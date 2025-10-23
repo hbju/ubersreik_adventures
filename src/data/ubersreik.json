@@ -66,5 +66,71 @@
         "image": "assets/images/new-location.png",
         "music": "assets/music/new-location-ambience.mp3"
       }
+    ],
+    "characters": [
+      {
+        "id": "hbju",
+        "name": "Hbju Arakasai",
+        "career": "Gard",
+        "characteristics": {
+          "ws": { "initial": 30, "advances": 5, "talents": 0, "modifier": 0 },
+          "bs": { "initial": 25, "advances": 0, "talents": 0, "modifier": 0 },
+          "s": { "initial": 35, "advances": 0, "talents": 0, "modifier": 0 },
+          "t": { "initial": 40, "advances": 5, "talents":0, "modifier": 0 },
+          "i": { "initial": 30, "advances": 0, "talents": 0, "modifier": 0 },
+          "ag": { "initial": 20, "advances": 5, "talents": 0, "modifier": 0 },
+          "dex": { "initial": 25, "advances": 0, "talents": 0, "modifier": 0 },
+          "int": { "initial": 30, "advances": 0, "talents": 0, "modifier": 0 },
+          "wp": { "initial": 25, "advances": 0, "talents": 0, "modifier": 0 },
+          "fel": { "initial": 20, "advances": 0, "talents": 0, "modifier": 0 }
+        },
+        "skills": [
+          { "id": "melee-basic", "name": "Melee (Basic)", "characteristic": "ws", "advances" : 10, "talents" : 0, "modifier": 0 },
+          { "id": "dodge", "name": "Dodge", "characteristic": "ag", "advances" : 5, "talents": 0, "modifier": 0 },
+          { "id": "intimidate", "name": "Intimidate", "characteristic": "s", "advances" : 5, "talents": 0, "modifier": 0 }
+        ],
+        "status": {
+          "wounds": { "current": 12, "max": 12 },
+          "fate": { "current": 1, "max": 3 },
+          "fortune": { "current": 2, "max": 2 },
+          "resilience": { "current": 0, "max": 3 },
+          "resolve": { "current": 0, "max": 3 },
+          "corruption": { "current": 0, "max": 8 }
+        },
+        "talents": { "Fearless": 1, "Strong Back": 1 },
+        "inventory": ["Greatsword", "Chainmail", "Backpack"]
+      },
+            {
+        "id": "frazaie",
+        "name": "Frazaie Arakasai",
+        "career": "Rogue",
+        "characteristics": {
+          "ws": { "initial": 25, "advances": 0, "talents": 0, "modifier": 0 },
+          "bs": { "initial": 45, "advances": 10, "talents": 5, "modifier": 0 },
+          "s": { "initial": 25, "advances": 0, "talents": 0, "modifier": 0 },
+          "t": { "initial": 20, "advances": 0, "talents":0, "modifier": 0 },
+          "i": { "initial": 35, "advances": 5, "talents": 0, "modifier": 0 },
+          "ag": { "initial": 30, "advances": 5, "talents": 5, "modifier": 0 },
+          "dex": { "initial": 37, "advances": 0, "talents": 0, "modifier": 0 },
+          "int": { "initial": 29, "advances": 0, "talents": 0, "modifier": 0 },
+          "wp": { "initial": 35, "advances": 0, "talents": 0, "modifier": 0 },
+          "fel": { "initial": 29, "advances": 0, "talents": 0, "modifier": 0 }
+        },
+        "skills": [
+          { "id": "ranged-bow", "name": "Ranged (Bow)", "characteristic": "bs", "advances" : 10, "talents": 0, "modifier": 0 },
+          { "id": "dodge", "name": "Dodge", "characteristic": "ag", "advances" : 5, "talents": 0, "modifier": 0 },
+          { "id": "intimidate", "name": "Intimidate", "characteristic": "s", "advances" : 5, "talents": 0, "modifier": 0 }
+        ],
+        "status": {
+          "wounds": { "current": 12, "max": 12 },
+          "fate": { "current": 1, "max": 3 },
+          "fortune": { "current": 2, "max": 2 },
+          "resilience": { "current": 0, "max": 3 },
+          "resolve": { "current": 0, "max": 3 },
+          "corruption": { "current": 0, "max": 8 }
+        },
+        "talents": { "Fearless": 1, "Strong Back": 1 },
+        "inventory": ["Greatsword", "Chainmail", "Backpack"]
+      }
     ]
   }

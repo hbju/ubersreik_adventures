@@ -19,8 +19,58 @@ export interface Character {
   name: string;
 }
 
+export interface Characteristic {
+  initial: number;
+  advances: number;
+  talents: number;
+  modifier: number;
+}
+
+export interface Status {
+  current: number;
+  max: number;
+}
+
+export interface Skill {
+  id: string;
+  name: string;
+  characteristic: string;
+  advances: number;
+  talents: number;
+  modifier: number;
+}
+
+export interface Character {
+  id: string;
+  name: string;
+  career: string;
+  characteristics: {
+    ws: Characteristic;
+    bs: Characteristic;
+    s: Characteristic;
+    t: Characteristic;
+    i: Characteristic;
+    ag: Characteristic;
+    dex: Characteristic;
+    int: Characteristic;
+    wp: Characteristic;
+    fel: Characteristic;
+  };
+  skills: Skill[];
+  status: {
+    wounds: Status;
+    fate: Status;
+    fortune: Status;
+    resilience: Status;
+    resolve: Status;
+    corruption: Status;
+  };
+  talents: Record<string, number>;
+  inventory: string[];
+}
+
 export interface GameData {
   mapImage: string;
   locations: Location[];
-  //characters: Character[]; 
+  characters: Character[];
 }

@@ -1,0 +1,107 @@
+.sheetContainer {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 80vw;
+  max-height: 80vh;
+  background-color: #2c2c2c;
+  border: 1px solid #444;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  z-index: 1001; /* Above the info panel */
+}
+
+.header {
+  padding: 10px 20px;
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #444;
+  border-radius: 8px 8px 0 0;
+}
+
+.charNameInput {
+  background: transparent;
+  border: none;
+  color: #ffcc00;
+  font-size: 1.5rem;
+  font-weight: bold;
+  width: 25%;
+}
+.charNameInput:focus {
+  outline: none;
+  background-color: #333;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr; /* 3 columns for characteristics, status, skills */
+  gap: 20px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.characteristicsPanel, .statusPanel, .skillsPanel {
+  background-color: #333;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+
+.characteristicsGrid, .skillsGrid, .statusGrid {
+  display: grid;
+  gap: 5px 15px;
+  align-items: center;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.characteristicsGrid > span:first-of-type,
+.characteristicsGrid > label,
+.skillsGrid > span:first-of-type,
+.skillsGrid > label,
+.statusGrid > label {
+  font-weight: bold;
+  color: #ffcc00;
+  text-align: left;
+}
+
+.characteristicsGrid {
+  grid-template-columns: auto repeat(5, 1fr);
+}
+
+.skillsGrid {
+  grid-template-columns: auto auto repeat(5, 2fr);
+  grid-auto-flow: row;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.statusGrid {
+  grid-template-columns: auto repeat(2, 1fr);
+}
+
+.totalValue {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.numericInput {
+  width: 100%;
+  background-color: #1a1a1a;
+  border: 1px solid #555;
+  color: #e0e0e0;
+  border-radius: 3px;
+  text-align: center;
+}
+.numericInput:focus {
+  outline: 1px solid #ffcc00;
+}
+
+h3 {
+  margin-top: 0;
+  border-bottom: 1px solid #555;
+  padding-bottom: 5px;
+  color: #ccc;
+}
