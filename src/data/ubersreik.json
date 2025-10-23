@@ -1,0 +1,70 @@
+{
+    "mapImage": "assets/maps/ubersreik-map.jpg",
+    "locations": [
+      {
+        "id": "red-moon-inn",
+        "name": "The Red Moon Inn",
+        "coords": { "x": 1900, "y": 2000 },
+        "playerDescription": "The two-storey Red Moon Inn primarily caters to boatmen plying their trade up and down the Teufel. It’s the cleanest of the dock-side hostels, though still somewhat shabby. The lower floor is built from solid stone and includes a large drinking hall, common room, and small kitchen. The upper floor is timber and lathe and contains the inn’s private rooms, and a room for the owner. The main drinking hall has a row of quiet booths all slung with heavy curtains and tattered linen to provide a little privacy.",
+        "gmNotes": "Franz Lohner owns and runs the inn. A no-nonsense Mercenary done-good, Lohner is a slightly overweight, dishevelled man in his 40s. He employs Ilse Frecht, a matronly woman in her 50s, to clean rooms and wait tables. Gunter Bisset works in the kitchens, cooking dinner, and two younger lads to help serve during busier times. All Bisset ever produces is potato and fish stew. A wholesome meal, but one that doesn’t make the best breakfast in the morning when served as cold leftovers. ",
+        "hooks" : [
+            "While enjoying a tasty stew, the party overhear plans to allow brigands in through the town gates at midnight. One of the conspirators is in the Watch, but they didn’t get a clear view of him, and without proof, the authorities will never believe them. The watchman had a distinctive voice, though. Have they got time to talk to all the watchmen in Ubersreik before nightfall?",
+            "As the party are celebrating being paid by settling in to a round of good, strong beers, two masked hoodlums enter the Inn, bearing loaded pistols. Kürbis and Honighäschen, a pair of legendary married brigands, urge everyone to stay calm and hand over all their wealth. Honighäschen warns that should anyone move, she will execute every last patron in the inn."
+        ],
+        "image": "assets/images/red-moon-inn.png",
+        "music": "assets/music/Shady Rest.mp3"
+      },
+      {
+        "id": "axe-and-hammer",
+        "name": "The Axe and Hammer",
+        "coords": { "x": 1515, "y": 2615 },
+        "playerDescription": "The Axe and Hammer is the only dedicated tavern in Dawihafen, though there are also three inns. The Axe and Hammer has one floor above ground, containing a large common room and a number of smaller booths and meeting rooms. The walls, floors, tables, and chairs are all made of stone, and intricately wrought with images of Dwarf ancestors. The ceilings are low, and the building has no windows, being lit by lamps and a great fire roaring in the centre of the large open space. Although most customers are Dwarfs, all folk are welcome.",
+        "gmNotes": "The basement level of the inn is for Dwarfs only, and it resembles the great hall of a Dwarf hold. It contains shrines to Grungni and Valaya — two Dwarf ancestor Gods. It is also the site of the Dwarf Engineers’ Guild in town. Grodni Surehammer, a longbeard, leads this august institution. He answered Magnus’s call for aid centuries ago, and has remained in Ubersreik ever since. He is the de facto leader of the Dwarf community in Ubersreik. Visiting Dwarfs consider it a great honour to meet Surehammer, and often frequent the inn just to shake his hand.",
+        "hooks": [
+            "Tunnels connect the tavern to the Khazalgirt, and from thence to the homes of a number of prominent Dwarfs. In pursuit of a Skaven menace, the Characters find themselves blundering into the basement, bringing them face to face with a group of irate Dwarfs convinced they are raiding the inn!",
+            "Ivar Broadthumb, a Dwarf metalworker, is enraptured by Dordean Mournflair, the Elf behind the Cutlers’ Guild. He wants to meet the secretive smith to discuss methodology, in defiance of traditional Dwarf attitudes to metalworking, and Elves. He needs the party to convey a message, secretly, and arrange a secure, private, neutral space for the meeting, if they can convince Mournflair to come"
+        ],
+        "image": "assets/images/axe-and-hammer.png",
+        "music": "assets/music/Lion's Pride.mp3"
+      },
+      {
+        "id": "wizards-way",
+        "name": "Wizards' Way",
+        "coords": { "x": 2540, "y": 1130 },
+        "playerDescription": "Graf Otto Strasse is a long, winding street that snakes through the eastern end of the Artisan Quarter. It is known colloquially as Wizard’s Way, as it is home to the town’s only permanent wizard. The street mostly comprises small shops selling herbs, books, and other esoterica, but it is dominated by the Grey Wizard’s tower — a crooked, slate-roofed turret — that peeps above the other stone and timber buildings. Although the tower can be clearly seen, its actual entrance is seemingly impossible to locate. Curious visitors have circumnavigated the tower repeatedly in search of a door or alleyway, but to no avail; locals gave up long ago.",
+        "gmNotes": "Grey Guardian Christoph Engel has called Ubersreik his home for as long as anyone can remember. He is a wiry, unassuming fellow with dark-grey eyes and a neatly trimmed grey beard. On official business, he tends to dress formally, in flowing grey robes, with a pointed, wide-brimmed hat and a staff. However, when seeking to pass incognito, he favours the nondescript clothing of a burgher, the better to blend in and avoid a scene.",
+        "hooks": [
+            "Engel is often bored with the responsibilities of his rank. He is not above quietly misusing his magic to create minor illusions to trick and disturb citizens for his own amusement. If he hears one of the party disparage wizards while out and about in disguise, he determines to make the party the butt of his jokes until they repent.",
+            "A coalition of local burghers, concerned at plummeting property prices on the Wizard’s Way, have clubbed together to pay a Witch Hunter to obtain proof of Engel’s misuse of magic, and have him evicted (or burned). The Witch Hunter, Mattheus Hüpfen, is not above framing his targets. He has decided to hire some local muscle to help him confront the wizard."
+        ],
+        "image": "assets/images/wizards-way.png",
+        "music": "assets/music/Arendella.mp3"
+      },
+      {
+        "id": "high-temple-of-sigmar",
+        "name": "The High Temple of Sigmar",
+        "coords": { "x": 1655, "y": 2080 },
+        "playerDescription": "The High Temple of Sigmar, the Empire’s patron god, was the first building rebuilt on the orders of Magnus the Pious after the old one was levelled by Greenskins during the Great War Against Chaos. It is the largest temple in town, dwarfing those in other quarters. The facade is lined with pillars, and the temple itself can hold hundreds of worshippers.",
+        "gmNotes": " On especially busy Festags (festival days), poorer worshippers huddle outside the doors, straining to hear the service. Recently, locals have found the temple significantly busier, as it is filled with officers and soldiers from Altdorf. Father Gunther Emming is the High Priest. A stern looking man in his 50s with thinning silver hair, Emming is famed for the severity of his sermons, and the sobriety of his demeanour. Though not unkind, he laces even his praise and comforting words with dire warnings of the consequences of vice.",
+        "hooks": [
+            "Irma Brantl, a pious if somewhat naive, young priestess of Sigmar has recently arrived in Ubersreik. Father Emming finds her gentle nature and incessant blithe chat incompatible with his view of the world. He is seeking ways to keep her out of his hair. He will pay the party well to escort her on a tour of the surrounding villages, to meet with the priests there. He will pay double if they take their time. Two or three months should do…",
+            "Dark dreams haunt those who spend too much time in the basement. Recently a farmer’s child disappeared on Marktag. TThe clues seem to suggest it was taken to the temple of Sigmar. Ernst Ricker, of the Order of the Cleansing Flame, is the only person with rooms in the basement of the temple. He may have lost his mind to the Ruinous Powers, but who is righteous enough to accuse him of heresy?"
+        ],
+        "image": "assets/images/high-temple-of-sigmar.png",
+        "music": "assets/music/Song of Elune.mp3"
+      },
+      {
+        "id": "new-location-id",
+        "name": "New Location Name",
+        "coords": { "x": -1000, "y": -1000 },
+        "playerDescription": "A newly established location that offers a unique experience for adventurers.",
+        "gmNotes": "This location is rumored to be a meeting point for secretive organizations.",
+        "hooks": [
+            "A mysterious figure is seen entering the location at odd hours.",
+            "Rumors circulate about hidden treasures within the vicinity."
+        ],
+        "image": "assets/images/new-location.png",
+        "music": "assets/music/new-location-ambience.mp3"
+      }
+    ]
+  }
