@@ -1,21 +1,17 @@
 import React from 'react';
 import { Character, Characteristic, Skill, SkillCharDefinition } from '../type/wfrp.types';
+import { calculateCharacteristicBonus } from '@/utils/skills';
 import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
 import styles from './CharacterSheet.module.css';
 
 interface CharacterSheetProps {
-    characters: Character[];
+    character: Character;
     onCharacterUpdate: (character: Character) => void;
 }
 
-const CharacterSheet: React.FC<CharacterSheetProps> = ({ characters, onCharacterUpdate }) => {
-    const character = characters[0];
-    const characterCharacteristicsBonus = (char: Characteristic) => {
-        return Math.floor((char.initial + char.advances + char.talents + char.modifier) / 10);
-    }
-
+const CharacterSheet: React.FC<CharacterSheetProps> = ({ character, onCharacterUpdate }) => {
     if (!character) {
-        return <div className={styles.sheetContainer}>No Characters Loaded</div>;
+        return <div className={styles.sheetContainer}>No Character Loaded</div>;
     }
 
     const handleCharacteristicChange = (
@@ -27,12 +23,12 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ characters, onCharacter
         onCharacterUpdate(updatedCharacter);
     }
 
-    const woundsMax = characterCharacteristicsBonus(character.characteristics.t) * 2
-     + characterCharacteristicsBonus(character.characteristics.s)
-     + characterCharacteristicsBonus(character.characteristics.ws);
+    const woundsMax = calculateCharacteristicBonus(character.characteristics.t) * 2
+     + calculateCharacteristicBonus(character.characteristics.s)
+     + calculateCharacteristicBonus(character.characteristics.ws);
 
-    const corruptionMax = characterCharacteristicsBonus(character.characteristics.wp) +
-        characterCharacteristicsBonus(character.characteristics.t);
+    const corruptionMax = calculateCharacteristicBonus(character.characteristics.wp) +
+        calculateCharacteristicBonus(character.characteristics.t);
 
     const handleStatusChange = (
         statusKey: keyof Character['status'],

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './CombatResolver.module.css';
-import { rolld100, calculateSuccessLevel, getHitLocation } from '../../utils/mechanic';
+import { rolld100, calculateSuccessLevel, getHitLocation } from '../../utils/mechanics';
 
 import allSkillsAndCharacteristics from '../../data/skillsAndCharacteristics.json';
 
