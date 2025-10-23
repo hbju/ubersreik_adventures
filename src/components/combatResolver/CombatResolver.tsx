@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import styles from './CombatResolver.module.css';
 import { rolld100, calculateSuccessLevel, getHitLocation } from '../../utils/mechanic';
 
-import { Character } from '@/type/wfrp.types';
+import allSkillsAndCharacteristics from '../../data/skillsAndCharacteristics.json';
+
+import { Character, SkillCharDefinition } from '@/type/wfrp.types';
 import { calculateSkillValue, calculateCharacteristicBonus, calculateCharacteristicValue } from '../../utils/skills';
 import CharacterSelector from './CharacterSelector';
 
@@ -31,6 +33,9 @@ const CombatResolver: React.FC<CombatResolverProps> = ({ characters }) => {
     const [selectedAttackerId, setSelectedAttackerId] = useState<string>(characters[0]?.id || 'manual');
     const [selectedDefenderId, setSelectedDefenderId] = useState<string>(characters[1]?.id || 'manual');
 
+    const [attackerSkillId, setAttackerSkillId] = useState<string>('melee-basic');
+    const [defenderSkillId, setDefenderSkillId] = useState<string>('melee-basic');
+
     const [attackerStats, setAttackerStats] = useState<CombatantStats>({
         skill: 45,
         modifier: 0,
@@ -49,40 +54,51 @@ const CombatResolver: React.FC<CombatResolverProps> = ({ characters }) => {
 
     const [result, setResult] = useState<CombatResult | null>(null);
 
+    const getSkillValue = (character: Character, skillId: string): number => {
+        const skillInfo = (allSkillsAndCharacteristics as SkillCharDefinition[]).find(s => s.id === skillId);
+        if (!skillInfo) return 0;
+
+        const charValue = calculateCharacteristicValue(character.characteristics[skillInfo.characteristic]);
+
+        if (skillInfo.type !== 'characteristic') {
+            const skill = character.skills.find(s => s.id === skillId);
+            if (skill) {
+                return calculateSkillValue(skill, character);
+            }
+        }
+        return charValue;
+    };
+
     useEffect(() => {
         if (selectedAttackerId === 'manual') return;
 
         const attacker = characters.find(char => char.id === selectedAttackerId);
         if (attacker) {
-            const wsSkill = attacker.skills.find(skill => skill.id === 'melee-basic');
-            const attackStat = wsSkill ? calculateSkillValue(wsSkill, attacker) : calculateCharacteristicValue(attacker.characteristics.ws);
             const strengthBonus = calculateCharacteristicBonus(attacker.characteristics.s);
 
             setAttackerStats(prevStats => ({
                 ...prevStats,
-                skill: attackStat,
+                skill: getSkillValue(attacker, attackerSkillId),
                 weaponDamage: 4 + strengthBonus,
             }));
         }
-    }, [selectedAttackerId, characters]);
+    }, [selectedAttackerId, attackerSkillId, characters]);
 
     useEffect(() => {
         if (selectedDefenderId === 'manual') return;
 
         const defender = characters.find(char => char.id === selectedDefenderId);
         if (defender) {
-            const defenseSkill = defender.skills.find(skill => skill.id === 'melee-basic');
-            const defenseStat = defenseSkill ? calculateSkillValue(defenseSkill, defender) : calculateCharacteristicValue(defender.characteristics.ws);
             const toughnessBonus = calculateCharacteristicBonus(defender.characteristics.t);
 
             setDefenderStats(prevStats => ({
                 ...prevStats,
-                skill: defenseStat,
+                skill: getSkillValue(defender, defenderSkillId),
                 toughnessBonus: toughnessBonus,
                 armourPoints: 0, // TODO - derive from equipment
             }));
         }
-    }, [selectedDefenderId, characters]);
+    }, [selectedDefenderId, defenderSkillId, characters]);
 
     const handleStatChange = (
         combatant: 'attacker' | 'defender',
@@ -148,12 +164,34 @@ const CombatResolver: React.FC<CombatResolverProps> = ({ characters }) => {
                     onCharacterSelect={setSelectedAttackerId}
                 />
                 <div className={styles.statInput}>
-                    <label>Base Skill</label>
-                    <input
-                        type="number"
-                        value={attackerStats.skill}
-                        onChange={(e) => handleStatChange('attacker', 'skill', parseInt(e.target.value) || 0)}
-                    />
+                    <label>Test</label>
+                    {/* If manual, show number input. Otherwise, show skill dropdown. */}
+                    {selectedAttackerId === 'manual' ? (
+                        <input
+                            type="number"
+                            value={attackerStats.skill}
+                            onChange={(e) => handleStatChange('attacker', 'skill', parseInt(e.target.value) || 0)}
+                        />
+                    ) : (
+                        <div className={styles.skillSelectContainer}>
+                            <select
+                                value={attackerSkillId}
+                                onChange={(e) => setAttackerSkillId(e.target.value)}
+                                className={styles.skillSelect}
+                            >
+                                <optgroup label="Characteristics">
+                                    {allSkillsAndCharacteristics.filter(s => s.type === 'characteristic').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                </optgroup>
+                                <optgroup label="Skills">
+                                    {allSkillsAndCharacteristics.filter(s => s.type === 'skill').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                </optgroup>
+                            </select>
+                            
+                            <div className={styles.statDisplay}>
+                                <span>Skill Total: <strong>{attackerStats.skill}</strong></span>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className={styles.statInput}>
                     <label>Modifier</label>
@@ -188,12 +226,34 @@ const CombatResolver: React.FC<CombatResolverProps> = ({ characters }) => {
                     onCharacterSelect={setSelectedDefenderId}
                 />
                 <div className={styles.statInput}>
-                    <label>Base Skill</label>
-                    <input
-                        type="number"
-                        value={defenderStats.skill}
-                        onChange={(e) => handleStatChange('defender', 'skill', parseInt(e.target.value) || 0)}
-                    />
+                    <label>Test</label>
+                    {/* If manual, show number input. Otherwise, show skill dropdown. */}
+                    {selectedDefenderId === 'manual' ? (
+                        <input
+                            type="number"
+                            value={defenderStats.skill}
+                            onChange={(e) => handleStatChange('defender', 'skill', parseInt(e.target.value) || 0)}
+                        />
+                    ) : (
+                        <div className={styles.skillSelectContainer}>
+                            <select
+                                value={defenderSkillId}
+                                onChange={(e) => setDefenderSkillId(e.target.value)}
+                                className={styles.skillSelect}
+                            >
+                                <optgroup label="Characteristics">
+                                    {allSkillsAndCharacteristics.filter(s => s.type === 'characteristic').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                </optgroup>
+                                <optgroup label="Skills">
+                                    {allSkillsAndCharacteristics.filter(s => s.type === 'skill').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                </optgroup>
+                            </select>
+                            
+                            <div className={styles.statDisplay}>
+                                <span>Skill Total: <strong>{defenderStats.skill}</strong></span>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className={styles.statInput}>
                     <label>Modifier</label>

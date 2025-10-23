@@ -40,6 +40,13 @@ export interface Skill {
   modifier: number;
 }
 
+export interface SkillCharDefinition {
+  id: string;
+  name: string;
+  characteristic: keyof Character['characteristics'];
+  type: 'skill' | 'characteristic';
+}
+
 export interface Character {
   id: string;
   name: string;

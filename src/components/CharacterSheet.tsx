@@ -1,5 +1,6 @@
 import React from 'react';
-import { Character, Characteristic, Skill } from '../type/wfrp.types';
+import { Character, Characteristic, Skill, SkillCharDefinition } from '../type/wfrp.types';
+import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
 import styles from './CharacterSheet.module.css';
 
 interface CharacterSheetProps {
@@ -41,32 +42,14 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ characters, onCharacter
         onCharacterUpdate(updatedCharacter);
     }
 
-    const baseSkills: Skill[] = [
-        { id: 'art', name: 'Art', characteristic: 'dex', advances: 0, talents: 0, modifier: 0 },
-        { id: 'athletics', name: 'Athletics', characteristic: 'ag', advances: 0, talents: 0, modifier: 0 },
-        { id: 'bribery', name: 'Bribery', characteristic: 'fel', advances: 0, talents: 0, modifier: 0 },
-        { id: 'charm', name: 'Charm', characteristic: 'fel', advances: 0, talents: 0, modifier: 0 },
-        { id: 'charm-animal', name: 'Charm Animal', characteristic: 'wp', advances: 0, talents: 0, modifier: 0 },
-        { id: 'climb', name: 'Climb', characteristic: 's', advances: 0, talents: 0, modifier: 0 },
-        { id: 'consume-alcohol', name: 'Consume Alcohol', characteristic: 't', advances: 0, talents: 0, modifier: 0 },
-        { id: 'cool', name: 'Cool', characteristic: 'wp', advances: 0, talents: 0, modifier: 0 },
-        { id: 'dodge', name: 'Dodge', characteristic: 'ag', advances: 0, talents: 0, modifier: 0 },
-        { id: 'drive', name: 'Drive', characteristic: 'dex', advances: 0, talents: 0, modifier: 0 },
-        { id: 'endurance', name: 'Endurance', characteristic: 't', advances: 0, talents: 0, modifier: 0 },
-        { id: 'entertain', name: 'Entertain', characteristic: 'fel', advances: 0, talents: 0, modifier: 0 },
-        { id: 'gamble', name: 'Gamble', characteristic: 'int', advances: 0, talents: 0, modifier: 0 },
-        { id: 'gossip', name: 'Gossip', characteristic: 'fel', advances: 0, talents: 0, modifier: 0 },
-        { id: 'haggle', name: 'Haggle', characteristic: 'fel', advances: 0, talents: 0, modifier: 0 },
-        { id: 'intimidate', name: 'Intimidate', characteristic: 's', advances: 0, talents: 0, modifier: 0 },
-        { id: 'intuition', name: 'Intuition', characteristic: 'i', advances: 0, talents: 0, modifier: 0 },
-        { id: 'leadership', name: 'Leadership', characteristic: 'fel', advances: 0, talents: 0, modifier: 0 },
-        { id: 'melee-basic', name: 'Melee (Basic)', characteristic: 'ws', advances: 0, talents: 0, modifier: 0 },
-        { id: 'navigation', name: 'Navigation', characteristic: 'i', advances: 0, talents: 0, modifier: 0 },
-        { id: 'outdoor-survival', name: 'Outdoor Survival', characteristic: 'int', advances: 0, talents: 0, modifier: 0 },
-        { id: 'perception', name: 'Perception', characteristic: 'i', advances: 0, talents: 0, modifier: 0 },
-        { id: 'ride', name: 'Ride', characteristic: 'ag', advances: 0, talents: 0, modifier: 0 },
-        { id: 'stealth', name: 'Stealth', characteristic: 'ag', advances: 0, talents: 0, modifier: 0 },
-    ];
+    const baseSkills: Skill[] = (allSkillsAndCharacteristics as SkillCharDefinition[]).filter(skill => skill.type === 'skill').map(skill => ({
+        id: skill.id,
+        name: skill.name,
+        characteristic: skill.characteristic,
+        advances: 0,
+        talents: 0,
+        modifier: 0
+    }));
 
     const handleSkillChange = (
         skillId: string,
