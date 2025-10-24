@@ -1,6 +1,8 @@
 import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
+import { createServer } from 'node:http'
+import { Server } from 'socket.io'
 import path from 'node:path'
 import os from 'node:os'
 import { update } from './update'
@@ -80,6 +82,33 @@ async function createWindow() {
   // Auto update
   update(win)
 }
+
+const httpServer = createServer()
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+})
+
+io.on('connection', (socket) => {
+  console.log('[Socket.IO] A client connected : ${socket.id}')
+
+  socket.on("gm-event", (data) => {
+    console.log("[Socket.IO] Broadcasting GM event ", data)
+    socket.broadcast.emit('player-event', data)
+  })
+
+  socket.on('disconnect', () => {
+    console.log("[Socket.IO] Client disconnected: ${socket.id}")
+  })
+})
+
+const PORT = 3001;
+httpServer.listen(PORT, () => {
+  console.log(`[Socket.IO] Server is listening on port ${PORT}`);
+});
 
 app.whenReady().then(createWindow)
 

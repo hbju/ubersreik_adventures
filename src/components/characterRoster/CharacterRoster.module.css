@@ -74,6 +74,11 @@
   font-size: 0.8rem;
 }
 
+.combatBtn {
+  color: #3692f4;
+  border-color: #3692f4;
+  background-color: transparent;
+}
 .openBtn {
   color: #4caf50;
   border-color: #4caf50;

@@ -14,9 +14,16 @@ export interface Location {
   hooks: string[]; 
 }
 
-export interface Character {
-  id: string;
+export interface Combatant {
+  id: string; 
+  sourceId: string; 
   name: string;
+  initiative: number | null;
+  currentWounds: number;
+  maxWounds: number;
+  baseInitiative: number; 
+  baseAg: number;
+  isPlayer: boolean; 
 }
 
 export interface Characteristic {

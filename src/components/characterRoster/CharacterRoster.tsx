@@ -9,9 +9,10 @@ interface CharacterRosterProps {
     onCreateCharacter: () => void;
     onGenerateNpc: () => void;
     onDeleteCharacter: (characterId: string) => void;
+    onAddCombatant: (character: Character) => void;
 }
 
-const CharacterRoster: React.FC<CharacterRosterProps> = ({ characters, openSheetIds, onToggleCharacterSheet, onCreateCharacter, onGenerateNpc, onDeleteCharacter }) => {
+const CharacterRoster: React.FC<CharacterRosterProps> = ({ characters, openSheetIds, onToggleCharacterSheet, onCreateCharacter, onGenerateNpc, onDeleteCharacter, onAddCombatant }) => {
     return (
         <div className={styles.rosterContainer}>
             <header className={styles.header}>
@@ -25,21 +26,24 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({ characters, openSheet
                 {characters.map(character => {
                     const isOpen = openSheetIds.includes(character.id);
                     return (
-                    <li key={character.id} className={styles.characterItem}>
-                        <span className={styles.characterName}>{character.name}</span>
-                        <div className={styles.itemActions}>
-                            <button 
-                                onClick={() => onToggleCharacterSheet(character.id)}
-                                className={isOpen ? styles.closeBtn : styles.openBtn}>
-                                {isOpen ? 'Close' : 'Open'}
-                            </button>
-                            <button 
-                                onClick={() => onDeleteCharacter(character.id)}
-                                className={styles.deleteBtn}>
-                                Del
-                            </button>
-                        </div>
-                    </li>
+                        <li key={character.id} className={styles.characterItem}>
+                            <span className={styles.characterName}>{character.name}</span>
+                            <div className={styles.itemActions}>
+                                <button onClick={() => onAddCombatant(character)} className={styles.combatBtn}>
+                                    ⚔️
+                                </button>
+                                <button
+                                    onClick={() => onToggleCharacterSheet(character.id)}
+                                    className={isOpen ? styles.closeBtn : styles.openBtn}>
+                                    {isOpen ? 'Close' : 'Open'}
+                                </button>
+                                <button
+                                    onClick={() => onDeleteCharacter(character.id)}
+                                    className={styles.deleteBtn}>
+                                    Del
+                                </button>
+                            </div>
+                        </li>
                     );
                 })}
             </ul>
