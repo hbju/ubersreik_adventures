@@ -1,5 +1,5 @@
 import React from 'react';
-import { Character } from '../../type/wfrp.types';
+import { Character } from '@wfrp/shared';
 
 interface CharacterSelectorProps {
   characters: Character[];

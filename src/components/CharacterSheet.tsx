@@ -1,7 +1,5 @@
 import React from 'react';
-import { Character, Characteristic, Skill, SkillCharDefinition } from '../type/wfrp.types';
-import { calculateCharacteristicBonus } from '@/utils/skills';
-import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
+import { Character, Characteristic, Skill, SkillCharDefinition, calculateCharacteristicBonus, allSkillsAndCharacteristics } from '@wfrp/shared';
 import styles from './CharacterSheet.module.css';
 
 interface CharacterSheetProps {
@@ -24,8 +22,8 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ character, onCharacterU
     }
 
     const woundsMax = calculateCharacteristicBonus(character.characteristics.t) * 2
-     + calculateCharacteristicBonus(character.characteristics.s)
-     + calculateCharacteristicBonus(character.characteristics.ws);
+        + calculateCharacteristicBonus(character.characteristics.s)
+        + calculateCharacteristicBonus(character.characteristics.ws);
 
     const corruptionMax = calculateCharacteristicBonus(character.characteristics.wp) +
         calculateCharacteristicBonus(character.characteristics.t);
@@ -49,7 +47,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ character, onCharacterU
 
     const handleSkillChange = (
         skillId: string,
-        newSkill: Skill)  => {
+        newSkill: Skill) => {
         const updatedCharacter: Character = JSON.parse(JSON.stringify(character));
         const skillIndex = updatedCharacter.skills.findIndex(s => s.id === skillId);
 
@@ -145,7 +143,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ character, onCharacterU
                         <span>/ {character.status.fate.max}</span>
                         <label>Fortune</label>
                         <input
-                            type="number" 
+                            type="number"
                             value={character.status.fortune.current}
                             onChange={e => handleStatusChange('fortune', parseInt(e.target.value, 10) || 0)}
                             className={styles.numericInput}
@@ -189,7 +187,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({ character, onCharacterU
                                     <label>{skill.name}</label>
                                     <span className={styles.charValue}>{skill.characteristic.toUpperCase()}</span>
                                     <span>{baseValue}</span>
-                                    <input 
+                                    <input
                                         type="number"
                                         value={skillAdvances}
                                         onChange={e => handleSkillChange(skill.id, {

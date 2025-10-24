@@ -81,34 +81,36 @@ async function createWindow() {
 
   // Auto update
   update(win)
+
+  const httpServer = createServer()
+  const io = new Server(httpServer, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"]
+    }
+  });
+
+  io.on('connection', (socket) => {
+    console.log('[Socket.IO] Player connected : ${socket.id}')
+
+    win?.webContents.send("player-connected", socket.id);
+
+    socket.on("gm-event", (data) => {
+      console.log("[Socket.IO] Broadcasting GM event ", data)
+      socket.broadcast.emit('player-event', data)
+    })
+
+    socket.on('disconnect', () => {
+      console.log("[Socket.IO] Client disconnected: ${socket.id}")
+    })
+  })
+
+  const PORT = 3001;
+  httpServer.listen(PORT, () => {
+    console.log(`[Socket.IO] Server is listening on port ${PORT}`);
+    win?.webContents.send("server-ready");
+  });
 }
-
-const httpServer = createServer()
-
-const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"]
-  }
-})
-
-io.on('connection', (socket) => {
-  console.log('[Socket.IO] A client connected : ${socket.id}')
-
-  socket.on("gm-event", (data) => {
-    console.log("[Socket.IO] Broadcasting GM event ", data)
-    socket.broadcast.emit('player-event', data)
-  })
-
-  socket.on('disconnect', () => {
-    console.log("[Socket.IO] Client disconnected: ${socket.id}")
-  })
-})
-
-const PORT = 3001;
-httpServer.listen(PORT, () => {
-  console.log(`[Socket.IO] Server is listening on port ${PORT}`);
-});
 
 app.whenReady().then(createWindow)
 
@@ -131,6 +133,25 @@ app.on('activate', () => {
     allWindows[0].focus()
   } else {
     createWindow()
+  }
+})
+
+const getLocalIpAddress = () => {
+  const interfaces = os.networkInterfaces()
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]!) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address
+      }
+    }
+  }
+  return '127.0.0.1'
+}
+
+ipcMain.handle('get-server-status', () => {
+  return {
+    ip: getLocalIpAddress(),
+    port: 3001
   }
 })
 

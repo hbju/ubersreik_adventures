@@ -1,6 +1,5 @@
 import React from 'react';
-import { Combatant } from '../../type/wfrp.types';
-import { rollDice } from '../../utils/mechanics';
+import { Combatant, rollDice } from '@wfrp/shared';
 import styles from './InitiativeTracker.module.css';
 
 interface InitiativeTrackerProps {

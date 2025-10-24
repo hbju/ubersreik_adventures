@@ -19,9 +19,10 @@
     "paths": {
       "@/*": [
         "src/*"
-      ]
+      ],
+      "@wfrp/shared": ["../shared/src/index.ts"]
     },
   },
-  "include": ["src", "electron"],
+  "include": ["src", "electron", "../shared/src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { socket } from './utils/socket';
+import { socket } from '@wfrp/shared';
 import './PlayerApp.css'; // Create some simple styles for this view
 
 interface DisplayContent {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Location } from '../type/wfrp.types';
+import { Location } from '@wfrp/shared';
 import styles from './LocationInfoPanel.module.css';
 
 interface LocationInfoPanelProps {

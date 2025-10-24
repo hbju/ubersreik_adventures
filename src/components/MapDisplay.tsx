@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
 import styles from './MapDisplay.module.css';
-import { GameData } from '../type/wfrp.types'; // Import our types
+import { GameData } from '@wfrp/shared';
 import LocationPin from './LocationPin';
 import LocationInfoPanel from './LocationInfoPanel';
 

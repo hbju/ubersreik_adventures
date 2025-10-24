@@ -16,7 +16,8 @@ export default defineConfig(({ command }) => {
   return {
     resolve: {
       alias: {
-        '@': path.join(__dirname, 'src')
+        '@': path.join(__dirname, 'src'),
+        '@wfrp/shared': path.join(__dirname, '../shared/src/index.ts'),
       },
     },
     plugins: [
@@ -67,8 +68,8 @@ export default defineConfig(({ command }) => {
     server: process.env.VSCODE_DEBUG && (() => {
       const url = new URL(pkg.debug.env.VITE_DEV_SERVER_URL)
       return {
-        host: url.hostname,
-        port: +url.port,
+        host: true,
+        port: 5173,
       }
     })(),
     clearScreen: false,

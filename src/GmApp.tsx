@@ -5,19 +5,22 @@ import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker'
 
-import { socket } from './utils/socket';
-import React, { useState, useEffect } from 'react';
-import { Character, Combatant } from './type/wfrp.types';
-import { generateRandomNpc, createBlankCharacter } from './utils/generator';
+import { socket, 
+    Character, 
+    Combatant, 
+    generateRandomNpc, 
+    createBlankCharacter, 
+    gameData,
+    calculateCharacteristicBonus
+ } from '@wfrp/shared';
 
-import gameData from './data/ubersreik.json';
+import React, { useState, useEffect } from 'react';
 import useLocalStorageState from './hooks/useLocalStorageState';
 
 import './GmApp.css';
-import { calculateCharacteristicBonus } from './utils/skills';
+import ServerStatus from './components/server/ServerStatus';
 
 function GmApp() {
-
     const calculateMaxWounds = (character: Character) => {
         return calculateCharacteristicBonus(character.characteristics.t) * 2
             + calculateCharacteristicBonus(character.characteristics.s)
@@ -97,12 +100,17 @@ function GmApp() {
     };
 
     useEffect(() => {
-        socket.connect();
+        window.ipcRenderer.on('server-ready', () => {
+            console.log("Server is ready, connecting to socket ...")
+            socket.connect();
+        })
         return () => { socket.disconnect(); };
     }, []);
 
     return (
         <div className="App">
+            <ServerStatus />
+
             <CharacterRoster
                 characters={characters}
                 openSheetIds={openSheetIds}

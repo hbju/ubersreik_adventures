@@ -1,9 +1,9 @@
 {
-  "name": "electron-vite-react",
-  "version": "2.2.0",
+  "name": "@wfrp/gm-app",
+  "version": "0.1.0",
   "main": "dist-electron/main/index.js",
-  "description": "Electron Vite React boilerplate.",
-  "author": "草鞋没号 <308487730@qq.com>",
+  "description": "WFRP4e Game Master Application",
+  "author": "milouordo <milou@ordonneau.com>",
   "license": "MIT",
   "private": true,
   "debug": {
@@ -20,6 +20,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@wfrp/shared": "1.0.0",
     "electron-updater": "^6.3.9",
     "react-router-dom": "^7.9.4",
     "socket.io": "^4.8.1",

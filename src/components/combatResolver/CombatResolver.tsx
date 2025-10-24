@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './CombatResolver.module.css';
-import { rolld100, calculateSuccessLevel, getHitLocation } from '../../utils/mechanics';
+import { rolld100, calculateSuccessLevel, getHitLocation, allSkillsAndCharacteristics, Character, SkillCharDefinition, calculateSkillValue, calculateCharacteristicBonus, calculateCharacteristicValue } from '@wfrp/shared';
 
-import allSkillsAndCharacteristics from '../../data/skillsAndCharacteristics.json';
-
-import { Character, SkillCharDefinition } from '@/type/wfrp.types';
-import { calculateSkillValue, calculateCharacteristicBonus, calculateCharacteristicValue } from '../../utils/skills';
 import CharacterSelector from './CharacterSelector';
 
 interface CombatResolverProps {
