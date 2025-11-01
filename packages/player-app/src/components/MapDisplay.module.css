@@ -1,0 +1,16 @@
+.mapContainer {
+  width: 100vw;
+  height: 100vh;
+  align-content: center;
+  position: relative; 
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000
+}
+
+.mapImage {
+  height: 100%;
+  object-fit: cover; 
+}

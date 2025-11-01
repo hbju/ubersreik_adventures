@@ -7,6 +7,16 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+packages/*/logs
+packages/*/*.log
+
+packages/*/node_modules/
+packages/*/dist/
+packages/*/dist-ssr/
+packages/*/dist-electron/
+packages/*/release/
+packages/*/*.local
+
 node_modules
 dist
 dist-ssr
@@ -15,6 +25,7 @@ release
 *.local
 
 public/assets/music
+packages/*/public/assets/music
 
 # Editor directories and files
 .vscode/.debug.env
@@ -26,6 +37,15 @@ public/assets/music
 *.sln
 *.sw?
 
+/packages/*/.vscode/.debug.env
+/packages/*/.idea
+/packages/*/.DS_Store
+/packages/*/*.suo
+/packages/*/*.ntvs*
+/packages/*/*.njsproj
+/packages/*/*.sln
+/packages/*/*.sw?
+
 #lockfile
 package-lock.json
 pnpm-lock.yaml
@@ -33,3 +53,10 @@ yarn.lock
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+packages/*/package-lock.json
+packages/*/pnpm-lock.yaml
+packages/*/yarn.lock
+packages/*/test-results/
+packages/*/playwright-report/
+packages/*/playwright/.cache/

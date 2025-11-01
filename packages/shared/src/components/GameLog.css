@@ -1,0 +1,44 @@
+.gameLogContainer {
+  position: fixed;
+  right: 5px;
+  top: 2px;
+  background-color: rgba(30, 25, 20, 0.8);
+  border: 1px solid #5a4a3a;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 5px;
+  height: 150px;
+  width: 80vw;
+  overflow-y: auto;
+  font-family: 'Verdana', sans-serif;
+  font-size: 0.9rem;
+  color: #e0d6c8;
+  z-index: 1003; 
+}
+
+.logList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.logEntry {
+  padding: 4px 0;
+  border-bottom: 1px solid #413529;
+}
+.logEntry:last-child {
+  border-bottom: none;
+}
+
+.logEntry.roll {
+  color: #f0f0f0;
+}
+
+.logEntry.system {
+  color: #ffc107;
+  font-style: italic;
+}
+
+.logEntry.info {
+  color: #a0b0c0;
+}

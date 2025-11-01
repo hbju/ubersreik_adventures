@@ -1,0 +1,82 @@
+.panel {
+  position: fixed; /* Stays in place relative to the viewport */
+  top: 0;
+  right: 0;
+  width: 400px; /* Or whatever width you prefer */
+  height: 100vh; /* Full height of the screen */
+  background-color: #242424;
+  color: #e0e0e0;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+  transform: translateX(0); /* Default position is visible */
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto; /* Add a scrollbar if content is too long */
+  z-index: 1000; /* Ensure it's on top of the map */
+}
+
+/* We'll use this later to hide the panel off-screen */
+.panel.hidden {
+  transform: translateX(100%);
+}
+
+.locationImage {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.content {
+  padding: 20px;
+}
+
+.content h2 {
+  margin-top: 0;
+  color: #ffcc00; /* Matching our pin color */
+}
+
+.description {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background-color: #444;
+  margin: 20px 0;
+}
+
+.gmSection {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #ffcc00;
+  padding: 15px;
+  border-radius: 4px;
+  font-style: italic;
+  color: #c0c0c0;
+}
+
+.hooks h3,
+.gmSection h3 {
+  margin-top: 0;
+  font-style: normal;
+  color: #e0e0e0;
+}
+.hooks ul {
+  padding-left: 20px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  text-shadow: 0 0 5px black;
+}
+.closeButton:hover {
+  color: #ffcc00;
+}

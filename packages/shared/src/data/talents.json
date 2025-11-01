@@ -1,0 +1,3845 @@
+[
+    {
+        "id": "accurate-shot",
+        "name": "Accurate Shot",
+        "description": "You are an exceptional shot and know where to shoot an enemy in order to inflict maximum damage. You deal your Accurate Shot level in extra Damage with all ranged weapons.",
+        "tests": [],
+        "max_ranks": "bs",
+        "careers": {
+            "Archer": "1",
+            "Badger Rider": "2",
+            "Bounty Hunter": "3",
+            "Cavalryman": "4",
+            "Coachman": "3",
+            "Fieldwarden": "2",
+            "Ghost Strider": "1",
+            "Handgunner": "1",
+            "Hunter": "2",
+            "Karak Ranger": "3",
+            "Maneater": "3",
+            "Protagonist": "4",
+            "Ship’s Gunner": "4",
+            "Siege Specialist": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "acute-sense",
+        "name": "Acute Sense (Sense)",
+        "description": "One of your primary five senses is highly developed, allowing you to spot what others miss. You may take Perception Tests to detect normally imperceptible details with the associated sense, as dictated by the GM. This could include: seeing an eagle beyond everyone else’s eye shot, smelling an almost odourless poison, hearing the breath of an unmoving mouse within a wall, feeling a worn away letter in a carving, or tasting that two beers from the same brewer have been drawn from two different barrels.",
+        "tests": [
+            "Perception (Sense)"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Apothecary": "4 (Taste)",
+            "Artisan": "3 (Taste or Touch)",
+            "Artist": "3 (Any)",
+            "Butcher": "2 (Taste)",
+            "Hedge Witch": "4 (Any)",
+            "Herbalist": "1 (Taste)",
+            "Huffer": "3 (Sight)",
+            "Hunter": "3 (Any)",
+            "Investigator": "4 (Any)",
+            "Scout": "3 (Sight)",
+            "Wolf Kin": "2 (Any)"
+        },
+        "racial": [
+            "Random Racial Talent (Any)",
+            "Halfling (Taste)",
+            "High Elf (Sight)",
+            "Wood Elf (Sight)"
+        ]
+    },
+    {
+        "id": "aethyric-attunement",
+        "name": "Aethyric Attunement",
+        "description": "Your experience, talent or training lets you more safely manipulate the Winds of Magic. You do not suffer a Miscast if you roll a double on a successful Channel Test.",
+        "tests": [
+            "Channelling (Any)"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Alchemist": "1",
+            "Astromancer": "1",
+            "Butcher": "2",
+            "Druid": "1",
+            "Hedge Witch": "2",
+            "Hierophant": "1",
+            "Pyromancer": "1",
+            "Shadowmancer": "1",
+            "Shaman": "1",
+            "Spiriter": "1",
+            "Wizard": "1",
+            "Witch": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "alley-cat",
+        "name": "Alley Cat",
+        "description": "You are at home in shadowy backstreets. When using Stealth (Urban), you may reverse the dice of any failed Test if this will score a Success.",
+        "tests": [
+            "Stealth (Urban)"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Agitator": "2",
+            "Bawd": "1",
+            "Beggar": "2",
+            "Fence": "1",
+            "Grave Robber": "1",
+            "Investigator": "1",
+            "Magister Vigilant": "4",
+            "Townsman": "1",
+            "Thief": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "ambidextrous",
+        "name": "Ambidextrous",
+        "description": "You can use your off-hand far better than most folk, either by training or innate talent. You only suffer a penalty of –10 to Tests relying solely on your secondary hand, not – 20. If you have this Talent twice, you suffer no penalty at all.",
+        "tests": [],
+        "max_ranks": "2",
+        "careers": {
+            "Artist": "4",
+            "Bawd": "2",
+            "Duellist": "3",
+            "Pit Fighter": "2",
+            "Protagonist": "4",
+            "Slayer": "3"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "animal-affinity",
+        "name": "Animal Affinity",
+        "description": "Wild animals feel comfortable in your presence, and often follow your lead. All creatures with the Bestial Trait not trained to be belligerent will automatically be calm in your presence unless they have a reason not to be, such as pain, an attack, being naturally hyper-aggressive, or having nearby young.",
+        "tests": [
+            "Charm Animal"
+        ],
+        "max_ranks": "wp",
+        "careers": {
+            "Coachman": "1",
+            "Ghost Strider": "2",
+            "Hedge Witch": "2",
+            "Shaman": "3",
+            "Villager": "2",
+            "Warden": "2",
+            "Witch": "3"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "arcane-magic",
+        "name": "Arcane Magic (Lore)",
+        "description": "You either study one of the 8 Arcane Lores of Magic — Beasts, Death, Fire, Heavens, Metal, Shadow, Light, or Life — or practice a lesser-known Lore, such as Hedge-craft or Necromancy. You may now memorise spells from your chosen Lore for the following cost in XP.\nNumber of Spells Currently Known XP Cost for a new spell\nUp to Intelligence Bonus × 1 100 XP\nUp to Intelligence Bonus × 2 200 XP\nUp to Intelligence Bonus × 3 300 XP\nUp to Intelligence Bonus × 4 400 XP\n...and so on.\nSo, if your Intelligence Bonus is 4, it will cost you 100 XP for the first spell, and the next 4, then 200 XP for the next 4, and so on. Full rules for learning new spells are provided in Chapter 8: Magic. Under normal circumstances, you may not learn more than one Arcane Magic (Lore) Talent. Further, you may not learn the Bless or Invoke Talents when you have the Arcane Magic Talent. You can unlearn this Talent for 100 XP, but will immediately lose all of your spells if you do so.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Alchemist": "2 (Metal)",
+            "Astromancer": "2 (Heavens)",
+            "Butcher": "2 (Great Maw)",
+            "Hedge Witch": "2 (Hedgecraft)",
+            "Druid": "2 (Life)",
+            "Hierophant": "2 (Light)",
+            "Magister Vigilant": "2 (Any Arcane Lore)",
+            "Mundane Alchemist": "4 (Metal)",
+            "Mystic": "4 (Celestial)",
+            "Pyromancer": "2 (Fire)",
+            "Shadowmancer": "2 (Death)",
+            "Shaman": "2 (Beasts)",
+            "Spiriter": "2 (Death)",
+            "Witch": "2 (Witchery)",
+            "Wizard": "2 (Any Colour)"
+        },
+        "racial": []
+    },
+    {
+        "id": "argumentative",
+        "name": "Argumentative",
+        "description": "You are used to arguing your points and winning. If you roll a successful Charm Test to debate with an opponent, you can choose to either use your rolled SL, or the number rolled on your units die. So, a successful roll of 24 could be used for +4 SL.",
+        "tests": [
+            "Charm Tests when arguing and debating"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Advisor": "3",
+            "Agitator": "2",
+            "Alchemist": "2",
+            "Beadle": "3",
+            "Lawyer": "2",
+            "Miner": "4"
+        },
+        "racial": [
+            "Human (Tilean)"
+        ]
+    },
+    {
+        "id": "artistic",
+        "name": "Artistic",
+        "description": "You have a natural talent for art, able to produce precise sketches with nothing but time and appropriate media. This ability has several in-game uses, ranging from creating Wanted Posters to sketching accurate journals, and has spot benefits as determined by the GM. Further to this, add Art (Any) to any Career you enter; if it is already in Career, you may instead purchase the Skill for 5 XP fewer per Advance.",
+        "tests": [
+            "Art (Any)"
+        ],
+        "max_ranks": "dex",
+        "careers": {
+            "Artisan": "1",
+            "Artist": "1",
+            "Cartographer": "1",
+            "Engineer": "1"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "attractive",
+        "name": "Attractive",
+        "description": "Whether it’s your piercing eyes, your strong frame, or maybe the way you flash your perfect teeth, you know how to make the best use of what the gods gave you. When you successfully use Charm to influence those attracted to you, you can choose to either use your rolled SL, or the number rolled on your units die. So, a successful roll of 38 could be used for +8 SL.",
+        "tests": [
+            "Charm Tests to influence those attracted to you"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Bawd": "1",
+            "Camp Follower": "1",
+            "Charlatan": "3",
+            "Entertainer": "1",
+            "Envoy": "2",
+            "Mystic": "1",
+            "Noble": "2",
+            "Spy": "3",
+            "Witch": "2"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "battle-rage",
+        "name": "Battle Rage",
+        "description": "You are better able to control your Frenzy in combat. You can end your Frenzy with a successful Cool Test at the end of the round.",
+        "tests": [
+            "Melee Tests when Frenzied"
+        ],
+        "max_ranks": "wp",
+        "careers": {
+            "Flagellant": "4",
+            "Wolf Kin": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "beat-blade",
+        "name": "Beat Blade",
+        "description": "You are trained to make sharp controlled blows to your opponent’s weapon, creating an opening for an attack or simply impeding an incoming attack. For your Action, you can choose to Beat Blade before rolling. Perform a Melee Test; if successful, your opponent loses –1 Advantage, and loses a further –1 per SL you score. This Test is not Opposed. This Talent is of no use if your opponent has no weapon, or has a larger Size than you (see page 341).",
+        "tests": [
+            "Melee for a Beat Blade"
+        ],
+        "max_ranks": "ws",
+        "careers": {
+            "Duellist": "1",
+            "Ironbreaker": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "beneath-notice",
+        "name": "Beneath Notice",
+        "description": "The high and mighty pay no attention to your presence, knowing you are well beneath their notice. Assuming you are properly attired and not in an incongruous position, those of a higher Status Tier will normally ignore you unless your presence becomes inappropriate, which can make it very easy to listen into conversations you perhaps shouldn’t. Further, characters with a higher Status Tier than you gain no Advantage for striking or wounding you in combat, as there is nothing to be gained for defeating such a lowly cur.",
+        "tests": [
+            "Stealth when in plain sight"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Advisor": "1",
+            "Beggar": "2",
+            "Camp Follower": "1",
+            "Investigator": "1",
+            "Scryer": "1",
+            "Servant": "1",
+            "Townsman": "1"
+        },
+        "racial": [
+            "Gnome",
+            "Human (Sarl)"
+        ]
+    },
+    {
+        "id": "berserk-charge",
+        "name": "Berserk Charge",
+        "description": "You hurl yourself at your enemies with reckless abandon, using the force of your charge to add weight to your strikes. When you Charge, you gain +1 Damage to all Melee attacks per level in this Talent.",
+        "tests": [
+            "Melee on a Round when you Charge"
+        ],
+        "max_ranks": "s",
+        "careers": {
+            "Flagellant": "1",
+            "Wolf Kin": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "blather",
+        "name": "Blather",
+        "description": "Called ‘opening your mouth and letting your belly rumble’ in Nordland, or simply ‘bullshitting’ in Ostland, blathering involves talking rapidly and incessantly, or talking volubly and at-length, about inconsequential or nonsense matters, and is used to verbally confuse and confound a target. You use your Charm Skill to Blather. Attempt an Opposed Charm/Intelligence Test. Success gives your opponent a Stunned Condition. Further, for each level you have in Blather, your opponent gains another Stunned Condition. Targets Stunned by Blather may do nothing other than stare at you dumbfounded as they try to catch-up with or understand what you are saying. Once the last Stunned Condition comes to an end, the target finally gets a word in, and may not be best pleased with you — after all, you have been talking about nothing or nonsense for some time. Should you stop talking, your opponent immediately loses all Stunned Conditions caused by your Blather. Generally, you can only attempt to Blather at a character once per scene, or perhaps longer as determined by the GM, as the target soon wises up to your antics.",
+        "tests": [
+            "Charm to Blather"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Advisor": "2",
+            "Agitator": "1",
+            "Bawd": "1",
+            "Beggar": "3",
+            "Camp Follower": "1",
+            "Charlatan": "2",
+            "Entertainer": "3",
+            "Envoy": "1",
+            "Lawyer": "1",
+            "Magister Vigilant": "2",
+            "Merchant": "1",
+            "Priest": "2",
+            "Shadowmancer": "3",
+            "Spy": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "bless",
+        "name": "Bless (Divine Lore)",
+        "description": "You are watched over by one of the Gods and can empower simple prayers. You can now deploy the Blessings of your deity as listed in Chapter 7: Religion and Belief. Under normal circumstances, you may only ever know one Divine Lore for the Bless Talent.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Nun": "1",
+            "Priest": "1",
+            "Priest of Myrmidia": "1",
+            "Priest of Stromfels": "1",
+            "Sailor-Priest of Manann": "1",
+            "Warrior Priest": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "bookish",
+        "name": "Bookish",
+        "description": "You are as at home in a library as a seaman at sea or a farmer a-farming. When using Research, you may reverse the dice of any failed Test if this will score a success.",
+        "tests": [
+            "Research"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Alchemist": "3",
+            "Apothecary": "3",
+            "Cartographer": "2",
+            "Investigator": "3",
+            "Lawyer": "3",
+            "Mundane Alchemist": "2",
+            "Physician": "1",
+            "Priest": "2",
+            "Priest of Myrmidia": "",
+            "Scholar": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "break-and-enter",
+        "name": "Break and Enter",
+        "description": "You are an expert at quickly breaking down doors and forcing entry. You may add +1 Damage for each level in this Talent when determining damage against inanimate objects such as windows, chests, doors, and similar.",
+        "tests": [
+            "Melee when forcing or breaking inanimate objects"
+        ],
+        "max_ranks": "s",
+        "careers": {
+            "Bailiff": "2",
+            "Bounty Hunter": "1",
+            "Grave Robber": "2",
+            "Investigator": "3",
+            "Magister Vigilant": "3",
+            "Thief": "2",
+            "Watchman": "2",
+            "Wrecker": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "briber",
+        "name": "Briber",
+        "description": "You are an exceedingly skilled briber. The GM should reduce the base cost of any required bribe by 10% per level you have in Briber, to a minimum of 10% of the original amount.",
+        "tests": [
+            "Bribery"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Advisor": "3",
+            "Artisan": "4",
+            "Bawd": "4",
+            "Envoy": "4",
+            "Fence": "4",
+            "Merchant": "2",
+            "Noble": "2",
+            "Owler": "3",
+            "Smuggler": "3",
+            "Spy": "4",
+            "Townsman": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "cardsharp",
+        "name": "Cardsharp",
+        "description": "You are used to playing, and winning, at cards, although your methods may involve a little cheating. When you successfully use Gamble or Sleight of Hand when playing cards, you can choose to either use your rolled SL, or the number rolled on your units die. So, a successful roll of 28 could be used for +8 SL. If you play a real card game to represent what is happening in-game, you may receive an extra number of cards per deal equal to your level in Cardsharp, then discard down to the appropriate hand-size before each round of play.",
+        "tests": [
+            "Gamble and Sleight of Hand when playing card games"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Charlatan": "1",
+            "Fence": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "careful-strike",
+        "name": "Careful Strike",
+        "description": "You are skilled at hitting your enemy exactly where you want to, either at range or in melee. You may modify your Hit Location result by up to +/–10 per time you have this Talent. So, if you had this Talent twice and hit location 34, the Right Arm, you could modify this down to 14, the Left Arm, or up to 54, the Body (see page 159).",
+        "tests": [],
+        "max_ranks": "i",
+        "careers": {
+            "Bounty Hunter": "3",
+            "Fieldwarden": "1",
+            "Ironbreaker": "3",
+            "Miner": "3",
+            "Protagonist": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "carouser",
+        "name": "Carouser",
+        "description": "You are a seasoned drinker and know how to party hard. You may reverse the dice of any failed Consume Alcohol Test if this will score a Success.",
+        "tests": [
+            "Charm at Parties",
+            "Gossip at Parties",
+            "Consume Alcohol"
+        ],
+        "max_ranks": "t",
+        "careers": {
+            "Advisor": "3",
+            "Artist": "2",
+            "Badger Rider": "4",
+            "Bawd": "2",
+            "Beadle": "2",
+            "Chantyman": "3",
+            "Envoy": "3",
+            "Noble": "2",
+            "Rhinox Herder": "4",
+            "Scholar": "1",
+            "Spy": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "cat-fall",
+        "name": "Cat-fall",
+        "description": "You are nimble and balanced like a cat, and are able to fall much greater distances unharmed than others might. Whenever you fall, you attempt an Athletics Test. If successful, reduce the distance fallen by 1 yard, +1 extra yard per +1 SL scored, for the purposes of calculating Damage.",
+        "tests": [
+            "Athletics when falling"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Ghost Strider": "3",
+            "Seaman": "2",
+            "Thief": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "cat-tongued",
+        "name": "Cat-tongued",
+        "description": "Like Ranald the Trickster God, you blend truth and lies as if there were no difference. When using Charm to lie, listeners do not get to oppose your Charm with their Intuition to detect if there is something fishy in what you say.",
+        "tests": [
+            "Charm when lying"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Advisor": "3",
+            "Agitator": "3",
+            "Beggar": "4",
+            "Charlatan": "3",
+            "Envoy": "2",
+            "Lawyer": "3",
+            "Merchant": "3",
+            "Pedlar": "4",
+            "Spy": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "chanty",
+        "name": "Chanty",
+        "description": "This Talent allows a Character to learn a chanty (see Sea of Claws, page 67). Whenever a Character buys a new level in the Talent they learn a new song. A Chanty affects an entire crew. To use the talent the Chantyman should find a location within earshot of as many of the crew as possible and pass an Entertain (Singing) Test. It takes 30 seconds for a Chantyman to establish the chanty, after which the effect lasts for three minutes plus a number of minutes equal to the SL on the Entertain (Singing) Test. The only combat action the Chantyman can make while the Chanty is being performed is a Dodge. Other actions can be made at the GM’s discretion, such as Perception Tests or Cool Tests. If the Chantyman takes damage or fails any Opposed Test their Chanty ends. A Chanty may be sung at each watch. There’s only so much inspiration a crew can take.",
+        "tests": [
+            "Entertain (Singing)"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Chantyman": "2",
+            "Sailor-Priest of Manann": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "chaos-magic",
+        "name": "Chaos Magic (Lore)",
+        "description": "By accident or design you have lost a portion of your soul to one of the Dark Gods, and can now practice the foul magics of Chaos. Your ruinous patron immediately grants you access to a single spell from the chosen Lore (most commonly the Nurgle, Slaanesh, or Tzeentch Lores) and you gain a Corruption point as the spell infiltrates your mind, never to be forgotten. Each time you take this Talent, which always costs 100 XP per time instead of the normal cost, you learn another spell from your chosen Lore and gain a Corruption point. For more about the available spells, see Chapter 8: Magic. Under normal circumstances, you may only ever know one Lore of Chaos Magic.",
+        "tests": [],
+        "max_ranks": "chaos_spells_known",
+        "careers": {},
+        "racial": []
+    },
+    {
+        "id": "combat-aware",
+        "name": "Combat Aware",
+        "description": "You are used to scanning the battlefield to make snap decisions informed by the shifting tides of war. You may take a Challenging (+0) Perception Test to ignore Surprise, which is modified by circumstance as normal.",
+        "tests": [
+            "Perception during melee"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Archer": "3",
+            "Artillerist": "3",
+            "Cavalryman": "1",
+            "Freelance": "1",
+            "Ghost Strider": "3",
+            "Greatsword": "3",
+            "Halberdier": "3",
+            "Handgunner": "3",
+            "Heirophant": "4",
+            "Ironbreaker": "2",
+            "Light Cavalry": "2",
+            "Outlaw": "1",
+            "Pikeman": "3",
+            "Priest of Myrmidia": "3",
+            "Pyromancer": "4",
+            "Road Warden": "4",
+            "Scout": "2",
+            "Ship’s Gunner": "3",
+            "Siege Specialist": "4",
+            "Soldier": "3",
+            "Spiriter": "4",
+            "Warrior Priest": "3",
+            "Wizard": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "combat-master",
+        "name": "Combat Master",
+        "description": "Your accumulated years of combat experience allow you to keep lesser fighters at bay. For each level in this Talent, you count as one more person for the purposes of determining if one side out numbers the other. This Talent only comes into play when you are out-numbered. See page 162 for the rules for out-numbering.",
+        "tests": [],
+        "max_ranks": "ag",
+        "careers": {
+            "Duellist": "4",
+            "Freelance": "3",
+            "Guard": "4",
+            "Ironbreaker": "3",
+            "Maneater": "4",
+            "Pit Fighter": "3",
+            "Priest of Myrmidia": "4",
+            "Slayer": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "combat-reflexes",
+        "name": "Combat Reflexes",
+        "description": "You react like a flash of lightning. Add 10 to your Initiative for each level in this Talent when determining Combat Initiative.",
+        "tests": [],
+        "max_ranks": "i",
+        "careers": {
+            "Cavalryman": "3",
+            "Duellist": "2",
+            "Greatsword": "2",
+            "Light Cavalry": "3",
+            "Maneater": "3",
+            "Pikeman": "3",
+            "Pit Fighter": "2",
+            "Priest of Myrmidia": "4",
+            "Protagonist": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "commanding-presence",
+        "name": "Commanding Presence",
+        "description": "Your presence fills others with hushed awe and admiration. Such is your aura of authority, those with a lower Status may not resist your Leadership tests with their Willpower. Of course, enemies are still no more likely to respect or obey you, but the common folk rarely stand against you.",
+        "tests": [
+            "Leadership"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Advisor": "4",
+            "Bailiff": "4",
+            "Envoy": "4",
+            "Greatsword": "4",
+            "Halberdier": "4",
+            "Ironbreaker": "4",
+            "Lawyer": "4",
+            "Light Cavalry": "4",
+            "Noble": "4",
+            "Nun": "4",
+            "Officer": "4",
+            "Racketeer": "4",
+            "Riverwarden": "4",
+            "Road Warden": "4",
+            "Scryer": "4",
+            "Townsman": "4",
+            "Warden": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "concoct",
+        "name": "Concoct",
+        "description": "You are skilled at making potions, philtres, and draughts on the go. You may take one free Crafting Endeavor to use Lore (Apothecary) without need of a Workshop. Other Crafting Endeavors use the normal rules.",
+        "tests": [
+            "Lore (Apothecary)"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Apothecary": "1",
+            "Herbalist": "4",
+            "Mundane Alchemist": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "contortionist",
+        "name": "Contortionist",
+        "description": "You can bend and manipulate your body in a myriad of seemingly unnatural ways. This allows you to squeeze through unlikely gaps and bend your body in crazy ways, giving benefits determined by the GM, possibly with a successful Agility test.",
+        "tests": [
+            "Perform and Agility Tests when contorting helps"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Entertainer": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "cool-headed",
+        "name": "Cool-headed",
+        "description": "You gain a permanent +5 bonus to your starting Willpower Characteristic this does not count towards your Advances.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Apothecary": "4",
+            "Beachcomber": "2",
+            "Cartographer": "2",
+            "Coachman": "2",
+            "Greatsword": "1",
+            "Knight of the White Wolf": "4",
+            "Knight Panther": "2",
+            "Noble": "3",
+            "Officer": "2",
+            "Physician": "2",
+            "Road Warden": "1",
+            "Scryer": "2",
+            "Shaman": "2",
+            "Witch Hunter": "1"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "High Elf",
+            "Human (Tilean)"
+        ]
+    },
+    {
+        "id": "crack-the-whip",
+        "name": "Crack the Whip",
+        "description": "You know how to get the most out of your animals. When an animal you control is Fleeing or Running, it gains +1 Movement if you are using a whip.",
+        "tests": [
+            "Drive or Ride Tests when Fleeing or Running"
+        ],
+        "max_ranks": "dex",
+        "careers": {
+            "Cavalryman": "1",
+            "Coachman": "2",
+            "Messenger": "2",
+            "Road Warden": "2"
+        },
+        "racial": [
+            "Human (Sarl)"
+        ]
+    },
+    {
+        "id": "craftsman",
+        "name": "Craftsman (Trade)",
+        "description": "You have true creative talent. Add the associated Trade Skill to any Career you enter. If the Trade Skill is already in your Career, you may instead purchase the Skill for 5 XP fewer per Advance.",
+        "tests": [
+            "Trade (any one)"
+        ],
+        "max_ranks": "dex",
+        "careers": {
+            "Alchemist": "3 (Blacksmith, Goldsmith, or Engineer)",
+            "Apothecary": "1 (Apothecary)",
+            "Artisan": "1 (Any)",
+            "Engineer": "2 (Engineer)",
+            "Hedge Witch": "3 (Herbalist)",
+            "Herbalist": "3 (Herbalist)",
+            "Miner": "3 (Explosives)",
+            "Mundane Alchemist": "1 (Alchemy)",
+            "Riverwoman": "2 (Boat-builder)",
+            "Siege Specialist": "3 (Explosives)",
+            "Villager": "3 (Any)"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "crew-commander",
+        "name": "Crew Commander",
+        "description": "A Character with this talent is practised at managing crews of siege weapons and artillery pieces. The Character may make a Challenging (+0) Leadership Test to help a crew manning a weapon with the Crewed Quality within earshot. If the Character passes the Test, the crew members may then use the Character’s Ranged Skill when shooting the weapon.",
+        "tests": [
+            "Ranged Skill tests when firing a weapon with the Crewed Flaw."
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Artillerist": "3",
+            "Crew Commander": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "criminal",
+        "name": "Criminal",
+        "description": "You are an active criminal making money from illegal sources, and you’re not always quiet about it. For the purposes of securing money, either when Earning during play or performing an Income Endeavor, refer to the following table:\nCareer Level Bonus Money per time the Talent is taken\n1 +2d10 brass pennies\n2 +1d10 silver shillings\n3 +2d10 silver shillings\n4 +1 gold crown\nBecause of your obvious criminal nature, others consider you lower Status than them unless they also have the Criminal Talent, where Status is compared as normal — perhaps you have gang tattoos, look shifty, or are just rough around the edges, it’s your choice. Because of this, local law enforcers are always suspicious of you and suspect your motivations, which only gets worse the more times you have this Talent, with the exact implications determined by the GM. Lawbreakers without the Criminal Talent earn significantly less coin but are not obviously the sort to be breaking the law, so maintain their Status. With GM consent, you may spend XP to remove levels of the Criminal Talent for the same XP it cost to buy.",
+        "tests": [],
+        "max_ranks": "None",
+        "careers": {
+            "Advisor": "2",
+            "Apothecary": "2",
+            "Artist": "2",
+            "Bailiff": "2",
+            "Bawd": "2",
+            "Beggar": "2",
+            "Charlatan": "2",
+            "Fence": "2",
+            "Grave Robber": "1",
+            "Lawyer": "2",
+            "Messenger": "2",
+            "Mundane Alchemist": "2",
+            "Outlaw": "1",
+            "Owler": "1",
+            "Physician": "2",
+            "Priest of Stromfels": "1",
+            "Protagonist": "2",
+            "Racketeer": "1",
+            "Riverwarden": "2",
+            "Road Warden": "2",
+            "Scryer": "2",
+            "Smuggler": "1",
+            "Stevedore": "2",
+            "Thief": "1",
+            "Watchman": "2",
+            "Witch": "1",
+            "Wrecker": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "dead-eye-shot",
+        "name": "Dead-eye Shot",
+        "description": "You always hit an opponent right between the eyes… or wherever else you intended to hit. Instead of reversing the dice to determine which Hit Location is struck with your ranged weapons, you may pick a location.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Bounty Hunter": "4",
+            "Ghost Strider": "4",
+            "Hunter": "3",
+            "Outlaw": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "deal-maker",
+        "name": "Deal maker",
+        "description": "You are a skilled businessman who knows how to close a deal. When using the Haggle skill, you reduce or increase the price of the products by an extra 10%. Note: The GM may put a lower limit on prices here to show a seller refusing to sell below cost.",
+        "tests": [
+            "Haggle"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Apothecary": "2",
+            "Artisan": "2",
+            "Artist": "3",
+            "Bawd": "3",
+            "Beachcomber": "4",
+            "Boatman": "3",
+            "Cartographer": "4",
+            "Charlatan": "3",
+            "Coachman": "3",
+            "Entertainer": "4",
+            "Envoy": "3",
+            "Fence": "1",
+            "Herbalist": "2",
+            "Huffer": "2",
+            "Light Cavalry": "4",
+            "Merchant": "1",
+            "Messenger": "4",
+            "Noble": "3",
+            "Owler": "2",
+            "Pedlar": "2",
+            "Smuggler": "2",
+            "Stevedore": "3",
+            "Townsman": "2",
+            "Villager": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "detect-artefact",
+        "name": "Detect Artefact",
+        "description": "You are able to sense when magic lies within an artefact. You may attempt an Intuition Test for any magical artefact touched. If successful, you sense the item is magical; further, each SL also provides a specific special rule the item uses, if it has any. Normally, you may only attempt this Test once per artefact touched.",
+        "tests": [
+            "Intuition tests to detect magical artefacts"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Alchemist": "2",
+            "Astromancer": "2",
+            "Butcher": "4",
+            "Druid": "2",
+            "Hierophant": "2",
+            "Mundane Alchemist": "3",
+            "Mystic": "2",
+            "Pyromancer": "2",
+            "Shadowmancer": "2",
+            "Shaman": "2",
+            "Spiriter": "2",
+            "Wizard": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "diceman",
+        "name": "Diceman",
+        "description": "You are a dicing master, and all claims you cheat are clearly wrong. When you successfully use Gamble or Sleight of Hand when playing with dice, you can choose to either use your rolled SL, or the number rolled on your units die. So, a successful roll of 06 could be used for +6 SL. If you play any real-life dice games to represent in-game dice games, always roll extra dice equal to your Diceman level and choose the best results.",
+        "tests": [
+            "Gamble and Sleight of Hand when playing dice games"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Beadle": "1",
+            "Charlatan": "1",
+            "Camp Follower": "2",
+            "Guard": "1",
+            "Halberdier": "1",
+            "Light Cavalry": "1",
+            "Pikeman": "2",
+            "Soldier": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "dirty-fighting",
+        "name": "Dirty Fighting",
+        "description": "You have been taught all the dirty tricks of unarmed combat. You may choose to cause an extra +1 Damage for each level in Dirty Fighting with any successful Melee (Brawling) hit.\nNote: using this Talent will be seen as cheating in any formal bout.",
+        "tests": [
+            "Melee (Brawling)"
+        ],
+        "max_ranks": "ws",
+        "careers": {
+            "Agitator": "3",
+            "Beggar": "3",
+            "Boatman": "1",
+            "Camp Follower": "1",
+            "Fence": "4",
+            "Maneater": "1",
+            "Outlaw": "2",
+            "Pit Fighter": "1",
+            "Protagonist": "1",
+            "Racketeer": "2",
+            "Stevedore": "1",
+            "Wrecker": "3"
+        },
+        "racial": [
+            "Ogre"
+        ]
+    },
+    {
+        "id": "disarm",
+        "name": "Disarm",
+        "description": "You are able to disarm an opponent with a careful flick of the wrist or a well-aimed blow to the hand. For your Action, you may attempt an Opposed Melee/Melee test. If you win, your opponent loses a held weapon, which flies 1d10 feet in a random direction (with further effects as determined by the GM). If you win by 2 SL, you can determine how far the weapon is flung instead of rolling randomly; if you win by 4 SL, you can also choose the direction the weapon goes in; if you win by 6 SL or more, you can take your opponent’s weapon if you have a free hand, plucking it from the air with a flourish. This Talent is of no use if your opponent has no weapon, or is a larger Size than you (see page 341).",
+        "tests": [
+            "Melee Tests concerning this Talent"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Duellist": "3",
+            "Freelance": "4",
+            "Knight": "4",
+            "Knight of the Blazing Sun": "3",
+            "Knight Panther": "4",
+            "Pit Fighter": "3",
+            "Protagonist": "3",
+            "Watchman": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "distract",
+        "name": "Distract",
+        "description": "You are trained in simple movements to distract or startle your opponent, drawing eyes from your true intent. You may use your Move to perform a Distraction. This is resolved by an Opposed Athletics/Cool Test. If you win, your opponent can gain no Advantage until the end of the next Round.",
+        "tests": [
+            "Athletics to Distract"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Badger Rider": "3",
+            "Duellist": "1",
+            "Fieldwarden": "1",
+            "Rhinox Herder": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "doomed",
+        "name": "Doomed",
+        "description": "At the age of 10, a Priest of Morr called a Doomsayer took you aside to foretell your death in an incense-laden, coming-of-age ritual called the Dooming. In conjunction with your GM, come up with a suitable Dooming. Should your character die in a fashion that matches your Dooming, your next character gains a bonus of half the total XP your dead character accrued during play.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {},
+        "racial": [
+            "Human (Middenheimer, Middenlander, Nordlander, Reiklander, Salzenmunder, Tilean (Luccini))",
+            "Dooming Miracle"
+        ]
+    },
+    {
+        "id": "drilled",
+        "name": "Drilled",
+        "description": "You have been trained to fight shoulder-to-shoulder with other soldiers. If an enemy causes you to lose Advantage when standing beside an active ally with the Drilled Talent, you may keep 1 lost Advantage for each time you’ve taken the Drilled Talent.",
+        "tests": [
+            "Melee Tests when beside an ally with Drilled"
+        ],
+        "max_ranks": "ws",
+        "careers": {
+            "Archer": "2",
+            "Fieldwarden": "2",
+            "Greatsword": "1",
+            "Halberdier": "1",
+            "Handgunner": "2",
+            "Ironbreaker": "1",
+            "Pikeman": "1",
+            "Priest of Myrmidia": "2",
+            "Soldier": "2",
+            "Watchman": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "dual-wielder",
+        "name": "Dual Wielder",
+        "description": "When armed with two weapons, you may attack with both for your Action. Roll to hit with the weapon held in your primary hand. If you hit, determine Damage as normal, but remember to keep your dice roll, as you will use it again. If the first strike hits, once it is resolved, the weapon in your secondary hand can then target an available opponent of your choice using the same dice roll for the first strike, but reversed. So, if you rolled 34 to hit with the first weapon, you use 43 to hit with the second. Remember to modify this second roll by your off-hand penalty (–20 unless you have the Ambidextrous Talent). This second attack is Opposed with a new defending roll, and damage for this second strike is calculated as normal. The only exception to this is if you roll a Critical for your first strike. If this happens, use the roll on the Critical Table to also act as the roll for the second attack. So, if you scored a critical to the head and rolled 56 on the Critical table for a Major Eye Wound, your second attack would then strike out with a to-hit value of 56. If you choose to attack with both weapons, all your defensive rolls until the start of your next Turn suffer a penalty of –10. You do not gain an Advantage when you successfully strike or Wound an opponent when Dual Wielding unless both attacks hit.",
+        "tests": [
+            "Melee or Ranged when attacking with two weapons"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Bounty Hunter": "3",
+            "Duellist": "3",
+            "Hierophant": "3",
+            "Pit Fighter": "2",
+            "Pyromancer": "3",
+            "Slayer": "1",
+            "Warrior Priest": "2",
+            "Witch Hunter": "2",
+            "Wizard": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "embezzle",
+        "name": "Embezzle",
+        "description": "You are skilled at skimming money from your employers without being detected. Whenever you secure money when Earning (during play or performing an Income Endeavor), you may attempt an Opposed Intelligence Test with your employer (assuming you have one). If you win, you skim 2d10 + SL brass pennies, 1d10 + SL silver shillings, or 1 + SL gold crowns (depending upon the size of the business in question, as determined by the GM) without being detected. If your employer wins by 6+ SL, you gain the money, but your embezzling is detected; what then happens is left to the GM. Any other result means you have failed to embezzle any money.",
+        "tests": [
+            "Intelligence (Embezzling)"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Advisor": "4",
+            "Bailiff": "1",
+            "Bawd": "3",
+            "Boatman": "3",
+            "Merchant": "2",
+            "Miner": "4",
+            "Racketeer": "2",
+            "Road Warden": "1",
+            "Servant": "3",
+            "Stevedore": "3",
+            "Townsman": "2",
+            "Warden": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "enclosed-fighter",
+        "name": "Enclosed Fighter",
+        "description": "You have learned to make the most benefit out of fighting in enclosed spaces. You ignore penalties to Melee caused by confined spaces such as tunnels, the front-line, small fighting pits, and similar, and can use the Dodge Skill, even if it would normally be disallowed due to lack of space.",
+        "tests": [
+            "Dodge in enclosed environments"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Greatsword": "3",
+            "Halberdier": "2",
+            "Ironbreaker": "1",
+            "Karak Ranger": "3",
+            "Pikeman": "2",
+            "Rat Catcher": "2",
+            "Siege Specialist": "2",
+            "Soldier": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "etiquette",
+        "name": "Etiquette (Social Group)",
+        "description": "You can blend in socially with the chosen group so long as you are dressed and acting appropriately. Example social groups for this Talent are: Criminals, Cultists, Guilders, Nobles, Scholars, Servants, and Soldiers. If you do not have the Talent, those with it will note your discomfort in the unfamiliar environment. This is primarily a matter for role-playing, but may confer a bonus to Fellowship Tests at the GM’s discretion.",
+        "tests": [
+            "Charm and Gossip (Social Group)"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Advisor": "1 (Any)",
+            "Agitator": "4 (Any)",
+            "Apothecary": "1 (Scholar), 2 (Guilder)",
+            "Archer": "2 (Soldiers)",
+            "Artillerist": "2 (Soldiers)",
+            "Artisan": "2 (Guilder)",
+            "Artist": "3 (Any)",
+            "Bawd": "3 (Any)",
+            "Beadle": "2 (Scholars)",
+            "Beggar": "2 (Criminals)",
+            "Boatman": "2 (Guilder)",
+            "Camp Follower": "2 (Soldiers)",
+            "Cartographer": "3 (Guilder)",
+            "Cavalryman": "2 (Soldiers)",
+            "Chantyman": "1 (Crew)",
+            "Charlatan": "1 (Any)",
+            "Duellist": "2 (Any)",
+            "Engineer": "2 (Guilder), 3 (Scholar)",
+            "Entertainer": "4 (Any)",
+            "Envoy": "1 (Nobles), 2 (Any)",
+            "Fence": "2 (Criminals)",
+            "Freelance": "2 (Any)",
+            "Greatsword": "2 (Soldiers)",
+            "Guard": "1 (Servants)",
+            "Halberdier": "2 (Soldiers)",
+            "Handgunner": "2 (Soldiers)",
+            "Huffer": "2 (Guilder)",
+            "Investigator": "2 (Any)",
+            "Knight of the Blazing Sun": "1 (Any)",
+            "Lawyer": "1 (Scholar), 2 (Guilder)",
+            "Maneater": "2 (Slims)",
+            "Merchant": "2 (Guilder), 3 (Any)",
+            "Mundane Alchemist": "2 (Guilder)",
+            "Noble": "1 (Nobles)",
+            "Nun": "2 (Cultists)",
+            "Officer": "1 (Crew)",
+            "Owler": "2 (Criminals)",
+            "Physician": "2 (Guilder), 3 (Scholar), 4 (Nobles)",
+            "Pikeman": "2 (Mercenaries)",
+            "Priest": "2 (Cultists)",
+            "Priest of Myrmidia": "1 (Cultists)",
+            "Racketeer": "1 (Criminals)",
+            "Rat Catcher": "2 (Guilder)",
+            "Road Warden": "3 (Soldiers)",
+            "Scholar": "2 (Scholar)",
+            "Scryer": "3 (Nobles)",
+            "Servant": "2 (Servants), 4 (Any)",
+            "Ship’s Gunner": "2 (Crew)",
+            "Siege Specialist": "1 (Mercenaries)",
+            "Smuggler": "2 (Criminals)",
+            "Soldier": "2 (Soldiers)",
+            "Spy": "2 (Any)",
+            "Stevedore": "2 (Guilder), 3 (Criminals)",
+            "Thief": "2 (Criminals)",
+            "Townsman": "1 (Servants), 2 (Any)",
+            "Warden": "2 (Servants), 4 (Any)",
+            "Warrior Priest": "1 (Cultists)",
+            "Watchman": "3 (Soldiers)",
+            "Wrecker": "3 (Criminals)"
+        },
+        "racial": [
+            "Human (Middenheimer) (Any)"
+        ]
+    },
+    {
+        "id": "fast-hands",
+        "name": "Fast Hands",
+        "description": "You can move your hands with surprising dexterity. Bystanders get no passive Perception Tests to spot your use of the Sleight of Hand Skill, instead they only get to Oppose your Sleight of Hand Tests if they actively suspect and are looking for your movements. Further, attempts to use Melee (Brawling) to simply touch an opponent gain a bonus of +10 × your level in Fast Hands.",
+        "tests": [
+            "Sleight of Hand, Melee (Brawling) to touch an opponent"
+        ],
+        "max_ranks": "dex",
+        "careers": {
+            "Cavalryman": "3",
+            "Charlatan": "2",
+            "Druid": "2",
+            "Hedge Witch": "1",
+            "Magister Vigilant": "2",
+            "Pyromancer": "2",
+            "Shadowmancer": "2",
+            "Shaman": "2",
+            "Spiriter": "2",
+            "Thief": "2",
+            "Witch": "3",
+            "Wizard": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "fast-shot",
+        "name": "Fast Shot",
+        "description": "If you have a loaded ranged weapon, you can fire it outside the normal Initiative Order before any other combatant reacts in the following Round. You roll to hit using all the normal modifiers. Employing Fast Shot requires both your Action and Move for your upcoming turn, and these will count as having been spent when your next turn arrives. If two or more characters use Fast Shot, the character who has taken this Talent most goes first. If any characters have taken Fast Shot an equal number of times, both shots are fired simultaneously, and should both be handled at the same time.",
+        "tests": [
+            "Ranged when making a Fast Shot"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Archer": "1",
+            "Badger Rider": "1",
+            "Duellist": "2",
+            "Fieldwarden": "1",
+            "Ghost Strider": "2",
+            "Handgunner": "2",
+            "Hunter": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "fearless",
+        "name": "Fearless (Enemy)",
+        "description": "You are either brave enough or crazy enough that fear of certain enemies has become a distant memory. With a single Average (+20%) Cool Test, you may ignore any Intimidate, Fear, or Terror effects from the specified enemy when encountered. Typical enemies include Beastmen, Greenskins, Outlaws, Vampires, Watchmen, and Witches.",
+        "tests": [
+            "Cool to oppose your Enemy’s Intimidate, Fear, and Terror"
+        ],
+        "max_ranks": "wp",
+        "careers": {
+            "Beadle": "3 (Intruders)",
+            "Beggar": "4 (Watchmen)",
+            "Bounty Hunter": "4 (Criminals)",
+            "Coachman": "3 (Outlaws), 4 (Beastmen)",
+            "Fieldwarden": "4",
+            "Flagellant": "4 (Heretics)",
+            "Grave Robber": "4 (Undead)",
+            "Greatsword": "2 (Any)",
+            "Guard": "3 (Intruders)",
+            "Halberdier": "2 (Any)",
+            "Hunter": "3 (Animals), 4 (Monsters)",
+            "Knight": "3 (Any)",
+            "Knight of the Blazing Sun": "3 (Any)",
+            "Knight of the White Wolf": "3 (Any)",
+            "Knight Panther": "3 (Chaos)",
+            "Outlaw": "4 (Road Warden)",
+            "Owler": "3 (Road Wardens)",
+            "Pikeman": "2 (Cavalry)",
+            "Priest of Myrmidia": "4 (Any)",
+            "Priest of Stromfels": "2 (Any)",
+            "Racketeer": "3 (Watchmen)",
+            "Rat Catcher": "2 (Rats), 4 (Skaven)",
+            "Rhinox Herder": "2 (Large Beasts)",
+            "Riverwarden": "3 (Wreckers)",
+            "Road Warden": "3 (Outlaws)",
+            "Slayer": "1 (Everything)",
+            "Smuggler": "3 (Riverwarden)",
+            "Warrior Priest": "4 (Any)",
+            "Watchman": "3 (Criminals)",
+            "Witch Hunter": "3 (Witches)",
+            "Wolf Kin": "4 (Beastmen)"
+        },
+        "racial": [
+            "Combat Familiar (Size Large or smaller)"
+        ]
+    },
+    {
+        "id": "feint",
+        "name": "Feint",
+        "description": "You have trained how to make false attacks in close combat to fool your opponent. You may now make a Feint for your Action against any opponent using a weapon. This is resolved with an Opposed Melee (Fencing)/Melee Test. If you win, and you attack the same opponent before the end of the next Round, you may add the SL of your Feint to your attack roll.",
+        "tests": [
+            "Melee (Fencing) for Feints"
+        ],
+        "max_ranks": "ws",
+        "careers": {
+            "Duellist": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "field-dressing",
+        "name": "Field Dressing",
+        "description": "You are used to treating wounds quickly. If you fail a Heal Test when using Bandages, you may reverse the result if this will score a success; however, if you do so, you may not score more than +1 SL as you focus on speed over accuracy.",
+        "tests": [
+            "Heal during combat Rounds"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Herbalist": "3",
+            "Flagellant": "3",
+            "Light Cavalry": "1",
+            "Nun": "2",
+            "Physician": "1",
+            "Pikeman": "3",
+            "Wolf Kin": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "fisherman",
+        "name": "Fisherman",
+        "description": "You are a very capable fisherman and know all the best ways to land fish. Assuming a large enough body of water is available, you are automatically assumed to be able to fish enough to feed yourself and a number of others equal to your level in Fisherman, assuming you choose to spend at least an hour or so with a line and bait. You may secure more fish in addition to this using the normal rules for foraging (see page 127).",
+        "tests": [
+            "Any Test involving fishing"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Beachcomber": "1",
+            "Boatman": "1",
+            "Chantyman": "3",
+            "Huffer": "1",
+            "Pedlar": "1",
+            "Riverwarden": "2",
+            "Riverwoman": "1",
+            "Seaman": "1",
+            "Smuggler": "1",
+            "Wrecker": "1"
+        },
+        "racial": [
+            "Gnome",
+            "Human (Björnling, Nordlander, Tilean)"
+        ]
+    },
+    {
+        "id": "flagellant",
+        "name": "Flagellant",
+        "description": "You have dedicated your pain to the service of your God. Each day, you must spend half a bell (half an hour) praying as you maintain a number of Wounds suffered equal to your level in Flagellant. Until you next sleep, if you have the Frenzy Talent you may enter Frenzy immediately without testing. The Frenzy Talent is added to the Talent list of any career you are in. Should you fail to flagellate yourself on any given day, or allow your castigated flesh to be healed, you may not spend any Resilience or Resolve until you flagellate yourself again.",
+        "tests": [
+            "Any for resisting the Ruinous Powers"
+        ],
+        "max_ranks": "t",
+        "careers": {
+            "Flagellant": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "flee",
+        "name": "Flee!",
+        "description": "When your life is on the line you are capable of impressive bursts of speed. Your Movement Attribute counts as 1 higher when Fleeing (see page 165).",
+        "tests": [
+            "Athletics when Fleeing"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Agitator": "3",
+            "Badger Rider": "1",
+            "Beachcomber": "2",
+            "Cartographer": "2",
+            "Grave Robber": "1",
+            "Light Cavalry": "1",
+            "Messenger": "1",
+            "Outlaw": "1",
+            "Pedlar": "1",
+            "Priest of Stromfels": "2",
+            "Rhinox Herder": "1",
+            "Thief": "1",
+            "Wrecker": "2"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "fleet-footed",
+        "name": "Fleet Footed",
+        "description": "You gain +1 to your Movement Attribute.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Fieldwarden": "1",
+            "Ghost Strider": "1",
+            "Messenger": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "frenzy",
+        "name": "Frenzy",
+        "description": "You can Frenzy as described on page 190.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Flagellant": "1",
+            "Slayer": "1",
+            "Wolf Kin": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "frightening",
+        "name": "Frightening",
+        "description": "Anyone sane thinks twice before approaching you. If you wish, you have a Fear Rating of 1 (see page 190). Add +1 to this number per extra time you have this Talent.",
+        "tests": [],
+        "max_ranks": "sus",
+        "careers": {
+            "Alchemist": "4",
+            "Astromancer": "4",
+            "Badger Rider": "4",
+            "Beadle": "4",
+            "Butcher": "3",
+            "Druid": "4",
+            "Flagellant": "4",
+            "Magister Vigilant": "4",
+            "Maneater": "3",
+            "Pit Fighter": "4",
+            "Pyromancer": "4",
+            "Racketeer": "4",
+            "Rhinox Herder": "4",
+            "Scryer": "4",
+            "Shaman": "4",
+            "Slayer": "4",
+            "Spiriter": "4",
+            "Witch": "3",
+            "Witch Hunter": "4",
+            "Wizard": "4",
+            "Wolf Kin": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "furious-assault",
+        "name": "Furious Assault",
+        "description": "Your blows follow one another in quick succession, raining down on your opponents with the fury of Ulric. Once per Round, if you hit an opponent in close combat, you may immediately spend an Advantage or your Move to make an extra attack (assuming you have your Move remaining).",
+        "tests": [
+            "Melee when making extra attacks"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Flagellant": "3",
+            "Guard": "3",
+            "Knight of the White Wolf": "3",
+            "Maneater": "4",
+            "Pit Fighter": "4",
+            "Priest of Stromfels": "4",
+            "Protagonist": "4",
+            "Slayer": "3",
+            "Warrior Priest": "4",
+            "Wrecker": "4",
+            "Wolf Kin": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "gregarious",
+        "name": "Gregarious",
+        "description": "You just like talking to other folk and it seems they like talking to you. You may reverse any failed Gossip Test if this allows the Test to succeed.",
+        "tests": [
+            "Gossip Tests with travellers"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Advisor": "1",
+            "Agitator": "1",
+            "Artist": "2",
+            "Bawd": "1",
+            "Charlatan": "4",
+            "Envoy": "3",
+            "Fence": "1",
+            "Riverwoman": "1",
+            "Spy": "1",
+            "Townsman": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "gunner",
+        "name": "Gunner",
+        "description": "You can reload blackpowder weapons with practiced ease. Add SL equal to your level in Gunner to any Extended Test to reload a Blackpowder weapon.",
+        "tests": [],
+        "max_ranks": "dex",
+        "careers": {
+            "Cavalryman": "2",
+            "Coachman": "2",
+            "Engineer": "1",
+            "Handgunner": "1",
+            "Karak Ranger": "3",
+            "Riverwarden": "2",
+            "Ship’s Gunner": "2",
+            "Siege Specialist": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "hardy",
+        "name": "Hardy",
+        "description": "You gain a permanent addition to your Wounds, equal to your Toughness Bonus. If your Toughness Bonus should increase, then the number of Wounds Hardy provides also increases.",
+        "tests": [],
+        "max_ranks": "t",
+        "careers": {
+            "Beggar": "3",
+            "Bounty Hunter": "4",
+            "Fieldwarden": "3",
+            "Flagellant": "2",
+            "Herbalist": "3",
+            "Hunter": "1",
+            "Knight of the White Wolf": "1",
+            "Maneater": "3",
+            "Rat Catcher": "3",
+            "Scout": "4",
+            "Siege Specialist": "2",
+            "Slayer": "2",
+            "Villager": "2",
+            "Watchman": "1",
+            "Wolf Kin": "2"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Wood Elf"
+        ]
+    },
+    {
+        "id": "hatred",
+        "name": "Hatred (Group)",
+        "description": "You are consumed with hatred for something in the Old World, as described on page 190. Each time you take this Talent you develop hatred for a new group. Examples you could take include: Beastmen, Greenskins, Monsters, Outlaws, Sigmarites, Undead, Witches.",
+        "tests": [
+            "Willpower (Resist Group)"
+        ],
+        "max_ranks": "wp",
+        "careers": {
+            "Cavalryman": "3 (Any)",
+            "Fieldwarden": "4 (Undead)",
+            "Flagellant": "2 (Heretics)",
+            "Ghost Strider": "4 (Any)",
+            "Messenger": "4 (Outlaws)",
+            "Priest": "3 (Any)",
+            "Priest of Stromfels": "3 (Manannites or Followers of Chaos)",
+            "Riverwarden": "3 (Any)",
+            "Road Warden": "3 (Any)",
+            "Sailor-Priest of Manann": "3 (Followers of Stromfels)"
+        },
+        "racial": []
+    },
+    {
+        "id": "holy-hatred",
+        "name": "Holy Hatred",
+        "description": "Your prayers drip with the hatred you feel for your blasphemous enemies. You deal +1 Damage with Miracles for each level in this Talent.",
+        "tests": [],
+        "max_ranks": "fel",
+        "careers": {
+            "Warrior Priest": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "holy-visions",
+        "name": "Holy Visions",
+        "description": "You clearly see the great works of the Gods all around you. You automatically know when you enter Holy Ground, and may take an Intuition Test to receive visions often obscure and seen through the paradigm of your cult or individual belief system) regarding the local area if significant events have occurred there in the past.",
+        "tests": [
+            "Intuition Tests when on holy ground"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Butcher": "2",
+            "Mystic": "2",
+            "Nun": "2",
+            "Priest": "1",
+            "Priest of Myrmidia": "3",
+            "Priest of Stromfels": "1",
+            "Sailor-Priest of Manann": "1",
+            "Warrior Priest": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "hunters-eye",
+        "name": "Hunter’s Eye",
+        "description": "You are a skilled hunter and know all the best techniques to find game. When travelling through well-stocked lands, you are automatically assumed to be able to hunt down enough game to feed yourself and a number of others equal to your level in Hunter’s Eye, so long as you have time and the correct equipment. You may secure more food in addition to this using the normal rules for foraging (see page 127).",
+        "tests": [
+            "Any Test to trail or capture game"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Hunter": "2",
+            "Owler": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "impassioned-zeal",
+        "name": "Impassioned Zeal",
+        "description": "When you talk about your cause, case, or religion, your words fill with passion and fervent zeal. You may double your Fellowship for the purposes of determining the number of people influenced by your Public Speaking (see page 142) when talking about your cause.",
+        "tests": [
+            "Charm when speaking about your cause"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Agitator": "2",
+            "Butcher": "4",
+            "Flagellant": "4",
+            "Lawyer": "3",
+            "Priest": "3",
+            "Priest of Stromfels": "3",
+            "Wolf Kin": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "implacable",
+        "name": "Implacable",
+        "description": "It takes a lot to finish you off. You can ignore the Wound loss from a Bleeding Condition. Each level in this Talent lets you ignore the Wound loss from an extra Bleeding Condition.",
+        "tests": [],
+        "max_ranks": "t",
+        "careers": {
+            "Butcher": "1",
+            "Flagellant": "2",
+            "Ironbreaker": "4",
+            "Karak Ranger": "1",
+            "Knight of the White Wolf": "4",
+            "Pit Fighter": "4",
+            "Slayer": "2",
+            "Wolf Kin": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "in-fighter",
+        "name": "In-fighter",
+        "description": "You are skilled at drawing in close to an opponent. You suffer no penalties for fighting against an opponent with a longer weapon than you. Further, if you use the optional rules for In-fighting (see page 297), gain a bonus of +10 to hit your opponent.",
+        "tests": [
+            "Melee when in-fighting, or to enter in-fighting"
+        ],
+        "max_ranks": "dex",
+        "careers": {
+            "Pit Fighter": "1",
+            "Priest of Stromfels": "4",
+            "Protagonist": "1",
+            "Wrecker": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "inspiring",
+        "name": "Inspiring",
+        "description": "Your rousing words and pleas can turn the tide of a battle. Refer to the following table to see how many people you can now influence with your Leadership Skill (see page 126) when at war.\nTalent Taken Number of soldiers influenced\n1 As normal × 5\n2 As normal × 10\n3 As normal × 20\n4 As normal × 50\n5 As normal × 100\n6 As normal × 200\n7 As normal × 500\n8 As normal × 1000\n9 All who can hear your inspiring voice\nExample: Abbess Birgitte van der Hoogenband’s monastery is under attack by Greenskins, and things are going badly. So, she decides to bolster her soldiers’ spirits with a Leadership Test, granting them +10 to all Psychology Tests. Her Leadership Test scores 3 SL. Given she has a Fellowship Bonus of 6, and she can influence her Fellowship Bonus + SL of her soldiers using Leadership, she bolsters 9 soldiers. However, as she has Inspiring 3, that number is multiplied by 20, meaning 180 of her soldiers take heart from her screamed encouragement to, ‘HOLD THE LINE!’",
+        "tests": [
+            "Leadership during war"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Archer": "1",
+            "Artillerist": "4",
+            "Badger Rider": "4",
+            "Camp Follower": "4",
+            "Cavalryman": "4",
+            "Fieldwarden": "4",
+            "Freelance": "4",
+            "Greatsword": "4",
+            "Halberdier": "4",
+            "Handgunner": "4",
+            "Ironbreaker": "4",
+            "Knight": "4",
+            "Knight of the Blazing Sun": "4",
+            "Knight of the White Wolf": "4",
+            "Knight Panther": "4",
+            "Light Cavalry": "4",
+            "Officer": "3",
+            "Pikeman": "4",
+            "Priest of Myrmidia": "2",
+            "Rhinox Herder": "4",
+            "Sailor-Priest of Manann": "4",
+            "Ship’s Gunner": "4",
+            "Soldier": "4",
+            "Warrior Priest": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "instinctive-diction",
+        "name": "Instinctive Diction",
+        "description": "You instinctively understand the language of Magick, and are capable of articulating the most complex phrases rapidly without error. You do not suffer a Miscast if you roll a double on a successful Language (Magick) Test.",
+        "tests": [
+            "Language (Magick) when casting"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Alchemist": "3",
+            "Astromancer": "3",
+            "Druid": "3",
+            "Hierophant": "3",
+            "Pyromancer": "3",
+            "Shadowmancer": "3",
+            "Shaman": "3",
+            "Spiriter": "3",
+            "Witch": "1",
+            "Wizard": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "invoke",
+        "name": "Invoke (Divine Lore)",
+        "description": "You are blessed by one of the Gods and can empower one of your Cult’s Miracles. Further, you may purchase extra miracles for 100 XP per miracle you currently know. So, if you already know 3 miracles, your next miracle costs 300 XP to purchase. Full rules for learning new miracles are provided in Chapter 7: Religion and Belief. Under normal circumstances, you may not learn more than one Invoke (Divine Lore) Talent. Further, you may not learn the Petty Magic or Arcane Magic Talents when you have the Invoke Talent. You can unlearn this Talent for 100 XP, but will lose all of your miracles if you do so, and will also garner the extreme disfavour of your God, with effects determined by your GM.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Nun": "2",
+            "Priest": "2",
+            "Priest of Myrmidia": "2",
+            "Priest of Stromfels": "2",
+            "Sailor-Priest of Manann": "2",
+            "Warrior Priest": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "iron-jaw",
+        "name": "Iron Jaw",
+        "description": "You are made of sturdy stuff and can weather even the strongest blows. Whenever you gain one or more Stunned Conditions, you may make an immediate Challenging (+0) Endurance Test to not take one of them, with each SL removing an extra Stunned Condition.",
+        "tests": [
+            "Endurance tests to resist Stunned"
+        ],
+        "max_ranks": "t",
+        "careers": {
+            "Pit Fighter": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "iron-will",
+        "name": "Iron Will",
+        "description": "You have an indomitable will of iron, and will never willingly bow down before another. Use of the Intimidate skill does not cause Fear in you, and will not stop you speaking out against the intimidating party.",
+        "tests": [
+            "Cool Tests to oppose Intimidate"
+        ],
+        "max_ranks": "wp",
+        "careers": {
+            "Alchemist": "4",
+            "Astromancer": "4",
+            "Bailiff": "4",
+            "Druid": "4",
+            "Fence": "4",
+            "Freelance": "4",
+            "Guard": "4",
+            "Hierophant": "4",
+            "Knight": "4",
+            "Knight of the White Wolf": "4",
+            "Knight Panther": "4",
+            "Magister Vigilant": "4",
+            "Merchant": "4",
+            "Noble": "4",
+            "Nun": "4",
+            "Officer": "4",
+            "Outlaw": "4",
+            "Pyromancer": "4",
+            "Racketeer": "3",
+            "Shaman": "4",
+            "Spiriter": "4",
+            "Witch Hunter": "4",
+            "Wizard": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "jump-up",
+        "name": "Jump Up",
+        "description": "You are hard to keep down. You may perform a Challenging (+0) Athletics Test to immediately regain your feet whenever you gain a Prone Condition. This Athletics Test is often modified by the Strength behind the blow that knocks you down: for every +10 Strength the blow has over your Toughness, you suffer a penalty of –10 to the Athletics Test, and vice versa.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Chantyman": "2",
+            "Entertainer": "2",
+            "Guard": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "kingpin",
+        "name": "Kingpin",
+        "description": "You have earned an air of respectability despite your nefarious ways. You may ignore the Status loss of the Criminal Talent.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Advisor": "4",
+            "Artist": "4",
+            "Beggar": "4",
+            "Bailiff": "3",
+            "Bawd": "4",
+            "Fence": "3",
+            "Lawyer": "4",
+            "Messenger": "4",
+            "Owler": "4",
+            "Racketeer": "4",
+            "Riverwarden": "4",
+            "Road Warden": "4",
+            "Smuggler": "4",
+            "Stevedore": "4",
+            "Watchman": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "large",
+        "name": "Large",
+        "description": "You are much bigger than most folk in the Old World. The full rules for different Sizes are found on page 341 of WFRP.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {},
+        "racial": [
+            "Ogre"
+        ]
+    },
+    {
+        "id": "lightning-reflexes",
+        "name": "Lightning Reflexes",
+        "description": "You gain a permanent +5 bonus to your starting Agility Characteristic (this does not count towards your Advances).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Cavalryman": "1",
+            "Shaman": "4"
+        },
+        "racial": [
+            "Combat Familiar",
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "linguistics",
+        "name": "Linguistics",
+        "description": "You have a natural affinity for languages. Given a month’s exposure to any Language, you count the associated Language Skill as a Basic Skill with a successful Intelligence Test (which can be attempted once per month). Note: Linguistics only works for languages used to frequently communicate with others, so does not work with Language (Magick).",
+        "tests": [
+            "Language (All)"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Scholar": "3",
+            "Scout": "4"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "lip-reading",
+        "name": "Lip Reading",
+        "description": "You can tell what people are saying by simply watching their lips; you do not need to hear what they are saying. If you have an unobstructed view of the speaker’s lower face, you can attempt a Perception Test to understand what they are saying.",
+        "tests": [
+            "Perception Tests concerning this Talent"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Spy": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "luck",
+        "name": "Luck",
+        "description": "They say when you were born, Ranald smiled. Your maximum Fortune Points now equal your current Fate points plus the number of times you’ve taken Luck.",
+        "tests": [],
+        "max_ranks": "fel",
+        "careers": {
+            "Charlatan": "1",
+            "Freelance": "4",
+            "Merchant": "4",
+            "Mystic": "1",
+            "Noble": "1",
+            "Scryer": "1",
+            "Witch": "4"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Gnome"
+        ]
+    },
+    {
+        "id": "magical-assistant",
+        "name": "Magical Assistant",
+        "description": "The familiar may assist the wizard who created them with any Channelling, Lore (Magic), or Language (Magick) Tests they make. They can also assist with Research Tests, provided the research is into a magical innovation or discovery. The assistant provides a bonus of +20 to these Tests rather than the normal +10 (see WFRP, page 155).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {},
+        "racial": [
+            "Power Familiar"
+        ]
+    },
+    {
+        "id": "magical-sense",
+        "name": "Magical Sense",
+        "description": "You are able to sense the Winds of Magic in others. You may attempt an Average (+20) Intuition Test whenever you encounter a spell-caster. If you pass, you sense the target is a witch. Further, if you score an Astounding Success (+6), can also determine the target’s highest Channelling Specialization.",
+        "tests": [
+            "Intuition Tests to detect Wizards"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Alchemist": "3",
+            "Astromancer": "3",
+            "Druid": "3",
+            "Hedge Witch": "3",
+            "Hierophant": "3",
+            "Mystic": "4",
+            "Pyromancer": "3",
+            "Scryer": "4",
+            "Shaman": "3",
+            "Shadowmancer": "3",
+            "Spiriter": "3",
+            "Witch": "3",
+            "Witch Hunter": "4",
+            "Wizard": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "magic-resistance",
+        "name": "Magic Resistance",
+        "description": "You are resistant to magic. The SL of any spell affecting you is reduced by 2 per point you have in this Talent. The SL of a spell is only modified by the highest Magic Resistance Talent within its target area. Further, you may never learn the Arcane Magic, Bless, Invoke, Petty Magic, or Witch! Talents.",
+        "tests": [],
+        "max_ranks": "t",
+        "careers": {},
+        "racial": [
+            "Dwarf (Grumsson, WHFRP)"
+        ]
+    },
+    {
+        "id": "magnum-opus",
+        "name": "Magnum Opus",
+        "description": "You are an undisputed master in your field, able to create work of such incredible complexity others can but sit back and marvel at your genius. Each time you take this Talent you may create a single, extraordinary work of art with one of your Art or Trade Skills. This work is unrivaled in your field, a unique piece that will always impress, giving bonuses as determined by the GM, most commonly to Fellowship Tests from those who have witnessed your astounding work. Selling the piece will net you at least ten times its normal value, and sometimes significantly more than this.",
+        "tests": [],
+        "max_ranks": "None",
+        "careers": {
+            "Artisan": "4",
+            "Artist": "4",
+            "Cartographer": "4",
+            "Chantyman": "4",
+            "Engineer": "4",
+            "Scholar": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "marksman",
+        "name": "Marksman",
+        "description": "You gain a permanent +5 bonus to your starting Ballistic Skill (this does not count towards your Advances).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Archer": "2",
+            "Artillerist": "1",
+            "Badger Rider": "1",
+            "Bounty Hunter": "2",
+            "Coachman": "4",
+            "Engineer": "2",
+            "Handgunner": "1",
+            "Hunter": "2",
+            "Outlaw": "2",
+            "Protagonist": "3",
+            "Rhinox Herder": "1",
+            "Road Warden": "1",
+            "Ship’s Gunner": "2",
+            "Siege Specialist": "1",
+            "Soldier": "1",
+            "Witch Hunter": "2"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "master-and-commander",
+        "name": "Master and Commander",
+        "description": "You are respected and trusted by your crew. Any appropriate Leadership Test on board your ship or involving your crew gains an SL bonus equal to your levels in Master and Commander. This bonus applies to Crew Tests as well as individual Leadership Tests.",
+        "tests": [
+            "Leadership"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Officer": "2",
+            "Wrecker": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "master-of-disguise",
+        "name": "Master of Disguise",
+        "description": "You are an expert at taking on the appearance and mannerisms of others. With nothing but posture changes, face twisting, and careful use of appropriate clothing, you no longer look like yourself without having to use a Disguise Kit.",
+        "tests": [
+            "Entertain (Acting) when being someone else"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Charlatan": "4",
+            "Entertainer": "3",
+            "Spy": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "master-orator",
+        "name": "Master Orator",
+        "description": "You are skilled at firing up crowds. You gain a gain a SL bonus equal to your levels of Master Orator to any Charm Test when Public Speaking before a crowd.",
+        "tests": [],
+        "max_ranks": "fel",
+        "careers": {
+            "Agitator": "4",
+            "Priest": "4",
+            "Priest of Stromfels": "3",
+            "Scholar": "4",
+            "Townsman": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "master-tradesman",
+        "name": "Master Tradesman (Trade)",
+        "description": "You are exceptionally skilled at your specified Trade skill. You reduce the required SL of any Extended Test using your Trade Skill by the level of your Master Tradesman Talent.",
+        "tests": [
+            "Any appropriate Extended Trade Tests"
+        ],
+        "max_ranks": "dex",
+        "careers": {
+            "Apothecary": "3 (Apothecary), 4 (Poisoner)",
+            "Artisan": "3 (Any)",
+            "Cartographer": "4 (Cartography)",
+            "Engineer": "3 (Engineer)",
+            "Hedge Witch": "4 (Herbalist)",
+            "Herbalist": "4 (Herbalist)",
+            "Mundane Alchemist": "3 (Alchemy), 4 (Poisoner)",
+            "Riverwoman": "4 (Boat Builder)",
+            "Siege Specialist": "4 (Engineering)"
+        },
+        "racial": []
+    },
+    {
+        "id": "menacing",
+        "name": "Menacing",
+        "description": "You have an imposing presence. When using the Intimidate Skill, gain a SL bonus equal to your levels of Menacing.",
+        "tests": [
+            "Intimidate"
+        ],
+        "max_ranks": "sus",
+        "careers": {
+            "Bailiff": "3",
+            "Beadle": "3",
+            "Boatman": "4",
+            "Druid": "3",
+            "Duellist": "4",
+            "Fence": "4",
+            "Flagellant": "3",
+            "Hierophant": "4",
+            "Knight": "2",
+            "Knight of the White Wolf": "2",
+            "Knight Panther": "2",
+            "Magister Vigilant": "2",
+            "Maneater": "1",
+            "Mystic": "4",
+            "Racketeer": "1",
+            "Rat Catcher": "4",
+            "Riverwarden": "4",
+            "Outlaw": "3",
+            "Pit Fighter": "3",
+            "Priest of Stromfels": "2",
+            "Protagonist": "1",
+            "Pyromancer": "3",
+            "Scryer": "3",
+            "Shaman": "3",
+            "Slayer": "2",
+            "Spiriter": "3",
+            "Stevedore": "4",
+            "Warden": "1",
+            "Witch": "1",
+            "Witch Hunter": "1",
+            "Wizard": "3",
+            "Wrecker": "3"
+        },
+        "racial": [
+            "Human (Middenlander)"
+        ]
+    },
+    {
+        "id": "mimic",
+        "name": "Mimic",
+        "description": "You have a good ear for accents and dialects, and can reproduce them accurately. You may replicate any accent you are exposed to for at least a day with an Initiative Test; this Test may be attempted once per day. Once passed, you may always mimic the accent, and locals will believe you to be one of their own.",
+        "tests": [
+            "Entertain (Acting) Tests where accents are important"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Entertainer": "1",
+            "Shadowmancer": "3",
+            "Spy": "3"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Gnome"
+        ]
+    },
+    {
+        "id": "night-vision",
+        "name": "Night Vision",
+        "description": "You can see very well in natural darkness. Assuming you have at least a faint source of light (such as starlight, moonlight, or bio-luminescence) you can see clearly for 20 yards per level of Night Vision. Further, you can extend the effective illumination distance of any light sources by 20 yards per level of Night Vision.",
+        "tests": [
+            "Perception tests in low-light conditions"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Astromancer": "4",
+            "Fieldwarden": "3",
+            "Grave Robber": "2",
+            "Hedge Witch": "4",
+            "Huffer": "1",
+            "Miner": "2",
+            "Physician": "4",
+            "Rat Catcher": "1",
+            "Scout": "2",
+            "Thief": "3",
+            "Warden": "1",
+            "Watchman": "2"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Dwarf (Grumsson, WHFRP)",
+            "Gnome",
+            "Halfling",
+            "High Elf",
+            "Ogre",
+            "Wood Elf"
+        ]
+    },
+    {
+        "id": "nimble-fingered",
+        "name": "Nimble Fingered",
+        "description": "You gain a permanent +5 bonus to your starting Dexterity (this does not count towards your Advances).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Artisan": "2",
+            "Artist": "2",
+            "Cartographer": "3",
+            "Herbalist": "2",
+            "Mundane Alchemist": "2",
+            "Thief": "3",
+            "Villager": "4"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "noble-blood",
+        "name": "Noble Blood",
+        "description": "You are either born into the nobility, or otherwise elevated to it by in-game events. Assuming you are dressed appropriately, you are always considered of higher Status than others unless they also have the Noble Blood Talent, where Status is compared as normal.",
+        "tests": [
+            "Any Test influenced by your Status"
+        ],
+        "max_ranks": "1",
+        "careers": {
+            "Envoy": "4",
+            "Noble": "1"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "nose-for-trouble",
+        "name": "Nose for Trouble",
+        "description": "You are used to getting into, and preferably out of, trouble. You may attempt an Intuition Test to spot those seeking to cause trouble or seeking to cause you harm, even if normally you would not be allowed a Test (because of Talents or a Spell, for example). This Test will likely be Opposed if others are hiding, and the GM may prefer to take this Test on your behalf in secret so you do not know the results should you fail. If any troublemakers you spot start combat, you may ignore any Surprised Condition they would normally inflict.",
+        "tests": [
+            "Any Test to spot Troublemakers"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Artist": "3",
+            "Bailiff": "3",
+            "Boatman": "3",
+            "Charlatan": "4",
+            "Coachman": "3",
+            "Fieldwarden": "2",
+            "Karak Ranger": "2",
+            "Magister Vigilant": "4",
+            "Messenger": "3",
+            "Mystic": "3",
+            "Scout": "2",
+            "Scryer": "3",
+            "Road Warden": "3",
+            "Huffer": "2",
+            "Watchman": "3",
+            "Witch Hunter": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "numismatics",
+        "name": "Numismatics",
+        "description": "You are well versed with the different coinage of the Old World, and are adept at determining their value. You can judge the true value of a coin by experience alone, not even requiring a Test. Further, you can identify forged coins with a Simple Evaluate Test; it is never Opposed by the SL of the Forger.",
+        "tests": [
+            "Evaluate to establish the worth of coins"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Bailiff": "1",
+            "Bawd": "4",
+            "Fence": "2",
+            "Merchant": "3",
+            "Pedlar": "3",
+            "Road Warden": "1",
+            "Servant": "4",
+            "Stevedore": "4",
+            "Warden": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "old-salt",
+        "name": "Old Salt",
+        "description": "You are an experienced seaman, and are very used to sea life. You can ignore all negative modifiers to Tests at sea derived from poor weather, rolling ships, and similar. Further, you count as two seamen towards the minimum number of crew to pilot a sea going vessel.",
+        "tests": [
+            "Sail (any Sea-worthy Vessels)"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Beachcomber": "3",
+            "Chantyman": "3",
+            "Huffer SOC": "2",
+            "Officer": "2",
+            "Sailor-Priest of Manann": "3",
+            "Seaman": "3",
+            "Ship’s Gunner": "1"
+        },
+        "racial": [
+            "Human (Sarl)"
+        ]
+    },
+    {
+        "id": "orientation",
+        "name": "Orientation",
+        "description": "You have an instinctual feel for direction. You automatically know which direction is north with a glimpse at the stars, trees, or whatever other signs you are familiar with.",
+        "tests": [
+            "Navigation"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Artillerist": "2",
+            "Astromancer": "2",
+            "Beachcomber": "1",
+            "Boatman": "4",
+            "Cartographer": "1",
+            "Chantyman": "4",
+            "Coachman": "4",
+            "Engineer": "2",
+            "Fieldwarden": "2",
+            "Ghost Strider": "2",
+            "Herbalist": "1",
+            "Huffer": "1",
+            "Karak Ranger": "1",
+            "Light Cavalry": "2",
+            "Messenger": "2",
+            "Officer": "1",
+            "Owler": "2",
+            "Pedlar": "2",
+            "Riverwarden": "4",
+            "Scout": "1",
+            "Scryer": "1",
+            "Seaman": "4",
+            "Ship’s Gunner": "3",
+            "Siege Specialist": "2",
+            "Wolf Kin": "3"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "panhandle",
+        "name": "Panhandle",
+        "description": "You are a skilled beggar, able to get even the most jaded individual to contribute to your cause. You can perform a Charm Test every half hour when Begging, not every hour (see page 120).",
+        "tests": [
+            "Charm (Begging)"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Agitator": "1",
+            "Beggar": "1",
+            "Nun": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "perfect-pitch",
+        "name": "Perfect Pitch",
+        "description": "You have perfect pitch, able to replicate notes perfectly and identify them without even making a Test. Further, add Entertain (Sing) to any Career you enter; if it is already in your Career, you may instead purchase the Skill for 5 XP fewer per Advance.",
+        "tests": [
+            "Entertain (Sing)",
+            "Language (Tonal Languages, such as Eltharin, Cathayan, and Magick)"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Chantyman": "1",
+            "Entertainer": "3"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "petty-magic",
+        "name": "Petty Magic",
+        "description": "You have the spark to cast magic within you and have mastered techniques to control it at a basic level. When you take this Talent, you manifest, and permanently memorize, a number of spells equal to your Willpower Bonus. You can learn extra Petty spells for the following cost in XP.\nNo. of Petty Spells Currently Known XP Cost for a new spell\nUp to Willpower Bonus × 1 50 XP\nUp to Willpower Bonus × 2 100 XP\nUp to Willpower Bonus × 3 150 XP\nUp to Willpower Bonus × 4 200 XP\n...and so on.\nSo, if your Willpower Bonus is 3 and you had 3 Petty spells, it will cost you 50XP for the first learned spell, then 100 XP for the next three, and so on. Full rules for learning new spells are provided in Chapter 8: Magic.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Alchemist": "1",
+            "Astromancer": "1",
+            "Butcher": "1",
+            "Druid": "1",
+            "Hedge Witch": "1",
+            "Hierophant": "1",
+            "Magister Vigilant": "1",
+            "Mundane Alchemist": "3",
+            "Mystic": "3",
+            "Pyromancer": "1",
+            "Shadowmancer": "1",
+            "Shaman": "1",
+            "Spiriter": "1",
+            "Witch": "1",
+            "Wizard": "1"
+        },
+        "racial": [
+            "Power Familiar",
+            "Spell Familiar"
+        ]
+    },
+    {
+        "id": "pharmacist",
+        "name": "Pharmacist",
+        "description": "You are highly skilled at pharmacy, better able than most to make pills, ointments, unguents, oils, creams, and more. You may reverse any failed Trade (Apothecary) test if this allows the Test to succeed.",
+        "tests": [
+            "Trade (Apothecary)"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Apothecary": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "pilot",
+        "name": "Pilot",
+        "description": "You are skilled at leading vessels through dangerous waters. If you fail a Test to pass through dangerous waters, you may reverse the result if it will score a success; however, if you do so, you may not score more than +1 SL as you catch the incoming danger at the last moment.",
+        "tests": [
+            "Row or Sail Tests while navigating unsure waters"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Boatman": "4",
+            "Huffer": "3",
+            "Riverwarden": "3",
+            "Officer": "2",
+            "Priest of Stromfels": "4",
+            "Sailor Priest of Manann": "3",
+            "Seaman": "4",
+            "Smuggler": "3",
+            "Wrecker": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "public-speaker",
+        "name": "Public Speaker",
+        "description": "You are a skilled orator and know how to work large groups of people. Refer to the following table to see how many people you can now influence with your Charm Skill (see page 120) when Public Speaking.\nTalent Taken Number influenced\n1 As normal × 5\n2 As normal × 10\n3 As normal × 20\n4 As normal × 50\n5 As normal × 100\n6 As normal × 200\n7 As normal × 500\n8 As normal × 1000\n9 All who can hear your golden voice",
+        "tests": [],
+        "max_ranks": "fel",
+        "careers": {
+            "Agitator": "2",
+            "Artillerist": "4",
+            "Artisan": "4",
+            "Bailiff": "2",
+            "Beadle": "4",
+            "Boatman": "4",
+            "Camp Follower": "4",
+            "Chantyman": "3",
+            "Entertainer": "1",
+            "Greatsword": "4",
+            "Halberdier": "4",
+            "Noble": "3",
+            "Officer": "4",
+            "Riverwoman": "4",
+            "Road Warden": "4",
+            "Sailor-Priest of Manann": "2",
+            "Scholar": "3",
+            "Seaman": "4",
+            "Soldier": "4",
+            "Stevedore": "3",
+            "Townsman": "3",
+            "Villager": "4",
+            "Watchman": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "pure-soul",
+        "name": "Pure Soul",
+        "description": "Your soul is pure, quite resistant to the depredations of Chaos. You may gain extra Corruption points equal to your level of Pure Soul before having to Test to see if you become corrupt.",
+        "tests": [],
+        "max_ranks": "wp",
+        "careers": {
+            "Hedge Witch": "3",
+            "Nun": "4",
+            "Priest": "4",
+            "Priest of Myrmidia": "3",
+            "Sailor-Priest of Manann": "4",
+            "Witch Hunter": "4",
+            "Warrior Priest": "4"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "rapid-reload",
+        "name": "Rapid Reload",
+        "description": "You can reload ranged weapons with practiced ease. You add SL equal to your level in Rapid Reload to any Test to reload a ranged weapon.",
+        "tests": [],
+        "max_ranks": "dex",
+        "careers": {
+            "Artillerist": "1",
+            "Coachman": "4",
+            "Engineer": "4",
+            "Handgunner": "2",
+            "Light Cavalry": "3",
+            "Maneater": "2",
+            "Outlaw": "3",
+            "Ship’s Gunner": "1",
+            "Siege Specialist": "1",
+            "Soldier": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "reaction-strike",
+        "name": "Reaction Strike",
+        "description": "Your fast reactions have allowed you to fell many opponents before they have even swung their blades. When you are Charged, you may attempt a Challenging (+0) Initiative Test to gain an immediate Free Attack outside the normal turn sequence. This attack is resolved with whatever weapon you are carrying in your primary hand. You may make as many Reaction Strikes in a Round as you have levels in this Talent, but can only attack each individual charger once each.",
+        "tests": [
+            "Initiative Tests concerning this Talent"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Cavalryman": "4",
+            "Duellist": "4",
+            "Ironbreaker": "3",
+            "Maneater": "4",
+            "Pikeman": "1",
+            "Pit Fighter": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "read-write",
+        "name": "Read/Write",
+        "description": "You are one of the rare literate individuals in the Old World. You are assumed to be able to read and write (if appropriate) all of the Languages you can speak.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Advisor": "1",
+            "Agitator": "1",
+            "Alchemist": "1",
+            "Apothecary": "1",
+            "Artillerist": "3",
+            "Artisan": "3",
+            "Artist": "4",
+            "Astromancer": "1",
+            "Bailiff": "3",
+            "Beadle": "1",
+            "Cartographer": "1",
+            "Chantyman": "4",
+            "Charlatan": "3",
+            "Druid": "1",
+            "Engineer": "1",
+            "Entertainer": "3",
+            "Envoy": "1",
+            "Flagellant": "1",
+            "Grave Robber": "3",
+            "Heirophant": "1",
+            "Investigator": "1",
+            "Knight of the Blazing Sun": "1",
+            "Lawyer": "1",
+            "Magister Vigilant": "1",
+            "Merchant": "1",
+            "Miner": "4",
+            "Mundane Alchemist": "1",
+            "Mystic": "3",
+            "Noble": "1",
+            "Nun": "1",
+            "Officer": "1",
+            "Physician": "1",
+            "Priest": "1",
+            "Priest of Myrmidia": "1",
+            "Pyromancer": "1",
+            "Sailor-Priest of Manann": "2",
+            "Scholar": "1",
+            "Servant": "4",
+            "Shadowmancer": "1",
+            "Shaman": "1",
+            "Ship’s Gunner": "3",
+            "Spiriter": "1",
+            "Spy": "2",
+            "Stevedore": "4",
+            "Townsman": "3",
+            "Warden": "3",
+            "Warrior Priest": "1",
+            "Witch Hunter": "1",
+            "Wizard": "1"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Dwarf",
+            "Gnome",
+            "High Elf",
+            "Power Familiar",
+            "Spell Familiar",
+            "Wood Elf"
+        ]
+    },
+    {
+        "id": "relentless",
+        "name": "Relentless",
+        "description": "When you have your mind set on a target, there is nothing anyone can do to stop you reaching them. If you use Advantage when Disengaging, you may keep a number of Advantage equal to your level of Relentless. Further, you may use Advantage to Disengage even if you have lower Advantage than your opponents.",
+        "tests": [],
+        "max_ranks": "ag",
+        "careers": {
+            "Bounty Hunter": "2",
+            "Guard": "2",
+            "Messenger": "3",
+            "Protagonist": "3",
+            "Slayer": "3",
+            "Witch Hunter": "3"
+        },
+        "racial": [
+            "Dwarf (Grumsson, WHFRP)"
+        ]
+    },
+    {
+        "id": "resistance",
+        "name": "Resistance (Threat)",
+        "description": "Your strong constitution allows you to more readily survive a specific threat. You may automatically pass the first Test to resist the specified threat, such as Magic, Poison, Disease, Mutation, every session. If SL is important, use your Toughness Bonus as SL for the Test.",
+        "tests": [
+            "All those to resist the associated Threat"
+        ],
+        "max_ranks": "t",
+        "careers": {
+            "Apothecary": "3 (Poison)",
+            "Bawd": "2 (Disease)",
+            "Beggar": "1 (Disease)",
+            "Grave Robber": "2 (Disease)",
+            "Hedge Witch": "3 (Disease)",
+            "Herbalist": "4 (Poison)",
+            "Hierophant": "4 (Chaos)",
+            "Mundane Alchemist": "4 (Poison)",
+            "Nun": "3 (Any)",
+            "Physician": "3 (Disease)",
+            "Priest": "4 (Any)",
+            "Racketeer": "3 (Poison)",
+            "Rat Catcher": "1 (Disease)",
+            "Servant": "3 (Poison)",
+            "Spiriter": "3 (Poison or Disease)"
+        },
+        "racial": [
+            "Random Racial Talent (Any)",
+            "Halfling (Chaos)",
+            "Human (Björnling, Sarl (Chaos))",
+            "Ogre (Poison (Ingested))"
+        ]
+    },
+    {
+        "id": "resolute",
+        "name": "Resolute",
+        "description": "You launch into attacks with grim determination. Add your level of Resolute to your Strength Bonus when you Charge.",
+        "tests": [],
+        "max_ranks": "sus",
+        "careers": {
+            "Badger Rider": "3",
+            "Rhinox Herder": "3",
+            "Witch Hunter": "1"
+        },
+        "racial": [
+            "Dwarf"
+        ]
+    },
+    {
+        "id": "reversal",
+        "name": "Reversal",
+        "description": "You are used to desperate combats, able to turn even the direst circumstances to your Advantage. If you win an Opposed Melee Test, instead of gaining +1 Advantage, you may take all your opponent’s Current Advantage. If you do this, you do not cause any Damage, even if it is your Turn in the Round.",
+        "tests": [
+            "Melee when defending"
+        ],
+        "max_ranks": "ws",
+        "careers": {
+            "Beadle": "2",
+            "Duellist": "2",
+            "Guard": "2",
+            "Pit Fighter": "1",
+            "Protagonist": "2",
+            "Slayer": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "riposte",
+        "name": "Riposte",
+        "description": "Conforming to ‘the best defense is offense’, you respond to an incoming attack with a lightning-fast counter-strike of your own. If your weapon has the Fast quality, you may cause Damage when you are attacked, just as if it was your Action. You can Riposte a number of attacks per round equal to your Riposte level.",
+        "tests": [
+            "Melee when defending"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Duellist": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "river-guide",
+        "name": "River Guide",
+        "description": "You know all the tricks for navigating dangerous rivers. You don’t need to Test for passing through dangerous stretches of water until the Difficulty for doing so is –10 or lower — you automatically pass all Tests easier than this. Further, if you have the appropriate Lore (Local) Skill, you need never Test for navigating dangerous waters — you are assumed to know the route through.",
+        "tests": [
+            "Any Lore Test concerning river matters"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Beachcomber": "4",
+            "Huffer": "2",
+            "Karak Ranger": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "robust",
+        "name": "Robust",
+        "description": "You are as tough as old boots and just soak up damage. You reduce all incoming Damage by an extra +1 per time you have taken the Robust Talent, even if the Damage cannot normally be reduced, but still suffer a minimum of 1 Wound from any Damage source.",
+        "tests": [],
+        "max_ranks": "t",
+        "careers": {
+            "Cavalryman": "4",
+            "Fieldwarden": "4",
+            "Guard": "4",
+            "Hunter": "4",
+            "Karak Ranger": "4",
+            "Nun": "3",
+            "Outlaw": "4",
+            "Pikeman": "3",
+            "Pit Fighter": "3",
+            "Racketeer": "3",
+            "Rat Catcher": "4",
+            "Slayer": "3",
+            "Watchman": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "roughrider",
+        "name": "Roughrider",
+        "description": "You are at home in the saddle in even the most difficult of circumstances, and know how to get the best out of your mount during conflict. Assuming you have the Ride skill, you can direct your mount to take an Action, not just a Move, without a Ride test.",
+        "tests": [
+            "Ride (Horse) when in combat"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Badger Rider": "1",
+            "Cavalryman": "1",
+            "Freelance": "1",
+            "Knight": "1",
+            "Knight of the Blazing Sun": "1",
+            "Knight of the White Wolf": "1",
+            "Knight Panther": "1",
+            "Light Cavalry": "2",
+            "Outlaw": "3",
+            "Rhinox Herder": "2",
+            "Road Warden": "2"
+        },
+        "racial": [
+            "Human (Sarl)"
+        ]
+    },
+    {
+        "id": "rover",
+        "name": "Rover",
+        "description": "You are at home roaming the wild places. When using Stealth in a rural environment, bystanders do not get passive Perception Tests to detect you; they can only spot you if they are specifically on look-out, or watching for hidden spies.",
+        "tests": [
+            "Stealth Tests in a Rural environment"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Badger Rider": "2",
+            "Beachcomber": "2",
+            "Camp Follower": "2",
+            "Cartographer": "1",
+            "Druid": "3",
+            "Fieldwarden": "3",
+            "Hedge Witch": "1",
+            "Herbalist": "1",
+            "Hunter": "1",
+            "Karak Ranger": "2",
+            "Light Cavalry": "2",
+            "Miner": "1",
+            "Outlaw": "1",
+            "Pedlar": "1",
+            "Priest of Stromfels": "3",
+            "Rhinox Herder": "1",
+            "Riverwoman": "2",
+            "Scout": "1",
+            "Villager": "1",
+            "Warden": "2",
+            "Wrecker": "2",
+            "Wolf Kin": "1"
+        },
+        "racial": [
+            "Human (Nordlander)",
+            "Wood Elf"
+        ]
+    },
+    {
+        "id": "savant",
+        "name": "Savant (Lore)",
+        "description": "You are exceptionally learned, and have a significant degree of specialized knowledge in a single field of study. You automatically know a number of pieces of correct information equal to you Savant (Lore) level about a relevant issue without having to test your Lore Skill. Testing, as always, will provide yet more information as normal as determined by the GM.",
+        "tests": [
+            "Lore (chosen Lore)"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Apothecary": "4 (Apothecary)",
+            "Beachcomber": "3 (Coasts and Tides)",
+            "Engineer": "4 (Engineering)",
+            "Fieldwarden": "4 (Moot Terrain)",
+            "Herbalist": "4 (Herbs)",
+            "Investigator": "4 (Any)",
+            "Karak Ranger": "4 (Dwarf Holds and Routes)",
+            "Lawyer": "4 (Law)",
+            "Mundane Alchemist": "4 (Alchemy)",
+            "Nun": "3 (Theology)",
+            "Priest": "4 (Theology)",
+            "Riverwoman": "3 (Riverways)",
+            "Scholar": "3 (Any), 4 (Any)",
+            "Scout": "4 (Local)",
+            "Villager": "4 (Local)",
+            "Warden": "4 (Local)"
+        },
+        "racial": []
+    },
+    {
+        "id": "savvy",
+        "name": "Savvy",
+        "description": "You gain a permanent +5 bonus to your starting Intelligence Characteristic (this does not count towards your Advances).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Apothecary": "3",
+            "Bailiff": "4",
+            "Beadle": "1",
+            "Lawyer": "3",
+            "Envoy": "4",
+            "Fence": "2",
+            "Herbalist": "3",
+            "Hierophant": "2",
+            "Investigator": "2",
+            "Knight of the Blazing Sun": "2",
+            "Magister Vigilant": "3",
+            "Merchant": "2",
+            "Mundane Alchemist": "1",
+            "Owler": "4",
+            "Physician": "3",
+            "Scholar": "1",
+            "Scryer": "2",
+            "Seaman": "4",
+            "Servant": "4",
+            "Siege Specialist": "4",
+            "Smuggler": "4",
+            "Bawd": "4"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Human (Reiklander, Salzenmunder)",
+            "High Elf",
+            "Power Familiar",
+            "Spell Familiar"
+        ]
+    },
+    {
+        "id": "scale-sheer-surface",
+        "name": "Scale Sheer Surface",
+        "description": "You are an exceptional climber. You can attempt to climb even seemingly impossible surfaces such as sheer fortifications, ice shelves, plastered walls, and similar, and you ignore any penalties to Climb Tests derived from the difficulty of the surface climbed.",
+        "tests": [
+            "Climb"
+        ],
+        "max_ranks": "sus",
+        "careers": {
+            "Ghost Strider": "2",
+            "Karak Ranger": "2",
+            "Thief": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "schemer",
+        "name": "Schemer",
+        "description": "You are a master of politics and see conspiracy around every corner. Once per session, you may ask the GM one question regarding a political situation or entangled web of social connections; the GM will perform a secret Intelligence Test and provide you some observations regarding the situation based upon your SL.",
+        "tests": [
+            "Intelligence Tests concerning this Talent"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Advisor": "2",
+            "Agitator": "4",
+            "Artisan": "4",
+            "Bailiff": "4",
+            "Envoy": "3",
+            "Merchant": "4",
+            "Noble": "3",
+            "Spy": "4",
+            "Townsman": "4",
+            "Watchman": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "sea-legs",
+        "name": "Sea Legs",
+        "description": "You are used to the rolling motion of the oceans, and are very unlikely to get sea sick, even in the worst storms. Under normal conditions at sea, you need never Test to see if you become Sea Sick. At other times (such as a storm, or a magically induced bout of Sea Sickness), you can ignore any penalties to Tests to avoid Sea Sickness.",
+        "tests": [
+            "All those taken to resist Sea Sickness"
+        ],
+        "max_ranks": "t",
+        "careers": {
+            "Beachcomber": "3",
+            "Chantyman": "1",
+            "Huffer": "3",
+            "Officer": "1",
+            "Riverwarden": "3",
+            "Sailor Priest of Manann": "1",
+            "Seaman": "2",
+            "Ship’s Gunner": "1",
+            "Smuggler": "4"
+        },
+        "racial": [
+            "Human (Björnling, Sarl)"
+        ]
+    },
+    {
+        "id": "seasoned-traveller",
+        "name": "Seasoned Traveller",
+        "description": "You are an inquisitive soul who has travelled far and wide, learning all manner of local information. Add Lore (Local) to any Career you enter; if it is already in Career, you may purchase the Skill, both times — a different Specialty each time, such as Altdorf, Vorbergland, or Ubersreik — for 5 XP fewer per Advance.",
+        "tests": [
+            "Any Lore Test concerning local detail"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Archer": "4",
+            "Artillerist": "4",
+            "Astromancer": "3",
+            "Badger Rider": "2",
+            "Beachcomber": "4",
+            "Boatman": "2",
+            "Bounty Hunter": "2",
+            "Camp Follower": "3",
+            "Cartographer": "3",
+            "Cavalryman": "2",
+            "Chantyman": "2",
+            "Coachman": "1",
+            "Entertainer": "4",
+            "Envoy": "2",
+            "Flagellant": "3",
+            "Freelance": "2",
+            "Halberdier": "4",
+            "Handgunner": "4",
+            "Knight": "2",
+            "Knight of the Blazing Sun": "2",
+            "Knight of the White Wolf": "2",
+            "Light Cavalry": "3",
+            "Maneater": "2",
+            "Messenger": "2",
+            "Officer": "3",
+            "Owler": "3",
+            "Pedlar": "2",
+            "Rhinox Herder": "3",
+            "Riverwarden": "2",
+            "Road Warden": "2",
+            "Sailor Priest of Manann": "4",
+            "Scout": "2",
+            "Seaman": "2",
+            "Ship’s Gunner": "4",
+            "Soldier": "4",
+            "Warrior Priest": "2",
+            "Witch Hunter": "2",
+            "Wolf Kin": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "second-sight",
+        "name": "Second Sight",
+        "description": "You can perceive the shifting Winds of Magic that course from the Chaos Gates at the poles of the world. You now have the Sight (see page 233).",
+        "tests": [
+            "Any Test to detect the Winds of Magic"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Alchemist": "1",
+            "Astromancer": "1",
+            "Butcher": "3",
+            "Druid": "1",
+            "Hierophant": "1",
+            "Magister Vigilant": "1",
+            "Mundane Alchemist": "3",
+            "Mystic": "1",
+            "Pyromancer": "1",
+            "Shadowmancer": "1",
+            "Shaman": "1",
+            "Spiriter": "1",
+            "Scryer": "1",
+            "Witch": "2",
+            "Wizard": "1"
+        },
+        "racial": [
+            "Gnome",
+            "High Elf",
+            "Wood Elf"
+        ]
+    },
+    {
+        "id": "secret-identity",
+        "name": "Secret Identity",
+        "description": "You maintain a secret identity that allows you to appear richer, or perhaps poorer, than you actually are. With GM permission, choose any one Career. As long as you are dressed appropriately, you may use the Social Status of the chosen Career you masquerade as rather than your own for modifying Fellowship Tests, and can even ignore the Criminal Talent. However, maintaining this identity will require Entertain (Acting) rolls when you encounter those who may recognize your falsehood. You may create a new Secret Identity for each level you have in this Talent.",
+        "tests": [
+            "Entertain (Acting) Tests to support your secret identities"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Charlatan": "2",
+            "Shadowmancer": "4",
+            "Spy": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "shadow",
+        "name": "Shadow",
+        "description": "You are skilled at following people without being spotted. You may use the Shadowing rules on page 130 without doing a Combined Test. Instead, you test against just your Perception or your Stealth Skill, whichever is higher.",
+        "tests": [
+            "Any Test involving Shadowing"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Bounty Hunter": "1",
+            "Ghost Strider": "1",
+            "Investigator": "2",
+            "Magister Vigilant": "2",
+            "Servant": "2",
+            "Shadowmancer": "4",
+            "Spy": "1",
+            "Thief": "2",
+            "Witch Hunter": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "sharp",
+        "name": "Sharp",
+        "description": "You gain a permanent +5 bonus to your starting Initiative Characteristic (this does not count towards your Advances).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Artist": "1",
+            "Entertainer": "4",
+            "Herbalist": "2",
+            "Huffer": "4",
+            "Investigator": "1",
+            "Merchant": "3",
+            "Scholar": "4",
+            "Scout": "1",
+            "Riverwoman": "4",
+            "Warden": "1"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "sharpshooter",
+        "name": "Sharpshooter",
+        "description": "You can make aimed shots of exceptional accuracy. You ignore any negative Difficulty modifiers to Ranged Tests due to the size of your target.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Archer": "3",
+            "Entertainer": "2",
+            "Ghost Strider": "3",
+            "Handgunner": "3",
+            "Hunter": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "shieldsman",
+        "name": "Shieldsman",
+        "description": "You are skilled at using your shield to maneuver others in combat so you can take advantage of a desperate situation. When using a Shield to defend, you gain Advantage equal to the number of levels you have in Shieldsman if you lose the Opposed Test.",
+        "tests": [
+            "Any Test to defend with a shield"
+        ],
+        "max_ranks": "sus",
+        "careers": {
+            "Guard": "2",
+            "Ironbreaker": "2",
+            "Knight": "2",
+            "Knight of the Blazing Sun": "2",
+            "Knight Panther": "2",
+            "Pit Fighter": "2",
+            "Priest of Myrmidia": "2",
+            "Soldier": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "sixth-sense",
+        "name": "Sixth Sense",
+        "description": "You get a strange feeling when you are threatened, and can react accordingly. The GM may warn you if you are walking into danger; this will normally come after a secret Intuition Test on your behalf. Further, you may ignore Surprise if you pass an Intuition Test.",
+        "tests": [
+            "Intuition Tests involving your Sixth Sense"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Alchemist": "2",
+            "Astromancer": "2",
+            "Butcher": "1",
+            "Druid": "2",
+            "Grave Robber": "4",
+            "Hedge Witch": "2",
+            "Huffer": "4",
+            "Investigator": "3",
+            "Magister Vigilant": "2",
+            "Mystic": "2",
+            "Pyromancer": "2",
+            "Scout": "3",
+            "Scryer": "2",
+            "Shadowmancer": "2",
+            "Shaman": "2",
+            "Spiriter": "2",
+            "Wizard": "2"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Gnome",
+            "High Elf"
+        ]
+    },
+    {
+        "id": "slayer",
+        "name": "Slayer",
+        "description": "When determining Damage use your opponent’s Toughness Bonus as your Strength Bonus if it is higher; always determine this before any other rules modify your Strength or Strength Bonus. Further, if your target is larger than you, and your score a Critical (see page 159), multiply all melee Damage you cause by the number of steps larger your target is (so, 2 steps = ×2, 3 steps = ×3, and so on); this multiplication is calculated after all modifiers are applied. See page 341 for more about Size.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Slayer": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "small",
+        "name": "Small",
+        "description": "You are much shorter than most folk in the Old World. The full rules for different Sizes are found in Chapter 12: Bestiary on page 341.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {},
+        "racial": [
+            "Combat Familiar",
+            "Gnome",
+            "Halfling",
+            "Power Familiar",
+            "Spell Familiar"
+        ]
+    },
+    {
+        "id": "sniper",
+        "name": "Sniper",
+        "description": "Distance is of no import to your shooting skills, and you are just as adept at picking off far away targets as those nearby. You suffer no penalties for shooting at Long range, and half the penalties for Extreme range.",
+        "tests": [
+            "Ranged (Long–Extreme Range)"
+        ],
+        "max_ranks": "4",
+        "careers": {
+            "Archer": "3",
+            "Artillerist": "2",
+            "Engineer": "3",
+            "Ghost Strider": "4",
+            "Handgunner": "1",
+            "Hunter": "4",
+            "Ship’s Gunner": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "speed-reader",
+        "name": "Speed-reader",
+        "description": "You read books at a voracious pace. You may reverse a failed Research Test if this will grant success. If the speed at which you read is important during combat, a successful Language Test lets you read and fully comprehend a number of pages per Round equal to your SL plus Speed-reader level (minimum of 1, even if you fail the Test).",
+        "tests": [
+            "Research and Language Tests where speed of reading is important"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Investigator": "4",
+            "Lawyer": "1",
+            "Scholar": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "sprinter",
+        "name": "Sprinter",
+        "description": "You are a swift runner. Your Movement Attribute counts as 1 higher when Running.",
+        "tests": [
+            "Athletics Tests concerning Running"
+        ],
+        "max_ranks": "sus",
+        "careers": {
+            "Bounty Hunter": "3",
+            "Messenger": "1",
+            "Watchman": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "step-aside",
+        "name": "Step Aside",
+        "description": "You are skilled at being where enemy weapons are not. If you use Dodge to defend against an incoming attack and win the Opposed Test, you may move up to 2 yards as you dive away, and no longer count as Engaged. None of your opponents will gain a Free Attack when you do this.",
+        "tests": [
+            "Dodge Tests to activate this Talent"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Agitator": "3",
+            "Beggar": "3",
+            "Duellist": "1",
+            "Messenger": "1",
+            "Thief": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "stone-soup",
+        "name": "Stone Soup",
+        "description": "You are used to getting by with less, and know how to survive lean times. You can subsist on half the amount of food required without any negative penalties (bar feeling really hungry), and need only test for Starvation every 3 days, not 2 (see page 181).",
+        "tests": [
+            "Endurance Tests to resist hunger"
+        ],
+        "max_ranks": "t",
+        "careers": {
+            "Beachcomber": "2",
+            "Beggar": "1",
+            "Camp Follower": "2",
+            "Flagellant": "1",
+            "Freelance": "2",
+            "Nun": "1",
+            "Villager": "1",
+            "Wolf Kin": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "stout-hearted",
+        "name": "Stout-hearted",
+        "description": "No matter how bad things get, you always seem to come back for more. You may attempt a Cool Test to remove a Broken Condition at the end of each of your Turns as well as at the end of the Round (see page 168 for more on this).",
+        "tests": [
+            "Cool Tests to remove Broken Conditions"
+        ],
+        "max_ranks": "wp",
+        "careers": {
+            "Archer": "4",
+            "Artillerist": "4",
+            "Badger Rider": "2",
+            "Beadle": "3",
+            "Camp Follower": "4",
+            "Cartographer": "4",
+            "Fieldwarden": "1",
+            "Freelance": "3",
+            "Greatsword": "4",
+            "Guard": "3",
+            "Halberdier": "3",
+            "Handgunner": "4",
+            "Ironbreaker": "4",
+            "Knight": "3",
+            "Knight of the Blazing Sun": "4",
+            "Knight Panther": "3",
+            "Nun": "3",
+            "Officer": "4",
+            "Priest of Myrmidia": "3",
+            "Rat Catcher": "3",
+            "Rhinox Herder": "2",
+            "Riverwoman": "3",
+            "Ship’s Gunner": "4",
+            "Soldier": "4",
+            "Villager": "3",
+            "Warden": "2",
+            "Warrior Priest": "3"
+        },
+        "racial": [
+            "Human (Nordlander)"
+        ]
+    },
+    {
+        "id": "strider",
+        "name": "Strider (Terrain)",
+        "description": "You are experienced in traversing difficult ground. You ignore all movement penalties when crossing over or through a specified terrain. Typical specialties include: Coastal, Deserts, Marshes, Rocky, Tundra, Woodlands.",
+        "tests": [
+            "Athletics Tests to traverse the Terrain"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Beachcomber": "1 (Coastal)",
+            "Cartographer": "2 (Any)",
+            "Chantyman": "1 (Coastal)",
+            "Ghost Strider": "1 (Woodlands)",
+            "Hedge Witch": "1 (Woodlands)",
+            "Herbalist": "1 (Any)",
+            "Hunter": "1 (Any)",
+            "Karak Ranger": "1 (Any)",
+            "Miner": "1 (Rocky)",
+            "Owler": "1 (Forests), 4 (Mountains)",
+            "Rhinox Herder": "1 (Mountains)",
+            "Riverwoman": "1 (Marshes)",
+            "Scout": "1 (Any)",
+            "Seaman": "1 (Coastal)",
+            "Smuggler": "1 (Marshes), 4 (Coastal)",
+            "Wolf Kin": "2 (Any)"
+        },
+        "racial": []
+    },
+    {
+        "id": "strike-mighty-blow",
+        "name": "Strike Mighty Blow",
+        "description": "You know how to hit hard! You deal your level of Strike Mighty Blow in extra Damage with melee weapons.",
+        "tests": [],
+        "max_ranks": "sus",
+        "careers": {
+            "Beadle": "2",
+            "Boatman": "3",
+            "Butcher": "3",
+            "Freelance": "2",
+            "Ghost Strider": "3",
+            "Grave Robber": "3",
+            "Greatsword": "2",
+            "Guard": "2",
+            "Halberdier": "2",
+            "Ironbreaker": "1",
+            "Karak Ranger": "2",
+            "Knight": "2",
+            "Knight of the Blazing Sun": "4",
+            "Knight of the White Wolf": "2",
+            "Knight Panther": "2",
+            "Maneater": "2",
+            "Miner": "2",
+            "Racketeer": "1",
+            "Rat Catcher": "1",
+            "Seaman": "3",
+            "Slayer": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "strike-to-injure",
+        "name": "Strike to Injure",
+        "description": "You are an expert at striking your enemies most vulnerable areas. You inflict your level of Strike to Injure in additional Wounds when you cause a Critical Wound.",
+        "tests": [],
+        "max_ranks": "i",
+        "careers": {
+            "Badger Rider": "4",
+            "Duellist": "4",
+            "Ghost Strider": "4",
+            "Knight": "4",
+            "Knight of the Blazing Sun": "2",
+            "Knight Panther": "4",
+            "Physician": "3",
+            "Protagonist": "4",
+            "Rhinox Herder": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "strike-to-stun",
+        "name": "Strike to Stun",
+        "description": "You know where to hit an opponent to bring him down fast. You ignore the ‘Called Shot’ penalty to strike the Head Hit Location when using a melee weapon with the Pummel Quality (see page 298). Further, you count all improvised weapons as having the Pummel Quality.",
+        "tests": [
+            "Melee Tests when Striking to Stun"
+        ],
+        "max_ranks": "ws",
+        "careers": {
+            "Bailiff": "2",
+            "Bounty Hunter": "1",
+            "Fence": "3",
+            "Guard": "1",
+            "Outlaw": "2",
+            "Physician": "1",
+            "Protagonist": "2",
+            "Racketeer": "2",
+            "Rat Catcher": "1",
+            "Thief": "1",
+            "Warden": "1",
+            "Watchman": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "strong-back",
+        "name": "Strong Back",
+        "description": "You have a strong back that is used to hard work. You may add your levels in Strong Back to your SL in any Opposed Strength Tests, and can carry additional Encumbrance points of trappings (see page 293) equal to your level of Strong Back.",
+        "tests": [
+            "Row and Swim"
+        ],
+        "max_ranks": "sus",
+        "careers": {
+            "Archer": "1",
+            "Artillerist": "1",
+            "Artisan": "1",
+            "Artist": "1",
+            "Bailiff": "1",
+            "Boatman": "1",
+            "Bounty Hunter": "2",
+            "Butcher": "1",
+            "Grave Robber": "1",
+            "Greatsword": "1",
+            "Halberdier": "1",
+            "Karak Ranger": "1",
+            "Light Cavalry": "1",
+            "Maneater": "1",
+            "Miner": "2",
+            "Owler": "1",
+            "Pedlar": "2",
+            "Riverwarden": "1",
+            "Riverwoman": "2",
+            "Sailor-Priest of Manann": "2",
+            "Seaman": "1",
+            "Servant": "1",
+            "Ship’s Gunner": "1",
+            "Siege Specialist": "1",
+            "Smuggler": "1",
+            "Soldier": "1",
+            "Stevedore": "1",
+            "Villager": "1",
+            "Wrecker": "1"
+        },
+        "racial": [
+            "Human (Middenheimer)"
+        ]
+    },
+    {
+        "id": "strong-legs",
+        "name": "Strong Legs",
+        "description": "You have strong legs able to carry you great distances when you jump. Add your Strong Legs level to your SL in any Athletics Tests involving Leaping (see page 166).",
+        "tests": [],
+        "max_ranks": "sus",
+        "careers": {
+            "Karak Ranger": "3",
+            "Owler": "3",
+            "Rat Catcher": "3",
+            "Scout": "3",
+            "Seaman": "2",
+            "Stevedore": "2",
+            "Thief": "4"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "strong-minded",
+        "name": "Strong-minded",
+        "description": "You are the epitome of determination and resolve. Add your level in Strong Minded to your maximum Resolve pool.",
+        "tests": [],
+        "max_ranks": "wp",
+        "careers": {
+            "Coachman": "2",
+            "Camp Follower": "4",
+            "Grave Robber": "4",
+            "Hedge Witch": "4",
+            "Miner": "4",
+            "Mystic": "4",
+            "Nun": "4",
+            "Pedlar": "4",
+            "Physician": "4",
+            "Priest": "3",
+            "Rat Catcher": "4",
+            "Riverwoman": "4",
+            "Scryer": "4",
+            "Servant": "1",
+            "Villager": "1",
+            "Warrior Priest": "1",
+            "Witch": "4",
+            "Witch Hunter": "3"
+        },
+        "racial": [
+            "Dwarf (Grumsson, WHFRP)"
+        ]
+    },
+    {
+        "id": "strong-swimmer",
+        "name": "Strong Swimmer",
+        "description": "You are an especially strong swimmer and used to holding your breath for a long time underwater. Gain a bonus of your level in Strong Swimmer to your Toughness Bonus for the purposes of holding your breath.",
+        "tests": [
+            "Swim"
+        ],
+        "max_ranks": "sus",
+        "careers": {
+            "Beachcomber": "1",
+            "Boatman": "1",
+            "Chantyman": "2",
+            "Huffer": "4",
+            "Priest of Stromfels": "1",
+            "Riverwarden": "1",
+            "Riverwoman": "1",
+            "Sailor-Priest of Manann": "3",
+            "Seaman": "1",
+            "Smuggler": "3",
+            "Wrecker": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "sturdy",
+        "name": "Sturdy",
+        "description": "You have a brawny physique, or are very used to carrying things. Increase the number of Encumbrance Points you can carry by your Sturdy level x 2.",
+        "tests": [
+            "Strength Tests when lifting"
+        ],
+        "max_ranks": "sus",
+        "careers": {
+            "Artisan": "2",
+            "Camp Follower": "3",
+            "Freelance": "1",
+            "Herbalist": "2",
+            "Knight": "1",
+            "Knight of the White Wolf": "1",
+            "Knight Panther": "1",
+            "Maneater": "1",
+            "Miner": "1",
+            "Owler": "4",
+            "Pedlar": "3",
+            "Rhinox Herder": "2",
+            "Servant": "1",
+            "Stevedore": "1",
+            "Townsman": "1"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Combat Familiar",
+            "Dwarf (Grumsson, WHFRP)"
+        ]
+    },
+    {
+        "id": "suave",
+        "name": "Suave",
+        "description": "You gain a permanent +5 bonus to your starting Fellowship Characteristic (this does not count towards your Advances).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Advisor": "4",
+            "Agitator": "4",
+            "Bawd": "3",
+            "Beadle": "4",
+            "Beggar": "4",
+            "Bounty Hunter": "1",
+            "Charlatan": "4",
+            "Entertainer": "1",
+            "Envoy": "1",
+            "Fence": "3",
+            "Investigator": "3",
+            "Lawyer": "2",
+            "Merchant": "1",
+            "Mystic": "1",
+            "Noble": "2",
+            "Pedlar": "4",
+            "Priest": "1",
+            "Scholar": "2",
+            "Servant": "3",
+            "Spy": "4",
+            "Townsman": "4",
+            "Warden": "4"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Human (Reiklander, Salzenmunder, Tilean)"
+        ]
+    },
+    {
+        "id": "suffuse-with-ulgu",
+        "name": "Suffuse with Ulgu",
+        "description": "You are suffuse with the Grey Wind of Magic, which those with Second Sight perceive as a shadowy, shifting mist wreathed about your body. You can use your Channelling (Ulgu) Skill in place of the Stealth Skill for all relevant Tests. Further, any successful attempts to cast spells from the Lore of Shadow within 8 yards of you gain +1 SL. This bonus may only be claimed once, no matter how many Characters are Suffuse with Ulgu in a spellcaster’s vicinity.",
+        "tests": [
+            "Stealth (Any)"
+        ],
+        "max_ranks": "1",
+        "careers": {},
+        "racial": [
+            "Gnome"
+        ]
+    },
+    {
+        "id": "suffuse-with-wind-wom",
+        "name": "Suffuse with (Wind) WOM",
+        "description": "You are suffused with one of the Winds of Magic, which those with Second Sight can perceive clinging to your body. Any successful attempts to cast spells from the lore associated with the wind within 8 yards of you gain +1 SL. You can only claim this bonus once, no matter how many sources in your vicinity are suffused with your associated Wind of Magic. In addition, you benefit from an extra effect depending on which wind you are suffused with.\nAqshy: You can benefit from the Frenzy Talent and may use your Channelling (Aqshy) Skill in place of Willpower for the purposes of entering Frenzy.\nAzyr: You can use your Channelling (Azyr) Skill in place of the Perception Skill for all relevant Tests.\nChamon: You can use your Channelling (Chamon) Skill in place of the Evaluate Skill for all relevant Tests.\nGhur: You can use your Channelling (Ghur) Skill in place of the Charm Animal Skill and the Lore (Beasts) Skill for all relevant Tests.\nGhyran: You can use your Channelling (Ghyran) Skill in place of the Lore (Plants, Animals, Herbs) Skill and the Animal Care Skill for all relevant Tests.\nHysh: You can use your Channelling (Hysh) Skill in place of the Research Skill for all relevant Tests.\nShyish: You can use your Channelling (Shyish) Skill in place of the Intimidate Skill for all relevant Tests.\nUlgu: You can use your Channelling (Ulgu) Skill in place of the Stealth Skill for all relevant Tests.",
+        "tests": [
+            "See text."
+        ],
+        "max_ranks": "1",
+        "careers": {
+            "Winds of Magic Wizard Career with the Arcane Mark of their Wind": ""
+        },
+        "racial": [
+            "Combat Familiar",
+            "Power Familiar",
+            "Spell Familiar"
+        ]
+    },
+    {
+        "id": "super-numerate",
+        "name": "Super Numerate",
+        "description": "You have a gift for calculation and can work out the solution to most mathematical problems with ease. You may use a simple calculator to represent what your PC is capable of mentally computing.",
+        "tests": [
+            "Evaluate",
+            "Gamble"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Engineer": "3",
+            "Fence": "3",
+            "Scholar": "1"
+        },
+        "racial": [
+            "Random Racial Talent"
+        ]
+    },
+    {
+        "id": "supportive",
+        "name": "Supportive",
+        "description": "You know what to say and when to make the most impact upon your superiors. When you successfully use a social Skill to influence those with a higher Status tier, you can choose to either use your rolled SL, or the number rolled on your units die. So, a successful roll of 46 could be used for +6 SL.",
+        "tests": [
+            "Social Tests to influence a superior"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Advisor": "2",
+            "Servant": "3",
+            "Townsman": "3",
+            "Warden": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "sure-shot",
+        "name": "Sure Shot",
+        "description": "You know how to find the weak spots in a target’s armor. When you hit a target with a Ranged weapon, you may ignore Armour Points equal to your Sure Shot level.",
+        "tests": [],
+        "max_ranks": "i",
+        "careers": {
+            "Archer": "2",
+            "Bounty Hunter": "4",
+            "Handgunner": "3",
+            "Hunter": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "surgery",
+        "name": "Surgery",
+        "description": "You are a surgeon, able to open and close the flesh in order to heal others. You can treat any Critical Wound marked as needing Surgery. You can also perform surgery to resolve internal issues with an Extended Challenging (+0) Heal Test with a target SL determined by the GM (usually 5–10) depending upon the difficulty of the procedure at hand. This will cause 1d10 Wounds and 1 Bleeding Condition per Test, meaning surgery has a high chance of killing a patient if the surgeon is not careful. After surgery, the patient must pass an Average (+20) Endurance Test or gain a Minor Infection (see page 187).",
+        "tests": [
+            "Heal Tests outside combat rounds; i.e. when you have time to do it ‘properly’"
+        ],
+        "max_ranks": "int",
+        "careers": {
+            "Physician": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "tenacious",
+        "name": "Tenacious",
+        "description": "You never give up, no matter how impossible your travails appear. You can double the length of time successful Endurance Tests allow you to endure a hardship. This includes enduring prolonged riding, exposure, rituals, and similar adversities.",
+        "tests": [
+            "Endurance Tests for enduring hardships"
+        ],
+        "max_ranks": "t",
+        "careers": {
+            "Artist": "1",
+            "Bailiff": "1",
+            "Beachcomber": "4",
+            "Chantyman": "4",
+            "Coachman": "1",
+            "Grave Robber": "3",
+            "Guard": "1",
+            "Huffer": "4",
+            "Investigator": "2",
+            "Karak Ranger": "4",
+            "Messenger": "3",
+            "Miner": "1",
+            "Pedlar": "4",
+            "Riverwoman": "3",
+            "Scout": "4",
+            "Servant": "2",
+            "Seaman": "3",
+            "Stevedore": "2",
+            "Villager": "2",
+            "Watchman": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "tinker",
+        "name": "Tinker",
+        "description": "You are somewhat of a Johann-of-all-trades, able to repair almost anything. You count all non-magical Trade Skills as Basic when repairing broken items.",
+        "tests": [
+            "Trade Tests to repair broken items"
+        ],
+        "max_ranks": "dex",
+        "careers": {
+            "Artillerist": "3",
+            "Artisan": "3",
+            "Beachcomber": "3",
+            "Engineer": "1",
+            "Karak Ranger": "4",
+            "Miner": "3",
+            "Pedlar": "1"
+        },
+        "racial": []
+    },
+    {
+        "id": "tower-of-memories",
+        "name": "Tower of Memories",
+        "description": "A recollection technique first instigated by the Cult of Verena, reputedly from Elven practices taught by the Loremasters of Hoeth, Tower of Memories allows you to perfectly recall a sequence of facts by storing them in an imaginary spire. You can recall a sequence as long as your Intelligence without having to make a Test. For every 10 more items you attempt to memorize, you must make an increasingly difficult Intelligence Test to recall the list correctly, starting at Very Easy (+60) for +10, Easy (+40) for +20, Average (+20) for +30, and so on. Beyond it’s obvious utility for Gamble Tests, where having this Talent adds a bonus of +20 to +60 depending upon how useful recalling sequences is to the game at hand, the GM can apply bonuses to other Tests as appropriate. Each time you take this Talent you may recall an extra sequence without having to forget a previously stored one.",
+        "tests": [],
+        "max_ranks": "int",
+        "careers": {
+            "Hierophant": "3",
+            "Investigator": "4",
+            "Scholar": "3",
+            "Shadowmancer": "4",
+            "Spy": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "trapper",
+        "name": "Trapper",
+        "description": "You are skilled at spotting and using traps. You may take a Perception Test to spot traps automatically without having to tell the GM of your intention; the GM may prefer to make some of these Tests on your behalf in private.",
+        "tests": [
+            "Perception Tests to spot traps",
+            "Set Trap"
+        ],
+        "max_ranks": "i",
+        "careers": {
+            "Grave Robber": "4",
+            "Hunter": "1",
+            "Outlaw": "2",
+            "Thief": "3",
+            "Wrecker": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "trick-riding",
+        "name": "Trick Riding",
+        "description": "You are capable of amazing feats of agility on horseback. You can use any of your Performer Skills and unmodified Dodge skill when on horseback. Further, when mounted, you can make your Move at the start of the Round instead of on your Turn.",
+        "tests": [
+            "Dodge Tests on Horseback",
+            "Ride (Horse)"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Badger Rider": "3",
+            "Cavalryman": "2",
+            "Coachman": "1",
+            "Entertainer": "2",
+            "Light Cavalry": "3",
+            "Messenger": "3",
+            "Rhinox Herder": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "tunnel-rat",
+        "name": "Tunnel Rat",
+        "description": "You are at home in tunnels, sewers, and other underground environments. When using Stealth in an underground environment, bystanders do not get passive Perception Tests to detect you; they can only spot you if they are specifically on look-out, or watching for hidden others.",
+        "tests": [
+            "Stealth Tests when underground"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Badger Rider": "3",
+            "Grave Robber": "3",
+            "Miner": "3",
+            "Rat Catcher": "3",
+            "Siege Specialist": "2"
+        },
+        "racial": []
+    },
+    {
+        "id": "unshakable",
+        "name": "Unshakable",
+        "description": "You are a jaded veteran who has survived more than one hail of shots from Blackpowder weapons. You need only take a Cool Test to resist a Broken Condition if you are successfully wounded by a Blackpowder weapon, not just if you are shot at.",
+        "tests": [
+            "Cool Tests to resist Blackpowder panic"
+        ],
+        "max_ranks": "wp",
+        "careers": {
+            "Archer": "3",
+            "Artillerist": "3",
+            "Beadle": "4",
+            "Camp Follower": "3",
+            "Cartographer": "3",
+            "Engineer": "4",
+            "Freelance": "3",
+            "Greatsword": "3",
+            "Guard": "3",
+            "Halberdier": "3",
+            "Handgunner": "3",
+            "Ironbreaker": "2",
+            "Knight": "3",
+            "Knight of the Blazing Sun": "3",
+            "Knight of the White Wolf": "3",
+            "Knight Panther": "3",
+            "Pikeman": "4",
+            "Siege Specialist": "3",
+            "Soldier": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "very-resilient",
+        "name": "Very Resilient",
+        "description": "You gain a permanent +5 bonus to your starting Toughness Characteristic (this does not count towards your Advances).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Beggar": "1",
+            "Camp Follower": "3",
+            "Messenger": "4",
+            "Outlaw": "3",
+            "Pedlar": "3",
+            "Pikeman": "4",
+            "Rat Catcher": "2",
+            "Scout": "3",
+            "Villager": "3",
+            "Witch": "4"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Combat Familiar",
+            "Human (Nordlander)",
+            "Ogre",
+            "Wood Elf"
+        ]
+    },
+    {
+        "id": "very-strong",
+        "name": "Very Strong",
+        "description": "You gain a permanent +5 bonus to your starting Strength Characteristic (this does not count towards your Advances).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Artisan": "1",
+            "Boatman": "2",
+            "Grave Robber": "2",
+            "Huffer": "3",
+            "Miner": "2",
+            "Owler": "2",
+            "Pikeman": "1",
+            "Riverwarden": "1",
+            "Riverwoman": "3",
+            "Sailor-Priest of Manann": "1",
+            "Seaman": "3",
+            "Slayer": "4",
+            "Smuggler": "2",
+            "Stevedore": "1",
+            "Villager": "2"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Combat Familiar",
+            "Ogre"
+        ]
+    },
+    {
+        "id": "vice",
+        "name": "Vice (Target)",
+        "description": "You are consumed with a need to indulge in a particular vice, suffering from the Vice Psychology. Each time you take this Talent you develop a new vice. Examples you could take include: Alcohol, Food, Narcotics, Pleasure.",
+        "tests": [
+            "Willpower (Resist Target)"
+        ],
+        "max_ranks": "wp",
+        "careers": {},
+        "racial": [
+            "Ogre (Food)"
+        ]
+    },
+    {
+        "id": "war-leader",
+        "name": "War Leader",
+        "description": "Your stern gaze and inspiring words motivate your soldiers to fight on to the end. All subordinates able to see you may add your level in War Leader to their SL in one Willpower Test per Round. This bonus does not stack.",
+        "tests": [
+            "Leadership Tests during War"
+        ],
+        "max_ranks": "fel",
+        "careers": {
+            "Archer": "4",
+            "Cavalryman": "3",
+            "Freelance": "3",
+            "Greatsword": "3",
+            "Halberdier": "3",
+            "Handgunner": "4",
+            "Ironbreaker": "3",
+            "Knight": "3",
+            "Knight of the Blazing Sun": "3",
+            "Knight of the White Wolf": "3",
+            "Knight Panther": "3",
+            "Light Cavalry": "4",
+            "Maneater": "4",
+            "Noble": "4",
+            "Officer": "3",
+            "Pikeman": "4",
+            "Priest of Myrmidia": "4",
+            "Siege Specialist": "4",
+            "Soldier": "3",
+            "Warrior Priest": "4"
+        },
+        "racial": [
+            "Human (Björnling)"
+        ]
+    },
+    {
+        "id": "war-wizard",
+        "name": "War Wizard",
+        "description": "You are trained to cast magic while in the thick of combat. On your Turn, you may cast one Spell with a Casting Number of 5 or less for free without using your Action. However, if you do this, you may not cast another spell this Turn.",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Alchemist": "4",
+            "Astromancer": "4",
+            "Butcher": "3",
+            "Druid": "4",
+            "Pyromancer": "4",
+            "Shadowmancer": "4",
+            "Shaman": "4",
+            "Spiriter": "4",
+            "Wizard": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "warrior-born",
+        "name": "Warrior Born",
+        "description": "You gain a permanent +5 bonus to your starting Weapon Skill Characteristic (doesn’t count as Advances).",
+        "tests": [],
+        "max_ranks": "1",
+        "careers": {
+            "Archer": "1",
+            "Artillerist": "1",
+            "Beadle": "1",
+            "Freelance": "1",
+            "Greatsword": "1",
+            "Halberdier": "1",
+            "Ironbreaker": "1",
+            "Knight": "1",
+            "Knight of the Blazing Sun": "1",
+            "Knight of the White Wolf": "1",
+            "Knight Panther": "1",
+            "Pikeman": "1",
+            "Priest of Stromfels": "4",
+            "Protagonist": "1",
+            "Racketeer": "2",
+            "Soldier": "1",
+            "Wrecker": "4"
+        },
+        "racial": [
+            "Random Racial Talent",
+            "Combat Familiar",
+            "Human (Björnling, Middenlander)"
+        ]
+    },
+    {
+        "id": "waterman",
+        "name": "Waterman",
+        "description": "You are an experienced freshwater sailor and are well-versed with river vessels. You can ignore all negatives to your Tests when onboard a barge derived from rolling waters, swaying vessels, unsure footing, and similar. Further, you count as two boatmen towards the minimum number of crew to pilot a river vessel.",
+        "tests": [
+            "Sail Tests for river-going vessels"
+        ],
+        "max_ranks": "ag",
+        "careers": {
+            "Boatman": "2",
+            "Huffer": "1",
+            "Riverwarden": "1",
+            "Riverwoman": "2",
+            "Smuggler": "2",
+            "Wrecker": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "wealthy",
+        "name": "Wealthy",
+        "description": "You are fabulously wealthy, and are rarely ever short of coin. When Earning (including Income Endeavors) you secure +1 GC per time you have this Talent.",
+        "tests": [],
+        "max_ranks": "None",
+        "careers": {
+            "Alchemist": "4",
+            "Knight of the Blazing Sun": "4",
+            "Lawyer": "4",
+            "Merchant": "4",
+            "Noble": "4",
+            "Racketeer": "4",
+            "Thief": "4"
+        },
+        "racial": []
+    },
+    {
+        "id": "well-prepared",
+        "name": "Well-prepared",
+        "description": "You are used to anticipating the needs of others, and yourself. A number of times per session equal to your level of Well-Prepared, you may pull the trapping required for the current situation from your backpack (or similar) as long as it is Encumbrance 0, could feasibly been bought recently, and doesn’t stretch credibility too far. This could be anything from a flask of spirits to fortify a wounded comrade to a pfennig-whistle needed by a passing entertainer. Whenever you do this, you must deduct the cost for the prepared item from your purse, representing the coin you spent earlier.",
+        "tests": [],
+        "max_ranks": "i",
+        "careers": {
+            "Astromancer": "3",
+            "Mystic": "2",
+            "Scryer": "3",
+            "Servant": "2",
+            "Pedlar": "3"
+        },
+        "racial": []
+    },
+    {
+        "id": "witch",
+        "name": "Witch!",
+        "description": "You have learned magic through trial and error. Add Language (Magick) to any Career you enter; if it is already in your Career, you may purchase the Skill for 5 XP fewer per Advance. Further, you may spend 1 Resilience point to immediately cast any spell as if it were one of your Arcane Lore spells; you also instantly memorize that spell as one of your Arcane Lore spells for 0 XP. You can do this a number of times equal to your level in this Talent.",
+        "tests": [],
+        "max_ranks": "wp",
+        "careers": {
+            "Mystic": "3",
+            "Witch": "2"
+        },
+        "racial": []
+    }
+]
