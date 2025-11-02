@@ -1,15 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant } from '@wfrp/shared';
 
-
-// import { ServerToClientMessage } from '@wfrp/shared';
+interface OpposedTestRequest {
+  testId: string;
+  role: 'attacker' | 'defender';
+  skillName: string;
+  targetNumber: number;
+  modifier: number;
+}
 
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [character, setCharacter] = useState<Character | null>(null);
   const [shopItems, setShopItems] = useState<string[]>([]);
+  const [combatants, setCombatants] = useState<Combatant[]>([]);
+  const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
+  const [opposedTestRequest, setOpposedTestRequest] = useState<OpposedTestRequest | null>(null);
 
 
   const connect = useCallback((ipAddress: string) => {
@@ -69,6 +77,23 @@ export const useSocket = () => {
           alert(`Purchase denied${message.payload.reason ? ': ' + message.payload.reason : ''}`);
         }
       }
+
+      if (message.type === 'UPDATE_INITIATIVE_TRACKER') {
+        console.log('[CLIENT] Initiative tracker updated:', message.payload);
+        setCombatants(message.payload.combatants);
+        setCurrentTurnId(message.payload.currentTurnId);
+      }
+
+      if (message.type === 'REQUEST_OPPOSED_TEST') {
+        console.log('[CLIENT] Opposed test request:', message.payload);
+        setOpposedTestRequest({
+          testId: message.payload.testId,
+          role: message.payload.role,
+          skillName: message.payload.skillName,
+          targetNumber: message.payload.targetNumber,
+          modifier: message.payload.modifier
+        });
+      }
     });
 
     setSocket(newSocket);
@@ -91,5 +116,5 @@ export const useSocket = () => {
     };
   }, [socket]);
 
-  return { isConnected, character, shopItems, connect, disconnect, sendMessage };
+  return { isConnected, character, shopItems, combatants, currentTurnId, opposedTestRequest, setOpposedTestRequest, connect, disconnect, sendMessage };
 };

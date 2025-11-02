@@ -3,15 +3,17 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage } from '@wfrp/shared';
 import { TestModal } from './components/TestModal';
 import { TestResultMessage, calculateCharacteristicAdvanceCost, calculateSkillAdvanceCost, allSkillsAndCharacteristics } from '@wfrp/shared';
 import { TalentModal } from './components/TalentModal';
 import { ShopModal } from './components/ShopModal';
+import { OpposedTestModal } from './components/OpposedTestModal';
+import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
 
 
 const PlayerApp: React.FC = () => {
-  const { isConnected, character, shopItems, connect, disconnect, sendMessage } = useSocket();
+  const { isConnected, character, shopItems, combatants, currentTurnId, opposedTestRequest, setOpposedTestRequest, connect, disconnect, sendMessage } = useSocket();
   const [isAdvancementMode, setIsAdvancementMode] = useState(false);
   const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
   const [testModalInfo, setTestModalInfo] = useState<{ name: string, value: number } | null>(null);
@@ -130,6 +132,47 @@ const PlayerApp: React.FC = () => {
     alert(`Purchase request sent to GM for ${item.name}`);
   };
 
+  const handleOpposedTestRoll = (rollResult: number, successLevel: number, fortuneSpent: number, corruptionGained: number) => {
+    if (!character || !opposedTestRequest) return;
+
+    // Update character's fortune and corruption
+    const updatedCharacter: Character = {
+      ...character,
+      status: {
+        ...character.status,
+        fortune: {
+          ...character.status.fortune,
+          current: character.status.fortune.current - fortuneSpent
+        },
+        corruption: {
+          ...character.status.corruption,
+          current: Math.min(character.status.corruption.current + corruptionGained, character.status.corruption.max)
+        }
+      }
+    };
+
+    // Send CHARACTER_UPDATE to sync the changes
+    const updateMessage: CharacterUpdateMessage = {
+      type: 'CHARACTER_UPDATE',
+      payload: { character: updatedCharacter }
+    };
+    sendMessage(updateMessage);
+
+    // Send the opposed test result
+    const message: OpposedTestResultMessage = {
+      type: 'OPPOSED_TEST_RESULT',
+      payload: {
+        testId: opposedTestRequest.testId,
+        characterId: character.id,
+        role: opposedTestRequest.role,
+        rollResult,
+        successLevel
+      }
+    };
+    sendMessage(message);
+    setOpposedTestRequest(null);
+  };
+
   const activeCharacter = isAdvancementMode ? draftCharacter : character;
 
   if (!isConnected) {
@@ -166,6 +209,27 @@ const PlayerApp: React.FC = () => {
           onRequestPurchase={handleRequestPurchase}
         />
       )}
+
+      {opposedTestRequest && character && (
+        <OpposedTestModal
+          testId={opposedTestRequest.testId}
+          role={opposedTestRequest.role}
+          skillName={opposedTestRequest.skillName}
+          targetNumber={opposedTestRequest.targetNumber}
+          modifier={opposedTestRequest.modifier}
+          fortunePoints={character.status.fortune.current}
+          corruptionCurrent={character.status.corruption.current}
+          corruptionMax={character.status.corruption.max}
+          onRollComplete={handleOpposedTestRoll}
+          onClose={() => setOpposedTestRequest(null)}
+        />
+      )}
+      
+      <InitiativeTracker 
+        combatants={combatants}
+        currentTurnId={currentTurnId}
+      />
+      
       {character ? (
         <CharacterSheet
           character={activeCharacter!}

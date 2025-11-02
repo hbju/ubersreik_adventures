@@ -24,6 +24,8 @@ import {
     AwardCurrencyMessage,
     equilibrateCurrency,
     RequestPurchaseMessage,
+    UpdateInitiativeTrackerMessage,
+    OpposedTestResultMessage,
     Armor,
     Weapon,
     Item,
@@ -64,6 +66,7 @@ function App() {
     const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
 
     const [characters, setCharacters] = useLocalStorageState<Character[]>('wfrp-gm-tools-characters', initChars);
+    const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
     const [openSheetIds, setOpenSheetIds] = useState<string[]>([]);
     const [combatants, setCombatants] = useState<Combatant[]>([]);
     const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
@@ -75,9 +78,10 @@ function App() {
         playerCurrency: Currency;
         characterId: string;
     } | null>(null);
+    const [opposedTestResults, setOpposedTestResults] = useState<Map<string, OpposedTestResultMessage['payload']>>(new Map());
 
     const addLogEntry = (type: LogEntry['type'], content: string) => {
-        const newEntry: LogEntry = { id: new Date().toISOString(), type, content };
+        const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content };
         setLogEntries(prev => [...prev, newEntry]);
     };
 
@@ -103,6 +107,7 @@ function App() {
 
         window.ipcRenderer.sendToPlayer(socketId, message);
         window.ipcRenderer.assignCharacterToPlayer(character.id, socketId);
+        setAssignedCharacters(prev => [...prev, character.id]);
         console.log('Assigned ' + character.name + ' to player ' + socketId)
     }
 
@@ -183,6 +188,8 @@ function App() {
         // Prevent adding the same character twice
         if (combatants.some(c => c.sourceId === character.id)) return;
 
+        console.log(assignedCharacters);
+
         const newCombatant: Combatant = {
             id: crypto.randomUUID(),
             sourceId: character.id,
@@ -192,7 +199,7 @@ function App() {
             maxWounds: calculateMaxWounds(character),
             baseInitiative: calculateCharacteristicBonus(character.characteristics.i),
             baseAg: calculateCharacteristicBonus(character.characteristics.ag),
-            isPlayer: true,
+            isPlayer: assignedCharacters.includes(character.id),
         };
         setCombatants(prev => [...prev, newCombatant]);
     };
@@ -259,15 +266,47 @@ function App() {
                     });
                 }
             }
+
+            if (message.type === 'OPPOSED_TEST_RESULT') {
+                const { testId, characterId, role, rollResult, successLevel } = message.payload;
+                const character = characters.find(c => c.id === characterId);
+                if (character) {
+                    addLogEntry(
+                        'roll',
+                        `${character.name} (${role}) rolled ${rollResult} with SL ${successLevel >= 0 ? '+' : ''}${Math.round(successLevel)}`
+                    );
+                }
+                // Store the result for CombatResolver
+                setOpposedTestResults(prev => {
+                    const newMap = new Map(prev);
+                    const key = `${testId}-${role}`;
+                    newMap.set(key, message.payload);
+                    return newMap;
+                });
+            }
         });
 
-    return () => {
-        cleanupStatusListener();
-        cleanupMessageListener();
-    };
-}, []);
+        return () => {
+            cleanupStatusListener();
+            cleanupMessageListener();
+        };
+    }, []);
 
-return (
+    // Broadcast initiative tracker updates to all players
+    useEffect(() => {
+        if (combatants.length > 0 || currentTurnId !== null) {
+            const message: UpdateInitiativeTrackerMessage = {
+                type: 'UPDATE_INITIATIVE_TRACKER',
+                payload: {
+                    combatants,
+                    currentTurnId
+                }
+            };
+            window.ipcRenderer.sendToAllPlayers(message);
+        }
+    }, [combatants, currentTurnId]);
+
+    return (
     <div className="App">
         <ServerStatus
             ip={serverInfo.ip}
@@ -298,7 +337,25 @@ return (
         />
 
         <MapDisplay gameData={gameData} />
-        {/* <CombatResolver characters={characters} /> */}
+        
+        <CombatResolver 
+            characters={characters}
+            combatants={combatants}
+            opposedTestResults={opposedTestResults}
+            onClearOpposedTestResult={(testId: string, role: 'attacker' | 'defender') => {
+                setOpposedTestResults(prev => {
+                    const newMap = new Map(prev);
+                    newMap.delete(`${testId}-${role}`);
+                    return newMap;
+                });
+            }}
+            onSendToPlayer={(characterId: string, message) => {
+                window.ipcRenderer.sendToPlayer(characterId, message);
+            }}
+            onLogEntry={addLogEntry}
+            onUpdateCharacter={handleCharacterUpdate}
+            onUpdateCombatant={handleUpdateCombatant}
+        />
 
         <AtmospherePanel />
 

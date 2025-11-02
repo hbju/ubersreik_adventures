@@ -1,4 +1,4 @@
-import { Character, Currency, Item, Weapon, Armor } from './wfrp.types';
+import { Character, Currency, Item, Weapon, Armor, Combatant } from './wfrp.types';
 
 interface BaseMessage<T extends string, P> {
   type: T;
@@ -13,8 +13,16 @@ export type AwardXpMessage = BaseMessage<'AWARD_XP', { amount: number }>;
 export type AwardCurrencyMessage = BaseMessage<'AWARD_CURRENCY', { currency: Currency }>;
 export type UpdateShopInventoryMessage = BaseMessage<'UPDATE_SHOP_INVENTORY', { items: Record<string, number> }>;
 export type PurchaseResponseMessage = BaseMessage<'PURCHASE_RESPONSE', { success: boolean; item: Armor | Weapon | Item; reason?: string }>;
+export type UpdateInitiativeTrackerMessage = BaseMessage<'UPDATE_INITIATIVE_TRACKER', { combatants: Combatant[]; currentTurnId: string | null }>;
+export type RequestOpposedTestMessage = BaseMessage<'REQUEST_OPPOSED_TEST', { 
+  testId: string;
+  role: 'attacker' | 'defender';
+  skillName: string;
+  targetNumber: number;
+  modifier: number;
+}>;
 
-export type ServerToClientMessage = AssignCharacterMessage | RequestTestMessage | AwardXpMessage | CharacterUpdateMessage | AwardCurrencyMessage | UpdateShopInventoryMessage | PurchaseResponseMessage;
+export type ServerToClientMessage = AssignCharacterMessage | RequestTestMessage | AwardXpMessage | CharacterUpdateMessage | AwardCurrencyMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage;
 
 // == Player to GM Messages ==
 
@@ -27,5 +35,12 @@ export type TestResultMessage = BaseMessage<'TEST_RESULT', {
 }>;
 export type CharacterUpdateMessage = BaseMessage<'CHARACTER_UPDATE', { character: Character }>;
 export type RequestPurchaseMessage = BaseMessage<'REQUEST_PURCHASE', { item: Armor | Weapon | Item, characterId: string }>;
+export type OpposedTestResultMessage = BaseMessage<'OPPOSED_TEST_RESULT', {
+  testId: string;
+  role: 'attacker' | 'defender';
+  rollResult: number;
+  successLevel: number;
+  characterId: string;
+}>;
 
-export type ClientToServerMessage = TestResultMessage | CharacterUpdateMessage | RequestPurchaseMessage;
+export type ClientToServerMessage = TestResultMessage | CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage;
