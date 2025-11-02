@@ -1,0 +1,281 @@
+/* Inventory View Container */
+.inventoryView {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    color: #e0e0e0;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+/* Section Styling */
+.inventorySection {
+    background-color: #222;
+    border: 1px solid #444;
+    border-radius: 6px;
+}
+
+.sectionHeader {
+    padding: 12px 16px;
+    background-color: #2a2a2a;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.2s;
+}
+
+.sectionHeader:hover {
+    background-color: #333;
+}
+
+.sectionTitle {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffcc00;
+}
+
+.sectionContent {
+    padding: 12px;
+}
+
+/* Items List */
+.itemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inventoryItem {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 12px;
+    transition: border-color 0.2s;
+}
+
+.inventoryItem:hover {
+    border-color: #ffcc00;
+}
+
+.itemHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #444;
+}
+
+.itemName {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffcc00;
+}
+
+.itemEnc {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.itemDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.detailRow {
+    display: flex;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.detailLabel {
+    color: #aaa;
+    min-width: 100px;
+    font-weight: 500;
+}
+
+.detailValue {
+    color: #e0e0e0;
+}
+
+.emptyMessage {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 20px;
+    margin: 0;
+}
+
+/* Footer Section */
+.inventoryFooter {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 2px solid #444;
+}
+
+.purchaseButtonContainer {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+}
+
+.purchaseButton {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, #4a9eff 0%, #357abd 100%);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
+}
+
+.purchaseButton:hover {
+    background: linear-gradient(135deg, #5aaeff 0%, #4a8acd 100%);
+    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.purchaseButton:active {
+    transform: translateY(0);
+}
+
+.footerContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.currencyDisplay,
+.encumbranceDisplay {
+    background-color: #222;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+.currencyDisplay h4,
+.encumbranceDisplay h4 {
+    margin: 0 0 12px 0;
+    color: #ffcc00;
+    font-size: 1rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+}
+
+/* Currency Display */
+.currencyValues {
+    display: flex;
+    gap: 16px;
+    justify-content: space-around;
+}
+
+.currency {
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #2a2a2a;
+}
+
+.currency.gc {
+    color: #ffd700;
+    border: 1px solid #ffd70044;
+}
+
+.currency.ss {
+    color: #c0c0c0;
+    border: 1px solid #c0c0c044;
+}
+
+.currency.bp {
+    color: #cd7f32;
+    border: 1px solid #cd7f3244;
+}
+
+/* Encumbrance Display */
+.encumbranceBar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.encumbranceValue {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #4a9eff;
+    text-align: center;
+}
+
+.encumbranceValue.overEncumbered {
+    color: #ff4444;
+}
+
+.progressBar {
+    width: 100%;
+    height: 24px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #4a9eff 0%, #6bb0ff 100%);
+    transition: width 0.3s ease;
+}
+
+.progressFill.overEncumbered {
+    background: linear-gradient(90deg, #ff4444 0%, #ff6666 100%);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .footerContent {
+        grid-template-columns: 1fr;
+    }
+
+    .currencyValues {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .currency {
+        text-align: center;
+    }
+
+    .detailLabel {
+        min-width: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .inventoryView {
+        padding: 12px;
+    }
+
+    .sectionHeader {
+        padding: 10px 12px;
+    }
+
+    .sectionTitle {
+        font-size: 1rem;
+    }
+
+    .itemHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}

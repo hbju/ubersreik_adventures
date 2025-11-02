@@ -32,6 +32,9 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   sendToPlayer(socketId: string, message: any) {
     return ipcRenderer.send('send-to-player', socketId, message)
   },
+  sendToAllPlayers(message: any) {
+    return ipcRenderer.send('send-to-all-players', message)
+  },
   assignCharacterToPlayer(characterId: string, socketId: string) {
     return ipcRenderer.send('assign-character-to-player', characterId, socketId)
   },

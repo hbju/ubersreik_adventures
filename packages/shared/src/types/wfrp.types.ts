@@ -67,6 +67,37 @@ export interface Talent {
   max_ranks: number | keyof Character['characteristics']
 }
 
+interface BaseItem {
+  id: string;
+  name: string;
+  price: string; // Keep as string for display (e.g., "1 GC", "10 S")
+  enc: number;
+  availability: 'Common' | 'Scarce' | 'Rare' | 'Exotic' | 'Unique';
+}
+
+export interface Armor extends BaseItem {
+  type: 'Soft Leather' | 'Boiled Leather' | 'Mail' | 'Plate';
+  penalty: string;
+  locations: string[];
+  ap: number;
+  qualities: string[];
+}
+
+export interface Weapon extends BaseItem {
+  group: string;
+  reach: string;
+  damage: string;
+  qualities: string[];
+}
+
+export interface Item extends BaseItem {}
+
+export interface Currency {
+  gc: number; // Gold Crowns
+  ss: number; // Silver Shillings
+  bp: number; // Brass Pennies
+}
+
 export interface Character {
   id: string;
   name: string;
@@ -94,7 +125,12 @@ export interface Character {
     corruption: Status;
   };
   talents: Record<string, number>;
-  inventory: string[];
+  inventory: {
+    weapons: string[];
+    armor: string[];
+    items: string[];
+  };
+  currency: Currency;
 }
 
 export interface GameData {

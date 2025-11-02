@@ -9,6 +9,7 @@ export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [character, setCharacter] = useState<Character | null>(null);
+  const [shopItems, setShopItems] = useState<string[]>([]);
 
 
   const connect = useCallback((ipAddress: string) => {
@@ -44,6 +45,30 @@ export const useSocket = () => {
           return newChar;
         });
       }
+
+      if (message.type === 'AWARD_CURRENCY') {
+        console.log('[CLIENT] Awarding Currency:', message.payload);
+        setCharacter(prevChar => {
+          if (!prevChar) return prevChar;
+          const newChar = { ...prevChar, currency: { ...message.payload.currency } };
+          return newChar;
+        });
+      }
+
+      if (message.type === 'UPDATE_SHOP_INVENTORY') {
+        console.log('[CLIENT] Shop inventory updated:', message.payload);
+        const itemIds = Object.keys(message.payload.items);
+        setShopItems(itemIds);
+      }
+
+      if (message.type === 'PURCHASE_RESPONSE') {
+        console.log('[CLIENT] Purchase response:', message.payload);
+        if (message.payload.success) {
+          alert(`Purchase successful! You received ${message.payload.item.name}`);
+        } else {
+          alert(`Purchase denied${message.payload.reason ? ': ' + message.payload.reason : ''}`);
+        }
+      }
     });
 
     setSocket(newSocket);
@@ -66,5 +91,5 @@ export const useSocket = () => {
     };
   }, [socket]);
 
-  return { isConnected, character, connect, disconnect, sendMessage };
+  return { isConnected, character, shopItems, connect, disconnect, sendMessage };
 };

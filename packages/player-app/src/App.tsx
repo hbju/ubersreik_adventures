@@ -3,21 +3,28 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage } from '@wfrp/shared';
 import { TestModal } from './components/TestModal';
 import { TestResultMessage, calculateCharacteristicAdvanceCost, calculateSkillAdvanceCost, allSkillsAndCharacteristics } from '@wfrp/shared';
+import { TalentModal } from './components/TalentModal';
+import { ShopModal } from './components/ShopModal';
 
 
 const PlayerApp: React.FC = () => {
-  const { isConnected, character, connect, disconnect, sendMessage } = useSocket();
+  const { isConnected, character, shopItems, connect, disconnect, sendMessage } = useSocket();
   const [isAdvancementMode, setIsAdvancementMode] = useState(false);
   const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
   const [testModalInfo, setTestModalInfo] = useState<{ name: string, value: number } | null>(null);
-
+  const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
+  const [isShopModalOpen, setIsShopModalOpen] = useState(false);
 
   const handleSkillClick = (skillName: string, skillValue: number) => {
     setTestModalInfo({ name: skillName, value: skillValue });
   };
+
+  const handleCharacteristicClick = (charName: string, charValue: number) => {
+    setTestModalInfo({ name: charName, value: charValue });
+  }
 
   const handleRoll = (result: TestResultMessage['payload']) => {
     sendMessage({ type: 'TEST_RESULT', payload: result });
@@ -95,6 +102,34 @@ const PlayerApp: React.FC = () => {
     }
   };
 
+  const handleBuyTalent = (talentId: string, cost: number) => {
+    if (!draftCharacter) return;
+
+    if (draftCharacter.xp.current >= cost) {
+      const newDraft = { ...draftCharacter };
+      newDraft.xp.current -= cost;
+      newDraft.talents[talentId] = (newDraft.talents[talentId] || 0) + 1;
+      setDraftCharacter(newDraft);
+    } else {
+      alert("Not enough XP!");
+    }
+  };
+
+  const handleRequestPurchase = (item: any) => {
+    if (!character) return;
+    
+    const message: RequestPurchaseMessage = {
+      type: 'REQUEST_PURCHASE',
+      payload: { 
+        item,
+        characterId: character.id 
+      }
+    };
+    sendMessage(message);
+    setIsShopModalOpen(false);
+    alert(`Purchase request sent to GM for ${item.name}`);
+  };
+
   const activeCharacter = isAdvancementMode ? draftCharacter : character;
 
   if (!isConnected) {
@@ -111,19 +146,38 @@ const PlayerApp: React.FC = () => {
           <h3>Advancement Mode</h3>
           <p>XP Available: {draftCharacter.xp.current}</p>
           {/* We'll calculate spent XP later */}
+          <button onClick={() => setIsTalentModalOpen(true)} className='advanceControlButton'>Buy Talents</button>
           <button onClick={handleConfirmAdvancement} className='advanceControlButton'>Confirm Changes</button>
           <button onClick={handleCancelAdvancement} className="advanceControlButton">Cancel</button>
         </div>
+      )}
+      {isTalentModalOpen && draftCharacter && (
+        <TalentModal
+          character={draftCharacter}
+          onClose={() => setIsTalentModalOpen(false)}
+          onBuyTalent={handleBuyTalent}
+        />
+      )}
+      {isShopModalOpen && character && (
+        <ShopModal
+          shopItems={shopItems}
+          playerCurrency={character.currency}
+          onClose={() => setIsShopModalOpen(false)}
+          onRequestPurchase={handleRequestPurchase}
+        />
       )}
       {character ? (
         <CharacterSheet
           character={activeCharacter!}
           onCharacterUpdate={() => { }}
           onSkillClick={handleSkillClick}
+          onCharacteristicClick={handleCharacteristicClick}
           readonly={true}
           advancementMode={isAdvancementMode}
           onCharacteristicAdvance={handleAdvanceCharacteristic}
           onSkillAdvance={handleAdvanceSkill}
+          onPurchaseClick={() => setIsShopModalOpen(true)}
+          showPurchaseButton={!isAdvancementMode}
         />
       ) : (
         <div className="waiting-screen">

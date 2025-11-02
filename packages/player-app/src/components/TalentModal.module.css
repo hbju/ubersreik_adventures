@@ -1,0 +1,241 @@
+/* Modal backdrop and container */
+.modalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1010;
+}
+
+.modalContent {
+    background-color: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+}
+
+/* Header */
+.modalHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #444;
+    background-color: #1a1a1a;
+    border-radius: 8px 8px 0 0;
+}
+
+.modalHeader h2 {
+    margin: 0;
+    color: #ffcc00;
+    font-size: 1.5rem;
+}
+
+.closeButton {
+    background: transparent;
+    border: none;
+    color: #e0e0e0;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    color: #ffcc00;
+}
+
+/* Search bar */
+.searchBar {
+    padding: 12px 20px;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #444;
+}
+
+.searchInput {
+    width: 30%;
+    padding: 8px 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #ffcc00;
+    background-color: #333;
+}
+
+/* XP display */
+.xpDisplay {
+    padding: 10px 20px;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #444;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+}
+
+.xpDisplay strong {
+    color: #ffcc00;
+    font-size: 1.1rem;
+}
+
+/* Talent list */
+.talentList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Talent card */
+.talentCard {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 14px;
+    transition: background-color 0.2s;
+}
+
+.talentCard:hover {
+    background-color: #303030;
+}
+
+.talentHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.talentName {
+    margin: 0;
+    color: #ffcc00;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.talentRank {
+    color: #aaa;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+.talentDescription {
+    margin: 0 0 10px 0;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.talentTests {
+    margin-bottom: 10px;
+    padding: 6px 10px;
+    background-color: #1a1a1a;
+    border-left: 3px solid #555;
+    font-size: 0.85rem;
+    color: #ccc;
+}
+
+.talentTests strong {
+    color: #ffcc00;
+}
+
+.talentFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #444;
+}
+
+.talentCost {
+    color: #aaa;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.buyButton {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ffcc00;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+}
+
+.buyButton:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.buyButton:disabled {
+    background-color: #555;
+    color: #888;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Scrollbar styling for webkit browsers */
+.talentList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.talentList::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.talentList::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.talentList::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .modalContent {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .talentHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .talentFooter {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .buyButton {
+        width: 100%;
+    }
+}

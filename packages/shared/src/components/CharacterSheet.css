@@ -37,7 +37,7 @@
 }
 
 /* XP panel */
-.xpPanel {
+.xpPanel, .currencyPanel {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -48,18 +48,53 @@
   color: #e0e0e0;
 }
 
-.xpPanel span {
+.xpPanel span, .currencyPanel span {
   font-weight: bold;
   color: #ffcc00;
 }
 
-.xpButtons {
+/* Tabs */
+.tabsContainer {
+  display: flex;
+  background-color: #1a1a1a;
+  border-bottom: 2px solid #444;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px 20px;
+  background-color: #222;
+  border: none;
+  border-right: 1px solid #444;
+  color: #aaa;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab:last-child {
+  border-right: none;
+}
+
+.tab:hover {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+}
+
+.tab.active {
+  background-color: #2c2c2c;
+  color: #ffcc00;
+  border-bottom: 2px solid #ffcc00;
+}
+
+.xpButtons, .currencyButtons {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.xpButtons input[type="number"] {
+.xpButtons input[type="number"], .currencyButtons input[type="number"] {
   width: 80px;
   background-color: #1a1a1a;
   border: 1px solid #555;
@@ -68,12 +103,12 @@
   padding: 4px 6px;
   text-align: center;
 }
-.xpButtons input[type="number"]:focus {
+.xpButtons input[type="number"]:focus, .currencyButtons input[type="number"]:focus {
   outline: 1px solid #ffcc00;
   background-color: #333;
 }
 
-.xpButtons button {
+.xpButtons button, .currencyButtons button {
   padding: 6px 10px;
   border-radius: 4px;
   border: none;
@@ -82,22 +117,27 @@
   font-weight: bold;
   cursor: pointer;
 }
-.xpButtons button:hover {
+.xpButtons button:hover, .currencyButtons button:hover {
   opacity: 0.85;
 }
 
 .mainGrid {
   display: grid;
   grid-template-columns: 1fr 1fr 2fr; /* 3 columns for characteristics, status, skills */
+  grid-template-rows: auto auto; /* 2 rows: top 3 panels, bottom talents panel */
   gap: 20px;
   padding: 20px;
   overflow-y: auto;
 }
 
-.characteristicsPanel, .statusPanel, .skillsPanel {
+.characteristicsPanel, .statusPanel, .skillsPanel, .talentsPanel {
   background-color: #333;
   padding: 15px;
   border-radius: 4px;
+}
+
+.talentsPanel {
+  grid-column: 1 / -1; /* Span all columns */
 }
 
 
@@ -203,4 +243,91 @@ h3 {
 
 .rollButton:hover {
   opacity: 0.7;
+}
+/* Talents panel styles */
+.talentsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.noTalents {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+}
+
+.talentCard {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 12px;
+  transition: background-color 0.2s;
+}
+
+.talentCard:hover {
+  background-color: #303030;
+}
+
+.talentHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.talentName {
+  color: #ffcc00;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.talentRank {
+  color: #aaa;
+  font-size: 0.85rem;
+  background-color: #1a1a1a;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.talentDescription {
+  margin: 0 0 8px 0;
+  color: #e0e0e0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.talentTests {
+  padding: 6px 8px;
+  background-color: #1a1a1a;
+  border-left: 3px solid #555;
+  font-size: 0.8rem;
+  color: #ccc;
+  margin-top: 8px;
+}
+
+.talentTests strong {
+  color: #ffcc00;
+}
+
+/* Scrollbar styling for talents list */
+.talentsList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.talentsList::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.talentsList::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+.talentsList::-webkit-scrollbar-thumb:hover {
+  background: #666;
 }

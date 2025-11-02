@@ -98,8 +98,17 @@
           "resolve": { "current": 0, "max": 3 },
           "corruption": { "current": 0, "max": 8 }
         },
-        "talents": { "Fearless": 1, "Strong Back": 1 },
-        "inventory": ["Greatsword", "Chainmail", "Backpack"]
+        "talents": { "fearless": 1, "strong-back": 1 },
+        "inventory": {
+          "armor": ["armour_mail_coat"],
+          "weapons": ["weapon_twohanded_great_axe", "weapon_basic_dagger"],
+          "items": []
+        },
+        "currency": {
+          "gc": 1,
+          "ss": 5,
+          "bp": 20
+        }
       },
       {
         "id": "frazaie",
@@ -131,8 +140,17 @@
           "resolve": { "current": 0, "max": 3 },
           "corruption": { "current": 0, "max": 8 }
         },
-        "talents": { "Fearless": 1, "Strong Back": 1 },
-        "inventory": ["Greatsword", "Chainmail", "Backpack"]
+        "talents": { "fearless": 1, "strong-back": 1 },
+        "inventory": {
+          "armor": ["armour_leather_leggings", "armour_leather_jerkin"],
+          "weapons": ["weapon_bow_shortbow", "weapon_basic_dagger"],
+          "items": ["item_trade_tools", "item_cloak"]
+        },
+        "currency": {
+          "gc": 0,
+          "ss": 10,
+          "bp": 15
+        }
       }
     ]
   }

@@ -73,6 +73,13 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
     sendToPlayer(targetSocketId, message);
   });
 
+  ipcMain.on('send-to-all-players', (_event, message: ServerToClientMessage) => {
+    console.log(`[IPC] Broadcasting message to all ${connectedClients.size} connected players`);
+    connectedClients.forEach((socket) => {
+      socket.emit('gm-message', message);
+    });
+  });
+
   ipcMain.on('assign-character-to-player', (_event, characterId: string, socketId: string) => {
     charactersAssignments.set(characterId, socketId);
     console.log(`[IPC] Assigned character ${characterId} to player ${socketId}`);

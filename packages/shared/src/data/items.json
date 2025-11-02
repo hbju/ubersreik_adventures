@@ -1,0 +1,940 @@
+[
+  {
+    "id": "item_amulet",
+    "name": "Amulet",
+    "price": "2 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_boots",
+    "name": "Boots",
+    "price": "5 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_cloak",
+    "name": "Cloak",
+    "price": "10 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_clothing",
+    "name": "Clothing",
+    "price": "6 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_coat",
+    "name": "Coat",
+    "price": "18 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_costume",
+    "name": "Costume",
+    "price": "1 GC",
+    "enc": 1,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_courtly_garb",
+    "name": "Courtly Garb",
+    "price": "12 GC",
+    "enc": 1,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_face_powder",
+    "name": "Face Powder",
+    "price": "10 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_gloves",
+    "name": "Gloves",
+    "price": "4 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_hood_or_mask",
+    "name": "Hood or Mask",
+    "price": "5 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_jewellery",
+    "name": "Jewellery",
+    "price": "Varies",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_perfume",
+    "name": "Perfume",
+    "price": "10 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_pins_6",
+    "name": "Pins (6)",
+    "price": "10 S",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_religious_symbol",
+    "name": "Religious Symbol",
+    "price": "6 S 8 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_robes",
+    "name": "Robes",
+    "price": "2 GC",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_sceptre",
+    "name": "Sceptre",
+    "price": "8 GC",
+    "enc": 1,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_shoes",
+    "name": "Shoes",
+    "price": "5 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_signet_ring",
+    "name": "Signet Ring",
+    "price": "5 GC",
+    "enc": 0,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_tattoo",
+    "name": "Tattoo",
+    "price": "4 S+",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_uniform",
+    "name": "Uniform",
+    "price": "1 GC 2 S",
+    "enc": 1,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_walking_cane",
+    "name": "Walking Cane",
+    "price": "3 GC",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_ale_pint",
+    "name": "Ale, pint",
+    "price": "3 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_ale_keg",
+    "name": "Ale, keg",
+    "price": "3 S",
+    "enc": 2,
+    "availability": "Common"
+  },
+  {
+    "id": "item_bugmans_xxxxxx_ale_pint",
+    "name": "Bugman's XXXXXX Ale, pint",
+    "price": "9 B",
+    "enc": 0,
+    "availability": "Exotic"
+  },
+  {
+    "id": "item_food_groceries_day",
+    "name": "Food, groceries/day",
+    "price": "10 B",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_meal_inn",
+    "name": "Meal, inn",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_rations_1_day",
+    "name": "Rations, 1 day",
+    "price": "2 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_room_common_night",
+    "name": "Room, common/night",
+    "price": "10 B",
+    "enc": null,
+    "availability": "Common"
+  },
+  {
+    "id": "item_room_private_night",
+    "name": "Room, private/night",
+    "price": "10 S",
+    "enc": null,
+    "availability": "Common"
+  },
+  {
+    "id": "item_spirits_pint",
+    "name": "Spirits, pint",
+    "price": "2 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_stables_night",
+    "name": "Stables/night",
+    "price": "10 B",
+    "enc": null,
+    "availability": "Common"
+  },
+  {
+    "id": "item_wine_bottle",
+    "name": "Wine, bottle",
+    "price": "10 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_wine_spirits_drink",
+    "name": "Wine & Spirits, drink",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_abacus",
+    "name": "Abacus",
+    "price": "3 S 4 B",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_animal_trap",
+    "name": "Animal Trap",
+    "price": "2 S 6 B",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_antitoxin_kit",
+    "name": "Antitoxin Kit",
+    "price": "3 GC",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_boat_hook",
+    "name": "Boat Hook",
+    "price": "5 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_broom",
+    "name": "Broom",
+    "price": "10 B",
+    "enc": 2,
+    "availability": "Common"
+  },
+  {
+    "id": "item_bucket",
+    "name": "Bucket",
+    "price": "2 S 6 B",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_chisel",
+    "name": "Chisel",
+    "price": "4 S 2 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_comb",
+    "name": "Comb",
+    "price": "10 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_crowbar",
+    "name": "Crowbar",
+    "price": "2 S 6 B",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_crutch",
+    "name": "Crutch",
+    "price": "3 S",
+    "enc": 2,
+    "availability": "Common"
+  },
+  {
+    "id": "item_disguise_kit",
+    "name": "Disguise Kit",
+    "price": "6 S 6 B",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_ear_pick",
+    "name": "Ear Pick",
+    "price": "2 S",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_fish_hooks_12",
+    "name": "Fish Hooks (12)",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_floor_brush",
+    "name": "Floor Brush",
+    "price": "1 S 6 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_gavel",
+    "name": "Gavel",
+    "price": "1 GC",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_hammer",
+    "name": "Hammer",
+    "price": "3 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_hand_mirror",
+    "name": "Hand Mirror",
+    "price": "1 GC 1 S 6 B",
+    "enc": 0,
+    "availability": "Exotic"
+  },
+  {
+    "id": "item_hoe",
+    "name": "Hoe",
+    "price": "4 S",
+    "enc": 2,
+    "availability": "Common"
+  },
+  {
+    "id": "item_knife",
+    "name": "Knife",
+    "price": "8 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_lock_picks",
+    "name": "Lock Picks",
+    "price": "15 S",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_manacles",
+    "name": "Manacles",
+    "price": "18 S",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_mop",
+    "name": "Mop",
+    "price": "1 S",
+    "enc": 2,
+    "availability": "Common"
+  },
+  {
+    "id": "item_nails_12",
+    "name": "Nails (12)",
+    "price": "2 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_paint_brush",
+    "name": "Paint Brush",
+    "price": "4 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_pestle_mortar",
+    "name": "Pestle & Mortar",
+    "price": "14 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_pick",
+    "name": "Pick",
+    "price": "18 S",
+    "enc": 1,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_pole_3_yards",
+    "name": "Pole (3 yards)",
+    "price": "8 S",
+    "enc": 3,
+    "availability": "Common"
+  },
+  {
+    "id": "item_quill_pen",
+    "name": "Quill Pen",
+    "price": "3 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_rake",
+    "name": "Rake",
+    "price": "4 S 6 B",
+    "enc": 2,
+    "availability": "Common"
+  },
+  {
+    "id": "item_reading_lens",
+    "name": "Reading Lens",
+    "price": "3 GC",
+    "enc": 0,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_saw",
+    "name": "Saw",
+    "price": "6 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_sickle",
+    "name": "Sickle",
+    "price": "1 GC",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_spade",
+    "name": "Spade",
+    "price": "8 S",
+    "enc": 2,
+    "availability": "Common"
+  },
+  {
+    "id": "item_spike",
+    "name": "Spike",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_stamp_engraved",
+    "name": "Stamp, engraved",
+    "price": "5 GC",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_tongs_steel",
+    "name": "Tongs, steel",
+    "price": "16 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_telescope",
+    "name": "Telescope",
+    "price": "5 GC",
+    "enc": 0,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_tweezers",
+    "name": "Tweezers",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_writing_kit",
+    "name": "Writing Kit",
+    "price": "2 GC",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_book_apothecary",
+    "name": "Book, Apothecary",
+    "price": "8 GC",
+    "enc": 1,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_book_art",
+    "name": "Book, Art",
+    "price": "5 GC",
+    "enc": 1,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_book_cryptography",
+    "name": "Book, Cryptography",
+    "price": "8 GC",
+    "enc": 1,
+    "availability": "Exotic"
+  },
+  {
+    "id": "item_book_engineer",
+    "name": "Book, Engineer",
+    "price": "3 GC",
+    "enc": 1,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_book_law",
+    "name": "Book, Law",
+    "price": "15 GC",
+    "enc": 1,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_book_magic",
+    "name": "Book, Magic",
+    "price": "20 GC",
+    "enc": 1,
+    "availability": "Exotic"
+  },
+  {
+    "id": "item_book_medicine",
+    "name": "Book, Medicine",
+    "price": "15 GC",
+    "enc": 1,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_book_religion",
+    "name": "Book, Religion",
+    "price": "1 GC",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_guild_license",
+    "name": "Guild License",
+    "price": null,
+    "enc": 0,
+    "availability": null
+  },
+  {
+    "id": "item_leaflet",
+    "name": "Leaflet",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_legal_document",
+    "name": "Legal Document",
+    "price": "3 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_map",
+    "name": "Map",
+    "price": "3 GC",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_parchment_sheet",
+    "name": "Parchment/sheet",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_trade_tools",
+    "name": "Trade Tools",
+    "price": "3 GC",
+    "enc": 1,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_workshop",
+    "name": "Workshop",
+    "price": "80 GC",
+    "enc": null,
+    "availability": "Exotic"
+  },
+  {
+    "id": "item_black_lotus",
+    "name": "Black Lotus",
+    "price": "20 GC",
+    "enc": 0,
+    "availability": "Exotic"
+  },
+  {
+    "id": "item_heartkill",
+    "name": "Heartkill",
+    "price": "40 GC",
+    "enc": 0,
+    "availability": "Exotic"
+  },
+  {
+    "id": "item_mad_cap_mushrooms",
+    "name": "Mad Cap Mushrooms",
+    "price": "5 GC",
+    "enc": 0,
+    "availability": "Exotic"
+  },
+  {
+    "id": "item_mandrake_root",
+    "name": "Mandrake Root",
+    "price": "1 GC",
+    "enc": 0,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_moonflower",
+    "name": "Moonflower",
+    "price": "5 GC",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_ranalds_delight",
+    "name": "Ranald's Delight",
+    "price": "18 S",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_spit",
+    "name": "Spit",
+    "price": "1 GC 5 S",
+    "enc": 0,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_weirdroot",
+    "name": "Weirdroot",
+    "price": "4 S",
+    "enc": 0,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_digestive_tonic",
+    "name": "Digestive Tonic",
+    "price": "3 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_earth_root",
+    "name": "Earth Root",
+    "price": "5 GC",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_faxtoryll",
+    "name": "Faxtoryll",
+    "price": "15 S",
+    "enc": 0,
+    "availability": "Exotic"
+  },
+  {
+    "id": "item_healing_draught",
+    "name": "Healing Draught",
+    "price": "10 S",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_healing_poultice",
+    "name": "Healing Poultice",
+    "price": "12 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_nightshade",
+    "name": "Nightshade",
+    "price": "3 GC",
+    "enc": 0,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_salwort",
+    "name": "Salwort",
+    "price": "12 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_vitality_draught",
+    "name": "Vitality Draught",
+    "price": "18 S",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_ball",
+    "name": "Ball",
+    "price": "5 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_bandage",
+    "name": "Bandage",
+    "price": "4 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_baton",
+    "name": "Baton",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_bedroll",
+    "name": "Bedroll",
+    "price": "6 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_blanket",
+    "name": "Blanket",
+    "price": "8 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_candle_dozen",
+    "name": "Candle (dozen)",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_canvas_tarp",
+    "name": "Canvas Tarp",
+    "price": "8 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_chalk",
+    "name": "Chalk",
+    "price": "10 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_charcoal_stick",
+    "name": "Charcoal stick",
+    "price": "10 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_cutlery",
+    "name": "Cutlery",
+    "price": "3 S 6 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_davrich_lamp",
+    "name": "Davrich Lamp",
+    "price": "2 GC",
+    "enc": 1,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_deck_of_cards",
+    "name": "Deck of Cards",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_cooking_pot",
+    "name": "Cooking Pot",
+    "price": "8 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_cup",
+    "name": "Cup",
+    "price": "8 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_dice",
+    "name": "Dice",
+    "price": "10 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_doll",
+    "name": "Doll",
+    "price": "2 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_grappling_hook",
+    "name": "Grappling Hook",
+    "price": "1 GC 10 B",
+    "enc": 1,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_instrument",
+    "name": "Instrument",
+    "price": "2 GC",
+    "enc": 1,
+    "availability": "Rare"
+  },
+  {
+    "id": "item_lamp_oil",
+    "name": "Lamp Oil",
+    "price": "2 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_lantern",
+    "name": "Lantern",
+    "price": "12 S",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_storm_lantern",
+    "name": "Storm Lantern",
+    "price": "1 GC",
+    "enc": 1,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_match",
+    "name": "Match",
+    "price": "1 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_pan",
+    "name": "Pan",
+    "price": "7 S 6 B",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_pipe_and_tobacco",
+    "name": "Pipe and Tobacco",
+    "price": "3 S 4 B",
+    "enc": 0,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_placard",
+    "name": "Placard",
+    "price": "1 S",
+    "enc": 2,
+    "availability": "Common"
+  },
+  {
+    "id": "item_plate",
+    "name": "Plate",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_bowl",
+    "name": "Bowl",
+    "price": "1 S",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_rags",
+    "name": "Rags",
+    "price": "1 B",
+    "enc": 0,
+    "availability": "Common"
+  },
+  {
+    "id": "item_rope_10_yards",
+    "name": "Rope, 10 yards",
+    "price": "8 S 4 B",
+    "enc": 1,
+    "availability": "Common"
+  },
+  {
+    "id": "item_tent",
+    "name": "Tent",
+    "price": "12 S",
+    "enc": 2,
+    "availability": "Scarce"
+  },
+  {
+    "id": "item_tinderbox",
+    "name": "Tinderbox",
+    "price": "4 S 2 B",
+    "enc": 0,
+    "availability": "Common"
+  }
+]

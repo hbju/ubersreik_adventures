@@ -1,0 +1,463 @@
+/* Modal backdrop and container */
+.modalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1020;
+}
+
+.modalContent {
+    background-color: #222;
+    border: 1px solid #444;
+    border-radius: 8px;
+    width: 95%;
+    max-width: 1400px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #444;
+    background-color: #1a1a1a;
+    border-radius: 8px 8px 0 0;
+}
+
+.header h2 {
+    margin: 0;
+    color: #ffcc00;
+    font-size: 1.5rem;
+}
+
+.closeButton {
+    background: transparent;
+    border: none;
+    color: #e0e0e0;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    color: #ffcc00;
+}
+
+/* Controls section */
+.controls {
+    padding: 16px 20px;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.searchBar {
+    width: 30%;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #ffcc00;
+    background-color: #333;
+}
+
+.categoryFilters {
+    display: flex;
+    gap: 8px;
+}
+
+.categoryFilters button {
+    padding: 6px 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.categoryFilters button:hover {
+    background-color: #333;
+    border-color: #666;
+}
+
+.categoryFilters button.active {
+    background-color: #ffcc00;
+    color: #000;
+    border-color: #ffcc00;
+    font-weight: bold;
+}
+
+.selectionControls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.selectionCount {
+    color: #ffcc00;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.secondaryButton {
+    padding: 6px 12px;
+    background-color: #333;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.secondaryButton:hover {
+    background-color: #444;
+}
+
+/* Main layout */
+.mainLayout {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    overflow: hidden;
+}
+
+/* Bookmarks panel */
+.bookmarksPanel {
+    background-color: #1a1a1a;
+    border-right: 1px solid #444;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.bookmarksPanel h3 {
+    margin: 0 0 12px 0;
+    color: #ffcc00;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+}
+
+.bookmarkSection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bookmarkSection h4 {
+    margin: 0;
+    color: #ccc;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+.bookmarkButton {
+    padding: 8px 12px;
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #e0e0e0;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.bookmarkButton:hover {
+    background-color: #333;
+    border-color: #ffcc00;
+}
+
+.customBookmark {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.customBookmark .bookmarkButton {
+    flex: 1;
+}
+
+.deleteButton {
+    background: transparent;
+    border: 1px solid #555;
+    color: #e0e0e0;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.deleteButton:hover {
+    background-color: #d44;
+    border-color: #d44;
+    color: #fff;
+}
+
+.bookmarkInput {
+    width: 100%;
+    padding: 6px 10px;
+    background-color: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+}
+
+.bookmarkInput:focus {
+    outline: none;
+    border-color: #ffcc00;
+    background-color: #333;
+}
+
+.saveButton {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 4px;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+}
+
+.saveButton:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.saveButton:disabled {
+    background-color: #555;
+    color: #888;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Items panel */
+.itemsPanel {
+    background-color: #222;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.itemsList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 12px;
+    align-content: start;
+}
+
+.noItems {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #888;
+    padding: 40px;
+    font-style: italic;
+}
+
+.itemCard {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.itemCard:hover {
+    background-color: #303030;
+    border-color: #555;
+}
+
+.itemLabel {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+    cursor: pointer;
+}
+
+.checkbox {
+    margin-top: 2px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.itemInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.itemHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.itemName {
+    color: #ffcc00;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.itemPrice {
+    color: #aaa;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.itemMeta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+}
+
+.itemCategory {
+    background-color: #1a1a1a;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #ccc;
+    text-transform: capitalize;
+}
+
+.itemAvailability {
+    background-color: #1a1a1a;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #aaa;
+}
+
+.itemGroup {
+    background-color: #1a1a1a;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #aaa;
+    text-transform: capitalize;
+}
+
+/* Footer */
+.footer {
+    padding: 16px 20px;
+    background-color: #1a1a1a;
+    border-top: 1px solid #444;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.publishButton {
+    padding: 12px 24px;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 4px;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: opacity 0.2s;
+}
+
+.publishButton:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.publishButton:disabled {
+    background-color: #555;
+    color: #888;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Scrollbar styling */
+.bookmarksPanel::-webkit-scrollbar,
+.itemsList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.bookmarksPanel::-webkit-scrollbar-track,
+.itemsList::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.bookmarksPanel::-webkit-scrollbar-thumb,
+.itemsList::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.bookmarksPanel::-webkit-scrollbar-thumb:hover,
+.itemsList::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .mainLayout {
+        grid-template-columns: 240px 1fr;
+    }
+
+    .itemsList {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .mainLayout {
+        grid-template-columns: 1fr;
+    }
+
+    .bookmarksPanel {
+        max-height: 200px;
+        border-right: none;
+        border-bottom: 1px solid #444;
+    }
+
+    .itemsList {
+        grid-template-columns: 1fr;
+    }
+}
