@@ -12,9 +12,21 @@ interface CharacterRosterProps {
     onGenerateNpc: () => void;
     onDeleteCharacter: (characterId: string) => void;
     onAddCombatant: (character: Character) => void;
+    onFightButtonClick: () => void;
 }
 
-const CharacterRoster: React.FC<CharacterRosterProps> = ({ characters, openSheetIds, onToggleCharacterSheet, connectedPlayers, onAssignCharacter, onCreateCharacter, onGenerateNpc, onDeleteCharacter, onAddCombatant }) => {
+const CharacterRoster: React.FC<CharacterRosterProps> = ({ 
+    characters, 
+    openSheetIds, 
+    onToggleCharacterSheet, 
+    connectedPlayers, 
+    onAssignCharacter, 
+    onCreateCharacter, 
+    onGenerateNpc, 
+    onDeleteCharacter, 
+    onAddCombatant, 
+    onFightButtonClick 
+}) => {
     const handleAssignClick = (character: Character) => {
         if (connectedPlayers.length === 0) {
         alert("No players are connected.");
@@ -33,6 +45,7 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({ characters, openSheet
                 <div className={styles.actions}>
                     <button onClick={onCreateCharacter}>New</button>
                     <button onClick={onGenerateNpc}>Generate NPC</button>
+                    <button onClick={onFightButtonClick}>Fight</button>
                 </div>
             </header>
             <ul className={styles.characterList}>

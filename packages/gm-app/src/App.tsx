@@ -72,6 +72,7 @@ function App() {
     const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
 
     const [showShopManager, setShowShopManager] = useState(true);
+    const [showCombatResolver, setShowCombatResolver] = useState(false);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
         item: Armor | Weapon | Item;
@@ -307,148 +308,151 @@ function App() {
     }, [combatants, currentTurnId]);
 
     return (
-    <div className="App">
-        <ServerStatus
-            ip={serverInfo.ip}
-            port={serverInfo.port}
-            clients={connectedPlayers} />
+        <div className="App">
+            <ServerStatus
+                ip={serverInfo.ip}
+                port={serverInfo.port}
+                clients={connectedPlayers} />
 
-        <GameLog entries={logEntries} />
+            <GameLog entries={logEntries} />
 
-        <CharacterRoster
-            characters={characters}
-            openSheetIds={openSheetIds}
-            onToggleCharacterSheet={handleToggleCharacterSheet}
-            connectedPlayers={connectedPlayers}
-            onAssignCharacter={handleAssignCharacter}
-            onCreateCharacter={handleCreateCharacter}
-            onGenerateNpc={handleGenerateNPC}
-            onDeleteCharacter={handleDeleteCharacter}
-            onAddCombatant={handleAddCombatant}
-        />
-
-        <InitiativeTracker
-            combatants={combatants}
-            onSetCombatants={setCombatants}
-            onUpdateCombatant={handleUpdateCombatant}
-            onClearCombatants={handleClearCombatants}
-            currentTurnId={currentTurnId}
-            onSetCurrentTurnId={setCurrentTurnId}
-        />
-
-        <MapDisplay gameData={gameData} />
-        
-        <CombatResolver 
-            characters={characters}
-            combatants={combatants}
-            opposedTestResults={opposedTestResults}
-            onClearOpposedTestResult={(testId: string, role: 'attacker' | 'defender') => {
-                setOpposedTestResults(prev => {
-                    const newMap = new Map(prev);
-                    newMap.delete(`${testId}-${role}`);
-                    return newMap;
-                });
-            }}
-            onSendToPlayer={(characterId: string, message) => {
-                window.ipcRenderer.sendToPlayer(characterId, message);
-            }}
-            onLogEntry={addLogEntry}
-            onUpdateCharacter={handleCharacterUpdate}
-            onUpdateCombatant={handleUpdateCombatant}
-        />
-
-        <AtmospherePanel />
-
-        {showShopManager && <ShopManager onClose={() => setShowShopManager(false)} />}
-
-        {purchaseRequest && (
-            <PurchaseRequestModal
-                playerName={purchaseRequest.playerName}
-                item={purchaseRequest.item}
-                playerCurrency={purchaseRequest.playerCurrency}
-                characterId={purchaseRequest.characterId}
-                onClose={() => setPurchaseRequest(null)}
-                onApprove={(item) => {
-                    // Find the character and update their inventory and currency
-                    const character = characters.find(c => c.id === purchaseRequest.characterId);
-                    if (character) {
-                        // Parse the item price
-                        const priceParts = item.price.split(' ');
-                        const amount = parseInt(priceParts[0]);
-                        const currencyType = priceParts[1];
-
-                        // Calculate the currency to subtract
-                        const currencyChange = {
-                            gc: currencyType === 'GC' ? -amount : 0,
-                            ss: currencyType === 'S' ? -amount : 0,
-                            bp: currencyType === 'P' ? -amount : 0,
-                        };
-
-                        // Update character currency
-                        const newCurrency = equilibrateCurrency({ ...character.currency });
-                        newCurrency.gc += currencyChange.gc;
-                        newCurrency.ss += currencyChange.ss;
-                        newCurrency.bp += currencyChange.bp;
-                        const equilibratedCurrency = equilibrateCurrency(newCurrency);
-
-                        // Determine which inventory array to add to
-                        const updatedInventory = { ...character.inventory };
-                        if ('damage' in item) {
-                            // It's a weapon
-                            updatedInventory.weapons = [...character.inventory.weapons, item.id];
-                        } else if ('ap' in item) {
-                            // It's armor
-                            updatedInventory.armor = [...character.inventory.armor, item.id];
-                        } else {
-                            // It's a regular item
-                            updatedInventory.items = [...character.inventory.items, item.id];
-                        }
-
-                        // Update character
-                        const updatedCharacter: Character = {
-                            ...character,
-                            currency: equilibratedCurrency,
-                            inventory: updatedInventory,
-                        };
-
-                        // Update local state
-                        setCharacters(prevChars =>
-                            prevChars.map(c => (c.id === character.id ? updatedCharacter : c))
-                        );
-
-                        // Send updated character to player
-                        const assignMessage: AssignCharacterMessage = {
-                            type: "ASSIGN_CHARACTER",
-                            payload: { character: updatedCharacter }
-                        };
-                        window.ipcRenderer.sendToPlayer(character.id, assignMessage);
-
-                        addLogEntry('system', `${character.name} purchased ${item.name} for ${item.price}.`);
-                    }
-                    setPurchaseRequest(null);
-                }}
+            <CharacterRoster
+                characters={characters}
+                openSheetIds={openSheetIds}
+                onToggleCharacterSheet={handleToggleCharacterSheet}
+                connectedPlayers={connectedPlayers}
+                onAssignCharacter={handleAssignCharacter}
+                onCreateCharacter={handleCreateCharacter}
+                onGenerateNpc={handleGenerateNPC}
+                onDeleteCharacter={handleDeleteCharacter}
+                onAddCombatant={handleAddCombatant}
+                onFightButtonClick={() => setShowCombatResolver(true)}
             />
-        )}
 
-        <div className="character-sheets-container">
-            {openSheetIds.map(characterId => {
-                const character = characters.find(char => char.id === characterId);
+            <InitiativeTracker
+                combatants={combatants}
+                onSetCombatants={setCombatants}
+                onUpdateCombatant={handleUpdateCombatant}
+                onClearCombatants={handleClearCombatants}
+                currentTurnId={currentTurnId}
+                onSetCurrentTurnId={setCurrentTurnId}
+            />
 
-                if (!character) return null;
+            <MapDisplay gameData={gameData} />
 
-                return (
-                    <CharacterSheet
-                        key={character.id}
-                        character={character}
-                        onCharacterUpdate={handleCharacterUpdate}
-                        onXpAward={(amount) => handleXpAward(character.id, amount)}
-                        onCurrencyAward={(amount) => handleCurrencyAward(character.id, amount)}
-                    />
-                );
-            })}
+            {showCombatResolver && (<CombatResolver
+                characters={characters}
+                combatants={combatants}
+                opposedTestResults={opposedTestResults}
+                onClearOpposedTestResult={(testId: string, role: 'attacker' | 'defender') => {
+                    setOpposedTestResults(prev => {
+                        const newMap = new Map(prev);
+                        newMap.delete(`${testId}-${role}`);
+                        return newMap;
+                    });
+                }}
+                onSendToPlayer={(characterId: string, message) => {
+                    window.ipcRenderer.sendToPlayer(characterId, message);
+                }}
+                onLogEntry={addLogEntry}
+                onUpdateCharacter={handleCharacterUpdate}
+                onUpdateCombatant={handleUpdateCombatant}
+                onClose={() => { setShowCombatResolver(false); }}
+            />
+            )}
+
+            <AtmospherePanel />
+
+            {showShopManager && <ShopManager onClose={() => setShowShopManager(false)} />}
+
+            {purchaseRequest && (
+                <PurchaseRequestModal
+                    playerName={purchaseRequest.playerName}
+                    item={purchaseRequest.item}
+                    playerCurrency={purchaseRequest.playerCurrency}
+                    characterId={purchaseRequest.characterId}
+                    onClose={() => setPurchaseRequest(null)}
+                    onApprove={(item) => {
+                        // Find the character and update their inventory and currency
+                        const character = characters.find(c => c.id === purchaseRequest.characterId);
+                        if (character) {
+                            // Parse the item price
+                            const priceParts = item.price.split(' ');
+                            const amount = parseInt(priceParts[0]);
+                            const currencyType = priceParts[1];
+
+                            // Calculate the currency to subtract
+                            const currencyChange = {
+                                gc: currencyType === 'GC' ? -amount : 0,
+                                ss: currencyType === 'S' ? -amount : 0,
+                                bp: currencyType === 'P' ? -amount : 0,
+                            };
+
+                            // Update character currency
+                            const newCurrency = equilibrateCurrency({ ...character.currency });
+                            newCurrency.gc += currencyChange.gc;
+                            newCurrency.ss += currencyChange.ss;
+                            newCurrency.bp += currencyChange.bp;
+                            const equilibratedCurrency = equilibrateCurrency(newCurrency);
+
+                            // Determine which inventory array to add to
+                            const updatedInventory = { ...character.inventory };
+                            if ('damage' in item) {
+                                // It's a weapon
+                                updatedInventory.weapons = [...character.inventory.weapons, item.id];
+                            } else if ('ap' in item) {
+                                // It's armor
+                                updatedInventory.armor = [...character.inventory.armor, item.id];
+                            } else {
+                                // It's a regular item
+                                updatedInventory.items = [...character.inventory.items, item.id];
+                            }
+
+                            // Update character
+                            const updatedCharacter: Character = {
+                                ...character,
+                                currency: equilibratedCurrency,
+                                inventory: updatedInventory,
+                            };
+
+                            // Update local state
+                            setCharacters(prevChars =>
+                                prevChars.map(c => (c.id === character.id ? updatedCharacter : c))
+                            );
+
+                            // Send updated character to player
+                            const assignMessage: AssignCharacterMessage = {
+                                type: "ASSIGN_CHARACTER",
+                                payload: { character: updatedCharacter }
+                            };
+                            window.ipcRenderer.sendToPlayer(character.id, assignMessage);
+
+                            addLogEntry('system', `${character.name} purchased ${item.name} for ${item.price}.`);
+                        }
+                        setPurchaseRequest(null);
+                    }}
+                />
+            )}
+
+            <div className="character-sheets-container">
+                {openSheetIds.map(characterId => {
+                    const character = characters.find(char => char.id === characterId);
+
+                    if (!character) return null;
+
+                    return (
+                        <CharacterSheet
+                            key={character.id}
+                            character={character}
+                            onCharacterUpdate={handleCharacterUpdate}
+                            onXpAward={(amount) => handleXpAward(character.id, amount)}
+                            onCurrencyAward={(amount) => handleCurrencyAward(character.id, amount)}
+                        />
+                    );
+                })}
+            </div>
         </div>
-    </div>
-);
+    );
 }
 
 export default App;

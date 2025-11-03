@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import styles from './CombatResolver.module.css';
-import { 
-    rolld100, 
-    calculateSuccessLevel, 
-    getHitLocation, 
-    allSkillsAndCharacteristics, 
-    Character, 
+import {
+    rolld100,
+    calculateSuccessLevel,
+    getHitLocation,
+    allSkillsAndCharacteristics,
+    Character,
     Combatant,
-    SkillCharDefinition, 
-    calculateSkillValue, 
-    calculateCharacteristicBonus, 
+    SkillCharDefinition,
+    calculateSkillValue,
+    calculateCharacteristicBonus,
     calculateCharacteristicValue,
     RequestOpposedTestMessage,
     OpposedTestResultMessage,
@@ -28,6 +28,7 @@ interface CombatResolverProps {
     onLogEntry: (type: LogEntry['type'], content: string) => void;
     onUpdateCharacter: (character: Character) => void;
     onUpdateCombatant: (combatant: Combatant) => void;
+    onClose: () => void;
 }
 
 interface CombatResult {
@@ -65,15 +66,16 @@ interface OpposedTestState {
     armourPoints: number;
 }
 
-const CombatResolver: React.FC<CombatResolverProps> = ({ 
-    characters, 
+const CombatResolver: React.FC<CombatResolverProps> = ({
+    characters,
     combatants,
     opposedTestResults,
     onClearOpposedTestResult,
     onSendToPlayer,
     onLogEntry,
     onUpdateCharacter,
-    onUpdateCombatant
+    onUpdateCombatant,
+    onClose
 }) => {
     const [selectedAttackerId, setSelectedAttackerId] = useState<string>(characters[0]?.id || 'manual');
     const [selectedDefenderId, setSelectedDefenderId] = useState<string>(characters[1]?.id || 'manual');
@@ -165,8 +167,8 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                     attackerSL: attackerResult.successLevel,
                 };
             });
-        } 
-        
+        }
+
         if (defenderResult && !opposedTestState.defenderSL) {
             setOpposedTestState(prev => {
                 if (!prev) return prev;
@@ -184,7 +186,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             let outcomeMessage = '';
             let damageDealt: number | undefined;
             let hitLocation: string | undefined;
-            
+
             if (attackerSL > defenderSL || (attackerSL === defenderSL && opposedTestState.attackerTarget > opposedTestState.defenderTarget)) {
                 const slDiff = attackerSL - defenderSL;
                 const damage = opposedTestState.weaponDamage + slDiff -
@@ -423,6 +425,11 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
 
     return (
         <div className={styles.resolverContainer}>
+            <button className={styles.closeButton} onClick={() => {
+                setResult(null);
+                setOpposedTestState(null);
+                onClose();
+            }}>x</button>
             <div className={styles.combatantPanel}>
                 <h3 className={styles.attacker}>Attacker</h3>
                 <CharacterSelector
@@ -453,7 +460,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                     {allSkillsAndCharacteristics.filter(s => s.type === 'skill').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                 </optgroup>
                             </select>
-                            
+
                             <div className={styles.statDisplay}>
                                 <span>Skill Total: <strong>{attackerStats.skill}</strong></span>
                             </div>
@@ -483,8 +490,8 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 <button className={styles.fightButton} onClick={handleResolveCombat}>
                     - GM Rolls -
                 </button>
-                <button 
-                    className={styles.requestRollsButton} 
+                <button
+                    className={styles.requestRollsButton}
                     onClick={handleRequestPlayerRolls}
                     disabled={false}
                 >
@@ -495,8 +502,8 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                         <p>Waiting for player rolls...</p>
                         <p>Attacker: {opposedTestState.attackerRoll !== null ? `✅ ${opposedTestState.attackerRoll} (SL: ${opposedTestState.attackerSL !== null ? (opposedTestState.attackerSL >= 0 ? '+' : '') + Math.round(opposedTestState.attackerSL) : '?'})` : '⏳'}</p>
                         <p>Defender: {opposedTestState.defenderRoll !== null ? `✅ ${opposedTestState.defenderRoll} (SL: ${opposedTestState.defenderSL !== null ? (opposedTestState.defenderSL >= 0 ? '+' : '') + Math.round(opposedTestState.defenderSL) : '?'})` : '⏳'}</p>
-                        <button 
-                            className={styles.cancelTestButton} 
+                        <button
+                            className={styles.cancelTestButton}
                             onClick={() => {
                                 if (opposedTestState) {
                                     onClearOpposedTestResult(opposedTestState.testId, 'attacker');
@@ -542,7 +549,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                     {allSkillsAndCharacteristics.filter(s => s.type === 'skill').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                 </optgroup>
                             </select>
-                            
+
                             <div className={styles.statDisplay}>
                                 <span>Skill Total: <strong>{defenderStats.skill}</strong></span>
                             </div>
@@ -603,8 +610,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 </div>
             )}
         </div>
-    );
-
-}
+    )
+};
 
 export default CombatResolver;
