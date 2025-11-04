@@ -98,6 +98,7 @@
           "resolve": { "current": 0, "max": 3 },
           "corruption": { "current": 0, "max": 8 }
         },
+        "conditions": [],
         "talents": { "fearless": 1, "strong-back": 1 },
         "inventory": {
           "armor": ["armour_mail_coat"],
@@ -140,6 +141,7 @@
           "resolve": { "current": 0, "max": 3 },
           "corruption": { "current": 0, "max": 8 }
         },
+        "conditions": [],
         "talents": { "fearless": 1, "strong-back": 1 },
         "inventory": {
           "armor": ["armour_leather_leggings", "armour_leather_jerkin"],

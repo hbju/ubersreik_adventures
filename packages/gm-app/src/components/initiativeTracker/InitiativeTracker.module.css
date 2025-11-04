@@ -61,18 +61,23 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
     font-size: 0.8rem;
 }
 
 .combatantList li {
-    display: grid;
-    grid-template-columns: 40px 1fr 100px;
-    align-items: center;
-    gap: 15px;
+    display: flex;
+    flex-direction: column;
     padding: 8px 15px;
     border-bottom: 1px solid #444;
+}
+
+.combatantRow {
+    display: grid;
+    grid-template-columns: 40px 1fr 100px 30px;
+    align-items: center;
+    gap: 15px;
 }
 
 li.activeTurn {
@@ -103,5 +108,151 @@ li.activeTurn {
     border: 1px solid #555;
     color: #e0e0e0;
     border-radius: 3px;
+    text-align: center;
+}
+
+.expandBtn {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #e0e0e0;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    transition: background-color 0.2s;
+}
+
+.expandBtn:hover {
+    background-color: #444;
+}
+
+/* Condition badges */
+.conditionBadges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.conditionBadge {
+    background-color: #d32f2f;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    cursor: help;
+}
+
+/* Advantage display */
+.advantageDisplay {
+    margin-top: 5px;
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 0.75rem;
+}
+
+/* Condition management panel */
+.conditionPanel {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #1a1a1a;
+    border-radius: 4px;
+    border: 1px solid #555;
+}
+
+.panelSection {
+    margin-bottom: 10px;
+}
+
+.panelSection:last-child {
+    margin-bottom: 0;
+}
+
+.panelSection label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+.conditionSelect {
+    width: 100%;
+    background-color: #2c2c2c;
+    border: 1px solid #555;
+    color: #e0e0e0;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+}
+
+.activeConditionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.activeConditionItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c2c2c;
+    padding: 5px 8px;
+    border-radius: 3px;
+    border: 1px solid #444;
+}
+
+.conditionText {
+    font-size: 0.75rem;
+    cursor: help;
+}
+
+.removeConditionBtn {
+    background-color: #d32f2f;
+    border: none;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    transition: background-color 0.2s;
+}
+
+.removeConditionBtn:hover {
+    background-color: #b71c1c;
+}
+
+.advantageControls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.advantageBtn {
+    background-color: #4caf50;
+    border: none;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.advantageBtn:hover:not(:disabled) {
+    background-color: #66bb6a;
+}
+
+.advantageBtn:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.advantageValue {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #4caf50;
+    min-width: 30px;
     text-align: center;
 }

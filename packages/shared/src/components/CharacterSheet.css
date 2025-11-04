@@ -130,7 +130,7 @@
   overflow-y: auto;
 }
 
-.characteristicsPanel, .statusPanel, .skillsPanel, .talentsPanel {
+.characteristicsPanel, .statusPanel, .skillsPanel, .talentsPanel, .conditionsPanel, .advantagePanel {
   background-color: #333;
   padding: 15px;
   border-radius: 4px;
@@ -330,4 +330,56 @@ h3 {
 
 .talentsList::-webkit-scrollbar-thumb:hover {
   background: #666;
+}
+
+/* Conditions Panel */
+.conditionsPanel h3, .advantagePanel h3 {
+  margin: 0 0 10px 0;
+  color: #ffcc00;
+  font-size: 1rem;
+}
+
+.conditionsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.conditionItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #d32f2f;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  cursor: help;
+  transition: background-color 0.2s;
+}
+
+.conditionItem:hover {
+  background-color: #b71c1c;
+}
+
+.conditionName {
+  font-weight: 500;
+}
+
+.conditionCount {
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+}
+
+.advantagePanel {
+  text-align: center;
+}
+
+.advantageValue {
+  color: #4caf50;
+  font-size: 1.5rem;
+  font-weight: bold;
 }

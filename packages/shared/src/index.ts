@@ -15,3 +15,4 @@ export { default as WeaponData } from './data/weapons.json';
 export { default as gameData } from './data/ubersreik.json';
 export { default as allSkillsAndCharacteristics } from './data/skillsAndCharacteristics.json';
 export { default as talentsData } from './data/talents.json';
+export { default as conditionsData } from './data/conditions.json';

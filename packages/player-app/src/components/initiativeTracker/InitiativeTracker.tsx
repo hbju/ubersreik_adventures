@@ -1,36 +1,88 @@
 import React from 'react';
-import { Combatant } from '@wfrp/shared';
+import { Combatant, conditionsData, TeamAdvantage } from '@wfrp/shared';
 import styles from './InitiativeTracker.module.css';
 
 interface InitiativeTrackerProps {
     combatants: Combatant[];
     currentTurnId: string | null;
+    playerAdvantage?: TeamAdvantage;
+    enemyAdvantage?: TeamAdvantage;
 }
 
 const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
-    combatants, currentTurnId
+    combatants, currentTurnId, playerAdvantage, enemyAdvantage
 }) => {
     if (combatants.length === 0) {
         return null; // Don't show tracker if no combat is active
     }
+
+    const getConditionName = (conditionId: string): string => {
+        const condition = conditionsData.find(c => c.id === conditionId);
+        return condition ? condition.name : conditionId;
+    };
+
+    const getConditionDescription = (conditionId: string): string => {
+        const condition = conditionsData.find(c => c.id === conditionId);
+        return condition ? condition.description : '';
+    };
+
+    const getConditionCounts = (conditions: string[]): Map<string, number> => {
+        const counts = new Map<string, number>();
+        conditions.forEach(condId => {
+            counts.set(condId, (counts.get(condId) || 0) + 1);
+        });
+        return counts;
+    };
 
     return (
         <div className={styles.trackerContainer}>
             <header className={styles.header}>
                 <h3>Initiative Tracker</h3>
             </header>
+            <div className={styles.advantageDisplay}>
+                {playerAdvantage && playerAdvantage.team === 'players' && (
+                    <div>
+                        Advantage: {playerAdvantage.advantage}
+                    </div>
+                )}
+                {enemyAdvantage && enemyAdvantage.team === 'enemies' && (
+                    <div>
+                        Advantage: {enemyAdvantage.advantage}
+                    </div>
+                )}
+            </div>
             <ol className={styles.combatantList}>
-                {combatants.map(c => (
-                    <li key={c.id} className={c.id === currentTurnId ? styles.activeTurn : ''}>
-                        <span className={styles.initiative}>{c.initiative ?? '-'}</span>
-                        <span className={styles.name}>{c.name}</span>
-                        <div className={styles.wounds}>
-                            <span className={styles.woundsDisplay}>
-                                {c.currentWounds} / {c.maxWounds}
-                            </span>
-                        </div>
-                    </li>
-                ))}
+                {combatants.map(c => {
+                    const conditionCounts = getConditionCounts(c.conditions || []);
+                    
+                    return (
+                        <li key={c.id} className={c.id === currentTurnId ? styles.activeTurn : ''}>
+                            <div className={styles.combatantRow}>
+                                <span className={styles.initiative}>{c.initiative ?? '-'}</span>
+                                <span className={styles.name}>{c.name}</span>
+                                <div className={styles.wounds}>
+                                    <span className={styles.woundsDisplay}>
+                                        {c.currentWounds} / {c.maxWounds}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {conditionCounts.size > 0 && (
+                                <div className={styles.conditionBadges}>
+                                    {Array.from(conditionCounts.entries()).map(([condId, count]) => (
+                                        <span 
+                                            key={condId}
+                                            className={styles.conditionBadge}
+                                            title={getConditionDescription(condId)}
+                                        >
+                                            {getConditionName(condId)}{count > 1 ? ` (${count})` : ''}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </li>
+                    );
+                })}
             </ol>
         </div>
     );

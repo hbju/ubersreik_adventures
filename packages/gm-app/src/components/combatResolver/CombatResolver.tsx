@@ -412,6 +412,19 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             onLogEntry('system', 'Result accepted but defender not found in combat tracker');
         }
 
+        // Grant advantage to attacker if they won (dealt damage)
+        if (result.damageDealt > 0) {
+            const attackerCombatant = combatants.find(c => c.sourceId === selectedAttackerId);
+            if (attackerCombatant) {
+                const updatedAttacker: Combatant = {
+                    ...attackerCombatant,
+                    advantage: (attackerCombatant.advantage || 0) + 1
+                };
+                onUpdateCombatant(updatedAttacker);
+                onLogEntry('system', `${attackerCombatant.name} gains +1 Advantage (now ${updatedAttacker.advantage})`);
+            }
+        }
+
         // Clear the result and opposed test state
         setResult(null);
         setOpposedTestState(null);

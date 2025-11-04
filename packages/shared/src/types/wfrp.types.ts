@@ -23,7 +23,20 @@ export interface Combatant {
   maxWounds: number;
   baseInitiative: number; 
   baseAg: number;
-  isPlayer: boolean; 
+  isPlayer: boolean;
+  conditions: string[]; 
+}
+
+export interface TeamAdvantage {
+  team: 'players' | 'enemies';
+  advantage: number;
+}
+
+export interface Condition {
+  id: string;
+  name: string;
+  description: string;
+  stack: number; // current number of stacks
 }
 
 export interface XP {
@@ -124,6 +137,7 @@ export interface Character {
     resolve: Status;
     corruption: Status;
   };
+  conditions: Condition[]; 
   talents: Record<string, number>;
   inventory: {
     weapons: string[];

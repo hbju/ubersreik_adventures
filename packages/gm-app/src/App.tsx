@@ -14,6 +14,7 @@ import {
     generateRandomNpc,
     createBlankCharacter,
     gameData,
+    conditionsData,
     calculateCharacteristicBonus,
     CharacterSheet,
     AssignCharacterMessage,
@@ -29,6 +30,7 @@ import {
     Armor,
     Weapon,
     Item,
+    Condition
 } from '@wfrp/shared';
 
 import React, { useState, useEffect } from 'react';
@@ -201,11 +203,34 @@ function App() {
             baseInitiative: calculateCharacteristicBonus(character.characteristics.i),
             baseAg: calculateCharacteristicBonus(character.characteristics.ag),
             isPlayer: assignedCharacters.includes(character.id),
+            conditions: []
         };
         setCombatants(prev => [...prev, newCombatant]);
     };
 
     const handleUpdateCombatant = (updatedCombatant: Combatant) => {
+        const char = characters.find(c => c.id === updatedCombatant.sourceId);
+        if (char) {
+            // sync wounds & conditions back to character sheet
+            const conds = updatedCombatant.conditions || [];
+            const counts = new Map<string, number>();
+                conds.forEach(condId => {
+                counts.set(condId, (counts.get(condId) || 0) + 1);
+            });
+            const newConds: Condition[] = counts.size > 0 ? Array.from(counts.entries()).map(([id, stack]) => {
+                const existingCond = char.conditions.find(c => c.id === id) || conditionsData.find(c => c.id === id);
+                if (existingCond) {
+                    return { ...existingCond, duration: stack };
+                }
+                return { id, name: id, description: '', stack };
+            }) : [];
+            const newChar = { ...char, status: { ...char.status, wounds: { ...char.status.wounds, current: updatedCombatant.currentWounds }, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }, conditions: newConds };
+            setCharacters(prevChars =>
+                prevChars.map(c =>
+                    c.id === newChar.id ? newChar : c
+                )
+            );
+        }
         setCombatants(prev => prev.map(c => c.id === updatedCombatant.id ? updatedCombatant : c));
     };
 
@@ -336,6 +361,7 @@ function App() {
                 onClearCombatants={handleClearCombatants}
                 currentTurnId={currentTurnId}
                 onSetCurrentTurnId={setCurrentTurnId}
+                onUpdateAdvantage={(advantage) => {}}
             />
 
             <MapDisplay gameData={gameData} />

@@ -61,18 +61,23 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
     font-size: 0.8rem;
 }
 
 .combatantList li {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 15px;
+    border-bottom: 1px solid #444;
+}
+
+.combatantRow {
     display: grid;
     grid-template-columns: 40px 1fr 100px;
     align-items: center;
     gap: 15px;
-    padding: 8px 15px;
-    border-bottom: 1px solid #444;
 }
 
 li.activeTurn {
@@ -111,4 +116,29 @@ li.activeTurn {
     color: #e0e0e0;
     text-align: center;
     min-width: 60px;
+}
+
+/* Condition badges */
+.conditionBadges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.conditionBadge {
+    background-color: #d32f2f;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    cursor: help;
+}
+
+/* Advantage display */
+.advantageDisplay {
+    margin-top: 5px;
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 0.75rem;
 }

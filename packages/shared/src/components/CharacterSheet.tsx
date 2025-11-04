@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Character, Characteristic, Skill, SkillCharDefinition, Currency } from '../types/wfrp.types';
+import { Character, Characteristic, Skill, SkillCharDefinition, Currency, TeamAdvantage } from '../types/wfrp.types';
 import { calculateCharacteristicBonus } from '../utils/skills';
 import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
 import talentsDataRaw from '../data/talents.json';
+import conditionsData from '../data/conditions.json';
 import InventoryView from './InventoryView';
 import './CharacterSheet.css';
 
@@ -29,27 +30,48 @@ interface CharacterSheetProps {
     onSkillAdvance?: (skillId: string) => void;
     onPurchaseClick?: () => void;
     showPurchaseButton?: boolean;
+    advantage?: TeamAdvantage;
 }
 
-const CharacterSheet: React.FC<CharacterSheetProps> = ({ 
-    character, 
-    onCharacterUpdate, 
-    onSkillClick, 
-    onCharacteristicClick, 
-    onXpAward, 
-    onCurrencyAward, 
-    readonly, 
-    advancementMode, 
-    onCharacteristicAdvance, 
+const CharacterSheet: React.FC<CharacterSheetProps> = ({
+    character,
+    onCharacterUpdate,
+    onSkillClick,
+    onCharacteristicClick,
+    onXpAward,
+    onCurrencyAward,
+    readonly,
+    advancementMode,
+    onCharacteristicAdvance,
     onSkillAdvance,
     onPurchaseClick,
-    showPurchaseButton = false
+    showPurchaseButton = false,
+    advantage
 }) => {
     const [activeTab, setActiveTab] = useState<'stats' | 'talents' | 'inventory'>('stats');
 
     if (!character) {
         return <div className="sheetContainer">No Character Loaded</div>;
     }
+
+    const getConditionName = (conditionId: string): string => {
+        const condition = conditionsData.find((c: any) => c.id === conditionId);
+        return condition ? condition.name : conditionId;
+    };
+
+    const getConditionDescription = (conditionId: string): string => {
+        const condition = conditionsData.find((c: any) => c.id === conditionId);
+        return condition ? condition.description : '';
+    };
+
+    // Group conditions by ID and count them
+    const getConditionCounts = (conditions: string[]): Map<string, number> => {
+        const counts = new Map<string, number>();
+        conditions.forEach(condId => {
+            counts.set(condId, (counts.get(condId) || 0) + 1);
+        });
+        return counts;
+    };
 
     const handleCharacteristicChange = (
         charKey: keyof Character['characteristics'],
@@ -198,7 +220,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                             <span></span><span>Initial</span><span>Adv</span>{advancementMode && <span>Adv</span>}<span>Mod</span><span>Total</span>
                             {Object.entries(character.characteristics).map(([key, char]) => {
                                 const charKey = key as keyof Character['characteristics'];
-                                const charNames: { [key: string]: string } = { "ws" : "Weapon Skill", "bs": "Ballistic Skill", "s": "Strength", "t": "Toughness", "i": "Initiative", "ag": "Agility", "int": "Intelligence", "dex": "Dexterity", "wp": "Willpower", "fel": "Fellowship" };
+                                const charNames: { [key: string]: string } = { "ws": "Weapon Skill", "bs": "Ballistic Skill", "s": "Strength", "t": "Toughness", "i": "Initiative", "ag": "Agility", "int": "Intelligence", "dex": "Dexterity", "wp": "Willpower", "fel": "Fellowship" };
                                 const total = char.initial + char.advances + char.talents + char.modifier;
                                 return (
                                     <React.Fragment key={key}>
@@ -284,7 +306,30 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                 />)}
                             <span>/ {character.status.resolve.max}</span>
                         </div>
+                        {character.conditions.length > 0 && (
+                            <div className="conditionsPanel">
+                                <h3>Active Conditions</h3>
+                                <div className="conditionsList">
+                                    {character.conditions.map((cond) => (
+                                        <div
+                                            key={cond.id}
+                                            className="conditionItem"
+                                            title={getConditionDescription(cond.id)}
+                                        >
+                                            <span className="conditionName">{getConditionName(cond.id)}</span>
+                                            {cond.stack > 1 && <span className="conditionCount">×{cond.stack}</span>}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
+
+                    {(advantage && advantage.team === 'players') && (
+                        <div className="advantagePanel">
+                            <h3>Advantage: <span className="advantageValue">{advantage.advantage}</span></h3>
+                        </div>
+                    )}
 
                     <div className="skillsPanel">
                         <h3>Skills</h3>
@@ -370,8 +415,8 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
             )}
 
             {activeTab === 'inventory' && (
-                <InventoryView 
-                    character={character} 
+                <InventoryView
+                    character={character}
                     onPurchaseClick={onPurchaseClick}
                     showPurchaseButton={showPurchaseButton}
                 />
