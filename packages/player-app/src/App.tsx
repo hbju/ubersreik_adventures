@@ -13,7 +13,7 @@ import InitiativeTracker from './components/initiativeTracker/InitiativeTracker'
 
 
 const PlayerApp: React.FC = () => {
-  const { isConnected, character, shopItems, combatants, currentTurnId, opposedTestRequest, setOpposedTestRequest, connect, disconnect, sendMessage } = useSocket();
+  const { isConnected, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, connect, disconnect, sendMessage } = useSocket();
   const [isAdvancementMode, setIsAdvancementMode] = useState(false);
   const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
   const [testModalInfo, setTestModalInfo] = useState<{ name: string, value: number } | null>(null);
@@ -228,6 +228,7 @@ const PlayerApp: React.FC = () => {
       <InitiativeTracker 
         combatants={combatants}
         currentTurnId={currentTurnId}
+        advantages={currentAdvantage}
       />
       
       {character ? (

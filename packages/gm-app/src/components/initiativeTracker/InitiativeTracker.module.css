@@ -221,10 +221,14 @@ li.activeTurn {
     background-color: #b71c1c;
 }
 
+
+/* Advantage controls --> align spans into the center */
 .advantageControls {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: auto auto;
     gap: 10px;
+    margin-left: 10px;
+    justify-content: space-around;
 }
 
 .advantageBtn {
@@ -237,6 +241,7 @@ li.activeTurn {
     font-size: 0.9rem;
     font-weight: bold;
     transition: background-color 0.2s;
+    margin: 0 2px;
 }
 
 .advantageBtn:hover:not(:disabled) {

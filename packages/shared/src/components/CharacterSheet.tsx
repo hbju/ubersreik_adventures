@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Character, Characteristic, Skill, SkillCharDefinition, Currency, TeamAdvantage } from '../types/wfrp.types';
+import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages } from '../types/wfrp.types';
 import { calculateCharacteristicBonus } from '../utils/skills';
 import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
 import talentsDataRaw from '../data/talents.json';
@@ -30,7 +30,7 @@ interface CharacterSheetProps {
     onSkillAdvance?: (skillId: string) => void;
     onPurchaseClick?: () => void;
     showPurchaseButton?: boolean;
-    advantage?: TeamAdvantage;
+    advantages?: Advantages;
 }
 
 const CharacterSheet: React.FC<CharacterSheetProps> = ({
@@ -46,7 +46,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     onSkillAdvance,
     onPurchaseClick,
     showPurchaseButton = false,
-    advantage
+    advantages
 }) => {
     const [activeTab, setActiveTab] = useState<'stats' | 'talents' | 'inventory'>('stats');
 
@@ -310,24 +310,26 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                             <div className="conditionsPanel">
                                 <h3>Active Conditions</h3>
                                 <div className="conditionsList">
-                                    {character.conditions.map((cond) => (
-                                        <div
-                                            key={cond.id}
-                                            className="conditionItem"
-                                            title={getConditionDescription(cond.id)}
-                                        >
+                                    {character.conditions.map((cond) => {
+                                        console.log(cond);
+                                        return (
+                                            <div
+                                                key={cond.id}
+                                                className="conditionItem"
+                                                title={getConditionDescription(cond.id)}
+                                            >
                                             <span className="conditionName">{getConditionName(cond.id)}</span>
                                             {cond.stack > 1 && <span className="conditionCount">×{cond.stack}</span>}
                                         </div>
-                                    ))}
+                                    )})}
                                 </div>
                             </div>
                         )}
                     </div>
 
-                    {(advantage && advantage.team === 'players') && (
+                    {(advantages) && (
                         <div className="advantagePanel">
-                            <h3>Advantage: <span className="advantageValue">{advantage.advantage}</span></h3>
+                            <h3>Advantage: <span className="advantageValue">{advantages.playerAdvantage}</span></h3>
                         </div>
                     )}
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Combatant, rollDice, conditionsData, TeamAdvantage } from '@wfrp/shared';
+import { Combatant, rollDice, conditionsData, Advantages } from '@wfrp/shared';
 import styles from './InitiativeTracker.module.css';
 
 interface InitiativeTrackerProps {
@@ -9,13 +9,12 @@ interface InitiativeTrackerProps {
     onClearCombatants: () => void;
     currentTurnId: string | null;
     onSetCurrentTurnId: (id: string | null) => void;
-    playerAdvantage?: TeamAdvantage;
-    enemyAdvantage?: TeamAdvantage;
-    onUpdateAdvantage: (advantage: TeamAdvantage) => void;
+    advantages?: Advantages;
+    onUpdateAdvantages: (advantage: Advantages) => void;
 }
 
 const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
-    combatants, onSetCombatants, onUpdateCombatant, onClearCombatants, currentTurnId, onSetCurrentTurnId, playerAdvantage, enemyAdvantage, onUpdateAdvantage
+    combatants, onSetCombatants, onUpdateCombatant, onClearCombatants, currentTurnId, onSetCurrentTurnId, advantages, onUpdateAdvantages
 }) => {
     const [expandedCombatantId, setExpandedCombatantId] = useState<string | null>(null);
 
@@ -52,16 +51,8 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
         if (!condition) return;
 
         const updatedConditions = [...(combatant.conditions || [])];
-        
-        // Check if condition can stack
-        if (condition.stack > 1) {
-            updatedConditions.push(conditionId);
-        } else {
-            // If doesn't stack and not already present, add it
-            if (!updatedConditions.includes(conditionId)) {
-                updatedConditions.push(conditionId);
-            }
-        }
+
+        updatedConditions.push(conditionId);
 
         onUpdateCombatant({ ...combatant, conditions: updatedConditions });
     };
@@ -76,12 +67,15 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
         onUpdateCombatant({ ...combatant, conditions: updatedConditions });
     };
 
-    const handleAdvantageChange = (combatantId: string, delta: number, advantage: TeamAdvantage) => {
-        const combatant = combatants.find(c => c.id === combatantId);
-        if (!combatant) return;
+    const handleAdvantageChange = (delta: number, advantage: Advantages, team: 'player' | 'enemy') => {
+        const newAdvantage = { ...advantage };
+        if (team === 'player') {
+            newAdvantage.playerAdvantage = Math.max(0, advantage.playerAdvantage + delta);
+        } else {
+            newAdvantage.enemyAdvantage = Math.max(0, advantage.enemyAdvantage + delta);
+        }
 
-        advantage = { ...advantage, advantage: Math.max(0, advantage.advantage + delta) };
-        onUpdateAdvantage(advantage);
+        onUpdateAdvantages(newAdvantage);
     };
 
     const toggleExpanded = (combatantId: string) => {
@@ -117,11 +111,27 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                     <button onClick={onClearCombatants} className={styles.clearBtn}>Clear</button>
                 </div>
             </header>
+            <div className={styles.advantageDisplay}>
+                {advantages && (
+                    <div className={styles.advantageControls}>
+                        <span> Player Adv. : {advantages.playerAdvantage} </span>
+                        <span> Enemy Adv. : {advantages.enemyAdvantage} </span>
+                        <span>
+                            <button onClick={() => handleAdvantageChange(-1, advantages, 'player')} className={styles.advantageBtn}>-</button>
+                            <button onClick={() => handleAdvantageChange(1, advantages, 'player')} className={styles.advantageBtn}>+</button>
+                        </span>
+                        <span>
+                            <button onClick={() => handleAdvantageChange(-1, advantages, 'enemy')} className={styles.advantageBtn}>-</button>
+                            <button onClick={() => handleAdvantageChange(1, advantages, 'enemy')} className={styles.advantageBtn}>+</button>
+                        </span>
+                    </div>
+                )}
+            </div>
             <ol className={styles.combatantList}>
                 {combatants.map(c => {
                     const conditionCounts = getConditionCounts(c.conditions || []);
                     const isExpanded = expandedCombatantId === c.id;
-                    
+
                     return (
                         <li key={c.id} className={c.id === currentTurnId ? styles.activeTurn : ''}>
                             <div className={styles.combatantRow}>
@@ -134,7 +144,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                                         onChange={(e) => handleWoundsChange(c.id, Math.min(Math.max(parseInt(e.target.value), 0), c.maxWounds) || 0)}
                                     /> / {c.maxWounds}
                                 </div>
-                                <button 
+                                <button
                                     className={styles.expandBtn}
                                     onClick={() => toggleExpanded(c.id)}
                                     title="Manage conditions and advantage"
@@ -147,7 +157,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                             {conditionCounts.size > 0 && (
                                 <div className={styles.conditionBadges}>
                                     {Array.from(conditionCounts.entries()).map(([condId, count]) => (
-                                        <span 
+                                        <span
                                             key={condId}
                                             className={styles.conditionBadge}
                                             title={getConditionDescription(condId)}
@@ -158,19 +168,12 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                                 </div>
                             )}
 
-                            {/* Display advantage */}
-                            {(c.advantage || 0) > 0 && (
-                                <div className={styles.advantageDisplay}>
-                                    Advantage: {c.advantage}
-                                </div>
-                            )}
-
                             {/* Condition management panel */}
                             {isExpanded && (
                                 <div className={styles.conditionPanel}>
                                     <div className={styles.panelSection}>
                                         <label>Add Condition:</label>
-                                        <select 
+                                        <select
                                             onChange={(e) => {
                                                 if (e.target.value) {
                                                     handleAddCondition(c.id, e.target.value);
@@ -194,7 +197,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                                             <div className={styles.activeConditionsList}>
                                                 {(c.conditions || []).map((condId, index) => (
                                                     <div key={`${condId}-${index}`} className={styles.activeConditionItem}>
-                                                        <span 
+                                                        <span
                                                             className={styles.conditionText}
                                                             title={getConditionDescription(condId)}
                                                         >
@@ -212,26 +215,6 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                                             </div>
                                         </div>
                                     )}
-
-                                    <div className={styles.panelSection}>
-                                        <label>Advantage:</label>
-                                        <div className={styles.advantageControls}>
-                                            <button
-                                                onClick={() => handleAdvantageChange(c.id, -1)}
-                                                className={styles.advantageBtn}
-                                                disabled={(c.advantage || 0) === 0}
-                                            >
-                                                −
-                                            </button>
-                                            <span className={styles.advantageValue}>{c.advantage || 0}</span>
-                                            <button
-                                                onClick={() => handleAdvantageChange(c.id, 1)}
-                                                className={styles.advantageBtn}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
                             )}
                         </li>

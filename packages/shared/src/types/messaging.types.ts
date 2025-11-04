@@ -1,4 +1,4 @@
-import { Character, Currency, Item, Weapon, Armor, Combatant } from './wfrp.types';
+import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages } from './wfrp.types';
 
 interface BaseMessage<T extends string, P> {
   type: T;
@@ -13,7 +13,7 @@ export type AwardXpMessage = BaseMessage<'AWARD_XP', { amount: number }>;
 export type AwardCurrencyMessage = BaseMessage<'AWARD_CURRENCY', { currency: Currency }>;
 export type UpdateShopInventoryMessage = BaseMessage<'UPDATE_SHOP_INVENTORY', { items: Record<string, number> }>;
 export type PurchaseResponseMessage = BaseMessage<'PURCHASE_RESPONSE', { success: boolean; item: Armor | Weapon | Item; reason?: string }>;
-export type UpdateInitiativeTrackerMessage = BaseMessage<'UPDATE_INITIATIVE_TRACKER', { combatants: Combatant[]; currentTurnId: string | null }>;
+export type UpdateInitiativeTrackerMessage = BaseMessage<'UPDATE_INITIATIVE_TRACKER', { combatants: Combatant[]; currentTurnId: string | null; currentAdvantage: Advantages }>;
 export type RequestOpposedTestMessage = BaseMessage<'REQUEST_OPPOSED_TEST', { 
   testId: string;
   role: 'attacker' | 'defender';

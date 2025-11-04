@@ -30,7 +30,8 @@ import {
     Armor,
     Weapon,
     Item,
-    Condition
+    Condition,
+    Advantages
 } from '@wfrp/shared';
 
 import React, { useState, useEffect } from 'react';
@@ -72,6 +73,7 @@ function App() {
     const [openSheetIds, setOpenSheetIds] = useState<string[]>([]);
     const [combatants, setCombatants] = useState<Combatant[]>([]);
     const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
+    const [currentAdvantage, setCurrentAdvantage] = useState<Advantages>({ playerAdvantage: 0, enemyAdvantage: 0 });
 
     const [showShopManager, setShowShopManager] = useState(true);
     const [showCombatResolver, setShowCombatResolver] = useState(false);
@@ -94,6 +96,13 @@ function App() {
                 char.id === updatedCharacter.id ? updatedCharacter : char
             )
         );
+
+        const newMessage: AssignCharacterMessage = {
+            type: "ASSIGN_CHARACTER",
+            payload: { character: updatedCharacter }
+        };
+
+        window.ipcRenderer.sendToPlayer(updatedCharacter.id, newMessage);
     }
 
     const handleToggleCharacterSheet = (characterId: string) => {
@@ -191,8 +200,6 @@ function App() {
         // Prevent adding the same character twice
         if (combatants.some(c => c.sourceId === character.id)) return;
 
-        console.log(assignedCharacters);
-
         const newCombatant: Combatant = {
             id: crypto.randomUUID(),
             sourceId: character.id,
@@ -203,8 +210,11 @@ function App() {
             baseInitiative: calculateCharacteristicBonus(character.characteristics.i),
             baseAg: calculateCharacteristicBonus(character.characteristics.ag),
             isPlayer: assignedCharacters.includes(character.id),
-            conditions: []
+            conditions: character.conditions.map(cond => [cond.id, ...Array(cond.stack - 1).fill(cond.id)]).flat(),
         };
+        if (combatants.length === 0) {
+            setCurrentAdvantage({ playerAdvantage: 0, enemyAdvantage: 0 });
+        }
         setCombatants(prev => [...prev, newCombatant]);
     };
 
@@ -214,13 +224,13 @@ function App() {
             // sync wounds & conditions back to character sheet
             const conds = updatedCombatant.conditions || [];
             const counts = new Map<string, number>();
-                conds.forEach(condId => {
+            conds.forEach(condId => {
                 counts.set(condId, (counts.get(condId) || 0) + 1);
             });
             const newConds: Condition[] = counts.size > 0 ? Array.from(counts.entries()).map(([id, stack]) => {
-                const existingCond = char.conditions.find(c => c.id === id) || conditionsData.find(c => c.id === id);
+                const existingCond = conditionsData.find(c => c.id === id);
                 if (existingCond) {
-                    return { ...existingCond, duration: stack };
+                    return { ...existingCond, stack: stack };
                 }
                 return { id, name: id, description: '', stack };
             }) : [];
@@ -230,12 +240,14 @@ function App() {
                     c.id === newChar.id ? newChar : c
                 )
             );
+            handleCharacterUpdate(newChar);
         }
         setCombatants(prev => prev.map(c => c.id === updatedCombatant.id ? updatedCombatant : c));
     };
 
     const handleClearCombatants = () => {
         setCombatants([]);
+        setCurrentAdvantage({ playerAdvantage: 0, enemyAdvantage: 0 });
         setCurrentTurnId(null);
     };
 
@@ -267,15 +279,7 @@ function App() {
 
             if (message.type === 'CHARACTER_UPDATE') {
                 const updatedChar = message.payload.character;
-                setCharacters(prevChars =>
-                    prevChars.map(c => (c.id === updatedChar.id ? updatedChar : c))
-                );
-                const newMessage: AssignCharacterMessage = {
-                    type: "ASSIGN_CHARACTER",
-                    payload: { character: updatedChar }
-                };
-
-                window.ipcRenderer.sendToPlayer(updatedChar.id, newMessage);
+                handleCharacterUpdate(updatedChar);
                 addLogEntry('system', `${updatedChar.name}'s character sheet has been updated.`);
             }
 
@@ -325,12 +329,24 @@ function App() {
                 type: 'UPDATE_INITIATIVE_TRACKER',
                 payload: {
                     combatants,
-                    currentTurnId
+                    currentTurnId,
+                    currentAdvantage: currentAdvantage
                 }
             };
             window.ipcRenderer.sendToAllPlayers(message);
         }
-    }, [combatants, currentTurnId]);
+        else {
+            const message: UpdateInitiativeTrackerMessage = {
+                type: 'UPDATE_INITIATIVE_TRACKER',
+                payload: {
+                    combatants,
+                    currentTurnId,
+                    currentAdvantage: currentAdvantage
+                }
+            };
+            window.ipcRenderer.sendToAllPlayers(message);
+        }
+    }, [combatants, currentTurnId, currentAdvantage]);
 
     return (
         <div className="App">
@@ -354,6 +370,7 @@ function App() {
                 onFightButtonClick={() => setShowCombatResolver(true)}
             />
 
+            {Object.keys(combatants).length > 0 && (
             <InitiativeTracker
                 combatants={combatants}
                 onSetCombatants={setCombatants}
@@ -361,8 +378,9 @@ function App() {
                 onClearCombatants={handleClearCombatants}
                 currentTurnId={currentTurnId}
                 onSetCurrentTurnId={setCurrentTurnId}
-                onUpdateAdvantage={(advantage) => {}}
-            />
+                onUpdateAdvantages={(advantage) => setCurrentAdvantage(advantage)}
+                advantages={currentAdvantage}
+            /> )}
 
             <MapDisplay gameData={gameData} />
 
@@ -383,6 +401,11 @@ function App() {
                 onLogEntry={addLogEntry}
                 onUpdateCharacter={handleCharacterUpdate}
                 onUpdateCombatant={handleUpdateCombatant}
+                onUpdateAdvantage={(team, amount) => {
+                    team === 'players'
+                        ? setCurrentAdvantage(prev => ({ ...prev, playerAdvantage: prev.playerAdvantage + amount }))
+                        : setCurrentAdvantage(prev => ({ ...prev, enemyAdvantage: prev.enemyAdvantage + amount }));
+                }}
                 onClose={() => { setShowCombatResolver(false); }}
             />
             )}
@@ -441,18 +464,7 @@ function App() {
                                 inventory: updatedInventory,
                             };
 
-                            // Update local state
-                            setCharacters(prevChars =>
-                                prevChars.map(c => (c.id === character.id ? updatedCharacter : c))
-                            );
-
-                            // Send updated character to player
-                            const assignMessage: AssignCharacterMessage = {
-                                type: "ASSIGN_CHARACTER",
-                                payload: { character: updatedCharacter }
-                            };
-                            window.ipcRenderer.sendToPlayer(character.id, assignMessage);
-
+                            handleCharacterUpdate(updatedCharacter);
                             addLogEntry('system', `${character.name} purchased ${item.name} for ${item.price}.`);
                         }
                         setPurchaseRequest(null);

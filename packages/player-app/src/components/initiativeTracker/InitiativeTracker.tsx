@@ -1,16 +1,15 @@
 import React from 'react';
-import { Combatant, conditionsData, TeamAdvantage } from '@wfrp/shared';
+import { Combatant, conditionsData, Advantages } from '@wfrp/shared';
 import styles from './InitiativeTracker.module.css';
 
 interface InitiativeTrackerProps {
     combatants: Combatant[];
     currentTurnId: string | null;
-    playerAdvantage?: TeamAdvantage;
-    enemyAdvantage?: TeamAdvantage;
+    advantages?: Advantages;
 }
 
 const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
-    combatants, currentTurnId, playerAdvantage, enemyAdvantage
+    combatants, currentTurnId, advantages
 }) => {
     if (combatants.length === 0) {
         return null; // Don't show tracker if no combat is active
@@ -39,22 +38,18 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
             <header className={styles.header}>
                 <h3>Initiative Tracker</h3>
             </header>
-            <div className={styles.advantageDisplay}>
-                {playerAdvantage && playerAdvantage.team === 'players' && (
+            {advantages && (
+                <div className={styles.advantageDisplay}>
                     <div>
-                        Advantage: {playerAdvantage.advantage}
+                        Player Adv. : {advantages.playerAdvantage} - 
+                        Enemy Adv. : {advantages.enemyAdvantage}
                     </div>
-                )}
-                {enemyAdvantage && enemyAdvantage.team === 'enemies' && (
-                    <div>
-                        Advantage: {enemyAdvantage.advantage}
-                    </div>
-                )}
-            </div>
+                </div>
+            )}
             <ol className={styles.combatantList}>
                 {combatants.map(c => {
                     const conditionCounts = getConditionCounts(c.conditions || []);
-                    
+
                     return (
                         <li key={c.id} className={c.id === currentTurnId ? styles.activeTurn : ''}>
                             <div className={styles.combatantRow}>
@@ -70,7 +65,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                             {conditionCounts.size > 0 && (
                                 <div className={styles.conditionBadges}>
                                     {Array.from(conditionCounts.entries()).map(([condId, count]) => (
-                                        <span 
+                                        <span
                                             key={condId}
                                             className={styles.conditionBadge}
                                             title={getConditionDescription(condId)}

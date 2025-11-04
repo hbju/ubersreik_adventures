@@ -14,7 +14,7 @@ import {
     RequestOpposedTestMessage,
     OpposedTestResultMessage,
     AssignCharacterMessage,
-    LogEntry
+    LogEntry,
 } from '@wfrp/shared';
 
 import CharacterSelector from './CharacterSelector';
@@ -28,6 +28,7 @@ interface CombatResolverProps {
     onLogEntry: (type: LogEntry['type'], content: string) => void;
     onUpdateCharacter: (character: Character) => void;
     onUpdateCombatant: (combatant: Combatant) => void;
+    onUpdateAdvantage: (team: 'players' | 'enemies', amount: number) => void;
     onClose: () => void;
 }
 
@@ -75,6 +76,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     onLogEntry,
     onUpdateCharacter,
     onUpdateCombatant,
+    onUpdateAdvantage,
     onClose
 }) => {
     const [selectedAttackerId, setSelectedAttackerId] = useState<string>(characters[0]?.id || 'manual');
@@ -416,12 +418,9 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         if (result.damageDealt > 0) {
             const attackerCombatant = combatants.find(c => c.sourceId === selectedAttackerId);
             if (attackerCombatant) {
-                const updatedAttacker: Combatant = {
-                    ...attackerCombatant,
-                    advantage: (attackerCombatant.advantage || 0) + 1
-                };
-                onUpdateCombatant(updatedAttacker);
-                onLogEntry('system', `${attackerCombatant.name} gains +1 Advantage (now ${updatedAttacker.advantage})`);
+                const team = attackerCombatant.isPlayer ? 'players' : 'enemies';
+                onUpdateAdvantage(team, 1);
+                onLogEntry('system', `Team ${team} gains +1 Advantage`);
             }
         }
 

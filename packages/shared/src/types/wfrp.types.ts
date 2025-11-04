@@ -27,9 +27,9 @@ export interface Combatant {
   conditions: string[]; 
 }
 
-export interface TeamAdvantage {
-  team: 'players' | 'enemies';
-  advantage: number;
+export interface Advantages {
+  playerAdvantage: number;
+  enemyAdvantage: number;
 }
 
 export interface Condition {
