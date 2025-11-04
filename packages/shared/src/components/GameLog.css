@@ -1,6 +1,6 @@
 .gameLogContainer {
   position: fixed;
-  right: 25vw;
+  right: 30vw;
   top: 2px;
   background-color: rgba(30, 25, 20, 0.8);
   border: 1px solid #5a4a3a;
@@ -8,7 +8,7 @@
   padding: 10px;
   margin-bottom: 5px;
   height: 150px;
-  width: 50vw;
+  width: 45vw;
   overflow-y: auto;
   font-family: 'Verdana', sans-serif;
   font-size: 0.9rem;

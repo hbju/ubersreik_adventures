@@ -2,7 +2,7 @@
   position: fixed; /* Stays in place relative to the viewport */
   top: 0;
   right: 0;
-  width: 20vw; /* Or whatever width you prefer */
+  width: 25vw;
   height: 100vh; /* Full height of the screen */
   background-color: #242424;
   color: #e0e0e0;

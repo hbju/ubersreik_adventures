@@ -43,9 +43,15 @@ export const generateRandomNpc = (): Character => {
             resolve: { current: 3, max: 3 },
             corruption: { current: 0, max: 10 },
         },
+        conditions: [],
         skills: [...basicSkills],
         talents: {},
-        inventory: ["Ragged clothes", "1d10 brass pennies"],
+        inventory: {
+            weapons: [],
+            armor: [],
+            items: []
+        },
+        currency: { gc: 0, ss: rollDice(1, 6), bp: rollDice(1, 12) }
     };
 };
 
@@ -77,8 +83,14 @@ export const createBlankCharacter = (): Character => {
             resolve: { current: 3, max: 3 },
             corruption: { current: 0, max: 10 },
         },
+        conditions: [],
         skills: [...basicSkills],
         talents: {},
-        inventory: [],
+        inventory: {
+            weapons: [],
+            armor: [],
+            items: []
+        },
+        currency: { gc: 0, ss: 0, bp: 0 }
     }
 }
