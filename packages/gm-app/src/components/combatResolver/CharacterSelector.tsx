@@ -13,10 +13,10 @@ const CharacterSelector: React.FC<CharacterSelectorProps> = ({
   onCharacterSelect,
 }) => {
   return (
-    <select 
-      value={selectedCharacterId} 
+    <select
+      value={selectedCharacterId}
       onChange={(e) => onCharacterSelect(e.target.value)}
-      style={{ width: '100%', padding: '5px', backgroundColor: '#333', color: 'white', border: '1px solid #555' }}
+      style={{ width: '60%', padding: '5px', backgroundColor: 'var(--color-vellum)', color: 'var(--color-ink)', border: '2px solid var(--color-leather-light)', textAlign: 'end', alignSelf: 'end', fontSize: '1rem' }}
     >
       <option value="manual">-- Manual Entry --</option>
       {characters.map(char => (

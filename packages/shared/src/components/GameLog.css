@@ -2,17 +2,20 @@
   position: fixed;
   right: 30vw;
   top: 2px;
-  background-color: rgba(30, 25, 20, 0.8);
-  border: 1px solid #5a4a3a;
-  border-radius: 4px;
-  padding: 10px;
+  background: var(--color-parchment);
+  border: 3px solid var(--color-leather-dark);
+  box-shadow: 
+    inset 0 0 0 1px var(--color-gold),
+    0 4px 12px rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+  padding: 12px;
   margin-bottom: 5px;
   height: 150px;
   width: 45vw;
   overflow-y: auto;
-  font-family: 'Verdana', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
-  color: #e0d6c8;
+  color: var(--color-ink);
   z-index: 1003; 
 }
 
@@ -23,22 +26,53 @@
 }
 
 .logEntry {
-  padding: 4px 0;
-  border-bottom: 1px solid #413529;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--color-leather-light);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-parchment-light) 0px,
+    var(--color-parchment) 2px,
+    var(--color-parchment-light) 4px
+  );
+  margin-bottom: 2px;
 }
+
 .logEntry:last-child {
   border-bottom: none;
 }
 
 .logEntry.roll {
-  color: #f0f0f0;
+  color: var(--color-ink);
+  font-weight: 600;
+  background: var(--color-vellum);
 }
 
 .logEntry.system {
-  color: #ffc107;
+  color: var(--color-gold);
   font-style: italic;
+  font-weight: 600;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .logEntry.info {
-  color: #a0b0c0;
+  color: var(--color-leather-dark);
+  font-style: italic;
+}
+
+/* Scrollbar styling */
+.gameLogContainer::-webkit-scrollbar {
+  width: 10px;
+}
+
+.gameLogContainer::-webkit-scrollbar-track {
+  background: var(--color-leather-dark);
+}
+
+.gameLogContainer::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border: 2px solid var(--color-leather-dark);
+}
+
+.gameLogContainer::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-light);
 }

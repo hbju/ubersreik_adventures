@@ -4,37 +4,42 @@
     flex-direction: column;
     gap: 16px;
     padding: 20px;
-    background-color: #1a1a1a;
-    border-radius: 8px;
-    color: #e0e0e0;
+    background: var(--color-parchment);
+    border-radius: 0;
+    color: var(--color-ink);
     overflow-y: auto;
     max-height: 80vh;
 }
 
 /* Section Styling */
 .inventorySection {
-    background-color: #222;
-    border: 1px solid #444;
-    border-radius: 6px;
+    background: var(--color-vellum);
+    border: 2px solid var(--color-leather-dark);
+    border-radius: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .sectionHeader {
     padding: 12px 16px;
-    background-color: #2a2a2a;
+    background: var(--color-parchment-dark);
     cursor: pointer;
     user-select: none;
-    border-bottom: 1px solid #444;
-    transition: background-color 0.2s;
+    border-bottom: 2px solid var(--color-gold);
+    transition: all 0.2s;
 }
 
 .sectionHeader:hover {
-    background-color: #333;
+    background: var(--color-parchment-light);
 }
 
 .sectionTitle {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #ffcc00;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-gold);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 .sectionContent {
@@ -49,15 +54,20 @@
 }
 
 .inventoryItem {
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-    border-radius: 4px;
+    background: var(--color-parchment);
+    border: 2px solid var(--color-leather-dark);
+    border-radius: 0;
     padding: 12px;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .inventoryItem:hover {
-    border-color: #ffcc00;
+    border-color: var(--color-gold);
+    box-shadow: 
+        0 0 0 1px var(--color-gold),
+        0 2px 4px rgba(212, 175, 55, 0.3);
+    transform: translateY(-2px);
 }
 
 .itemHeader {
@@ -66,18 +76,22 @@
     align-items: center;
     margin-bottom: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #444;
+    border-bottom: 2px solid var(--color-leather-light);
 }
 
 .itemName {
     font-size: 1rem;
     font-weight: bold;
-    color: #ffcc00;
+    font-family: var(--font-heading);
+    color: var(--color-gold);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .itemEnc {
     font-size: 0.9rem;
-    color: #aaa;
+    font-family: var(--font-heading);
+    color: var(--color-leather-dark);
+    font-weight: 600;
 }
 
 .itemDetails {
@@ -93,19 +107,22 @@
 }
 
 .detailLabel {
-    color: #aaa;
+    color: var(--color-leather-dark);
     min-width: 100px;
-    font-weight: 500;
+    font-weight: 600;
+    font-family: var(--font-body);
 }
 
 .detailValue {
-    color: #e0e0e0;
+    color: var(--color-ink);
+    font-family: var(--font-body);
 }
 
 .emptyMessage {
     text-align: center;
-    color: #666;
+    color: var(--color-leather-light);
     font-style: italic;
+    font-family: var(--font-body);
     padding: 20px;
     margin: 0;
 }
@@ -117,7 +134,7 @@
     gap: 16px;
     margin-top: 8px;
     padding-top: 16px;
-    border-top: 2px solid #444;
+    border-top: 3px double var(--color-gold);
 }
 
 .purchaseButtonContainer {
@@ -128,25 +145,35 @@
 
 .purchaseButton {
     padding: 12px 32px;
-    background: linear-gradient(135deg, #4a9eff 0%, #357abd 100%);
-    border: none;
-    border-radius: 6px;
-    color: #fff;
+    background: linear-gradient(180deg, var(--color-gold-light), var(--color-gold));
+    border: 2px solid var(--color-leather-dark);
+    border-radius: 0;
+    color: var(--color-leather-dark);
     font-size: 1.1rem;
+    font-family: var(--font-heading);
     font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(74, 158, 255, 0.3);
+    box-shadow: 
+        0 4px 0 var(--color-leather-dark),
+        0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .purchaseButton:hover {
-    background: linear-gradient(135deg, #5aaeff 0%, #4a8acd 100%);
-    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.5);
+    background: linear-gradient(180deg, #f4d971, var(--color-gold-light));
+    box-shadow: 
+        0 4px 0 var(--color-leather-dark),
+        0 8px 16px rgba(212, 175, 55, 0.5);
     transform: translateY(-2px);
 }
 
 .purchaseButton:active {
-    transform: translateY(0);
+    transform: translateY(2px);
+    box-shadow: 
+        0 2px 0 var(--color-leather-dark),
+        0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .footerContent {
@@ -157,19 +184,24 @@
 
 .currencyDisplay,
 .encumbranceDisplay {
-    background-color: #222;
-    border: 1px solid #444;
-    border-radius: 6px;
+    background: var(--color-vellum);
+    border: 2px solid var(--color-leather-dark);
+    border-radius: 0;
     padding: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .currencyDisplay h4,
 .encumbranceDisplay h4 {
     margin: 0 0 12px 0;
-    color: #ffcc00;
+    color: var(--color-gold);
     font-size: 1rem;
-    border-bottom: 1px solid #444;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 2px solid var(--color-gold);
     padding-bottom: 8px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* Currency Display */
@@ -182,24 +214,29 @@
 .currency {
     font-size: 1.1rem;
     font-weight: bold;
+    font-family: var(--font-heading);
     padding: 8px 12px;
-    border-radius: 4px;
-    background-color: #2a2a2a;
+    border-radius: 0;
+    background: var(--color-parchment-light);
+    border: 2px solid;
 }
 
 .currency.gc {
-    color: #ffd700;
-    border: 1px solid #ffd70044;
+    color: #d4af37;
+    border-color: #d4af37;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .currency.ss {
-    color: #c0c0c0;
-    border: 1px solid #c0c0c044;
+    color: #a0a0a0;
+    border-color: #a0a0a0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .currency.bp {
-    color: #cd7f32;
-    border: 1px solid #cd7f3244;
+    color: #8b5a3c;
+    border-color: #8b5a3c;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Encumbrance Display */
@@ -212,32 +249,53 @@
 .encumbranceValue {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #4a9eff;
+    font-family: var(--font-heading);
+    color: var(--color-gold);
     text-align: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .encumbranceValue.overEncumbered {
-    color: #ff4444;
+    color: var(--color-blood-red);
 }
 
 .progressBar {
     width: 100%;
     height: 24px;
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-    border-radius: 4px;
+    background: var(--color-parchment-dark);
+    border: 2px solid var(--color-leather-dark);
+    border-radius: 0;
     overflow: hidden;
     position: relative;
 }
 
 .progressFill {
     height: 100%;
-    background: linear-gradient(90deg, #4a9eff 0%, #6bb0ff 100%);
+    background: linear-gradient(90deg, var(--color-gold) 0%, var(--color-leather-light) 100%);
     transition: width 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .progressFill.overEncumbered {
-    background: linear-gradient(90deg, #ff4444 0%, #ff6666 100%);
+    background: linear-gradient(90deg, var(--color-blood-red) 0%, #b83030 100%);
+}
+
+/* Scrollbar styling */
+.inventoryView::-webkit-scrollbar {
+    width: 10px;
+}
+
+.inventoryView::-webkit-scrollbar-track {
+    background: var(--color-leather-dark);
+}
+
+.inventoryView::-webkit-scrollbar-thumb {
+    background: var(--color-gold);
+    border: 2px solid var(--color-leather-dark);
+}
+
+.inventoryView::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gold-light);
 }
 
 /* Responsive Design */

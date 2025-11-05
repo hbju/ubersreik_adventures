@@ -7,10 +7,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #000
+  background: #1a1410;
 }
 
 .mapImage {
   height: 100%;
-  object-fit: cover; 
+  object-fit: cover;
+  filter: sepia(0.15) contrast(1.1);
 }

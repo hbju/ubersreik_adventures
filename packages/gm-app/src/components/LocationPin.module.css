@@ -1,18 +1,24 @@
 .pin {
   position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: #ffcc00; /* A nice gold color */
-  border-radius: 50%; /* Makes it a circle */
-  border: 2px solid #fff;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+  width: 10px;
+  height: 10px;
+  background: radial-gradient(circle, var(--color-gold-light), var(--color-gold));
+  border-radius: 0;
+  border: 3px solid var(--color-leather-dark);
+  box-shadow: 
+    inset 0 0 0 1px var(--color-gold-light),
+    0 4px 12px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(212, 175, 55, 0.6);
   cursor: pointer;
-  transition: transform 0.2s ease-in-out, background-color 0.2s;
-
-  transform: translate(-50%, -50%); 
+  transition: all 0.2s ease-in-out;
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
 .pin:hover {
-  transform: translate(-50%, -50%) scale(1.3);
-  background-color: #ffeb3b;
+  transform: translate(-50%, -50%) rotate(45deg) scale(1.2);
+  background: radial-gradient(circle, var(--color-gold-light), var(--color-gold));
+  box-shadow: 
+    inset 0 0 0 1px var(--color-gold-light),
+    0 6px 16px rgba(0, 0, 0, 0.9),
+    0 0 30px rgba(212, 175, 55, 0.9);
 }

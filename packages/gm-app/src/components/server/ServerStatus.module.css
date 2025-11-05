@@ -3,15 +3,22 @@
   bottom: 0;
   right: 0;
   width: 100%;
-  background-color: #222;
-  color: #eee;
-  padding: 6px 16px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-parchment-dark) 0px,
+    var(--color-parchment) 2px,
+    var(--color-parchment-dark) 4px
+  );
+  color: var(--color-ink);
+  padding: 8px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.85rem;
+  font-family: var(--font-body);
   z-index: 1002;
-  border-top: 1px solid #444;
+  border-top: 3px double var(--color-leather-dark);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .statusIndicatorContainer {
@@ -22,16 +29,21 @@
 
 .statusIndicator {
   display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: #ccc;
+  width: 12px;
+  height: 12px;
+  border-radius: 0;
+  background-color: var(--color-leather-light);
+  border: 2px solid var(--color-leather-dark);
+  transform: rotate(45deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .statusIndicator.disconnected {
-  background-color: #f44336; /* Red */
+  background-color: var(--color-blood-red);
+  box-shadow: 0 0 8px rgba(139, 26, 26, 0.6);
 }
 
 .statusIndicator.connected {
-  background-color: #4caf50; /* Green */
+  background-color: #2d7a3e;
+  box-shadow: 0 0 8px rgba(45, 122, 62, 0.6);
 }
