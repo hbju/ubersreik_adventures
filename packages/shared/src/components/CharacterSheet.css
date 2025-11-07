@@ -38,9 +38,8 @@
   box-shadow: 0 0 8px var(--color-gold);
 }
 
-.charNameInput {
+.header input[type="text"] {
   background: transparent;
-  background-color: var(--color-parchment);
   border: none;
   color: var(--color-gold);
   font-size: 1.8rem;
@@ -48,13 +47,18 @@
   font-family: var(--font-heading);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
   width: 30%;
+  box-shadow: none;
 }
-.charNameInput:focus {
+
+.header input[type="text"]:focus {
   outline: none;
-  background: rgba(212, 175, 55, 0.1);
+  background: var(--color-parchment-darker);
+  border: 2px solid var(--color-gold);
+  box-shadow: 0 0 8px var(--color-gold);
   padding: 2px 8px;
+  color: var(--color-ink);
 }
 
 /* XP panel */
