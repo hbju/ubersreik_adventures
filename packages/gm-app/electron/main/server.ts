@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState } from '@wfrp/shared';
 
 const PORT = 3003;
 const connectedClients = new Map<string, Socket>();
@@ -92,5 +92,105 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
       port: PORT,
       clients: Array.from(connectedClients.keys())
     };
+  });
+}
+
+/**
+ * Broadcast map pin states to all connected players
+ * Each player receives only pins discovered for their character
+ * @param mapPinStates The complete map pin states record
+ */
+export function broadcastMapPinStates(mapPinStates: Record<string, MapPinState>) {
+  if (!io || connectedClients.size === 0) {
+    console.log('[SERVER] No clients connected, skipping map broadcast');
+    return;
+  }
+
+  console.log(`[SERVER] Broadcasting map state to ${connectedClients.size} players`);
+
+  connectedClients.forEach((socket, socketId) => {
+    let assignedCharacterId: string | undefined;
+    for (const [charId, socketIdValue] of charactersAssignments.entries()) {
+      if (socketIdValue === socketId) {
+        assignedCharacterId = charId;
+        break;
+      }
+    }
+
+    if (!assignedCharacterId) {
+      const message: MapStateUpdateMessage = {
+        type: 'MAP_STATE_UPDATE',
+        payload: { pinStates: {} },
+      };
+      socket.emit('gm-message', message);
+      console.log(`[SERVER] Sent empty map state to unassigned player ${socketId}`);
+      return;
+    }
+
+    const filteredMapPinStates: Record<string, MapPinState> = {};
+    
+    for (const [locationId, pinState] of Object.entries(mapPinStates)) {
+      if (pinState.playerDiscovered.includes(assignedCharacterId)) {
+        filteredMapPinStates[locationId] = {
+          playerDiscovered: [assignedCharacterId] // Only include this character's discovery
+        };
+      }
+    }
+
+    const message: MapStateUpdateMessage = {
+      type: 'MAP_STATE_UPDATE',
+      payload: { pinStates: filteredMapPinStates },
+    };
+
+    socket.emit('gm-message', message);
+    console.log(`[SERVER] Sent ${Object.keys(filteredMapPinStates).length} discovered pins to player ${socketId} (character ${assignedCharacterId})`);
+  });
+}
+
+/**
+ * Broadcast journal entries to all connected players
+ * Each player receives only entries they are allowed to see
+ * @param journal The complete journal array
+ */
+export function broadcastJournalEntries(journal: JournalEntry[]) {
+  if (!io || connectedClients.size === 0) {
+    console.log('[SERVER] No clients connected, skipping journal broadcast');
+    return;
+  }
+
+  console.log(`[SERVER] Broadcasting journal to ${connectedClients.size} players`);
+
+  // Iterate through each connected player
+  connectedClients.forEach((socket, socketId) => {
+    // Find which character is assigned to this player
+    let assignedCharacterId: string | undefined;
+    for (const [charId, socketIdValue] of charactersAssignments.entries()) {
+      if (socketIdValue === socketId) {
+        assignedCharacterId = charId;
+        break;
+      }
+    }
+
+    // Filter journal entries for this player
+    const filteredEntries = journal.filter((entry) => {
+      // Include entries shared with all
+      if (entry.sharedWith.includes('all')) {
+        return true;
+      }
+      // Include entries shared with this specific character
+      if (assignedCharacterId && entry.sharedWith.includes(assignedCharacterId)) {
+        return true;
+      }
+      return false;
+    });
+
+    // Send the filtered journal to this player
+    const message: JournalUpdateMessage = {
+      type: 'JOURNAL_UPDATE',
+      payload: { entries: filteredEntries },
+    };
+
+    socket.emit('gm-message', message);
+    console.log(`[SERVER] Sent ${filteredEntries.length} journal entries to player ${socketId}`);
   });
 }

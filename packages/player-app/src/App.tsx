@@ -3,22 +3,24 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, MapDisplay, gameData } from '@wfrp/shared';
 import { TestModal } from './components/TestModal';
 import { TestResultMessage, calculateCharacteristicAdvanceCost, calculateSkillAdvanceCost, allSkillsAndCharacteristics } from '@wfrp/shared';
 import { TalentModal } from './components/TalentModal';
 import { ShopModal } from './components/ShopModal';
 import { OpposedTestModal } from './components/OpposedTestModal';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
+import { JournalView } from './components/JournalView';
 
 
 const PlayerApp: React.FC = () => {
-  const { isConnected, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, connect, disconnect, sendMessage } = useSocket();
+  const { isConnected, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, journalEntries, mapPinStates, connect, disconnect, sendMessage } = useSocket();
   const [isAdvancementMode, setIsAdvancementMode] = useState(false);
   const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
   const [testModalInfo, setTestModalInfo] = useState<{ name: string, value: number } | null>(null);
   const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
   const [isShopModalOpen, setIsShopModalOpen] = useState(false);
+  const [currentView, setCurrentView] = useState<'character' | 'journal' | 'map'>('character');
 
   const handleSkillClick = (skillName: string, skillValue: number) => {
     setTestModalInfo({ name: skillName, value: skillValue });
@@ -181,6 +183,85 @@ const PlayerApp: React.FC = () => {
 
   return (
     <div className="player-app-container">
+      {/* Navigation tabs */}
+      {character && (
+        <div style={{
+          position: 'fixed',
+          top: '10px',
+          left: '10px',
+          display: 'flex',
+          gap: '10px',
+          zIndex: 1100
+        }}>
+          <button
+            onClick={() => setCurrentView('character')}
+            style={{
+              padding: '10px 20px',
+              background: currentView === 'character' ? '#2d5016' : '#2c1810',
+              color: '#d4af37',
+              border: currentView === 'character' ? '2px solid #3d6f1f' : '2px solid #8b6914',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '14px'
+            }}
+          >
+            ⚔️ Character
+          </button>
+          <button
+            onClick={() => setCurrentView('journal')}
+            style={{
+              padding: '10px 20px',
+              background: currentView === 'journal' ? '#2d5016' : '#2c1810',
+              color: '#d4af37',
+              border: currentView === 'journal' ? '2px solid #3d6f1f' : '2px solid #8b6914',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '14px',
+              position: 'relative'
+            }}
+          >
+            📜 Journal
+            {journalEntries.length > 0 && (
+              <span style={{
+                position: 'absolute',
+                top: '-5px',
+                right: '-5px',
+                background: '#8b0000',
+                color: '#fff',
+                borderRadius: '50%',
+                width: '20px',
+                height: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '12px'
+              }}>
+                {journalEntries.length}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setCurrentView('map')}
+            style={{
+              padding: '10px 20px',
+              background: currentView === 'map' ? '#2d5016' : '#2c1810',
+              color: '#d4af37',
+              border: currentView === 'map' ? '2px solid #3d6f1f' : '2px solid #8b6914',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '14px'
+            }}
+          >
+            🗺️ Map
+          </button>
+        </div>
+      )}
+
+      {currentView === 'character' && (
+        <>
       {character && !isAdvancementMode && (
         <button onClick={handleEnterAdvancement} className='advanceControlButton'>Advance Character</button>
       )}
@@ -258,6 +339,23 @@ const PlayerApp: React.FC = () => {
           baseTarget={testModalInfo.value}
           onClose={() => setTestModalInfo(null)}
           onRoll={handleRoll}
+        />
+      )}
+        </>
+      )}
+
+      {/* Journal View */}
+      {currentView === 'journal' && (
+        <JournalView journal={journalEntries} />
+      )}
+
+      {/* Map View */}
+      {currentView === 'map' && character && (
+        <MapDisplay
+          gameData={gameData}
+          mapPinStates={mapPinStates}
+          characters={[character]}
+          isGM={false}
         />
       )}
     </div>

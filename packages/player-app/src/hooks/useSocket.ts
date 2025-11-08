@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState } from '@wfrp/shared';
 
 interface OpposedTestRequest {
   testId: string;
@@ -19,6 +19,8 @@ export const useSocket = () => {
   const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
   const [currentAdvantage, setCurrentAdvantage] = useState<Advantages>({ playerAdvantage: 0, enemyAdvantage: 0 });
   const [opposedTestRequest, setOpposedTestRequest] = useState<OpposedTestRequest | null>(null);
+  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
+  const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
 
 
   const connect = useCallback((ipAddress: string) => {
@@ -96,6 +98,16 @@ export const useSocket = () => {
           modifier: message.payload.modifier
         });
       }
+
+      if (message.type === 'JOURNAL_UPDATE') {
+        console.log('[CLIENT] Journal update received:', message.payload);
+        setJournalEntries(message.payload.entries);
+      }
+
+      if (message.type === 'MAP_STATE_UPDATE') {
+        console.log('[CLIENT] Map state update received:', message.payload);
+        setMapPinStates(message.payload.pinStates);
+      }
     });
 
     setSocket(newSocket);
@@ -118,5 +130,5 @@ export const useSocket = () => {
     };
   }, [socket]);
 
-  return { isConnected, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, connect, disconnect, sendMessage };
+  return { isConnected, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, journalEntries, mapPinStates, connect, disconnect, sendMessage };
 };

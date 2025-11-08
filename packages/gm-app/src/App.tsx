@@ -1,10 +1,11 @@
-import MapDisplay from './components/MapDisplay';
+import { MapDisplay } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
 import { ShopManager } from './components/ShopManager';
 import { PurchaseRequestModal } from './components/PurchaseRequestModal';
+import { JournalManager } from './components/JournalManager';
 
 import {
     socket,
@@ -18,11 +19,9 @@ import {
     calculateCharacteristicBonus,
     CharacterSheet,
     AssignCharacterMessage,
-    AwardXpMessage,
     ClientToServerMessage,
     GameLog,
     LogEntry,
-    AwardCurrencyMessage,
     equilibrateCurrency,
     RequestPurchaseMessage,
     UpdateInitiativeTrackerMessage,
@@ -31,15 +30,15 @@ import {
     Weapon,
     Item,
     Condition,
-    Advantages
+    Advantages,
+    JournalEntry,
+    MapPinState
 } from '@wfrp/shared';
 
 import React, { useState, useEffect } from 'react';
-import useLocalStorageState from './hooks/useLocalStorageState';
 
 import './App.css';
 import ServerStatus from './components/server/ServerStatus';
-import { cp } from 'fs';
 
 interface ServerStatusData {
     ip: string;
@@ -68,15 +67,18 @@ function App() {
 
     const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
 
-    const [characters, setCharacters] = useLocalStorageState<Character[]>('wfrp-gm-tools-characters', initChars);
+    const [characters, setCharacters] = useState<Character[]>(initChars);
+    const [journal, setJournal] = useState<JournalEntry[]>([]);
+    const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
     const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
     const [openSheetIds, setOpenSheetIds] = useState<string[]>([]);
     const [combatants, setCombatants] = useState<Combatant[]>([]);
     const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
     const [currentAdvantage, setCurrentAdvantage] = useState<Advantages>({ playerAdvantage: 0, enemyAdvantage: 0 });
 
-    const [showShopManager, setShowShopManager] = useState(true);
+    const [showShopManager, setShowShopManager] = useState(false);
     const [showCombatResolver, setShowCombatResolver] = useState(false);
+    const [showJournalManager, setShowJournalManager] = useState(false);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
         item: Armor | Weapon | Item;
@@ -90,12 +92,29 @@ function App() {
         setLogEntries(prev => [...prev, newEntry]);
     };
 
+    /**
+     * Save the current application state to persistent storage
+     * This packages all data and sends it to the main process via IPC
+     */
+    const saveApplicationState = (updatedCharacters: Character[], updatedJournal?: JournalEntry[], updatedMapPinStates?: Record<string, MapPinState>) => {
+        const campaignData = {
+            characters: updatedCharacters,
+            journal: updatedJournal ?? journal,
+            mapPinStates: updatedMapPinStates ?? mapPinStates,
+            version: '1.0.0',
+            lastModified: new Date().toISOString(),
+        };
+        window.ipcRenderer.saveData(campaignData);
+    };
+
     const handleCharacterUpdate = (updatedCharacter: Character) => {
-        setCharacters(prevChars =>
-            prevChars.map(char =>
-                char.id === updatedCharacter.id ? updatedCharacter : char
-            )
+        const updatedCharacters = characters.map(char =>
+            char.id === updatedCharacter.id ? updatedCharacter : char
         );
+        setCharacters(updatedCharacters);
+        
+        // Save to persistent storage
+        saveApplicationState(updatedCharacters);
 
         const newMessage: AssignCharacterMessage = {
             type: "ASSIGN_CHARACTER",
@@ -124,14 +143,10 @@ function App() {
     }
 
     const handleXpAward = (characterId: string, amount: number) => {
-        const message: AwardXpMessage = { type: 'AWARD_XP', payload: { amount } };
         const character = characters.find(c => c.id === characterId);
         if (!character) return;
         const newChar = { ...character, xp: { ...character.xp, current: character.xp.current + amount } };
-        setCharacters(prevChars =>
-            prevChars.map(c => (c.id === characterId ? newChar : c))
-        );
-        window.ipcRenderer.sendToPlayer(characterId, message);
+        handleCharacterUpdate(newChar);
         addLogEntry('system', `Awarded ${amount} XP to character ${characterId}.`);
     };
 
@@ -165,23 +180,24 @@ function App() {
             newCurrency.bp = remainingBp;
         }
         const newChar = { ...character, currency: newCurrency };
-        setCharacters(prevChars =>
-            prevChars.map(c => (c.id === characterId ? newChar : c))
-        );
-
-        const message: AwardCurrencyMessage = { type: 'AWARD_CURRENCY', payload: { currency: newCurrency } };
-        window.ipcRenderer.sendToPlayer(characterId, message);
+        handleCharacterUpdate(newChar);
         addLogEntry('system', `Awarded currency to character ${characterId}: ${amount.gc || 0} GC, ${amount.ss || 0} SS, ${amount.bp || 0} BP.`);
     };
 
     const handleCreateCharacter = () => {
         const newChar = createBlankCharacter();
-        setCharacters(prev => [...prev, newChar]);
+        const updatedCharacters = [...characters, newChar];
+        setCharacters(updatedCharacters);
+        saveApplicationState(updatedCharacters);
     };
 
     const handleGenerateNPC = () => {
         const newNPC = generateRandomNpc();
-        setCharacters(prev => [...prev, newNPC]);
+        const updatedCharacters = [...characters, newNPC];
+        setCharacters(updatedCharacters);
+        
+        // Save to persistent storage
+        saveApplicationState(updatedCharacters);
     }
 
     const handleDeleteCharacter = (characterId: string) => {
@@ -191,8 +207,12 @@ function App() {
 
         console.log("deleting " + characterId);
         if (window.confirm(`Are you sure you want to delete ${characterToDelete.name}? This cannot be undone.`)) {
-            setCharacters(prev => prev.filter(char => char.id !== characterId));
+            const updatedCharacters = characters.filter(char => char.id !== characterId);
+            setCharacters(updatedCharacters);
             setOpenSheetIds(prev => prev.filter(id => id !== characterId));
+            
+            // Save to persistent storage
+            saveApplicationState(updatedCharacters);
         }
     };
 
@@ -235,11 +255,6 @@ function App() {
                 return { id, name: id, description: '', stack };
             }) : [];
             const newChar = { ...char, status: { ...char.status, wounds: { ...char.status.wounds, current: updatedCombatant.currentWounds }, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }, conditions: newConds };
-            setCharacters(prevChars =>
-                prevChars.map(c =>
-                    c.id === newChar.id ? newChar : c
-                )
-            );
             handleCharacterUpdate(newChar);
         }
         setCombatants(prev => prev.map(c => c.id === updatedCombatant.id ? updatedCombatant : c));
@@ -250,6 +265,91 @@ function App() {
         setCurrentAdvantage({ playerAdvantage: 0, enemyAdvantage: 0 });
         setCurrentTurnId(null);
     };
+
+    const handleUpdateJournal = (updatedJournal: JournalEntry[]) => {
+        setJournal(updatedJournal);
+        // Save to persistent storage
+        saveApplicationState(characters, updatedJournal);
+    };
+
+    const handleTogglePinDiscovery = (locationId: string, characterIds: string[]) => {
+        console.log(`Toggling pin discovery for location ${locationId} and characters ${characterIds.join(', ')}`);
+        const currentPinState = mapPinStates[locationId] || { playerDiscovered: [] };
+        
+        const updatedPlayerDiscovered = [...currentPinState.playerDiscovered];
+        characterIds.forEach(characterId => {
+            const isCurrentlyDiscovered = currentPinState.playerDiscovered.includes(characterId);
+            if (isCurrentlyDiscovered) {
+                updatedPlayerDiscovered.splice(updatedPlayerDiscovered.indexOf(characterId), 1);
+            } else {
+                updatedPlayerDiscovered.push(characterId);
+            }
+        });
+
+        const updatedMapPinStates = {
+            ...mapPinStates,
+            [locationId]: {
+                ...currentPinState,
+                playerDiscovered: updatedPlayerDiscovered
+            }
+        };
+
+        console.log(`Updated pin state for location ${locationId}:`, updatedMapPinStates[locationId]);
+        setMapPinStates(updatedMapPinStates);
+        saveApplicationState(characters, journal, updatedMapPinStates);
+    };
+
+    useEffect(() => {
+        // Load initial data on component mount
+        window.ipcRenderer.getInitialData().then((data: any) => {
+            if (data && data.characters && data.characters.length > 0) {
+                setCharacters(data.characters);
+                console.log('Loaded campaign data from file system:', data);
+            }
+            if (data && data.journal) {
+                setJournal(data.journal);
+            }
+            
+            // Initialize mapPinStates if not present
+            if (data && data.mapPinStates) {
+                setMapPinStates(data.mapPinStates);
+            } else {
+                // Create initial map pin states for all locations
+                const initialMapPinStates: Record<string, MapPinState> = {};
+                gameData.locations.forEach((location) => {
+                    initialMapPinStates[location.id] = {
+                        playerDiscovered: [],
+                    };
+                });
+                setMapPinStates(initialMapPinStates);
+                
+                // Save the initialized state
+                if (data && data.characters) {
+                    saveApplicationState(data.characters, data.journal || [], initialMapPinStates);
+                }
+            }
+        }).catch((error: any) => {
+            console.error('Failed to load initial data:', error);
+        });
+
+        // Listen for data updates from the main process
+        const cleanupDataUpdateListener = window.ipcRenderer.onDataUpdated((data: any) => {
+            if (data && data.characters) {
+                setCharacters(data.characters);
+                console.log('Received data update from main process');
+            }
+            if (data && data.journal) {
+                setJournal(data.journal);
+            }
+            if (data && data.mapPinStates) {
+                setMapPinStates(data.mapPinStates);
+            }
+        });
+
+        return () => {
+            cleanupDataUpdateListener();
+        };
+    }, []);
 
     useEffect(() => {
         window.ipcRenderer.getServerStatus().then((info) => {
@@ -355,6 +455,46 @@ function App() {
                 port={serverInfo.port}
                 clients={connectedPlayers} />
 
+            <div style={{
+                position: 'fixed',
+                top: '10px',
+                right: '10px',
+                display: 'flex',
+                gap: '10px',
+                zIndex: 100
+            }}>
+                <button
+                    onClick={() => setShowJournalManager(true)}
+                    style={{
+                        padding: '10px 20px',
+                        background: '#2d5016',
+                        color: '#d4af37',
+                        border: '2px solid #3d6f1f',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '14px'
+                    }}
+                >
+                    📜 Journal
+                </button>
+                <button
+                    onClick={() => setShowShopManager(!showShopManager)}
+                    style={{
+                        padding: '10px 20px',
+                        background: showShopManager ? '#8b6914' : '#2c1810',
+                        color: '#d4af37',
+                        border: '2px solid #8b6914',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '14px'
+                    }}
+                >
+                    🏪 Shop
+                </button>
+            </div>
+
             <GameLog entries={logEntries} />
 
             <CharacterRoster
@@ -382,7 +522,13 @@ function App() {
                 advantages={currentAdvantage}
             /> )}
 
-            <MapDisplay gameData={gameData} />
+            <MapDisplay 
+                gameData={gameData} 
+                mapPinStates={mapPinStates}
+                characters={characters}
+                onTogglePinDiscovery={handleTogglePinDiscovery}
+                isGM={true}
+            />
 
             {showCombatResolver && (<CombatResolver
                 characters={characters}
@@ -413,6 +559,15 @@ function App() {
             <AtmospherePanel />
 
             {showShopManager && <ShopManager onClose={() => setShowShopManager(false)} />}
+
+            {showJournalManager && (
+                <JournalManager
+                    journal={journal}
+                    characters={characters}
+                    onUpdateJournal={handleUpdateJournal}
+                    onClose={() => setShowJournalManager(false)}
+                />
+            )}
 
             {purchaseRequest && (
                 <PurchaseRequestModal

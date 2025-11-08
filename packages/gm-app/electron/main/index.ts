@@ -6,7 +6,9 @@ import { Server } from 'socket.io'
 import path from 'node:path'
 import os from 'node:os'
 import { update } from './update'
-import { startWebSocketServer, sendToPlayer } from './server'
+import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates } from './server'
+import { loadCampaignData, saveCampaignData } from './dataManager'
+import { CampaignState } from '@wfrp/shared'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -86,7 +88,11 @@ async function createWindow() {
   startWebSocketServer(win);
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  // Load campaign data on startup
+  loadCampaignData();
+  createWindow();
+})
 
 app.on('window-all-closed', () => {
   win = null
@@ -127,3 +133,49 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg })
   }
 });
+
+// ==================== Campaign Data Persistence IPC Handlers ====================
+
+/**
+ * Handle request for initial campaign data
+ * Returns the entire campaign data object loaded from disk
+ */
+ipcMain.handle('get-initial-data', async () => {
+  try {
+    const data = loadCampaignData();
+    console.log('Sending initial data to renderer');
+    return data;
+  } catch (error) {
+    console.error('Error loading initial data:', error);
+    throw error;
+  }
+});
+
+/**
+ * Handle save data request from renderer
+ * Saves the data to disk and broadcasts the update to all windows
+ */
+ipcMain.on('save-data', (event, data: CampaignState) => {
+  try {
+    saveCampaignData(data);
+    console.log('Data saved successfully');
+    
+    // Broadcast the updated data to all renderer windows
+    if (win && !win.isDestroyed()) {
+      win.webContents.send('data-updated', data);
+    }
+    
+    // Broadcast journal entries to all connected players
+    if (data.journal && data.journal.length > 0) {
+      broadcastJournalEntries(data.journal);
+    }
+    
+    // Broadcast map pin states to all connected players
+    if (data.mapPinStates) {
+      broadcastMapPinStates(data.mapPinStates);
+    }
+  } catch (error) {
+    console.error('Error saving data:', error);
+  }
+});
+

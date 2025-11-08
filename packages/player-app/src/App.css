@@ -37,7 +37,7 @@
 .advancement-controls {
   position: absolute;
   left: 1%;
-  top: 50%;
+  top: 40%;
   background: linear-gradient(to bottom, var(--color-parchment), var(--color-parchment-dark));
   border: 3px solid var(--color-leather-medium);
   border-radius: 0;

@@ -4,18 +4,29 @@ import styles from './LocationPin.module.css';
 interface LocationPinProps {
   x: number;
   y: number;
-  onClick: () => void; 
+  onClick: () => void;
+  onContextMenu?: (event: React.MouseEvent) => void;
+  isDiscovered?: boolean; // Visual indicator for GM
 }
 
-const LocationPin: React.FC<LocationPinProps> = ({ x, y, onClick }) => {
+const LocationPin: React.FC<LocationPinProps> = ({ x, y, onClick, onContextMenu, isDiscovered = false }) => {
+  const handleContextMenu = (event: React.MouseEvent) => {
+    event.preventDefault();
+    if (onContextMenu) {
+      onContextMenu(event);
+    }
+  };
+
   return (
     <div
-      className={styles.pin}
+      className={`${styles.pin} ${isDiscovered ? styles.discovered : styles.hidden}`}
       style={{
         left: `${x}px`,
         top: `${y}px`,
       }}
       onClick={onClick}
+      onContextMenu={handleContextMenu}
+      title={isDiscovered ? "Discovered (Right-click for options)" : "Hidden (Right-click for options)"}
     />
   );
 };

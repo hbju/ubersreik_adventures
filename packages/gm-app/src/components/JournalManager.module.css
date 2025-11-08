@@ -1,0 +1,297 @@
+.journalManager {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 1200px;
+  height: 80vh;
+  background: linear-gradient(135deg, #2c1810 0%, #3e2723 100%);
+  border: 3px solid #8b6914;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  z-index: 1010;
+  color: #d4af37;
+  font-family: 'Cinzel', serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #8b6914;
+}
+
+.header h2 {
+  margin: 0;
+  color: #d4af37;
+  font-size: 28px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.closeButton {
+  background: #8b0000;
+  color: #fff;
+  border: 2px solid #660000;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: #a00000;
+  transform: scale(1.05);
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 300px;
+  background: rgba(0, 0, 0, 0.2);
+  border-right: 2px solid #8b6914;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarHeader {
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #8b6914;
+}
+
+.createButton {
+  width: 100%;
+  background: #2d5016;
+  color: #d4af37;
+  border: 2px solid #3d6f1f;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.createButton:hover {
+  background: #3d6f1f;
+  transform: scale(1.02);
+}
+
+.entriesList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.entryItem {
+  padding: 12px;
+  margin-bottom: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.entryItem:hover {
+  background: rgba(139, 105, 20, 0.2);
+  border-color: #8b6914;
+}
+
+.entryItem.selected {
+  background: rgba(139, 105, 20, 0.3);
+  border-color: #d4af37;
+}
+
+.entryTitle {
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #d4af37;
+}
+
+.entryShared {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.noSelection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #888;
+  font-size: 18px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #d4af37;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 97%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #8b6914;
+  border-radius: 6px;
+  color: #d4af37;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.formGroup textarea {
+  min-height: 200px;
+  resize: vertical;
+  font-family: 'Georgia', serif;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+.sharingSection {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid #8b6914;
+  border-radius: 6px;
+}
+
+.sharingSection h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #d4af37;
+}
+
+.characterCheckboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.checkboxLabel:hover {
+  background: rgba(139, 105, 20, 0.2);
+}
+
+.checkboxLabel input {
+  margin-right: 8px;
+  width: auto;
+}
+
+.allCheckbox {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: rgba(45, 80, 22, 0.3);
+  border: 2px solid #3d6f1f;
+  border-radius: 6px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #8b6914;
+}
+
+.saveButton {
+  flex: 1;
+  background: #2d5016;
+  color: #d4af37;
+  border: 2px solid #3d6f1f;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.saveButton:hover {
+  background: #3d6f1f;
+}
+
+.deleteButton {
+  background: #8b0000;
+  color: #fff;
+  border: 2px solid #660000;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.deleteButton:hover {
+  background: #a00000;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1009;
+}
+
+/* Scrollbar styling */
+.entriesList::-webkit-scrollbar,
+.editor::-webkit-scrollbar {
+  width: 10px;
+}
+
+.entriesList::-webkit-scrollbar-track,
+.editor::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.entriesList::-webkit-scrollbar-thumb,
+.editor::-webkit-scrollbar-thumb {
+  background: #8b6914;
+  border-radius: 5px;
+}
+
+.entriesList::-webkit-scrollbar-thumb:hover,
+.editor::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}

@@ -8,6 +8,9 @@ interface Window {
       sendToPlayer: (socketId: string, message: any) => void; 
       sendToAllPlayers: (message: any) => void;
       onPlayerMessageReceived: (callback: (value: any) => void) => () => void; 
-      assignCharacterToPlayer: (characterId: string, socketId: string) => void; 
+      assignCharacterToPlayer: (characterId: string, socketId: string) => void;
+      getInitialData: () => Promise<any>;
+      saveData: (data: any) => void;
+      onDataUpdated: (callback: (value: any) => void) => () => void;
     };
 }

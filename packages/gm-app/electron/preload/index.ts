@@ -46,6 +46,37 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     }
   },
 
+  // ==================== Campaign Data Persistence API ====================
+  
+  /**
+   * Get initial campaign data from the main process
+   * @returns Promise resolving to the campaign data
+   */
+  getInitialData() {
+    return ipcRenderer.invoke('get-initial-data')
+  },
+
+  /**
+   * Save campaign data to the main process
+   * @param data The campaign data to save
+   */
+  saveData(data: any) {
+    return ipcRenderer.send('save-data', data)
+  },
+
+  /**
+   * Listen for data updates from the main process
+   * @param callback Function to call when data is updated
+   * @returns Cleanup function to remove the listener
+   */
+  onDataUpdated(callback: (value: any) => void) {
+    const listener = (_event: any, value: any) => callback(value);
+    ipcRenderer.on('data-updated', listener)
+    return () => {
+      ipcRenderer.removeListener('data-updated', listener)
+    }
+  },
+
 
   // You can expose other APTs you need here.
   // ...

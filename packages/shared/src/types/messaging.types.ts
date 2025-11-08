@@ -1,4 +1,4 @@
-import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages } from './wfrp.types';
+import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState } from './wfrp.types';
 
 interface BaseMessage<T extends string, P> {
   type: T;
@@ -21,8 +21,10 @@ export type RequestOpposedTestMessage = BaseMessage<'REQUEST_OPPOSED_TEST', {
   targetNumber: number;
   modifier: number;
 }>;
+export type JournalUpdateMessage = BaseMessage<'JOURNAL_UPDATE', { entries: JournalEntry[] }>;
+export type MapStateUpdateMessage = BaseMessage<'MAP_STATE_UPDATE', { pinStates: Record<string, MapPinState> }>;
 
-export type ServerToClientMessage = AssignCharacterMessage | RequestTestMessage | AwardXpMessage | CharacterUpdateMessage | AwardCurrencyMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage;
+export type ServerToClientMessage = AssignCharacterMessage | RequestTestMessage | AwardXpMessage | CharacterUpdateMessage | AwardCurrencyMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | JournalUpdateMessage | MapStateUpdateMessage;
 
 // == Player to GM Messages ==
 

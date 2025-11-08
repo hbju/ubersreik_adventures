@@ -1,0 +1,238 @@
+import React, { useState } from 'react';
+import { JournalEntry, Character } from '@wfrp/shared';
+import styles from './JournalManager.module.css';
+
+interface JournalManagerProps {
+  journal: JournalEntry[];
+  characters: Character[];
+  onUpdateJournal: (updatedJournal: JournalEntry[]) => void;
+  onClose: () => void;
+}
+
+export const JournalManager: React.FC<JournalManagerProps> = ({
+  journal,
+  characters,
+  onUpdateJournal,
+  onClose,
+}) => {
+  const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
+  const [editingEntry, setEditingEntry] = useState<JournalEntry | null>(null);
+
+  const handleCreateEntry = () => {
+    const newEntry: JournalEntry = {
+      id: crypto.randomUUID(),
+      title: 'New Entry',
+      content: '',
+      imageUrl: '',
+      sharedWith: [],
+    };
+    setSelectedEntry(newEntry);
+    setEditingEntry(newEntry);
+  };
+
+  const handleSelectEntry = (entry: JournalEntry) => {
+    setSelectedEntry(entry);
+    setEditingEntry({ ...entry });
+  };
+
+  const handleSaveEntry = () => {
+    if (!editingEntry) return;
+
+    const existingIndex = journal.findIndex((e) => e.id === editingEntry.id);
+    let updatedJournal: JournalEntry[];
+
+    if (existingIndex >= 0) {
+      // Update existing entry
+      updatedJournal = journal.map((e) =>
+        e.id === editingEntry.id ? editingEntry : e
+      );
+    } else {
+      // Add new entry
+      updatedJournal = [...journal, editingEntry];
+    }
+
+    onUpdateJournal(updatedJournal);
+    setSelectedEntry(editingEntry);
+  };
+
+  const handleDeleteEntry = () => {
+    if (!editingEntry) return;
+
+    if (
+      window.confirm(
+        `Are you sure you want to delete "${editingEntry.title}"? This cannot be undone.`
+      )
+    ) {
+      const updatedJournal = journal.filter((e) => e.id !== editingEntry.id);
+      onUpdateJournal(updatedJournal);
+      setSelectedEntry(null);
+      setEditingEntry(null);
+    }
+  };
+
+  const handleFieldChange = (
+    field: keyof JournalEntry,
+    value: string | string[]
+  ) => {
+    if (!editingEntry) return;
+    setEditingEntry({ ...editingEntry, [field]: value });
+  };
+
+  const handleToggleCharacter = (characterId: string) => {
+    if (!editingEntry) return;
+
+    const sharedWith = editingEntry.sharedWith.filter((id) => id !== 'all');
+    const isShared = sharedWith.includes(characterId);
+
+    const newSharedWith = isShared
+      ? sharedWith.filter((id) => id !== characterId)
+      : [...sharedWith, characterId];
+
+    handleFieldChange('sharedWith', newSharedWith);
+  };
+
+  const handleToggleAll = () => {
+    if (!editingEntry) return;
+
+    const hasAll = editingEntry.sharedWith.includes('all');
+    const newSharedWith = hasAll ? editingEntry.sharedWith.filter((id) => id !== 'all') : [...editingEntry.sharedWith, 'all'];
+
+    handleFieldChange('sharedWith', newSharedWith);
+  };
+
+  const isSharedWithAll = editingEntry?.sharedWith.includes('all') ?? false;
+
+  return (
+    <>
+      <div className={styles.overlay} onClick={onClose} />
+      <div className={styles.journalManager}>
+        <div className={styles.header}>
+          <h2>📜 Journal Manager</h2>
+          <button className={styles.closeButton} onClick={onClose}>
+            Close
+          </button>
+        </div>
+
+        <div className={styles.content}>
+          {/* Sidebar with entry list */}
+          <div className={styles.sidebar}>
+            <div className={styles.sidebarHeader}>
+              <button className={styles.createButton} onClick={handleCreateEntry}>
+                ➕ Create New Entry
+              </button>
+            </div>
+
+            <div className={styles.entriesList}>
+              {journal.map((entry) => (
+                <div
+                  key={entry.id}
+                  className={`${styles.entryItem} ${
+                    selectedEntry?.id === entry.id ? styles.selected : ''
+                  }`}
+                  onClick={() => handleSelectEntry(entry)}
+                >
+                  <div className={styles.entryTitle}>{entry.title}</div>
+                  <div className={styles.entryShared}>
+                    {entry.sharedWith.includes('all')
+                      ? 'Shared with: All'
+                      : entry.sharedWith.length > 0
+                      ? `Shared with: ${entry.sharedWith.length} character(s)`
+                      : 'Not shared'}
+                  </div>
+                </div>
+              ))}
+              {journal.length === 0 && (
+                <div style={{ padding: '20px', textAlign: 'center', color: '#888' }}>
+                  No entries yet. Create one to get started!
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Editor panel */}
+          <div className={styles.editor}>
+            {editingEntry ? (
+              <>
+                <div className={styles.formGroup}>
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    value={editingEntry.title}
+                    onChange={(e) => handleFieldChange('title', e.target.value)}
+                    placeholder="Enter entry title..."
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Content</label>
+                  <textarea
+                    value={editingEntry.content}
+                    onChange={(e) => handleFieldChange('content', e.target.value)}
+                    placeholder="Enter entry content... You can describe lore, clues, or information the players discover."
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Image URL (Optional)</label>
+                  <input
+                    type="text"
+                    value={editingEntry.imageUrl || ''}
+                    onChange={(e) => handleFieldChange('imageUrl', e.target.value)}
+                    placeholder="https://example.com/image.jpg"
+                  />
+                </div>
+
+                <div className={styles.sharingSection}>
+                  <h3>Share With</h3>
+
+                  <div className={styles.allCheckbox}>
+                    <label className={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={isSharedWithAll}
+                        onChange={handleToggleAll}
+                      />
+                      <strong>Share with all players</strong>
+                    </label>
+                  </div>
+
+                  {!isSharedWithAll && (
+                    <div className={styles.characterCheckboxes}>
+                      {characters.map((character) => (
+                        <label key={character.id} className={styles.checkboxLabel}>
+                          <input
+                            type="checkbox"
+                            checked={editingEntry.sharedWith.includes(character.id)}
+                            onChange={() => handleToggleCharacter(character.id)}
+                          />
+                          {character.name}
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className={styles.actions}>
+                  <button className={styles.saveButton} onClick={handleSaveEntry}>
+                    💾 Save Entry
+                  </button>
+                  {journal.some((e) => e.id === editingEntry.id) && (
+                    <button className={styles.deleteButton} onClick={handleDeleteEntry}>
+                      🗑️ Delete
+                    </button>
+                  )}
+                </div>
+              </>
+            ) : (
+              <div className={styles.noSelection}>
+                Select an entry to edit or create a new one
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default JournalManager;

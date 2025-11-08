@@ -152,3 +152,23 @@ export interface GameData {
   locations: Location[];
   characters: Character[];
 }
+
+export interface JournalEntry {
+  id: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  sharedWith: ('all' | string)[]; // Array of character IDs or 'all'
+}
+
+export interface MapPinState {
+  playerDiscovered: string[]; // Array of character IDs who have discovered this location
+}
+
+export interface CampaignState {
+  characters: Character[];
+  journal: JournalEntry[];
+  mapPinStates: Record<string, MapPinState>; // locationId -> MapPinState
+  version: string;
+  lastModified: string;
+}
