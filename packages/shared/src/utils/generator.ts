@@ -20,6 +20,7 @@ export const generateRandomNpc = (): Character => {
 
     return {
         id: crypto.randomUUID(), 
+        userId: null,
         name: name,
         career: "",
         xp: { current: 0, spent: 0 },
@@ -60,6 +61,7 @@ export const createBlankCharacter = (): Character => {
     const defaultStat = 30;
     return {
         id: crypto.randomUUID(),
+        userId: null,
         name: "New Character",
         career: "",
         xp: { current: 0, spent: 0 },

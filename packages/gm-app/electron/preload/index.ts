@@ -29,14 +29,14 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
       ipcRenderer.removeListener('server-status-update', listener)
     }
   },
-  sendToPlayer(socketId: string, message: any) {
-    return ipcRenderer.send('send-to-player', socketId, message)
+  sendToPlayer(userId: string, message: any) {
+    return ipcRenderer.send('send-to-player', userId, message)
   },
   sendToAllPlayers(message: any) {
     return ipcRenderer.send('send-to-all-players', message)
   },
-  assignCharacterToPlayer(characterId: string, socketId: string) {
-    return ipcRenderer.send('assign-character-to-player', characterId, socketId)
+  assignCharacterToPlayer(characterId: string, userId: string) {
+    return ipcRenderer.send('assign-character-to-player', characterId, userId)
   },
   onPlayerMessageReceived(callback: (value: any) => void) {
     const listener = (_event: any, value: any) => callback(value);

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage } from '@wfrp/shared';
 
 interface OpposedTestRequest {
   testId: string;
@@ -13,6 +13,9 @@ interface OpposedTestRequest {
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
   const [character, setCharacter] = useState<Character | null>(null);
   const [shopItems, setShopItems] = useState<string[]>([]);
   const [combatants, setCombatants] = useState<Combatant[]>([]);
@@ -23,47 +26,66 @@ export const useSocket = () => {
   const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
 
 
-  const connect = useCallback((ipAddress: string) => {
+  const connect = useCallback((ipAddress: string, username: string, password: string) => {
     if (socket?.connected) return;
 
     console.log(`[CLIENT] Attempting to connect to ws://${ipAddress}:3003`);
+    setAuthError(null);
     const newSocket = io(`ws://${ipAddress}:3003`);
 
     newSocket.on('connect', () => {
       console.log(`[CLIENT] Connected successfully with ID: ${newSocket.id}`);
       setIsConnected(true);
+      
+      // Send login request immediately after connection
+      const loginMessage: LoginRequestMessage = {
+        type: 'LOGIN_REQUEST',
+        payload: { username, password }
+      };
+      console.log('[CLIENT] Sending login request...');
+      newSocket.emit('player-message', loginMessage);
     });
 
     newSocket.on('disconnect', () => {
       console.log('[CLIENT] Disconnected from server.');
       setIsConnected(false);
+      setIsAuthenticated(false);
+      setUsername(null);
+      setCharacter(null);
     });
 
     newSocket.on('gm-message', (message: ServerToClientMessage) => {
       console.log('[CLIENT] Received message from GM:', message);
+      
+      // Handle authentication responses
+      if (message.type === 'LOGIN_SUCCESS') {
+        console.log('[CLIENT] Login successful!');
+        setIsAuthenticated(true);
+        setUsername(message.payload.username);
+        setAuthError(null);
+        
+        // Auto-assign character if available
+        if (message.payload.character) {
+          console.log('[CLIENT] Character assigned:', message.payload.character.name);
+          setCharacter(message.payload.character);
+        } else {
+          console.log('[CLIENT] No character assigned to this user');
+        }
+        return;
+      }
+
+      if (message.type === 'LOGIN_FAILURE') {
+        console.log('[CLIENT] Login failed:', message.payload.reason);
+        setIsAuthenticated(false);
+        setAuthError(message.payload.reason);
+        // Disconnect socket on failed login
+        newSocket.disconnect();
+        return;
+      }
+
+      // Handle character assignment (legacy support)
       if (message.type === 'ASSIGN_CHARACTER') {
         setCharacter(message.payload.character);
-      }
-
-      if (message.type === 'AWARD_XP') {
-        console.log('[CLIENT] Awarding XP:', message.payload.amount);
-        setCharacter(prevChar => {
-          if (!prevChar) return prevChar;
-          const newChar = { ...prevChar };
-          const newXp = { ...newChar.xp };
-          newXp.current += message.payload.amount;
-          newChar.xp = newXp;
-          return newChar;
-        });
-      }
-
-      if (message.type === 'AWARD_CURRENCY') {
-        console.log('[CLIENT] Awarding Currency:', message.payload);
-        setCharacter(prevChar => {
-          if (!prevChar) return prevChar;
-          const newChar = { ...prevChar, currency: { ...message.payload.currency } };
-          return newChar;
-        });
       }
 
       if (message.type === 'UPDATE_SHOP_INVENTORY') {
@@ -130,5 +152,22 @@ export const useSocket = () => {
     };
   }, [socket]);
 
-  return { isConnected, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, journalEntries, mapPinStates, connect, disconnect, sendMessage };
+  return { 
+    isConnected, 
+    isAuthenticated, 
+    authError, 
+    username,
+    character, 
+    shopItems, 
+    combatants, 
+    currentTurnId, 
+    currentAdvantage, 
+    opposedTestRequest, 
+    setOpposedTestRequest, 
+    journalEntries, 
+    mapPinStates, 
+    connect, 
+    disconnect, 
+    sendMessage 
+  };
 };

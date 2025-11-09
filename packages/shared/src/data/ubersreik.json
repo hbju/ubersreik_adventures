@@ -70,6 +70,7 @@
     "characters": [
       {
         "id": "hbju",
+        "userId": "",
         "name": "Hbju Arakasai",
         "career": "Guard",
         "xp": { "current": 250, "spent": 500 },
@@ -113,6 +114,7 @@
       },
       {
         "id": "frazaie",
+        "userId": "",
         "name": "Frazaie Arakasai",
         "career": "Rogue",
         "xp": { "current": 300, "spent": 400 },

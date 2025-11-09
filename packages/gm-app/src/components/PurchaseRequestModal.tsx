@@ -6,7 +6,7 @@ interface PurchaseRequestModalProps {
   playerName: string;
   item: Armor | Weapon | Item;
   playerCurrency: Currency;
-  characterId: string;
+  userId: string;
   onClose: () => void;
   onApprove: (item: Armor | Weapon | Item) => void;
 }
@@ -15,7 +15,7 @@ export const PurchaseRequestModal: React.FC<PurchaseRequestModalProps> = ({
   playerName,
   item,
   playerCurrency,
-  characterId,
+  userId,
   onClose,
   onApprove,
 }) => {
@@ -31,7 +31,7 @@ export const PurchaseRequestModal: React.FC<PurchaseRequestModalProps> = ({
       },
     };
 
-    window.ipcRenderer.sendToPlayer(characterId, response);
+    window.ipcRenderer.sendToPlayer(userId, response);
     onApprove(item);
     onClose();
   };
@@ -46,7 +46,7 @@ export const PurchaseRequestModal: React.FC<PurchaseRequestModalProps> = ({
       },
     };
 
-    window.ipcRenderer.sendToPlayer(characterId, response);
+    window.ipcRenderer.sendToPlayer(userId, response);
     onClose();
   };
 

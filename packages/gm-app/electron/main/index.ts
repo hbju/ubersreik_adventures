@@ -7,7 +7,7 @@ import path from 'node:path'
 import os from 'node:os'
 import { update } from './update'
 import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates } from './server'
-import { loadCampaignData, saveCampaignData } from './dataManager'
+import { loadCampaignData, saveCampaignData, clearCampaignCache } from './dataManager'
 import { CampaignState } from '@wfrp/shared'
 
 const require = createRequire(import.meta.url)
@@ -90,6 +90,7 @@ async function createWindow() {
 
 app.whenReady().then(() => {
   // Load campaign data on startup
+  clearCampaignCache();
   loadCampaignData();
   createWindow();
 })

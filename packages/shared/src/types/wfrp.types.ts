@@ -111,10 +111,19 @@ export interface Currency {
   bp: number; // Brass Pennies
 }
 
+export interface User {
+  id: string;
+  username: string;
+  passwordHash: string; 
+  characterId: string | null;
+  createdAt: string;
+}
+
 export interface Character {
   id: string;
   name: string;
   career: string;
+  userId: string | null; // null if unassigned
   xp: XP;
   characteristics: {
     ws: Characteristic;
@@ -167,6 +176,7 @@ export interface MapPinState {
 
 export interface CampaignState {
   characters: Character[];
+  users: User[]; 
   journal: JournalEntry[];
   mapPinStates: Record<string, MapPinState>; // locationId -> MapPinState
   version: string;

@@ -3,13 +3,15 @@ import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
+import ServerStatus from './components/server/ServerStatus';
 import { ShopManager } from './components/ShopManager';
 import { PurchaseRequestModal } from './components/PurchaseRequestModal';
 import { JournalManager } from './components/JournalManager';
+import { UserManager } from './components/UserManager';
 
 import {
-    socket,
     Character,
+    User,
     Combatant,
     Currency,
     generateRandomNpc,
@@ -23,7 +25,6 @@ import {
     GameLog,
     LogEntry,
     equilibrateCurrency,
-    RequestPurchaseMessage,
     UpdateInitiativeTrackerMessage,
     OpposedTestResultMessage,
     Armor,
@@ -38,7 +39,6 @@ import {
 import React, { useState, useEffect } from 'react';
 
 import './App.css';
-import ServerStatus from './components/server/ServerStatus';
 
 interface ServerStatusData {
     ip: string;
@@ -58,8 +58,8 @@ function App() {
         return calculateCharacteristicBonus(character.characteristics.wp) + calculateCharacteristicBonus(character.characteristics.t);
     }
 
-    const initChars = (gameData.characters as Character[]).map(c => (
-        { ...c, status: { ...c.status, wounds: { ...c.status.wounds, max: calculateMaxWounds(c) }, corruption: { ...c.status.corruption, max: calculateMaxCorruption(c) } } }
+    const initChars = (gameData.characters as any[]).map(c => (
+        { ...c, userId: null, status: { ...c.status, wounds: { ...c.status.wounds, max: calculateMaxWounds(c) }, corruption: { ...c.status.corruption, max: calculateMaxCorruption(c) } } }
     ));
 
     const [serverInfo, setServerInfo] = useState({ ip: 'Loading...', port: 0 });
@@ -68,6 +68,7 @@ function App() {
     const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
 
     const [characters, setCharacters] = useState<Character[]>(initChars);
+    const [users, setUsers] = useState<User[]>([]);
     const [journal, setJournal] = useState<JournalEntry[]>([]);
     const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
     const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
@@ -79,11 +80,12 @@ function App() {
     const [showShopManager, setShowShopManager] = useState(false);
     const [showCombatResolver, setShowCombatResolver] = useState(false);
     const [showJournalManager, setShowJournalManager] = useState(false);
+    const [showUserManager, setShowUserManager] = useState(false);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
         item: Armor | Weapon | Item;
         playerCurrency: Currency;
-        characterId: string;
+        charId: string;
     } | null>(null);
     const [opposedTestResults, setOpposedTestResults] = useState<Map<string, OpposedTestResultMessage['payload']>>(new Map());
 
@@ -96,9 +98,14 @@ function App() {
      * Save the current application state to persistent storage
      * This packages all data and sends it to the main process via IPC
      */
-    const saveApplicationState = (updatedCharacters: Character[], updatedJournal?: JournalEntry[], updatedMapPinStates?: Record<string, MapPinState>) => {
+    const saveApplicationState = (updatedCharacters: Character[], updatedUsers?: User[], updatedJournal?: JournalEntry[], updatedMapPinStates?: Record<string, MapPinState>) => {
+        if (!updatedCharacters || updatedCharacters.length === 0) {
+            console.warn("No characters to save, aborting save operation.");
+            return;
+        }
         const campaignData = {
             characters: updatedCharacters,
+            users: updatedUsers ?? users,
             journal: updatedJournal ?? journal,
             mapPinStates: updatedMapPinStates ?? mapPinStates,
             version: '1.0.0',
@@ -112,7 +119,7 @@ function App() {
             char.id === updatedCharacter.id ? updatedCharacter : char
         );
         setCharacters(updatedCharacters);
-        
+
         // Save to persistent storage
         saveApplicationState(updatedCharacters);
 
@@ -121,25 +128,13 @@ function App() {
             payload: { character: updatedCharacter }
         };
 
-        window.ipcRenderer.sendToPlayer(updatedCharacter.id, newMessage);
+        window.ipcRenderer.sendToPlayer(updatedCharacter.userId || '', newMessage);
     }
 
     const handleToggleCharacterSheet = (characterId: string) => {
         setOpenSheetIds(prevOpenIds =>
             prevOpenIds.includes(characterId) ? prevOpenIds.filter(id => id !== characterId) : [...prevOpenIds, characterId]
         );
-    }
-
-    const handleAssignCharacter = (character: Character, socketId: string) => {
-        const message: AssignCharacterMessage = {
-            type: "ASSIGN_CHARACTER",
-            payload: { character }
-        };
-
-        window.ipcRenderer.sendToPlayer(socketId, message);
-        window.ipcRenderer.assignCharacterToPlayer(character.id, socketId);
-        setAssignedCharacters(prev => [...prev, character.id]);
-        console.log('Assigned ' + character.name + ' to player ' + socketId)
     }
 
     const handleXpAward = (characterId: string, amount: number) => {
@@ -195,7 +190,7 @@ function App() {
         const newNPC = generateRandomNpc();
         const updatedCharacters = [...characters, newNPC];
         setCharacters(updatedCharacters);
-        
+
         // Save to persistent storage
         saveApplicationState(updatedCharacters);
     }
@@ -210,7 +205,7 @@ function App() {
             const updatedCharacters = characters.filter(char => char.id !== characterId);
             setCharacters(updatedCharacters);
             setOpenSheetIds(prev => prev.filter(id => id !== characterId));
-            
+
             // Save to persistent storage
             saveApplicationState(updatedCharacters);
         }
@@ -268,14 +263,109 @@ function App() {
 
     const handleUpdateJournal = (updatedJournal: JournalEntry[]) => {
         setJournal(updatedJournal);
-        // Save to persistent storage
-        saveApplicationState(characters, updatedJournal);
+        saveApplicationState(characters, undefined, updatedJournal, undefined);
+    };
+
+    // User Management Functions
+    const hashPassword = (password: string): string => {
+        let hash = 0;
+        for (let i = 0; i < password.length; i++) {
+            const char = password.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return hash.toString(36);
+    };
+
+    const handleCreateUser = (username: string, password: string) => {
+        const newUser: User = {
+            id: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            username,
+            passwordHash: hashPassword(password),
+            characterId: null,
+            createdAt: new Date().toISOString(),
+        };
+        const updatedUsers = [...users, newUser];
+        setUsers(updatedUsers);
+        saveApplicationState(characters, updatedUsers);
+        addLogEntry('info', `User created: ${username}`);
+    };
+
+    const handleDeleteUser = (userId: string) => {
+        const user = users.find(u => u.id === userId);
+        if (!user) return;
+
+        // If user had a character assigned, clear the character's userId
+        if (user.characterId) {
+            const updatedCharacters = characters.map(char =>
+                char.id === user.characterId ? { ...char, userId: null } : char
+            );
+            setCharacters(updatedCharacters);
+        }
+
+        const updatedUsers = users.filter(u => u.id !== userId);
+        setUsers(updatedUsers);
+        saveApplicationState(characters, updatedUsers);
+        addLogEntry('info', `User deleted: ${user.username}`);
+    };
+
+    const handleAssignCharacterToUser = (userId: string, characterId: string | null) => {
+        const user = users.find(u => u.id === userId);
+        if (!user) return;
+
+        const updatedUsers = users.map(u =>
+            u.id === userId ? { ...u, characterId } : u
+        );
+        setUsers(updatedUsers);
+
+        let updatedCharacters = [...characters];
+
+        // Clear previous assignment
+        if (user.characterId) {
+            const oldChar = characters.find(c => c.id === user.characterId);
+            if (oldChar) {
+                updatedCharacters = characters.map(char =>
+                    char.id === user.characterId ? { ...char, userId: null } : char
+                );
+                setCharacters(updatedCharacters);
+            }
+        }
+
+        // Update character's user assignment
+        if (characterId) {
+            // Clear any other user assigned to this character
+            const otherUsersWithChar = users.filter(u => u.id !== userId && u.characterId === characterId);
+            let finalUsers = updatedUsers;
+            if (otherUsersWithChar.length > 0) {
+                finalUsers = updatedUsers.map(u =>
+                    otherUsersWithChar.some(ou => ou.id === u.id) ? { ...u, characterId: null } : u
+                );
+                setUsers(finalUsers);
+            }
+
+            updatedCharacters = updatedCharacters.map(char =>
+                char.id === characterId ? { ...char, userId } : char
+            );
+            setCharacters(updatedCharacters);
+            saveApplicationState(updatedCharacters, finalUsers);
+            const message: AssignCharacterMessage = {
+                type: "ASSIGN_CHARACTER",
+                payload: { character: updatedCharacters.find(c => c.id === characterId)! }
+            };
+            window.ipcRenderer.sendToPlayer(userId, message);
+
+            const character = characters.find(c => c.id === characterId);
+            addLogEntry('info', `User ${user.username} assigned to character ${character?.name}`);
+        } else {
+            saveApplicationState(updatedCharacters, updatedUsers);
+            addLogEntry('info', `User ${user.username} unassigned from character`);
+        }
     };
 
     const handleTogglePinDiscovery = (locationId: string, characterIds: string[]) => {
         console.log(`Toggling pin discovery for location ${locationId} and characters ${characterIds.join(', ')}`);
         const currentPinState = mapPinStates[locationId] || { playerDiscovered: [] };
-        
+
         const updatedPlayerDiscovered = [...currentPinState.playerDiscovered];
         characterIds.forEach(characterId => {
             const isCurrentlyDiscovered = currentPinState.playerDiscovered.includes(characterId);
@@ -296,22 +386,28 @@ function App() {
 
         console.log(`Updated pin state for location ${locationId}:`, updatedMapPinStates[locationId]);
         setMapPinStates(updatedMapPinStates);
-        saveApplicationState(characters, journal, updatedMapPinStates);
+        saveApplicationState(characters, undefined, undefined, updatedMapPinStates);
     };
 
     useEffect(() => {
         // Load initial data on component mount
         window.ipcRenderer.getInitialData().then((data: any) => {
-            if (data && data.characters && data.characters.length > 0) {
+            if (!data) 
+                return;
+
+            if (data.characters && data.characters.length > 0) {
                 setCharacters(data.characters);
                 console.log('Loaded campaign data from file system:', data);
             }
-            if (data && data.journal) {
+            if (data.users) {
+                setUsers(data.users);
+            }
+            if (data.journal) {
                 setJournal(data.journal);
             }
-            
+
             // Initialize mapPinStates if not present
-            if (data && data.mapPinStates) {
+            if (data.mapPinStates) {
                 setMapPinStates(data.mapPinStates);
             } else {
                 // Create initial map pin states for all locations
@@ -322,11 +418,6 @@ function App() {
                     };
                 });
                 setMapPinStates(initialMapPinStates);
-                
-                // Save the initialized state
-                if (data && data.characters) {
-                    saveApplicationState(data.characters, data.journal || [], initialMapPinStates);
-                }
             }
         }).catch((error: any) => {
             console.error('Failed to load initial data:', error);
@@ -392,7 +483,7 @@ function App() {
                         playerName: character.name,
                         item: item,
                         playerCurrency: character.currency,
-                        characterId: message.payload.characterId,
+                        charId: message.payload.characterId,
                     });
                 }
             }
@@ -464,6 +555,21 @@ function App() {
                 zIndex: 100
             }}>
                 <button
+                    onClick={() => setShowUserManager(true)}
+                    style={{
+                        padding: '10px 20px',
+                        background: '#2d5016',
+                        color: '#d4af37',
+                        border: '2px solid #3d6f1f',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '14px'
+                    }}
+                >
+                    👤 Users
+                </button>
+                <button
                     onClick={() => setShowJournalManager(true)}
                     style={{
                         padding: '10px 20px',
@@ -499,10 +605,10 @@ function App() {
 
             <CharacterRoster
                 characters={characters}
+                users={users}
                 openSheetIds={openSheetIds}
                 onToggleCharacterSheet={handleToggleCharacterSheet}
-                connectedPlayers={connectedPlayers}
-                onAssignCharacter={handleAssignCharacter}
+                onAssignCharacter={handleAssignCharacterToUser}
                 onCreateCharacter={handleCreateCharacter}
                 onGenerateNpc={handleGenerateNPC}
                 onDeleteCharacter={handleDeleteCharacter}
@@ -511,19 +617,19 @@ function App() {
             />
 
             {Object.keys(combatants).length > 0 && (
-            <InitiativeTracker
-                combatants={combatants}
-                onSetCombatants={setCombatants}
-                onUpdateCombatant={handleUpdateCombatant}
-                onClearCombatants={handleClearCombatants}
-                currentTurnId={currentTurnId}
-                onSetCurrentTurnId={setCurrentTurnId}
-                onUpdateAdvantages={(advantage) => setCurrentAdvantage(advantage)}
-                advantages={currentAdvantage}
-            /> )}
+                <InitiativeTracker
+                    combatants={combatants}
+                    onSetCombatants={setCombatants}
+                    onUpdateCombatant={handleUpdateCombatant}
+                    onClearCombatants={handleClearCombatants}
+                    currentTurnId={currentTurnId}
+                    onSetCurrentTurnId={setCurrentTurnId}
+                    onUpdateAdvantages={(advantage) => setCurrentAdvantage(advantage)}
+                    advantages={currentAdvantage}
+                />)}
 
-            <MapDisplay 
-                gameData={gameData} 
+            <MapDisplay
+                gameData={{ ...gameData, characters }}
                 mapPinStates={mapPinStates}
                 characters={characters}
                 onTogglePinDiscovery={handleTogglePinDiscovery}
@@ -541,8 +647,11 @@ function App() {
                         return newMap;
                     });
                 }}
-                onSendToPlayer={(characterId: string, message) => {
-                    window.ipcRenderer.sendToPlayer(characterId, message);
+                onSendToPlayer={(charId: string, message) => {
+                    const character = characters.find(c => c.id === charId);
+                    if (!character || !character.userId) return;
+                    const userId = character.userId;
+                    window.ipcRenderer.sendToPlayer(userId, message);
                 }}
                 onLogEntry={addLogEntry}
                 onUpdateCharacter={handleCharacterUpdate}
@@ -560,6 +669,51 @@ function App() {
 
             {showShopManager && <ShopManager onClose={() => setShowShopManager(false)} />}
 
+            {showUserManager && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0, 0, 0, 0.8)',
+                    zIndex: 1100,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '20px'
+                }}>
+                    <div style={{ maxWidth: '1400px', width: '100%', maxHeight: '90vh', overflow: 'auto' }}>
+                        <button
+                            onClick={() => setShowUserManager(false)}
+                            style={{
+                                position: 'absolute',
+                                top: '30px',
+                                right: '30px',
+                                background: '#8b0000',
+                                border: '2px solid #d4af37',
+                                color: '#d4af37',
+                                padding: '10px 20px',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                fontSize: '16px',
+                                zIndex: 1001
+                            }}
+                        >
+                            ✖ Close
+                        </button>
+                        <UserManager
+                            users={users}
+                            characters={characters}
+                            onCreateUser={handleCreateUser}
+                            onDeleteUser={handleDeleteUser}
+                            onAssignCharacter={handleAssignCharacterToUser}
+                        />
+                    </div>
+                </div>
+            )}
+
             {showJournalManager && (
                 <JournalManager
                     journal={journal}
@@ -574,11 +728,11 @@ function App() {
                     playerName={purchaseRequest.playerName}
                     item={purchaseRequest.item}
                     playerCurrency={purchaseRequest.playerCurrency}
-                    characterId={purchaseRequest.characterId}
+                    userId={characters.find(c => c.id === purchaseRequest.charId)?.userId || ''}
                     onClose={() => setPurchaseRequest(null)}
                     onApprove={(item) => {
                         // Find the character and update their inventory and currency
-                        const character = characters.find(c => c.id === purchaseRequest.characterId);
+                        const character = characters.find(c => c.id === purchaseRequest.charId);
                         if (character) {
                             // Parse the item price
                             const priceParts = item.price.split(' ');

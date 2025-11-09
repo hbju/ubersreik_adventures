@@ -7,10 +7,10 @@ interface BaseMessage<T extends string, P> {
 
 // == GM to Player Messages ==
 
+export type LoginSuccessMessage = BaseMessage<'LOGIN_SUCCESS', { character: Character | null; username: string }>;
+export type LoginFailureMessage = BaseMessage<'LOGIN_FAILURE', { reason: string }>;
 export type AssignCharacterMessage = BaseMessage<'ASSIGN_CHARACTER', { character: Character }>;
 export type RequestTestMessage = BaseMessage<'REQUEST_TEST', { skillName: string; characteristicName: string; modifier: number; }>;
-export type AwardXpMessage = BaseMessage<'AWARD_XP', { amount: number }>;
-export type AwardCurrencyMessage = BaseMessage<'AWARD_CURRENCY', { currency: Currency }>;
 export type UpdateShopInventoryMessage = BaseMessage<'UPDATE_SHOP_INVENTORY', { items: Record<string, number> }>;
 export type PurchaseResponseMessage = BaseMessage<'PURCHASE_RESPONSE', { success: boolean; item: Armor | Weapon | Item; reason?: string }>;
 export type UpdateInitiativeTrackerMessage = BaseMessage<'UPDATE_INITIATIVE_TRACKER', { combatants: Combatant[]; currentTurnId: string | null; currentAdvantage: Advantages }>;
@@ -24,10 +24,12 @@ export type RequestOpposedTestMessage = BaseMessage<'REQUEST_OPPOSED_TEST', {
 export type JournalUpdateMessage = BaseMessage<'JOURNAL_UPDATE', { entries: JournalEntry[] }>;
 export type MapStateUpdateMessage = BaseMessage<'MAP_STATE_UPDATE', { pinStates: Record<string, MapPinState> }>;
 
-export type ServerToClientMessage = AssignCharacterMessage | RequestTestMessage | AwardXpMessage | CharacterUpdateMessage | AwardCurrencyMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | JournalUpdateMessage | MapStateUpdateMessage;
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | JournalUpdateMessage | MapStateUpdateMessage;
 
 // == Player to GM Messages ==
 
+export type LoginRequestMessage = BaseMessage<'LOGIN_REQUEST', { username: string; password: string }>;
+export type LogoutMessage = BaseMessage<'LOGOUT', {}>;
 export type TestResultMessage = BaseMessage<'TEST_RESULT', {
   characterName: string;
   testName: string; // e.g., "Perception" or "Melee (Basic)"
@@ -45,4 +47,4 @@ export type OpposedTestResultMessage = BaseMessage<'OPPOSED_TEST_RESULT', {
   characterId: string;
 }>;
 
-export type ClientToServerMessage = TestResultMessage | CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage;
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage;

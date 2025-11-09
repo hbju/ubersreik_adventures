@@ -37,6 +37,7 @@ export function loadCampaignData(): CampaignState {
       // Initialize with default data if file doesn't exist
       campaignData = {
         characters: [],
+        users: [],
         journal: [],
         mapPinStates: {},
         version: '1.0.0',
@@ -49,6 +50,7 @@ export function loadCampaignData(): CampaignState {
     // Return default data on error
     campaignData = {
       characters: [],
+      users: [],
       journal: [],
       mapPinStates: {},
       version: '1.0.0',
@@ -101,5 +103,6 @@ export function getCampaignData(): CampaignState | null {
  * Clear the in-memory cache (useful for testing or resetting)
  */
 export function clearCampaignCache(): void {
+  console.log('Clearing campaign data cache');
   campaignData = null;
 }

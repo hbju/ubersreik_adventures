@@ -1,13 +1,13 @@
 import React from 'react';
-import { Character } from '@wfrp/shared';
+import { Character, User } from '@wfrp/shared';
 import styles from './CharacterRoster.module.css';
 
 interface CharacterRosterProps {
     characters: Character[];
+    users: User[];
     openSheetIds: string[];
     onToggleCharacterSheet: (characterId: string) => void;
-    connectedPlayers: string[];
-    onAssignCharacter: (character: Character, socketId: string) => void;
+    onAssignCharacter: (userId: string, characterId: string | null) => void;
     onCreateCharacter: () => void;
     onGenerateNpc: () => void;
     onDeleteCharacter: (characterId: string) => void;
@@ -17,9 +17,9 @@ interface CharacterRosterProps {
 
 const CharacterRoster: React.FC<CharacterRosterProps> = ({ 
     characters, 
+    users,
     openSheetIds, 
     onToggleCharacterSheet, 
-    connectedPlayers, 
     onAssignCharacter, 
     onCreateCharacter, 
     onGenerateNpc, 
@@ -27,16 +27,20 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
     onAddCombatant, 
     onFightButtonClick 
 }) => {
-    const handleAssignClick = (character: Character) => {
-        if (connectedPlayers.length === 0) {
-        alert("No players are connected.");
-        return;
+    const handleAssignChange = (character: Character, event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValue = event.target.value;
+        if (selectedValue === '') {
+            // Unassign character
+            onAssignCharacter(character.userId!, null);
+        } else {
+            // Assign to selected user
+            onAssignCharacter(selectedValue, character.id);
         }
+    };
 
-        const targetSocketId = connectedPlayers[0]; // TODO choose player
-        onAssignCharacter(character, targetSocketId);
-        alert(`Assigned ${character.name} to player ${targetSocketId.substring(0, 5)}...`);
-  };
+    const getAssignedUser = (character: Character): User | undefined => {
+        return users.find(u => u.id === character.userId);
+    };
     
     return (
         <div className={styles.rosterContainer}>
@@ -51,16 +55,34 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
             <ul className={styles.characterList}>
                 {characters.map(character => {
                     const isOpen = openSheetIds.includes(character.id);
+                    const assignedUser = getAssignedUser(character);
+                    
                     return (
                         <li key={character.id} className={styles.characterItem}>
-                            <span className={styles.characterName}>{character.name}</span>
+                            <span className={styles.characterName}>
+                                {character.name}
+                                {assignedUser && (
+                                    <span className={styles.userBadge}>
+                                        👤 {assignedUser.username}
+                                    </span>
+                                )}
+                            </span>
                             <div className={styles.itemActions}>
                                 <button onClick={() => onAddCombatant(character)} className={styles.combatBtn}>
                                     ⚔️
                                 </button>
-                                <button onClick={() => handleAssignClick(character)} disabled={connectedPlayers.length === 0}>
-                                    Assign
-                                </button>
+                                <select 
+                                    value={character.userId || ''} 
+                                    onChange={(e) => handleAssignChange(character, e)}
+                                    className={styles.assignSelect}
+                                >
+                                    <option value="">Unassigned</option>
+                                    {users.map(user => (
+                                        <option key={user.id} value={user.id}>
+                                            {user.username}
+                                        </option>
+                                    ))}
+                                </select>
                                 <button
                                     onClick={() => onToggleCharacterSheet(character.id)}
                                     className={isOpen ? styles.closeBtn : styles.openBtn}>

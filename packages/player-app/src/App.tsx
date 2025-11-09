@@ -14,7 +14,7 @@ import { JournalView } from './components/JournalView';
 
 
 const PlayerApp: React.FC = () => {
-  const { isConnected, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, journalEntries, mapPinStates, connect, disconnect, sendMessage } = useSocket();
+  const { isConnected, isAuthenticated, authError, username, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, journalEntries, mapPinStates, connect, disconnect, sendMessage } = useSocket();
   const [isAdvancementMode, setIsAdvancementMode] = useState(false);
   const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
   const [testModalInfo, setTestModalInfo] = useState<{ name: string, value: number } | null>(null);
@@ -177,8 +177,15 @@ const PlayerApp: React.FC = () => {
 
   const activeCharacter = isAdvancementMode ? draftCharacter : character;
 
-  if (!isConnected) {
-    return <ConnectionScreen onConnect={connect} />;
+  // Show connection screen if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <ConnectionScreen 
+        onConnect={connect} 
+        error={authError || undefined} 
+        isConnecting={isConnected && !isAuthenticated} 
+      />
+    );
   }
 
   return (

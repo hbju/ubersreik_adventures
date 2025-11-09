@@ -24,7 +24,7 @@ interface CombatResolverProps {
     combatants: Combatant[];
     opposedTestResults: Map<string, OpposedTestResultMessage['payload']>;
     onClearOpposedTestResult: (testId: string, role: 'attacker' | 'defender') => void;
-    onSendToPlayer: (characterId: string, message: RequestOpposedTestMessage | AssignCharacterMessage) => void;
+    onSendToPlayer: (charId: string, message: RequestOpposedTestMessage | AssignCharacterMessage) => void;
     onLogEntry: (type: LogEntry['type'], content: string) => void;
     onUpdateCharacter: (character: Character) => void;
     onUpdateCombatant: (combatant: Combatant) => void;

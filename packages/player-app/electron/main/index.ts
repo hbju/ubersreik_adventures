@@ -122,10 +122,4 @@ ipcMain.handle('open-win', (_, arg) => {
   } else {
     childWindow.loadFile(indexHtml, { hash: arg })
   }
-
-  ipcMain.on('send-to-player', (_event, socketId: string, message: any) => {
-    console.log(`[IPC] Received request to send message to ${socketId}`);
-    sendToPlayer(socketId, message);
-
-  })
 });
