@@ -4,7 +4,7 @@ import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
 import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, MapDisplay, gameData } from '@wfrp/shared';
-import { TestModal } from './components/TestModal';
+import { TalentSelectionModal } from './components/TalentSelectionModal';
 import { TestResultMessage, calculateCharacteristicAdvanceCost, calculateSkillAdvanceCost, allSkillsAndCharacteristics } from '@wfrp/shared';
 import { TalentModal } from './components/TalentModal';
 import { ShopModal } from './components/ShopModal';
@@ -340,8 +340,8 @@ const PlayerApp: React.FC = () => {
         </div>
       )}
       {testModalInfo && character && (
-        <TestModal
-          characterName={character.name}
+        <TalentSelectionModal
+          character={character}
           testName={testModalInfo.name}
           baseTarget={testModalInfo.value}
           onClose={() => setTestModalInfo(null)}

@@ -36,6 +36,7 @@ export type TestResultMessage = BaseMessage<'TEST_RESULT', {
   targetNumber: number;
   rollResult: number;
   successLevel: number;
+  usedTalents?: { name: string; rank: number; }[];
 }>;
 export type CharacterUpdateMessage = BaseMessage<'CHARACTER_UPDATE', { character: Character }>;
 export type RequestPurchaseMessage = BaseMessage<'REQUEST_PURCHASE', { item: Armor | Weapon | Item, characterId: string }>;

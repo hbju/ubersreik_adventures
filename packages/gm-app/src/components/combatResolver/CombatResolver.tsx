@@ -15,6 +15,13 @@ import {
     OpposedTestResultMessage,
     AssignCharacterMessage,
     LogEntry,
+    checkCriticalResult,
+    CriticalHitModal,
+    FumbleModal,
+    getApplicableTalents,
+    getTalentDamageBonus,
+    getTalentTestBonus,
+    applyTalentSLBonuses,
 } from '@wfrp/shared';
 
 import CharacterSelector from './CharacterSelector';
@@ -40,6 +47,10 @@ interface CombatResult {
     outcomeMessage: string;
     damageDealt?: number;
     hitLocation?: string;
+    attackerCritical?: boolean;
+    attackerFumble?: boolean;
+    defenderCritical?: boolean;
+    defenderFumble?: boolean;
 }
 
 interface CombatantStats {
@@ -48,6 +59,7 @@ interface CombatantStats {
     weaponDamage: number;
     toughnessBonus: number;
     armourPoints: number;
+    selectedTalents?: Array<{ name: string; rank: number }>;
 }
 
 interface OpposedTestState {
@@ -104,6 +116,14 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     const [result, setResult] = useState<CombatResult | null>(null);
     const [opposedTestState, setOpposedTestState] = useState<OpposedTestState | null>(null);
 
+    // State for critical/fumble modals
+    const [showCriticalModal, setShowCriticalModal] = useState<{ location: string; wounds: number } | null>(null);
+    const [showFumbleModal, setShowFumbleModal] = useState<number | null>(null);
+
+    // State for talent selection
+    const [attackerApplicableTalents, setAttackerApplicableTalents] = useState<Array<{ talent: any; rank: number }>>([]);
+    const [defenderApplicableTalents, setDefenderApplicableTalents] = useState<Array<{ talent: any; rank: number }>>([]);
+
     const getSkillValue = (character: Character, skillId: string): number => {
         const skillInfo = (allSkillsAndCharacteristics as SkillCharDefinition[]).find(s => s.id === skillId);
         if (!skillInfo) return 0;
@@ -120,32 +140,62 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     };
 
     useEffect(() => {
-        if (selectedAttackerId === 'manual') return;
+        if (selectedAttackerId === 'manual') {
+            setAttackerApplicableTalents([]);
+            return;
+        }
 
         const attacker = characters.find(char => char.id === selectedAttackerId);
         if (attacker) {
             const strengthBonus = calculateCharacteristicBonus(attacker.characteristics.s);
+            const skillInfo = allSkillsAndCharacteristics.find(s => s.id === attackerSkillId);
+
+            // Get applicable talents for the selected skill
+            const applicableTalents = skillInfo ? getApplicableTalents(attacker, skillInfo.name) : [];
+            setAttackerApplicableTalents(applicableTalents);
+
+            // Auto-select SL bonus talents
+            const autoSelectedTalents = applicableTalents
+                .filter(({ talent }) => talent.effects?.some((e: any) => e.type === 'SL_BONUS_ON_SUCCESS'))
+                .map(({ talent, rank }) => ({ name: talent.name, rank }));
+
+            const talentDamageBonus = getTalentDamageBonus(autoSelectedTalents, attackerSkillId.includes('ranged') ? 'ranged' : 'melee');
 
             setAttackerStats(prevStats => ({
                 ...prevStats,
                 skill: getSkillValue(attacker, attackerSkillId),
-                weaponDamage: 4 + strengthBonus,
+                weaponDamage: 4 + strengthBonus + talentDamageBonus,
+                selectedTalents: autoSelectedTalents,
             }));
         }
     }, [selectedAttackerId, attackerSkillId, characters]);
 
     useEffect(() => {
-        if (selectedDefenderId === 'manual') return;
+        if (selectedDefenderId === 'manual') {
+            setDefenderApplicableTalents([]);
+            return;
+        }
 
         const defender = characters.find(char => char.id === selectedDefenderId);
         if (defender) {
             const toughnessBonus = calculateCharacteristicBonus(defender.characteristics.t);
+            const skillInfo = allSkillsAndCharacteristics.find(s => s.id === defenderSkillId);
+
+            // Get applicable talents for the selected skill
+            const applicableTalents = skillInfo ? getApplicableTalents(defender, skillInfo.name) : [];
+            setDefenderApplicableTalents(applicableTalents);
+
+            // Auto-select SL bonus talents
+            const autoSelectedTalents = applicableTalents
+                .filter(({ talent }) => talent.effects?.some((e: any) => e.type === 'SL_BONUS_ON_SUCCESS'))
+                .map(({ talent, rank }) => ({ name: talent.name, rank }));
 
             setDefenderStats(prevStats => ({
                 ...prevStats,
                 skill: getSkillValue(defender, defenderSkillId),
                 toughnessBonus: toughnessBonus,
                 armourPoints: 0, // TODO - derive from equipment
+                selectedTalents: autoSelectedTalents,
             }));
         }
     }, [selectedDefenderId, defenderSkillId, characters]);
@@ -182,8 +232,23 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             });
         }
         if (opposedTestState.attackerSL !== null && opposedTestState.defenderSL !== null && (attackerResult || defenderResult)) {
-            const attackerSL = Math.round(opposedTestState.attackerSL);
-            const defenderSL = Math.round(opposedTestState.defenderSL);
+            let attackerSL = Math.round(opposedTestState.attackerSL);
+            let defenderSL = Math.round(opposedTestState.defenderSL);
+
+            // Apply talent SL bonuses
+            if (attackerStats.selectedTalents && attackerStats.selectedTalents.length > 0 && attackerSL >= 0) {
+                const attacker = characters.find(c => c.id === selectedAttackerId);
+                attackerSL = applyTalentSLBonuses(attackerSL, attackerStats.selectedTalents, attacker);
+            }
+
+            if (defenderStats.selectedTalents && defenderStats.selectedTalents.length > 0 && defenderSL >= 0) {
+                const defender = characters.find(c => c.id === selectedDefenderId);
+                defenderSL = applyTalentSLBonuses(defenderSL, defenderStats.selectedTalents, defender);
+            }
+
+            // Check for criticals and fumbles
+            const attackerCriticalCheck = checkCriticalResult(opposedTestState.attackerRoll!, opposedTestState.attackerTarget);
+            const defenderCriticalCheck = checkCriticalResult(opposedTestState.defenderRoll!, opposedTestState.defenderTarget);
 
             let outcomeMessage = '';
             let damageDealt: number | undefined;
@@ -221,7 +286,11 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 defenseSuccessLevel: roundedDefenseSL,
                 outcomeMessage,
                 damageDealt,
-                hitLocation
+                hitLocation,
+                attackerCritical: attackerCriticalCheck.isCritical,
+                attackerFumble: attackerCriticalCheck.isFumble,
+                defenderCritical: defenderCriticalCheck.isCritical,
+                defenderFumble: defenderCriticalCheck.isFumble,
             });
 
             onClearOpposedTestResult(opposedTestState.testId, 'attacker');
@@ -248,8 +317,23 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         const attackRoll = rolld100();
         const defenseRoll = rolld100();
 
-        const attackSuccessLevel = calculateSuccessLevel(attackRoll, attackerTarget);
-        const defenseSuccessLevel = calculateSuccessLevel(defenseRoll, defenderTarget);
+        let attackSuccessLevel = calculateSuccessLevel(attackRoll, attackerTarget);
+        let defenseSuccessLevel = calculateSuccessLevel(defenseRoll, defenderTarget);
+
+        // Apply talent SL bonuses
+        if (attackerStats.selectedTalents && attackerStats.selectedTalents.length > 0 && attackSuccessLevel >= 0) {
+            const attacker = characters.find(c => c.id === selectedAttackerId);
+            attackSuccessLevel = applyTalentSLBonuses(attackSuccessLevel, attackerStats.selectedTalents, attacker);
+        }
+
+        if (defenderStats.selectedTalents && defenderStats.selectedTalents.length > 0 && defenseSuccessLevel >= 0) {
+            const defender = characters.find(c => c.id === selectedDefenderId);
+            defenseSuccessLevel = applyTalentSLBonuses(defenseSuccessLevel, defenderStats.selectedTalents, defender);
+        }
+
+        // Check for criticals and fumbles
+        const attackerCriticalCheck = checkCriticalResult(attackRoll, attackerTarget);
+        const defenderCriticalCheck = checkCriticalResult(defenseRoll, defenderTarget);
 
         let outcomeMessage = '';
         let damageDealt: number | undefined;
@@ -262,9 +346,21 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             damageDealt = Math.max(damage, 0);
             hitLocation = getHitLocation(attackRoll);
             outcomeMessage = `Attacker wins by ${slDiff}! Damage Dealt: ${damageDealt} to ${hitLocation}.`;
+
+            // Log talent usage
+            if (attackerStats.selectedTalents && attackerStats.selectedTalents.length > 0) {
+                const talentString = attackerStats.selectedTalents.map(t => `${t.name} (Rank ${t.rank})`).join(', ');
+                onLogEntry('info', `Attacker used talents: ${talentString}`);
+            }
         }
         else if (attackSuccessLevel < defenseSuccessLevel || (attackSuccessLevel === defenseSuccessLevel && attackerStats.skill < defenderStats.skill)) {
             outcomeMessage = `Defender wins by ${Math.round(defenseSuccessLevel) - Math.round(attackSuccessLevel)}!`;
+
+            // Log talent usage
+            if (defenderStats.selectedTalents && defenderStats.selectedTalents.length > 0) {
+                const talentString = defenderStats.selectedTalents.map(t => `${t.name} (Rank ${t.rank})`).join(', ');
+                onLogEntry('info', `Defender used talents: ${talentString}`);
+            }
         }
         else {
             console.log("Combat resulted in a draw, resolving again...");
@@ -284,7 +380,11 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             defenseSuccessLevel: roundedDefenseSL,
             outcomeMessage,
             damageDealt,
-            hitLocation
+            hitLocation,
+            attackerCritical: attackerCriticalCheck.isCritical,
+            attackerFumble: attackerCriticalCheck.isFumble,
+            defenderCritical: defenderCriticalCheck.isCritical,
+            defenderFumble: defenderCriticalCheck.isFumble,
         });
     };
 
@@ -299,8 +399,8 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         }
 
         // Check if attacker and defender are connected players
-        const attackerIsPlayer = selectedAttackerId !== 'manual' && combatants.some(c => c.sourceId === selectedAttackerId && c.isPlayer);
-        const defenderIsPlayer = selectedDefenderId !== 'manual' && combatants.some(c => c.sourceId === selectedDefenderId && c.isPlayer);
+        const attackerIsPlayer = selectedAttackerId !== 'manual' && characters.some(c => c.id === selectedAttackerId && c.userId != null);
+        const defenderIsPlayer = selectedDefenderId !== 'manual' && characters.some(c => c.id === selectedDefenderId && c.userId != null);
 
         // Create opposed test state
         const newOpposedTestState: OpposedTestState = {
@@ -496,6 +596,52 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                         onChange={(e) => handleStatChange('attacker', 'weaponDamage', parseInt(e.target.value) || 0)}
                     />
                 </div>
+                {attackerApplicableTalents.length > 0 && (
+                    <div className={styles.talentSection}>
+                        <label className={styles.talentLabel}>Applicable Talents</label>
+                        {attackerApplicableTalents.map(({ talent, rank }) => {
+                            const isSelected = attackerStats.selectedTalents?.some(t => t.name === talent.name) || false;
+                            const slBonus = talent.effects?.find((e: any) => e.type === 'SL_BONUS_ON_SUCCESS');
+                            return (
+                                <label key={talent.id} className={styles.talentCheckbox}>
+                                    <input
+                                        type="checkbox"
+                                        checked={isSelected}
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                const newTalents = [...(attackerStats.selectedTalents || []), { name: talent.name, rank }];
+                                                setAttackerStats(prev => ({
+                                                    ...prev,
+                                                    selectedTalents: newTalents
+                                                }));
+                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId.includes('ranged') ? 'ranged' : 'melee');
+                                                setAttackerStats(prev => ({
+                                                    ...prev,
+                                                    weaponDamage: 4 + calculateCharacteristicBonus(characters.find(c => c.id === selectedAttackerId)!.characteristics.s) + weaponDamage,
+                                                }));
+                                            } else {
+                                                const newTalents = attackerStats.selectedTalents?.filter(t => t.name !== talent.name) || [];
+                                                setAttackerStats(prev => ({
+                                                    ...prev,
+                                                    selectedTalents: newTalents
+                                                }));
+                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId.includes('ranged') ? 'ranged' : 'melee');
+                                                setAttackerStats(prev => ({
+                                                    ...prev,
+                                                    weaponDamage: 4 + calculateCharacteristicBonus(characters.find(c => c.id === selectedAttackerId)!.characteristics.s) + weaponDamage,
+                                                }));
+                                            }
+                                        }}
+                                    />
+                                    <span className={styles.talentName}>
+                                        {talent.name} (Rank {rank})
+                                        {slBonus && <span className={styles.talentBonus}> +{slBonus.value * rank} SL</span>}
+                                    </span>
+                                </label>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
 
             <div className={styles.actionPanel}>
@@ -593,20 +739,63 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                         onChange={(e) => handleStatChange('defender', 'armourPoints', parseInt(e.target.value) || 0)}
                     />
                 </div>
+                {defenderApplicableTalents.length > 0 && (
+                    <div className={styles.talentSection}>
+                        <label className={styles.talentLabel}>Applicable Talents</label>
+                        {defenderApplicableTalents.map(({ talent, rank }) => {
+                            const isSelected = defenderStats.selectedTalents?.some(t => t.name === talent.name) || false;
+                            const slBonus = talent.effects?.find((e: any) => e.type === 'SL_BONUS_ON_SUCCESS');
+                            return (
+                                <label key={talent.id} className={styles.talentCheckbox}>
+                                    <input
+                                        type="checkbox"
+                                        checked={isSelected}
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setDefenderStats(prev => ({
+                                                    ...prev,
+                                                    selectedTalents: [...(prev.selectedTalents || []), { name: talent.name, rank }]
+                                                }));
+                                            } else {
+                                                setDefenderStats(prev => ({
+                                                    ...prev,
+                                                    selectedTalents: prev.selectedTalents?.filter(t => t.name !== talent.name) || []
+                                                }));
+                                            }
+                                        }}
+                                    />
+                                    <span className={styles.talentName}>
+                                        {talent.name} (Rank {rank})
+                                        {slBonus && <span className={styles.talentBonus}> +{slBonus.value * rank} SL</span>}
+                                    </span>
+                                </label>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
 
             {result && (
                 <div className={styles.resultPanel}>
                     <div className={styles.resultSection}>
                         <h4>Rolls</h4>
-                        <p>Attacker rolled: <span className={styles.rollValue}>{result.attackRoll}</span></p>
-                        <p>Defender rolled: <span className={styles.rollValue}>{result.defenseRoll}</span></p>
+                        <p>
+                            Attacker rolled: <span className={styles.rollValue}>{result.attackRoll}</span>
+                            {result.attackerCritical && <span className={styles.criticalBadge}>CRITICAL!</span>}
+                            {result.attackerFumble && <span className={styles.fumbleBadge}>FUMBLE!</span>}
+                        </p>
+                        <p>
+                            Defender rolled: <span className={styles.rollValue}>{result.defenseRoll}</span>
+                            {result.defenderCritical && <span className={styles.criticalBadge}>CRITICAL!</span>}
+                            {result.defenderFumble && <span className={styles.fumbleBadge}>FUMBLE!</span>}
+                        </p>
                     </div>
                     <div className={styles.resultSection}>
                         <h4>Success Levels</h4>
                         <p>Attacker SL: <span className={styles.slValue}>{result.attackSuccessLevel}</span></p>
                         <p>Defender SL: <span className={styles.slValue}>{result.defenseSuccessLevel}</span></p>
                     </div>
+
                     <div className={styles.outcomeSection}>
                         <h3>Outcome</h3>
                         <p className={styles.outcomeMessage}>{result.outcomeMessage}</p>
@@ -619,7 +808,72 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                             </button>
                         </div>
                     </div>
+                    {(result.attackerCritical || result.attackerFumble || result.defenderCritical || result.defenderFumble) && (
+                        <div className={styles.criticalSection}>
+                            <h4>Critical/Fumble Results</h4>
+                            {result.attackerCritical && result.hitLocation && result.damageDealt !== undefined && (
+                                <button
+                                    className={styles.criticalButton}
+                                    onClick={() => setShowCriticalModal({ location: result.hitLocation!, wounds: result.damageDealt! })}
+                                >
+                                    🎯 View Attacker Critical Hit
+                                </button>
+                            )}
+                            {result.attackerFumble && (
+                                <button
+                                    className={styles.fumbleButton}
+                                    onClick={() => setShowFumbleModal(result.attackRoll)}
+                                >
+                                    💀 View Attacker Fumble
+                                </button>
+                            )}
+                            {result.defenderCritical && (
+                                <button
+                                    className={styles.criticalButton}
+                                    onClick={() => {
+                                        // For defender critical, just show a placeholder or narrative element
+                                        alert('Defender rolled a critical! They have dramatically succeeded in their defense.');
+                                    }}
+                                >
+                                    🛡️ View Defender Critical
+                                </button>
+                            )}
+                            {result.defenderFumble && (
+                                <button
+                                    className={styles.fumbleButton}
+                                    onClick={() => setShowFumbleModal(result.defenseRoll)}
+                                >
+                                    💀 View Defender Fumble
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </div>
+            )}
+
+            {/* Critical Hit Modal */}
+            {showCriticalModal && (
+                <CriticalHitModal
+                    location={showCriticalModal.location}
+                    wounds={showCriticalModal.wounds}
+                    onClose={() => setShowCriticalModal(null)}
+                    onApplyEffects={(effects) => {
+                        onLogEntry('system', `Applied critical hit effects: ${effects.join(', ')}`);
+                        setShowCriticalModal(null);
+                    }}
+                />
+            )}
+
+            {/* Fumble Modal */}
+            {showFumbleModal !== null && (
+                <FumbleModal
+                    fumbleRoll={showFumbleModal}
+                    onClose={() => setShowFumbleModal(null)}
+                    onApplyEffect={(effect) => {
+                        onLogEntry('system', `Applied fumble effect: ${effect}`);
+                        setShowFumbleModal(null);
+                    }}
+                />
             )}
         </div>
     )

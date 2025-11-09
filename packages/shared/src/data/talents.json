@@ -21,7 +21,16 @@
             "Ship’s Gunner": "4",
             "Siege Specialist": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "DAMAGE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "ranged"
+                ]
+            }
+        ]
     },
     {
         "id": "acute-sense",
@@ -49,6 +58,22 @@
             "Halfling (Taste)",
             "High Elf (Sight)",
             "Wood Elf (Sight)"
+        ],
+        "effects": [
+            {
+                "type": "TEST_BONUS",
+                "value": 10,
+                "appliesTo": [
+                    "Perception"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Perception (Sense)"
+                ]
+            }
         ]
     },
     {
@@ -73,7 +98,23 @@
             "Wizard": "1",
             "Witch": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "No Miscast on double successful Channel",
+                "appliesTo": [
+                    "Channelling (Any)"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Channelling (Any)"
+                ]
+            }
+        ]
     },
     {
         "id": "alley-cat",
@@ -94,7 +135,23 @@
             "Townsman": "1",
             "Thief": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "REVERSE_ROLL_ON_FAIL",
+                "value": 1,
+                "appliesTo": [
+                    "Stealth (Urban)"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Stealth (Urban)"
+                ]
+            }
+        ]
     },
     {
         "id": "ambidextrous",
@@ -112,6 +169,15 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Reduce off-hand penalty",
+                "appliesTo": [
+                    "secondary hand"
+                ]
+            }
         ]
     },
     {
@@ -133,6 +199,22 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Wild animals are calm around you",
+                "appliesTo": [
+                    "Charm Animal"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm Animal"
+                ]
+            }
         ]
     },
     {
@@ -158,7 +240,16 @@
             "Witch": "2 (Witchery)",
             "Wizard": "2 (Any Colour)"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Can cast spells from chosen Lore",
+                "appliesTo": [
+                    "magic"
+                ]
+            }
+        ]
     },
     {
         "id": "argumentative",
@@ -178,6 +269,22 @@
         },
         "racial": [
             "Human (Tilean)"
+        ],
+        "effects": [
+            {
+                "type": "SL_DICES_UNITS",
+                "appliesTo": [
+                    "Charm"
+                ],
+                "condition": "arguing or debating"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm Tests when arguing and debating"
+                ]
+            }
         ]
     },
     {
@@ -196,6 +303,22 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Add Art (Any) to Career or reduce cost. You may purchase the Skill for 5 XP fewer per Advance.",
+                "appliesTo": [
+                    "Art"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Art (Any)"
+                ]
+            }
         ]
     },
     {
@@ -219,6 +342,22 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "SL_DICES_UNITS",
+                "appliesTo": [
+                    "Charm"
+                ],
+                "condition": "target attracted"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm Tests to influence those attracted to you"
+                ]
+            }
         ]
     },
     {
@@ -233,12 +372,29 @@
             "Flagellant": "4",
             "Wolf Kin": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "End Frenzy with successful Cool Test",
+                "appliesTo": [
+                    "Melee"
+                ],
+                "condition": "Frenzied"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee Tests when Frenzied"
+                ]
+            }
+        ]
     },
     {
         "id": "beat-blade",
         "name": "Beat Blade",
-        "description": "You are trained to make sharp controlled blows to your opponent’s weapon, creating an opening for an attack or simply impeding an incoming attack. For your Action, you can choose to Beat Blade before rolling. Perform a Melee Test; if successful, your opponent loses –1 Advantage, and loses a further –1 per SL you score. This Test is not Opposed. This Talent is of no use if your opponent has no weapon, or has a larger Size than you (see page 341).",
+        "description": "You are trained to make sharp controlled blows to your opponent’s weapon, creating an opening for an attack or simply impeding an incoming attack. For your Action, you can choose to Beat Blade before rolling. Perform a Melee Test; if successful, the opposing Advantage Pool loses –1 Advantage, and loses a further –1 if you score 6 SL. This Test is not Opposed. This Talent is of no use if your opponent has no weapon, or has a larger Size than you.",
         "tests": [
             "Melee for a Beat Blade"
         ],
@@ -247,7 +403,23 @@
             "Duellist": "1",
             "Ironbreaker": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Remove one opponent Advantage",
+                "appliesTo": [
+                    "Melee"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee for a Beat Blade"
+                ]
+            }
+        ]
     },
     {
         "id": "beneath-notice",
@@ -269,6 +441,29 @@
         "racial": [
             "Gnome",
             "Human (Sarl)"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Higher Status ignore you",
+                "appliesTo": [
+                    "Stealth"
+                ]
+            },
+            {
+                "type": "PASSIVE",
+                "value": "Higher Status gain no Advantage to strike or wound you",
+                "appliesTo": [
+                    "combat"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Stealth when in plain sight"
+                ]
+            }
         ]
     },
     {
@@ -283,7 +478,24 @@
             "Flagellant": "1",
             "Wolf Kin": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "DAMAGE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "melee"
+                ],
+                "condition": "charging"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee on a Round when you Charge"
+                ]
+            }
+        ]
     },
     {
         "id": "blather",
@@ -309,7 +521,23 @@
             "Shadowmancer": "3",
             "Spy": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Stun with fast talking",
+                "appliesTo": [
+                    "Charm"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm to Blather"
+                ]
+            }
+        ]
     },
     {
         "id": "bless",
@@ -325,7 +553,16 @@
             "Sailor-Priest of Manann": "1",
             "Warrior Priest": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Can use Blessings from chosen Divine Lore",
+                "appliesTo": [
+                    "magic"
+                ]
+            }
+        ]
     },
     {
         "id": "bookish",
@@ -347,7 +584,22 @@
             "Priest of Myrmidia": "",
             "Scholar": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "REVERSE_ROLL_ON_FAIL",
+                "appliesTo": [
+                    "Research"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Research"
+                ]
+            }
+        ]
     },
     {
         "id": "break-and-enter",
@@ -367,7 +619,23 @@
             "Watchman": "2",
             "Wrecker": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "DAMAGE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "inanimate objects"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee when forcing or breaking inanimate objects"
+                ]
+            }
+        ]
     },
     {
         "id": "briber",
@@ -390,7 +658,23 @@
             "Spy": "4",
             "Townsman": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Reduce bribe cost by 10%",
+                "appliesTo": [
+                    "Bribery"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Bribery"
+                ]
+            }
+        ]
     },
     {
         "id": "cardsharp",
@@ -404,7 +688,24 @@
             "Charlatan": "1",
             "Fence": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_DICES_UNITS",
+                "appliesTo": [
+                    "Gamble",
+                    "Sleight of Hand"
+                ],
+                "condition": "playing card games"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Gamble and Sleight of Hand when playing card games"
+                ]
+            }
+        ]
     },
     {
         "id": "careful-strike",
@@ -419,7 +720,25 @@
             "Miner": "3",
             "Protagonist": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Modify hit location",
+                "appliesTo": [
+                    "melee",
+                    "ranged"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "melee",
+                    "ranged"
+                ]
+            }
+        ]
     },
     {
         "id": "carouser",
@@ -444,7 +763,24 @@
             "Scholar": "1",
             "Spy": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "REVERSE_ROLL_ON_FAIL",
+                "appliesTo": [
+                    "Consume Alcohol"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm at Parties",
+                    "Gossip at Parties",
+                    "Consume Alcohol"
+                ]
+            }
+        ]
     },
     {
         "id": "cat-fall",
@@ -459,7 +795,23 @@
             "Seaman": "2",
             "Thief": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Reduce falling distance",
+                "appliesTo": [
+                    "Athletics"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Athletics when falling"
+                ]
+            }
+        ]
     },
     {
         "id": "cat-tongued",
@@ -480,7 +832,23 @@
             "Pedlar": "4",
             "Spy": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Opponents can't detect lies with Intuition",
+                "appliesTo": [
+                    "Charm"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm when lying"
+                ]
+            }
+        ]
     },
     {
         "id": "chanty",
@@ -494,7 +862,23 @@
             "Chantyman": "2",
             "Sailor-Priest of Manann": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Can perform Chanties",
+                "appliesTo": [
+                    "Entertain (Singing)"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Entertain (Singing)"
+                ]
+            }
+        ]
     },
     {
         "id": "chaos-magic",
@@ -503,7 +887,16 @@
         "tests": [],
         "max_ranks": "chaos_spells_known",
         "careers": {},
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Can learn spells from chosen Chaos Lore",
+                "appliesTo": [
+                    "magic"
+                ]
+            }
+        ]
     },
     {
         "id": "combat-aware",
@@ -538,7 +931,24 @@
             "Warrior Priest": "3",
             "Wizard": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Ignore Surprise with Perception Test",
+                "appliesTo": [
+                    "Perception"
+                ],
+                "condition": "surprise"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Perception during fights"
+                ]
+            }
+        ]
     },
     {
         "id": "combat-master",
@@ -556,7 +966,16 @@
             "Priest of Myrmidia": "4",
             "Slayer": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Count as additional person when outnumbered",
+                "appliesTo": [
+                    "combat"
+                ]
+            }
+        ]
     },
     {
         "id": "combat-reflexes",
@@ -575,7 +994,14 @@
             "Priest of Myrmidia": "4",
             "Protagonist": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "INITIATIVE_BONUS",
+                "value": 10,
+                "condition": "combat initiative"
+            }
+        ]
     },
     {
         "id": "commanding-presence",
@@ -604,7 +1030,23 @@
             "Townsman": "4",
             "Warden": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Lower Status can't resist Leadership",
+                "appliesTo": [
+                    "Leadership"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Leadership"
+                ]
+            }
+        ]
     },
     {
         "id": "concoct",
@@ -619,7 +1061,23 @@
             "Herbalist": "4",
             "Mundane Alchemist": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "One free Crafting Endeavor for Lore (Apothecary) without Workshop",
+                "appliesTo": [
+                    "Lore (Apothecary)"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Lore (Apothecary)"
+                ]
+            }
+        ]
     },
     {
         "id": "contortionist",
@@ -632,7 +1090,23 @@
         "careers": {
             "Entertainer": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Bend body to squeeze through gaps",
+                "appliesTo": [
+                    "Agility"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Perform and Agility Tests when contorting helps"
+                ]
+            }
+        ]
     },
     {
         "id": "cool-headed",
@@ -660,6 +1134,15 @@
             "Random Racial Talent",
             "High Elf",
             "Human (Tilean)"
+        ],
+        "effects": [
+            {
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
+                "appliesTo": [
+                    "Willpower"
+                ]
+            }
         ]
     },
     {
@@ -678,6 +1161,23 @@
         },
         "racial": [
             "Human (Sarl)"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "+1 Movement when animal fleeing/running",
+                "appliesTo": [
+                    "Drive",
+                    "Ride"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Drive or Ride Tests when Fleeing or Running"
+                ]
+            }
         ]
     },
     {
@@ -703,6 +1203,22 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Add Trade (Any) to Career or reduce cost. You may purchase the Skill for 5 XP fewer per Advance.",
+                "appliesTo": [
+                    "Trade"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Trade (any one)"
+                ]
+            }
         ]
     },
     {
@@ -717,7 +1233,23 @@
             "Artillerist": "3",
             "Crew Commander": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Use Crew Commander's Ranged Skill when firing Crewed weapons",
+                "appliesTo": [
+                    "Ranged"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Ranged Skill tests when firing a weapon with the Crewed Flaw."
+                ]
+            }
+        ]
     },
     {
         "id": "criminal",
@@ -754,7 +1286,16 @@
             "Witch": "1",
             "Wrecker": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Illegal income bonus",
+                "appliesTo": [
+                    "criminal activities"
+                ]
+            }
+        ]
     },
     {
         "id": "dead-eye-shot",
@@ -768,7 +1309,16 @@
             "Hunter": "3",
             "Outlaw": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Choose hit location with ranged attacks",
+                "appliesTo": [
+                    "ranged"
+                ]
+            }
+        ]
     },
     {
         "id": "deal-maker",
@@ -804,7 +1354,23 @@
             "Townsman": "2",
             "Villager": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Modify prices by 10% when using Haggle",
+                "appliesTo": [
+                    "Haggle"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Haggle"
+                ]
+            }
+        ]
     },
     {
         "id": "detect-artefact",
@@ -828,7 +1394,23 @@
             "Spiriter": "2",
             "Wizard": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Detect magical artefacts with Intuition",
+                "appliesTo": [
+                    "Intuition"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Intuition tests to detect magical artefacts"
+                ]
+            }
+        ]
     },
     {
         "id": "diceman",
@@ -848,7 +1430,24 @@
             "Pikeman": "2",
             "Soldier": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_DICES_UNITS",
+                "appliesTo": [
+                    "Gamble",
+                    "Sleight of Hand"
+                ],
+                "condition": "playing dice games"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Gamble and Sleight of Hand when playing dice games"
+                ]
+            }
+        ]
     },
     {
         "id": "dirty-fighting",
@@ -874,6 +1473,22 @@
         },
         "racial": [
             "Ogre"
+        ],
+        "effects": [
+            {
+                "type": "DAMAGE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee (Brawling)"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee (Brawling)"
+                ]
+            }
         ]
     },
     {
@@ -894,7 +1509,23 @@
             "Protagonist": "3",
             "Watchman": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Disarm opponent with Melee Test",
+                "appliesTo": [
+                    "Melee"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee Tests concerning this Talent"
+                ]
+            }
+        ]
     },
     {
         "id": "distract",
@@ -910,7 +1541,23 @@
             "Fieldwarden": "1",
             "Rhinox Herder": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Distract opponent with Athletics Test",
+                "appliesTo": [
+                    "Athletics"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Athletics to Distract"
+                ]
+            }
+        ]
     },
     {
         "id": "doomed",
@@ -922,12 +1569,13 @@
         "racial": [
             "Human (Middenheimer, Middenlander, Nordlander, Reiklander, Salzenmunder, Tilean (Luccini))",
             "Dooming Miracle"
-        ]
+        ],
+        "effects": []
     },
     {
         "id": "drilled",
         "name": "Drilled",
-        "description": "You have been trained to fight shoulder-to-shoulder with other soldiers. If an enemy causes you to lose Advantage when standing beside an active ally with the Drilled Talent, you may keep 1 lost Advantage for each time you’ve taken the Drilled Talent.",
+        "description": "You have been trained to fight shoulder-to-shoulder with other soldiers.  Characters with the Drilled Talent count as two combatants when determining Losing Advantage.",
         "tests": [
             "Melee Tests when beside an ally with Drilled"
         ],
@@ -944,7 +1592,23 @@
             "Soldier": "2",
             "Watchman": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Count as two combatants for Losing Advantage",
+                "appliesTo": [
+                    "Melee"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee Tests when beside an ally with Drilled"
+                ]
+            }
+        ]
     },
     {
         "id": "dual-wielder",
@@ -965,7 +1629,23 @@
             "Witch Hunter": "2",
             "Wizard": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Attack with both weapons",
+                "appliesTo": [
+                    "Melee"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee or Ranged when attacking with two weapons"
+                ]
+            }
+        ]
     },
     {
         "id": "embezzle",
@@ -989,7 +1669,23 @@
             "Townsman": "2",
             "Warden": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Embezzle money with Intelligence Test",
+                "appliesTo": [
+                    "Intelligence"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Intelligence (Embezzling)"
+                ]
+            }
+        ]
     },
     {
         "id": "enclosed-fighter",
@@ -1009,7 +1705,25 @@
             "Siege Specialist": "2",
             "Soldier": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Ignore Melee penalties in confined spaces; can use Dodge",
+                "appliesTo": [
+                    "Melee",
+                    "Dodge"
+                ],
+                "condition": "enclosed spaces"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Dodge in enclosed environments"
+                ]
+            }
+        ]
     },
     {
         "id": "etiquette",
@@ -1082,6 +1796,17 @@
         },
         "racial": [
             "Human (Middenheimer) (Any)"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm",
+                    "Gossip"
+                ],
+                "condition": "appropriate social class"
+            }
         ]
     },
     {
@@ -1106,7 +1831,25 @@
             "Witch": "3",
             "Wizard": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "TEST_BONUS",
+                "value": 10,
+                "appliesTo": [
+                    "Melee (Brawling)"
+                ],
+                "condition": "to touch an opponent"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Sleight of Hand",
+                    "Melee (Brawling) to touch an opponent"
+                ]
+            }
+        ]
     },
     {
         "id": "fast-shot",
@@ -1125,7 +1868,23 @@
             "Handgunner": "2",
             "Hunter": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Make a Fast Shot before Initiative Order",
+                "appliesTo": [
+                    "Ranged"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Ranged when making a Fast Shot"
+                ]
+            }
+        ]
     },
     {
         "id": "fearless",
@@ -1170,6 +1929,23 @@
         },
         "racial": [
             "Combat Familiar (Size Large or smaller)"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Roll Cool (+20%) to oppose Intimidate, Fear, and Terror from specified enemy",
+                "appliesTo": [
+                    "Cool"
+                ],
+                "condition": "from specified enemy"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Cool to oppose your Enemy’s Intimidate, Fear, and Terror"
+                ]
+            }
         ]
     },
     {
@@ -1183,7 +1959,23 @@
         "careers": {
             "Duellist": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Add SL from Feint to next attack",
+                "appliesTo": [
+                    "Melee"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee (Fencing) for Feints"
+                ]
+            }
+        ]
     },
     {
         "id": "field-dressing",
@@ -1202,7 +1994,23 @@
             "Pikeman": "3",
             "Wolf Kin": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "REVERSE_ROLL_ON_FAIL",
+                "appliesTo": [
+                    "Heal"
+                ],
+                "condition": "using Bandages"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Heal during combat Rounds"
+                ]
+            }
+        ]
     },
     {
         "id": "fisherman",
@@ -1227,12 +2035,29 @@
         "racial": [
             "Gnome",
             "Human (Björnling, Nordlander, Tilean)"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Feed self and others equal to Fisherman level",
+                "appliesTo": [
+                    "foraging"
+                ],
+                "condition": "fishing for at least an hour"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Any Test involving fishing"
+                ]
+            }
         ]
     },
     {
         "id": "flagellant",
         "name": "Flagellant",
-        "description": "You have dedicated your pain to the service of your God. Each day, you must spend half a bell (half an hour) praying as you maintain a number of Wounds suffered equal to your level in Flagellant. Until you next sleep, if you have the Frenzy Talent you may enter Frenzy immediately without testing. The Frenzy Talent is added to the Talent list of any career you are in. Should you fail to flagellate yourself on any given day, or allow your castigated flesh to be healed, you may not spend any Resilience or Resolve until you flagellate yourself again.",
+        "description": "You have dedicated your pain to the service of your God. Each day, you must spend half a bell praying as you maintain a number of Wounds suffered equal to your level in Flagellant. Until you next sleep, if you have the Frenzy Talent you may enter Frenzy immediately without testing. The Frenzy Talent is added to the Talent list of any career you are in. Should you fail to flagellate yourself on any given day, or allow your castigated flesh to be healed, you may not spend any Resilience or Resolve until you flagellate yourself again.",
         "tests": [
             "Any for resisting the Ruinous Powers"
         ],
@@ -1240,7 +2065,24 @@
         "careers": {
             "Flagellant": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Enter Frenzy without testing",
+                "appliesTo": [
+                    "Frenzy"
+                ],
+                "condition": "after daily flagellation"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Any for resisting the Ruinous Powers"
+                ]
+            }
+        ]
     },
     {
         "id": "flee",
@@ -1267,6 +2109,23 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "ATTRIBUTE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "Movement"
+                ],
+                "condition": "when Fleeing"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Athletics when Fleeing"
+                ]
+            }
         ]
     },
     {
@@ -1280,7 +2139,16 @@
             "Ghost Strider": "1",
             "Messenger": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "ATTRIBUTE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "Movement"
+                ]
+            }
+        ]
     },
     {
         "id": "frenzy",
@@ -1293,14 +2161,23 @@
             "Slayer": "1",
             "Wolf Kin": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Enter Frenzy",
+                "appliesTo": [
+                    "Frenzy"
+                ]
+            }
+        ]
     },
     {
         "id": "frightening",
         "name": "Frightening",
         "description": "Anyone sane thinks twice before approaching you. If you wish, you have a Fear Rating of 1 (see page 190). Add +1 to this number per extra time you have this Talent.",
         "tests": [],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Alchemist": "4",
             "Astromancer": "4",
@@ -1324,7 +2201,13 @@
             "Wizard": "4",
             "Wolf Kin": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "FEAR_RATING",
+                "value": "1 per rank"
+            }
+        ]
     },
     {
         "id": "furious-assault",
@@ -1347,7 +2230,23 @@
             "Wrecker": "4",
             "Wolf Kin": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Make an extra attack after hitting in Melee at cost of one Advantage or Move",
+                "appliesTo": [
+                    "Melee"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee when making extra attacks"
+                ]
+            }
+        ]
     },
     {
         "id": "gregarious",
@@ -1369,7 +2268,22 @@
             "Spy": "1",
             "Townsman": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "REVERSE_ROLL_ON_FAIL",
+                "appliesTo": [
+                    "Gossip"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Gossip Tests with travellers"
+                ]
+            }
+        ]
     },
     {
         "id": "gunner",
@@ -1387,7 +2301,16 @@
             "Ship’s Gunner": "2",
             "Siege Specialist": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": "1 per rank",
+                "appliesTo": [
+                    "reloading Blackpowder weapons"
+                ]
+            }
+        ]
     },
     {
         "id": "hardy",
@@ -1415,6 +2338,12 @@
         "racial": [
             "Random Racial Talent",
             "Wood Elf"
+        ],
+        "effects": [
+            {
+                "type": "WOUNDS_BONUS",
+                "value": "TB"
+            }
         ]
     },
     {
@@ -1437,7 +2366,24 @@
             "Road Warden": "3 (Any)",
             "Sailor-Priest of Manann": "3 (Followers of Stromfels)"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Hatred against a group",
+                "appliesTo": [
+                    "Willpower"
+                ],
+                "condition": "against hated group"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Willpower (Resist Group)"
+                ]
+            }
+        ]
     },
     {
         "id": "holy-hatred",
@@ -1448,12 +2394,21 @@
         "careers": {
             "Warrior Priest": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "DAMAGE_BONUS",
+                "value": "1 per rank",
+                "appliesTo": [
+                    "Miracles"
+                ]
+            }
+        ]
     },
     {
         "id": "holy-visions",
         "name": "Holy Visions",
-        "description": "You clearly see the great works of the Gods all around you. You automatically know when you enter Holy Ground, and may take an Intuition Test to receive visions often obscure and seen through the paradigm of your cult or individual belief system) regarding the local area if significant events have occurred there in the past.",
+        "description": "You clearly see the great works of the Gods all around you. You automatically know when you enter Holy Ground, and may take an Intuition Test to receive visions (often obscure and seen through the paradigm of your cult or individual belief system) regarding the local area if significant events have occurred there in the past.",
         "tests": [
             "Intuition Tests when on holy ground"
         ],
@@ -1468,7 +2423,24 @@
             "Sailor-Priest of Manann": "1",
             "Warrior Priest": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Know when on Holy Ground; Intuition Test for visions",
+                "appliesTo": [
+                    "Intuition"
+                ],
+                "condition": "when on Holy Ground"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Intuition Tests when on holy ground"
+                ]
+            }
+        ]
     },
     {
         "id": "hunters-eye",
@@ -1482,7 +2454,24 @@
             "Hunter": "2",
             "Owler": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Feed self and others equal to Hunter's Eye level",
+                "appliesTo": [
+                    "foraging"
+                ],
+                "condition": "hunting in well-stocked lands with time and equipment"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Any Test to trail or capture game"
+                ]
+            }
+        ]
     },
     {
         "id": "impassioned-zeal",
@@ -1501,7 +2490,24 @@
             "Priest of Stromfels": "3",
             "Wolf Kin": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Double Fellowship for Public Speaking",
+                "appliesTo": [
+                    "Public Speaking"
+                ],
+                "condition": "when speaking about your cause"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm when speaking about your cause"
+                ]
+            }
+        ]
     },
     {
         "id": "implacable",
@@ -1519,7 +2525,13 @@
             "Slayer": "2",
             "Wolf Kin": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "BLEEDING_CONDITION_IGNORE",
+                "value": 1
+            }
+        ]
     },
     {
         "id": "in-fighter",
@@ -1535,7 +2547,31 @@
             "Protagonist": "1",
             "Wrecker": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "No penalties for longer weapons",
+                "appliesTo": [
+                    "Melee"
+                ]
+            },
+            {
+                "type": "TEST_BONUS",
+                "value": 10,
+                "appliesTo": [
+                    "Melee"
+                ],
+                "condition": "when in-fighting"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee when in-fighting, or to enter in-fighting"
+                ]
+            }
+        ]
     },
     {
         "id": "inspiring",
@@ -1571,7 +2607,24 @@
             "Soldier": "4",
             "Warrior Priest": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Increase number of soldiers influenced by Leadership during battle",
+                "appliesTo": [
+                    "Leadership"
+                ],
+                "condition": "during battle"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Leadership during war"
+                ]
+            }
+        ]
     },
     {
         "id": "instinctive-diction",
@@ -1593,7 +2646,23 @@
             "Witch": "1",
             "Wizard": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "No Miscast on double rolls",
+                "appliesTo": [
+                    "Language (Magick)"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Language (Magick) when casting"
+                ]
+            }
+        ]
     },
     {
         "id": "invoke",
@@ -1622,7 +2691,23 @@
         "careers": {
             "Pit Fighter": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Resist Stunned Conditions on Endurance Tests",
+                "appliesTo": [
+                    "Endurance"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Endurance tests to resist Stunned"
+                ]
+            }
+        ]
     },
     {
         "id": "iron-will",
@@ -1721,6 +2806,15 @@
         "racial": [
             "Combat Familiar",
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Dodge"
+                ]
+            }
         ]
     },
     {
@@ -1737,6 +2831,15 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Learn languages faster",
+                "appliesTo": [
+                    "Language"
+                ]
+            }
         ]
     },
     {
@@ -1770,6 +2873,15 @@
         "racial": [
             "Random Racial Talent",
             "Gnome"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Reroll any Test",
+                "appliesTo": [
+                    "all"
+                ]
+            }
         ]
     },
     {
@@ -1807,7 +2919,16 @@
             "Witch Hunter": "4",
             "Wizard": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Detect magic",
+                "appliesTo": [
+                    "Intuition"
+                ]
+            }
+        ]
     },
     {
         "id": "magic-resistance",
@@ -1818,6 +2939,15 @@
         "careers": {},
         "racial": [
             "Dwarf (Grumsson, WHFRP)"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Resistance (Magic)"
+                ]
+            }
         ]
     },
     {
@@ -1862,6 +2992,15 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Ranged"
+                ]
+            }
         ]
     },
     {
@@ -1973,6 +3112,15 @@
         },
         "racial": [
             "Human (Middenlander)"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Intimidate"
+                ]
+            }
         ]
     },
     {
@@ -2023,6 +3171,15 @@
             "High Elf",
             "Ogre",
             "Wood Elf"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "See in darkness",
+                "appliesTo": [
+                    "Perception"
+                ]
+            }
         ]
     },
     {
@@ -2042,6 +3199,16 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Sleight of Hand",
+                    "Pick Lock"
+                ]
+            }
         ]
     },
     {
@@ -2107,7 +3274,17 @@
             "Stevedore": "4",
             "Warden": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Evaluate"
+                ],
+                "condition": "coins and currency"
+            }
+        ]
     },
     {
         "id": "old-salt",
@@ -2227,6 +3404,15 @@
         "racial": [
             "Power Familiar",
             "Spell Familiar"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Can cast Petty spells",
+                "appliesTo": [
+                    "magic"
+                ]
+            }
         ]
     },
     {
@@ -2333,7 +3519,16 @@
             "Siege Specialist": "1",
             "Soldier": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Reload as Free Action",
+                "appliesTo": [
+                    "ranged"
+                ]
+            }
+        ]
     },
     {
         "id": "reaction-strike",
@@ -2418,6 +3613,15 @@
             "Power Familiar",
             "Spell Familiar",
             "Wood Elf"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Can read and write",
+                "appliesTo": [
+                    "Language"
+                ]
+            }
         ]
     },
     {
@@ -2468,6 +3672,15 @@
             "Halfling (Chaos)",
             "Human (Björnling, Sarl (Chaos))",
             "Ogre (Poison (Ingested))"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Resistance"
+                ]
+            }
         ]
     },
     {
@@ -2501,7 +3714,16 @@
             "Protagonist": "2",
             "Slayer": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Reverse fumble to success",
+                "appliesTo": [
+                    "Melee"
+                ]
+            }
+        ]
     },
     {
         "id": "riposte",
@@ -2514,7 +3736,16 @@
         "careers": {
             "Duellist": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Attack after successful parry",
+                "appliesTo": [
+                    "Melee"
+                ]
+            }
+        ]
     },
     {
         "id": "river-guide",
@@ -2642,7 +3873,16 @@
             "Villager": "4 (Local)",
             "Warden": "4 (Local)"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Lore"
+                ]
+            }
+        ]
     },
     {
         "id": "savvy",
@@ -2680,6 +3920,15 @@
             "High Elf",
             "Power Familiar",
             "Spell Familiar"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "+5 starting Intelligence",
+                "appliesTo": [
+                    "Int"
+                ]
+            }
         ]
     },
     {
@@ -2695,7 +3944,16 @@
             "Karak Ranger": "2",
             "Thief": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Climb"
+                ]
+            }
+        ]
     },
     {
         "id": "schemer",
@@ -2857,7 +4115,16 @@
             "Thief": "2",
             "Witch Hunter": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Stealth"
+                ]
+            }
+        ]
     },
     {
         "id": "sharp",
@@ -2894,7 +4161,17 @@
             "Handgunner": "3",
             "Hunter": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Ranged"
+                ],
+                "condition": "aiming"
+            }
+        ]
     },
     {
         "id": "shieldsman",
@@ -3128,14 +4405,23 @@
             "Smuggler": "1 (Marshes), 4 (Coastal)",
             "Wolf Kin": "2 (Any)"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Ignore terrain penalties",
+                "appliesTo": [
+                    "Athletics"
+                ]
+            }
+        ]
     },
     {
         "id": "strike-mighty-blow",
         "name": "Strike Mighty Blow",
         "description": "You know how to hit hard! You deal your level of Strike Mighty Blow in extra Damage with melee weapons.",
         "tests": [],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Beadle": "2",
             "Boatman": "3",
@@ -3159,7 +4445,16 @@
             "Seaman": "3",
             "Slayer": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "DAMAGE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "melee"
+                ]
+            }
+        ]
     },
     {
         "id": "strike-to-injure",
@@ -3178,7 +4473,16 @@
             "Protagonist": "4",
             "Rhinox Herder": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee"
+                ]
+            }
+        ]
     },
     {
         "id": "strike-to-stun",
@@ -3202,7 +4506,16 @@
             "Warden": "1",
             "Watchman": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Stun opponent on hit",
+                "appliesTo": [
+                    "Melee"
+                ]
+            }
+        ]
     },
     {
         "id": "strong-back",
@@ -3383,6 +4696,15 @@
         "racial": [
             "Random Racial Talent",
             "Human (Reiklander, Salzenmunder, Tilean)"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "+5 starting Fellowship",
+                "appliesTo": [
+                    "Fel"
+                ]
+            }
         ]
     },
     {
@@ -3461,7 +4783,16 @@
             "Handgunner": "3",
             "Hunter": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Ignore penalties for range",
+                "appliesTo": [
+                    "ranged"
+                ]
+            }
+        ]
     },
     {
         "id": "surgery",
@@ -3525,7 +4856,17 @@
             "Miner": "3",
             "Pedlar": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Trade"
+                ],
+                "condition": "repairs"
+            }
+        ]
     },
     {
         "id": "tower-of-memories",
@@ -3652,6 +4993,15 @@
             "Human (Nordlander)",
             "Ogre",
             "Wood Elf"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "+5 starting Toughness",
+                "appliesTo": [
+                    "T"
+                ]
+            }
         ]
     },
     {
@@ -3681,6 +5031,15 @@
             "Random Racial Talent",
             "Combat Familiar",
             "Ogre"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "+5 starting Strength",
+                "appliesTo": [
+                    "S"
+                ]
+            }
         ]
     },
     {
@@ -3778,6 +5137,15 @@
             "Random Racial Talent",
             "Combat Familiar",
             "Human (Björnling, Middenlander)"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee"
+                ]
+            }
         ]
     },
     {

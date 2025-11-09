@@ -1,0 +1,166 @@
+[
+  {
+    "location": "head",
+    "results": [
+      {
+        "minWounds": 1,
+        "maxWounds": 2,
+        "description": "Striking Blow: You suffer a Minor Head Injury.",
+        "effect": "stunned_1"
+      },
+      {
+        "minWounds": 3,
+        "maxWounds": 4,
+        "description": "Minor Head Wound: You suffer a Minor Head Injury and gain 1 Bleeding Condition.",
+        "effect": "stunned_1_bleeding_1"
+      },
+      {
+        "minWounds": 5,
+        "maxWounds": 6,
+        "description": "Pummeled: You suffer a Minor Head Injury and gain the Stunned Condition.",
+        "effect": "minor_head_injury_stunned"
+      },
+      {
+        "minWounds": 7,
+        "maxWounds": 8,
+        "description": "Cracked Skull: You suffer a Fractured Skull and gain 2 Bleeding Conditions.",
+        "effect": "fractured_skull_bleeding_2"
+      },
+      {
+        "minWounds": 9,
+        "maxWounds": 9,
+        "description": "Devastated Eye: You suffer a Minor Head Injury and are Blinded in one eye.",
+        "effect": "minor_head_injury_blinded_eye"
+      },
+      {
+        "minWounds": 10,
+        "maxWounds": null,
+        "description": "Decapitated: Your head is separated from your body. You are dead.",
+        "effect": "death"
+      }
+    ]
+  },
+  {
+    "location": "arm",
+    "results": [
+      {
+        "minWounds": 1,
+        "maxWounds": 2,
+        "description": "Jarred Arm: You drop anything held in that hand.",
+        "effect": "drop_item"
+      },
+      {
+        "minWounds": 3,
+        "maxWounds": 4,
+        "description": "Minor Arm Wound: You gain 1 Bleeding Condition.",
+        "effect": "bleeding_1"
+      },
+      {
+        "minWounds": 5,
+        "maxWounds": 6,
+        "description": "Badly Cut Arm: You drop anything held and gain 2 Bleeding Conditions.",
+        "effect": "drop_item_bleeding_2"
+      },
+      {
+        "minWounds": 7,
+        "maxWounds": 8,
+        "description": "Broken Arm: The arm is broken. You suffer a Fractured Arm and drop anything held.",
+        "effect": "fractured_arm_drop_item"
+      },
+      {
+        "minWounds": 9,
+        "maxWounds": 9,
+        "description": "Mangled Arm: The arm is Torn. You drop anything held.",
+        "effect": "torn_arm_drop_item"
+      },
+      {
+        "minWounds": 10,
+        "maxWounds": null,
+        "description": "Severed Arm: The arm is Amputated and you gain 2 Bleeding Conditions.",
+        "effect": "amputated_arm_bleeding_2"
+      }
+    ]
+  },
+  {
+    "location": "body",
+    "results": [
+      {
+        "minWounds": 1,
+        "maxWounds": 2,
+        "description": "Winded: You gain the Stunned Condition.",
+        "effect": "stunned"
+      },
+      {
+        "minWounds": 3,
+        "maxWounds": 4,
+        "description": "Minor Chest Wound: You gain 1 Bleeding Condition.",
+        "effect": "bleeding_1"
+      },
+      {
+        "minWounds": 5,
+        "maxWounds": 6,
+        "description": "Gaping Chest Wound: You gain the Prone Condition and 2 Bleeding Conditions.",
+        "effect": "prone_bleeding_2"
+      },
+      {
+        "minWounds": 7,
+        "maxWounds": 8,
+        "description": "Crushed Ribs: You suffer Fractured Ribs and gain the Prone and Stunned Conditions.",
+        "effect": "fractured_ribs_prone_stunned"
+      },
+      {
+        "minWounds": 9,
+        "maxWounds": 9,
+        "description": "Gutted: You are Torn and gain the Prone Condition and 3 Bleeding Conditions.",
+        "effect": "torn_prone_bleeding_3"
+      },
+      {
+        "minWounds": 10,
+        "maxWounds": null,
+        "description": "Heart Pierced: Your heart is pierced. You are dead.",
+        "effect": "death"
+      }
+    ]
+  },
+  {
+    "location": "leg",
+    "results": [
+      {
+        "minWounds": 1,
+        "maxWounds": 2,
+        "description": "Jarred Leg: You gain the Prone Condition.",
+        "effect": "prone"
+      },
+      {
+        "minWounds": 3,
+        "maxWounds": 4,
+        "description": "Minor Leg Wound: You gain 1 Bleeding Condition.",
+        "effect": "bleeding_1"
+      },
+      {
+        "minWounds": 5,
+        "maxWounds": 6,
+        "description": "Badly Cut Leg: You gain the Prone Condition and 2 Bleeding Conditions.",
+        "effect": "prone_bleeding_2"
+      },
+      {
+        "minWounds": 7,
+        "maxWounds": 8,
+        "description": "Broken Leg: You suffer a Fractured Leg and gain the Prone Condition.",
+        "effect": "fractured_leg_prone"
+      },
+      {
+        "minWounds": 9,
+        "maxWounds": 9,
+        "description": "Mangled Leg: The leg is Torn. You gain the Prone Condition.",
+        "effect": "torn_leg_prone"
+      },
+      {
+        "minWounds": 10,
+        "maxWounds": null,
+        "description": "Severed Leg: The leg is Amputated. You gain the Prone Condition and 2 Bleeding Conditions.",
+        "effect": "amputated_leg_prone_bleeding_2"
+      }
+    ]
+  }
+]
