@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node --version:*)"
+      "Bash(node --version:*)",
+      "Bash(npm run build:shared:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Combatant, rollDice, conditionsData, Advantages } from '@wfrp/shared';
+import {
+    Combatant,
+    rollDice,
+    conditionsData,
+    Advantages,
+    ConditionPromptModal,
+    applyEndOfRoundConditionEffects,
+    checkConditionEffects
+} from '@wfrp/shared';
 import styles from './InitiativeTracker.module.css';
 
 interface InitiativeTrackerProps {
@@ -17,6 +25,8 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
     combatants, onSetCombatants, onUpdateCombatant, onClearCombatants, currentTurnId, onSetCurrentTurnId, advantages, onUpdateAdvantages
 }) => {
     const [expandedCombatantId, setExpandedCombatantId] = useState<string | null>(null);
+    const [conditionPromptCombatant, setConditionPromptCombatant] = useState<Combatant | null>(null);
+    const [roundNumber, setRoundNumber] = useState<number>(0);
 
     const handleRollInitiative = () => {
         const rolledCombatants = combatants.map(c => ({
@@ -34,7 +44,66 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
 
         const currentIndex = combatants.findIndex(c => c.id === currentTurnId);
         const nextIndex = (currentIndex + 1) % combatants.length;
-        onSetCurrentTurnId(combatants[nextIndex].id);
+        const nextCombatant = combatants[nextIndex];
+
+        // Check if we're starting a new round
+        if (nextIndex === 0) {
+            handleEndOfRound();
+            setRoundNumber(prev => prev + 1);
+        }
+
+        // Check if next combatant has conditions that need processing
+        if (nextCombatant && nextCombatant.conditions && nextCombatant.conditions.length > 0) {
+            const uniqueConditions = Array.from(new Set(nextCombatant.conditions));
+            const needsPrompt = uniqueConditions.some(condId => {
+                const effect = checkConditionEffects(condId, nextCombatant);
+                return effect.needsTest || effect.automaticEffect?.type === 'remove';
+            });
+
+            if (needsPrompt) {
+                setConditionPromptCombatant(nextCombatant);
+            }
+        }
+        console.log('Next Turn:', nextCombatant?.name);
+        onSetCurrentTurnId(nextCombatant.id);
+    }
+
+    const handleEndOfRound = () => {
+        // Apply end-of-round condition effects to all combatants
+        const updatedCombatants = [...combatants];
+        const allLogs: string[] = [];
+
+        updatedCombatants.forEach((combatant, index) => {
+            if (combatant.conditions && combatant.conditions.length > 0) {
+                const result = applyEndOfRoundConditionEffects(combatant);
+
+                updatedCombatants[index] = result.combatant;
+                allLogs.push(...result.log);
+
+                // Apply condition changes
+                result.conditionsToRemove.forEach(condId => {
+                    const condIndex = updatedCombatants[index].conditions?.indexOf(condId);
+                    if (condIndex !== undefined && condIndex !== -1) {
+                        updatedCombatants[index].conditions?.splice(condIndex, 1);
+                    }
+                });
+
+                result.conditionsToAdd.forEach(condId => {
+                    if (!updatedCombatants[index].conditions) {
+                        updatedCombatants[index].conditions = [];
+                    }
+                    updatedCombatants[index].conditions!.push(condId);
+                });
+            }
+        });
+
+        onSetCombatants(updatedCombatants);
+
+        // Log end-of-round effects
+        if (allLogs.length > 0) {
+            console.log('End of Round Effects:', allLogs.join('\n'));
+            // You could display these in a modal or log panel
+        }
     }
 
     const handleWoundsChange = (combatantId: string, newWounds: number) => {
@@ -104,10 +173,11 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
     return (
         <div className={styles.trackerContainer}>
             <header className={styles.header}>
-                <h3>Encounter</h3>
+                <h3>Encounter {roundNumber > 0 && `- Round ${roundNumber}`}</h3>
                 <div className={styles.actions}>
                     <button onClick={handleRollInitiative}>Roll Init</button>
                     <button onClick={handleNextTurn}>Next Turn</button>
+                    <button onClick={() => { handleEndOfRound(); setRoundNumber(prev => prev + 1); }}>End Round</button>
                     <button onClick={onClearCombatants} className={styles.clearBtn}>Clear</button>
                 </div>
             </header>
@@ -221,6 +291,47 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                     );
                 })}
             </ol>
+
+            {/* Condition Prompt Modal */}
+            {conditionPromptCombatant && (
+                <ConditionPromptModal
+                    combatant={conditionPromptCombatant}
+                    conditions={conditionPromptCombatant.conditions || []}
+                    onClose={() => setConditionPromptCombatant(null)}
+                    onApplyEffects={(conditionsRemoved, conditionsToAdd, log) => {
+                        // Update combatant with condition changes
+                        let updatedConditions = [...(conditionPromptCombatant.conditions || [])];
+
+                        // Remove conditions
+                        for (let i = 0; i < conditionsRemoved; i++) {
+                            const uniqueConditions = Array.from(new Set(updatedConditions));
+                            if (uniqueConditions.length > 0) {
+                                const condToRemove = uniqueConditions[0];
+                                const index = updatedConditions.indexOf(condToRemove);
+                                if (index !== -1) {
+                                    updatedConditions.splice(index, 1);
+                                }
+                            }
+                        }
+
+                        // Add new conditions
+                        updatedConditions = [...updatedConditions, ...conditionsToAdd];
+
+                        // Update combatant
+                        onUpdateCombatant({
+                            ...conditionPromptCombatant,
+                            conditions: updatedConditions
+                        });
+
+                        // Log effects
+                        if (log.length > 0) {
+                            console.log('Condition Effects:', log.join('\n'));
+                        }
+
+                        setConditionPromptCombatant(null);
+                    }}
+                />
+            )}
         </div>
     );
 }
