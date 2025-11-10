@@ -1,4 +1,4 @@
-import { calculateEffectiveMaxWounds, MapDisplay, recalculateCharacterTalentBonuses } from '@wfrp/shared';
+import { calculateEffectiveMaxWounds, getTalentInitiativeBonus, MapDisplay, recalculateCharacterTalentBonuses } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -220,7 +220,7 @@ function App() {
             initiative: null,
             currentWounds: character.status.wounds.current,
             maxWounds: calculateMaxWounds(character),
-            baseInitiative: calculateCharacteristicBonus(character.characteristics.i),
+            baseInitiative: calculateCharacteristicBonus(character.characteristics.i) + getTalentInitiativeBonus(character),
             baseAg: calculateCharacteristicBonus(character.characteristics.ag),
             isPlayer: assignedCharacters.includes(character.id),
             conditions: character.conditions.map(cond => [cond.id, ...Array(cond.stack - 1).fill(cond.id)]).flat(),

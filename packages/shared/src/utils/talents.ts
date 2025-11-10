@@ -1,6 +1,7 @@
 import { Character, Talent, TalentEffect } from '../types/wfrp.types';
 import talentsData from '../data/talents.json';
 import { calculateCharacteristicBonus } from './skills';
+import { rolld100 } from './mechanics';
 
 /**
  * Gets all talents that could apply to a given skill or characteristic test
@@ -232,9 +233,14 @@ export function getTalentInitiativeBonus(character: Character): number {
 export function checkCriticalResult(roll: number, target: number): {
     isCritical: boolean;
     isFumble: boolean;
+    critRoll?: number;
 } {
     const isCritical = roll <= 5 || (roll <= target && roll % 11 === 0);
     const isFumble = roll >= 96 || (roll > target && roll % 11 === 0);
+
+    if (isCritical || isFumble) {
+        return { isCritical, isFumble, critRoll: rolld100() };
+    }
 
     return { isCritical, isFumble };
 }

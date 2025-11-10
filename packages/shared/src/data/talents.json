@@ -4699,10 +4699,10 @@
         ],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "+5 starting Fellowship",
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
                 "appliesTo": [
-                    "Fel"
+                    "Fellowship"
                 ]
             }
         ]
