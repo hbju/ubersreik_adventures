@@ -75,24 +75,30 @@ export interface SkillCharDefinition {
 export interface Talent {
   id: string,
   name: string,
-  description: string, 
-  tests: keyof Character['characteristics'][] | Skill[] | null,
-  max_ranks: number | keyof Character['characteristics'],
+  description: string,
+  tests: string[],
+  max_ranks: number | string | keyof Character['characteristics'],
+  careers?: Record<string, string | undefined>,
+  racial?: string[],
   effects?: TalentEffect[]
 }
 
 export interface TalentEffect {
-  type: 
-    'SL_BONUS_ON_SUCCESS' | 
-    'WOUNDS_BONUS' | 
-    'TEST_BONUS' | 
-    'DAMAGE_BONUS' | 
-    'INITIATIVE_BONUS' | 
-    'PASSIVE' | 
+  type:
+    'SL_BONUS_ON_SUCCESS' |
+    'WOUNDS_BONUS' |
+    'TEST_BONUS' |
+    'DAMAGE_BONUS' |
+    'INITIATIVE_BONUS' |
+    'PASSIVE' |
     'REVERSE_ROLL_ON_FAIL' |
     'SL_DICES_UNITS' |
     'OPPONENT_ADVANTAGE_MODIFIER' |
-    'CONDITIONAL';
+    'CONDITIONAL' |
+    'ATTRIBUTE_BONUS' |
+    'CHARACTERISTIC_BONUS' |
+    'FEAR_RATING' |
+    'BLEEDING_CONDITION_IGNORE';
   value: number | string; // number for fixed values, string for formulas like "TB" (Toughness Bonus)
   appliesTo?: string[]; // skill names, characteristic names, or descriptors like "ranged", "melee"
   condition?: string; // optional condition for when the effect applies

@@ -1,21 +1,14 @@
 import React, { useState } from 'react';
-import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages } from '../types/wfrp.types';
+import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages, Talent } from '../types/wfrp.types';
 import { calculateCharacteristicBonus } from '../utils/skills';
 import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
 import talentsDataRaw from '../data/talents.json';
 import conditionsData from '../data/conditions.json';
 import InventoryView from './InventoryView';
 import './CharacterSheet.css';
+import { getTalentCharacteristicBonus } from '../utils/talents';
 
-interface TalentDefinition {
-    id: string;
-    name: string;
-    description: string;
-    tests: string[];
-    max_ranks: string | number;
-}
-
-const talentsData = talentsDataRaw as TalentDefinition[];
+const talentsData = talentsDataRaw as Talent[];
 
 interface CharacterSheetProps {
     character: Character;
@@ -31,6 +24,7 @@ interface CharacterSheetProps {
     onPurchaseClick?: () => void;
     showPurchaseButton?: boolean;
     advantages?: Advantages;
+    onRemoveTalent?: (talentId: string) => void;
 }
 
 const CharacterSheet: React.FC<CharacterSheetProps> = ({
@@ -46,7 +40,8 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     onSkillAdvance,
     onPurchaseClick,
     showPurchaseButton = false,
-    advantages
+    advantages,
+    onRemoveTalent
 }) => {
     const [activeTab, setActiveTab] = useState<'stats' | 'talents' | 'inventory'>('stats');
 
@@ -217,11 +212,12 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                     <div className="characteristicsPanel">
                         <h3>Characteristics</h3>
                         <div className={advancementMode ? "characteristicsGridAdvancement" : "characteristicsGrid"}>
-                            <span></span><span>Initial</span><span>Adv</span>{advancementMode && <span>Adv</span>}<span>Mod</span><span>Total</span>
+                            <span></span><span>Initial</span><span>Adv</span>{advancementMode && <span></span>}<span>Mod</span><span>Talents</span><span>Total</span>
                             {Object.entries(character.characteristics).map(([key, char]) => {
                                 const charKey = key as keyof Character['characteristics'];
                                 const charNames: { [key: string]: string } = { "ws": "Weapon Skill", "bs": "Ballistic Skill", "s": "Strength", "t": "Toughness", "i": "Initiative", "ag": "Agility", "int": "Intelligence", "dex": "Dexterity", "wp": "Willpower", "fel": "Fellowship" };
-                                const total = char.initial + char.advances + char.talents + char.modifier;
+                                const charTalents = getTalentCharacteristicBonus(character, charKey);
+                                const total = char.initial + char.advances + charTalents + char.modifier;
                                 return (
                                     <React.Fragment key={key}>
                                         <button className="rollButton" onClick={() => onCharacteristicClick && onCharacteristicClick(charNames[key], total)}>{key.toUpperCase()}</button>
@@ -241,6 +237,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                                 onChange={e => handleCharacteristicChange(charKey, 'modifier', parseInt(e.target.value, 10) || 0)}
                                                 className="numericInput"
                                             />)}
+                                        <span>{charTalents}</span>
                                         <span className="totalValue">{total}</span>
                                     </React.Fragment>
                                 );
@@ -399,12 +396,17 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                         <div key={talentId} className="talentCard">
                                             <div className="talentHeader">
                                                 <span className="talentName">{talentDef.name}</span>
-                                                <span className="talentRank">Rank {rank}</span>
+                                                <div>
+                                                    <span className="talentRank">Rank {rank}</span>
+                                                    {!readonly && onRemoveTalent && (
+                                                        <button className="removeTalentButton" onClick={() => onRemoveTalent(talentId)}>X</button>
+                                                    )}
+                                                </div>
                                             </div>
                                             <p className="talentDescription">{talentDef.description}</p>
-                                            {talentDef.tests && talentDef.tests.length > 0 && (
+                                            {talentDef.effects && talentDef.effects.length > 0 && talentDef.effects.some(effect => effect.type === 'SL_BONUS_ON_SUCCESS') && (
                                                 <div className="talentTests">
-                                                    <strong>Tests:</strong> {talentDef.tests.join(', ')}
+                                                    <strong>Tests:</strong> {talentDef.effects.filter(effect => effect.type === 'SL_BONUS_ON_SUCCESS').map(effect => effect.appliesTo).join(', ')}
                                                 </div>
                                             )}
                                         </div>

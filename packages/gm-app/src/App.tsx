@@ -1,4 +1,4 @@
-import { MapDisplay } from '@wfrp/shared';
+import { calculateEffectiveMaxWounds, MapDisplay, recalculateCharacterTalentBonuses } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -49,9 +49,7 @@ interface ServerStatusData {
 function App() {
 
     const calculateMaxWounds = (character: Character) => {
-        return calculateCharacteristicBonus(character.characteristics.t) * 2
-            + calculateCharacteristicBonus(character.characteristics.s)
-            + calculateCharacteristicBonus(character.characteristics.wp)
+        return calculateEffectiveMaxWounds(character);
     }
 
     const calculateMaxCorruption = (character: Character) => {
@@ -396,7 +394,10 @@ function App() {
                 return;
 
             if (data.characters && data.characters.length > 0) {
-                setCharacters(data.characters);
+                const updatedCharacters = data.characters.map((char: Character) => ({
+                    ...char, status: { ...char.status, wounds: { current: Math.min(char.status.wounds.current, calculateMaxWounds(char)), max: calculateMaxWounds(char) }, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }
+                }));
+                setCharacters(updatedCharacters);
                 console.log('Loaded campaign data from file system:', data);
             }
             if (data.users) {
@@ -794,6 +795,12 @@ function App() {
                             onCharacterUpdate={handleCharacterUpdate}
                             onXpAward={(amount) => handleXpAward(character.id, amount)}
                             onCurrencyAward={(amount) => handleCurrencyAward(character.id, amount)}
+                            onRemoveTalent={(talentId) => {
+                                const updatedTalents = { ...character.talents };
+                                delete updatedTalents[talentId];
+                                const updatedCharacter = { ...character, talents: updatedTalents };
+                                handleCharacterUpdate(recalculateCharacterTalentBonuses(updatedCharacter));
+                            }}
                         />
                     );
                 })}
