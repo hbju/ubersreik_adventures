@@ -1,16 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Character, calculateTalentAdvanceCost, talentsData } from '@wfrp/shared';
+import { Character, Talent, calculateTalentAdvanceCost, talentsData } from '@wfrp/shared';
 import styles from './TalentModal.module.css';
-
-interface TalentDefinition {
-  id: string;
-  name: string;
-  description: string;
-  tests: string[];
-  max_ranks: string | number;
-  careers: Record<string, string>;
-  racial: string[];
-}
 
 interface TalentModalProps {
   character: Character;
@@ -21,7 +11,7 @@ interface TalentModalProps {
 export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, onBuyTalent }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const getMaxRanks = (talent: TalentDefinition): number => {
+  const getMaxRanks = (talent: Talent): number => {
     if (typeof talent.max_ranks === 'number') {
       return talent.max_ranks;
     }
@@ -36,19 +26,19 @@ export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, on
   };
 
   const filteredTalents = useMemo(() => {
-    const talents = talentsData as TalentDefinition[];
+    const talents = talentsData as Talent[];
     if (!searchTerm.trim()) {
       return talents;
     }
-    
+
     const lowerSearch = searchTerm.toLowerCase();
-    return talents.filter(talent => 
+    return talents.filter(talent =>
       talent.name.toLowerCase().includes(lowerSearch) ||
       talent.description.toLowerCase().includes(lowerSearch)
     );
   }, [searchTerm]);
 
-  const handleBuy = (talent: TalentDefinition) => {
+  const handleBuy = (talent: Talent) => {
     const currentRank = character.talents[talent.id] || 0;
     const maxRanks = getMaxRanks(talent);
     
@@ -108,9 +98,9 @@ export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, on
 
                 <p className={styles.talentDescription}>{talent.description}</p>
 
-                {talent.tests && talent.tests.length > 0 && (
+                {talent.effects && talent.effects.length > 0 && talent.effects.some(effect => effect.type === 'SL_BONUS_ON_SUCCESS') && (
                   <div className={styles.talentTests}>
-                    <strong>Tests:</strong> {talent.tests.join(', ')}
+                    <strong>Tests:</strong> {talent.effects.filter(effect => effect.type === 'SL_BONUS_ON_SUCCESS').map(effect => effect.appliesTo).join(', ')}
                   </div>
                 )}
 

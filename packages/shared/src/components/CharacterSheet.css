@@ -215,11 +215,11 @@
 }
 
 .characteristicsGrid {
-  grid-template-columns: auto repeat(4, 1fr);
+  grid-template-columns: auto repeat(5, 1fr);
 }
 
 .characteristicsGridAdvancement {
-  grid-template-columns: auto repeat(5, 1fr);
+  grid-template-columns: auto repeat(6, 1fr);
 }
 
 .advanceButton {
@@ -389,6 +389,19 @@
   font-family: var(--font-heading);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.removeTalentButton {
+  background: var(--color-blood-red);
+  color: var(--color-parchment);
+  border: none;
+  border-radius: 2px;
+  padding: 2px 6px;
+  margin-left: 3px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .talentRank {

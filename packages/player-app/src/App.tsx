@@ -3,7 +3,7 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, MapDisplay, gameData } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, MapDisplay, gameData, recalculateCharacterTalentBonuses } from '@wfrp/shared';
 import { TalentSelectionModal } from './components/TalentSelectionModal';
 import { TestResultMessage, calculateCharacteristicAdvanceCost, calculateSkillAdvanceCost, allSkillsAndCharacteristics } from '@wfrp/shared';
 import { TalentModal } from './components/TalentModal';
@@ -113,7 +113,7 @@ const PlayerApp: React.FC = () => {
       const newDraft = { ...draftCharacter };
       newDraft.xp.current -= cost;
       newDraft.talents[talentId] = (newDraft.talents[talentId] || 0) + 1;
-      setDraftCharacter(newDraft);
+      setDraftCharacter(recalculateCharacterTalentBonuses(newDraft));
     } else {
       alert("Not enough XP!");
     }

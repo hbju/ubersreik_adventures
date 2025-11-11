@@ -49,8 +49,10 @@ interface CombatResult {
     hitLocation?: string;
     attackerCritical?: boolean;
     attackerFumble?: boolean;
+    attackerCritRoll?: number;
     defenderCritical?: boolean;
     defenderFumble?: boolean;
+    defenderCritRoll?: number;
 }
 
 interface CombatantStats {
@@ -289,8 +291,10 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 hitLocation,
                 attackerCritical: attackerCriticalCheck.isCritical,
                 attackerFumble: attackerCriticalCheck.isFumble,
+                attackerCritRoll: attackerCriticalCheck.critRoll,
                 defenderCritical: defenderCriticalCheck.isCritical,
                 defenderFumble: defenderCriticalCheck.isFumble,
+                defenderCritRoll: defenderCriticalCheck.critRoll,
             });
 
             onClearOpposedTestResult(opposedTestState.testId, 'attacker');
@@ -383,8 +387,10 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             hitLocation,
             attackerCritical: attackerCriticalCheck.isCritical,
             attackerFumble: attackerCriticalCheck.isFumble,
+            attackerCritRoll: attackerCriticalCheck.critRoll,
             defenderCritical: defenderCriticalCheck.isCritical,
             defenderFumble: defenderCriticalCheck.isFumble,
+            defenderCritRoll: defenderCriticalCheck.critRoll,
         });
     };
 
@@ -516,9 +522,9 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
 
         // Grant advantage to attacker if they won (dealt damage)
         if (result.damageDealt > 0) {
-            const attackerCombatant = combatants.find(c => c.sourceId === selectedAttackerId);
-            if (attackerCombatant) {
-                const team = attackerCombatant.isPlayer ? 'players' : 'enemies';
+            const attackerPlayer = characters.find(c => c.id === selectedAttackerId);
+            if (attackerPlayer) {
+                const team = attackerPlayer.userId != null ? 'players' : 'enemies';
                 onUpdateAdvantage(team, 1);
                 onLogEntry('system', `Team ${team} gains +1 Advantage`);
             }
@@ -822,7 +828,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                             {result.attackerFumble && (
                                 <button
                                     className={styles.fumbleButton}
-                                    onClick={() => setShowFumbleModal(result.attackRoll)}
+                                    onClick={() => setShowFumbleModal(result.attackerCritRoll || -1)}
                                 >
                                     💀 View Attacker Fumble
                                 </button>
@@ -841,7 +847,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                             {result.defenderFumble && (
                                 <button
                                     className={styles.fumbleButton}
-                                    onClick={() => setShowFumbleModal(result.defenseRoll)}
+                                    onClick={() => setShowFumbleModal(result.defenderCritRoll || -1)}
                                 >
                                     💀 View Defender Fumble
                                 </button>
