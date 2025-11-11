@@ -306,11 +306,8 @@
         ],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "Add Art (Any) to Career or reduce cost. You may purchase the Skill for 5 XP fewer per Advance.",
-                "appliesTo": [
-                    "Art"
-                ]
+                "type": "CAREER_SKILL_ADDITION",
+                "value": "Art (Any)"
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
@@ -1206,11 +1203,8 @@
         ],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "Add Trade (Any) to Career or reduce cost. You may purchase the Skill for 5 XP fewer per Advance.",
-                "appliesTo": [
-                    "Trade"
-                ]
+                "type": "CAREER_SKILL_ADDITION",
+                "value": "Trade (Any)"
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
@@ -2742,7 +2736,23 @@
             "Witch Hunter": "4",
             "Wizard": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Immune to Intimidate",
+                "appliesTo": [
+                    "Intimidate"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Cool Tests to oppose Intimidate"
+                ]
+            }
+        ]
     },
     {
         "id": "jump-up",
@@ -2755,7 +2765,17 @@
             "Entertainer": "2",
             "Guard": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Regain feet on Athletics Test",
+                "appliesTo": [
+                    "Athletics"
+                ],
+                "condition": "when Prone"
+            }
+        ]
     },
     {
         "id": "kingpin",
@@ -2780,7 +2800,16 @@
             "Stevedore": "4",
             "Watchman": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Ignore Status loss from Criminal Talent",
+                "appliesTo": [
+                    "Status"
+                ]
+            }
+        ]
     },
     {
         "id": "large",
@@ -2791,6 +2820,12 @@
         "careers": {},
         "racial": [
             "Ogre"
+        ],
+        "effects": [
+            {
+                "type": "SIZE_INCREASE",
+                "value": "Large"
+            }
         ]
     },
     {
@@ -2809,10 +2844,10 @@
         ],
         "effects": [
             {
-                "type": "SL_BONUS_ON_SUCCESS",
-                "value": 1,
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
                 "appliesTo": [
-                    "Dodge"
+                    "Agility"
                 ]
             }
         ]
@@ -2839,6 +2874,13 @@
                 "appliesTo": [
                     "Language"
                 ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Language (All)"
+                ]
             }
         ]
     },
@@ -2853,7 +2895,24 @@
         "careers": {
             "Spy": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Understand speech by watching lips",
+                "appliesTo": [
+                    "Perception"
+                ],
+                "condition": "when watching lips"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Perception Tests concerning this Talent"
+                ]
+            }
+        ]
     },
     {
         "id": "luck",
@@ -2876,11 +2935,8 @@
         ],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "Reroll any Test",
-                "appliesTo": [
-                    "all"
-                ]
+                "type": "FORTUNE_POINTS_BONUS",
+                "value": "1 per rank"
             }
         ]
     },
@@ -2893,6 +2949,18 @@
         "careers": {},
         "racial": [
             "Power Familiar"
+        ],
+        "effects": [
+            {
+                "type": "TEST_BONUS",
+                "value": 20,
+                "appliesTo": [
+                    "Channelling",
+                    "Lore (Magic)",
+                    "Language (Magick)",
+                    "Research (magical)"
+                ]
+            }
         ]
     },
     {
@@ -2927,6 +2995,13 @@
                 "appliesTo": [
                     "Intuition"
                 ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Intuition Tests to detect Wizards"
+                ]
             }
         ]
     },
@@ -2942,10 +3017,10 @@
         ],
         "effects": [
             {
-                "type": "SL_BONUS_ON_SUCCESS",
-                "value": 1,
+                "type": "REDUCE_OPPOSING_SL",
+                "value": 2,
                 "appliesTo": [
-                    "Resistance (Magic)"
+                    "Spells"
                 ]
             }
         ]
@@ -2964,7 +3039,14 @@
             "Engineer": "4",
             "Scholar": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Once per rank, can create extraordinary work of art",
+                "appliesTo": []
+            }
+        ]
     },
     {
         "id": "marksman",
@@ -2995,10 +3077,10 @@
         ],
         "effects": [
             {
-                "type": "SL_BONUS_ON_SUCCESS",
-                "value": 1,
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
                 "appliesTo": [
-                    "Ranged"
+                    "Ballistic Skill"
                 ]
             }
         ]
@@ -3015,7 +3097,23 @@
             "Officer": "2",
             "Wrecker": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Leadership"
+                ]
+            },
+            {
+                "type": "SL_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "Leadership with crew or on ship"
+                ]
+            }
+        ]
     },
     {
         "id": "master-of-disguise",
@@ -3030,7 +3128,24 @@
             "Entertainer": "3",
             "Spy": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "No Disguise Kit needed",
+                "appliesTo": [
+                    "Entertain (Acting)"
+                ],
+                "condition": "when being someone else"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Entertain (Acting) when being someone else"
+                ]
+            }
+        ]
     },
     {
         "id": "master-orator",
@@ -3045,7 +3160,16 @@
             "Scholar": "4",
             "Townsman": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm Tests when Public Speaking"
+                ]
+            }
+        ]
     },
     {
         "id": "master-tradesman",
@@ -3066,7 +3190,23 @@
             "Riverwoman": "4 (Boat Builder)",
             "Siege Specialist": "4 (Engineering)"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "REDUCE_EXTENDED_TEST_SL",
+                "value": 1,
+                "appliesTo": [
+                    "Extended Trade Tests"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Any appropriate Extended Trade Tests"
+                ]
+            }
+        ]
     },
     {
         "id": "menacing",
@@ -3120,6 +3260,13 @@
                 "appliesTo": [
                     "Intimidate"
                 ]
+            },
+            {
+                "type": "SL_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "Intimidate"
+                ]
             }
         ]
     },
@@ -3139,6 +3286,19 @@
         "racial": [
             "Random Racial Talent",
             "Gnome"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Mimic accents with Initiative Test"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Entertain (Acting) Tests where accents are important"
+                ]
+            }
         ]
     },
     {
@@ -3179,6 +3339,13 @@
                 "appliesTo": [
                     "Perception"
                 ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Perception tests in low-light conditions"
+                ]
             }
         ]
     },
@@ -3202,11 +3369,10 @@
         ],
         "effects": [
             {
-                "type": "SL_BONUS_ON_SUCCESS",
-                "value": 1,
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
                 "appliesTo": [
-                    "Sleight of Hand",
-                    "Pick Lock"
+                    "Dexterity"
                 ]
             }
         ]
@@ -3225,6 +3391,23 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Always considered higher Status",
+                "appliesTo": [
+                    "Status"
+                ],
+                "condition": "when dressed appropriately"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Any Test influenced by your Status"
+                ]
+            }
         ]
     },
     {
@@ -3253,7 +3436,27 @@
             "Watchman": "3",
             "Witch Hunter": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Spot troublemakers with Intuition Test",
+                "appliesTo": [
+                    "Intuition"
+                ]
+            },
+            {
+                "type": "IGNORE_SURPRISED_CONDITION",
+                "value": "from troublemakers"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Any Test to spot Troublemakers"
+                ]
+            }
+        ]
     },
     {
         "id": "numismatics",
@@ -3276,6 +3479,13 @@
         },
         "racial": [],
         "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Know true value of coins",
+                "appliesTo": [
+                    "Evaluate"
+                ]
+            },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
@@ -3305,6 +3515,29 @@
         },
         "racial": [
             "Human (Sarl)"
+        ],
+        "effects": [
+            {
+                "type": "IGNORE_TEST_MODIFIERS",
+                "value": "from poor weather and rolling ships",
+                "appliesTo": [
+                    "Tests at sea"
+                ]
+            },
+            {
+                "type": "CREW_COUNT_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "Sea-worthy Vessels"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Sail (any Sea-worthy Vessels)"
+                ]
+            }
         ]
     },
     {
@@ -3344,6 +3577,19 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Know which direction is north"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Navigation"
+                ]
+            }
         ]
     },
     {
@@ -3359,7 +3605,23 @@
             "Beggar": "1",
             "Nun": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Charm Test every half hour when Begging",
+                "appliesTo": [
+                    "Charm (Begging)"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Charm (Begging)"
+                ]
+            }
+        ]
     },
     {
         "id": "perfect-pitch",
@@ -3376,6 +3638,24 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Perfect pitch"
+            },
+            {
+                "type": "CAREER_SKILL_ADDITION",
+                "value": "Entertain (Sing)"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Entertain (Sing)",
+                    "Language (Tonal Languages, such as Eltharin, Cathayan, and Magick)"
+                ]
+            }
         ]
     },
     {
@@ -3426,7 +3706,20 @@
         "careers": {
             "Apothecary": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "REVERSE_FAILED_TEST",
+                "value": "Trade (Apothecary)"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Trade (Apothecary)"
+                ]
+            }
+        ]
     },
     {
         "id": "pilot",
@@ -3447,7 +3740,21 @@
             "Smuggler": "3",
             "Wrecker": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "REVERSE_FAILED_TEST",
+                "value": "Row or Sail Tests while navigating unsure waters",
+                "condition": "if it will score a success, but max +1 SL"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Row or Sail Tests while navigating unsure waters"
+                ]
+            }
+        ]
     },
     {
         "id": "public-speaker",
@@ -3480,7 +3787,13 @@
             "Villager": "4",
             "Watchman": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Increase number influenced when Public Speaking"
+            }
+        ]
     },
     {
         "id": "pure-soul",
@@ -3499,12 +3812,18 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "CORRUPTION_BONUS",
+                "value": 1
+            }
         ]
     },
     {
         "id": "rapid-reload",
         "name": "Rapid Reload",
-        "description": "You can reload ranged weapons with practiced ease. You add SL equal to your level in Rapid Reload to any Test to reload a ranged weapon.",
+        "description": "You can reload ranged weapons with practiced ease. You add SL equal to your level in Rapid Reload to any Extended Test to reload a ranged weapon. Reloading a ranged weapon during combat also counts as an Assess action. You gain an extra +1 Advantage when making that Assess Test.",
         "tests": [],
         "max_ranks": "dex",
         "careers": {
@@ -3522,10 +3841,17 @@
         "racial": [],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "Reload as Free Action",
+                "type": "SL_BONUS",
+                "value": 1,
                 "appliesTo": [
-                    "ranged"
+                    "Tests to reload a ranged weapon"
+                ]
+            },
+            {
+                "type": "ADVANTAGE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "Assess Tests when reloading in combat"
                 ]
             }
         ]
@@ -3546,7 +3872,23 @@
             "Pikeman": "1",
             "Pit Fighter": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Free Attack when Charged with Initiative Test",
+                "appliesTo": [
+                    "Initiative"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Initiative Tests concerning this Talent"
+                ]
+            }
+        ]
     },
     {
         "id": "read-write",
@@ -3627,9 +3969,9 @@
     {
         "id": "relentless",
         "name": "Relentless",
-        "description": "When you have your mind set on a target, there is nothing anyone can do to stop you reaching them. If you use Advantage when Disengaging, you may keep a number of Advantage equal to your level of Relentless. Further, you may use Advantage to Disengage even if you have lower Advantage than your opponents.",
+        "description": "When you have your mind set on a target, there is nothing anyone can do to stop you reaching them. The Advantage cost of the Flee from Harm action is reduced to 1.",
         "tests": [],
-        "max_ranks": "ag",
+        "max_ranks": 1,
         "careers": {
             "Bounty Hunter": "2",
             "Guard": "2",
@@ -3640,6 +3982,15 @@
         },
         "racial": [
             "Dwarf (Grumsson, WHFRP)"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "The Advantage cost of the Flee from Harm action is reduced to 1",
+                "appliesTo": [
+                    "Flee from Harm"
+                ]
+            }
         ]
     },
     {
@@ -3678,8 +4029,19 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Resistance"
-                ]
+                    "Resistance",
+                    "Cool"
+                ],
+                "condition": "to resist the associated Threat"
+            },
+            {
+                "type": "AUTO_PASS_FIRST_TEST",
+                "value": "to resist the associated Threat",
+                "appliesTo": [
+                    "Resistance",
+                    "Cool"
+                ],
+                "condition": "to resist the associated Threat"
             }
         ]
     },
@@ -3696,6 +4058,16 @@
         },
         "racial": [
             "Dwarf"
+        ],
+        "effects": [
+            {
+                "type": "DAMAGE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "melee"
+                ],
+                "condition": "charging"
+            }
         ]
     },
     {
@@ -3718,7 +4090,7 @@
         "effects": [
             {
                 "type": "PASSIVE",
-                "value": "Reverse fumble to success",
+                "value": "Take opponent's Current Advantage on win",
                 "appliesTo": [
                     "Melee"
                 ]
@@ -3743,6 +4115,14 @@
                 "value": "Attack after successful parry",
                 "appliesTo": [
                     "Melee"
+                ],
+                "condition": "if weapon has Fast quality"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Melee when defending"
                 ]
             }
         ]
@@ -3760,7 +4140,34 @@
             "Huffer": "2",
             "Karak Ranger": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "AUTO_PASS_TESTS",
+                "value": "for passing through dangerous stretches of water easier than -10 Difficulty",
+                "appliesTo": [
+                    "Row",
+                    "Sail"
+                ],
+                "condition": "when navigating dangerous rivers easier than -10 Difficulty"
+            },
+            {
+                "type": "AUTO_PASS_TESTS",
+                "value": "for navigating dangerous waters with appropriate Lore (Local) Skill",
+                "appliesTo": [
+                    "Row",
+                    "Sail"
+                ],
+                "condition": "when navigating dangerous waters with appropriate Lore (Local) Skill"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Any Lore Test concerning river matters"
+                ]
+            }
+        ]
     },
     {
         "id": "robust",
@@ -3783,7 +4190,16 @@
             "Slayer": "3",
             "Watchman": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "DAMAGE_REDUCTION",
+                "value": 1,
+                "appliesTo": [
+                    "all incoming Damage"
+                ]
+            }
+        ]
     },
     {
         "id": "roughrider",
@@ -3808,6 +4224,24 @@
         },
         "racial": [
             "Human (Sarl)"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Direct mount to take an Action without Ride Test",
+                "appliesTo": [
+                    "Ride (Horse)"
+                ],
+                "condition": "when in combat"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Ride (Horse)"
+                ],
+                "condition": "when in combat"
+            }
         ]
     },
     {
@@ -3845,6 +4279,23 @@
         "racial": [
             "Human (Nordlander)",
             "Wood Elf"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "No passive Perception Tests to detect you in Rural environment",
+                "appliesTo": [
+                    "Stealth"
+                ],
+                "condition": "in a Rural environment"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Stealth (Rural)"
+                ]
+            }
         ]
     },
     {
@@ -3879,7 +4330,14 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Lore"
+                    "Lore (Any)"
+                ]
+            },
+            {
+                "type": "PASSIVE",
+                "value": "Automatically know number of pieces of correct information equal to Savant (Lore) level",
+                "appliesTo": [
+                    "Lore (chosen Lore)"
                 ]
             }
         ]
@@ -3923,10 +4381,10 @@
         ],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "+5 starting Intelligence",
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
                 "appliesTo": [
-                    "Int"
+                    "Intelligence"
                 ]
             }
         ]
@@ -3949,6 +4407,13 @@
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
+                "appliesTo": [
+                    "Climb"
+                ]
+            },
+            {
+                "type": "PASSIVE",
+                "value": "Ignore modifiers derived from the difficulty of the surface climbed",
                 "appliesTo": [
                     "Climb"
                 ]
@@ -3975,7 +4440,23 @@
             "Townsman": "4",
             "Watchman": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Once per session, ask GM one question regarding political situation or social connections",
+                "appliesTo": [
+                    "Intelligence"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Intelligence Tests concerning this Talent"
+                ]
+            }
+        ]
     },
     {
         "id": "sea-legs",
@@ -3998,6 +4479,31 @@
         },
         "racial": [
             "Human (Björnling, Sarl)"
+        ],
+        "effects": [
+            {
+                "type": "AUTO_PASS_TESTS",
+                "value": "to avoid Sea Sickness under normal conditions at sea",
+                "appliesTo": [
+                    "Resistance (Sea Sickness)"
+                ],
+                "condition": "under normal conditions at sea"
+            },
+            {
+                "type": "PASSIVE",
+                "value": "Ignore penalties to Tests to avoid Sea Sickness",
+                "appliesTo": [
+                    "Resistance (Sea Sickness)"
+                ],
+                "condition": "at other times (such as a storm, or magically induced Sea Sickness)"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Resistance (Sea Sickness)"
+                ]
+            }
         ]
     },
     {
@@ -4048,7 +4554,23 @@
             "Witch Hunter": "2",
             "Wolf Kin": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Any Lore Test concerning local detail"
+                ]
+            },
+            {
+                "type": "CAREER_SKILL_ADDITION",
+                "value": "Lore (Local)",
+                "appliesTo": [
+                    "All Careers"
+                ]
+            }
+        ]
     },
     {
         "id": "second-sight",
@@ -4079,6 +4601,22 @@
             "Gnome",
             "High Elf",
             "Wood Elf"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Can perceive the Winds of Magic (The Sight)",
+                "appliesTo": [
+                    "Detect the Winds of Magic"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Perception Tests to detect the Winds of Magic"
+                ]
+            }
         ]
     },
     {
@@ -4094,7 +4632,23 @@
             "Shadowmancer": "4",
             "Spy": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Use Social Status of chosen Career when masquerading",
+                "appliesTo": [
+                    "Fellowship"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "Entertain (Acting) Tests to support your secret identities"
+                ]
+            }
+        ]
     },
     {
         "id": "shadow",
