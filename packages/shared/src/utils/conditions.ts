@@ -39,6 +39,39 @@ export interface ConditionCheckResult {
 }
 
 /**
+ * Checks if a condition should be automatically removed based on rounds elapsed
+ * @param conditionId The condition to check
+ * @param roundApplied The round when the condition was applied
+ * @param currentRound The current combat round
+ * @returns true if the condition should be removed
+ */
+export function shouldAutoRemoveCondition(
+  conditionId: string,
+  roundApplied: number,
+  currentRound: number
+): boolean {
+  const roundsElapsed = currentRound - roundApplied;
+
+  switch (conditionId) {
+    case 'condition_blinded':
+    case 'condition_deafened':
+      // Remove after 2 rounds (end of round 2)
+      return roundsElapsed >= 2;
+    
+    case 'condition_surprised':
+      // Remove at end of round
+      return roundsElapsed >= 1;
+    
+    case 'condition_prone':
+      // Not auto-removed, must stand up
+      return false;
+    
+    default:
+      return false;
+  }
+}
+
+/**
  * Checks what effects and tests are needed for a condition at the start of a turn
  */
 export function checkConditionEffects(
@@ -237,9 +270,13 @@ export function checkConditionEffects(
 
 /**
  * Applies automatic end-of-round effects for conditions
+ * @param combatant The combatant with conditions
+ * @param currentRound The current combat round number
+ * @param character The character data (if available)
  */
 export function applyEndOfRoundConditionEffects(
   combatant: Combatant,
+  currentRound: number,
   character?: Character
 ): {
   combatant: Combatant;
@@ -253,8 +290,18 @@ export function applyEndOfRoundConditionEffects(
   let updatedCombatant = { ...combatant };
 
   const conditions = combatant.conditions || [];
+  const conditionInstances = combatant.conditionInstances || [];
   const conditionCounts = new Map<string, number>();
   conditions.forEach(c => conditionCounts.set(c, (conditionCounts.get(c) || 0) + 1));
+
+  // Check for automatic removal based on rounds
+  conditionInstances.forEach(instance => {
+    if (shouldAutoRemoveCondition(instance.id, instance.roundApplied, currentRound)) {
+      conditionsToRemove.push(instance.id);
+      const conditionName = getConditionName(instance.id);
+      log.push(`${combatant.name}'s ${conditionName} condition automatically removed after ${currentRound - instance.roundApplied} rounds.`);
+    }
+  });
 
   // Process Ablaze
   if (conditionCounts.has('condition_ablaze')) {
@@ -298,11 +345,8 @@ export function applyEndOfRoundConditionEffects(
     log.push(`${combatant.name} loses 1 wound from Poison`);
   }
 
-  // Auto-remove Blinded (every other round - would need round tracking)
-  // Auto-remove Deafened (every other round - would need round tracking)
-
-  // Auto-remove Surprised at end of round
-  if (conditionCounts.has('condition_surprised')) {
+  // Auto-remove Surprised at end of round (if not already removed)
+  if (conditionCounts.has('condition_surprised') && !conditionsToRemove.includes('condition_surprised')) {
     conditionsToRemove.push('condition_surprised');
     log.push(`${combatant.name} is no longer Surprised`);
   }

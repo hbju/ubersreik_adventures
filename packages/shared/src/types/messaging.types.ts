@@ -21,10 +21,20 @@ export type RequestOpposedTestMessage = BaseMessage<'REQUEST_OPPOSED_TEST', {
   targetNumber: number;
   modifier: number;
 }>;
+export type RequestConditionTestMessage = BaseMessage<'REQUEST_CONDITION_TEST', {
+  testId: string;
+  conditionId: string;
+  conditionName: string;
+  testType: string;
+  targetNumber: number;
+  modifier: number;
+  conditionCount: number;
+  description: string;
+}>;
 export type JournalUpdateMessage = BaseMessage<'JOURNAL_UPDATE', { entries: JournalEntry[] }>;
 export type MapStateUpdateMessage = BaseMessage<'MAP_STATE_UPDATE', { pinStates: Record<string, MapPinState> }>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | JournalUpdateMessage | MapStateUpdateMessage;
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage;
 
 // == Player to GM Messages ==
 
@@ -47,5 +57,13 @@ export type OpposedTestResultMessage = BaseMessage<'OPPOSED_TEST_RESULT', {
   successLevel: number;
   characterId: string;
 }>;
+export type ConditionTestResultMessage = BaseMessage<'CONDITION_TEST_RESULT', {
+  testId: string;
+  conditionId: string;
+  rollResult: number;
+  successLevel: number;
+  characterId: string;
+  targetNumber: number;
+}>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage;
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage;

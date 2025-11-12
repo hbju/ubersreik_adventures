@@ -10,6 +10,17 @@ interface OpposedTestRequest {
   modifier: number;
 }
 
+interface ConditionTestRequest {
+  testId: string;
+  conditionId: string;
+  conditionName: string;
+  testType: string;
+  targetNumber: number;
+  modifier: number;
+  conditionCount: number;
+  description: string;
+}
+
 export const useSocket = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -22,6 +33,7 @@ export const useSocket = () => {
   const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
   const [currentAdvantage, setCurrentAdvantage] = useState<Advantages>({ playerAdvantage: 0, enemyAdvantage: 0 });
   const [opposedTestRequest, setOpposedTestRequest] = useState<OpposedTestRequest | null>(null);
+  const [conditionTestRequest, setConditionTestRequest] = useState<ConditionTestRequest | null>(null);
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
   const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
 
@@ -121,6 +133,20 @@ export const useSocket = () => {
         });
       }
 
+      if (message.type === 'REQUEST_CONDITION_TEST') {
+        console.log('[CLIENT] Condition test request:', message.payload);
+        setConditionTestRequest({
+          testId: message.payload.testId,
+          conditionId: message.payload.conditionId,
+          conditionName: message.payload.conditionName,
+          testType: message.payload.testType,
+          targetNumber: message.payload.targetNumber,
+          modifier: message.payload.modifier,
+          conditionCount: message.payload.conditionCount,
+          description: message.payload.description
+        });
+      }
+
       if (message.type === 'JOURNAL_UPDATE') {
         console.log('[CLIENT] Journal update received:', message.payload);
         setJournalEntries(message.payload.entries);
@@ -164,6 +190,8 @@ export const useSocket = () => {
     currentAdvantage, 
     opposedTestRequest, 
     setOpposedTestRequest, 
+    conditionTestRequest,
+    setConditionTestRequest,
     journalEntries, 
     mapPinStates, 
     connect, 

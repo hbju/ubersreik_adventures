@@ -506,6 +506,52 @@ function App() {
                     return newMap;
                 });
             }
+
+            // Not used anymore, should be reimplemented later
+            if (message.type === 'CONDITION_TEST_RESULT') {
+                const { characterId, conditionId, rollResult, successLevel, targetNumber } = message.payload;
+                const character = characters.find(c => c.id === characterId);
+                if (character) {
+                    const outcome = successLevel >= 0
+                        ? `Success (${successLevel} SL)`
+                        : `Failure (${successLevel} SL)`;
+                    
+                    addLogEntry(
+                        'roll',
+                        `${character.name} tests to remove ${conditionId}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}]`
+                    );
+
+                    // Remove conditions if successful
+                    if (successLevel >= 0) {
+                        const combatant = combatants.find(c => c.sourceId === characterId);
+                        if (combatant && combatant.conditions) {
+                            console.log(combatant.conditions);
+                            const conditionsToRemove = Math.min(1 + successLevel, combatant.conditions.filter(c => c === conditionId).length);
+                            const updatedConditions = [...combatant.conditions];
+                            
+                            // Remove the specified number of conditions
+                            for (let i = 0; i < conditionsToRemove; i++) {
+                                const index = updatedConditions.indexOf(conditionId);
+                                if (index > -1) {
+                                    updatedConditions.splice(index, 1);
+                                }
+                            }
+
+                            // Add Fatigued condition for certain conditions when all are removed
+                            const shouldAddFatigued = ['condition_broken', 'condition_poisoned', 'condition_stunned', 'condition_unconscious'].includes(conditionId);
+                            const allRemoved = !updatedConditions.includes(conditionId);
+                            
+                            if (shouldAddFatigued && allRemoved) {
+                                updatedConditions.push('condition_fatigued');
+                                addLogEntry('system', `${character.name} gains Fatigued condition after recovering from ${conditionId}.`);
+                            }
+                            console.log(`Removing ${conditionsToRemove} ${conditionId} condition(s) from ${character.name}`);
+                            handleUpdateCombatant({ ...combatant, conditions: updatedConditions });
+                            addLogEntry('system', `${character.name} removed ${conditionsToRemove} ${conditionId} condition(s).`);
+                        }
+                    }
+                }
+            }
         });
 
         return () => {
@@ -627,6 +673,13 @@ function App() {
                     onSetCurrentTurnId={setCurrentTurnId}
                     onUpdateAdvantages={(advantage) => setCurrentAdvantage(advantage)}
                     advantages={currentAdvantage}
+                    characters={characters}
+                    onSendToPlayer={(charId: string, message) => {
+                        const character = characters.find(c => c.id === charId);
+                        if (!character || !character.userId) return;
+                        const userId = character.userId;
+                        window.ipcRenderer.sendToPlayer(userId, message);
+                    }}
                 />)}
 
             <MapDisplay

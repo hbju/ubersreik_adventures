@@ -6,7 +6,10 @@ import {
     Advantages,
     ConditionPromptModal,
     applyEndOfRoundConditionEffects,
-    checkConditionEffects
+    checkConditionEffects,
+    Character,
+    RequestConditionTestMessage,
+    calculateSkillValue
 } from '@wfrp/shared';
 import styles from './InitiativeTracker.module.css';
 
@@ -19,10 +22,12 @@ interface InitiativeTrackerProps {
     onSetCurrentTurnId: (id: string | null) => void;
     advantages?: Advantages;
     onUpdateAdvantages: (advantage: Advantages) => void;
+    characters: Character[];
+    onSendToPlayer: (charId: string, message: RequestConditionTestMessage) => void;
 }
 
 const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
-    combatants, onSetCombatants, onUpdateCombatant, onClearCombatants, currentTurnId, onSetCurrentTurnId, advantages, onUpdateAdvantages
+    combatants, onSetCombatants, onUpdateCombatant, onClearCombatants, currentTurnId, onSetCurrentTurnId, advantages, onUpdateAdvantages, characters, onSendToPlayer
 }) => {
     const [expandedCombatantId, setExpandedCombatantId] = useState<string | null>(null);
     const [conditionPromptCombatant, setConditionPromptCombatant] = useState<Combatant | null>(null);
@@ -48,12 +53,12 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
 
         // Check if we're starting a new round
         if (nextIndex === 0) {
-            handleEndOfRound();
+            // handleEndOfRound();
             setRoundNumber(prev => prev + 1);
         }
 
-        // Check if next combatant has conditions that need processing
-        if (nextCombatant && nextCombatant.conditions && nextCombatant.conditions.length > 0) {
+        // Check if next combatant has conditions that need processing. TODO : to be reimplemented later
+        /** if (nextCombatant && nextCombatant.conditions && nextCombatant.conditions.length > 0) {
             const uniqueConditions = Array.from(new Set(nextCombatant.conditions));
             const needsPrompt = uniqueConditions.some(condId => {
                 const effect = checkConditionEffects(condId, nextCombatant);
@@ -61,13 +66,63 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
             });
 
             if (needsPrompt) {
-                setConditionPromptCombatant(nextCombatant);
+                    const character = characters.find(c => c.id === nextCombatant.sourceId);
+                    if (character && character.userId != null) {
+                        uniqueConditions.forEach(condId => {
+                            const effect = checkConditionEffects(condId, nextCombatant, character);
+                            if (effect.needsTest) {
+                                const testId = `condition-test-${Date.now()}-${Math.random()}`;
+                                const conditionData = conditionsData.find(c => c.id === condId);
+                                const conditionCount = nextCombatant.conditions?.filter(c => c === condId).length || 1;
+                                
+                                // Calculate target number based on test type
+                                let targetNumber = 0;
+                                const testType = effect.testType || 'Endurance';
+                                
+                                // Try to find the skill first
+                                const skill = character.skills.find(s => s.name === testType);
+                                if (skill) {
+                                    targetNumber = calculateSkillValue(skill, character);
+                                } else {
+                                    // Fallback to characteristic (Endurance is typically Toughness-based)
+                                    const charMap: { [key: string]: keyof Character['characteristics'] } = {
+                                        'Endurance': 't',
+                                        'Cool': 'wp',
+                                        'Strength': 's',
+                                        'Athletics': 'ag'
+                                    };
+                                    const charKey = charMap[testType] || 't';
+                                    targetNumber = character.characteristics[charKey].initial + character.characteristics[charKey].advances;
+                                }
+                                
+                                const message: RequestConditionTestMessage = {
+                                    type: 'REQUEST_CONDITION_TEST',
+                                    payload: {
+                                        testId,
+                                        conditionId: condId,
+                                        conditionName: conditionData?.name || condId,
+                                        testType: testType,
+                                        targetNumber: targetNumber,
+                                        modifier: effect.testDifficulty || 0,
+                                        conditionCount,
+                                        description: conditionData?.description || ''
+                                    }
+                                };
+                                
+                                onSendToPlayer(nextCombatant.sourceId, message);
+                            }
+                        });
+                } else {
+                    setConditionPromptCombatant(nextCombatant);
+                }
             }
         }
+        **/
         console.log('Next Turn:', nextCombatant?.name);
         onSetCurrentTurnId(nextCombatant.id);
     }
 
+    // TODO: to be reimplemented later
     const handleEndOfRound = () => {
         // Apply end-of-round condition effects to all combatants
         const updatedCombatants = [...combatants];
@@ -75,7 +130,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
 
         updatedCombatants.forEach((combatant, index) => {
             if (combatant.conditions && combatant.conditions.length > 0) {
-                const result = applyEndOfRoundConditionEffects(combatant);
+                const result = applyEndOfRoundConditionEffects(combatant, roundNumber);
 
                 updatedCombatants[index] = result.combatant;
                 allLogs.push(...result.log);
@@ -177,7 +232,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                 <div className={styles.actions}>
                     <button onClick={handleRollInitiative}>Roll Init</button>
                     <button onClick={handleNextTurn}>Next Turn</button>
-                    <button onClick={() => { handleEndOfRound(); setRoundNumber(prev => prev + 1); }}>End Round</button>
+                    <button onClick={() => { /**handleEndOfRound(); */ setRoundNumber(prev => prev + 1); }}>End Round</button>
                     <button onClick={onClearCombatants} className={styles.clearBtn}>Clear</button>
                 </div>
             </header>

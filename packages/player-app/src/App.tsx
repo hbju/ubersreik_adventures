@@ -3,18 +3,19 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, MapDisplay, gameData, recalculateCharacterTalentBonuses } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapDisplay, gameData, recalculateCharacterTalentBonuses } from '@wfrp/shared';
 import { TalentSelectionModal } from './components/TalentSelectionModal';
 import { TestResultMessage, calculateCharacteristicAdvanceCost, calculateSkillAdvanceCost, allSkillsAndCharacteristics } from '@wfrp/shared';
 import { TalentModal } from './components/TalentModal';
 import { ShopModal } from './components/ShopModal';
 import { OpposedTestModal } from './components/OpposedTestModal';
+import { ConditionTestModal } from './components/ConditionTestModal';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
 import { JournalView } from './components/JournalView';
 
 
 const PlayerApp: React.FC = () => {
-  const { isConnected, isAuthenticated, authError, username, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, journalEntries, mapPinStates, connect, disconnect, sendMessage } = useSocket();
+  const { isConnected, isAuthenticated, authError, username, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, connect, disconnect, sendMessage } = useSocket();
   const [isAdvancementMode, setIsAdvancementMode] = useState(false);
   const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
   const [testModalInfo, setTestModalInfo] = useState<{ name: string, value: number } | null>(null);
@@ -173,6 +174,25 @@ const PlayerApp: React.FC = () => {
     };
     sendMessage(message);
     setOpposedTestRequest(null);
+  };
+
+  // To reimplement later, conditions rolls
+  const handleConditionTestRoll = (testId: string, roll: number, sl: number, targetNumber: number) => {
+    if (!character || !conditionTestRequest) return;
+
+    const message: ConditionTestResultMessage = {
+      type: 'CONDITION_TEST_RESULT',
+      payload: {
+        testId,
+        conditionId: conditionTestRequest.conditionId,
+        rollResult: roll,
+        successLevel: sl,
+        characterId: character.id,
+        targetNumber
+      }
+    };
+    sendMessage(message);
+    setConditionTestRequest(null);
   };
 
   const activeCharacter = isAdvancementMode ? draftCharacter : character;

@@ -14,6 +14,11 @@ export interface Location {
   hooks: string[]; 
 }
 
+export interface ConditionInstance {
+  id: string; // condition_blinded, etc.
+  roundApplied: number; // combat round when this was applied
+}
+
 export interface Combatant {
   id: string; 
   sourceId: string; 
@@ -25,6 +30,7 @@ export interface Combatant {
   baseAg: number;
   isPlayer: boolean;
   conditions: string[]; 
+  conditionInstances?: ConditionInstance[];
 }
 
 export interface Advantages {
