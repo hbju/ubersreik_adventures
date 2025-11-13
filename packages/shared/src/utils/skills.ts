@@ -35,9 +35,12 @@ export function getGroupedSkill(skillId: string): Skill | null {
         };
     }
 
+    const name = skillDef.name.split(' (')[0]; // Remove any existing group from name
+
+
     return {
         id: skillId,
-        name: skillDef.name + ` (${group.charAt(0).toUpperCase() + group.slice(1)})`,
+        name: name + ` (${group.charAt(0).toUpperCase() + group.slice(1)})`,
         characteristic: skillDef.characteristic,
         advances: 0,
         talents: 0,

@@ -105,6 +105,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                     if (isSkillGrouped(skillId)) {
                         const grouped = getGroupedSkill(skillId);
                         if (!grouped) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
+                        return grouped;
                     }
                     const skillDef = allSkills.find((s: any) => s.id === skillId && s.type === 'skill');
                     if (!skillDef) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
