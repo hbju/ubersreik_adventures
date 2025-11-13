@@ -1,0 +1,22 @@
+⚠️ Remaining Work (2-3 hours estimated)
+The following three tasks need to be completed in the player app:
+
+Task 3.1: Filter the advancement UI to only show career-path options
+Task 3.2: Add level completion detection and "Change Career" button
+Task 3.4: Implement request/response message handling
+
+🚀 Next Steps
+Review the implementation guides
+Complete the three remaining player app tasks (~2-3 hours)
+Migrate existing character data to include new career fields
+Integrate CareerManager into the GM UI (choose from 3 options)
+Run end-to-end tests
+Deploy!
+
+- boutiques automatiquement générées v1.0
+- tracks configurables par scènes v1.0
+- bouton sauvegarde backup v1.0
+- pnjs templates v1.0
+- carte complète v1.0
+- regular dices v1.0
+- fil rouge pour GM v1.0
