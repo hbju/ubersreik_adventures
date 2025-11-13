@@ -70,10 +70,15 @@
     "characters": [
       {
         "id": "hbju",
-        "userId": "",
         "name": "Hbju Arakasai",
-        "career": "Guard",
+        "currentCareerId": "pit-fighter",
+        "currentCareerLevelId": "pugilist",
+        "userId": "",
         "xp": { "current": 250, "spent": 500 },
+        "careerHistory": [],
+        "unlockedCharacteristicIds": [],
+        "unlockedSkillIds": [],
+        "unlockedTalentIds": [],
         "characteristics": {
           "ws": { "initial": 30, "advances": 5, "talents": 0, "modifier": 0 },
           "bs": { "initial": 25, "advances": 0, "talents": 0, "modifier": 0 },
@@ -114,10 +119,15 @@
       },
       {
         "id": "frazaie",
-        "userId": "",
         "name": "Frazaie Arakasai",
-        "career": "Rogue",
+        "currentCareerId": "racketeer",
+        "currentCareerLevelId": "thug",
+        "userId": "",
         "xp": { "current": 300, "spent": 400 },
+        "careerHistory": [],
+        "unlockedCharacteristicIds": [],
+        "unlockedSkillIds": [],
+        "unlockedTalentIds": [],
         "characteristics": {
           "ws": { "initial": 25, "advances": 0, "talents": 0, "modifier": 0 },
           "bs": { "initial": 45, "advances": 10, "talents": 5, "modifier": 0 },

@@ -76,6 +76,7 @@ export interface SkillCharDefinition {
   name: string;
   characteristic: keyof Character['characteristics'];
   type: 'skill' | 'characteristic';
+  classification?: 'basic' | 'advanced';
 }
 
 export interface Talent {
@@ -149,12 +150,51 @@ export interface User {
   createdAt: string;
 }
 
+// Career System Types
+export interface CareerLevel {
+  id: string;
+  name: string;
+  lvl: number;
+  characteristic_advances: string[];
+  talent_ids: string[];
+  skills_ids: string[];
+  trappings: string[];
+  status: string;
+}
+
+export interface Career {
+  id: string;
+  name: string;
+  description: string;
+  class: string;
+  races: string[];
+  career_level: CareerLevel[];
+}
+
+export interface CareerHistoryEntry {
+  careerId: string;
+  careerLevelId: string;
+  careerName: string;
+  levelName: string;
+  level: number;
+  xpSpent: number;
+  advancementType: 'characteristic' | 'skill' | 'talent';
+  advancementId: string; // characteristic key, skill id, or talent id
+  advancementName: string;
+  timestamp: string;
+}
+
 export interface Character {
   id: string;
   name: string;
-  career: string;
+  currentCareerId: string;
+  currentCareerLevelId: string;
   userId: string | null; // null if unassigned
   xp: XP;
+  careerHistory: CareerHistoryEntry[]; // full history of all XP spent
+  unlockedCharacteristicIds: string[]; // GM-granted unlocks
+  unlockedSkillIds: string[]; // GM-granted unlocks
+  unlockedTalentIds: string[]; // GM-granted unlocks
   characteristics: {
     ws: Characteristic;
     bs: Characteristic;

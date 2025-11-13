@@ -60,147 +60,317 @@
         "type": "characteristic"
     },
     {
+        "id": "animal-care",
+        "name": "Animal Care",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "animal-training",
+        "name": "Animal Training",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
         "id": "art",
         "name": "Art",
         "characteristic": "dex",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "athletics",
         "name": "Athletics",
         "characteristic": "ag",
-        "type" : "skill"
+        "type" : "skill",
+        "classification": "basic"
     },
     {
         "id": "bribery",
         "name": "Bribery",
         "characteristic": "fel",
-        "type" : "skill"
+        "type" : "skill",
+        "classification": "basic"
+    },
+    {
+        "id": "channeling",
+        "name": "Channeling",
+        "characteristic": "wp",
+        "type" : "skill",
+        "classification": "advanced"
     },
     {
         "id": "charm",
         "name": "Charm",
         "characteristic": "fel",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "charm-animal",
         "name": "Charm Animal",
         "characteristic": "wp",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "climb",
         "name": "Climb",
         "characteristic": "s",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "consume-alcohol",
         "name": "Consume Alcohol",
         "characteristic": "t",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "cool",
         "name": "Cool",
         "characteristic": "wp",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "dodge",
         "name": "Dodge",
         "characteristic": "ag",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "drive",
         "name": "Drive",
         "characteristic": "dex",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "endurance",
         "name": "Endurance",
         "characteristic": "t",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "entertain",
         "name": "Entertain",
         "characteristic": "fel",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
+    },
+    {
+        "id": "evaluate",
+        "name": "Evaluate",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "gamble",
         "name": "Gamble",
         "characteristic": "int",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "gossip",
         "name": "Gossip",
         "characteristic": "fel",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "haggle",
         "name": "Haggle",
         "characteristic": "fel",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
+    },
+    {
+        "id": "heal",
+        "name": "Heal",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "advanced"
     },
     {
         "id": "intimidate",
         "name": "Intimidate",
         "characteristic": "s",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "intuition",
         "name": "Intuition",
         "characteristic": "i",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
+    },
+    {
+        "id": "language",
+        "name": "Language",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "advanced"
     },
     {
         "id": "leadership",
         "name": "Leadership",
         "characteristic": "fel",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
-        "id": "melee-basic",
+        "id": "lore",
+        "name": "Lore",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "melee",
         "name": "Melee (Basic)",
         "characteristic": "ws",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "navigation",
         "name": "Navigation",
         "characteristic": "i",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "outdoor-survival",
         "name": "Outdoor Survival",
         "characteristic": "int",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
     },
     {
         "id": "perception",
         "name": "Perception",
         "characteristic": "i",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
+    },
+    {
+        "id": "perform",
+        "name": "Perform",
+        "characteristic": "Ag",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "pick-lock",
+        "name": "Pick Lock",
+        "characteristic": "dex",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "play",
+        "name": "Play",
+        "characteristic": "dex",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "pray",
+        "name": "Pray",
+        "characteristic": "fel",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "ranged",
+        "name": "Ranged",
+        "characteristic": "bs",
+        "type": "skill",
+        "classification": "basic"
+    },
+    {
+        "id": "research",
+        "name": "Research",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "advanced"
     },
     {
         "id": "ride",
         "name": "Ride",
         "characteristic": "ag",
-        "type": "skill"
+        "type": "skill",
+        "classification": "basic"
+    },
+    {
+        "id": "row",
+        "name": "Row",
+        "characteristic": "s",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "sail",
+        "name": "Sail",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "secret-signs",
+        "name": "Secret Signs",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "set-trap",
+        "name": "Set Trap",
+        "characteristic": "int",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "sleight-of-hand",
+        "name": "Sleight of Hand",
+        "characteristic": "dex",
+        "type": "skill",
+        "classification": "advanced"
     },
     {
         "id": "stealth",
         "name": "Stealth",
         "characteristic": "ag",
         "type": "skill"
+    },
+    {
+        "id": "swim",
+        "name": "Swim",
+        "characteristic": "s",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "track",
+        "name": "Track",
+        "characteristic": "i",
+        "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "trade",
+        "name": "Trade",
+        "characteristic": "dex",
+        "type": "skill",
+        "classification": "advanced"
     }
 ]

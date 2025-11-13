@@ -70,6 +70,33 @@
   letter-spacing: 0.05em;
 }
 
+.career span {
+  margin-right: 10px;
+  font-weight: 700;
+  color: var(--color-blood-red);
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.career select {
+  background: var(--color-vellum);
+  border: 2px solid var(--color-leather-light);
+  color: var(--color-ink);
+  border-radius: 2px;
+  padding: 6px 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  margin: 5px;
+}
+
+.career select:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
 /* Tabs */
 .tabsContainer {
   display: flex;

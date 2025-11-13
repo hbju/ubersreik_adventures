@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CAREERS_PATH = ROOT / 'packages' / 'shared' / 'src' / 'data' / 'careers.json'
 TALENTS_PATH = ROOT / 'packages' / 'shared' / 'src' / 'data' / 'talents.json'
 
-ALLOWED = ["WS","BS","S","T","I","Agi","Dex","Int","WP","Fel"]
+ALLOWED = ["WS","BS","S","T","I","Ag","Dex","Int","WP","Fel"]
 ALLOWED_SET = set(ALLOWED)
 PREFERRED_ORDER = ALLOWED[:]  # order to pick new attributes from
 
@@ -16,8 +16,9 @@ def normalize_token(tok: str) -> str:
         return tok
     t = tok.strip()
     # common normalizations
-    t = t.replace('Agility','Agi')
-    t = t.replace('Agi.','Agi')
+    t = t.replace('Agility','Ag')
+    t = t.replace('Ag.','Ag')
+    t = t.replace('Agi','Ag')
     t = t.replace('Dexterity','Dex')
     t = t.replace('Dx','Dex')
     t = t.replace('Dex.','Dex')

@@ -1,0 +1,276 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: linear-gradient(135deg, #2c2218 0%, #3d3128 100%);
+  border: 3px solid #8b7355;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+  max-width: 900px;
+  width: 95%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  color: #e0d5c7;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 2px solid #8b7355;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.header h2 {
+  font-family: 'Caslon Antique', serif;
+  font-size: 2rem;
+  color: #d4af37;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #e0d5c7;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: rgba(212, 175, 55, 0.2);
+  color: #d4af37;
+}
+
+.content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.info {
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid #8b7355;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.info p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.info strong {
+  color: #4caf50;
+  font-size: 1.2rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h3 {
+  font-family: 'Caslon Antique', serif;
+  font-size: 1.5rem;
+  color: #d4af37;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #8b7355;
+  padding-bottom: 0.5rem;
+}
+
+.optionsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1rem;
+}
+
+.option {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid #8b7355;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.option:hover:not(.disabled) {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.selected {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.15);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.optionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.optionHeader h4 {
+  margin: 0;
+  color: #d4af37;
+  font-size: 1.25rem;
+}
+
+.cost {
+  background: rgba(76, 175, 80, 0.3);
+  color: #4caf50;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.optionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.levelName {
+  font-size: 1.1rem;
+  color: #e0d5c7;
+  margin: 0;
+}
+
+.classInfo {
+  font-size: 0.95rem;
+  color: #c0b5a8;
+  margin: 0;
+}
+
+.levelDetails {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(139, 115, 85, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detailItem {
+  font-size: 0.9rem;
+  color: #c0b5a8;
+}
+
+.detailItem strong {
+  color: #d4af37;
+}
+
+.insufficientXP {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(244, 67, 54, 0.9);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 2px solid #8b7355;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.requestButton,
+.cancelButton {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.requestButton {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.requestButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+  transform: translateY(-2px);
+}
+
+.requestButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cancelButton {
+  background: rgba(139, 115, 85, 0.5);
+  color: #e0d5c7;
+  border: 1px solid #8b7355;
+}
+
+.cancelButton:hover {
+  background: rgba(139, 115, 85, 0.7);
+  transform: translateY(-2px);
+}
+
+/* Scrollbar styling */
+.content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #8b7355;
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}

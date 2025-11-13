@@ -641,7 +641,7 @@
                     "Int",
                     "WP",
                     "Fel",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "etiquette_nobles",
@@ -677,7 +677,7 @@
                 "characteristic_advances": [
                     "T",
                     "WP",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "bless_any",
@@ -708,7 +708,7 @@
                 "characteristic_advances": [
                     "T",
                     "WP",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -723,7 +723,7 @@
                     "gossip",
                     "heal",
                     "intimidate",
-                    "melee_basic"
+                    "melee"
                 ],
                 "trappings": [
                     "Book (Religion)",
@@ -739,7 +739,7 @@
                     "T",
                     "WP",
                     "Fel",
-                    "Agi",
+                    "Ag",
                     "Int"
                 ],
                 "talent_ids": [
@@ -770,7 +770,7 @@
                     "T",
                     "WP",
                     "Fel",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "I"
                 ],
@@ -958,7 +958,7 @@
                     "intuition",
                     "language_magick",
                     "lore_magic",
-                    "melee_basic",
+                    "melee",
                     "melee_polearm",
                     "perception"
                 ],
@@ -974,7 +974,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "WS",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "WP"
                 ],
@@ -1003,7 +1003,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "WS",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "WP",
                     "I"
@@ -1036,7 +1036,7 @@
                     "I",
                     "Int",
                     "WP",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -1108,7 +1108,7 @@
                 "characteristic_advances": [
                     "BS",
                     "Int",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -1137,7 +1137,7 @@
                 "characteristic_advances": [
                     "BS",
                     "Int",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WS"
                 ],
@@ -1165,7 +1165,7 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "WS",
-                    "Agi",
+                    "Ag",
                     "BS",
                     "Int",
                     "I",
@@ -1342,7 +1342,7 @@
                 "lvl": 1,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -1373,7 +1373,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WP"
                 ],
@@ -1403,7 +1403,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WP",
                     "WS"
@@ -1433,7 +1433,7 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WP",
                     "WS",
@@ -1475,7 +1475,7 @@
                 "lvl": 1,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "Int"
                 ],
                 "talent_ids": [
@@ -1508,7 +1508,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel"
                 ],
@@ -1540,7 +1540,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel",
                     "Dex"
@@ -1569,7 +1569,7 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "WP",
                     "Dex",
@@ -1611,7 +1611,7 @@
                 "lvl": 1,
                 "characteristic_advances": [
                     "WS",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -1644,7 +1644,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "WS",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel"
                 ],
@@ -1675,7 +1675,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "WS",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel",
                     "I"
@@ -1708,7 +1708,7 @@
                     "I",
                     "Int",
                     "Fel",
-                    "Agi",
+                    "Ag",
                     "WP"
                 ],
                 "talent_ids": [
@@ -1764,7 +1764,7 @@
                     "charm-animal",
                     "consume-alcohol",
                     "endurance",
-                    "melee_basic",
+                    "melee",
                     "ranged_sling",
                     "stealth_undergroundorurban"
                 ],
@@ -1883,7 +1883,7 @@
                 "name": "Clerk",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel"
                 ],
@@ -1914,7 +1914,7 @@
                 "name": "Townsman",
                 "lvl": 2,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel",
                     "I"
@@ -1945,7 +1945,7 @@
                 "name": "Town Councillor",
                 "lvl": 3,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel",
                     "I",
@@ -1974,7 +1974,7 @@
                 "name": "Burgomeister",
                 "lvl": 4,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel",
                     "I",
@@ -2158,7 +2158,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "beneath-notice",
@@ -2188,7 +2188,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -2217,7 +2217,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "Int"
                 ],
@@ -2246,7 +2246,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "Int",
                     "WP"
@@ -2422,7 +2422,7 @@
                 "characteristic_advances": [
                     "WS",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "beat-blade",
@@ -2454,7 +2454,7 @@
                     "WS",
                     "BS",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "combat-reflexes",
@@ -2485,7 +2485,7 @@
                     "BS",
                     "S",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "ambidextrous",
@@ -2496,7 +2496,7 @@
                 "skills_ids": [
                     "intimidate",
                     "leadership",
-                    "melee_basic",
+                    "melee",
                     "perform_acrobatics"
                 ],
                 "trappings": [
@@ -2516,7 +2516,7 @@
                     "BS",
                     "S",
                     "I",
-                    "Agi",
+                    "Ag",
                     "WP"
                 ],
                 "talent_ids": [
@@ -2555,7 +2555,7 @@
                 "lvl": 1,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -2587,7 +2587,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel"
                 ],
@@ -2617,7 +2617,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel",
                     "I"
@@ -2647,7 +2647,7 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel",
                     "I",
@@ -2834,7 +2834,7 @@
                 "characteristic_advances": [
                     "S",
                     "T",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "beneath-notice",
@@ -2865,7 +2865,7 @@
                     "S",
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "etiquette_servants",
@@ -2894,7 +2894,7 @@
                     "S",
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Int"
                 ],
                 "talent_ids": [
@@ -2925,7 +2925,7 @@
                     "S",
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Int",
                     "Fel"
                 ],
@@ -2937,7 +2937,7 @@
                 ],
                 "skills_ids": [
                     "leadership",
-                    "melee_basic"
+                    "melee"
                 ],
                 "trappings": [
                     "Hand Weapon",
@@ -2966,7 +2966,7 @@
                 "name": "Informer",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WP"
                 ],
@@ -2997,7 +2997,7 @@
                 "name": "Spy",
                 "lvl": 2,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WP",
                     "WS"
@@ -3012,7 +3012,7 @@
                     "climb",
                     "entertain_act",
                     "intuition",
-                    "melee_basic",
+                    "melee",
                     "secret-signs_any",
                     "sleight-of-hand"
                 ],
@@ -3030,7 +3030,7 @@
                 "name": "Agent",
                 "lvl": 3,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WP",
                     "WS",
@@ -3061,7 +3061,7 @@
                 "name": "Spymaster",
                 "lvl": 4,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WP",
                     "WS",
@@ -3149,7 +3149,7 @@
                 ],
                 "skills_ids": [
                     "animal-care",
-                    "melee_basic",
+                    "melee",
                     "outdoor-survival",
                     "ranged_bow",
                     "ride_horse",
@@ -3304,7 +3304,7 @@
                     "I",
                     "Fel",
                     "WP",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "kingpin",
@@ -3334,7 +3334,7 @@
                     "I",
                     "Fel",
                     "WP",
-                    "Agi",
+                    "Ag",
                     "Int"
                 ],
                 "talent_ids": [
@@ -3506,7 +3506,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "acute-sense_taste",
@@ -3538,7 +3538,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Dex"
                 ],
                 "talent_ids": [
@@ -3569,7 +3569,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel"
                 ],
@@ -3600,7 +3600,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel",
                     "Int"
@@ -3686,7 +3686,7 @@
                 "skills_ids": [
                     "cool",
                     "intuition",
-                    "melee_basic",
+                    "melee",
                     "ranged_sling",
                     "secret-signs_hunter",
                     "stealth_rural"
@@ -3821,7 +3821,7 @@
                     "climb",
                     "consume-alcohol",
                     "evaluate",
-                    "melee_basic",
+                    "melee",
                     "secret-signs_miner",
                     "trade_explosives"
                 ],
@@ -3969,7 +3969,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "WP",
                     "Fel",
                     "Dex"
@@ -3997,7 +3997,7 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "WP",
                     "Fel",
                     "Dex",
@@ -4040,7 +4040,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "orientation",
@@ -4054,7 +4054,7 @@
                     "endurance",
                     "gossip",
                     "lore_local",
-                    "melee_basic",
+                    "melee",
                     "outdoor-survival",
                     "perception"
                 ],
@@ -4073,7 +4073,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "BS"
                 ],
                 "talent_ids": [
@@ -4103,7 +4103,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "BS",
                     "Int"
                 ],
@@ -4134,7 +4134,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "BS",
                     "Int",
                     "Dex"
@@ -4173,7 +4173,7 @@
                 "name": "Peasant",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "S",
                     "T"
                 ],
@@ -4204,7 +4204,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "WS",
-                    "Agi",
+                    "Ag",
                     "S",
                     "T"
                 ],
@@ -4218,7 +4218,7 @@
                     "drive",
                     "entertain_storytelling",
                     "haggle",
-                    "melee_basic",
+                    "melee",
                     "trade_any"
                 ],
                 "trappings": [
@@ -4236,7 +4236,7 @@
                     "WS",
                     "S",
                     "T",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -4265,7 +4265,7 @@
                     "WS",
                     "S",
                     "T",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "Int"
                 ],
@@ -4306,7 +4306,7 @@
                 "characteristic_advances": [
                     "WS",
                     "T",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "break-and-enter",
@@ -4320,7 +4320,7 @@
                     "gossip",
                     "haggle",
                     "intuition",
-                    "melee_basic",
+                    "melee",
                     "outdoor-survival",
                     "perception"
                 ],
@@ -4339,7 +4339,7 @@
                     "WS",
                     "BS",
                     "T",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "marksman",
@@ -4373,7 +4373,7 @@
                     "T",
                     "BS",
                     "S",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "accurate-shot",
@@ -4402,7 +4402,7 @@
                     "T",
                     "BS",
                     "S",
-                    "Agi",
+                    "Ag",
                     "Int"
                 ],
                 "talent_ids": [
@@ -4474,7 +4474,7 @@
                     "WP",
                     "BS",
                     "T",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "coolheaded",
@@ -4506,7 +4506,7 @@
                     "WP",
                     "BS",
                     "T",
-                    "Agi",
+                    "Ag",
                     "WS"
                 ],
                 "talent_ids": [
@@ -4536,7 +4536,7 @@
                     "WP",
                     "BS",
                     "T",
-                    "Agi",
+                    "Ag",
                     "WS",
                     "I"
                 ],
@@ -4577,7 +4577,7 @@
                 "lvl": 1,
                 "characteristic_advances": [
                     "Dex",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -4608,7 +4608,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "Dex",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WS"
                 ],
@@ -4621,7 +4621,7 @@
                 "skills_ids": [
                     "entertain_any",
                     "ride_any",
-                    "melee_basic",
+                    "melee",
                     "perform_any",
                     "play_any",
                     "ranged_throwing"
@@ -4640,7 +4640,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "Dex",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WS",
                     "BS"
@@ -4669,7 +4669,7 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "Dex",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "WS",
                     "BS",
@@ -4843,7 +4843,7 @@
                 "characteristic_advances": [
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "flee",
@@ -4874,7 +4874,7 @@
                     "WS",
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "crack-the-whip",
@@ -4887,7 +4887,7 @@
                     "charm",
                     "cool",
                     "lore_local",
-                    "melee_basic",
+                    "melee",
                     "ride_horse"
                 ],
                 "trappings": [
@@ -4906,7 +4906,7 @@
                     "WP",
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "nose-for-trouble",
@@ -4936,7 +4936,7 @@
                     "WP",
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -5126,7 +5126,7 @@
                     "gamble",
                     "gossip",
                     "haggle",
-                    "melee_basic",
+                    "melee",
                     "perception",
                     "ranged_crossbow"
                 ],
@@ -5381,7 +5381,7 @@
                 "name": "Boat-hand",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "S",
                     "T"
                 ],
@@ -5396,7 +5396,7 @@
                     "dodge",
                     "endurance",
                     "gossip",
-                    "melee_basic",
+                    "melee",
                     "row",
                     "sail",
                     "swim"
@@ -5413,7 +5413,7 @@
                 "name": "Boatman",
                 "lvl": 2,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "S",
                     "T",
                     "I"
@@ -5443,7 +5443,7 @@
                 "name": "Bargeswain",
                 "lvl": 3,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "S",
                     "T",
                     "I",
@@ -5472,7 +5472,7 @@
                 "name": "Barge Master",
                 "lvl": 4,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "S",
                     "T",
                     "I",
@@ -5560,7 +5560,7 @@
                     "cool",
                     "entertain_storytelling",
                     "language_any",
-                    "melee_basic",
+                    "melee",
                     "navigation"
                 ],
                 "trappings": [
@@ -5658,7 +5658,7 @@
                     "athletics",
                     "dodge",
                     "endurance",
-                    "melee_basic",
+                    "melee",
                     "perception",
                     "row",
                     "sail",
@@ -5779,7 +5779,7 @@
                 "lvl": 1,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Dex"
                 ],
                 "talent_ids": [
@@ -5811,7 +5811,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "WS"
                 ],
@@ -5843,7 +5843,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "WS",
                     "I"
@@ -5872,7 +5872,7 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "T",
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "WS",
                     "I",
@@ -5912,7 +5912,7 @@
                 "name": "Landsman",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel"
                 ],
@@ -5944,7 +5944,7 @@
                 "name": "Seaman",
                 "lvl": 2,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel",
                     "WS"
@@ -5961,7 +5961,7 @@
                     "endurance",
                     "entertain_singing",
                     "language_any",
-                    "melee_basic"
+                    "melee"
                 ],
                 "trappings": [
                     "Hand Weapon (Boat Hook)",
@@ -5974,7 +5974,7 @@
                 "name": "Boatswain",
                 "lvl": 3,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel",
                     "WS",
@@ -6002,7 +6002,7 @@
                 "name": "Ship's Master",
                 "lvl": 4,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel",
                     "WS",
@@ -6046,7 +6046,7 @@
                 "name": "River Runner",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "WP"
                 ],
@@ -6079,7 +6079,7 @@
                 "name": "Smuggler",
                 "lvl": 2,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "WP",
                     "I"
@@ -6095,7 +6095,7 @@
                     "charm",
                     "gossip",
                     "lore_local",
-                    "melee_basic",
+                    "melee",
                     "perception",
                     "secret-signs_smuggler"
                 ],
@@ -6112,7 +6112,7 @@
                 "name": "Master Smuggler",
                 "lvl": 3,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "WP",
                     "I",
@@ -6141,7 +6141,7 @@
                 "name": "Smuggler King",
                 "lvl": 4,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "WP",
                     "I",
@@ -6199,7 +6199,7 @@
                     "dodge",
                     "endurance",
                     "gossip",
-                    "melee_basic",
+                    "melee",
                     "swim"
                 ],
                 "trappings": [
@@ -6331,7 +6331,7 @@
                     "dodge",
                     "endurance",
                     "row",
-                    "melee_basic",
+                    "melee",
                     "outdoor-survival",
                     "swim"
                 ],
@@ -6450,7 +6450,7 @@
                 "name": "Hustler",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel"
                 ],
@@ -6481,7 +6481,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel"
                 ],
@@ -6496,7 +6496,7 @@
                     "endurance",
                     "intuition",
                     "lore_local",
-                    "melee_basic",
+                    "melee",
                     "perception"
                 ],
                 "trappings": [
@@ -6512,7 +6512,7 @@
                 "characteristic_advances": [
                     "WP",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel"
                 ],
@@ -6540,7 +6540,7 @@
                 "characteristic_advances": [
                     "WP",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Dex",
                     "Fel",
                     "Int"
@@ -6648,7 +6648,7 @@
                     "I",
                     "Dex",
                     "Fel",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "attractive",
@@ -6678,7 +6678,7 @@
                     "I",
                     "Dex",
                     "Fel",
-                    "Agi",
+                    "Ag",
                     "Int"
                 ],
                 "talent_ids": [
@@ -6716,7 +6716,7 @@
                 "lvl": 1,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -6733,7 +6733,7 @@
                     "gamble",
                     "gossip",
                     "haggle",
-                    "melee_basic"
+                    "melee"
                 ],
                 "trappings": [
                     "Hand Weapon",
@@ -6747,7 +6747,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "Dex"
                 ],
@@ -6778,7 +6778,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "Dex",
                     "Int"
@@ -6806,7 +6806,7 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel",
                     "Dex",
                     "Int",
@@ -6896,7 +6896,7 @@
                     "evaluate",
                     "haggle",
                     "lore_medicine",
-                    "melee_basic"
+                    "melee"
                 ],
                 "trappings": [
                     "Backpack",
@@ -7006,7 +7006,7 @@
                     "endurance",
                     "gamble",
                     "intimidate",
-                    "melee_basic",
+                    "melee",
                     "outdoor-survival"
                 ],
                 "trappings": [
@@ -7173,7 +7173,7 @@
                     "evaluate",
                     "gossip",
                     "language_estalianortilean",
-                    "melee_basic"
+                    "melee"
                 ],
                 "trappings": [
                     "Hand Weapon",
@@ -7260,7 +7260,7 @@
                 "lvl": 1,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "WP"
                 ],
                 "talent_ids": [
@@ -7292,7 +7292,7 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "WP",
                     "Dex"
                 ],
@@ -7322,7 +7322,7 @@
                 "lvl": 3,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "WP",
                     "Dex",
                     "S"
@@ -7351,7 +7351,7 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "I",
-                    "Agi",
+                    "Ag",
                     "WP",
                     "Dex",
                     "S",
@@ -7528,7 +7528,7 @@
                 "characteristic_advances": [
                     "WS",
                     "S",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "combat-aware",
@@ -7541,7 +7541,7 @@
                     "charm-animal",
                     "endurance",
                     "language_battle",
-                    "melee_basic",
+                    "melee",
                     "outdoor-survival",
                     "perception",
                     "ride_horse"
@@ -7560,7 +7560,7 @@
                     "WS",
                     "BS",
                     "S",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "etiquette_soldiers",
@@ -7595,7 +7595,7 @@
                     "BS",
                     "S",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "combat-reflexes",
@@ -7623,7 +7623,7 @@
                     "BS",
                     "S",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -7664,7 +7664,7 @@
                 "characteristic_advances": [
                     "WS",
                     "T",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "diceman",
@@ -7679,7 +7679,7 @@
                     "gamble",
                     "gossip",
                     "intuition",
-                    "melee_basic",
+                    "melee",
                     "perception"
                 ],
                 "trappings": [
@@ -7697,7 +7697,7 @@
                     "WS",
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "relentless",
@@ -7730,7 +7730,7 @@
                     "S",
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "fearless_intruders",
@@ -7760,7 +7760,7 @@
                     "S",
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Int"
                 ],
                 "talent_ids": [
@@ -7798,7 +7798,7 @@
                 "characteristic_advances": [
                     "S",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "etiquette_any",
@@ -7833,7 +7833,7 @@
                     "WS",
                     "S",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "menacing",
@@ -7866,7 +7866,7 @@
                     "S",
                     "WP",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "fearless_any",
@@ -7895,7 +7895,7 @@
                     "S",
                     "WP",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -7981,7 +7981,7 @@
                 "skills_ids": [
                     "haggle",
                     "intuition",
-                    "melee_basic",
+                    "melee",
                     "melee_flailortwohanded",
                     "perception",
                     "ranged_entangling"
@@ -8003,7 +8003,7 @@
                     "S",
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "combat-master",
@@ -8032,7 +8032,7 @@
                     "S",
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -8070,7 +8070,7 @@
                 "characteristic_advances": [
                     "WS",
                     "T",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "in-fighter",
@@ -8103,7 +8103,7 @@
                     "WS",
                     "I",
                     "T",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "combat-reflexes",
@@ -8115,7 +8115,7 @@
                     "bribery",
                     "charm",
                     "intuition",
-                    "melee_basic",
+                    "melee",
                     "perception",
                     "ride_horse"
                 ],
@@ -8136,7 +8136,7 @@
                     "BS",
                     "T",
                     "I",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "careful-strike",
@@ -8167,7 +8167,7 @@
                     "BS",
                     "T",
                     "I",
-                    "Agi",
+                    "Ag",
                     "Fel"
                 ],
                 "talent_ids": [
@@ -8220,7 +8220,7 @@
                     "gamble",
                     "heal",
                     "lore_trolls",
-                    "melee_basic"
+                    "melee"
                 ],
                 "trappings": [
                     "Axe",
@@ -8269,7 +8269,7 @@
                     "WS",
                     "S",
                     "T",
-                    "Agi",
+                    "Ag",
                     "WP"
                 ],
                 "talent_ids": [
@@ -8300,7 +8300,7 @@
                     "T",
                     "I",
                     "WP",
-                    "Agi"
+                    "Ag"
                 ],
                 "talent_ids": [
                     "combat-master",
@@ -8354,7 +8354,7 @@
                     "dodge",
                     "endurance",
                     "language_battle",
-                    "melee_basic",
+                    "melee",
                     "play_drumorfife"
                 ],
                 "trappings": [

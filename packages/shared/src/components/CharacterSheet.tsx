@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages, Talent } from '../types/wfrp.types';
-import { calculateCharacteristicBonus } from '../utils/skills';
+import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages, Talent, Career } from '../types/wfrp.types';
+import { calculateCharacteristicBonus, getGroupedSkill, isSkillGrouped } from '../utils/skills';
 import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
-import talentsDataRaw from '../data/talents.json';
-import conditionsData from '../data/conditions.json';
+import { talentsData } from '..';
+import { conditionsData } from '..';
+import { careersData } from '..';
 import InventoryView from './InventoryView';
 import './CharacterSheet.css';
 import { getTalentCharacteristicBonus } from '../utils/talents';
 
-const talentsData = talentsDataRaw as Talent[];
+const talents = talentsData as Talent[];
 
 interface CharacterSheetProps {
     character: Character;
@@ -16,6 +17,7 @@ interface CharacterSheetProps {
     onSkillClick?: (skillName: string, skillValue: number) => void;
     onCharacteristicClick?: (charName: string, charValue: number) => void;
     onXpAward?: (amount: number) => void;
+    onCareerManagementModalOpen?: (character: Character) => void;
     onCurrencyAward?: (newCurrency: Currency) => void;
     readonly?: boolean;
     advancementMode?: boolean;
@@ -33,6 +35,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     onSkillClick,
     onCharacteristicClick,
     onXpAward,
+    onCareerManagementModalOpen,
     onCurrencyAward,
     readonly,
     advancementMode,
@@ -48,6 +51,9 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     if (!character) {
         return <div className="sheetContainer">No Character Loaded</div>;
     }
+
+    const career = careersData.find((c: any) => c.id === character.currentCareerId);
+    const careerLevel = career?.career_level.find((lvl: any) => lvl.id === character.currentCareerLevelId);
 
     const getConditionName = (conditionId: string): string => {
         const condition = conditionsData.find((c: any) => c.id === conditionId);
@@ -68,6 +74,54 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
         return counts;
     };
 
+    const handleCareerChange = (newCareerId: string, newCareerLevelId?: string) => {
+        const newCareer = careersData.find((c: any) => c.id === newCareerId);
+        if (!newCareer) return;
+
+        const newCareerLevel = newCareerLevelId ? newCareer.career_level.find((lvl: any) => lvl.id === newCareerLevelId) : newCareer.career_level.find((lvl: any) => lvl.lvl === 1);
+        if (!newCareerLevel) return;
+
+        console.log('Changing career to:', newCareer.name, 'Level:', newCareerLevel.name);
+
+        const updatedCharacter: Character = { 
+            ...character, 
+            currentCareerId: newCareerId, 
+            currentCareerLevelId: newCareerLevel.id,
+            unlockedCharacteristicIds: [
+                ...(character.unlockedCharacteristicIds ?? []),
+                ...newCareerLevel.characteristic_advances
+            ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
+            unlockedSkillIds: [
+                ...(character.unlockedSkillIds ?? []),
+                ...newCareerLevel.skills_ids
+            ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
+            unlockedTalentIds: [
+                ...(character.unlockedTalentIds ?? []),
+                ...newCareerLevel.talent_ids
+            ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
+            skills: [
+                ...character.skills,
+                ...newCareerLevel.skills_ids.filter(skillId => !character.skills.some(s => s.id === skillId)).map((skillId: string) => { 
+                    if (isSkillGrouped(skillId)) {
+                        const grouped = getGroupedSkill(skillId);
+                        if (!grouped) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
+                    }
+                    const skillDef = allSkills.find((s: any) => s.id === skillId && s.type === 'skill');
+                    if (!skillDef) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
+                    return {
+                        id: skillDef.id,
+                        name: skillDef.name,
+                        characteristic: skillDef.characteristic,
+                        advances: 0,
+                        talents: 0,
+                        modifier: 0
+                    };
+                }).filter((s: Skill) => s.id !== "" ) // Filter out unknown skills
+            ]
+        };
+        onCharacterUpdate(updatedCharacter);
+    };
+
     const handleCharacteristicChange = (
         charKey: keyof Character['characteristics'],
         field: keyof Characteristic,
@@ -85,7 +139,9 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
         onCharacterUpdate(updatedCharacter);
     }
 
-    const baseSkills: Skill[] = (allSkillsAndCharacteristics as SkillCharDefinition[]).filter(skill => skill.type === 'skill').map(skill => ({
+    const allSkills = allSkillsAndCharacteristics as SkillCharDefinition[]
+    const charSkills = character.skills
+    const remainingBasicSkills: Skill[] = allSkills.filter(skill => charSkills.filter(s => s.id === skill.id).length == 0 && skill.type === 'skill' && skill.classification === 'basic').map(skill => ({
         id: skill.id,
         name: skill.name,
         characteristic: skill.characteristic,
@@ -93,6 +149,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
         talents: 0,
         modifier: 0
     }));
+    const baseSkills: Skill[] = [...charSkills, ...remainingBasicSkills].sort((a, b) => a.name.localeCompare(b.name));
 
     const handleSkillChange = (
         skillId: string,
@@ -128,21 +185,45 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
 
             <div className="xpPanel">
                 <span>XP: {character.xp.current} / {character.xp.spent}</span>
-                {!readonly && onXpAward && (
-                    <div className="xpButtons">
-                        <input
-                            type="number"
-                            min={0}
-                            defaultValue={10}
-                            id="xpAwardInput"
-                        />
-                        <button onClick={() => {
-                            const input = document.getElementById('xpAwardInput') as HTMLInputElement;
-                            const amount = parseInt(input.value, 10) || 0;
-                            onXpAward(amount);
-                        }}>Award XP</button>
-                    </div>
-                )}
+                {
+                    readonly ? (
+                        <span>Career {career?.name} - {careerLevel?.name}</span>
+                    ) : (
+                        <div className="career"><span>Career : </span>
+                            <select value={character.currentCareerId} onChange={e => handleCareerChange(e.target.value)}>
+                                {(careersData as Career[]).map(c => {
+                                    return (<option key={c.id} value={c.id}>{c.name}</option>);
+                                }).sort((a, b) => a.props.children.localeCompare(b.props.children))}
+                            </select>
+                            -
+                            <select value={character.currentCareerLevelId} onChange={e => handleCareerChange(character.currentCareerId, e.target.value)}>
+                                {(careersData as Career[]).filter(c => c.id === character.currentCareerId).flatMap(c => c.career_level).map(level => {
+                                    return (<option key={level.id} value={level.id}>{level.name}</option>);
+                                })}
+                            </select>
+                        </div>
+                    )
+                }
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    {!readonly && onXpAward && (
+                        <div className="xpButtons">
+                            <input
+                                type="number"
+                                min={0}
+                                defaultValue={10}
+                                id="xpAwardInput"
+                            />
+                            <button onClick={() => {
+                                const input = document.getElementById('xpAwardInput') as HTMLInputElement;
+                                const amount = parseInt(input.value, 10) || 0;
+                                onXpAward(amount);
+                            }}>Award XP</button>
+                        </div>
+                    )}
+                    {!readonly && onCareerManagementModalOpen && (
+                        <button onClick={() => onCareerManagementModalOpen(character)}>Manage Career</button>
+                    )}
+                </div>
             </div>
             {!readonly && onCurrencyAward && (
                 <div className="currencyPanel">
@@ -315,10 +396,11 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                                 className="conditionItem"
                                                 title={getConditionDescription(cond.id)}
                                             >
-                                            <span className="conditionName">{getConditionName(cond.id)}</span>
-                                            {cond.stack > 1 && <span className="conditionCount">×{cond.stack}</span>}
-                                        </div>
-                                    )})}
+                                                <span className="conditionName">{getConditionName(cond.id)}</span>
+                                                {cond.stack > 1 && <span className="conditionCount">×{cond.stack}</span>}
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             </div>
                         )}
@@ -389,7 +471,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                 <p className="noTalents">No talents acquired yet.</p>
                             ) : (
                                 Object.entries(character.talents).map(([talentId, rank]) => {
-                                    const talentDef = talentsData.find(t => t.id === talentId);
+                                    const talentDef = talents.find(t => t.id === talentId);
                                     if (!talentDef) return null;
 
                                     return (

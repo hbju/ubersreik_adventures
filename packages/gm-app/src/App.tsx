@@ -1,4 +1,4 @@
-import { calculateEffectiveMaxWounds, getTalentInitiativeBonus, MapDisplay, recalculateCharacterTalentBonuses } from '@wfrp/shared';
+import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, recalculateCharacterTalentBonuses, Skill } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -8,6 +8,7 @@ import { ShopManager } from './components/ShopManager';
 import { PurchaseRequestModal } from './components/PurchaseRequestModal';
 import { JournalManager } from './components/JournalManager';
 import { UserManager } from './components/UserManager';
+import CareerChangeApprovalModal from './components/CareerChangeApprovalModal';
 
 import {
     Character,
@@ -33,12 +34,17 @@ import {
     Condition,
     Advantages,
     JournalEntry,
-    MapPinState
+    MapPinState,
+    CareerChangeRequestMessage,
+    CareerChangeResponseMessage,
+    careersData,
+    Career
 } from '@wfrp/shared';
 
 import React, { useState, useEffect } from 'react';
 
 import './App.css';
+import CareerManager from './components/CareerManager';
 
 interface ServerStatusData {
     ip: string;
@@ -79,11 +85,21 @@ function App() {
     const [showCombatResolver, setShowCombatResolver] = useState(false);
     const [showJournalManager, setShowJournalManager] = useState(false);
     const [showUserManager, setShowUserManager] = useState(false);
+    const [showCareerManager, setShowCareerManager] = useState<Character | null>(null);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
         item: Armor | Weapon | Item;
         playerCurrency: Currency;
         charId: string;
+    } | null>(null);
+    const [careerChangeRequest, setCareerChangeRequest] = useState<{
+        characterId: string;
+        characterName: string;
+        newCareerId: string;
+        newCareerLevelId: string;
+        newCareerName: string;
+        newCareerLevelName: string;
+        xpCost: number;
     } | null>(null);
     const [opposedTestResults, setOpposedTestResults] = useState<Map<string, OpposedTestResultMessage['payload']>>(new Map());
 
@@ -390,7 +406,7 @@ function App() {
     useEffect(() => {
         // Load initial data on component mount
         window.ipcRenderer.getInitialData().then((data: any) => {
-            if (!data) 
+            if (!data)
                 return;
 
             if (data.characters && data.characters.length > 0) {
@@ -489,6 +505,20 @@ function App() {
                 }
             }
 
+            if (message.type === 'CAREER_CHANGE_REQUEST') {
+                const { characterId, characterName, newCareerId, newCareerLevelId, newCareerName, newCareerLevelName, xpCost } = message.payload;
+                setCareerChangeRequest({
+                    characterId,
+                    characterName,
+                    newCareerId,
+                    newCareerLevelId,
+                    newCareerName,
+                    newCareerLevelName,
+                    xpCost
+                });
+                addLogEntry('system', `${characterName} requests career change to ${newCareerName} - ${newCareerLevelName} for ${xpCost} XP.`);
+            }
+
             if (message.type === 'OPPOSED_TEST_RESULT') {
                 const { testId, characterId, role, rollResult, successLevel } = message.payload;
                 const character = characters.find(c => c.id === characterId);
@@ -515,7 +545,7 @@ function App() {
                     const outcome = successLevel >= 0
                         ? `Success (${successLevel} SL)`
                         : `Failure (${successLevel} SL)`;
-                    
+
                     addLogEntry(
                         'roll',
                         `${character.name} tests to remove ${conditionId}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}]`
@@ -528,7 +558,7 @@ function App() {
                             console.log(combatant.conditions);
                             const conditionsToRemove = Math.min(1 + successLevel, combatant.conditions.filter(c => c === conditionId).length);
                             const updatedConditions = [...combatant.conditions];
-                            
+
                             // Remove the specified number of conditions
                             for (let i = 0; i < conditionsToRemove; i++) {
                                 const index = updatedConditions.indexOf(conditionId);
@@ -540,7 +570,7 @@ function App() {
                             // Add Fatigued condition for certain conditions when all are removed
                             const shouldAddFatigued = ['condition_broken', 'condition_poisoned', 'condition_stunned', 'condition_unconscious'].includes(conditionId);
                             const allRemoved = !updatedConditions.includes(conditionId);
-                            
+
                             if (shouldAddFatigued && allRemoved) {
                                 updatedConditions.push('condition_fatigued');
                                 addLogEntry('system', `${character.name} gains Fatigued condition after recovering from ${conditionId}.`);
@@ -835,6 +865,150 @@ function App() {
                 />
             )}
 
+            {careerChangeRequest && (
+                <CareerChangeApprovalModal
+                    request={careerChangeRequest}
+                    onApprove={() => {
+                        const character = characters.find(c => c.id === careerChangeRequest.characterId);
+                        if (character && careerChangeRequest) {
+                            // Check if character has enough XP
+                            if (character.xp.current < careerChangeRequest.xpCost) {
+                                const responseMessage: CareerChangeResponseMessage = {
+                                    type: 'CAREER_CHANGE_RESPONSE',
+                                    payload: {
+                                        success: false,
+                                        reason: 'Insufficient XP'
+                                    }
+                                };
+                                window.ipcRenderer.sendToPlayer(character.userId || '', responseMessage);
+                                addLogEntry('system', `Career change rejected: ${character.name} has insufficient XP.`);
+                                setCareerChangeRequest(null);
+                                return;
+                            }
+                            const newCareer = (careersData as Career[]).find(c => c.id === careerChangeRequest.newCareerId);
+                            if (!newCareer) {
+                                const responseMessage: CareerChangeResponseMessage = {
+                                    type: 'CAREER_CHANGE_RESPONSE',
+                                    payload: {
+                                        success: false,
+                                        reason: 'Invalid Career'
+                                    }
+                                };
+                                window.ipcRenderer.sendToPlayer(character.userId || '', responseMessage);
+                                addLogEntry('system', `Career change rejected: ${character.name} has invalid career.`);
+                                setCareerChangeRequest(null);
+                                return;
+                            }
+
+                            const newCareerLevel = newCareer.career_level.find(lvl => lvl.id === careerChangeRequest.newCareerLevelId);
+                            if (!newCareerLevel) {
+                                const responseMessage: CareerChangeResponseMessage = {
+                                    type: 'CAREER_CHANGE_RESPONSE',
+                                    payload: {
+                                        success: false,
+                                        reason: 'Invalid Career Level'
+                                    }
+                                };
+                                window.ipcRenderer.sendToPlayer(character.userId || '', responseMessage);
+                                addLogEntry('system', `Career change rejected: ${character.name} has invalid career level.`);
+                                setCareerChangeRequest(null);
+                                return;
+                            }
+
+
+                            // Update character's career, level, and XP
+                            const updatedCharacter: Character = {
+                                ...character,
+                                currentCareerId: careerChangeRequest.newCareerId,
+                                currentCareerLevelId: careerChangeRequest.newCareerLevelId,
+                                xp: {
+                                    current: character.xp.current - careerChangeRequest.xpCost,
+                                    spent: character.xp.spent + careerChangeRequest.xpCost
+                                },
+                                careerHistory: [
+                                    ...(character.careerHistory || []),
+                                    {
+                                        careerId: careerChangeRequest.newCareerId,
+                                        careerLevelId: careerChangeRequest.newCareerLevelId,
+                                        careerName: careerChangeRequest.newCareerName,
+                                        levelName: careerChangeRequest.newCareerLevelName,
+                                        level: (careersData as Career[])
+                                            .find(c => c.id === careerChangeRequest.newCareerId)
+                                            ?.career_level.find(lvl => lvl.id === careerChangeRequest.newCareerLevelId)
+                                            ?.lvl || 1,
+                                        xpSpent: careerChangeRequest.xpCost,
+                                        advancementType: 'characteristic' as const,
+                                        advancementId: 'career_change',
+                                        advancementName: `Career Change: ${careerChangeRequest.newCareerName} - ${careerChangeRequest.newCareerLevelName}`,
+                                        timestamp: new Date().toISOString()
+                                    }
+                                ],
+                                unlockedCharacteristicIds: [
+                                    ...character.unlockedCharacteristicIds,
+                                    ...newCareerLevel.characteristic_advances
+                                ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
+                                unlockedSkillIds: [
+                                    ...character.unlockedSkillIds,
+                                    ...newCareerLevel.skills_ids
+                                ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
+                                unlockedTalentIds: [
+                                    ...character.unlockedTalentIds,
+                                    ...newCareerLevel.talent_ids
+                                ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
+                                skills: [
+                                    ...character.skills,
+                                    ...newCareerLevel.skills_ids.filter(skillId => !character.skills.some(s => s.id === skillId)).map((skillId: string) => {
+                                        if (isSkillGrouped(skillId)) {
+                                            const grouped = getGroupedSkill(skillId);
+                                            if (!grouped) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
+                                        }
+                                        const skillDef = allSkillsAndCharacteristics.find((s: any) => s.id === skillId && s.type === 'skill');
+                                        if (!skillDef) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
+                                        return {
+                                            id: skillDef.id,
+                                            name: skillDef.name,
+                                            characteristic: skillDef.characteristic,
+                                            advances: 0,
+                                            talents: 0,
+                                            modifier: 0
+                                        };
+                                    }).filter((s: Skill) => s.id !== "") // Filter out unknown skills
+                                ]
+                            };
+
+                            handleCharacterUpdate(updatedCharacter);
+
+                            const responseMessage: CareerChangeResponseMessage = {
+                                type: 'CAREER_CHANGE_RESPONSE',
+                                payload: {
+                                    success: true,
+                                    character: updatedCharacter
+                                }
+                            };
+                            window.ipcRenderer.sendToPlayer(character.userId || '', responseMessage);
+                            addLogEntry('system', `Career change approved: ${character.name} is now ${careerChangeRequest.newCareerName} - ${careerChangeRequest.newCareerLevelName}.`);
+                        }
+                        setCareerChangeRequest(null);
+                    }}
+                    onReject={(reason) => {
+                        const character = characters.find(c => c.id === careerChangeRequest?.characterId);
+                        if (character) {
+                            const responseMessage: CareerChangeResponseMessage = {
+                                type: 'CAREER_CHANGE_RESPONSE',
+                                payload: {
+                                    success: false,
+                                    reason: reason
+                                }
+                            };
+                            window.ipcRenderer.sendToPlayer(character.userId || '', responseMessage);
+                            addLogEntry('system', `Career change rejected for ${character.name}: ${reason}`);
+                        }
+                        setCareerChangeRequest(null);
+                    }}
+                    onClose={() => setCareerChangeRequest(null)}
+                />
+            )}
+
             <div className="character-sheets-container">
                 {openSheetIds.map(characterId => {
                     const character = characters.find(char => char.id === characterId);
@@ -847,6 +1021,7 @@ function App() {
                             character={character}
                             onCharacterUpdate={handleCharacterUpdate}
                             onXpAward={(amount) => handleXpAward(character.id, amount)}
+                            onCareerManagementModalOpen={(char) => setShowCareerManager(char)}
                             onCurrencyAward={(amount) => handleCurrencyAward(character.id, amount)}
                             onRemoveTalent={(talentId) => {
                                 const updatedTalents = { ...character.talents };
@@ -858,6 +1033,14 @@ function App() {
                     );
                 })}
             </div>
+
+            {showCareerManager && (
+                <CareerManager
+                    character={showCareerManager}
+                    onClose={() => setShowCareerManager(null)}
+                    onCharacterUpdate={handleCharacterUpdate}
+                />
+            )}
         </div>
     );
 }

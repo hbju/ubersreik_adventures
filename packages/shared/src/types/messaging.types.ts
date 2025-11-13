@@ -33,8 +33,13 @@ export type RequestConditionTestMessage = BaseMessage<'REQUEST_CONDITION_TEST', 
 }>;
 export type JournalUpdateMessage = BaseMessage<'JOURNAL_UPDATE', { entries: JournalEntry[] }>;
 export type MapStateUpdateMessage = BaseMessage<'MAP_STATE_UPDATE', { pinStates: Record<string, MapPinState> }>;
+export type CareerChangeResponseMessage = BaseMessage<'CAREER_CHANGE_RESPONSE', { 
+  success: boolean; 
+  character?: Character; 
+  reason?: string 
+}>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage;
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | CareerChangeResponseMessage;
 
 // == Player to GM Messages ==
 
@@ -65,5 +70,14 @@ export type ConditionTestResultMessage = BaseMessage<'CONDITION_TEST_RESULT', {
   characterId: string;
   targetNumber: number;
 }>;
+export type CareerChangeRequestMessage = BaseMessage<'CAREER_CHANGE_REQUEST', {
+  characterId: string;
+  characterName: string;
+  newCareerId: string;
+  newCareerLevelId: string;
+  newCareerName: string;
+  newCareerLevelName: string;
+  xpCost: number;
+}>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage;
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage;

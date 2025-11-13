@@ -139,7 +139,7 @@ export const UserManager: React.FC<UserManagerProps> = ({
                     <option value="">No Character</option>
                     {characters.map((char) => (
                       <option key={char.id} value={char.id}>
-                        {char.name} ({char.career})
+                        {char.name} ({char.currentCareerId})
                       </option>
                     ))}
                   </select>
