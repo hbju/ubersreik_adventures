@@ -56,7 +56,7 @@
                 ],
                 "talent_ids": [
                     "Criminal",
-                    "Dealmaker",
+                    "Deal maker",
                     "Etiquette (Guilder)",
                     "Pharmacist"
                 ],
@@ -250,7 +250,7 @@
                     "Magnum Opus",
                     "Rapid Reload",
                     "Savant (Engineering)",
-                    "Unshakeable"
+                    "Unshakable"
                 ],
                 "skills_ids": [
                     "Language (Any)",
@@ -2798,7 +2798,7 @@
                 "talent_ids": [
                     "Commanding Presence",
                     "Iron Will",
-                    "Warleader",
+                    "War leader",
                     "Wealthy"
                 ],
                 "skills_ids": [
@@ -3278,7 +3278,7 @@
                 "talent_ids": [
                     "Break and Enter",
                     "Criminal",
-                    "Public Speaking",
+                    "Public Speaker",
                     "Strike to Stun"
                 ],
                 "skills_ids": [
@@ -3471,7 +3471,7 @@
                 ],
                 "talent_ids": [
                     "Acute Sense (Any)",
-                    "Master Craftsman (Herbalist)",
+                    "Master Tradesman (Herbalist)",
                     "Night Vision",
                     "Strong-minded"
                 ],
@@ -3710,7 +3710,7 @@
                 ],
                 "talent_ids": [
                     "Acute Sense (any)",
-                    "Deadeye Shot",
+                    "Dead-eye Shot",
                     "Fearless (Animals)",
                     "Sharpshooter"
                 ],
@@ -4406,7 +4406,7 @@
                     "Int"
                 ],
                 "talent_ids": [
-                    "Deadeye Shot",
+                    "Dead-eye Shot",
                     "Fearless (Bounties)",
                     "Hardy",
                     "Sure Shot"
@@ -4447,7 +4447,7 @@
                 "talent_ids": [
                     "Animal Affinity",
                     "Seasoned Traveller",
-                    "Trick-Riding",
+                    "Trick Riding",
                     "Tenacious"
                 ],
                 "skills_ids": [
@@ -4912,7 +4912,7 @@
                     "Nose for Trouble",
                     "Relentless",
                     "Tenacious",
-                    "Trick Rider"
+                    "Trick Riding"
                 ],
                 "skills_ids": [
                     "Charm Animal",
@@ -5879,7 +5879,7 @@
                     "Fel"
                 ],
                 "talent_ids": [
-                    "Master Craftsman (Boatbuilder)",
+                    "Master Tradesman (Boatbuilder)",
                     "Public Speaker",
                     "Sharp",
                     "Strong-minded"
@@ -5950,7 +5950,7 @@
                     "WS"
                 ],
                 "talent_ids": [
-                    "Catfall",
+                    "Cat-Fall",
                     "Sea Legs",
                     "Seasoned Traveller",
                     "Strong Legs"
@@ -6012,7 +6012,7 @@
                 "talent_ids": [
                     "Orientation",
                     "Pilot",
-                    "Public Speaking",
+                    "Public Speaker",
                     "Savvy"
                 ],
                 "skills_ids": [
@@ -6255,7 +6255,7 @@
                     "Dealmaker",
                     "Embezzle",
                     "Etiquette (Criminals)",
-                    "Public Speaking"
+                    "Public Speaker"
                 ],
                 "skills_ids": [
                     "Cool",
@@ -7092,7 +7092,7 @@
                     "Fel"
                 ],
                 "talent_ids": [
-                    "Deadeye Shot",
+                    "Dead-eye Shot",
                     "Fearless (Road Wardens)",
                     "Iron Will",
                     "Robust"
@@ -7163,7 +7163,7 @@
                 ],
                 "talent_ids": [
                     "Embezzle",
-                    "Street Fighting",
+                    "Dirty Fighting",
                     "Strike to Stun",
                     "Warrior Born"
                 ],
@@ -7358,7 +7358,7 @@
                     "Fel"
                 ],
                 "talent_ids": [
-                    "Catfall",
+                    "Cat-Fall",
                     "Scale Sheer Surface",
                     "Strong Legs",
                     "Wealthy"
@@ -7601,7 +7601,7 @@
                     "Combat Reflexes",
                     "Fast Shot",
                     "Hatred (Any)",
-                    "Warleader"
+                    "War leader"
                 ],
                 "skills_ids": [
                     "Intimidate",
@@ -7736,7 +7736,7 @@
                     "Fearless (Intruders)",
                     "Jump Up",
                     "Stout-hearted",
-                    "Unshakeable"
+                    "Unshakable"
                 ],
                 "skills_ids": [
                     "Heal",
@@ -7871,8 +7871,8 @@
                 "talent_ids": [
                     "Fearless (Any)",
                     "Stout-hearted",
-                    "Unshakeable",
-                    "Warleader"
+                    "Unshakable",
+                    "War leader"
                 ],
                 "skills_ids": [
                     "Charm",
@@ -7940,7 +7940,7 @@
                     "T"
                 ],
                 "talent_ids": [
-                    "Dirty Fighter",
+                    "Dirty Fighting",
                     "In-fighter",
                     "Iron Jaw",
                     "Reversal"
@@ -8409,8 +8409,8 @@
                 "talent_ids": [
                     "Combat Aware",
                     "Enclosed Fighter",
-                    "Unshakeable",
-                    "Warleader"
+                    "Unshakable",
+                    "War leader"
                 ],
                 "skills_ids": [
                     "Heal",
@@ -8438,7 +8438,7 @@
                 ],
                 "talent_ids": [
                     "Inspiring",
-                    "Public Speaking",
+                    "Public Speaker",
                     "Seasoned Traveller",
                     "Stout-hearted"
                 ],
@@ -8576,7 +8576,7 @@
                     "Fearless (Any)",
                     "Furious Assault",
                     "Holy Hatred",
-                    "Warleader"
+                    "War leader"
                 ],
                 "skills_ids": [
                     "Consume Alcohol",
