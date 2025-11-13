@@ -17,13 +17,30 @@ def normalize_token(tok: str) -> str:
     t = tok.strip()
     # common normalizations
     t = t.replace('Agility','Agi')
-    t = t.replace('Ag','Agi')
     t = t.replace('Agi.','Agi')
+    t = t.replace('Dexterity','Dex')
+    t = t.replace('Dx','Dex')
+    t = t.replace('Dex.','Dex')
+    t = t.replace('Intelligence','Int')
+    t = t.replace('Int.','Int')
+    t = t.replace('Will Power','WP')
+    t = t.replace('Willpower','WP')
+    t = t.replace('WP.','WP')
+    t = t.replace('Weapon Skill','WS')
+    t = t.replace('Ballistic Skill','BS')
+    t = t.replace('BS.','BS')
+    t = t.replace('Strength','S')
+    t = t.replace('Str','S')
+    t = t.replace('S.','S')
+    t = t.replace('Toughness','T')
+    t = t.replace('T.','T')
+    
     # unify case: attempt to match allowed tokens ignoring case
     for a in ALLOWED:
         if t.lower() == a.lower():
             return a
-    # fallback: uppercase letters except keep case for 'Agi' 'Dex' etc
+        
+    print(f"Warning: characteristic token '{tok}' not recognized.")
     return t
 
 
@@ -42,24 +59,12 @@ def normalize_characteristics(levels):
         # ensure prev included
         for p in prev:
             if p not in chars_norm:
-                chars_norm.append(p)
-        # if too short, append from preferred order
-        for cand in PREFERRED_ORDER:
-            if len(chars_norm) >= expected_len:
-                break
-            if cand not in chars_norm:
-                chars_norm.append(cand)
-        # if too long, trim while ensuring prev stays
-        if len(chars_norm) > expected_len:
-            # keep any in prev and then the first ones
-            newlist = []
-            for x in chars_norm:
-                if x in prev and x not in newlist:
-                    newlist.append(x)
-            for x in chars_norm:
-                if x not in newlist and len(newlist) < expected_len:
-                    newlist.append(x)
-            chars_norm = newlist
+                print(f"Info: missing previous characteristic '{p}' in career {lvl.get('name', 'unknown')} at level {i+1}")
+            
+        if len(chars_norm) != expected_len:
+            print(f"Warning: characteristic advances for career {lvl.get('name', 'unknown')} too short at level {i+1}")
+            break
+            
         # final sanitize: ensure all in ALLOWED_SET else drop
         chars_norm = [c for c in chars_norm if c in ALLOWED_SET]
         # if removal made it short, top up
@@ -145,28 +150,14 @@ def process_careers():
     changed = 0
     for career in careers:
         if 'career_level' not in career or not isinstance(career['career_level'], list):
+            print(f"Career '{career.get('name','<unknown>')}' missing career_level list.")
             continue
         # sort by lvl
         career['career_level'].sort(key=lambda x: x.get('lvl', 0))
         levels = career['career_level']
         # enforce exactly 4 levels
-        if len(levels) < 4:
-            # clone the last level with incremented lvl and adjusted id/name
-            while len(levels) < 4:
-                last = levels[-1]
-                new = json.loads(json.dumps(last))
-                new_lvl = last.get('lvl', len(levels)) + 1
-                new['lvl'] = new_lvl
-                # adjust id and name (append level number)
-                new['id'] = f"{last.get('id', 'level')}-lvl{new_lvl}"
-                new['name'] = f"{last.get('name', 'Level')} {new_lvl}"
-                levels.append(new)
-                changed += 1
-        elif len(levels) > 4:
-            # trim to first 4
-            career['career_level'] = levels[:4]
-            levels = career['career_level']
-            changed += 1
+        if len(levels) != 4:
+            print(f"Career '{career.get('name','<unknown>')}' has {len(levels)} levels, expected 4.")
         # normalize characteristics progression
         career['career_level'] = normalize_characteristics(career['career_level'])
         # map talent_ids and skills_ids
