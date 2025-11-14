@@ -156,6 +156,17 @@ export const useSocket = () => {
         console.log('[CLIENT] Map state update received:', message.payload);
         setMapPinStates(message.payload.pinStates);
       }
+
+      // Task 3.4: Handle career change response
+      if (message.type === 'CAREER_CHANGE_RESPONSE') {
+        console.log('[CLIENT] Career change response received:', message.payload);
+        if (message.payload.success && message.payload.character) {
+          setCharacter(message.payload.character);
+          alert('Career change approved by GM! Your character has been updated.');
+        } else {
+          alert(`Career change request denied${message.payload.reason ? ': ' + message.payload.reason : '.'}`);
+        }
+      }
     });
 
     setSocket(newSocket);

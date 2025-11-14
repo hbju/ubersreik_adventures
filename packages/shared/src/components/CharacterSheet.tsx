@@ -303,7 +303,8 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                                 onChange={e => handleCharacteristicChange(charKey, 'advances', parseInt(e.target.value, 10) || 0)}
                                                 className="numericInput"
                                             />)}
-                                        {advancementMode && <button onClick={() => onCharacteristicAdvance?.(charKey)} className="advanceButton">+</button>}
+                                        {advancementMode && isUnlocked && <button onClick={() => onCharacteristicAdvance?.(charKey)} className="advanceButton">+</button>}
+                                        {advancementMode && !isUnlocked && <span></span>}
                                         {readonly ? (<span>{char.modifier}</span>) : (
                                             <input
                                                 type="number"
@@ -440,7 +441,8 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                                 })}
                                                 className="numericInput"
                                             />)}
-                                        {advancementMode && <button onClick={() => onSkillAdvance?.(skill.id)} className='advanceButton'>+</button>}
+                                        {advancementMode && isUnlocked && <button onClick={() => onSkillAdvance?.(skill.id)} className='advanceButton'>+</button>}
+                                        {advancementMode && !isUnlocked && <span></span>}
                                         {readonly ? (<span>{skillModifier}</span>) : (
                                             <input
                                                 type="number"

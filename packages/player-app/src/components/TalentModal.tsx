@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Character, Talent, calculateTalentAdvanceCost, talentsData } from '@wfrp/shared';
+import { Character, Talent, calculateTalentAdvanceCost, talentsData, careersData, getAvailableAdvancements } from '@wfrp/shared';
 import styles from './TalentModal.module.css';
 
 interface TalentModalProps {
@@ -10,6 +10,26 @@ interface TalentModalProps {
 
 export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, onBuyTalent }) => {
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Task 3.1: Get available talents based on career path
+  const availableTalentIds = useMemo(() => {
+    const careers = careersData as any[];
+    const career = careers.find((c: any) => c.id === character.currentCareerId);
+    if (!career) return [];
+
+    const careerLevel = career.career_level.find((lvl: any) => lvl.id === character.currentCareerLevelId);
+    if (!careerLevel) return [];
+
+    const availableAdvancements = getAvailableAdvancements(career, careerLevel.lvl);
+    
+    // Combine career talents with GM unlocked talents
+    const allAvailable = new Set([
+      ...availableAdvancements.talents,
+      ...(character.unlockedTalentIds || [])
+    ]);
+    
+    return Array.from(allAvailable);
+  }, [character]);
 
   const getMaxRanks = (talent: Talent): number => {
     if (typeof talent.max_ranks === 'number') {
@@ -27,16 +47,20 @@ export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, on
 
   const filteredTalents = useMemo(() => {
     const talents = talentsData as Talent[];
+    
+    // Filter by career availability first
+    let careerFilteredTalents = talents.filter(talent => availableTalentIds.includes(talent.id));
+    
     if (!searchTerm.trim()) {
-      return talents;
+      return careerFilteredTalents;
     }
 
     const lowerSearch = searchTerm.toLowerCase();
-    return talents.filter(talent =>
+    return careerFilteredTalents.filter(talent =>
       talent.name.toLowerCase().includes(lowerSearch) ||
       talent.description.toLowerCase().includes(lowerSearch)
     );
-  }, [searchTerm]);
+  }, [searchTerm, availableTalentIds]);
 
   const handleBuy = (talent: Talent) => {
     const currentRank = character.talents[talent.id] || 0;
@@ -76,6 +100,9 @@ export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, on
 
         <div className={styles.xpDisplay}>
           <span>Available XP: <strong>{character.xp.current}</strong></span>
+          <span style={{ marginLeft: '20px', fontSize: '0.9em', color: '#888' }}>
+            Showing talents from your career path
+          </span>
         </div>
 
         <div className={styles.talentList}>

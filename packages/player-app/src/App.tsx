@@ -3,7 +3,7 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapDisplay, gameData, recalculateCharacterTalentBonuses } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapDisplay, gameData, recalculateCharacterTalentBonuses, careersData, getAvailableAdvancements, hasCompletedCurrentLevel } from '@wfrp/shared';
 import { TalentSelectionModal } from './components/TalentSelectionModal';
 import { TestResultMessage, calculateCharacteristicAdvanceCost, calculateSkillAdvanceCost, allSkillsAndCharacteristics } from '@wfrp/shared';
 import { TalentModal } from './components/TalentModal';
@@ -12,6 +12,7 @@ import { OpposedTestModal } from './components/OpposedTestModal';
 import { ConditionTestModal } from './components/ConditionTestModal';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
 import { JournalView } from './components/JournalView';
+import { CareerChangeModal } from './components/CareerChangeModal';
 
 
 const PlayerApp: React.FC = () => {
@@ -22,6 +23,8 @@ const PlayerApp: React.FC = () => {
   const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
   const [isShopModalOpen, setIsShopModalOpen] = useState(false);
   const [currentView, setCurrentView] = useState<'character' | 'journal' | 'map'>('character');
+  const [isCareerChangeModalOpen, setIsCareerChangeModalOpen] = useState(false);
+  const [canChangeCareer, setCanChangeCareer] = useState(false);
 
   const handleSkillClick = (skillName: string, skillValue: number) => {
     setTestModalInfo({ name: skillName, value: skillValue });
@@ -30,6 +33,17 @@ const PlayerApp: React.FC = () => {
   const handleCharacteristicClick = (charName: string, charValue: number) => {
     setTestModalInfo({ name: charName, value: charValue });
   }
+
+  // Check if the current level is completed (Task 3.2)
+  useEffect(() => {
+    if (character && character.currentCareerId && character.currentCareerLevelId) {
+      const careers = careersData as any[];
+      const completed = hasCompletedCurrentLevel(character, careers);
+      setCanChangeCareer(completed);
+    } else {
+      setCanChangeCareer(false);
+    }
+  }, [character]);
 
   const handleRoll = (result: TestResultMessage['payload']) => {
     sendMessage({ type: 'TEST_RESULT', payload: result });
@@ -195,6 +209,27 @@ const PlayerApp: React.FC = () => {
     setConditionTestRequest(null);
   };
 
+  const handleCareerChangeRequest = (careerId: string, careerLevelId: string, careerName: string, levelName: string, xpCost: number) => {
+    if (!character) return;
+
+    const message = {
+      type: 'CAREER_CHANGE_REQUEST' as const,
+      payload: {
+        characterId: character.id,
+        characterName: character.name,
+        newCareerId: careerId,
+        newCareerLevelId: careerLevelId,
+        newCareerName: careerName,
+        newCareerLevelName: levelName,
+        xpCost: xpCost
+      }
+    };
+    
+    sendMessage(message);
+    setIsCareerChangeModalOpen(false);
+    alert('Career change request sent to GM. Awaiting approval...');
+  };
+
   const activeCharacter = isAdvancementMode ? draftCharacter : character;
 
   // Show connection screen if not authenticated
@@ -298,6 +333,15 @@ const PlayerApp: React.FC = () => {
           <p>XP Available: {draftCharacter.xp.current}</p>
           {/* We'll calculate spent XP later */}
           <button onClick={() => setIsTalentModalOpen(true)} className='advanceControlButton'>Buy Talents</button>
+          {canChangeCareer && (
+            <button 
+              onClick={() => setIsCareerChangeModalOpen(true)} 
+              className='advanceControlButton'
+              style={{ background: '#2d5016', borderColor: '#3d6f1f' }}
+            >
+              Change Career
+            </button>
+          )}
           <button onClick={handleConfirmAdvancement} className='advanceControlButton'>Confirm Changes</button>
           <button onClick={handleCancelAdvancement} className="advanceControlButton">Cancel</button>
         </div>
@@ -307,6 +351,13 @@ const PlayerApp: React.FC = () => {
           character={draftCharacter}
           onClose={() => setIsTalentModalOpen(false)}
           onBuyTalent={handleBuyTalent}
+        />
+      )}
+      {isCareerChangeModalOpen && character && (
+        <CareerChangeModal
+          character={character}
+          onRequestChange={handleCareerChangeRequest}
+          onClose={() => setIsCareerChangeModalOpen(false)}
         />
       )}
       {isShopModalOpen && character && (
