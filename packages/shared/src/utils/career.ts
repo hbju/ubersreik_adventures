@@ -24,14 +24,14 @@ export function getCareerLevelsForCharacter(
  * Get all advancements available to the character based on their career path and GM unlocks
  */
 export function getAvailableAdvancements(
-  character: Character,
-  allCareers: Career[]
+  career: Career,
+  careerLevel: number
 ): {
   characteristics: string[];
   skills: string[];
   talents: string[];
 } {
-  const careerLevels = getCareerLevelsForCharacter(character, allCareers);
+  const careerLevels = career.career_level.slice(0, careerLevel);
   
   // Collect all characteristics, skills, and talents from career levels
   const careerCharacteristics = new Set<string>();
@@ -43,11 +43,6 @@ export function getAvailableAdvancements(
     level.skills_ids.forEach(skill => careerSkills.add(skill));
     level.talent_ids.forEach(talent => careerTalents.add(talent));
   });
-
-  // Add GM unlocks
-  character.unlockedCharacteristicIds?.forEach(char => careerCharacteristics.add(char));
-  character.unlockedSkillIds?.forEach(skill => careerSkills.add(skill));
-  character.unlockedTalentIds?.forEach(talent => careerTalents.add(talent));
 
   return {
     characteristics: Array.from(careerCharacteristics),

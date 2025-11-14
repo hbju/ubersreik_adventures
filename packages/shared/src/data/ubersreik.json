@@ -92,7 +92,7 @@
           "fel": { "initial": 20, "advances": 0, "talents": 0, "modifier": 0 }
         },
         "skills": [
-          { "id": "melee-basic", "name": "Melee (Basic)", "characteristic": "ws", "advances" : 10, "talents" : 0, "modifier": 0 },
+          { "id": "melee", "name": "Melee (Basic)", "characteristic": "ws", "advances" : 10, "talents" : 0, "modifier": 0 },
           { "id": "dodge", "name": "Dodge", "characteristic": "ag", "advances" : 5, "talents": 0, "modifier": 0 },
           { "id": "intimidate", "name": "Intimidate", "characteristic": "s", "advances" : 5, "talents": 0, "modifier": 0 }
         ],

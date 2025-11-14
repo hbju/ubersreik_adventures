@@ -39,24 +39,25 @@ const CareerManager: React.FC<CareerManagerProps> = ({ character, onCharacterUpd
     const toggleCharacteristic = (charId: string) => {
         const updatedCharacter = { ...character };
         const unlocked = updatedCharacter.unlockedCharacteristicIds || [];
+        const charIdToChange = unlocked.find(c => c.toLowerCase() === charId.toLowerCase()) || charId;
 
-        if (unlocked.includes(charId.toLowerCase())) {
-            updatedCharacter.unlockedCharacteristicIds = unlocked.filter(c => c !== charId.toLowerCase());
+        if (unlocked.map(id => id.toLowerCase()).includes(charId.toLowerCase())) {
+            updatedCharacter.unlockedCharacteristicIds = unlocked.filter(c => c.toLowerCase() !== charId.toLowerCase());
         } else {
-            updatedCharacter.unlockedCharacteristicIds = [...unlocked, charId.toLowerCase()];
+            updatedCharacter.unlockedCharacteristicIds = [...unlocked, charIdToChange];
         }
-
         onCharacterUpdate(updatedCharacter);
     };
 
     const toggleSkill = (skillId: string) => {
         const updatedCharacter = { ...character };
         const unlocked = updatedCharacter.unlockedSkillIds || [];
+        const skillIdToChange = unlocked.find(s => s.toLowerCase() === skillId.toLowerCase()) || skillId;
 
-        if (unlocked.includes(skillId)) {
-            updatedCharacter.unlockedSkillIds = unlocked.filter(s => s !== skillId);
+        if (unlocked.map(id => id.toLowerCase()).includes(skillIdToChange.toLowerCase())) {
+            updatedCharacter.unlockedSkillIds = unlocked.filter(s => s.toLowerCase() !== skillIdToChange.toLowerCase());
         } else {
-            updatedCharacter.unlockedSkillIds = [...unlocked, skillId];
+            updatedCharacter.unlockedSkillIds = [...unlocked, skillIdToChange];
         }
 
         onCharacterUpdate(updatedCharacter);
@@ -178,7 +179,7 @@ const CareerManager: React.FC<CareerManagerProps> = ({ character, onCharacterUpd
                     {selectedUnlockTab === 'characteristics' && (
                         <div className={styles.optionsList}>
                             {characteristicOptions.map(char => {
-                                const isUnlocked = (character.unlockedCharacteristicIds || []).includes(char.toLowerCase());
+                                const isUnlocked = (character.unlockedCharacteristicIds || []).map(id => id.toLowerCase()).includes(char.toLowerCase());
                                 return (
                                     <label key={char} className={styles.checkboxLabel}>
                                         <input

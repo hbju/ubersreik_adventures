@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages, Talent, Career } from '../types/wfrp.types';
 import { calculateCharacteristicBonus, getGroupedSkill, isSkillGrouped } from '../utils/skills';
 import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
-import { talentsData } from '..';
+import { getAvailableAdvancements, talentsData } from '..';
 import { conditionsData } from '..';
 import { careersData } from '..';
 import InventoryView from './InventoryView';
@@ -81,24 +81,15 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
         const newCareerLevel = newCareerLevelId ? newCareer.career_level.find((lvl: any) => lvl.id === newCareerLevelId) : newCareer.career_level.find((lvl: any) => lvl.lvl === 1);
         if (!newCareerLevel) return;
 
-        console.log('Changing career to:', newCareer.name, 'Level:', newCareerLevel.name);
+        const availableAdvancements = getAvailableAdvancements(newCareer, newCareerLevel.lvl);
 
         const updatedCharacter: Character = { 
             ...character, 
             currentCareerId: newCareerId, 
             currentCareerLevelId: newCareerLevel.id,
-            unlockedCharacteristicIds: [
-                ...(character.unlockedCharacteristicIds ?? []),
-                ...newCareerLevel.characteristic_advances
-            ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
-            unlockedSkillIds: [
-                ...(character.unlockedSkillIds ?? []),
-                ...newCareerLevel.skills_ids
-            ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
-            unlockedTalentIds: [
-                ...(character.unlockedTalentIds ?? []),
-                ...newCareerLevel.talent_ids
-            ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
+            unlockedCharacteristicIds: availableAdvancements.characteristics,
+            unlockedSkillIds : availableAdvancements.skills,
+            unlockedTalentIds: availableAdvancements.talents,
             skills: [
                 ...character.skills,
                 ...newCareerLevel.skills_ids.filter(skillId => !character.skills.some(s => s.id === skillId)).map((skillId: string) => { 
@@ -150,7 +141,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
         talents: 0,
         modifier: 0
     }));
-    const baseSkills: Skill[] = [...charSkills, ...remainingBasicSkills].sort((a, b) => a.name.localeCompare(b.name));
+    const baseSkills: Skill[] = [...charSkills, ...remainingBasicSkills].filter(skill => skill.id !== "ranged").sort((a, b) => a.name.localeCompare(b.name));
 
     const handleSkillChange = (
         skillId: string,
@@ -300,9 +291,10 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                 const charNames: { [key: string]: string } = { "ws": "Weapon Skill", "bs": "Ballistic Skill", "s": "Strength", "t": "Toughness", "i": "Initiative", "ag": "Agility", "int": "Intelligence", "dex": "Dexterity", "wp": "Willpower", "fel": "Fellowship" };
                                 const charTalents = getTalentCharacteristicBonus(character, charKey);
                                 const total = char.initial + char.advances + charTalents + char.modifier;
+                                const isUnlocked = !character.unlockedCharacteristicIds || character.unlockedCharacteristicIds.map(id => id.toLowerCase()).includes(charKey);
                                 return (
                                     <React.Fragment key={key}>
-                                        <button className="rollButton" onClick={() => onCharacteristicClick && onCharacteristicClick(charNames[key], total)}>{key.toUpperCase()}</button>
+                                        <button className={!isUnlocked ? "rollButton" : "rollButtonUnlocked"} onClick={() => onCharacteristicClick && onCharacteristicClick(charNames[key], total)}>{key.toUpperCase()}</button>
                                         <span>{char.initial}</span>
                                         {readonly ? (<span>{char.advances}</span>) :
                                             (<input
@@ -418,18 +410,24 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                         <div className={advancementMode ? "skillsGridAdvancement" : "skillsGrid"}>
                             <span></span><span>Base</span><span>Char</span><span>Adv</span>{advancementMode && <span></span>}<span>Mod</span><span>Total</span><span></span>
                             {baseSkills.map(skill => {
-                                const charSkill = character.skills.find(s => s.id === skill.id);
-                                let charKey = charSkill ? charSkill.characteristic as keyof Character['characteristics'] : skill.characteristic as keyof Character['characteristics'];
+                                let charKey = skill.characteristic as keyof Character['characteristics'];
                                 const characteristicValue = character.characteristics[charKey];
                                 const baseValue = characteristicValue.initial + characteristicValue.advances + characteristicValue.talents + characteristicValue.modifier;
-                                const skillAdvances = charSkill ? charSkill.advances : skill.advances;
-                                const skillTalents = charSkill ? charSkill.talents : skill.talents;
-                                const skillModifier = charSkill ? charSkill.modifier : skill.modifier;
+                                const skillAdvances = skill.advances;
+                                const skillTalents = skill.talents;
+                                const skillModifier = skill.modifier;
 
                                 const total = baseValue + skillAdvances + skillTalents + skillModifier;
+                                const isUnlocked = !character.unlockedSkillIds || character.unlockedSkillIds.includes(skill.id);
                                 return (
                                     <React.Fragment key={skill.id}>
-                                        <label>{skill.name}</label>
+                                        {
+                                            isUnlocked ? (
+                                                <span className="skillUnlockedName">{skill.name}</span>
+                                            ) : (
+                                                <label>{skill.name}</label>
+                                            )
+                                        }
                                         <span className="charValue">{skill.characteristic.toUpperCase()}</span>
                                         <span>{baseValue}</span>
                                         {readonly ? (<span>{skillAdvances}</span>) : (

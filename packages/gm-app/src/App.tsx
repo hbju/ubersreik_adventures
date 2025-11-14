@@ -1,4 +1,4 @@
-import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, recalculateCharacterTalentBonuses, Skill } from '@wfrp/shared';
+import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, recalculateCharacterTalentBonuses, Skill } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -132,9 +132,9 @@ function App() {
         const updatedCharacters = characters.map(char =>
             char.id === updatedCharacter.id ? updatedCharacter : char
         );
+
         setCharacters(updatedCharacters);
 
-        // Save to persistent storage
         saveApplicationState(updatedCharacters);
 
         const newMessage: AssignCharacterMessage = {
@@ -915,7 +915,7 @@ function App() {
                                 return;
                             }
 
-
+                            const availableAdvancements = getAvailableAdvancements(newCareer, newCareerLevel.lvl);
                             // Update character's career, level, and XP
                             const updatedCharacter: Character = {
                                 ...character,
@@ -943,18 +943,9 @@ function App() {
                                         timestamp: new Date().toISOString()
                                     }
                                 ],
-                                unlockedCharacteristicIds: [
-                                    ...character.unlockedCharacteristicIds,
-                                    ...newCareerLevel.characteristic_advances
-                                ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
-                                unlockedSkillIds: [
-                                    ...character.unlockedSkillIds,
-                                    ...newCareerLevel.skills_ids
-                                ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
-                                unlockedTalentIds: [
-                                    ...character.unlockedTalentIds,
-                                    ...newCareerLevel.talent_ids
-                                ].filter((v, i, a) => a.indexOf(v) === i), // Ensure uniqueness
+                                unlockedCharacteristicIds: availableAdvancements.characteristics,
+                                unlockedSkillIds : availableAdvancements.skills,
+                                unlockedTalentIds: availableAdvancements.talents,
                                 skills: [
                                     ...character.skills,
                                     ...newCareerLevel.skills_ids.filter(skillId => !character.skills.some(s => s.id === skillId)).map((skillId: string) => {
@@ -1039,7 +1030,10 @@ function App() {
                 <CareerManager
                     character={showCareerManager}
                     onClose={() => setShowCareerManager(null)}
-                    onCharacterUpdate={handleCharacterUpdate}
+                    onCharacterUpdate={(char) => {
+                        handleCharacterUpdate(char);
+                        setShowCareerManager(char);
+                    }}
                 />
             )}
         </div>
