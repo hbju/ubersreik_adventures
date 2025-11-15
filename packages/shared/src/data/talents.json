@@ -64,14 +64,14 @@
                 "type": "TEST_BONUS",
                 "value": 10,
                 "appliesTo": [
-                    "Perception"
+                    "perception"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Perception (Sense)"
+                    "perception_sense"
                 ]
             }
         ]
@@ -104,14 +104,14 @@
                 "type": "PASSIVE",
                 "value": "No Miscast on double successful Channel",
                 "appliesTo": [
-                    "Channelling (Any)"
+                    "channelling"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Channelling (Any)"
+                    "channelling"
                 ]
             }
         ]
@@ -141,14 +141,14 @@
                 "type": "REVERSE_ROLL_ON_FAIL",
                 "value": 1,
                 "appliesTo": [
-                    "Stealth (Urban)"
+                    "stealth_urban"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Stealth (Urban)"
+                    "stealth_urban"
                 ]
             }
         ]
@@ -205,14 +205,14 @@
                 "type": "PASSIVE",
                 "value": "Wild animals are calm around you",
                 "appliesTo": [
-                    "Charm Animal"
+                    "charm_animal"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm Animal"
+                    "charm_animal"
                 ]
             }
         ]
@@ -274,7 +274,7 @@
             {
                 "type": "SL_DICES_UNITS",
                 "appliesTo": [
-                    "Charm"
+                    "charm"
                 ],
                 "condition": "arguing or debating"
             },
@@ -282,8 +282,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm Tests when arguing and debating"
-                ]
+                    "charm"
+                ],
+                "condition": "arguing or debating"
             }
         ]
     },
@@ -307,13 +308,13 @@
         "effects": [
             {
                 "type": "CAREER_SKILL_ADDITION",
-                "value": "Art (Any)"
+                "value": "art"
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Art (Any)"
+                    "art"
                 ]
             }
         ]
@@ -344,7 +345,7 @@
             {
                 "type": "SL_DICES_UNITS",
                 "appliesTo": [
-                    "Charm"
+                    "charm"
                 ],
                 "condition": "target attracted"
             },
@@ -352,8 +353,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm Tests to influence those attracted to you"
-                ]
+                    "charm"
+                ],
+                "condition": "target attracted"
             }
         ]
     },
@@ -375,16 +377,17 @@
                 "type": "PASSIVE",
                 "value": "End Frenzy with successful Cool Test",
                 "appliesTo": [
-                    "Melee"
+                    "melee"
                 ],
-                "condition": "Frenzied"
+                "condition": "frenzied"
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee Tests when Frenzied"
-                ]
+                    "melee"
+                ],
+                "condition": "frenzied"
             }
         ]
     },
@@ -406,15 +409,16 @@
                 "type": "PASSIVE",
                 "value": "Remove one opponent Advantage",
                 "appliesTo": [
-                    "Melee"
+                    "melee"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee for a Beat Blade"
-                ]
+                    "melee"
+                ],
+                "condition": "beat blade"
             }
         ]
     },
@@ -444,7 +448,7 @@
                 "type": "PASSIVE",
                 "value": "Higher Status ignore you",
                 "appliesTo": [
-                    "Stealth"
+                    "stealth"
                 ]
             },
             {
@@ -458,8 +462,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Stealth when in plain sight"
-                ]
+                    "stealth"
+                ],
+                "condition": "in plain sight"
             }
         ]
     },
@@ -489,8 +494,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee on a Round when you Charge"
-                ]
+                    "melee"
+                ],
+                "condition": "charging"
             }
         ]
     },
@@ -524,15 +530,16 @@
                 "type": "PASSIVE",
                 "value": "Stun with fast talking",
                 "appliesTo": [
-                    "Charm"
+                    "charm"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm to Blather"
-                ]
+                    "charm"
+                ],
+                "condition": "to blather"
             }
         ]
     },
@@ -586,14 +593,14 @@
             {
                 "type": "REVERSE_ROLL_ON_FAIL",
                 "appliesTo": [
-                    "Research"
+                    "research"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Research"
+                    "research"
                 ]
             }
         ]
@@ -622,15 +629,17 @@
                 "type": "DAMAGE_BONUS",
                 "value": 1,
                 "appliesTo": [
-                    "inanimate objects"
-                ]
+                    "melee"
+                ],
+                "condition": "forcing or breaking inanimate objects"
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee when forcing or breaking inanimate objects"
-                ]
+                    "melee"
+                ],
+                "condition": "forcing or breaking inanimate objects"
             }
         ]
     },
@@ -661,14 +670,14 @@
                 "type": "PASSIVE",
                 "value": "Reduce bribe cost by 10%",
                 "appliesTo": [
-                    "Bribery"
+                    "bribery"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Bribery"
+                    "bribery"
                 ]
             }
         ]
@@ -690,8 +699,8 @@
             {
                 "type": "SL_DICES_UNITS",
                 "appliesTo": [
-                    "Gamble",
-                    "Sleight of Hand"
+                    "gamble",
+                    "sleight-of-hand"
                 ],
                 "condition": "playing card games"
             },
@@ -699,8 +708,10 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Gamble and Sleight of Hand when playing card games"
-                ]
+                    "gamble",
+                    "sleight-of-hand"
+                ],
+                "condition": "playing card games"
             }
         ]
     },
@@ -765,17 +776,18 @@
             {
                 "type": "REVERSE_ROLL_ON_FAIL",
                 "appliesTo": [
-                    "Consume Alcohol"
+                    "consume-alcohol"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm at Parties",
-                    "Gossip at Parties",
-                    "Consume Alcohol"
-                ]
+                    "charm",
+                    "gossip",
+                    "consume-alcohol"
+                ],
+                "condition": "at parties"
             }
         ]
     },
@@ -798,15 +810,16 @@
                 "type": "PASSIVE",
                 "value": "Reduce falling distance",
                 "appliesTo": [
-                    "Athletics"
+                    "athletics"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Athletics when falling"
-                ]
+                    "athletics"
+                ],
+                "condition": "when falling"
             }
         ]
     },
@@ -842,8 +855,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm when lying"
-                ]
+                    "charm"
+                ],
+                "condition": "when lying"
             }
         ]
     },
@@ -865,14 +879,14 @@
                 "type": "PASSIVE",
                 "value": "Can perform Chanties",
                 "appliesTo": [
-                    "Entertain (Singing)"
+                    "entertain_singing"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Entertain (Singing)"
+                    "entertain_singing"
                 ]
             }
         ]
@@ -934,7 +948,7 @@
                 "type": "PASSIVE",
                 "value": "Ignore Surprise with Perception Test",
                 "appliesTo": [
-                    "Perception"
+                    "perception"
                 ],
                 "condition": "surprise"
             },
@@ -942,8 +956,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Perception during fights"
-                ]
+                    "perception"
+                ],
+                "condition": "during melee"
             }
         ]
     },
@@ -1033,14 +1048,14 @@
                 "type": "PASSIVE",
                 "value": "Lower Status can't resist Leadership",
                 "appliesTo": [
-                    "Leadership"
+                    "leadership"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Leadership"
+                    "leadership"
                 ]
             }
         ]
@@ -1064,14 +1079,14 @@
                 "type": "PASSIVE",
                 "value": "One free Crafting Endeavor for Lore (Apothecary) without Workshop",
                 "appliesTo": [
-                    "Lore (Apothecary)"
+                    "lore_apothecary"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Lore (Apothecary)"
+                    "lore_apothecary"
                 ]
             }
         ]
@@ -1093,15 +1108,17 @@
                 "type": "PASSIVE",
                 "value": "Bend body to squeeze through gaps",
                 "appliesTo": [
-                    "Agility"
+                    "agility"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Perform and Agility Tests when contorting helps"
-                ]
+                    "agility",
+                    "perform"
+                ],
+                "condition": "when contorting helps"
             }
         ]
     },
@@ -1137,7 +1154,7 @@
                 "type": "CHARACTERISTIC_BONUS",
                 "value": 5,
                 "appliesTo": [
-                    "Willpower"
+                    "wp"
                 ]
             }
         ]
@@ -1161,19 +1178,22 @@
         ],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "+1 Movement when animal fleeing/running",
+                "type": "ATTRIBUTE_BONUS",
+                "value": "+1 Movement",
                 "appliesTo": [
-                    "Drive",
-                    "Ride"
-                ]
+                    "drive",
+                    "ride"
+                ],
+                "condition": "fleeing or running"
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Drive or Ride Tests when Fleeing or Running"
-                ]
+                    "drive",
+                    "ride"
+                ],
+                "condition": "when fleeing or running"
             }
         ]
     },
@@ -1204,13 +1224,13 @@
         "effects": [
             {
                 "type": "CAREER_SKILL_ADDITION",
-                "value": "Trade (Any)"
+                "value": "trade"
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Trade (any one)"
+                    "trade"
                 ]
             }
         ]
@@ -1233,15 +1253,16 @@
                 "type": "PASSIVE",
                 "value": "Use Crew Commander's Ranged Skill when firing Crewed weapons",
                 "appliesTo": [
-                    "Ranged"
+                    "ranged"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Ranged Skill tests when firing a weapon with the Crewed Flaw."
-                ]
+                    "ranged"
+                ],
+                "condition": "when firing a weapon with the Crewed Flaw"
             }
         ]
     },
@@ -1354,14 +1375,14 @@
                 "type": "PASSIVE",
                 "value": "Modify prices by 10% when using Haggle",
                 "appliesTo": [
-                    "Haggle"
+                    "haggle"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Haggle"
+                    "haggle"
                 ]
             }
         ]
@@ -1394,15 +1415,16 @@
                 "type": "PASSIVE",
                 "value": "Detect magical artefacts with Intuition",
                 "appliesTo": [
-                    "Intuition"
+                    "intuition"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Intuition tests to detect magical artefacts"
-                ]
+                    "intuition"
+                ],
+                "condition": "to detect magical artefacts"
             }
         ]
     },
@@ -1429,8 +1451,8 @@
             {
                 "type": "SL_DICES_UNITS",
                 "appliesTo": [
-                    "Gamble",
-                    "Sleight of Hand"
+                    "gamble",
+                    "sleight-of-hand"
                 ],
                 "condition": "playing dice games"
             },
@@ -1438,8 +1460,10 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Gamble and Sleight of Hand when playing dice games"
-                ]
+                    "gamble",
+                    "sleight-of-hand"
+                ],
+                "condition": "playing dice games"
             }
         ]
     },
@@ -1473,14 +1497,14 @@
                 "type": "DAMAGE_BONUS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee (Brawling)"
+                    "melee_brawling"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee (Brawling)"
+                    "melee_brawling"
                 ]
             }
         ]
@@ -1509,15 +1533,16 @@
                 "type": "PASSIVE",
                 "value": "Disarm opponent with Melee Test",
                 "appliesTo": [
-                    "Melee"
+                    "melee"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee Tests concerning this Talent"
-                ]
+                    "melee"
+                ],
+                "condition": "when disarming"
             }
         ]
     },
@@ -1541,15 +1566,16 @@
                 "type": "PASSIVE",
                 "value": "Distract opponent with Athletics Test",
                 "appliesTo": [
-                    "Athletics"
+                    "athletics"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Athletics to Distract"
-                ]
+                    "athletics"
+                ],
+                "condition": "when distracting"
             }
         ]
     },
@@ -1592,15 +1618,16 @@
                 "type": "PASSIVE",
                 "value": "Count as two combatants for Losing Advantage",
                 "appliesTo": [
-                    "Melee"
+                    "melee"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee Tests when beside an ally with Drilled"
-                ]
+                    "melee"
+                ],
+                "condition": "when beside an ally with Drilled"
             }
         ]
     },
@@ -1629,15 +1656,18 @@
                 "type": "PASSIVE",
                 "value": "Attack with both weapons",
                 "appliesTo": [
-                    "Melee"
+                    "melee",
+                    "ranged"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee or Ranged when attacking with two weapons"
-                ]
+                    "melee",
+                    "ranged"
+                ],
+                "condition": "when attacking with two weapons"
             }
         ]
     },
@@ -1669,15 +1699,16 @@
                 "type": "PASSIVE",
                 "value": "Embezzle money with Intelligence Test",
                 "appliesTo": [
-                    "Intelligence"
+                    "intelligence"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Intelligence (Embezzling)"
-                ]
+                    "intelligence"
+                ],
+                "condition": "embezzling"
             }
         ]
     },
@@ -1705,8 +1736,8 @@
                 "type": "PASSIVE",
                 "value": "Ignore Melee penalties in confined spaces; can use Dodge",
                 "appliesTo": [
-                    "Melee",
-                    "Dodge"
+                    "melee",
+                    "dodge"
                 ],
                 "condition": "enclosed spaces"
             },
@@ -1714,8 +1745,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Dodge in enclosed environments"
-                ]
+                    "dodge"
+                ],
+                "condition": "in enclosed environments"
             }
         ]
     },
@@ -1796,8 +1828,8 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm",
-                    "Gossip"
+                    "charm",
+                    "gossip"
                 ],
                 "condition": "appropriate social class"
             }
@@ -1831,7 +1863,7 @@
                 "type": "TEST_BONUS",
                 "value": 10,
                 "appliesTo": [
-                    "Melee (Brawling)"
+                    "melee_brawling"
                 ],
                 "condition": "to touch an opponent"
             },
@@ -1839,8 +1871,8 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Sleight of Hand",
-                    "Melee (Brawling) to touch an opponent"
+                    "sleight-of-hand",
+                    "melee_brawling"
                 ]
             }
         ]
@@ -1868,15 +1900,16 @@
                 "type": "PASSIVE",
                 "value": "Make a Fast Shot before Initiative Order",
                 "appliesTo": [
-                    "Ranged"
+                    "ranged"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Ranged when making a Fast Shot"
-                ]
+                    "ranged"
+                ],
+                "condition": "when making a Fast Shot"
             }
         ]
     },
@@ -1929,7 +1962,7 @@
                 "type": "PASSIVE",
                 "value": "Roll Cool (+20%) to oppose Intimidate, Fear, and Terror from specified enemy",
                 "appliesTo": [
-                    "Cool"
+                    "cool"
                 ],
                 "condition": "from specified enemy"
             },
@@ -1937,8 +1970,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Cool to oppose your Enemy’s Intimidate, Fear, and Terror"
-                ]
+                    "cool"
+                ],
+                "condition": "to oppose your Enemy’s Intimidate, Fear, and Terror"
             }
         ]
     },
@@ -1959,15 +1993,16 @@
                 "type": "PASSIVE",
                 "value": "Add SL from Feint to next attack",
                 "appliesTo": [
-                    "Melee"
+                    "melee_fencing"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee (Fencing) for Feints"
-                ]
+                    "melee_fencing"
+                ],
+                "condition": "for Feints"
             }
         ]
     },
@@ -1993,7 +2028,7 @@
             {
                 "type": "REVERSE_ROLL_ON_FAIL",
                 "appliesTo": [
-                    "Heal"
+                    "heal"
                 ],
                 "condition": "using Bandages"
             },
@@ -2001,8 +2036,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Heal during combat Rounds"
-                ]
+                    "heal"
+                ],
+                "condition": "during combat Rounds"
             }
         ]
     },
@@ -2043,7 +2079,8 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Any Test involving fishing"
+                    "outdoor-survival",
+                    "any test involving fishing"
                 ]
             }
         ]
@@ -2065,7 +2102,7 @@
                 "type": "PASSIVE",
                 "value": "Enter Frenzy without testing",
                 "appliesTo": [
-                    "Frenzy"
+                    "frenzy"
                 ],
                 "condition": "after daily flagellation"
             },
@@ -2073,7 +2110,8 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Any for resisting the Ruinous Powers"
+                    "resistance",
+                    "wp"
                 ]
             }
         ]
@@ -2109,7 +2147,7 @@
                 "type": "ATTRIBUTE_BONUS",
                 "value": 1,
                 "appliesTo": [
-                    "Movement"
+                    "movement"
                 ],
                 "condition": "when Fleeing"
             },
@@ -2117,8 +2155,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Athletics when Fleeing"
-                ]
+                    "athletics"
+                ],
+                "condition": "when Fleeing"
             }
         ]
     },
@@ -2139,7 +2178,7 @@
                 "type": "ATTRIBUTE_BONUS",
                 "value": 1,
                 "appliesTo": [
-                    "Movement"
+                    "movement"
                 ]
             }
         ]
@@ -2161,7 +2200,7 @@
                 "type": "PASSIVE",
                 "value": "Enter Frenzy",
                 "appliesTo": [
-                    "Frenzy"
+                    "frenzy"
                 ]
             }
         ]
@@ -2230,15 +2269,16 @@
                 "type": "PASSIVE",
                 "value": "Make an extra attack after hitting in Melee at cost of one Advantage or Move",
                 "appliesTo": [
-                    "Melee"
+                    "melee"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee when making extra attacks"
-                ]
+                    "melee"
+                ],
+                "condition": "when making extra attacks"
             }
         ]
     },
@@ -2267,15 +2307,16 @@
             {
                 "type": "REVERSE_ROLL_ON_FAIL",
                 "appliesTo": [
-                    "Gossip"
+                    "gossip"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Gossip Tests with travellers"
-                ]
+                    "gossip"
+                ],
+                "condition": "with travellers"
             }
         ]
     },
@@ -2299,10 +2340,11 @@
         "effects": [
             {
                 "type": "SL_BONUS_ON_SUCCESS",
-                "value": "1 per rank",
+                "value": 1,
                 "appliesTo": [
-                    "reloading Blackpowder weapons"
-                ]
+                    "ranged_blackpowder"
+                ],
+                "condition": "when reloading"
             }
         ]
     },
@@ -2374,8 +2416,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Willpower (Resist Group)"
-                ]
+                    "wp"
+                ],
+                "condition": "to Resist Group"
             }
         ]
     },
@@ -2392,9 +2435,9 @@
         "effects": [
             {
                 "type": "DAMAGE_BONUS",
-                "value": "1 per rank",
+                "value": 1,
                 "appliesTo": [
-                    "Miracles"
+                    "miracles"
                 ]
             }
         ]
@@ -2431,8 +2474,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Intuition Tests when on holy ground"
-                ]
+                    "intuition"
+                ],
+                "condition": "when on holy ground"
             }
         ]
     },
@@ -2462,7 +2506,8 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Any Test to trail or capture game"
+                    "outdoor-survival",
+                    "any test to trail or capture game"
                 ]
             }
         ]
@@ -2498,8 +2543,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm when speaking about your cause"
-                ]
+                    "charm"
+                ],
+                "condition": "when speaking about your cause"
             }
         ]
     },
@@ -2562,8 +2608,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee when in-fighting, or to enter in-fighting"
-                ]
+                    "melee"
+                ],
+                "condition": "when in-fighting, or to enter in-fighting"
             }
         ]
     },
@@ -2615,8 +2662,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Leadership during war"
-                ]
+                    "leadership"
+                ],
+                "condition": "during war"
             }
         ]
     },
@@ -2646,15 +2694,16 @@
                 "type": "PASSIVE",
                 "value": "No Miscast on double rolls",
                 "appliesTo": [
-                    "Language (Magick)"
+                    "language_magick"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Language (Magick) when casting"
-                ]
+                    "language_magick"
+                ],
+                "condition": "when casting"
             }
         ]
     },
@@ -2672,7 +2721,16 @@
             "Sailor-Priest of Manann": "2",
             "Warrior Priest": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Empower one Cult Miracle; learn extra Miracles",
+                "appliesTo": [
+                    "miracles"
+                ]
+            }
+        ]
     },
     {
         "id": "iron-jaw",
@@ -2691,15 +2749,16 @@
                 "type": "PASSIVE",
                 "value": "Resist Stunned Conditions on Endurance Tests",
                 "appliesTo": [
-                    "Endurance"
+                    "endurance"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Endurance tests to resist Stunned"
-                ]
+                    "endurance"
+                ],
+                "condition": "to resist Stunned"
             }
         ]
     },
@@ -2742,15 +2801,16 @@
                 "type": "PASSIVE",
                 "value": "Immune to Intimidate",
                 "appliesTo": [
-                    "Intimidate"
+                    "intimidate"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Cool Tests to oppose Intimidate"
-                ]
+                    "cool"
+                ],
+                "condition": "to oppose Intimidate"
             }
         ]
     },
@@ -2847,7 +2907,7 @@
                 "type": "CHARACTERISTIC_BONUS",
                 "value": 5,
                 "appliesTo": [
-                    "Agility"
+                    "Ag"
                 ]
             }
         ]
@@ -2879,7 +2939,7 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Language (All)"
+                    "language"
                 ]
             }
         ]
@@ -2901,7 +2961,7 @@
                 "type": "PASSIVE",
                 "value": "Understand speech by watching lips",
                 "appliesTo": [
-                    "Perception"
+                    "perception"
                 ],
                 "condition": "when watching lips"
             },
@@ -2909,8 +2969,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Perception Tests concerning this Talent"
-                ]
+                    "perception"
+                ],
+                "condition": "to lip-read"
             }
         ]
     },
@@ -2955,10 +3016,10 @@
                 "type": "TEST_BONUS",
                 "value": 20,
                 "appliesTo": [
-                    "Channelling",
-                    "Lore (Magic)",
-                    "Language (Magick)",
-                    "Research (magical)"
+                    "channelling",
+                    "lore_magick",
+                    "language_magick",
+                    "research"
                 ]
             }
         ]
@@ -3000,8 +3061,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Intuition Tests to detect Wizards"
-                ]
+                    "intuition"
+                ],
+                "condition": "to detect Wizards"
             }
         ]
     },
@@ -3080,7 +3142,7 @@
                 "type": "CHARACTERISTIC_BONUS",
                 "value": 5,
                 "appliesTo": [
-                    "Ballistic Skill"
+                    "BS"
                 ]
             }
         ]
@@ -3103,15 +3165,16 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Leadership"
+                    "leadership"
                 ]
             },
             {
                 "type": "SL_BONUS",
                 "value": 1,
                 "appliesTo": [
-                    "Leadership with crew or on ship"
-                ]
+                    "leadership"
+                ],
+                "condition": "on board your ship or involving your crew"
             }
         ]
     },
@@ -3142,8 +3205,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Entertain (Acting) when being someone else"
-                ]
+                    "entertain_acting"
+                ],
+                "condition": "when being someone else"
             }
         ]
     },
@@ -3166,8 +3230,9 @@
                 "type": "SL_BONUS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm Tests when Public Speaking"
-                ]
+                    "charm"
+                ],
+                "condition": "when Public Speaking before a crowd"
             }
         ]
     },
@@ -3203,8 +3268,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Any appropriate Extended Trade Tests"
-                ]
+                    "Trade"
+                ],
+                "condition": "in Extended Tests"
             }
         ]
     },
@@ -3258,14 +3324,14 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Intimidate"
+                    "intimidate"
                 ]
             },
             {
                 "type": "SL_BONUS",
                 "value": 1,
                 "appliesTo": [
-                    "Intimidate"
+                    "intimidate"
                 ]
             }
         ]
@@ -3296,8 +3362,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Entertain (Acting) Tests where accents are important"
-                ]
+                    "entertain_acting"
+                ],
+                "condition": "when accents are important"
             }
         ]
     },
@@ -3344,8 +3411,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Perception tests in low-light conditions"
-                ]
+                    "perception"
+                ],
+                "condition": "in low-light conditions"
             }
         ]
     },
@@ -3372,7 +3440,7 @@
                 "type": "CHARACTERISTIC_BONUS",
                 "value": 5,
                 "appliesTo": [
-                    "Dexterity"
+                    "dex"
                 ]
             }
         ]
@@ -3405,8 +3473,11 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Any Test influenced by your Status"
-                ]
+                    "charm",
+                    "intimidate",
+                    "leadership"
+                ],
+                "condition": "influenced by your Status"
             }
         ]
     },
@@ -3453,8 +3524,10 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Any Test to spot Troublemakers"
-                ]
+                    "intuition",
+                    "perception"
+                ],
+                "condition": "to spot Troublemakers"
             }
         ]
     },
@@ -3490,7 +3563,7 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Evaluate"
+                    "evaluate"
                 ],
                 "condition": "coins and currency"
             }
@@ -3535,8 +3608,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Sail (any Sea-worthy Vessels)"
-                ]
+                    "sail"
+                ],
+                "condition": "for Sea-worthy Vessels"
             }
         ]
     },
@@ -3587,7 +3661,7 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Navigation"
+                    "navigation"
                 ]
             }
         ]
@@ -3611,14 +3685,14 @@
                 "type": "PASSIVE",
                 "value": "Charm Test every half hour when Begging",
                 "appliesTo": [
-                    "Charm (Begging)"
+                    "charm_begging"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Charm (Begging)"
+                    "charm_begging"
                 ]
             }
         ]
@@ -3646,14 +3720,16 @@
             },
             {
                 "type": "CAREER_SKILL_ADDITION",
-                "value": "Entertain (Sing)"
+                "value": "entertain_sing"
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Entertain (Sing)",
-                    "Language (Tonal Languages, such as Eltharin, Cathayan, and Magick)"
+                    "entertain_sing",
+                    "language_eltharin",
+                    "language_cathayan",
+                    "language_magick"
                 ]
             }
         ]
@@ -3716,7 +3792,7 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Trade (Apothecary)"
+                    "trade_apothecary"
                 ]
             }
         ]
@@ -3751,8 +3827,10 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Row or Sail Tests while navigating unsure waters"
-                ]
+                    "row",
+                    "sail"
+                ],
+                "condition": "while navigating unsure waters"
             }
         ]
     },
@@ -3844,8 +3922,9 @@
                 "type": "SL_BONUS",
                 "value": 1,
                 "appliesTo": [
-                    "Tests to reload a ranged weapon"
-                ]
+                    "ranged"
+                ],
+                "condition": "to reload a ranged weapon"
             },
             {
                 "type": "ADVANTAGE_BONUS",
@@ -3878,15 +3957,16 @@
                 "type": "PASSIVE",
                 "value": "Free Attack when Charged with Initiative Test",
                 "appliesTo": [
-                    "Initiative"
+                    "initiative"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Initiative Tests concerning this Talent"
-                ]
+                    "initiative"
+                ],
+                "condition": "concerning this Talent"
             }
         ]
     },
@@ -4094,6 +4174,14 @@
                 "appliesTo": [
                     "Melee"
                 ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "melee"
+                ],
+                "condition": "when defending"
             }
         ]
     },
@@ -4122,8 +4210,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Melee when defending"
-                ]
+                    "melee"
+                ],
+                "condition": "when defending"
             }
         ]
     },
@@ -4164,8 +4253,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Any Lore Test concerning river matters"
-                ]
+                    "lore"
+                ],
+                "condition": "concerning river matters"
             }
         ]
     },
@@ -4230,7 +4320,7 @@
                 "type": "PASSIVE",
                 "value": "Direct mount to take an Action without Ride Test",
                 "appliesTo": [
-                    "Ride (Horse)"
+                    "ride_horse"
                 ],
                 "condition": "when in combat"
             },
@@ -4238,7 +4328,7 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Ride (Horse)"
+                    "ride_horse"
                 ],
                 "condition": "when in combat"
             }
@@ -4283,17 +4373,16 @@
         "effects": [
             {
                 "type": "PASSIVE",
-                "value": "No passive Perception Tests to detect you in Rural environment",
+                "value": "No passive Perception Tests to detect you",
                 "appliesTo": [
-                    "Stealth"
-                ],
-                "condition": "in a Rural environment"
+                    "stealth_rural"
+                ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Stealth (Rural)"
+                    "stealth_rural"
                 ]
             }
         ]
@@ -4330,14 +4419,14 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Lore (Any)"
+                    "lore"
                 ]
             },
             {
                 "type": "PASSIVE",
                 "value": "Automatically know number of pieces of correct information equal to Savant (Lore) level",
                 "appliesTo": [
-                    "Lore (chosen Lore)"
+                    "lore"
                 ]
             }
         ]
@@ -4384,7 +4473,7 @@
                 "type": "CHARACTERISTIC_BONUS",
                 "value": 5,
                 "appliesTo": [
-                    "Intelligence"
+                    "int"
                 ]
             }
         ]
@@ -4408,14 +4497,14 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Climb"
+                    "climb"
                 ]
             },
             {
                 "type": "PASSIVE",
                 "value": "Ignore modifiers derived from the difficulty of the surface climbed",
                 "appliesTo": [
-                    "Climb"
+                    "climb"
                 ]
             }
         ]
@@ -4446,15 +4535,16 @@
                 "type": "PASSIVE",
                 "value": "Once per session, ask GM one question regarding political situation or social connections",
                 "appliesTo": [
-                    "Intelligence"
+                    "int"
                 ]
             },
             {
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Intelligence Tests concerning this Talent"
-                ]
+                    "int"
+                ],
+                "condition": "concerning this Talent"
             }
         ]
     },
@@ -4485,7 +4575,7 @@
                 "type": "AUTO_PASS_TESTS",
                 "value": "to avoid Sea Sickness under normal conditions at sea",
                 "appliesTo": [
-                    "Resistance (Sea Sickness)"
+                    "resistance_sea-sickness"
                 ],
                 "condition": "under normal conditions at sea"
             },
@@ -4493,7 +4583,7 @@
                 "type": "PASSIVE",
                 "value": "Ignore penalties to Tests to avoid Sea Sickness",
                 "appliesTo": [
-                    "Resistance (Sea Sickness)"
+                    "resistance_sea-sickness"
                 ],
                 "condition": "at other times (such as a storm, or magically induced Sea Sickness)"
             },
@@ -4501,7 +4591,7 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Resistance (Sea Sickness)"
+                    "resistance_sea-sickness"
                 ]
             }
         ]
@@ -4560,12 +4650,13 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Any Lore Test concerning local detail"
-                ]
+                    "lore"
+                ],
+                "condition": "concerning local detail"
             },
             {
                 "type": "CAREER_SKILL_ADDITION",
-                "value": "Lore (Local)",
+                "value": "lore_local",
                 "appliesTo": [
                     "All Careers"
                 ]
@@ -4614,8 +4705,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Perception Tests to detect the Winds of Magic"
-                ]
+                    "perception"
+                ],
+                "condition": "to detect the Winds of Magic"
             }
         ]
     },
@@ -4645,8 +4737,9 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Entertain (Acting) Tests to support your secret identities"
-                ]
+                    "entertain_acting"
+                ],
+                "condition": "to support your secret identities"
             }
         ]
     },
@@ -4675,7 +4768,7 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Stealth"
+                    "stealth"
                 ]
             }
         ]
@@ -4721,7 +4814,7 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "Ranged"
+                    "ranged"
                 ],
                 "condition": "aiming"
             }
@@ -4745,7 +4838,24 @@
             "Priest of Myrmidia": "2",
             "Soldier": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "melee"
+                ],
+                "condition": "defending with a shield"
+            },
+            {
+                "type": "PASSIVE",
+                "value": "Gain Advantage equal to Shieldsman level on lost Opposed Test",
+                "appliesTo": [
+                    "defend_with_shield"
+                ]
+            }
+        ]
     },
     {
         "id": "sixth-sense",
@@ -4789,7 +4899,25 @@
         "careers": {
             "Slayer": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "DAMAGE_CALCULATION_MODIFIER",
+                "value": "Use opponent's Toughness Bonus if higher",
+                "appliesTo": [
+                    "melee"
+                ],
+                "condition": "when determining Damage"
+            },
+            {
+                "type": "DAMAGE_MULTIPLIER_ON_CRITICAL",
+                "value": "Multiply melee Damage by number of steps larger target is",
+                "appliesTo": [
+                    "melee"
+                ],
+                "condition": "if target is larger and you score a Critical"
+            }
+        ]
     },
     {
         "id": "small",
@@ -4804,6 +4932,15 @@
             "Halfling",
             "Power Familiar",
             "Spell Familiar"
+        ],
+        "effects": [
+            {
+                "type": "SIZE_CATEGORY",
+                "value": "Small",
+                "appliesTo": [
+                    "All Tests and Effects"
+                ]
+            }
         ]
     },
     {
@@ -4823,7 +4960,24 @@
             "Hunter": "4",
             "Ship’s Gunner": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "No penalties for shooting at Long range, half penalties for Extreme range",
+                "appliesTo": [
+                    "ranged_long_extreme"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "ranged"
+                ],
+                "condition": "Long–Extreme Range"
+            }
+        ]
     },
     {
         "id": "speedreader",
@@ -4838,7 +4992,33 @@
             "Lawyer": "1",
             "Scholar": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "REVERSE_ROLL_ON_FAIL",
+                "value": "for Research Tests",
+                "appliesTo": [
+                    "research"
+                ]
+            },
+            {
+                "type": "PASSIVE",
+                "value": "Read and fully comprehend pages per Round equal to SL plus Speed-reader level",
+                "appliesTo": [
+                    "language"
+                ],
+                "condition": "where speed of reading is important"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "language",
+                    "research"
+                ],
+                "condition": "where speed of reading is important"
+            }
+        ]
     },
     {
         "id": "sprinter",
@@ -4853,7 +5033,25 @@
             "Messenger": "1",
             "Watchman": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "ATTRIBUTE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "movement"
+                ],
+                "condition": "concerning Running"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "athletics"
+                ],
+                "condition": "concerning Running"
+            }
+        ]
     },
     {
         "id": "step-aside",
@@ -4870,7 +5068,24 @@
             "Messenger": "1",
             "Thief": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Move up to 2 yards and no longer count as Engaged on successful Dodge",
+                "appliesTo": [
+                    "dodge"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "dodge"
+                ],
+                "condition": "to activate this Talent"
+            }
+        ]
     },
     {
         "id": "stone-soup",
@@ -4890,7 +5105,31 @@
             "Villager": "1",
             "Wolf Kin": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Subsist on half the amount of food required without penalties",
+                "appliesTo": [
+                    "endurance_hunger"
+                ]
+            },
+            {
+                "type": "DAYS_BETWEEN_TESTS_MODIFIER",
+                "value": 3,
+                "appliesTo": [
+                    "starvation"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "endurance"
+                ],
+                "condition": "to resist hunger"
+            }
+        ]
     },
     {
         "id": "stout-hearted",
@@ -4931,6 +5170,23 @@
         },
         "racial": [
             "Human (Nordlander)"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Attempt Cool Test to remove Broken Condition at end of each Turn",
+                "appliesTo": [
+                    "cool"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "cool"
+                ],
+                "condition": "to remove Broken Conditions"
+            }
         ]
     },
     {
@@ -4967,6 +5223,14 @@
                 "appliesTo": [
                     "Athletics"
                 ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "athletics"
+                ],
+                "condition": "to traverse the Terrain"
             }
         ]
     },
@@ -5030,10 +5294,10 @@
         "racial": [],
         "effects": [
             {
-                "type": "SL_BONUS_ON_SUCCESS",
+                "type": "WOUNDS_BONUS_ON_CRITICAL",
                 "value": 1,
                 "appliesTo": [
-                    "Melee"
+                    "melee"
                 ]
             }
         ]
@@ -5068,6 +5332,14 @@
                 "appliesTo": [
                     "Melee"
                 ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "melee"
+                ],
+                "condition": "when Striking to Stun"
             }
         ]
     },
@@ -5112,6 +5384,31 @@
         },
         "racial": [
             "Human (Middenheimer)"
+        ],
+        "effects": [
+            {
+                "type": "ATTRIBUTE_BONUS",
+                "value": "Strong Back level",
+                "appliesTo": [
+                    "strength"
+                ],
+                "condition": "in Opposed Strength Tests"
+            },
+            {
+                "type": "ENCUMBRANCE_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "All Tests and Effects"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "row",
+                    "swim"
+                ]
+            }
         ]
     },
     {
@@ -5131,6 +5428,16 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "athletics"
+                ],
+                "condition": "involving Leaping"
+            }
         ]
     },
     {
@@ -5161,6 +5468,15 @@
         },
         "racial": [
             "Dwarf (Grumsson, WHFRP)"
+        ],
+        "effects": [
+            {
+                "type": "RESOLVE_POOL_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "All Tests and Effects"
+                ]
+            }
         ]
     },
     {
@@ -5184,7 +5500,23 @@
             "Smuggler": "3",
             "Wrecker": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "TOUGHNESS_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "holding_breath"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "swim"
+                ]
+            }
+        ]
     },
     {
         "id": "sturdy",
@@ -5215,6 +5547,22 @@
             "Random Racial Talent",
             "Combat Familiar",
             "Dwarf (Grumsson, WHFRP)"
+        ],
+        "effects": [
+            {
+                "type": "ENCUMBRANCE_BONUS",
+                "value": 2,
+                "appliesTo": [
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "s"
+                ],
+                "condition": "when lifting"
+            }
         ]
     },
     {
@@ -5256,7 +5604,7 @@
                 "type": "CHARACTERISTIC_BONUS",
                 "value": 5,
                 "appliesTo": [
-                    "Fellowship"
+                    "fel"
                 ]
             }
         ]
@@ -5272,6 +5620,30 @@
         "careers": {},
         "racial": [
             "Gnome"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "casting Lore of Shadow spells"
+                ],
+                "condition": "within 8 yards of you"
+            },
+            {
+                "type": "SKILL_SUBSTITUTION",
+                "value": "Use Channelling (Ulgu) in place of Stealth",
+                "appliesTo": [
+                    "stealth"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "stealth"
+                ]
+            }
         ]
     },
     {
@@ -5307,6 +5679,16 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "evaluate",
+                    "gamble"
+                ]
+            }
         ]
     },
     {
@@ -5323,7 +5705,27 @@
             "Townsman": "3",
             "Warden": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_DICES_UNITS",
+                "value": "Use units die instead of SL",
+                "appliesTo": [
+                    "charm",
+                    "intimidate"
+                ],  
+                "condition": "to influence a superior"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "charm",
+                    "intimidate"
+                ],
+                "condition": "to influence a superior"
+            }
+        ]
     },
     {
         "id": "sure-shot",
@@ -5340,8 +5742,8 @@
         "racial": [],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "Ignore penalties for range",
+                "type": "ARMOUR_PIERCING",
+                "value": 1,
                 "appliesTo": [
                     "ranged"
                 ]
@@ -5359,7 +5761,24 @@
         "careers": {
             "Physician": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Treat any Critical Wound marked as needing Surgery",
+                "appliesTo": [
+                    "heal"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "heal"
+                ],
+                "condition": "outside combat rounds; i.e. when you have time to do it ‘properly’"
+            }
+        ]
     },
     {
         "id": "tenacious",
@@ -5391,7 +5810,24 @@
             "Villager": "2",
             "Watchman": "1"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "DURATION_BONUS",
+                "value": 2,
+                "appliesTo": [
+                    "endurance_hardships"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "endurance"
+                ],
+                "condition": "for enduring hardships"
+            }
+        ]
     },
     {
         "id": "tinker",
@@ -5453,7 +5889,17 @@
             "Thief": "3",
             "Wrecker": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "perception",
+                    "set trap"
+                ]
+            }
+        ]
     },
     {
         "id": "trick-riding",
@@ -5473,7 +5919,26 @@
             "Messenger": "3",
             "Rhinox Herder": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "MOVE_ORDER_BONUS",
+                "value": "at start of Round",
+                "appliesTo": [
+                    "All Tests and Effects"
+                ],
+                "condition": "when mounted"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "dodge",
+                    "ride_horse"
+                ],
+                "condition": "on Horseback"
+            }
+        ]
     },
     {
         "id": "tunnel-rat",
@@ -5490,7 +5955,25 @@
             "Rat Catcher": "3",
             "Siege Specialist": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "No passive Perception Tests against you",
+                "appliesTo": [
+                    "stealth"
+                ],
+                "condition": "when underground"
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "stealth"
+                ],
+                "condition": "when underground"
+            }
+        ]
     },
     {
         "id": "unshakable",
@@ -5521,7 +6004,24 @@
             "Siege Specialist": "3",
             "Soldier": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Cool Test only when wounded",
+                "appliesTo": [
+                    "resist_blackpowder_panic"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "cool"
+                ],
+                "condition": "to resist Blackpowder panic"
+            }
+        ]
     },
     {
         "id": "very-resilient",
@@ -5550,10 +6050,10 @@
         ],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "+5 starting Toughness",
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
                 "appliesTo": [
-                    "T"
+                    "toughness"
                 ]
             }
         ]
@@ -5582,16 +6082,16 @@
             "Villager": "2"
         },
         "racial": [
-            "Random Racial Talent",
+            "human",
             "Combat Familiar",
             "Ogre"
         ],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "+5 starting Strength",
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
                 "appliesTo": [
-                    "S"
+                    "strength"
                 ]
             }
         ]
@@ -5641,6 +6141,16 @@
         },
         "racial": [
             "Human (Björnling)"
+        ],
+        "effects": [
+            {
+                "type": "SL_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "leadership"
+                ],
+                "condition": "during War"
+            }
         ]
     },
     {
@@ -5660,7 +6170,17 @@
             "Spiriter": "4",
             "Wizard": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Cast one Spell with a Casting Number of 5 or less for free without using your Action",
+                "appliesTo": [
+                    "casting_spells"
+                ],
+                "condition": "on your Turn"
+            }
+        ]
     },
     {
         "id": "warrior-born",
@@ -5694,10 +6214,10 @@
         ],
         "effects": [
             {
-                "type": "SL_BONUS_ON_SUCCESS",
-                "value": 1,
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
                 "appliesTo": [
-                    "Melee"
+                    "ws"
                 ]
             }
         ]
@@ -5718,7 +6238,32 @@
             "Smuggler": "2",
             "Wrecker": "3"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Ignore all negatives to your Tests",
+                "appliesTo": [
+                    "sail"
+                ],
+                "condition": "for river-going vessels"
+            },
+            {
+                "type": "CREW_COUNT_BONUS",
+                "value": 2,
+                "appliesTo": [
+                    "piloting_river_vessel"
+                ]
+            },
+            {
+                "type": "SL_BONUS_ON_SUCCESS",
+                "value": 1,
+                "appliesTo": [
+                    "sail"
+                ],
+                "condition": "for river-going vessels"
+            }
+        ]
     },
     {
         "id": "wealthy",
@@ -5735,7 +6280,16 @@
             "Racketeer": "4",
             "Thief": "4"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "EARNING_BONUS",
+                "value": 1,
+                "appliesTo": [
+                    "earning_income"
+                ]
+            }
+        ]
     },
     {
         "id": "well-prepared",
@@ -5762,6 +6316,22 @@
             "Mystic": "3",
             "Witch": "2"
         },
-        "racial": []
+        "racial": [],
+        "effects": [
+            {
+                "type": "CAREER_SKILL_ADDITION",
+                "value": "language_magick",
+                "appliesTo": [
+                    "All Tests and Effects"
+                ]
+            },
+            {
+                "type": "RESILIENCE_CASTING",
+                "value": 1,
+                "appliesTo": [
+                    "casting_spells"
+                ]
+            }
+        ]
     }
 ]
