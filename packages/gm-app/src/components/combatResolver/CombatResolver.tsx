@@ -392,8 +392,16 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
 
     const handleRequestPlayerRolls = () => {
         const testId = crypto.randomUUID();
-        const attackerSkillInfo = allSkillsAndCharacteristics.find(s => s.id === attackerSkillId);
-        const defenderSkillInfo = allSkillsAndCharacteristics.find(s => s.id === defenderSkillId);
+        const attacker = characters.find(c => c.id === selectedAttackerId);
+        const defender = characters.find(c => c.id === selectedDefenderId);
+
+        if (!attacker || !defender) {
+            alert('Please select valid attacker and defender characters.');
+            return;
+        }
+
+        const attackerSkillInfo = attacker.skills.find(s => s.id === attackerSkillId);
+        const defenderSkillInfo = defender.skills.find(s => s.id === defenderSkillId);
 
         if (!attackerSkillInfo || !defenderSkillInfo) {
             alert('Invalid skill selection.');

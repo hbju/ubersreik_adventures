@@ -388,21 +388,18 @@ const PlayerApp: React.FC = () => {
           {character && !isAdvancementMode && (
             <button onClick={handleEnterAdvancement} className='advanceControlButton'>Advance Character</button>
           )}
+          {canChangeCareer && (
+            <button
+              onClick={() => setIsCareerChangeModalOpen(true)} className='advanceControlButton' style={{ background: '#2d5016', borderColor: '#3d6f1f' }}>
+              Change Career
+            </button>
+          )}
           {isAdvancementMode && draftCharacter && (
             <div className="advancement-controls">
               <h3>Advancement Mode</h3>
               <p>XP Available: {draftCharacter.xp.current}</p>
               {/* We'll calculate spent XP later */}
               <button onClick={() => setIsTalentModalOpen(true)} className='advanceControlButton'>Buy Talents</button>
-              {canChangeCareer && (
-                <button
-                  onClick={() => setIsCareerChangeModalOpen(true)}
-                  className='advanceControlButton'
-                  style={{ background: '#2d5016', borderColor: '#3d6f1f' }}
-                >
-                  Change Career
-                </button>
-              )}
               <button onClick={handleConfirmAdvancement} className='advanceControlButton'>Confirm Changes</button>
               <button onClick={handleCancelAdvancement} className="advanceControlButton">Cancel</button>
             </div>

@@ -383,7 +383,6 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                 <h3>Active Conditions</h3>
                                 <div className="conditionsList">
                                     {character.conditions.map((cond) => {
-                                        console.log(cond);
                                         return (
                                             <div
                                                 key={cond.id}
@@ -411,7 +410,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                         <div className={advancementMode ? "skillsGridAdvancement" : "skillsGrid"}>
                             <span></span><span>Base</span><span>Char</span><span>Adv</span>{advancementMode && <span></span>}<span>Mod</span><span>Total</span><span></span>
                             {baseSkills.map(skill => {
-                                let charKey = skill.characteristic as keyof Character['characteristics'];
+                                let charKey = skill.characteristic.toLowerCase() as keyof Character['characteristics'];
                                 const characteristicValue = character.characteristics[charKey];
                                 const baseValue = characteristicValue.initial + characteristicValue.advances + characteristicValue.talents + characteristicValue.modifier;
                                 const skillAdvances = skill.advances;

@@ -72,9 +72,10 @@ export function hasCompletedCurrentLevel(
 
   // Determine required advances based on level (5, 10, 15, 20)
   const requiredAdvances = currentLevel.lvl * 5;
+  const allAdvancements = getAvailableAdvancements(career, currentLevel.lvl);
 
   // Check characteristics - all must be at required level
-  const characteristicsComplete = currentLevel.characteristic_advances.every(charId => {
+  const characteristicsComplete = allAdvancements.characteristics.every(charId => {
     const charKey = charId.toLowerCase() as keyof Character['characteristics'];
     const characteristic = character.characteristics[charKey];
     return characteristic && characteristic.advances >= requiredAdvances;
@@ -84,7 +85,7 @@ export function hasCompletedCurrentLevel(
 
   // Check skills - at least 8 must be at required level
   let completedSkills = 0;
-  currentLevel.skills_ids.forEach(skillId => {
+  allAdvancements.skills.forEach(skillId => {
     const skill = character.skills.find(s => s.id === skillId);
     if (skill && skill.advances >= requiredAdvances) {
       completedSkills++;

@@ -161,11 +161,6 @@ ipcMain.on('save-data', (event, data: CampaignState) => {
     saveCampaignData(data);
     console.log('Data saved successfully');
     
-    // Broadcast the updated data to all renderer windows
-    if (win && !win.isDestroyed()) {
-      win.webContents.send('data-updated', data);
-    }
-    
     // Broadcast journal entries to all connected players
     if (data.journal && data.journal.length > 0) {
       broadcastJournalEntries(data.journal);

@@ -41,7 +41,7 @@ import {
     Career
 } from '@wfrp/shared';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import './App.css';
 import CareerManager from './components/CareerManager';
@@ -62,26 +62,20 @@ function App() {
         return calculateCharacteristicBonus(character.characteristics.wp) + calculateCharacteristicBonus(character.characteristics.t);
     }
 
-    const initChars = (gameData.characters as any[]).map(c => (
-        { ...c, userId: null, status: { ...c.status, wounds: { ...c.status.wounds, max: calculateMaxWounds(c) }, corruption: { ...c.status.corruption, max: calculateMaxCorruption(c) } } }
-    ));
-    allSkillsAndCharacteristics.filter(s => s.type === 'skill' && s.classification === 'basic').forEach(skillDef => {
-        initChars.forEach((char: Character) => {
-            if (!char.skills.find(s => s.id === skillDef.id)) {
-                char.skills.push({ id: skillDef.id, name: skillDef.name, characteristic: skillDef.characteristic, advances: 0, modifier: 0, talents: 0 });
-            }
-        });
-    });
-
     const [serverInfo, setServerInfo] = useState({ ip: 'Loading...', port: 0 });
     const [connectedPlayers, setConnectedPlayers] = useState<string[]>([]);
+    const [saving, setSaving] = useState<boolean>(false);
 
     const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
 
-    const [characters, setCharacters] = useState<Character[]>(initChars);
+    const [characters, setCharacters] = useState<Character[]>([]);
+    const charactersRef = useRef(characters);
     const [users, setUsers] = useState<User[]>([]);
+    const usersRef = useRef(users);
     const [journal, setJournal] = useState<JournalEntry[]>([]);
+    const journalRef = useRef(journal);
     const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
+    const mapPinStatesRef = useRef(mapPinStates);
     const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
     const [openSheetIds, setOpenSheetIds] = useState<string[]>([]);
     const [combatants, setCombatants] = useState<Combatant[]>([]);
@@ -115,40 +109,34 @@ function App() {
         setLogEntries(prev => [...prev, newEntry]);
     };
 
-    /**
-     * Save the current application state to persistent storage
-     * This packages all data and sends it to the main process via IPC
-     */
-    const saveApplicationState = (updatedCharacters: Character[], updatedUsers?: User[], updatedJournal?: JournalEntry[], updatedMapPinStates?: Record<string, MapPinState>) => {
-        if (!updatedCharacters || updatedCharacters.length === 0) {
-            console.warn("No characters to save, aborting save operation.");
-            return;
-        }
 
-        if (!users || users.length === 0) {
-            console.warn("No users to save, aborting save operation.");
-            return;
-        }
+    useEffect(() => {
+        if (!saving) return;
 
+        console.log("Saving data, characters:", characters);
         const campaignData = {
-            characters: updatedCharacters,
-            users: updatedUsers ?? users,
-            journal: updatedJournal ?? journal,
-            mapPinStates: updatedMapPinStates ?? mapPinStates,
+            characters: characters,
+            users: users,
+            journal: journal,
+            mapPinStates: mapPinStates,
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
         window.ipcRenderer.saveData(campaignData);
-    };
+
+        charactersRef.current = characters;
+        usersRef.current = users;
+        journalRef.current = journal;
+        mapPinStatesRef.current = mapPinStates;
+
+    }, [characters, users, journal, mapPinStates]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
-        const updatedCharacters = characters.map(char =>
+        const updatedCharacters = charactersRef.current.map(char =>
             char.id === updatedCharacter.id ? updatedCharacter : char
         );
 
         setCharacters(updatedCharacters);
-
-        saveApplicationState(updatedCharacters);
 
         const newMessage: AssignCharacterMessage = {
             type: "ASSIGN_CHARACTER",
@@ -208,33 +196,26 @@ function App() {
 
     const handleCreateCharacter = () => {
         const newChar = createBlankCharacter();
-        const updatedCharacters = [...characters, newChar];
+        const updatedCharacters = [...charactersRef.current, newChar];
         setCharacters(updatedCharacters);
-        saveApplicationState(updatedCharacters);
     };
 
     const handleGenerateNPC = () => {
         const newNPC = generateRandomNpc();
-        const updatedCharacters = [...characters, newNPC];
+        const updatedCharacters = [...charactersRef.current, newNPC];
         setCharacters(updatedCharacters);
-
-        // Save to persistent storage
-        saveApplicationState(updatedCharacters);
     }
 
     const handleDeleteCharacter = (characterId: string) => {
         console.log("trying to delete " + characterId);
-        const characterToDelete = characters.find(c => c.id === characterId);
+        const characterToDelete = charactersRef.current.find(c => c.id === characterId);
         if (!characterToDelete) return;
 
         console.log("deleting " + characterId);
         if (window.confirm(`Are you sure you want to delete ${characterToDelete.name}? This cannot be undone.`)) {
-            const updatedCharacters = characters.filter(char => char.id !== characterId);
+            const updatedCharacters = charactersRef.current.filter(char => char.id !== characterId);
             setCharacters(updatedCharacters);
             setOpenSheetIds(prev => prev.filter(id => id !== characterId));
-
-            // Save to persistent storage
-            saveApplicationState(updatedCharacters);
         }
     };
 
@@ -261,7 +242,7 @@ function App() {
     };
 
     const handleUpdateCombatant = (updatedCombatant: Combatant) => {
-        const char = characters.find(c => c.id === updatedCombatant.sourceId);
+        const char = charactersRef.current.find(c => c.id === updatedCombatant.sourceId);
         if (char) {
             // sync wounds & conditions back to character sheet
             const conds = updatedCombatant.conditions || [];
@@ -290,7 +271,6 @@ function App() {
 
     const handleUpdateJournal = (updatedJournal: JournalEntry[]) => {
         setJournal(updatedJournal);
-        saveApplicationState(characters, undefined, updatedJournal, undefined);
     };
 
     // User Management Functions
@@ -312,46 +292,44 @@ function App() {
             characterId: null,
             createdAt: new Date().toISOString(),
         };
-        const updatedUsers = [...users, newUser];
+        const updatedUsers = [...usersRef.current, newUser];
         setUsers(updatedUsers);
-        saveApplicationState(characters, updatedUsers);
         addLogEntry('info', `User created: ${username}`);
     };
 
     const handleDeleteUser = (userId: string) => {
-        const user = users.find(u => u.id === userId);
+        const user = usersRef.current.find(u => u.id === userId);
         if (!user) return;
 
         // If user had a character assigned, clear the character's userId
         if (user.characterId) {
-            const updatedCharacters = characters.map(char =>
+            const updatedCharacters = charactersRef.current.map(char =>
                 char.id === user.characterId ? { ...char, userId: null } : char
             );
             setCharacters(updatedCharacters);
         }
 
-        const updatedUsers = users.filter(u => u.id !== userId);
+        const updatedUsers = usersRef.current.filter(u => u.id !== userId);
         setUsers(updatedUsers);
-        saveApplicationState(characters, updatedUsers);
         addLogEntry('info', `User deleted: ${user.username}`);
     };
 
     const handleAssignCharacterToUser = (userId: string, characterId: string | null) => {
-        const user = users.find(u => u.id === userId);
+        const user = usersRef.current.find(u => u.id === userId);
         if (!user) return;
 
-        const updatedUsers = users.map(u =>
+        const updatedUsers = usersRef.current.map(u =>
             u.id === userId ? { ...u, characterId } : u
         );
         setUsers(updatedUsers);
 
-        let updatedCharacters = [...characters];
+        let updatedCharacters = [...charactersRef.current];
 
         // Clear previous assignment
         if (user.characterId) {
-            const oldChar = characters.find(c => c.id === user.characterId);
+            const oldChar = charactersRef.current.find(c => c.id === user.characterId);
             if (oldChar) {
-                updatedCharacters = characters.map(char =>
+                updatedCharacters = charactersRef.current.map(char =>
                     char.id === user.characterId ? { ...char, userId: null } : char
                 );
                 setCharacters(updatedCharacters);
@@ -361,7 +339,7 @@ function App() {
         // Update character's user assignment
         if (characterId) {
             // Clear any other user assigned to this character
-            const otherUsersWithChar = users.filter(u => u.id !== userId && u.characterId === characterId);
+            const otherUsersWithChar = usersRef.current.filter(u => u.id !== userId && u.characterId === characterId);
             let finalUsers = updatedUsers;
             if (otherUsersWithChar.length > 0) {
                 finalUsers = updatedUsers.map(u =>
@@ -374,24 +352,22 @@ function App() {
                 char.id === characterId ? { ...char, userId } : char
             );
             setCharacters(updatedCharacters);
-            saveApplicationState(updatedCharacters, finalUsers);
             const message: AssignCharacterMessage = {
                 type: "ASSIGN_CHARACTER",
                 payload: { character: updatedCharacters.find(c => c.id === characterId)! }
             };
             window.ipcRenderer.sendToPlayer(userId, message);
 
-            const character = characters.find(c => c.id === characterId);
+            const character = charactersRef.current.find(c => c.id === characterId);
             addLogEntry('info', `User ${user.username} assigned to character ${character?.name}`);
         } else {
-            saveApplicationState(updatedCharacters, updatedUsers);
             addLogEntry('info', `User ${user.username} unassigned from character`);
         }
     };
 
     const handleTogglePinDiscovery = (locationId: string, characterIds: string[]) => {
         console.log(`Toggling pin discovery for location ${locationId} and characters ${characterIds.join(', ')}`);
-        const currentPinState = mapPinStates[locationId] || { playerDiscovered: [] };
+        const currentPinState = mapPinStatesRef.current[locationId] || { playerDiscovered: [] };
 
         const updatedPlayerDiscovered = [...currentPinState.playerDiscovered];
         characterIds.forEach(characterId => {
@@ -413,7 +389,6 @@ function App() {
 
         console.log(`Updated pin state for location ${locationId}:`, updatedMapPinStates[locationId]);
         setMapPinStates(updatedMapPinStates);
-        saveApplicationState(characters, undefined, undefined, updatedMapPinStates);
     };
 
     useEffect(() => {
@@ -456,6 +431,7 @@ function App() {
                 });
                 setMapPinStates(initialMapPinStates);
             }
+            setSaving(true);
         }).catch((error: any) => {
             console.error('Failed to load initial data:', error);
         });
@@ -464,7 +440,7 @@ function App() {
         const cleanupDataUpdateListener = window.ipcRenderer.onDataUpdated((data: any) => {
             if (data && data.characters) {
                 setCharacters(data.characters);
-                console.log('Received data update from main process');
+                console.log('Received data update from main process : ', data);
             }
             if (data && data.journal) {
                 setJournal(data.journal);
@@ -514,7 +490,7 @@ function App() {
             if (message.type === 'REQUEST_PURCHASE') {
                 const item = message.payload.item;
                 // Find the character associated with this socket
-                const character = characters.find(c => c.id === message.payload.characterId);
+                const character = charactersRef.current.find(c => c.id === message.payload.characterId);
                 if (character) {
                     setPurchaseRequest({
                         playerName: character.name,
@@ -541,7 +517,7 @@ function App() {
 
             if (message.type === 'OPPOSED_TEST_RESULT') {
                 const { testId, characterId, role, rollResult, successLevel } = message.payload;
-                const character = characters.find(c => c.id === characterId);
+                const character = charactersRef.current.find(c => c.id === characterId);
                 if (character) {
                     addLogEntry(
                         'roll',
@@ -560,7 +536,7 @@ function App() {
             // Not used anymore, should be reimplemented later
             if (message.type === 'CONDITION_TEST_RESULT') {
                 const { characterId, conditionId, rollResult, successLevel, targetNumber } = message.payload;
-                const character = characters.find(c => c.id === characterId);
+                const character = charactersRef.current.find(c => c.id === characterId);
                 if (character) {
                     const outcome = successLevel >= 0
                         ? `Success (${successLevel} SL)`
@@ -964,7 +940,7 @@ function App() {
                                     }
                                 ],
                                 unlockedCharacteristicIds: availableAdvancements.characteristics,
-                                unlockedSkillIds : availableAdvancements.skills,
+                                unlockedSkillIds: availableAdvancements.skills,
                                 unlockedTalentIds: availableAdvancements.talents,
                                 skills: [
                                     ...character.skills,

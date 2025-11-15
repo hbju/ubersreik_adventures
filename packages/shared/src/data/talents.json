@@ -158,7 +158,7 @@
         "name": "Ambidextrous",
         "description": "You can use your off-hand far better than most folk, either by training or innate talent. You only suffer a penalty of –10 to Tests relying solely on your secondary hand, not – 20. If you have this Talent twice, you suffer no penalty at all.",
         "tests": [],
-        "max_ranks": "2",
+        "max_ranks": 2,
         "careers": {
             "Artist": "4",
             "Bawd": "2",

@@ -127,7 +127,7 @@ export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, on
 
                 {talent.effects && talent.effects.length > 0 && talent.effects.some(effect => effect.type === 'SL_BONUS_ON_SUCCESS') && (
                   <div className={styles.talentTests}>
-                    <strong>Tests:</strong> {talent.effects.filter(effect => effect.type === 'SL_BONUS_ON_SUCCESS').map(effect => effect.appliesTo).join(', ')}
+                    <strong>Tests:</strong> {talent.tests.join(', ')}
                   </div>
                 )}
 
