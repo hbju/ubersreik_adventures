@@ -81,7 +81,7 @@ const CareerManager: React.FC<CareerManagerProps> = ({ character, onCharacterUpd
     };
 
     // Group career history by career level
-    const groupedHistory = (character.careerHistory || []).reduce((acc, entry) => {
+    const groupedHistoryDeveloped = (character.careerHistory || []).reduce((acc, entry) => {
         const key = `${entry.careerId}-${entry.careerLevelId}`;
         if (!acc[key]) {
             acc[key] = {
@@ -93,6 +93,30 @@ const CareerManager: React.FC<CareerManagerProps> = ({ character, onCharacterUpd
         acc[key].entries.push(entry);
         return acc;
     }, {} as Record<string, { careerName: string; levelName: string; entries: CareerHistoryEntry[] }>);
+
+    const groupedHistory : Record<string, { careerName: string; levelName: string; entries: { type: string, advancement: string, advancementNumber: number, totalXpSpent: number }[] }> =
+        Object.entries(groupedHistoryDeveloped).reduce((acc, [key, group]) => {
+            acc[key] = {
+                careerName: group.careerName,
+                levelName: group.levelName,
+                entries: group.entries.reduce((entryAcc, entry) => {
+                    const existing = entryAcc.find(e => e.type === entry.advancementType && e.advancement === entry.advancementName);
+                    if (existing) {
+                        existing.advancementNumber += 1;
+                        existing.totalXpSpent += entry.xpSpent;
+                    } else {
+                        entryAcc.push({
+                            type: entry.advancementType,
+                            advancement: entry.advancementName,
+                            advancementNumber: 1,
+                            totalXpSpent: entry.xpSpent
+                        });
+                    }
+                    return entryAcc;
+                }, [] as { type: string, advancement: string, advancementNumber: number, totalXpSpent: number }[])
+            };
+            return acc;
+        }, {} as Record<string, { careerName: string; levelName: string; entries: { type: string, advancement: string, advancementNumber: number, totalXpSpent: number }[] }>);
 
     return (
         <div className={styles.careerManager}>
@@ -251,19 +275,19 @@ const CareerManager: React.FC<CareerManagerProps> = ({ character, onCharacterUpd
                                 <table className={styles.historyTable}>
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
                                             <th>Type</th>
                                             <th>Advancement</th>
+                                            <th>Number</th>
                                             <th>XP Spent</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {group.entries.map((entry, idx) => (
                                             <tr key={idx}>
-                                                <td>{new Date(entry.timestamp).toLocaleDateString()}</td>
-                                                <td className={styles.typeCell}>{entry.advancementType}</td>
-                                                <td>{entry.advancementName}</td>
-                                                <td className={styles.xpCell}>{formatXP(entry.xpSpent)} XP</td>
+                                                <td className={styles.typeCell}>{entry.type}</td>
+                                                <td>{entry.advancement}</td>
+                                                <td>{entry.advancementNumber}</td>
+                                                <td className={styles.xpCell}>{formatXP(entry.totalXpSpent)} XP</td>
                                             </tr>
                                         ))}
                                     </tbody>

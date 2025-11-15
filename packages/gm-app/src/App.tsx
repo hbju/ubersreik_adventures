@@ -65,6 +65,13 @@ function App() {
     const initChars = (gameData.characters as any[]).map(c => (
         { ...c, userId: null, status: { ...c.status, wounds: { ...c.status.wounds, max: calculateMaxWounds(c) }, corruption: { ...c.status.corruption, max: calculateMaxCorruption(c) } } }
     ));
+    allSkillsAndCharacteristics.filter(s => s.type === 'skill' && s.classification === 'basic').forEach(skillDef => {
+        initChars.forEach((char: Character) => {
+            if (!char.skills.find(s => s.id === skillDef.id)) {
+                char.skills.push({ id: skillDef.id, name: skillDef.name, characteristic: skillDef.characteristic, advances: 0, modifier: 0, talents: 0 });
+            }
+        });
+    });
 
     const [serverInfo, setServerInfo] = useState({ ip: 'Loading...', port: 0 });
     const [connectedPlayers, setConnectedPlayers] = useState<string[]>([]);
@@ -117,6 +124,12 @@ function App() {
             console.warn("No characters to save, aborting save operation.");
             return;
         }
+
+        if (!users || users.length === 0) {
+            console.warn("No users to save, aborting save operation.");
+            return;
+        }
+
         const campaignData = {
             characters: updatedCharacters,
             users: updatedUsers ?? users,
@@ -413,6 +426,13 @@ function App() {
                 const updatedCharacters = data.characters.map((char: Character) => ({
                     ...char, status: { ...char.status, wounds: { current: Math.min(char.status.wounds.current, calculateMaxWounds(char)), max: calculateMaxWounds(char) }, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }
                 }));
+                allSkillsAndCharacteristics.filter(s => s.type === 'skill' && s.classification === 'basic').forEach(skillDef => {
+                    updatedCharacters.forEach((char: Character) => {
+                        if (!char.skills.find(s => s.id === skillDef.id)) {
+                            char.skills.push({ id: skillDef.id, name: skillDef.name, characteristic: skillDef.characteristic, advances: 0, modifier: 0, talents: 0 });
+                        }
+                    });
+                });
                 setCharacters(updatedCharacters);
                 console.log('Loaded campaign data from file system:', data);
             }

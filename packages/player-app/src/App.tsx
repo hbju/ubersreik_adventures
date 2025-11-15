@@ -3,9 +3,14 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapDisplay, gameData, recalculateCharacterTalentBonuses, careersData, getAvailableAdvancements, hasCompletedCurrentLevel } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapDisplay, gameData, recalculateCharacterTalentBonuses, careersData, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, talentsData } from '@wfrp/shared';
 import { TalentSelectionModal } from './components/TalentSelectionModal';
-import { TestResultMessage, calculateCharacteristicAdvanceCost, calculateSkillAdvanceCost, allSkillsAndCharacteristics } from '@wfrp/shared';
+import {
+  TestResultMessage,
+  calculateCharacteristicAdvanceCost,
+  calculateSkillAdvanceCost,
+  allSkillsAndCharacteristics
+} from '@wfrp/shared';
 import { TalentModal } from './components/TalentModal';
 import { ShopModal } from './components/ShopModal';
 import { OpposedTestModal } from './components/OpposedTestModal';
@@ -78,8 +83,27 @@ const PlayerApp: React.FC = () => {
     const advances = draftCharacter.characteristics[charName].advances;
     const cost = calculateCharacteristicAdvanceCost(advances, true);
 
+    const currentCareer = careersData.find(c => c.id === draftCharacter.currentCareerId);
+    const currentLevel = currentCareer?.career_level.find(lvl => lvl.id === draftCharacter.currentCareerLevelId);
+
     if (draftCharacter.xp.current >= cost) {
-      const newDraft = { ...draftCharacter };
+
+      const careerHistoryEntry: CareerHistoryEntry = {
+        careerId: draftCharacter.currentCareerId,
+        careerLevelId: draftCharacter.currentCareerLevelId,
+        careerName: currentCareer ? currentCareer.name : 'Unknown',
+        levelName: currentLevel ? currentLevel.name : 'Unknown',
+        level: currentLevel ? currentLevel.lvl : 0,
+        xpSpent: cost,
+        advancementType: 'characteristic' as const,
+        advancementId: charName,
+        advancementName: charName.toUpperCase(),
+        timestamp: Date.now().toString(),
+      }
+
+      const newCareerHistory = draftCharacter.careerHistory ? [...draftCharacter.careerHistory, careerHistoryEntry] : [careerHistoryEntry];
+      const newDraft = { ...draftCharacter, careerHistory: newCareerHistory };
+
       newDraft.characteristics[charName].advances += 1;
       newDraft.xp.current -= cost;
       setDraftCharacter(newDraft);
@@ -109,7 +133,26 @@ const PlayerApp: React.FC = () => {
     const cost = calculateSkillAdvanceCost(advances, true);
 
     if (draftCharacter.xp.current >= cost) {
-      const newDraft = { ...draftCharacter };
+
+      const currentCareer = careersData.find(c => c.id === draftCharacter.currentCareerId);
+      const currentLevel = currentCareer?.career_level.find(lvl => lvl.id === draftCharacter.currentCareerLevelId);
+      const careerHistoryEntry: CareerHistoryEntry = {
+        careerId: draftCharacter.currentCareerId,
+        careerLevelId: draftCharacter.currentCareerLevelId,
+        careerName: currentCareer ? currentCareer.name : 'Unknown',
+        levelName: currentLevel ? currentLevel.name : 'Unknown',
+        level: currentLevel ? currentLevel.lvl : 0,
+        xpSpent: cost,
+        advancementType: 'skill' as const,
+        advancementId: skillId,
+        advancementName: skill.name,
+        timestamp: Date.now().toString(),
+      }
+
+
+      const newCareerHistory = draftCharacter.careerHistory ? [...draftCharacter.careerHistory, careerHistoryEntry] : [careerHistoryEntry];
+      const newDraft = { ...draftCharacter, careerHistory: newCareerHistory };
+
       const skillToUpdate = newDraft.skills.find(s => s.id === skillId);
       if (skillToUpdate) {
         skillToUpdate.advances += 1;
@@ -125,7 +168,25 @@ const PlayerApp: React.FC = () => {
     if (!draftCharacter) return;
 
     if (draftCharacter.xp.current >= cost) {
-      const newDraft = { ...draftCharacter };
+
+      const currentCareer = careersData.find(c => c.id === draftCharacter.currentCareerId);
+      const currentLevel = currentCareer?.career_level.find(lvl => lvl.id === draftCharacter.currentCareerLevelId);
+
+      const careerHistoryEntry: CareerHistoryEntry = {
+        careerId: draftCharacter.currentCareerId,
+        careerLevelId: draftCharacter.currentCareerLevelId,
+        careerName: currentCareer ? currentCareer.name : 'Unknown',
+        levelName: currentLevel ? currentLevel.name : 'Unknown',
+        level: currentLevel ? currentLevel.lvl : 0,
+        xpSpent: cost,
+        advancementType: 'talent' as const,
+        advancementId: talentId,
+        advancementName: talentsData.find(t => t.id === talentId) ? talentsData.find(t => t.id === talentId)!.name : 'Unknown',
+        timestamp: Date.now().toString(),
+      }
+
+      const newCareerHistory = draftCharacter.careerHistory ? [...draftCharacter.careerHistory, careerHistoryEntry] : [careerHistoryEntry];
+      const newDraft = { ...draftCharacter, careerHistory: newCareerHistory };
       newDraft.xp.current -= cost;
       newDraft.talents[talentId] = (newDraft.talents[talentId] || 0) + 1;
       setDraftCharacter(recalculateCharacterTalentBonuses(newDraft));
@@ -136,12 +197,12 @@ const PlayerApp: React.FC = () => {
 
   const handleRequestPurchase = (item: any) => {
     if (!character) return;
-    
+
     const message: RequestPurchaseMessage = {
       type: 'REQUEST_PURCHASE',
-      payload: { 
+      payload: {
         item,
-        characterId: character.id 
+        characterId: character.id
       }
     };
     sendMessage(message);
@@ -224,7 +285,7 @@ const PlayerApp: React.FC = () => {
         xpCost: xpCost
       }
     };
-    
+
     sendMessage(message);
     setIsCareerChangeModalOpen(false);
     alert('Career change request sent to GM. Awaiting approval...');
@@ -235,10 +296,10 @@ const PlayerApp: React.FC = () => {
   // Show connection screen if not authenticated
   if (!isAuthenticated) {
     return (
-      <ConnectionScreen 
-        onConnect={connect} 
-        error={authError || undefined} 
-        isConnecting={isConnected && !isAuthenticated} 
+      <ConnectionScreen
+        onConnect={connect}
+        error={authError || undefined}
+        isConnecting={isConnected && !isAuthenticated}
       />
     );
   }
@@ -324,101 +385,101 @@ const PlayerApp: React.FC = () => {
 
       {currentView === 'character' && (
         <>
-      {character && !isAdvancementMode && (
-        <button onClick={handleEnterAdvancement} className='advanceControlButton'>Advance Character</button>
-      )}
-      {isAdvancementMode && draftCharacter && (
-        <div className="advancement-controls">
-          <h3>Advancement Mode</h3>
-          <p>XP Available: {draftCharacter.xp.current}</p>
-          {/* We'll calculate spent XP later */}
-          <button onClick={() => setIsTalentModalOpen(true)} className='advanceControlButton'>Buy Talents</button>
-          {canChangeCareer && (
-            <button 
-              onClick={() => setIsCareerChangeModalOpen(true)} 
-              className='advanceControlButton'
-              style={{ background: '#2d5016', borderColor: '#3d6f1f' }}
-            >
-              Change Career
-            </button>
+          {character && !isAdvancementMode && (
+            <button onClick={handleEnterAdvancement} className='advanceControlButton'>Advance Character</button>
           )}
-          <button onClick={handleConfirmAdvancement} className='advanceControlButton'>Confirm Changes</button>
-          <button onClick={handleCancelAdvancement} className="advanceControlButton">Cancel</button>
-        </div>
-      )}
-      {isTalentModalOpen && draftCharacter && (
-        <TalentModal
-          character={draftCharacter}
-          onClose={() => setIsTalentModalOpen(false)}
-          onBuyTalent={handleBuyTalent}
-        />
-      )}
-      {isCareerChangeModalOpen && character && (
-        <CareerChangeModal
-          character={character}
-          onRequestChange={handleCareerChangeRequest}
-          onClose={() => setIsCareerChangeModalOpen(false)}
-        />
-      )}
-      {isShopModalOpen && character && (
-        <ShopModal
-          shopItems={shopItems}
-          playerCurrency={character.currency}
-          onClose={() => setIsShopModalOpen(false)}
-          onRequestPurchase={handleRequestPurchase}
-        />
-      )}
+          {isAdvancementMode && draftCharacter && (
+            <div className="advancement-controls">
+              <h3>Advancement Mode</h3>
+              <p>XP Available: {draftCharacter.xp.current}</p>
+              {/* We'll calculate spent XP later */}
+              <button onClick={() => setIsTalentModalOpen(true)} className='advanceControlButton'>Buy Talents</button>
+              {canChangeCareer && (
+                <button
+                  onClick={() => setIsCareerChangeModalOpen(true)}
+                  className='advanceControlButton'
+                  style={{ background: '#2d5016', borderColor: '#3d6f1f' }}
+                >
+                  Change Career
+                </button>
+              )}
+              <button onClick={handleConfirmAdvancement} className='advanceControlButton'>Confirm Changes</button>
+              <button onClick={handleCancelAdvancement} className="advanceControlButton">Cancel</button>
+            </div>
+          )}
+          {isTalentModalOpen && draftCharacter && (
+            <TalentModal
+              character={draftCharacter}
+              onClose={() => setIsTalentModalOpen(false)}
+              onBuyTalent={handleBuyTalent}
+            />
+          )}
+          {isCareerChangeModalOpen && character && (
+            <CareerChangeModal
+              character={character}
+              onRequestChange={handleCareerChangeRequest}
+              onClose={() => setIsCareerChangeModalOpen(false)}
+            />
+          )}
+          {isShopModalOpen && character && (
+            <ShopModal
+              shopItems={shopItems}
+              playerCurrency={character.currency}
+              onClose={() => setIsShopModalOpen(false)}
+              onRequestPurchase={handleRequestPurchase}
+            />
+          )}
 
-      {opposedTestRequest && character && (
-        <OpposedTestModal
-          testId={opposedTestRequest.testId}
-          role={opposedTestRequest.role}
-          skillName={opposedTestRequest.skillName}
-          targetNumber={opposedTestRequest.targetNumber}
-          modifier={opposedTestRequest.modifier}
-          fortunePoints={character.status.fortune.current}
-          corruptionCurrent={character.status.corruption.current}
-          corruptionMax={character.status.corruption.max}
-          onRollComplete={handleOpposedTestRoll}
-          onClose={() => setOpposedTestRequest(null)}
-        />
-      )}
-      
-      <InitiativeTracker 
-        combatants={combatants}
-        currentTurnId={currentTurnId}
-        advantages={currentAdvantage}
-      />
-      
-      {character ? (
-        <CharacterSheet
-          character={activeCharacter!}
-          onCharacterUpdate={() => { }}
-          onSkillClick={handleSkillClick}
-          onCharacteristicClick={handleCharacteristicClick}
-          readonly={true}
-          advancementMode={isAdvancementMode}
-          onCharacteristicAdvance={handleAdvanceCharacteristic}
-          onSkillAdvance={handleAdvanceSkill}
-          onPurchaseClick={() => setIsShopModalOpen(true)}
-          showPurchaseButton={!isAdvancementMode}
-        />
-      ) : (
-        <div className="waiting-screen">
-          <h1>Connected to the Game</h1>
-          <p>Waiting for the GM to assign your character...</p>
-          <button onClick={disconnect}>Disconnect</button>
-        </div>
-      )}
-      {testModalInfo && character && (
-        <TalentSelectionModal
-          character={character}
-          testName={testModalInfo.name}
-          baseTarget={testModalInfo.value}
-          onClose={() => setTestModalInfo(null)}
-          onRoll={handleRoll}
-        />
-      )}
+          {opposedTestRequest && character && (
+            <OpposedTestModal
+              testId={opposedTestRequest.testId}
+              role={opposedTestRequest.role}
+              skillName={opposedTestRequest.skillName}
+              targetNumber={opposedTestRequest.targetNumber}
+              modifier={opposedTestRequest.modifier}
+              fortunePoints={character.status.fortune.current}
+              corruptionCurrent={character.status.corruption.current}
+              corruptionMax={character.status.corruption.max}
+              onRollComplete={handleOpposedTestRoll}
+              onClose={() => setOpposedTestRequest(null)}
+            />
+          )}
+
+          <InitiativeTracker
+            combatants={combatants}
+            currentTurnId={currentTurnId}
+            advantages={currentAdvantage}
+          />
+
+          {character ? (
+            <CharacterSheet
+              character={activeCharacter!}
+              onCharacterUpdate={() => { }}
+              onSkillClick={handleSkillClick}
+              onCharacteristicClick={handleCharacteristicClick}
+              readonly={true}
+              advancementMode={isAdvancementMode}
+              onCharacteristicAdvance={handleAdvanceCharacteristic}
+              onSkillAdvance={handleAdvanceSkill}
+              onPurchaseClick={() => setIsShopModalOpen(true)}
+              showPurchaseButton={!isAdvancementMode}
+            />
+          ) : (
+            <div className="waiting-screen">
+              <h1>Connected to the Game</h1>
+              <p>Waiting for the GM to assign your character...</p>
+              <button onClick={disconnect}>Disconnect</button>
+            </div>
+          )}
+          {testModalInfo && character && (
+            <TalentSelectionModal
+              character={character}
+              testName={testModalInfo.name}
+              baseTarget={testModalInfo.value}
+              onClose={() => setTestModalInfo(null)}
+              onRoll={handleRoll}
+            />
+          )}
         </>
       )}
 

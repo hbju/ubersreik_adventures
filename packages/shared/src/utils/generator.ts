@@ -2,11 +2,12 @@ import { Character, Skill } from '../types/wfrp.types';
 import { rollDice } from './mechanics';
 import { SkillCharDefinition } from '../types/wfrp.types';
 import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
+import { careersData } from '..';
 
 const firstNames = ["Albrecht", "Gunnar", "Elsa", "Katrin", "Hanz", "Sigrid", "Ludwig", "Mathilde", "Ulrich"];
 const lastNames = ["Weber", "Hoffman", "Schmidt", "Fischer", "Schneider", "Bauer", "Klein", "Vogt"];
 
-const basicSkills = (allSkillsAndCharacteristics as SkillCharDefinition[]).filter(skill => skill.type === 'skill').map(skill => ({
+const basicSkills = (allSkillsAndCharacteristics as SkillCharDefinition[]).filter(skill => skill.type === 'skill' && skill.classification === 'basic').map(skill => ({
     id: skill.id,
     name: skill.name,
     characteristic: skill.characteristic,
@@ -17,12 +18,19 @@ const basicSkills = (allSkillsAndCharacteristics as SkillCharDefinition[]).filte
 
 export const generateRandomNpc = (): Character => {
     const name = `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+    const career = careersData[Math.floor(Math.random() * careersData.length)];
+    const careerLevel = career.career_level[0];
 
     return {
         id: crypto.randomUUID(), 
         userId: null,
         name: name,
-        career: "",
+        currentCareerId: career.id,
+        currentCareerLevelId: careerLevel.id,
+        careerHistory: [],
+        unlockedCharacteristicIds: careerLevel.characteristic_advances || [],
+        unlockedSkillIds: careerLevel.skills_ids || [],
+        unlockedTalentIds: careerLevel.talent_ids || [],
         xp: { current: 0, spent: 0 },
         characteristics: {
             ws: { initial: 20 + rollDice(2, 10), advances: 0, talents: 0, modifier: 0 },
@@ -63,7 +71,12 @@ export const createBlankCharacter = (): Character => {
         id: crypto.randomUUID(),
         userId: null,
         name: "New Character",
-        career: "",
+        currentCareerId: "",
+        currentCareerLevelId: "",
+        careerHistory: [],
+        unlockedCharacteristicIds: [],
+        unlockedSkillIds: [],
+        unlockedTalentIds: [],
         xp: { current: 0, spent: 0 },
         characteristics: {
             ws: { initial: defaultStat, advances: 0, talents: 0, modifier: 0 },

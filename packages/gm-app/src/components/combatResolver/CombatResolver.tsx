@@ -25,6 +25,7 @@ import {
 } from '@wfrp/shared';
 
 import CharacterSelector from './CharacterSelector';
+import { cp } from 'node:fs';
 
 interface CombatResolverProps {
     characters: Character[];
@@ -96,8 +97,8 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     const [selectedAttackerId, setSelectedAttackerId] = useState<string>(characters[0]?.id || 'manual');
     const [selectedDefenderId, setSelectedDefenderId] = useState<string>(characters[1]?.id || 'manual');
 
-    const [attackerSkillId, setAttackerSkillId] = useState<string>('melee-basic');
-    const [defenderSkillId, setDefenderSkillId] = useState<string>('melee-basic');
+    const [attackerSkillId, setAttackerSkillId] = useState<string>('melee');
+    const [defenderSkillId, setDefenderSkillId] = useState<string>('melee');
 
     const [attackerStats, setAttackerStats] = useState<CombatantStats>({
         skill: 45,
@@ -127,18 +128,13 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     const [defenderApplicableTalents, setDefenderApplicableTalents] = useState<Array<{ talent: any; rank: number }>>([]);
 
     const getSkillValue = (character: Character, skillId: string): number => {
-        const skillInfo = (allSkillsAndCharacteristics as SkillCharDefinition[]).find(s => s.id === skillId);
-        if (!skillInfo) return 0;
-
-        const charValue = calculateCharacteristicValue(character.characteristics[skillInfo.characteristic]);
-
-        if (skillInfo.type !== 'characteristic') {
-            const skill = character.skills.find(s => s.id === skillId);
-            if (skill) {
-                return calculateSkillValue(skill, character);
-            }
+        const skill = character.skills.find(s => s.id === skillId);
+        if (!skill) {
+            const char = character.characteristics[skillId as keyof typeof character.characteristics];
+            return calculateCharacteristicValue(char);
         }
-        return charValue;
+
+        return calculateSkillValue(skill, character);
     };
 
     useEffect(() => {
@@ -150,10 +146,10 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         const attacker = characters.find(char => char.id === selectedAttackerId);
         if (attacker) {
             const strengthBonus = calculateCharacteristicBonus(attacker.characteristics.s);
-            const skillInfo = allSkillsAndCharacteristics.find(s => s.id === attackerSkillId);
+            const skillInfo = attacker.skills.find(s => s.id === attackerSkillId);
 
-            // Get applicable talents for the selected skill
-            const applicableTalents = skillInfo ? getApplicableTalents(attacker, skillInfo.name) : [];
+            console.log("Attacker Skill Info:", skillInfo);
+            const applicableTalents = skillInfo ? getApplicableTalents(attacker, skillInfo.id) : [];
             setAttackerApplicableTalents(applicableTalents);
 
             // Auto-select SL bonus talents
@@ -161,7 +157,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 .filter(({ talent }) => talent.effects?.some((e: any) => e.type === 'SL_BONUS_ON_SUCCESS'))
                 .map(({ talent, rank }) => ({ name: talent.name, rank }));
 
-            const talentDamageBonus = getTalentDamageBonus(autoSelectedTalents, attackerSkillId.includes('ranged') ? 'ranged' : 'melee');
+            const talentDamageBonus = getTalentDamageBonus(autoSelectedTalents, attackerSkillId);
 
             setAttackerStats(prevStats => ({
                 ...prevStats,
@@ -184,7 +180,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             const skillInfo = allSkillsAndCharacteristics.find(s => s.id === defenderSkillId);
 
             // Get applicable talents for the selected skill
-            const applicableTalents = skillInfo ? getApplicableTalents(defender, skillInfo.name) : [];
+            const applicableTalents = skillInfo ? getApplicableTalents(defender, skillInfo.id) : [];
             setDefenderApplicableTalents(applicableTalents);
 
             // Auto-select SL bonus talents
@@ -575,7 +571,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                     {allSkillsAndCharacteristics.filter(s => s.type === 'characteristic').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                 </optgroup>
                                 <optgroup label="Skills">
-                                    {allSkillsAndCharacteristics.filter(s => s.type === 'skill').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                    {characters.find(c => c.id === selectedAttackerId) && characters.find(c => c.id === selectedAttackerId)!.skills.sort((a, b) => a.name.localeCompare(b.name)).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                 </optgroup>
                             </select>
 
@@ -620,7 +616,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                                     ...prev,
                                                     selectedTalents: newTalents
                                                 }));
-                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId.includes('ranged') ? 'ranged' : 'melee');
+                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId);
                                                 setAttackerStats(prev => ({
                                                     ...prev,
                                                     weaponDamage: 4 + calculateCharacteristicBonus(characters.find(c => c.id === selectedAttackerId)!.characteristics.s) + weaponDamage,
@@ -631,7 +627,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                                     ...prev,
                                                     selectedTalents: newTalents
                                                 }));
-                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId.includes('ranged') ? 'ranged' : 'melee');
+                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId);
                                                 setAttackerStats(prev => ({
                                                     ...prev,
                                                     weaponDamage: 4 + calculateCharacteristicBonus(characters.find(c => c.id === selectedAttackerId)!.characteristics.s) + weaponDamage,
@@ -710,7 +706,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                     {allSkillsAndCharacteristics.filter(s => s.type === 'characteristic').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                 </optgroup>
                                 <optgroup label="Skills">
-                                    {allSkillsAndCharacteristics.filter(s => s.type === 'skill').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                    {characters.find(c => c.id === selectedDefenderId) && characters.find(c => c.id === selectedDefenderId)!.skills.sort((a, b) => a.name.localeCompare(b.name)).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                 </optgroup>
                             </select>
 

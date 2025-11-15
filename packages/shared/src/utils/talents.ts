@@ -178,14 +178,14 @@ export function getTalentTestBonus(character: Character, testName: string): numb
  * @param attackType Either "ranged" or "melee"
  * @returns The total damage bonus from all applicable talents
  */
-export function getTalentDamageBonus(talents: { name: string; rank: number }[], attackType: 'ranged' | 'melee'): number {
+export function getTalentDamageBonus(talents: { name: string; rank: number }[], skillId: string): number {
     let bonus = 0;
     for (const { name, rank } of talents) {
         const talentDef = (talentsData as Talent[]).find(t => t.name === name);
         if (!talentDef || !talentDef.effects) continue;
         for (const effect of talentDef.effects) {
             if (effect.type === 'DAMAGE_BONUS' && typeof effect.value === 'number') {
-                if (!effect.appliesTo || effect.appliesTo.includes(attackType)) {
+                if (!effect.appliesTo || effect.appliesTo.some(appl => skillId.toLowerCase().includes(appl.toLowerCase()) || appl.toLowerCase().includes(skillId.toLowerCase()))) {
                     bonus += effect.value * rank;
                 }
             }
