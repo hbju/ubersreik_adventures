@@ -1,7 +1,7 @@
 .pin {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   background: radial-gradient(circle, var(--color-gold-light), var(--color-gold));
   border-radius: 0;
   border: 3px solid var(--color-leather-dark);

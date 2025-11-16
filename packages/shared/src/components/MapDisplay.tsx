@@ -173,6 +173,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
                             onContextMenu={isGM ? (e) => handlePinContextMenu(e, location.id) : undefined}
                             isDiscovered={anyDiscovered}
                             locationName={location.name}
+                            isGm={isGM}
                         />
                     );
                 })}

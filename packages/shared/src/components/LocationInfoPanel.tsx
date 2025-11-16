@@ -14,8 +14,9 @@ const LocationInfoPanel: React.FC<LocationInfoPanelProps> = ({ location, onClose
         <button className={styles.closeButton} onClick={onClose}>
             &times;
         </button>
-        <img src={location.image} alt={location.name} className={styles.locationImage} />
-
+        {location.image && location.image != '' &&
+            <img src={location.image} alt={location.name} className={styles.locationImage} />
+        }
         <div className={styles.content}>
             <h2 className={styles.locationName}>{location.name}</h2>
             <p className={styles.description}>{location.playerDescription}</p>

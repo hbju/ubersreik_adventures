@@ -12,7 +12,7 @@
   transform: translateX(0);
   transition: transform 0.3s ease-in-out;
   overflow-y: auto;
-  z-index: 1000;
+  z-index: 1010;
 }
 
 .panel.hidden {

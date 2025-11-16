@@ -8,9 +8,10 @@ interface LocationPinProps {
     onContextMenu?: (event: React.MouseEvent) => void;
     isDiscovered?: boolean; // Visual indicator for GM
     locationName: string;
+    isGm? : boolean;
 }
 
-const LocationPin: React.FC<LocationPinProps> = ({ x, y, onClick, onContextMenu, isDiscovered = false, locationName }) => {
+const LocationPin: React.FC<LocationPinProps> = ({ x, y, onClick, onContextMenu, isDiscovered = false, locationName, isGm = false }) => {
     const handleContextMenu = (event: React.MouseEvent) => {
         event.preventDefault();
         if (onContextMenu) {
@@ -27,7 +28,7 @@ const LocationPin: React.FC<LocationPinProps> = ({ x, y, onClick, onContextMenu,
             }}
             onClick={onClick}
             onContextMenu={handleContextMenu}
-            title={isDiscovered ? locationName : "Not Discovered"}
+            title={isDiscovered || isGm ? locationName : "Not Discovered"}
         />
     );
 };
