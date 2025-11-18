@@ -3,151 +3,149 @@ import { Character, Talent, calculateTalentAdvanceCost, talentsData, careersData
 import styles from './TalentModal.module.css';
 
 interface TalentModalProps {
-  character: Character;
-  onClose: () => void;
-  onBuyTalent: (talentId: string, cost: number) => void;
+    character: Character;
+    onClose: () => void;
+    onBuyTalent: (talentId: string, cost: number) => void;
 }
 
 export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, onBuyTalent }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
-  // Task 3.1: Get available talents based on career path
-  const availableTalentIds = useMemo(() => {
-    const careers = careersData as any[];
-    const career = careers.find((c: any) => c.id === character.currentCareerId);
-    if (!career) return [];
+    const availableTalentIds = useMemo(() => {
+        const careers = careersData as any[];
+        const career = careers.find((c: any) => c.id === character.currentCareerId);
+        if (!career) return [];
 
-    const careerLevel = career.career_level.find((lvl: any) => lvl.id === character.currentCareerLevelId);
-    if (!careerLevel) return [];
+        const careerLevel = career.career_level.find((lvl: any) => lvl.id === character.currentCareerLevelId);
+        if (!careerLevel) return [];
 
-    const availableAdvancements = getAvailableAdvancements(career, careerLevel.lvl);
-    
-    // Combine career talents with GM unlocked talents
-    const allAvailable = new Set([
-      ...availableAdvancements.talents,
-      ...(character.unlockedTalentIds || [])
-    ]);
-    
-    return Array.from(allAvailable);
-  }, [character]);
+        const availableAdvancements = getAvailableAdvancements(career, careerLevel.lvl);
 
-  const getMaxRanks = (talent: Talent): number => {
-    if (typeof talent.max_ranks === 'number') {
-      return talent.max_ranks;
-    }
-    
-    const charKey = talent.max_ranks as keyof Character['characteristics'];
-    if (character.characteristics[charKey]) {
-      const char = character.characteristics[charKey];
-      return Math.floor((char.initial + char.advances + char.talents + char.modifier) / 10);
-    }
-    
-    return 1;
-  };
+        const allAvailable = new Set([
+            ...availableAdvancements.talents,
+            ...(character.unlockedTalentIds || [])
+        ]);
 
-  const filteredTalents = useMemo(() => {
-    const talents = talentsData as Talent[];
-    
-    // Filter by career availability first
-    let careerFilteredTalents = talents.filter(talent => availableTalentIds.includes(talent.id));
-    
-    if (!searchTerm.trim()) {
-      return careerFilteredTalents;
-    }
+        return Array.from(allAvailable);
+    }, [character]);
 
-    const lowerSearch = searchTerm.toLowerCase();
-    return careerFilteredTalents.filter(talent =>
-      talent.name.toLowerCase().includes(lowerSearch) ||
-      talent.description.toLowerCase().includes(lowerSearch)
+    const getMaxRanks = (talent: Talent): number => {
+        if (typeof talent.max_ranks === 'number') {
+            return talent.max_ranks;
+        }
+
+        const charKey = talent.max_ranks as keyof Character['characteristics'];
+        if (character.characteristics[charKey]) {
+            const char = character.characteristics[charKey];
+            return Math.floor((char.initial + char.advances + char.talents + char.modifier) / 10);
+        }
+
+        return 1;
+    };
+
+    const filteredTalents = useMemo(() => {
+        const talents = talentsData as Talent[];
+
+        // Filter by career availability first
+        let careerFilteredTalents = talents.filter(talent => availableTalentIds.includes(talent.id));
+
+        if (!searchTerm.trim()) {
+            return careerFilteredTalents;
+        }
+
+        const lowerSearch = searchTerm.toLowerCase();
+        return careerFilteredTalents.filter(talent =>
+            talent.name.toLowerCase().includes(lowerSearch) ||
+            talent.description.toLowerCase().includes(lowerSearch)
+        );
+    }, [searchTerm, availableTalentIds]);
+
+    const handleBuy = (talent: Talent) => {
+        const currentRank = character.talents[talent.id] || 0;
+        const maxRanks = getMaxRanks(talent);
+
+        if (currentRank >= maxRanks) {
+            return;
+        }
+
+        // Assume talent is in career for now (could be enhanced with career checking)
+        const cost = calculateTalentAdvanceCost(talent.id, character, true);
+
+        if (character.xp.current < cost) {
+            return;
+        }
+
+        onBuyTalent(talent.id, cost);
+    };
+
+    return (
+        <div className={styles.modalBackdrop} onClick={onClose}>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                <div className={styles.modalHeader}>
+                    <h2>Talents</h2>
+                    <button className={styles.closeButton} onClick={onClose}>&times;</button>
+                </div>
+
+                <div className={styles.searchBar}>
+                    <input
+                        type="text"
+                        placeholder="Search talents..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className={styles.searchInput}
+                    />
+                </div>
+
+                <div className={styles.xpDisplay}>
+                    <span>Available XP: <strong>{character.xp.current}</strong></span>
+                    <span style={{ marginLeft: '20px', fontSize: '0.9em', color: '#888' }}>
+                        Showing talents from your career path
+                    </span>
+                </div>
+
+                <div className={styles.talentList}>
+                    {filteredTalents.map(talent => {
+                        const currentRank = character.talents[talent.id] || 0;
+                        const maxRanks = getMaxRanks(talent);
+                        const cost = calculateTalentAdvanceCost(talent.id, character, true);
+                        const canAfford = character.xp.current >= cost;
+                        const atMaxRank = currentRank >= maxRanks;
+                        const canBuy = canAfford && !atMaxRank;
+
+                        return (
+                            <div key={talent.id} className={styles.talentCard}>
+                                <div className={styles.talentHeader}>
+                                    <h3 className={styles.talentName}>{talent.name}</h3>
+                                    <div className={styles.talentRank}>
+                                        Rank: {currentRank} / {maxRanks}
+                                    </div>
+                                </div>
+
+                                <p className={styles.talentDescription}>{talent.description}</p>
+
+                                {talent.effects && talent.effects.length > 0 && talent.effects.some(effect => effect.type === 'SL_BONUS_ON_SUCCESS') && (
+                                    <div className={styles.talentTests}>
+                                        <strong>Tests:</strong> {talent.tests.join(', ')}
+                                    </div>
+                                )}
+
+                                <div className={styles.talentFooter}>
+                                    <span className={styles.talentCost}>
+                                        {atMaxRank ? 'Max Rank' : `Cost: ${cost} XP`}
+                                    </span>
+                                    <button
+                                        onClick={() => handleBuy(talent)}
+                                        disabled={!canBuy}
+                                        className={styles.buyButton}
+                                    >
+                                        {atMaxRank ? 'Max' : canAfford ? 'Buy' : 'Cannot Afford'}
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
     );
-  }, [searchTerm, availableTalentIds]);
-
-  const handleBuy = (talent: Talent) => {
-    const currentRank = character.talents[talent.id] || 0;
-    const maxRanks = getMaxRanks(talent);
-    
-    if (currentRank >= maxRanks) {
-      return;
-    }
-    
-    // Assume talent is in career for now (could be enhanced with career checking)
-    const cost = calculateTalentAdvanceCost(talent.id, character, true);
-    
-    if (character.xp.current < cost) {
-      return;
-    }
-    
-    onBuyTalent(talent.id, cost);
-  };
-
-  return (
-    <div className={styles.modalBackdrop} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.modalHeader}>
-          <h2>Talents</h2>
-          <button className={styles.closeButton} onClick={onClose}>&times;</button>
-        </div>
-
-        <div className={styles.searchBar}>
-          <input
-            type="text"
-            placeholder="Search talents..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
-        </div>
-
-        <div className={styles.xpDisplay}>
-          <span>Available XP: <strong>{character.xp.current}</strong></span>
-          <span style={{ marginLeft: '20px', fontSize: '0.9em', color: '#888' }}>
-            Showing talents from your career path
-          </span>
-        </div>
-
-        <div className={styles.talentList}>
-          {filteredTalents.map(talent => {
-            const currentRank = character.talents[talent.id] || 0;
-            const maxRanks = getMaxRanks(talent);
-            const cost = calculateTalentAdvanceCost(talent.id, character, true);
-            const canAfford = character.xp.current >= cost;
-            const atMaxRank = currentRank >= maxRanks;
-            const canBuy = canAfford && !atMaxRank;
-
-            return (
-              <div key={talent.id} className={styles.talentCard}>
-                <div className={styles.talentHeader}>
-                  <h3 className={styles.talentName}>{talent.name}</h3>
-                  <div className={styles.talentRank}>
-                    Rank: {currentRank} / {maxRanks}
-                  </div>
-                </div>
-
-                <p className={styles.talentDescription}>{talent.description}</p>
-
-                {talent.effects && talent.effects.length > 0 && talent.effects.some(effect => effect.type === 'SL_BONUS_ON_SUCCESS') && (
-                  <div className={styles.talentTests}>
-                    <strong>Tests:</strong> {talent.tests.join(', ')}
-                  </div>
-                )}
-
-                <div className={styles.talentFooter}>
-                  <span className={styles.talentCost}>
-                    {atMaxRank ? 'Max Rank' : `Cost: ${cost} XP`}
-                  </span>
-                  <button
-                    onClick={() => handleBuy(talent)}
-                    disabled={!canBuy}
-                    className={styles.buyButton}
-                  >
-                    {atMaxRank ? 'Max' : canAfford ? 'Buy' : 'Cannot Afford'}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
 };

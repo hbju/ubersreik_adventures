@@ -3,7 +3,7 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapDisplay, gameData, recalculateCharacterTalentBonuses, careersData, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, talentsData } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, gameData, recalculateCharacterTalentBonuses, careersData, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, talentsData, Location } from '@wfrp/shared';
 import { TalentSelectionModal } from './components/TalentSelectionModal';
 import {
   TestResultMessage,
@@ -30,6 +30,7 @@ const PlayerApp: React.FC = () => {
   const [currentView, setCurrentView] = useState<'character' | 'journal' | 'map'>('character');
   const [isCareerChangeModalOpen, setIsCareerChangeModalOpen] = useState(false);
   const [canChangeCareer, setCanChangeCareer] = useState(false);
+  const [mapViewState, setMapViewState] = useState({ scale: 1, offsetX: 0, offsetY: 0 });
 
   const handleSkillClick = (skillName: string, skillValue: number) => {
     setTestModalInfo({ name: skillName, value: skillValue });
@@ -291,6 +292,22 @@ const PlayerApp: React.FC = () => {
     alert('Career change request sent to GM. Awaiting approval...');
   };
 
+  const handleLocationSelect = (location: Location) => {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    const effectiveViewportWidth = viewportWidth;
+    
+    const targetX = effectiveViewportWidth / 2 - location.coords.x * mapViewState.scale;
+    const targetY = viewportHeight / 2 - location.coords.y * mapViewState.scale;
+    
+    setMapViewState({
+      scale: mapViewState.scale,
+      offsetX: targetX,
+      offsetY: targetY,
+    });
+  };
+
   const activeCharacter = isAdvancementMode ? draftCharacter : character;
 
   // Show connection screen if not authenticated
@@ -487,12 +504,33 @@ const PlayerApp: React.FC = () => {
 
       {/* Map View */}
       {currentView === 'map' && character && (
-        <MapDisplay
-          gameData={gameData}
-          mapPinStates={mapPinStates}
-          characters={[character]}
-          isGM={false}
-        />
+        <div style={{
+          display: 'flex',
+          width: '100vw',
+          height: '100vh',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          zIndex: 1000
+        }}>
+          <div style={{ flex: 1 }}>
+            <MapView
+              gameData={gameData}
+              mapPinStates={mapPinStates}
+              characters={[character]}
+              isGM={false}
+              viewState={mapViewState}
+              onViewStateChange={setMapViewState}
+            />
+          </div>
+          <div style={{ width: '350px', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
+            <DiscoveredLocationsList
+              locations={gameData.locations}
+              mapPinStates={mapPinStates}
+              onLocationSelect={handleLocationSelect}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

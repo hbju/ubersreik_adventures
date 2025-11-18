@@ -1,4 +1,4 @@
-import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, recalculateCharacterTalentBonuses, Skill } from '@wfrp/shared';
+import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -38,7 +38,8 @@ import {
     CareerChangeRequestMessage,
     CareerChangeResponseMessage,
     careersData,
-    Career
+    Career,
+    Location
 } from '@wfrp/shared';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -76,6 +77,7 @@ function App() {
     const journalRef = useRef(journal);
     const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
     const mapPinStatesRef = useRef(mapPinStates);
+    const [mapViewState, setMapViewState] = useState<{ scale: number; offsetX: number; offsetY: number }>({ scale: 1, offsetX: 0, offsetY: 0 });
     const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
     const [openSheetIds, setOpenSheetIds] = useState<string[]>([]);
     const [combatants, setCombatants] = useState<Combatant[]>([]);
@@ -389,6 +391,22 @@ function App() {
 
         console.log(`Updated pin state for location ${locationId}:`, updatedMapPinStates[locationId]);
         setMapPinStates(updatedMapPinStates);
+    };
+
+    const handleLocationSelect = (location: Location) => {
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        const effectiveViewportWidth = viewportWidth;
+
+        const targetX = effectiveViewportWidth / 2 - location.coords.x * mapViewState.scale;
+        const targetY = viewportHeight / 2 - location.coords.y * mapViewState.scale;
+
+        setMapViewState({
+            scale: mapViewState.scale,
+            offsetX: targetX,
+            offsetY: targetY,
+        });
     };
 
     useEffect(() => {
@@ -708,13 +726,33 @@ function App() {
                     }}
                 />)}
 
-            <MapDisplay
-                gameData={{ ...gameData, characters }}
-                mapPinStates={mapPinStates}
-                characters={characters}
-                onTogglePinDiscovery={handleTogglePinDiscovery}
-                isGM={true}
-            />
+            <div style={{
+                display: 'flex',
+                width: '100vw',
+                height: '100vh',
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                zIndex: 1000
+            }}>
+                <div style={{ flex: 1 }}>
+                    <MapView
+                        gameData={gameData}
+                        mapPinStates={mapPinStates}
+                        characters={characters}
+                        isGM={true}
+                        viewState={mapViewState}
+                        onViewStateChange={setMapViewState}
+                    />
+                </div>
+                <div style={{ width: '350px', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
+                    <DiscoveredLocationsList
+                        locations={gameData.locations}
+                        mapPinStates={mapPinStates}
+                        onLocationSelect={handleLocationSelect}
+                    />
+                </div>
+            </div>
 
             {showCombatResolver && (<CombatResolver
                 characters={characters}

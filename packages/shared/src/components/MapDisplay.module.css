@@ -1,64 +1,18 @@
 .mapContainer {
   width: 100vw;
   height: 100vh;
-  align-content: center;
   position: relative; 
-  overflow: hidden;
+  overflow: visible;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   background: #1a1410;
 }
 
 .mapImage {
-  height: 100%;
-  object-fit: cover;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   filter: sepia(0.15) contrast(1.1);
-}
-
-/* Context Menu Styles */
-.contextMenu {
-  position: fixed;
-  background: linear-gradient(135deg, #2c1810 0%, #3e2723 100%);
-  border: 2px solid #8b6914;
-  border-radius: 8px;
-  padding: 8px 0;
-  min-width: 200px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
-  z-index: 10000;
-  color: #d4af37;
-  font-family: 'Cinzel', serif;
-}
-
-.contextMenuHeader {
-  padding: 10px 16px;
-  font-weight: bold;
-  font-size: 14px;
-  color: #d4af37;
-  border-bottom: 1px solid #8b6914;
-  margin-bottom: 4px;
-}
-
-.contextMenuItem {
-  width: 100%;
-  padding: 10px 16px;
-  background: transparent;
-  border: none;
-  color: #d4af37;
-  text-align: left;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 13px;
-  transition: background 0.2s;
-  display: block;
-}
-
-.contextMenuItem:hover {
-  background: rgba(139, 105, 20, 0.3);
-}
-
-.contextMenuDivider {
-  height: 1px;
-  background: #8b6914;
-  margin: 4px 8px;
+  pointer-events: none;
 }

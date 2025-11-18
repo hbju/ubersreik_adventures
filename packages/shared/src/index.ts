@@ -1,6 +1,8 @@
 export { default as CharacterSheet } from './components/CharacterSheet';
 export { default as InventoryView } from './components/InventoryView';
 export { default as MapDisplay } from './components/MapDisplay';
+export { default as MapView } from './components/MapView';
+export { default as DiscoveredLocationsList } from './components/DiscoveredLocationsList';
 export { default as LocationPin } from './components/LocationPin';
 export { default as LocationInfoPanel } from './components/LocationInfoPanel';
 export { CriticalHitModal } from './components/CriticalHitModal';

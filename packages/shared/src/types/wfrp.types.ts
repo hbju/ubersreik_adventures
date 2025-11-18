@@ -12,6 +12,7 @@ export interface Location {
   image: string;
   music: string;
   hooks: string[]; 
+  tag: string;
 }
 
 export interface ConditionInstance {
