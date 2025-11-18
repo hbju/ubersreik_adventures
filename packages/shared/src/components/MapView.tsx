@@ -90,13 +90,10 @@ const MapView: React.FC<MapViewProps> = ({
             const deltaX = e.clientX - panStart.x;
             const deltaY = e.clientY - panStart.y;
 
-            const container = containerRef.current?.getBoundingClientRect();
-            if (!container) return;
-
             setViewState({
                 ...viewState,
-                offsetX: Math.max(Math.min(viewState.offsetX + deltaX, container.width), 0),
-                offsetY: Math.max(Math.min(viewState.offsetY + deltaY, container.height), 0),
+                offsetX: viewState.offsetX + deltaX,
+                offsetY: viewState.offsetY + deltaY,
             });
 
             setPanStart({ x: e.clientX, y: e.clientY });
