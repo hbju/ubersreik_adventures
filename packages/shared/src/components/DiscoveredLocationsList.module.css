@@ -28,6 +28,23 @@
     color: #b8941f;
 }
 
+.searchBar {
+    margin-top: 12px;
+}
+
+.searchInput {
+    width: 90%;
+    padding: 8px 12px;
+    border: 1px solid #8b6914;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    color: #d4af37;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
 .filterSection {
     padding: 16px 20px;
     border-bottom: 1px solid #8b6914;

@@ -743,6 +743,7 @@ function App() {
                         isGM={true}
                         viewState={mapViewState}
                         onViewStateChange={setMapViewState}
+                        onTogglePinDiscovery={handleTogglePinDiscovery}
                     />
                 </div>
                 <div style={{ width: '350px', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
@@ -750,6 +751,7 @@ function App() {
                         locations={gameData.locations}
                         mapPinStates={mapPinStates}
                         onLocationSelect={handleLocationSelect}
+                        isGm={true}
                     />
                 </div>
             </div>

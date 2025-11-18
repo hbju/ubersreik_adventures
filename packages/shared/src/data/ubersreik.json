@@ -87,7 +87,7 @@
             "id": "metalworkers_guild",
             "name": "Metalworkers' Guild",
             "coords": {
-                "x": 1710,
+                "x": 2710,
                 "y": 1370
             },
             "playerDescription": "The Metalworkers' Guildhouse is a squat, unassuming, soot-stained building just off the Bögenhafen road. It is surrounded by forges, smithies, and workshops that ring with the sound of hammers on steel from dawn to dusk. The interior of the guildhouse is dark, and low-ceilinged, an attempt to appeal to the city's Dwarf populace.",
@@ -280,8 +280,8 @@
             "id": "khazalgirt",
             "name": "Khazalgirt",
             "coords": {
-                "x": 0,
-                "y": 0
+                "x": 1145,
+                "y": 2615
             },
             "playerDescription": "Beneath Dawihafen, a network of sturdy Dwarf-built tunnels forms its own subterranean street network. The tunnels are regular, well-constructed, and well-lit, not to mention well-patrolled. A large shrine to Grimnir lies at the nexus of the passages — a natural meeting point for local Slayers to gather.",
             "gmNotes": "The tunnels lead to most major Dwarf locations in Ubersreik. They are separate and discrete from both the Human sewers, and the Dwarfs' own sewer system, which lies deeper underground. Should any non-Dwarfs find their way into the network, they will be politely, if forcibly, ejected. Repeat offenders will not be treated gently.",
@@ -292,23 +292,6 @@
             "image": "",
             "music": "",
             "tag": "district"
-        },
-        {
-            "id": "lord_gazuls_underearth",
-            "name": "Lord Gazul's Underearth",
-            "coords": {
-                "x": 0,
-                "y": 0
-            },
-            "playerDescription": "Deep beneath the Khazalgirt, at the end of a long tunnel, lies Lord Gazul's Underearth. Entry is through a guarded fifty-foot high cave mouth carved with a yawning Dwarf face. Within is an enormous, earth-floored cavern with thousands of carved stone sarcophagi, each grouped by clan. In the centre of the cavern stands a twenty-foot statue of Gazul, great guardian of the dead. Gazul looks troubled, and leans heavily on a great runesword.",
-            "gmNotes": "Nargrimi the Quiet ensures Gazul's teachings are remembered. The ancient Dwarf is Karugromthi, a living ancestor. She tends to the Dwarf dead in Ubersreik, and consoles the bereaved. There are none alive in Ubersreik who can remember when Nargrimi last left the cavern.",
-            "hooks": [
-                "Reman Wardas and Gantz Ganev learn of the motherlode of corpses from a drunk Harataki Dwarf. They steal a map and dig a tunnel to the Underearth. Realising the place is well guarded, they seek a party of capable folk to create a diversion. However, on the day of the planned robbery, the nearby river floods, flushing everyone into the Underearth, leaving them with a lot of explaining to do.",
-                "Nargrimi is not just a living ancestor, she is the true Queen of Karak Zanda, a Lost Hold. When news arrives that her former home was uncovered, she wishes to speak to outsiders. She explains that her Lost Hold must never be investigated, and that no Dwarf with honour may ever approach Karak Zanda. She will provide 10 GC to any party who closes all routes to the ruins."
-            ],
-            "image": "",
-            "music": "",
-            "tag": "misc"
         },
         {
             "id": "nordwander_and_sons_expeditionary_supplies",
@@ -1197,20 +1180,6 @@
             "tag": "misc"
         },
         {
-            "id": "the_sewers",
-            "name": "The Sewers",
-            "coords": {
-                "x": -1000,
-                "y": -1000
-            },
-            "playerDescription": "Ubersreik's sewers are extensive and a source of local pride. Two distinct networks exist: one to the city's north (the Magnussewers), and another to the south (the Sigmarsewers). Both networks discharge into the Teufel through wide, steel-grated culverts. Each network comprises around a dozen major, arterial sewers, through which a four-foot wide effluent channel flows, flanked by equally wide walkways. Smaller tunnels connect these arterial sewers. Vaulted chambers, twenty-feet across, sit at the junctions. Intricate carvings of Dwarf faces line the chambers' columns, though few consider the splendid sight worth the appalling reek.",
-            "gmNotes": "When Greenskins razed the town 200 years ago, the sewers were untouched. Later, Empire infiltrators, led by Dwarf scouts, entered the town through the sewer grates to surprise the occupying Greenskin forces. This story is well known locally, but the invading Altdorfers have no idea. The southern network (Sigmarsewers) is better maintained. Nonetheless, there have been numerous sightings of fast-moving Beastmen with ratlike visages. The northern network (Magnussewers) is less regularly patrolled and, in addition to the omnipresent threat of ratmen, other creatures call the sewers home, such as Skaven Gutter Runners, Giant Rat Swarms, and a Doppelganger named Brandt.",
-            "hooks": [],
-            "image": "",
-            "music": "",
-            "tag": "district"
-        },
-        {
             "id": "fleshmarket",
             "name": "Fleshmarket",
             "coords": {
@@ -1802,20 +1771,6 @@
             "image": "",
             "music": "",
             "tag": "misc"   
-        },
-        {
-            "id": "",
-            "name": "",
-            "coords": {
-                "x": -1000,
-                "y": -1000
-            },
-            "playerDescription": "",
-            "gmNotes": "",
-            "hooks": [],
-            "image": "assets/images/",
-            "music": "assets/music/",
-            "tag": "misc"
         }
     ],
     "characters": [

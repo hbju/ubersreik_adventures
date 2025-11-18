@@ -16,14 +16,21 @@ const DiscoveredLocationsList: React.FC<DiscoveredLocationsListProps> = ({
     isGm,
 }) => {
     const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
+    const [searchTerm, setSearchTerm] = useState('');
 
     // Get all discovered locations
     const discoveredLocations = useMemo(() => {
-        return locations.filter(location => {
+        const searchFiltered = locations.filter(location =>
+            location.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
+        );
+
+        if (isGm)
+            return searchFiltered;
+        return searchFiltered.filter(location => {
             const pinState = mapPinStates[location.id];
             return pinState?.playerDiscovered && pinState.playerDiscovered.length > 0;
         });
-    }, [locations, mapPinStates]);
+    }, [locations, mapPinStates, searchTerm]);
 
     // Get all unique tags from discovered locations
     const availableTags = useMemo(() => {
@@ -76,7 +83,19 @@ const DiscoveredLocationsList: React.FC<DiscoveredLocationsListProps> = ({
             <div className={styles.listHeader}>
                 <h2 className={styles.title}>Discovered Locations</h2>
                 <p className={styles.count}>{filteredLocations.length} of {discoveredLocations.length}</p>
+
+                <div className={styles.searchBar}>
+                    <input
+                        type="text"
+                        placeholder="Search locations..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className={styles.searchInput}
+                    />
+                </div>
+
             </div>
+
 
             {availableTags.length > 0 && (
                 <div className={styles.filterSection}>
