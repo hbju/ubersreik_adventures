@@ -12,5 +12,6 @@ interface Window {
       getInitialData: () => Promise<any>;
       saveData: (data: any) => void;
       onDataUpdated: (callback: (value: any) => void) => () => void;
+      backupCampaign: () => Promise<{ success: boolean; path?: string; error?: string }>;
     };
 }

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "human",
+    "name": "Human",
+    "base_stats": { "ws": 20, "bs": 20, "s": 20, "t": 20, "i": 20, "ag": 20, "dex": 20, "int": 20, "wp": 20, "fel": 20 },
+    "fate": 2,
+    "resilience": 1,
+    "extra_points": 3,
+    "movement": 4,
+    "skills": ["animal-care", "charm", "cool", "evaluate", "gossip", "haggle", "language_bretonnian", "language_wastelander", "leadership", "lore_reikland", "melee", "ranged_bow"],
+    "talents": ["doomed", "savvy", "suave", "random", "random", "random"]
+  },
+  {
+    "id": "dwarf",
+    "name": "Dwarf",
+    "base_stats": { "ws": 30, "bs": 20, "s": 20, "t": 30, "i": 20, "ag": 10, "dex": 30, "int": 20, "wp": 40, "fel": 10 },
+    "fate": 0,
+    "resilience": 2,
+    "extra_points": 2,
+    "movement": 3,
+    "skills": ["consume-alcohol", "cool", "endurance", "entertain_storytelling", "evaluate", "intimidate", "language_khazalid", "lore_dwarfs", "lore_geology", "lore_metallurgy", "melee", "trade"],
+    "talents": ["magic-resistance", "night-vision", "read-write", "relentless", "resolute", "stout-hearted", "strong-minded"]
+  },
+  {
+    "id": "halfling",
+    "name": "Halfling",
+    "base_stats": { "ws": 10, "bs": 30, "s": 10, "t": 20, "i": 20, "ag": 20, "dex": 30, "int": 20, "wp": 30, "fel": 30 },
+    "fate": 0,
+    "resilience": 2,
+    "extra_points": 3,
+    "movement": 3,
+    "skills": ["charm", "consume-alcohol", "dodge", "gamble", "haggle", "intuition", "language_mootish", "lore_reikland", "perception", "sleight-of-hand", "stealth", "trade_cook"],
+    "talents": ["acute-sense_taste", "night-vision", "resistance_chaos", "small", "random", "random"]
+  },
+  {
+    "id": "elf",
+    "name": "High Elf",
+    "base_stats": { "ws": 30, "bs": 30, "s": 20, "t": 20, "i": 40, "ag": 30, "dex": 30, "int": 30, "wp": 30, "fel": 20 },
+    "fate": 0,
+    "resilience": 0,
+    "extra_points": 2,
+    "movement": 5,
+    "skills": ["cool", "entertain_sing", "evaluate", "language_eltharin", "leadership", "melee", "navigation", "perception", "play", "ranged_bow", "sail", "swim"],
+    "talents": ["acute-sense_sight", "coolheaded", "night-vision", "second-sight", "read-write"]
+  },
+  {
+    "id": "wood_elf",
+    "name": "Wood Elf",
+    "base_stats": { "ws": 30, "bs": 30, "s": 20, "t": 20, "i": 40, "ag": 30, "dex": 30, "int": 30, "wp": 30, "fel": 20 },
+    "fate": 0,
+    "resilience": 0,
+    "extra_points": 2,
+    "movement": 5,
+    "skills": ["athletics", "climb", "endurance", "entertain_sing", "intimidate", "language_eltharin", "melee", "outdoor_survival", "perception", "ranged_bow", "stealth", "track"],
+    "talents": ["acute-sense_sight", "hardy", "night-vision", "read-write", "rover"]
+  }
+]

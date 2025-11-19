@@ -92,6 +92,39 @@ export function saveCampaignData(data: CampaignState): void {
 }
 
 /**
+ * Create a backup of the current campaign data
+ * @returns The path to the backup file
+ */
+export function backupCampaignData(): string {
+  const filePath = getCampaignFilePath();
+  
+  try {
+    if (!fs.existsSync(filePath)) {
+      throw new Error('No campaign file to backup');
+    }
+
+    const userDataPath = app.getPath('userData');
+    const backupsDir = path.join(userDataPath, 'backups');
+    
+    // Ensure backups directory exists
+    if (!fs.existsSync(backupsDir)) {
+      fs.mkdirSync(backupsDir, { recursive: true });
+    }
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const backupPath = path.join(backupsDir, `campaign-state-${timestamp}.json`);
+    
+    fs.copyFileSync(filePath, backupPath);
+    console.log('Campaign backup created at:', backupPath);
+    
+    return backupPath;
+  } catch (error) {
+    console.error('Error creating backup:', error);
+    throw error;
+  }
+}
+
+/**
  * Get the current in-memory campaign data
  * @returns The current campaign data or null if not loaded
  */

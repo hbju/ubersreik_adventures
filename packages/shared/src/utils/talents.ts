@@ -6,10 +6,10 @@ import { rolld100 } from './mechanics';
 /**
  * Gets all talents that could apply to a given skill or characteristic test
  * @param character The character whose talents to check
- * @param testName The name of the skill or characteristic being tested (e.g., "Perception", "Melee (Basic)", "WS")
+ * @param testId The id of the skill or characteristic being tested (e.g., "perception", "melee_two-hands", "WS")
  * @returns Array of talents that could apply to this test
  */
-export function getApplicableTalents(character: Character, testName: string): Array<{ talent: Talent; rank: number }> {
+export function getApplicableTalents(character: Character, testId: string): Array<{ talent: Talent; rank: number }> {
     const result: Array<{ talent: Talent; rank: number }> = [];
 
     // Get all talents the character has
@@ -26,7 +26,7 @@ export function getApplicableTalents(character: Character, testName: string): Ar
         // Check if this talent has effects that could apply to this test
         if (talentDef.effects && talentDef.effects.length > 0) {
             for (const effect of talentDef.effects) {
-                if (doesEffectApplyToTest(effect, testName)) {
+                if (doesEffectApplyToTest(effect, testId)) {
                     result.push({ talent: talentDef, rank });
                     break; // Only add the talent once even if multiple effects apply
                 }
@@ -40,13 +40,13 @@ export function getApplicableTalents(character: Character, testName: string): Ar
 /**
  * Checks if a talent effect applies to a given test
  */
-function doesEffectApplyToTest(effect: TalentEffect, testName: string): boolean {
+function doesEffectApplyToTest(effect: TalentEffect, testId: string): boolean {
     if (!effect.appliesTo || effect.appliesTo.length === 0) {
         // Effects without appliesTo might be passive or apply universally
         return effect.type === 'SL_BONUS_ON_SUCCESS';
     }
 
-    const normalizedTestName = testName.toLowerCase().trim();
+    const normalizedTestName = testId.toLowerCase().trim();
 
     for (const target of effect.appliesTo) {
         const normalizedTarget = target.toLowerCase().trim();
@@ -134,8 +134,7 @@ export function applyTalentSLBonuses(
                 // Check conditions if any
                 if (effect.condition && character) {
                     // Evaluate condition (placeholder for future complex conditions)
-                    // For now, skip conditional talents
-                    continue;
+                    // For now, do nothing
                 }
 
                 if (typeof effect.value === 'number') {

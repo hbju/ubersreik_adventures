@@ -7,7 +7,7 @@ import path from 'node:path'
 import os from 'node:os'
 import { update } from './update'
 import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates } from './server'
-import { loadCampaignData, saveCampaignData, clearCampaignCache } from './dataManager'
+import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
 import { CampaignState } from '@wfrp/shared'
 
 const require = createRequire(import.meta.url)
@@ -172,6 +172,19 @@ ipcMain.on('save-data', (event, data: CampaignState) => {
     }
   } catch (error) {
     console.error('Error saving data:', error);
+  }
+});
+
+/**
+ * Handle backup request from renderer
+ */
+ipcMain.handle('backup-campaign', async () => {
+  try {
+    const backupPath = backupCampaignData();
+    return { success: true, path: backupPath };
+  } catch (error) {
+    console.error('Error backing up campaign:', error);
+    return { success: false, error: (error as Error).message };
   }
 });
 

@@ -77,6 +77,14 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     }
   },
 
+  /**
+   * Trigger a manual backup of the campaign data
+   * @returns Promise resolving to the result { success: boolean, path?: string, error?: string }
+   */
+  backupCampaign() {
+    return ipcRenderer.invoke('backup-campaign')
+  },
+
 
   // You can expose other APTs you need here.
   // ...

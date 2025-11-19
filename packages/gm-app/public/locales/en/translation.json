@@ -1,0 +1,37 @@
+{
+  "menu": {
+    "users": "Users",
+    "backup": "Backup",
+    "startSession": "Start Session",
+    "journal": "Journal",
+    "shop": "Shop",
+    "dice": "Dice",
+    "createCharacter": "Create Character",
+    "generateNPC": "Generate NPC"
+  },
+  "system": {
+    "backupSuccess": "Campaign backup created successfully at: {{path}}",
+    "backupFailed": "Backup failed: {{error}}",
+    "sessionStarted": "Session started. Fortune points reset.",
+    "corruptionTest": "{{name}} tests Corruption (Willpower {{target}}): Rolled {{roll}}. {{result}}",
+    "corruptionSuccess": "Success! No corruption gained.",
+    "corruptionFailure": "Failure! Gained 1 Corruption point.",
+    "mutationCheck": "⚠️ {{name}} has exceeded their Corruption Threshold! Mutation Check required!"
+  },
+  "characterSheet": {
+    "stats": "Stats & Skills",
+    "talents": "Talents",
+    "inventory": "Inventory",
+    "xp": "XP",
+    "career": "Career",
+    "currency": "Currency",
+    "wounds": "Wounds",
+    "corruption": "Corruption",
+    "fate": "Fate",
+    "fortune": "Fortune",
+    "resilience": "Resilience",
+    "resolve": "Resolve",
+    "skills": "Skills",
+    "characteristics": "Characteristics"
+  }
+}

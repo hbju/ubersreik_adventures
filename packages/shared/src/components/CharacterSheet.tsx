@@ -14,8 +14,8 @@ const talents = talentsData as Talent[];
 interface CharacterSheetProps {
     character: Character;
     onCharacterUpdate: (character: Character) => void;
-    onSkillClick?: (skillName: string, skillValue: number) => void;
-    onCharacteristicClick?: (charName: string, charValue: number) => void;
+    onSkillClick?: (skillId: string, skillName: string, skillValue: number) => void;
+    onCharacteristicClick?: (charId: string, charName: string, charValue: number) => void;
     onXpAward?: (amount: number) => void;
     onCareerManagementModalOpen?: (character: Character) => void;
     onCurrencyAward?: (newCurrency: Currency) => void;
@@ -27,6 +27,7 @@ interface CharacterSheetProps {
     showPurchaseButton?: boolean;
     advantages?: Advantages;
     onRemoveTalent?: (talentId: string) => void;
+    onCorruptionTest?: () => void;
 }
 
 const CharacterSheet: React.FC<CharacterSheetProps> = ({
@@ -44,7 +45,8 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     onPurchaseClick,
     showPurchaseButton = false,
     advantages,
-    onRemoveTalent
+    onRemoveTalent,
+    onCorruptionTest
 }) => {
     const [activeTab, setActiveTab] = useState<'stats' | 'talents' | 'inventory'>('stats');
 
@@ -83,16 +85,16 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
 
         const availableAdvancements = getAvailableAdvancements(newCareer, newCareerLevel.lvl);
 
-        const updatedCharacter: Character = { 
-            ...character, 
-            currentCareerId: newCareerId, 
+        const updatedCharacter: Character = {
+            ...character,
+            currentCareerId: newCareerId,
             currentCareerLevelId: newCareerLevel.id,
             unlockedCharacteristicIds: availableAdvancements.characteristics,
-            unlockedSkillIds : availableAdvancements.skills,
+            unlockedSkillIds: availableAdvancements.skills,
             unlockedTalentIds: availableAdvancements.talents,
             skills: [
                 ...character.skills,
-                ...newCareerLevel.skills_ids.filter(skillId => !character.skills.some(s => s.id === skillId)).map((skillId: string) => { 
+                ...newCareerLevel.skills_ids.filter(skillId => !character.skills.some(s => s.id === skillId)).map((skillId: string) => {
                     if (isSkillGrouped(skillId)) {
                         const grouped = getGroupedSkill(skillId);
                         if (!grouped) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
@@ -108,7 +110,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                         talents: 0,
                         modifier: 0
                     };
-                }).filter((s: Skill) => s.id !== "" ) // Filter out unknown skills
+                }).filter((s: Skill) => s.id !== "") // Filter out unknown skills
             ]
         };
         onCharacterUpdate(updatedCharacter);
@@ -294,7 +296,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                 const isUnlocked = !character.unlockedCharacteristicIds || character.unlockedCharacteristicIds.map(id => id.toLowerCase()).includes(charKey);
                                 return (
                                     <React.Fragment key={key}>
-                                        <button className={!isUnlocked ? "rollButton" : "rollButtonUnlocked"} onClick={() => onCharacteristicClick && onCharacteristicClick(charNames[key], total)}>{key.toUpperCase()}</button>
+                                        <button className={!isUnlocked ? "rollButton" : "rollButtonUnlocked"} onClick={() => onCharacteristicClick && onCharacteristicClick(charKey, charNames[key], total)}>{key.toUpperCase()}</button>
                                         <span>{char.initial}</span>
                                         {readonly ? (<span>{char.advances}</span>) :
                                             (<input
@@ -332,7 +334,16 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                     className="numericInput"
                                 />)}
                             <span>/ {character.status.wounds.max}</span>
-                            <label>Corruption</label>
+
+                            {onCorruptionTest ? (
+                                <button
+                                    onClick={() => onCorruptionTest()}
+                                    title="Test Corruption"
+                                    className="rollButton"
+                                >
+                                    Corruption
+                                </button>
+                            ) : <label>Corruption</label>}
                             {readonly ? (<span>{character.status.corruption.current}</span>) : (
                                 <input
                                     type="number"
@@ -453,7 +464,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                                 className="numericInput"
                                             />)}
                                         <span>{total}</span>
-                                        <button className="rollButton" onClick={() => onSkillClick && onSkillClick(skill.name, total)}>Roll</button>
+                                        <button className="rollButton" onClick={() => onSkillClick && onSkillClick(skill.id, skill.name, total)}>Roll</button>
                                     </React.Fragment>
                                 );
                             })}

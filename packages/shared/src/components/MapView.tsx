@@ -35,22 +35,24 @@ const MapView: React.FC<MapViewProps> = ({
     viewState: externalViewState,
     onViewStateChange,
 }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
     const [internalViewState, setInternalViewState] = useState<ViewState>({
-        scale: 1,
-        offsetX: 0,
-        offsetY: 0,
+        scale: 0.2,
+        offsetX: containerRef.current ? containerRef.current.clientWidth / 2 : 0,
+        offsetY: containerRef.current ? containerRef.current.clientHeight / 2 : 0,
     });
 
     const viewState = externalViewState || internalViewState;
     const setViewState = onViewStateChange || setInternalViewState;
+
+    console.log('MapView render with viewState:', viewState);
 
     const [isPanning, setIsPanning] = useState(false);
     const [panStart, setPanStart] = useState({ x: 0, y: 0 });
     const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
 
     const [contextMenu, setContextMenu] = useState<ContextMenu | null>(null);
-
-    const containerRef = useRef<HTMLDivElement>(null);
 
     const handleWheel = useCallback((e: WheelEvent) => {
         e.preventDefault();
@@ -115,62 +117,62 @@ const MapView: React.FC<MapViewProps> = ({
     const selectedLocation = selectedLocationId ? gameData.locations.find(loc => loc.id === selectedLocationId) : null;
 
     const handlePinContextMenu = (event: React.MouseEvent, locationId: string) => {
-            if (!isGM) return; // Context menu only for GM
-            event.preventDefault();
-            setContextMenu({
-                locationId,
-                x: event.clientX,
-                y: event.clientY,
-            });
-        };
-    
-        const handleToggleDiscoveryForAll = () => {
-            if (!contextMenu || !onTogglePinDiscovery) return;
-    
-            const pinState = mapPinStates[contextMenu.locationId];
-            const allDiscovered = characters.every(char =>
-                pinState?.playerDiscovered.includes(char.id)
-            );
-    
-            const characterIds: string[] = [];
-            characters.forEach(char => {
-                console.log('Toggling discovery for character:', char.name);
-                if (allDiscovered) {
-                    // Remove all
-                    if (pinState?.playerDiscovered.includes(char.id)) {
-                        characterIds.push(char.id);
-                    }
-                } else {
-                    // Add all
-                    if (!pinState?.playerDiscovered.includes(char.id)) {
-                        characterIds.push(char.id);
-                    }
+        if (!isGM) return; // Context menu only for GM
+        event.preventDefault();
+        setContextMenu({
+            locationId,
+            x: event.clientX,
+            y: event.clientY,
+        });
+    };
+
+    const handleToggleDiscoveryForAll = () => {
+        if (!contextMenu || !onTogglePinDiscovery) return;
+
+        const pinState = mapPinStates[contextMenu.locationId];
+        const allDiscovered = characters.every(char =>
+            pinState?.playerDiscovered.includes(char.id)
+        );
+
+        const characterIds: string[] = [];
+        characters.forEach(char => {
+            console.log('Toggling discovery for character:', char.name);
+            if (allDiscovered) {
+                // Remove all
+                if (pinState?.playerDiscovered.includes(char.id)) {
+                    characterIds.push(char.id);
                 }
-            });
-            onTogglePinDiscovery(contextMenu.locationId, characterIds);
-            setContextMenu(null);
-        };
-    
-        const handleToggleDiscoveryForPlayer = (characterId: string) => {
-            if (!contextMenu || !onTogglePinDiscovery) return;
-            onTogglePinDiscovery(contextMenu.locationId, [characterId]);
-        };
-    
-        const handleCloseContextMenu = () => {
-            setContextMenu(null);
-        };
-    
-        // Close context menu when clicking elsewhere
-        useEffect(() => {
-            const handleClick = () => {
-                if (contextMenu) {
-                    setContextMenu(null);
+            } else {
+                // Add all
+                if (!pinState?.playerDiscovered.includes(char.id)) {
+                    characterIds.push(char.id);
                 }
-            };
-            document.addEventListener('click', handleClick);
-            return () => document.removeEventListener('click', handleClick);
-        }, [contextMenu]);
-    
+            }
+        });
+        onTogglePinDiscovery(contextMenu.locationId, characterIds);
+        setContextMenu(null);
+    };
+
+    const handleToggleDiscoveryForPlayer = (characterId: string) => {
+        if (!contextMenu || !onTogglePinDiscovery) return;
+        onTogglePinDiscovery(contextMenu.locationId, [characterId]);
+    };
+
+    const handleCloseContextMenu = () => {
+        setContextMenu(null);
+    };
+
+    // Close context menu when clicking elsewhere
+    useEffect(() => {
+        const handleClick = () => {
+            if (contextMenu) {
+                setContextMenu(null);
+            }
+        };
+        document.addEventListener('click', handleClick);
+        return () => document.removeEventListener('click', handleClick);
+    }, [contextMenu]);
+
 
 
     useEffect(() => {

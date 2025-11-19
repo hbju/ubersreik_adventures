@@ -1,4 +1,4 @@
-import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill } from '@wfrp/shared';
+import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -9,6 +9,8 @@ import { PurchaseRequestModal } from './components/PurchaseRequestModal';
 import { JournalManager } from './components/JournalManager';
 import { UserManager } from './components/UserManager';
 import CareerChangeApprovalModal from './components/CareerChangeApprovalModal';
+import DiceTray from './components/DiceTray';
+import CharacterCreationWizard from './components/CharacterCreationWizard';
 
 import {
     Character,
@@ -46,6 +48,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import './App.css';
 import CareerManager from './components/CareerManager';
+import { useTranslation } from 'react-i18next';
 
 interface ServerStatusData {
     ip: string;
@@ -54,6 +57,7 @@ interface ServerStatusData {
 }
 
 function App() {
+    const { t } = useTranslation();
 
     const calculateMaxWounds = (character: Character) => {
         return calculateEffectiveMaxWounds(character);
@@ -77,7 +81,7 @@ function App() {
     const journalRef = useRef(journal);
     const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
     const mapPinStatesRef = useRef(mapPinStates);
-    const [mapViewState, setMapViewState] = useState<{ scale: number; offsetX: number; offsetY: number }>({ scale: 1, offsetX: 0, offsetY: 0 });
+    const [mapViewState, setMapViewState] = useState<{ scale: number; offsetX: number; offsetY: number }>({ scale: 0.3, offsetX: 126, offsetY: -26 });
     const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
     const [openSheetIds, setOpenSheetIds] = useState<string[]>([]);
     const [combatants, setCombatants] = useState<Combatant[]>([]);
@@ -85,6 +89,8 @@ function App() {
     const [currentAdvantage, setCurrentAdvantage] = useState<Advantages>({ playerAdvantage: 0, enemyAdvantage: 0 });
 
     const [showShopManager, setShowShopManager] = useState(false);
+    const [showDiceTray, setShowDiceTray] = useState(false);
+    const [showCharacterWizard, setShowCharacterWizard] = useState(false);
     const [showCombatResolver, setShowCombatResolver] = useState(false);
     const [showJournalManager, setShowJournalManager] = useState(false);
     const [showUserManager, setShowUserManager] = useState(false);
@@ -197,9 +203,16 @@ function App() {
     };
 
     const handleCreateCharacter = () => {
-        const newChar = createBlankCharacter();
-        const updatedCharacters = [...charactersRef.current, newChar];
+        setShowCharacterWizard(true);
+    };
+
+    const handleWizardComplete = (newCharacter: Character) => {
+        const updatedCharacters = [...charactersRef.current, newCharacter];
         setCharacters(updatedCharacters);
+        setShowCharacterWizard(false);
+        addLogEntry('system', `Created new character: ${newCharacter.name}`);
+        
+        // If we want to assign it immediately or just let it be in the roster
     };
 
     const handleGenerateNPC = () => {
@@ -391,6 +404,95 @@ function App() {
 
         console.log(`Updated pin state for location ${locationId}:`, updatedMapPinStates[locationId]);
         setMapPinStates(updatedMapPinStates);
+    };
+
+    const handleBackupCampaign = async () => {
+        try {
+            const result = await window.ipcRenderer.backupCampaign();
+            if (result.success) {
+                addLogEntry('system', `Campaign backup created successfully at: ${result.path}`);
+                alert(`Backup created successfully!\nPath: ${result.path}`);
+            } else {
+                addLogEntry('system', `Backup failed: ${result.error}`);
+                alert(`Backup failed: ${result.error}`);
+            }
+        } catch (error) {
+            console.error('Backup error:', error);
+            addLogEntry('system', `Backup failed: ${(error as Error).message}`);
+            alert(`Backup failed: ${(error as Error).message}`);
+        }
+    };
+
+    const handleStartSession = () => {
+        if (!window.confirm("Start a new session? This will reset Fortune points for all characters.")) return;
+
+        const updatedCharacters = charactersRef.current.map(char => ({
+            ...char,
+            status: {
+                ...char.status,
+                fortune: {
+                    ...char.status.fortune,
+                    current: char.status.fate.current
+                }
+            }
+        }));
+        
+        setCharacters(updatedCharacters);
+        
+        // Send updates to players
+        updatedCharacters.forEach(char => {
+             const newMessage: AssignCharacterMessage = {
+                type: "ASSIGN_CHARACTER",
+                payload: { character: char }
+            };
+            if (char.userId) {
+                window.ipcRenderer.sendToPlayer(char.userId, newMessage);
+            }
+        });
+        
+        addLogEntry('system', 'Session started. Fortune points reset.');
+    };
+
+    const handleCorruptionTest = (characterId: string) => {
+        const character = charactersRef.current.find(c => c.id === characterId);
+        if (!character) return;
+
+        const totalWp = character.characteristics.wp.initial + character.characteristics.wp.advances + character.characteristics.wp.modifier + getTalentCharacteristicBonus(character, 'wp');
+        
+        const roll = Math.floor(Math.random() * 100) + 1;
+        const success = roll <= totalWp;
+        
+        let newCorruption = character.status.corruption.current;
+        let logMsg = `${character.name} tests Corruption (Willpower ${totalWp}): Rolled ${roll}. `;
+        
+        if (success) {
+            logMsg += "Success! No corruption gained.";
+        } else {
+            newCorruption += 1;
+            logMsg += "Failure! Gained 1 Corruption point.";
+        }
+        
+        addLogEntry('roll', logMsg);
+        
+        if (!success) {
+            const maxCorruption = character.status.corruption.max;
+            if (newCorruption > maxCorruption) {
+                addLogEntry('system', `⚠️ ${character.name} has exceeded their Corruption Threshold! Mutation Check required!`);
+                alert(`⚠️ ${character.name} has exceeded their Corruption Threshold! Mutation Check required!`);
+            }
+            
+            const updatedCharacter = {
+                ...character,
+                status: {
+                    ...character.status,
+                    corruption: {
+                        ...character.status.corruption,
+                        current: newCorruption
+                    }
+                }
+            };
+            handleCharacterUpdate(updatedCharacter);
+        }
     };
 
     const handleLocationSelect = (location: Location) => {
@@ -639,11 +741,11 @@ function App() {
 
             <div style={{
                 position: 'fixed',
-                top: '10px',
-                right: '10px',
+                bottom: '40px',
+                left: '10px',
                 display: 'flex',
                 gap: '10px',
-                zIndex: 100
+                zIndex: 1010
             }}>
                 <button
                     onClick={() => setShowUserManager(true)}
@@ -658,7 +760,37 @@ function App() {
                         fontSize: '14px'
                     }}
                 >
-                    👤 Users
+                    👤 {t('menu.users')}
+                </button>
+                <button
+                    onClick={handleBackupCampaign}
+                    style={{
+                        padding: '10px 20px',
+                        background: '#2d5016',
+                        color: '#d4af37',
+                        border: '2px solid #3d6f1f',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '14px'
+                    }}
+                >
+                    💾 {t('menu.backup')}
+                </button>
+                <button
+                    onClick={handleStartSession}
+                    style={{
+                        padding: '10px 20px',
+                        background: '#2d5016',
+                        color: '#d4af37',
+                        border: '2px solid #3d6f1f',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '14px'
+                    }}
+                >
+                    🌅 {t('menu.startSession')}
                 </button>
                 <button
                     onClick={() => setShowJournalManager(true)}
@@ -673,7 +805,7 @@ function App() {
                         fontSize: '14px'
                     }}
                 >
-                    📜 Journal
+                    📜 {t('menu.journal')}
                 </button>
                 <button
                     onClick={() => setShowShopManager(!showShopManager)}
@@ -688,7 +820,22 @@ function App() {
                         fontSize: '14px'
                     }}
                 >
-                    🏪 Shop
+                    🏪 {t('menu.shop')}
+                </button>
+                <button
+                    onClick={() => setShowDiceTray(!showDiceTray)}
+                    style={{
+                        padding: '10px 20px',
+                        background: showDiceTray ? '#8b6914' : '#2c1810',
+                        color: '#d4af37',
+                        border: '2px solid #8b6914',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontWeight: 'bold',
+                        fontSize: '14px'
+                    }}
+                >
+                    🎲 {t('menu.dice')}
                 </button>
             </div>
 
@@ -788,6 +935,15 @@ function App() {
             <AtmospherePanel />
 
             {showShopManager && <ShopManager onClose={() => setShowShopManager(false)} />}
+            
+            {showDiceTray && <DiceTray onClose={() => setShowDiceTray(false)} onLogEntry={addLogEntry} />}
+
+            {showCharacterWizard && (
+                <CharacterCreationWizard 
+                    onClose={() => setShowCharacterWizard(false)} 
+                    onComplete={handleWizardComplete} 
+                />
+            )}
 
             {showUserManager && (
                 <div style={{
@@ -1057,6 +1213,7 @@ function App() {
                                 const updatedCharacter = { ...character, talents: updatedTalents };
                                 handleCharacterUpdate(recalculateCharacterTalentBonuses(updatedCharacter));
                             }}
+                            onCorruptionTest={() => handleCorruptionTest(character.id)}
                         />
                     );
                 })}

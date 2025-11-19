@@ -1,0 +1,37 @@
+{
+  "menu": {
+    "users": "Utilisateurs",
+    "backup": "Sauvegarde",
+    "startSession": "Début de Session",
+    "journal": "Journal",
+    "shop": "Boutique",
+    "dice": "Dés",
+    "createCharacter": "Créer Personnage",
+    "generateNPC": "Générer PNJ"
+  },
+  "system": {
+    "backupSuccess": "Sauvegarde de la campagne créée avec succès : {{path}}",
+    "backupFailed": "Échec de la sauvegarde : {{error}}",
+    "sessionStarted": "Session démarrée. Points de Fortune réinitialisés.",
+    "corruptionTest": "{{name}} teste la Corruption (Volonté {{target}}) : Jet {{roll}}. {{result}}",
+    "corruptionSuccess": "Succès ! Pas de corruption gagnée.",
+    "corruptionFailure": "Échec ! 1 point de Corruption gagné.",
+    "mutationCheck": "⚠️ {{name}} a dépassé son seuil de Corruption ! Test de Mutation requis !"
+  },
+  "characterSheet": {
+    "stats": "Stats & Compétences",
+    "talents": "Talents",
+    "inventory": "Inventaire",
+    "xp": "XP",
+    "career": "Carrière",
+    "currency": "Monnaie",
+    "wounds": "Blessures",
+    "corruption": "Corruption",
+    "fate": "Destin",
+    "fortune": "Fortune",
+    "resilience": "Résilience",
+    "resolve": "Détermination",
+    "skills": "Compétences",
+    "characteristics": "Caractéristiques"
+  }
+}
