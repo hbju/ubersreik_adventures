@@ -1384,14 +1384,14 @@
             "tag": "misc"
         },
         {
-            "id": "morgentor_district",
-            "name": "The Morgentor District",
+            "id": "magnustor_district",
+            "name": "The Magnustor District",
             "coords": {
                 "x": 2365,
                 "y": 990
             },
-            "playerDescription": "North of the Artisan's Quarter, the grime and noise of industry give way to the clean, orderly streets of the Morgentor District. This respectable quarter, nestled against the walls of the Precinct, is the administrative and financial heart of the town outside of the Town Hall itself. Well-maintained stone buildings house banks, law offices, and the headquarters of the more 'scholarly' guilds. The air is quiet, filled only with the rustle of paper and the murmur of serious business. Watch patrols are a common sight, ensuring the peace is kept for the district's influential inhabitants.",
-            "gmNotes": "Morgentor, or 'Morning Gate,' is where the real power outside the castles is brokered. Influence here is traded not with swords, but with contracts, loans, and legal writs. The district's proximity to the Precinct means it's heavily influenced by the military, but its lifeblood is the city's commerce. Beneath the veneer of respectability, however, the same struggles for power that plague the rest of Ubersreik play out in backroom deals and shadowy bargains.",
+            "playerDescription": "North of the Artisan's Quarter, the grime and noise of industry give way to the clean, orderly streets of the Magnustor District. This respectable quarter, nestled against the walls of the Precinct, is the administrative and financial heart of the town outside of the Town Hall itself. Well-maintained stone buildings house banks, law offices, and the headquarters of the more 'scholarly' guilds. The air is quiet, filled only with the rustle of paper and the murmur of serious business. Watch patrols are a common sight, ensuring the peace is kept for the district's influential inhabitants.",
+            "gmNotes": "Magnustor, or 'Magnus Gate,' is where the real power outside the castles is brokered. Influence here is traded not with swords, but with contracts, loans, and legal writs. The district's proximity to the Precinct means it's heavily influenced by the military, but its lifeblood is the city's commerce. Beneath the veneer of respectability, however, the same struggles for power that plague the rest of Ubersreik play out in backroom deals and shadowy bargains.",
             "hooks": [],
             "image": "",
             "music": "",
@@ -1643,7 +1643,7 @@
                 "x": 2575,
                 "y": 1065
             },
-            "playerDescription": "A modest, well-kept townhouse just between the Artisans' Quarter and the Morgentor District. The exterior is plain, with little decoration aside from a small brass plaque beside the door bearing the family name 'Stiegler.' Inside, the house is in a constant state of panic, with papers strewn about and a general air of disarray.",
+            "playerDescription": "A modest, well-kept townhouse just between the Artisans' Quarter and the Magnustor District. The exterior is plain, with little decoration aside from a small brass plaque beside the door bearing the family name 'Stiegler.' Inside, the house is in a constant state of panic, with papers strewn about and a general air of disarray.",
             "gmNotes": "The Stiegler House is the home of the Stiegler family, an up and coming merchant family from Grausee, a village not far-distant from Ubersreik. The patriarch, Wilhelm Stiegler, recently moved his family to the city to expand his trading business. However, Wilhelm has become increasingly paranoid, convinced that rival merchants and guilds are plotting against him. In reality, Wilhelm has fallen under the influence of a minor chaos cult that preys on his fears, urging him to take drastic measures to 'protect' his family and business. Johanna, his daughter, is unaware of her father's descent into madness and struggles to keep the family together amidst the turmoil. She recently departed for a new windmill project with Rutger Reuter, hoping to find some peace and stability away from her father's increasingly erratic behaviour.",
             "hooks": [
                 "Wilhelm Stiegler has disappeared, leaving behind a frantic note warning of an imminent threat to his family. Johanna hires the party to find her father and bring him back safely, fearing that his paranoia has led him into danger.",
