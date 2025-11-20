@@ -214,29 +214,6 @@ const PlayerApp: React.FC = () => {
     const handleOpposedTestRoll = (rollResult: number, successLevel: number, fortuneSpent: number, corruptionGained: number) => {
         if (!character || !opposedTestRequest) return;
 
-        // Update character's fortune and corruption
-        const updatedCharacter: Character = {
-            ...character,
-            status: {
-                ...character.status,
-                fortune: {
-                    ...character.status.fortune,
-                    current: character.status.fortune.current - fortuneSpent
-                },
-                corruption: {
-                    ...character.status.corruption,
-                    current: Math.min(character.status.corruption.current + corruptionGained, character.status.corruption.max)
-                }
-            }
-        };
-
-        // Send CHARACTER_UPDATE to sync the changes
-        const updateMessage: CharacterUpdateMessage = {
-            type: 'CHARACTER_UPDATE',
-            payload: { character: updatedCharacter }
-        };
-        sendMessage(updateMessage);
-
         // Send the opposed test result
         const message: OpposedTestResultMessage = {
             type: 'OPPOSED_TEST_RESULT',
@@ -245,7 +222,9 @@ const PlayerApp: React.FC = () => {
                 characterId: character.id,
                 role: opposedTestRequest.role,
                 rollResult,
-                successLevel
+                successLevel,
+                fortuneSpent,
+                corruptionGained
             }
         };
         sendMessage(message);
@@ -491,6 +470,9 @@ const PlayerApp: React.FC = () => {
                             testName={testModalInfo.name}
                             testId={testModalInfo.id}
                             baseTarget={testModalInfo.value}
+                            fortunePoints={character.status.fortune.current}
+                            corruptionCurrent={character.status.corruption.current}
+                            corruptionMax={character.status.corruption.max}
                             onClose={() => setTestModalInfo(null)}
                             onRoll={handleRoll}
                         />

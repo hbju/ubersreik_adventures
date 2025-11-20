@@ -20,15 +20,20 @@ interface TalentSelectionModalProps {
     testName: string;
     testId: string;
     baseTarget: number;
+    fortunePoints: number;
+    corruptionCurrent: number;
+    corruptionMax: number;
     modifier?: number;
     onClose: () => void;
     onRoll: (result: {
-        characterName: string;
+        characterId: string;
         testName: string;
         targetNumber: number;
         rollResult: number;
         successLevel: number;
         usedTalents?: UsedTalent[];
+        fortuneSpent: number;
+        corruptionGained: number;
     }) => void;
 }
 
@@ -37,6 +42,9 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
     testName,
     testId,
     baseTarget,
+    fortunePoints,
+    corruptionCurrent,
+    corruptionMax,
     modifier = 0,
     onClose,
     onRoll
@@ -45,6 +53,9 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
     const [selectedTalents, setSelectedTalents] = useState<UsedTalent[]>([]);
     const [applicableTalents, setApplicableTalents] = useState<{ talent: Talent; rank: number }[]>(getApplicableTalents(character, testId));
     const [showResult, setShowResult] = useState(false);
+    const [rollCount, setRollCount] = useState(0);
+    const [fortuneSpent, setFortuneSpent] = useState(0);
+    const [corruptionGained, setCorruptionGained] = useState(0);
     const [rollResult, setRollResult] = useState<{
         roll: number;
         target: number;
@@ -103,20 +114,74 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
             isFumble
         });
         setShowResult(true);
+        setRollCount(prev => prev + 1);
+    };
+
+    const handleReroll = () => {
+        // Determine cost for this reroll
+        if (rollCount === 1) {
+            // First reroll
+            if (fortunePoints - fortuneSpent > 0) {
+                // Use Fortune point
+                setFortuneSpent(prev => prev + 1);
+            } else {
+                setCorruptionGained(prev => prev + 1);
+            }
+        } else if (rollCount === 2) {
+            setCorruptionGained(prev => prev + 1);
+        }
+
+        const result = rolld100();
+        const sl = calculateSuccessLevel(result, finalTarget);
+        const finalSL = applyTalentSLBonuses(sl, selectedTalents, character);
+        const { isCritical, isFumble } = checkCriticalResult(result, finalTarget);
+
+        setRollResult({
+            roll: result,
+            target: finalTarget,
+            baseSL: sl,
+            finalSL: finalSL,
+            isCritical,
+            isFumble
+        });
+
+        setRollCount(prev => prev + 1);
     };
 
     const handleConfirm = () => {
         if (!rollResult) return;
 
         onRoll({
-            characterName: character.name,
+            characterId: character.id,
             testName,
             targetNumber: rollResult.target,
             rollResult: rollResult.roll,
             successLevel: rollResult.finalSL,
             usedTalents: selectedTalents.length > 0 ? selectedTalents : undefined,
+            fortuneSpent: fortuneSpent,
+            corruptionGained: corruptionGained,
         });
         onClose();
+    };
+
+    const canReroll = () => {
+        console.log('Checking canReroll with rollCount:', rollCount, 'fortuneSpent:', fortuneSpent, 'corruptionGained:', corruptionGained);
+        if (rollCount >= 3) return false; // Max 3 rolls total (1 initial + 2 rerolls)
+        if (rollCount === 1) {
+            return (fortunePoints - fortuneSpent > 0) || (corruptionCurrent + corruptionGained < corruptionMax);
+        }
+        if (rollCount === 2) {
+            return corruptionGained == 0;
+        }
+        return false;
+    };
+
+    const getRerollButtonText = () => {
+        if (rollCount === 1 && fortunePoints - fortuneSpent > 0) {
+            return `🔄 Reroll (Fortune Point)`;
+        }
+
+        return `🔄 Reroll (Corruption)`;
     };
 
     const formatSL = (sl: number): string => {
@@ -152,6 +217,7 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
     };
 
     if (showResult && rollResult) {
+        console.log('Displaying result:', rollResult);
         return (
             <div className={styles.modalBackdrop}>
                 <div className={`${styles.modalContent} ${rollResult.isCritical ? styles.critical : ''} ${rollResult.isFumble ? styles.fumble : ''}`}>
@@ -204,6 +270,11 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
                     </div>
 
                     <div className={styles.buttonGroup}>
+                        {canReroll() && (
+                            <button onClick={handleReroll} className={styles.secondaryButton}>
+                                {getRerollButtonText()}
+                            </button>
+                        )}
                         <button onClick={handleConfirm} className={styles.primaryButton}>
                             Confirm & Send to GM
                         </button>

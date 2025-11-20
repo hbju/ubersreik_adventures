@@ -211,7 +211,7 @@ function App() {
         setCharacters(updatedCharacters);
         setShowCharacterWizard(false);
         addLogEntry('system', `Created new character: ${newCharacter.name}`);
-        
+
         // If we want to assign it immediately or just let it be in the roster
     };
 
@@ -436,12 +436,12 @@ function App() {
                 }
             }
         }));
-        
+
         setCharacters(updatedCharacters);
-        
+
         // Send updates to players
         updatedCharacters.forEach(char => {
-             const newMessage: AssignCharacterMessage = {
+            const newMessage: AssignCharacterMessage = {
                 type: "ASSIGN_CHARACTER",
                 payload: { character: char }
             };
@@ -449,7 +449,7 @@ function App() {
                 window.ipcRenderer.sendToPlayer(char.userId, newMessage);
             }
         });
-        
+
         addLogEntry('system', 'Session started. Fortune points reset.');
     };
 
@@ -458,29 +458,29 @@ function App() {
         if (!character) return;
 
         const totalWp = character.characteristics.wp.initial + character.characteristics.wp.advances + character.characteristics.wp.modifier + getTalentCharacteristicBonus(character, 'wp');
-        
+
         const roll = Math.floor(Math.random() * 100) + 1;
         const success = roll <= totalWp;
-        
+
         let newCorruption = character.status.corruption.current;
         let logMsg = `${character.name} tests Corruption (Willpower ${totalWp}): Rolled ${roll}. `;
-        
+
         if (success) {
             logMsg += "Success! No corruption gained.";
         } else {
             newCorruption += 1;
             logMsg += "Failure! Gained 1 Corruption point.";
         }
-        
+
         addLogEntry('roll', logMsg);
-        
+
         if (!success) {
             const maxCorruption = character.status.corruption.max;
             if (newCorruption > maxCorruption) {
                 addLogEntry('system', `⚠️ ${character.name} has exceeded their Corruption Threshold! Mutation Check required!`);
                 alert(`⚠️ ${character.name} has exceeded their Corruption Threshold! Mutation Check required!`);
             }
-            
+
             const updatedCharacter = {
                 ...character,
                 status: {
@@ -590,14 +590,31 @@ function App() {
         const cleanupMessageListener = window.ipcRenderer.onPlayerMessageReceived((message: ClientToServerMessage) => {
             console.log("Received message from player:", message);
             if (message.type === 'TEST_RESULT') {
-                const { characterName, testName, targetNumber, rollResult, successLevel } = message.payload;
+                const { characterId, testName, targetNumber, rollResult, successLevel, fortuneSpent, corruptionGained } = message.payload;
                 const outcome = successLevel >= 0
                     ? `${successLevel} Success Level(s)`
                     : `${Math.abs(successLevel)} Failure Level(s)`;
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (!character) return;
 
+                const updatedCharacter: Character = {
+                    ...character,
+                    status: {
+                        ...character.status,
+                        fortune: {
+                            ...character.status.fortune,
+                            current: character.status.fortune.current - fortuneSpent
+                        },
+                        corruption: {
+                            ...character.status.corruption,
+                            current: Math.min(character.status.corruption.current + corruptionGained, character.status.corruption.max)
+                        }
+                    }
+                };
+                handleCharacterUpdate(updatedCharacter);
                 addLogEntry(
                     'roll',
-                    `${characterName} tests ${testName}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}]`
+                    `${character.name} tests ${testName}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}] Fortune spent: ${fortuneSpent}, Corruption gained: ${corruptionGained}`
                 );
             }
 
@@ -636,9 +653,25 @@ function App() {
             }
 
             if (message.type === 'OPPOSED_TEST_RESULT') {
-                const { testId, characterId, role, rollResult, successLevel } = message.payload;
+                const { testId, characterId, role, rollResult, successLevel, fortuneSpent, corruptionGained } = message.payload;
                 const character = charactersRef.current.find(c => c.id === characterId);
                 if (character) {
+                    const updatedCharacter: Character = {
+                        ...character,
+                        status: {
+                            ...character.status,
+                            fortune: {
+                                ...character.status.fortune,
+                                current: character.status.fortune.current - fortuneSpent
+                            },
+                            corruption: {
+                                ...character.status.corruption,
+                                current: Math.min(character.status.corruption.current + corruptionGained, character.status.corruption.max)
+                            }
+                        }
+                    };
+                    handleCharacterUpdate(updatedCharacter);
+
                     addLogEntry(
                         'roll',
                         `${character.name} (${role}) rolled ${rollResult} with SL ${successLevel >= 0 ? '+' : ''}${Math.round(successLevel)}`
@@ -935,13 +968,13 @@ function App() {
             <AtmospherePanel />
 
             {showShopManager && <ShopManager onClose={() => setShowShopManager(false)} />}
-            
+
             {showDiceTray && <DiceTray onClose={() => setShowDiceTray(false)} onLogEntry={addLogEntry} />}
 
             {showCharacterWizard && (
-                <CharacterCreationWizard 
-                    onClose={() => setShowCharacterWizard(false)} 
-                    onComplete={handleWizardComplete} 
+                <CharacterCreationWizard
+                    onClose={() => setShowCharacterWizard(false)}
+                    onComplete={handleWizardComplete}
                 />
             )}
 

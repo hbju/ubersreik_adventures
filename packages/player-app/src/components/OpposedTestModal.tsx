@@ -91,12 +91,12 @@ export const OpposedTestModal: React.FC<OpposedTestModalProps> = ({
     const canReroll = () => {
         if (rollCount >= 3) return false; // Max 3 rolls total (1 initial + 2 rerolls)
         if (rollCount === 1) {
-            // Can reroll if have Fortune OR can gain Corruption
-            return (fortunePoints - fortuneSpent > 0) || (corruptionCurrent + corruptionGained < corruptionMax);
+            // Can reroll if have Fortune. Can always gain corruption
+            return (fortunePoints - fortuneSpent > 0);
         }
         if (rollCount === 2) {
             // Can only reroll with Corruption
-            return corruptionCurrent + corruptionGained < corruptionMax;
+            return corruptionGained == 0;
         }
         return false;
     };
