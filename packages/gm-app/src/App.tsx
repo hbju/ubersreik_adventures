@@ -1,4 +1,4 @@
-import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus } from '@wfrp/shared';
+import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, WeaponData, ArmorData, ItemData } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -11,6 +11,8 @@ import { UserManager } from './components/UserManager';
 import CareerChangeApprovalModal from './components/CareerChangeApprovalModal';
 import DiceTray from './components/DiceTray';
 import CharacterCreationWizard from './components/CharacterCreationWizard';
+import { ItemSelectorModal } from './components/ItemSelectorModal';
+import { TalentSelectorModal } from './components/TalentSelectorModal';
 
 import {
     Character,
@@ -41,7 +43,8 @@ import {
     CareerChangeResponseMessage,
     careersData,
     Career,
-    Location
+    Location,
+    Talent
 } from '@wfrp/shared';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -111,6 +114,9 @@ function App() {
         xpCost: number;
     } | null>(null);
     const [opposedTestResults, setOpposedTestResults] = useState<Map<string, OpposedTestResultMessage['payload']>>(new Map());
+
+    const [showItemSelector, setShowItemSelector] = useState<string | null>(null);
+    const [showTalentSelector, setShowTalentSelector] = useState<string | null>(null);
 
     const addLogEntry = (type: LogEntry['type'], content: string) => {
         const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content };
@@ -765,6 +771,115 @@ function App() {
         }
     }, [combatants, currentTurnId, currentAdvantage]);
 
+    const handleItemSelectorClose = () => {
+        setShowItemSelector(null);
+    };
+
+    const handleItemSelected = (item: Armor | Weapon | Item, charId: string) => {
+        const character = characters.find(c => c.id === charId);
+        if (!character) return;
+
+        const updatedCharacter: Character = {
+            ...character
+        };
+
+        if ('damage' in item) {
+            if (!Object.keys(updatedCharacter.inventory.weapons).includes(item.id)) {
+                updatedCharacter.inventory.weapons[item.id] = 1;
+            }
+            else {
+                updatedCharacter.inventory.weapons[item.id] += 1;
+            }
+        }
+        else if ('ap' in item) {
+            if (!Object.keys(updatedCharacter.inventory.armor).includes(item.id)) {
+                updatedCharacter.inventory.armor[item.id] = 1;
+            }
+            else {
+                updatedCharacter.inventory.armor[item.id] += 1;
+            }
+        }
+        else {
+            if (!Object.keys(updatedCharacter.inventory.items).includes(item.id)) {
+                updatedCharacter.inventory.items[item.id] = 1;
+            }
+            else {
+                updatedCharacter.inventory.items[item.id] += 1;
+            }
+        }
+
+        handleCharacterUpdate(updatedCharacter);
+        addLogEntry('system', `${item.name} added to ${character.name}'s inventory.`);
+        setShowItemSelector(null);
+    }
+
+    const handleRemoveItemFromCharacter = (itemId: string, charId: string) => {
+        const character = characters.find(c => c.id === charId);
+        if (!character) return;
+
+        const updatedCharacter: Character = {
+            ...character
+        };
+
+        if (Object.keys(updatedCharacter.inventory.weapons).includes(itemId)) {
+            if (updatedCharacter.inventory.weapons[itemId] > 1) {
+                updatedCharacter.inventory.weapons[itemId] -= 1;
+            }
+            else {
+                delete updatedCharacter.inventory.weapons[itemId];
+            }
+        }
+        else if (Object.keys(updatedCharacter.inventory.armor).includes(itemId)) {
+            if (updatedCharacter.inventory.armor[itemId] > 1) {
+                updatedCharacter.inventory.armor[itemId] -= 1;
+            }
+            else {
+                delete updatedCharacter.inventory.armor[itemId];
+            }
+        }
+        else if (Object.keys(updatedCharacter.inventory.items).includes(itemId)) {
+            if (updatedCharacter.inventory.items[itemId] > 1) {
+                updatedCharacter.inventory.items[itemId] -= 1;
+            }
+            else {
+                delete updatedCharacter.inventory.items[itemId];
+            }
+        }
+        else {
+            console.error("Item not found in inventory: " + itemId);
+            return;
+        }
+
+        handleCharacterUpdate(updatedCharacter);
+        addLogEntry('system', `${itemId} removed from ${character.name}'s inventory.`);
+    };
+
+    const handleTalentSelectorClose = () => {
+        setShowTalentSelector(null);
+    };
+
+    const handleTalentSelected = (talent: Talent, charId: string) => {
+        const character = characters.find(c => c.id === charId);
+        if (!character) return;
+
+        const updatedCharacter: Character = {
+            ...character
+        };
+        const talents = updatedCharacter.talents;
+        if (Object.keys(talents).includes(talent.id)) {
+            talents[talent.id] += 1;
+        }
+        else {
+            talents[talent.id] = 1;
+        }
+
+        updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter);
+
+        handleCharacterUpdate(updatedCharacter);
+        addLogEntry('system', `${talent.name} added to ${character.name}'s talents.`);
+        setShowTalentSelector(null);
+    }
+
     return (
         <div className="App">
             <ServerStatus
@@ -1066,15 +1181,29 @@ function App() {
                             const updatedInventory = { ...character.inventory };
                             if ('damage' in item) {
                                 // It's a weapon
-                                updatedInventory.weapons = [...character.inventory.weapons, item.id];
+                                updatedInventory.weapons = { ...character.inventory.weapons };
+                                if (updatedInventory.weapons[item.id]) {
+                                    updatedInventory.weapons[item.id] += 1;
+                                } else {
+                                    updatedInventory.weapons[item.id] = 1;
+                                }
                             } else if ('ap' in item) {
                                 // It's armor
-                                updatedInventory.armor = [...character.inventory.armor, item.id];
+                                updatedInventory.armor = { ...character.inventory.armor };
+                                if (updatedInventory.armor[item.id]) {
+                                    updatedInventory.armor[item.id] += 1;
+                                } else {
+                                    updatedInventory.armor[item.id] = 1;
+                                }
                             } else {
                                 // It's a regular item
-                                updatedInventory.items = [...character.inventory.items, item.id];
+                                updatedInventory.items = { ...character.inventory.items };
+                                if (updatedInventory.items[item.id]) {
+                                    updatedInventory.items[item.id] += 1;
+                                } else {
+                                    updatedInventory.items[item.id] = 1;
+                                }
                             }
-
                             // Update character
                             const updatedCharacter: Character = {
                                 ...character,
@@ -1244,13 +1373,32 @@ function App() {
                                 const updatedTalents = { ...character.talents };
                                 delete updatedTalents[talentId];
                                 const updatedCharacter = { ...character, talents: updatedTalents };
+                                updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter);
                                 handleCharacterUpdate(recalculateCharacterTalentBonuses(updatedCharacter));
                             }}
+                            onAddTalent={() => setShowTalentSelector(character.id)}
                             onCorruptionTest={() => handleCorruptionTest(character.id)}
+                            onRemoveItem={(itemId, type) => handleRemoveItemFromCharacter(itemId, character.id)}
+                            onAddItem={() => setShowItemSelector(character.id)}
                         />
                     );
                 })}
             </div>
+
+            {showItemSelector && (
+                <ItemSelectorModal
+                    onClose={() => setShowItemSelector(null)}
+                    onSelect={(item) => handleItemSelected(item, showItemSelector)}
+                />
+            )}
+
+            {showTalentSelector && (
+                <TalentSelectorModal
+                    onClose={() => setShowTalentSelector(null)}
+                    onSelect={(talent) => handleTalentSelected(talent, showTalentSelector)}
+                    character={characters.find(c => c.id == showTalentSelector)!}
+                />
+            )}
 
             {showCareerManager && (
                 <CareerManager

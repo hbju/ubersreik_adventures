@@ -9,7 +9,8 @@ import {
     talentsData,
     Career,
     Skill,
-    Characteristic
+    Characteristic,
+    calculateCharacteristicBonus
 } from '@wfrp/shared';
 
 interface CharacterCreationWizardProps {
@@ -175,18 +176,10 @@ const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClo
         finalChar.status.resolve.max = finalChar.status.resilience.max;
         finalChar.status.resolve.current = finalChar.status.resilience.max;
 
-        finalChar.status.wounds.max =
-            Math.floor((finalChar.characteristics.s.initial + finalChar.characteristics.t.initial + (2 * finalChar.characteristics.wp.initial)) / 10);
-        // Note: Wounds calc depends on size (Halfling is different). Need size logic.
-        // Halfling: (2xTB + WB) / 10 ? No, (SB+2xTB+WB)/10 usually.
-        // Standard: SB + 2xTB + WB.
-        // Small: 2xTB + WB.
-        // Large: SB + 2xTB + WB + ...
-        // For now use standard or check species traits.
         if (species.id === 'halfling') {
-            finalChar.status.wounds.max = Math.floor(((2 * finalChar.characteristics.t.initial) + finalChar.characteristics.wp.initial) / 10);
+            finalChar.status.wounds.max = calculateCharacteristicBonus(finalChar.characteristics.wp) + calculateCharacteristicBonus(finalChar.characteristics.t) * 2;
         } else {
-            finalChar.status.wounds.max = Math.floor((finalChar.characteristics.s.initial + (2 * finalChar.characteristics.t.initial) + finalChar.characteristics.wp.initial) / 10);
+            finalChar.status.wounds.max = calculateCharacteristicBonus(finalChar.characteristics.t) * 2 + calculateCharacteristicBonus(finalChar.characteristics.s) + calculateCharacteristicBonus(finalChar.characteristics.wp);
         }
         finalChar.status.wounds.current = finalChar.status.wounds.max;
 

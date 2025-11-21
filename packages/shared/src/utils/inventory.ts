@@ -8,9 +8,9 @@ const weapons = Object.groupBy(WeaponData as Weapon[], w => w.id);
 const items = Object.groupBy(ItemData as Item[], i => i.id);
 
 export function calculateTotalEncumbrance(character: Character): number {
-  const armorEnc = character.inventory.armor.reduce((sum, item) => sum + (armors[item]?.[0]?.enc || 0), 0);
-  const weaponEnc = character.inventory.weapons.reduce((sum, item) => sum + (weapons[item]?.[0]?.enc || 0), 0);
-  const itemEnc = character.inventory.items.reduce((sum, item) => sum + (items[item]?.[0]?.enc || 0), 0);
+  const armorEnc = Object.entries(character.inventory.armor).reduce((sum, [item, count]) => sum + ((armors[item]?.[0]?.enc || 0) * count), 0);
+  const weaponEnc = Object.entries(character.inventory.weapons).reduce((sum, [item, count]) => sum + ((weapons[item]?.[0]?.enc || 0) * count), 0);
+  const itemEnc = Object.entries(character.inventory.items).reduce((sum, [item, count]) => sum + ((items[item]?.[0]?.enc || 0) * count), 0);
   return armorEnc + weaponEnc + itemEnc;
 }
 

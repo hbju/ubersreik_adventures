@@ -27,7 +27,10 @@ interface CharacterSheetProps {
     showPurchaseButton?: boolean;
     advantages?: Advantages;
     onRemoveTalent?: (talentId: string) => void;
+    onAddTalent?: () => void;
     onCorruptionTest?: () => void;
+    onRemoveItem?: (itemId: string, type: 'weapon' | 'armor' | 'item') => void;
+    onAddItem?: () => void;
 }
 
 const CharacterSheet: React.FC<CharacterSheetProps> = ({
@@ -46,7 +49,10 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     showPurchaseButton = false,
     advantages,
     onRemoveTalent,
-    onCorruptionTest
+    onAddTalent,
+    onCorruptionTest,
+    onRemoveItem,
+    onAddItem
 }) => {
     const [activeTab, setActiveTab] = useState<'stats' | 'talents' | 'inventory'>('stats');
 
@@ -476,7 +482,14 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
             {activeTab === 'talents' && (
                 <main className="mainGrid">
                     <div className="talentsPanel">
-                        <h3>Talents</h3>
+                        <div className="talentsHeader" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h3>Talents</h3>
+                            {!readonly && onAddTalent && (
+                                <button onClick={onAddTalent} className="addTalentButton">
+                                    + Add Talent
+                                </button>
+                            )}
+                        </div>
                         <div className="talentsList">
                             {Object.keys(character.talents).length === 0 ? (
                                 <p className="noTalents">No talents acquired yet.</p>
@@ -516,6 +529,8 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                     character={character}
                     onPurchaseClick={onPurchaseClick}
                     showPurchaseButton={showPurchaseButton}
+                    onRemoveItem={onRemoveItem}
+                    onAddItem={onAddItem}
                 />
             )}
         </div>

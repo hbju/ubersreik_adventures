@@ -6,48 +6,49 @@ import ArmorData from '../data/armor.json';
 import WeaponData from '../data/weapons.json';
 import ItemData from '../data/items.json';
 import './InventoryView.css';
+import { calculateEffectiveMaxEncumbrance } from '../utils/talents';
 
 interface InventoryViewProps {
     character: Character;
     onPurchaseClick?: () => void;
     showPurchaseButton?: boolean;
+    onRemoveItem?: (itemId: string, type: 'weapon' | 'armor' | 'item') => void;
+    onAddItem?: () => void;
 }
 
 const armorsById = Object.groupBy(ArmorData as Armor[], a => a.id);
 const weaponsById = Object.groupBy(WeaponData as Weapon[], w => w.id);
 const itemsById = Object.groupBy(ItemData as Item[], i => i.id);
 
-const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClick, showPurchaseButton = false }) => {
+const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClick, showPurchaseButton = false, onRemoveItem, onAddItem }) => {
     const [armorExpanded, setArmorExpanded] = useState(true);
     const [weaponsExpanded, setWeaponsExpanded] = useState(true);
     const [itemsExpanded, setItemsExpanded] = useState(true);
 
     // Calculate encumbrance
     const currentEncumbrance = calculateTotalEncumbrance(character);
-    const maxEncumbrance = 
-        calculateCharacteristicBonus(character.characteristics.s) + 
-        calculateCharacteristicBonus(character.characteristics.t);
+    const maxEncumbrance = calculateEffectiveMaxEncumbrance(character);
 
     // Get armor items
-    const armorItems = character.inventory.armor
-        .map(id => armorsById[id]?.[0])
-        .filter(Boolean) as Armor[];
+    const armorItems = Object.entries(character.inventory.armor)
+        .map(([id, number]) => ({ ...armorsById[id]?.[0], itemCount: number }))
+        .filter(item => item.id) as (Armor & { itemCount: number })[];
 
     // Get weapon items
-    const weaponItems = character.inventory.weapons
-        .map(id => weaponsById[id]?.[0])
-        .filter(Boolean) as Weapon[];
+    const weaponItems = Object.entries(character.inventory.weapons)
+        .map(([id, number]) => ({ ...weaponsById[id]?.[0], itemCount: number }))
+        .filter(item => item.id) as (Weapon & { itemCount: number })[];
 
     // Get general items
-    const generalItems = character.inventory.items
-        .map(id => itemsById[id]?.[0])
-        .filter(Boolean) as Item[];
+    const generalItems = Object.entries(character.inventory.items)
+        .map(([id, number]) => ({ ...itemsById[id]?.[0], itemCount: number }))
+        .filter(item => item.id) as (Item & { itemCount: number })[];
 
     return (
         <div className="inventoryView">
             <div className="inventorySection">
-                <div 
-                    className="sectionHeader" 
+                <div
+                    className="sectionHeader"
                     onClick={() => setArmorExpanded(!armorExpanded)}
                 >
                     <span className="sectionTitle">
@@ -65,6 +66,19 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
                                         <div className="itemHeader">
                                             <span className="itemName">{armor.name}</span>
                                             <span className="itemEnc">Enc: {armor.enc}</span>
+                                            <span className="itemCount">x{armor.itemCount}</span>
+                                            {onRemoveItem && (
+                                                <button
+                                                    className="removeItemButton"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onRemoveItem(armor.id, 'armor');
+                                                    }}
+                                                    title="Remove Item"
+                                                >
+                                                    ×
+                                                </button>
+                                            )}
                                         </div>
                                         <div className="itemDetails">
                                             <div className="detailRow">
@@ -101,8 +115,8 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
             </div>
 
             <div className="inventorySection">
-                <div 
-                    className="sectionHeader" 
+                <div
+                    className="sectionHeader"
                     onClick={() => setWeaponsExpanded(!weaponsExpanded)}
                 >
                     <span className="sectionTitle">
@@ -121,33 +135,47 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
                                     const damageAddition = weapon.damage.replace('SB', sb.toString());
                                     const damage = damageAddition.includes('+') ? damageAddition.split('+').map(part => isNaN(Number(part)) ? part : Number(part)).reduce((a, b) => typeof a === 'number' && typeof b === 'number' ? a + b : `${a} + ${b}`) : damageAddition;
                                     return (
-                                    <div key={`${weapon.id}-${index}`} className="inventoryItem">
-                                        <div className="itemHeader">
-                                            <span className="itemName">{weapon.name}</span>
-                                            <span className="itemEnc">Enc: {weapon.enc}</span>
-                                        </div>
-                                        <div className="itemDetails">
-                                            <div className="detailRow">
-                                                <span className="detailLabel">Group:</span>
-                                                <span className="detailValue">{weapon.group.charAt(0).toUpperCase() + weapon.group.slice(1)}</span>
+                                        <div key={`${weapon.id}-${index}`} className="inventoryItem">
+                                            <div className="itemHeader">
+                                                <span className="itemName">{weapon.name}</span>
+                                                <span className="itemEnc">Enc: {weapon.enc}</span>
+                                                <span className="itemCount">x{weapon.itemCount}</span>
+                                                {onRemoveItem && (
+                                                    <button
+                                                        className="removeItemButton"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            onRemoveItem(weapon.id, 'weapon');
+                                                        }}
+                                                        title="Remove Item"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                )}
                                             </div>
-                                            <div className="detailRow">
-                                                <span className="detailLabel">Damage:</span>
-                                                <span className="detailValue">{damage}</span>
-                                            </div>
-                                            <div className="detailRow">
-                                                <span className="detailLabel">Reach:</span>
-                                                <span className="detailValue">{weapon.reach}</span>
-                                            </div>
-                                            {weapon.qualities && weapon.qualities.length > 0 && (
+                                            <div className="itemDetails">
                                                 <div className="detailRow">
-                                                    <span className="detailLabel">Qualities:</span>
-                                                    <span className="detailValue">{weapon.qualities.join(', ')}</span>
+                                                    <span className="detailLabel">Group:</span>
+                                                    <span className="detailValue">{weapon.group.charAt(0).toUpperCase() + weapon.group.slice(1)}</span>
                                                 </div>
-                                            )}
+                                                <div className="detailRow">
+                                                    <span className="detailLabel">Damage:</span>
+                                                    <span className="detailValue">{damage}</span>
+                                                </div>
+                                                <div className="detailRow">
+                                                    <span className="detailLabel">Reach:</span>
+                                                    <span className="detailValue">{weapon.reach}</span>
+                                                </div>
+                                                {weapon.qualities && weapon.qualities.length > 0 && (
+                                                    <div className="detailRow">
+                                                        <span className="detailLabel">Qualities:</span>
+                                                        <span className="detailValue">{weapon.qualities.join(', ')}</span>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                )})}
+                                    )
+                                })}
                             </div>
                         )}
                     </div>
@@ -155,8 +183,8 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
             </div>
 
             <div className="inventorySection">
-                <div 
-                    className="sectionHeader" 
+                <div
+                    className="sectionHeader"
                     onClick={() => setItemsExpanded(!itemsExpanded)}
                 >
                     <span className="sectionTitle">
@@ -174,6 +202,19 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
                                         <div className="itemHeader">
                                             <span className="itemName">{item.name}</span>
                                             <span className="itemEnc">Enc: {item.enc}</span>
+                                            <span className="itemCount">x{item.itemCount}</span>
+                                            {onRemoveItem && (
+                                                <button
+                                                    className="removeItemButton"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        onRemoveItem(item.id, 'item');
+                                                    }}
+                                                    title="Remove Item"
+                                                >
+                                                    ×
+                                                </button>
+                                            )}
                                         </div>
                                         <div className="itemDetails">
                                             <div className="detailRow">
@@ -194,6 +235,13 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
             </div>
 
             <div className="inventoryFooter">
+                {onAddItem && (
+                    <div className="addItemButtonContainer">
+                        <button className="addItemButton" onClick={onAddItem}>
+                            + Add Item
+                        </button>
+                    </div>
+                )}
                 {showPurchaseButton && onPurchaseClick && (
                     <div className="purchaseButtonContainer">
                         <button className="purchaseButton" onClick={onPurchaseClick}>
@@ -201,7 +249,7 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
                         </button>
                     </div>
                 )}
-                
+
                 <div className="footerContent">
                     <div className="currencyDisplay">
                         <h4>Currency</h4>
@@ -219,7 +267,7 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
                                 {currentEncumbrance} / {maxEncumbrance}
                             </span>
                             <div className="progressBar">
-                                <div 
+                                <div
                                     className={`progressFill ${currentEncumbrance > maxEncumbrance ? 'overEncumbered' : ''}`}
                                     style={{ width: `${Math.min((currentEncumbrance / maxEncumbrance) * 100, 100)}%` }}
                                 />

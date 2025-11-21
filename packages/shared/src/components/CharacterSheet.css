@@ -603,3 +603,22 @@
     font-size: 1.5rem;
     font-weight: bold;
 }
+
+.addTalentButton {
+    padding: 6px 12px;
+    background: var(--color-vellum);
+    border: 2px solid var(--color-gold);
+    color: var(--color-leather-dark);
+    font-size: 0.85rem;
+    font-family: var(--font-heading);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.addTalentButton:hover {
+    background: var(--color-parchment-light);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

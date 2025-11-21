@@ -56,9 +56,9 @@ export const generateRandomNpc = (): Character => {
         skills: [...basicSkills],
         talents: {},
         inventory: {
-            weapons: [],
-            armor: [],
-            items: []
+            weapons: {},
+            armor: {},
+            items: {}
         },
         currency: { gc: 0, ss: rollDice(1, 6), bp: rollDice(1, 12) }
     };
@@ -102,9 +102,9 @@ export const createBlankCharacter = (): Character => {
         skills: [...basicSkills],
         talents: {},
         inventory: {
-            weapons: [],
-            armor: [],
-            items: []
+            weapons: {},
+            armor: {},
+            items: {}
         },
         currency: { gc: 0, ss: 0, bp: 0 }
     }

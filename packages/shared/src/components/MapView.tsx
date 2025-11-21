@@ -46,8 +46,6 @@ const MapView: React.FC<MapViewProps> = ({
     const viewState = externalViewState || internalViewState;
     const setViewState = onViewStateChange || setInternalViewState;
 
-    console.log('MapView render with viewState:', viewState);
-
     const [isPanning, setIsPanning] = useState(false);
     const [panStart, setPanStart] = useState({ x: 0, y: 0 });
     const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);

@@ -1908,14 +1908,14 @@
                 "strong-back": 1
             },
             "inventory": {
-                "armor": [
-                    "armour_mail_coat"
-                ],
-                "weapons": [
-                    "weapon_twohanded_great_axe",
-                    "weapon_basic_dagger"
-                ],
-                "items": []
+                "armor": {
+                    "armour_mail_coat": 1
+                },
+                "weapons": {
+                    "weapon_twohanded_great_axe": 1,
+                    "weapon_basic_dagger": 1
+                },
+                "items": {}
             },
             "currency": {
                 "gc": 1,
@@ -2057,18 +2057,18 @@
                 "strong-back": 1
             },
             "inventory": {
-                "armor": [
-                    "armour_leather_leggings",
-                    "armour_leather_jerkin"
-                ],
-                "weapons": [
-                    "weapon_bow_shortbow",
-                    "weapon_basic_dagger"
-                ],
-                "items": [
-                    "item_trade_tools",
-                    "item_cloak"
-                ]
+                "armor": {
+                    "armour_leather_leggings": 1,
+                    "armour_leather_jerkin": 1
+                },
+                "weapons": {
+                    "weapon_bow_shortbow": 1,
+                    "weapon_basic_dagger": 1
+                },
+                "items": {
+                    "item_trade_tools": 1,
+                    "item_cloak": 1
+                }
             },
             "currency": {
                 "gc": 0,

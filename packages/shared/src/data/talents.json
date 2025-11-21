@@ -2378,7 +2378,7 @@
         "effects": [
             {
                 "type": "WOUNDS_BONUS",
-                "value": "TB"
+                "value": "t"
             }
         ]
     },
@@ -5350,7 +5350,7 @@
         "tests": [
             "Row and Swim"
         ],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Archer": "1",
             "Artillerist": "1",

@@ -71,37 +71,10 @@ function doesEffectApplyToTest(effect: TalentEffect, testId: string): boolean {
  * @returns The effective maximum wounds
  */
 export function calculateEffectiveMaxWounds(character: Character): number {
-    let maxWounds = calculateCharacteristicBonus(character.characteristics.t) * 2
-            + calculateCharacteristicBonus(character.characteristics.s)
-            + calculateCharacteristicBonus(character.characteristics.wp)
-
-    // Get all talents the character has
-    const characterTalentIds = Object.keys(character.talents);
-
-    for (const talentId of characterTalentIds) {
-        const rank = character.talents[talentId];
-        if (rank <= 0) continue;
-
-        // Find the talent definition
-        const talentDef = (talentsData as Talent[]).find(t => t.id === talentId);
-        if (!talentDef || !talentDef.effects) continue;
-
-        // Check for wounds bonuses
-        for (const effect of talentDef.effects) {
-            if (effect.type === 'WOUNDS_BONUS') {
-                if (typeof effect.value === 'number') {
-                    maxWounds += effect.value * rank;
-                } else if (typeof effect.value === 'string') {
-                    if (effect.value.toUpperCase() === 'TB') {
-                        const toughnessBonus = calculateCharacteristicBonus(character.characteristics.t);
-                        maxWounds += toughnessBonus * rank;
-                    }
-                }
-            }
-        }
-    }
-
-    return maxWounds;
+    return calculateCharacteristicBonus(character.characteristics.t) * 2
+        + calculateCharacteristicBonus(character.characteristics.s)
+        + calculateCharacteristicBonus(character.characteristics.wp)
+        + calculateTalentBonus(character, 'WOUNDS_BONUS');
 }
 
 /**
@@ -199,23 +172,35 @@ export function getTalentDamageBonus(talents: { name: string; rank: number }[], 
  * @returns The total initiative bonus from all applicable talents
  */
 export function getTalentInitiativeBonus(character: Character): number {
-    let bonus = 0;
+    return calculateTalentBonus(character, 'INITIATIVE_BONUS');
+}
 
-    // Get all talents the character has
+export function calculateEffectiveMaxEncumbrance(character: Character): number {
+    return calculateCharacteristicBonus(character.characteristics.s)
+        + calculateCharacteristicBonus(character.characteristics.t)
+        + calculateTalentBonus(character, 'ENCUMBRANCE_BONUS');
+}
+
+function calculateTalentBonus(character: Character, talentType : string): number {
+    let bonus = 0;
     const characterTalentIds = Object.keys(character.talents);
 
     for (const talentId of characterTalentIds) {
         const rank = character.talents[talentId];
         if (rank <= 0) continue;
 
-        // Find the talent definition
         const talentDef = (talentsData as Talent[]).find(t => t.id === talentId);
         if (!talentDef || !talentDef.effects) continue;
 
-        // Check for initiative bonuses
         for (const effect of talentDef.effects) {
-            if (effect.type === 'INITIATIVE_BONUS' && typeof effect.value === 'number') {
-                bonus += effect.value * rank;
+            if (effect.type === talentType) {
+                if (typeof effect.value === 'number') {
+                    bonus += effect.value * rank;
+                }
+                if (typeof effect.value === 'string') {
+                    const charBonus = calculateCharacteristicBonus(character.characteristics[effect.value.toLowerCase() as keyof Character['characteristics']]);
+                    bonus += charBonus * rank;
+                }
             }
         }
     }
@@ -377,3 +362,23 @@ export function recalculateCharacterTalentBonuses(character: Character): Charact
         }
     };
 }
+
+/**
+ * Gets the maximum ranks for a talent based on its definition and the character's characteristics
+ * @param talent The talent definition
+ * @param character The character to check
+ * @returns The maximum ranks for the talent
+ */
+export function getMaxRanks(talent: Talent, character: Character): number {
+    if (typeof talent.max_ranks === 'number') {
+        return talent.max_ranks;
+    }
+
+    const charKey = talent.max_ranks as keyof Character['characteristics'];
+    if (character.characteristics[charKey]) {
+        const char = character.characteristics[charKey];
+        return Math.floor((char.initial + char.advances + char.talents + char.modifier) / 10);
+    }
+
+    return 1;
+};

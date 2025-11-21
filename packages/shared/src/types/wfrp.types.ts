@@ -95,6 +95,7 @@ export interface TalentEffect {
   type:
     'SL_BONUS_ON_SUCCESS' |
     'WOUNDS_BONUS' |
+    'ENCUMBRANCE_BONUS' |
     'TEST_BONUS' |
     'DAMAGE_BONUS' |
     'INITIATIVE_BONUS' |
@@ -220,9 +221,9 @@ export interface Character {
   conditions: Condition[]; 
   talents: Record<string, number>;
   inventory: {
-    weapons: string[];
-    armor: string[];
-    items: string[];
+    weapons: Record<string, number>;
+    armor: Record<string, number>;
+    items: Record<string, number>;
   };
   currency: Currency;
 }
@@ -230,7 +231,6 @@ export interface Character {
 export interface GameData {
   mapImage: string;
   locations: Location[];
-  characters: Character[];
 }
 
 export interface JournalEntry {
