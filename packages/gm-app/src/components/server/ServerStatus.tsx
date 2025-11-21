@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styles from './ServerStatus.module.css';
+import { LanguageSwitcher } from '@wfrp/shared';
 
 interface ServerStatusProps {
-    ip: string, 
+    ip: string,
     port: number,
     clients: string[]
 }
@@ -18,6 +19,7 @@ export const ServerStatus: React.FC<ServerStatusProps> = ({ ip, port, clients })
                 <span className={`${styles.statusIndicator} ${connectionStatusClass}`}></span>
                 <span>Server Listening on: <strong>{ip}:{port}</strong></span>
             </div>
+            <LanguageSwitcher />
             <span>Players Connected: <strong>{connectionCount}</strong></span>
         </div>
     );

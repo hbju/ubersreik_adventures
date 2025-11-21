@@ -1,4 +1,4 @@
-import { allSkillsAndCharacteristics, calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, WeaponData, ArmorData, ItemData } from '@wfrp/shared';
+import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -21,8 +21,6 @@ import {
     Currency,
     generateRandomNpc,
     createBlankCharacter,
-    gameData,
-    conditionsData,
     calculateCharacteristicBonus,
     CharacterSheet,
     AssignCharacterMessage,
@@ -41,7 +39,6 @@ import {
     MapPinState,
     CareerChangeRequestMessage,
     CareerChangeResponseMessage,
-    careersData,
     Career,
     Location,
     Talent
@@ -52,6 +49,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import CareerManager from './components/CareerManager';
 import { useTranslation } from 'react-i18next';
+import i18n from './i18n';
 
 interface ServerStatusData {
     ip: string;
@@ -61,6 +59,8 @@ interface ServerStatusData {
 
 function App() {
     const { t } = useTranslation();
+
+    const {skills, talents, careers, items, weapons, armor, conditions, gameData } = useGameData();
 
     const calculateMaxWounds = (character: Character) => {
         return calculateEffectiveMaxWounds(character);
@@ -118,8 +118,8 @@ function App() {
     const [showItemSelector, setShowItemSelector] = useState<string | null>(null);
     const [showTalentSelector, setShowTalentSelector] = useState<string | null>(null);
 
-    const addLogEntry = (type: LogEntry['type'], content: string) => {
-        const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content };
+    const addLogEntry = (type: LogEntry['type'], content: string, messageCode?: string, params?: Record<string, any>) => {
+        const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content, messageCode, params };
         setLogEntries(prev => [...prev, newEntry]);
     };
 
@@ -171,7 +171,7 @@ function App() {
         if (!character) return;
         const newChar = { ...character, xp: { ...character.xp, current: character.xp.current + amount } };
         handleCharacterUpdate(newChar);
-        addLogEntry('system', `Awarded ${amount} XP to character ${characterId}.`);
+        addLogEntry('system', `Awarded ${amount} XP to character ${characterId}.`, 'logs.xp_awarded', { amount, characterId });
     };
 
     const handleCurrencyAward = (characterId: string, amount: { gc: number; ss: number; bp: number }) => {
@@ -205,7 +205,7 @@ function App() {
         }
         const newChar = { ...character, currency: newCurrency };
         handleCharacterUpdate(newChar);
-        addLogEntry('system', `Awarded currency to character ${characterId}: ${amount.gc || 0} GC, ${amount.ss || 0} SS, ${amount.bp || 0} BP.`);
+        addLogEntry('system', `Awarded currency to character ${characterId}: ${amount.gc || 0} GC, ${amount.ss || 0} SS, ${amount.bp || 0} BP.`, 'logs.currency_awarded', { characterId, gc: amount.gc || 0, ss: amount.ss || 0, bp: amount.bp || 0 });
     };
 
     const handleCreateCharacter = () => {
@@ -216,7 +216,7 @@ function App() {
         const updatedCharacters = [...charactersRef.current, newCharacter];
         setCharacters(updatedCharacters);
         setShowCharacterWizard(false);
-        addLogEntry('system', `Created new character: ${newCharacter.name}`);
+        addLogEntry('system', `Created new character: ${newCharacter.name}`, 'logs.character_created', { name: newCharacter.name });
 
         // If we want to assign it immediately or just let it be in the roster
     };
@@ -272,7 +272,7 @@ function App() {
                 counts.set(condId, (counts.get(condId) || 0) + 1);
             });
             const newConds: Condition[] = counts.size > 0 ? Array.from(counts.entries()).map(([id, stack]) => {
-                const existingCond = conditionsData.find(c => c.id === id);
+                const existingCond = conditions.find(c => c.id === id);
                 if (existingCond) {
                     return { ...existingCond, stack: stack };
                 }
@@ -315,7 +315,7 @@ function App() {
         };
         const updatedUsers = [...usersRef.current, newUser];
         setUsers(updatedUsers);
-        addLogEntry('info', `User created: ${username}`);
+        addLogEntry('info', `User created: ${username}`, 'logs.user_created', { username });
     };
 
     const handleDeleteUser = (userId: string) => {
@@ -332,7 +332,7 @@ function App() {
 
         const updatedUsers = usersRef.current.filter(u => u.id !== userId);
         setUsers(updatedUsers);
-        addLogEntry('info', `User deleted: ${user.username}`);
+        addLogEntry('info', `User deleted: ${user.username}`, 'logs.user_deleted', { username: user.username });
     };
 
     const handleAssignCharacterToUser = (userId: string, characterId: string | null) => {
@@ -380,9 +380,9 @@ function App() {
             window.ipcRenderer.sendToPlayer(userId, message);
 
             const character = charactersRef.current.find(c => c.id === characterId);
-            addLogEntry('info', `User ${user.username} assigned to character ${character?.name}`);
+            addLogEntry('info', `User ${user.username} assigned to character ${character?.name}`, 'logs.user_assigned', { username: user.username, characterName: character?.name });
         } else {
-            addLogEntry('info', `User ${user.username} unassigned from character`);
+            addLogEntry('info', `User ${user.username} unassigned from character`, 'logs.user_unassigned', { username: user.username });
         }
     };
 
@@ -416,15 +416,15 @@ function App() {
         try {
             const result = await window.ipcRenderer.backupCampaign();
             if (result.success) {
-                addLogEntry('system', `Campaign backup created successfully at: ${result.path}`);
+                addLogEntry('system', `Campaign backup created successfully at: ${result.path}`, 'logs.backup_success', { path: result.path });
                 alert(`Backup created successfully!\nPath: ${result.path}`);
             } else {
-                addLogEntry('system', `Backup failed: ${result.error}`);
+                addLogEntry('system', `Backup failed: ${result.error}`, 'logs.backup_failed', { error: result.error });
                 alert(`Backup failed: ${result.error}`);
             }
         } catch (error) {
             console.error('Backup error:', error);
-            addLogEntry('system', `Backup failed: ${(error as Error).message}`);
+            addLogEntry('system', `Backup failed: ${(error as Error).message}`, 'logs.backup_failed', { error: (error as Error).message });
             alert(`Backup failed: ${(error as Error).message}`);
         }
     };
@@ -456,7 +456,7 @@ function App() {
             }
         });
 
-        addLogEntry('system', 'Session started. Fortune points reset.');
+        addLogEntry('system', 'Session started. Fortune points reset.', 'logs.session_started');
     };
 
     const handleCorruptionTest = (characterId: string) => {
@@ -470,6 +470,7 @@ function App() {
 
         let newCorruption = character.status.corruption.current;
         let logMsg = `${character.name} tests Corruption (Willpower ${totalWp}): Rolled ${roll}. `;
+        const outcome = success ? t('logs.corruption_success') : t('logs.corruption_failure');
 
         if (success) {
             logMsg += "Success! No corruption gained.";
@@ -478,12 +479,12 @@ function App() {
             logMsg += "Failure! Gained 1 Corruption point.";
         }
 
-        addLogEntry('roll', logMsg);
+        addLogEntry('roll', logMsg, 'logs.corruption_test', { name: character.name, totalWp, roll, outcome });
 
         if (!success) {
             const maxCorruption = character.status.corruption.max;
             if (newCorruption > maxCorruption) {
-                addLogEntry('system', `⚠️ ${character.name} has exceeded their Corruption Threshold! Mutation Check required!`);
+                addLogEntry('system', `⚠️ ${character.name} has exceeded their Corruption Threshold! Mutation Check required!`, 'logs.corruption_threshold', { name: character.name });
                 alert(`⚠️ ${character.name} has exceeded their Corruption Threshold! Mutation Check required!`);
             }
 
@@ -525,9 +526,9 @@ function App() {
 
             if (data.characters && data.characters.length > 0) {
                 const updatedCharacters = data.characters.map((char: Character) => ({
-                    ...char, status: { ...char.status, wounds: { current: Math.min(char.status.wounds.current, calculateMaxWounds(char)), max: calculateMaxWounds(char) }, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }
+                    ...char, status: { ...char.status, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }
                 }));
-                allSkillsAndCharacteristics.filter(s => s.type === 'skill' && s.classification === 'basic').forEach(skillDef => {
+                skills.filter(s => s.type === 'skill' && s.classification === 'basic').forEach(skillDef => {
                     updatedCharacters.forEach((char: Character) => {
                         if (!char.skills.find(s => s.id === skillDef.id)) {
                             char.skills.push({ id: skillDef.id, name: skillDef.name, characteristic: skillDef.characteristic, advances: 0, modifier: 0, talents: 0 });
@@ -620,14 +621,16 @@ function App() {
                 handleCharacterUpdate(updatedCharacter);
                 addLogEntry(
                     'roll',
-                    `${character.name} tests ${testName}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}] Fortune spent: ${fortuneSpent}, Corruption gained: ${corruptionGained}`
+                    `${character.name} tests ${testName}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}] Fortune spent: ${fortuneSpent}, Corruption gained: ${corruptionGained}`,
+                    'logs.test_result',
+                    { name: character.name, testName, rollResult, targetNumber, outcome, fortuneSpent, corruptionGained }
                 );
             }
 
             if (message.type === 'CHARACTER_UPDATE') {
                 const updatedChar = message.payload.character;
                 handleCharacterUpdate(updatedChar);
-                addLogEntry('system', `${updatedChar.name}'s character sheet has been updated.`);
+                addLogEntry('system', `${updatedChar.name}'s character sheet has been updated.`, 'logs.character_updated', { name: updatedChar.name });
             }
 
             if (message.type === 'REQUEST_PURCHASE') {
@@ -655,7 +658,7 @@ function App() {
                     newCareerLevelName,
                     xpCost
                 });
-                addLogEntry('system', `${characterName} requests career change to ${newCareerName} - ${newCareerLevelName} for ${xpCost} XP.`);
+                addLogEntry('system', `${characterName} requests career change to ${newCareerName} - ${newCareerLevelName} for ${xpCost} XP.`, 'logs.career_change_request', { characterName, newCareerName, newCareerLevelName, xpCost });
             }
 
             if (message.type === 'OPPOSED_TEST_RESULT') {
@@ -809,7 +812,7 @@ function App() {
         }
 
         handleCharacterUpdate(updatedCharacter);
-        addLogEntry('system', `${item.name} added to ${character.name}'s inventory.`);
+        addLogEntry('system', `${item.name} added to ${character.name}'s inventory.`, 'logs.item_added', { itemName: item.name, characterName: character.name });
         setShowItemSelector(null);
     }
 
@@ -851,7 +854,7 @@ function App() {
         }
 
         handleCharacterUpdate(updatedCharacter);
-        addLogEntry('system', `${itemId} removed from ${character.name}'s inventory.`);
+        addLogEntry('system', `${itemId} removed from ${character.name}'s inventory.`, 'logs.item_removed', { itemName: itemId, characterName: character.name });
     };
 
     const handleTalentSelectorClose = () => {
@@ -876,7 +879,7 @@ function App() {
         updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter);
 
         handleCharacterUpdate(updatedCharacter);
-        addLogEntry('system', `${talent.name} added to ${character.name}'s talents.`);
+        addLogEntry('system', `${talent.name} added to ${character.name}'s talents.`, 'logs.talent_added', { talentName: talent.name, characterName: character.name });
         setShowTalentSelector(null);
     }
 
@@ -1212,7 +1215,7 @@ function App() {
                             };
 
                             handleCharacterUpdate(updatedCharacter);
-                            addLogEntry('system', `${character.name} purchased ${item.name} for ${item.price}.`);
+                            addLogEntry('system', `${character.name} purchased ${item.name} for ${item.price}.`, 'logs.purchase', { name: character.name, itemName: item.name, price: item.price });
                         }
                         setPurchaseRequest(null);
                     }}
@@ -1239,7 +1242,7 @@ function App() {
                                 setCareerChangeRequest(null);
                                 return;
                             }
-                            const newCareer = (careersData as Career[]).find(c => c.id === careerChangeRequest.newCareerId);
+                            const newCareer = careers.find(c => c.id === careerChangeRequest.newCareerId);
                             if (!newCareer) {
                                 const responseMessage: CareerChangeResponseMessage = {
                                     type: 'CAREER_CHANGE_RESPONSE',
@@ -1286,7 +1289,7 @@ function App() {
                                         careerLevelId: careerChangeRequest.newCareerLevelId,
                                         careerName: careerChangeRequest.newCareerName,
                                         levelName: careerChangeRequest.newCareerLevelName,
-                                        level: (careersData as Career[])
+                                        level: careers
                                             .find(c => c.id === careerChangeRequest.newCareerId)
                                             ?.career_level.find(lvl => lvl.id === careerChangeRequest.newCareerLevelId)
                                             ?.lvl || 1,
@@ -1308,7 +1311,7 @@ function App() {
                                             if (!grouped) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
                                             return grouped;
                                         }
-                                        const skillDef = allSkillsAndCharacteristics.find((s: any) => s.id === skillId && s.type === 'skill');
+                                        const skillDef = skills.find((s: any) => s.id === skillId && s.type === 'skill');
                                         if (!skillDef) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
                                         return {
                                             id: skillDef.id,
@@ -1332,7 +1335,7 @@ function App() {
                                 }
                             };
                             window.ipcRenderer.sendToPlayer(character.userId || '', responseMessage);
-                            addLogEntry('system', `Career change approved: ${character.name} is now ${careerChangeRequest.newCareerName} - ${careerChangeRequest.newCareerLevelName}.`);
+                            addLogEntry('system', `Career change approved: ${character.name} is now ${careerChangeRequest.newCareerName} - ${careerChangeRequest.newCareerLevelName}.`, 'logs.career_change_approved', { name: character.name, newCareerName: careerChangeRequest.newCareerName, newCareerLevelName: careerChangeRequest.newCareerLevelName });
                         }
                         setCareerChangeRequest(null);
                     }}
@@ -1347,7 +1350,7 @@ function App() {
                                 }
                             };
                             window.ipcRenderer.sendToPlayer(character.userId || '', responseMessage);
-                            addLogEntry('system', `Career change rejected for ${character.name}: ${reason}`);
+                            addLogEntry('system', `Career change rejected for ${character.name}: ${reason}`, 'logs.career_change_rejected', { name: character.name, reason });
                         }
                         setCareerChangeRequest(null);
                     }}

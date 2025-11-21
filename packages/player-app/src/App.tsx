@@ -3,13 +3,12 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, gameData, recalculateCharacterTalentBonuses, careersData, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, talentsData, Location } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, recalculateCharacterTalentBonuses, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, Location, useGameData } from '@wfrp/shared';
 import { TalentSelectionModal } from './components/TalentSelectionModal';
 import {
     TestResultMessage,
     calculateCharacteristicAdvanceCost,
-    calculateSkillAdvanceCost,
-    allSkillsAndCharacteristics
+    calculateSkillAdvanceCost
 } from '@wfrp/shared';
 import { TalentModal } from './components/TalentModal';
 import { ShopModal } from './components/ShopModal';
@@ -21,6 +20,8 @@ import { CareerChangeModal } from './components/CareerChangeModal';
 
 
 const PlayerApp: React.FC = () => {
+    const { skills, talents, careers, items, weapons, armor, conditions, gameData } = useGameData();
+
     const { isConnected, isAuthenticated, authError, username, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, connect, disconnect, sendMessage } = useSocket();
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
@@ -43,7 +44,6 @@ const PlayerApp: React.FC = () => {
     // Check if the current level is completed (Task 3.2)
     useEffect(() => {
         if (character && character.currentCareerId && character.currentCareerLevelId) {
-            const careers = careersData as any[];
             const completed = hasCompletedCurrentLevel(character, careers);
             setCanChangeCareer(completed);
         } else {
@@ -84,7 +84,7 @@ const PlayerApp: React.FC = () => {
         const advances = draftCharacter.characteristics[charName].advances;
         const cost = calculateCharacteristicAdvanceCost(advances, true);
 
-        const currentCareer = careersData.find(c => c.id === draftCharacter.currentCareerId);
+        const currentCareer = careers.find(c => c.id === draftCharacter.currentCareerId);
         const currentLevel = currentCareer?.career_level.find(lvl => lvl.id === draftCharacter.currentCareerLevelId);
 
         if (draftCharacter.xp.current >= cost) {
@@ -119,7 +119,7 @@ const PlayerApp: React.FC = () => {
         let skill = draftCharacter.skills.find(s => s.id === skillId);
 
         if (!skill) {
-            const baseSkills = allSkillsAndCharacteristics.filter(s => s.type === 'skill');
+            const baseSkills = skills.filter(s => s.type === 'skill');
             const baseSkill = baseSkills.find(s => s.id === skillId);
             if (baseSkill) {
                 skill = { ...baseSkill, advances: 0, talents: 0, modifier: 0 };
@@ -135,7 +135,7 @@ const PlayerApp: React.FC = () => {
 
         if (draftCharacter.xp.current >= cost) {
 
-            const currentCareer = careersData.find(c => c.id === draftCharacter.currentCareerId);
+            const currentCareer = careers.find(c => c.id === draftCharacter.currentCareerId);
             const currentLevel = currentCareer?.career_level.find(lvl => lvl.id === draftCharacter.currentCareerLevelId);
             const careerHistoryEntry: CareerHistoryEntry = {
                 careerId: draftCharacter.currentCareerId,
@@ -170,7 +170,7 @@ const PlayerApp: React.FC = () => {
 
         if (draftCharacter.xp.current >= cost) {
 
-            const currentCareer = careersData.find(c => c.id === draftCharacter.currentCareerId);
+            const currentCareer = careers.find(c => c.id === draftCharacter.currentCareerId);
             const currentLevel = currentCareer?.career_level.find(lvl => lvl.id === draftCharacter.currentCareerLevelId);
 
             const careerHistoryEntry: CareerHistoryEntry = {
@@ -182,7 +182,7 @@ const PlayerApp: React.FC = () => {
                 xpSpent: cost,
                 advancementType: 'talent' as const,
                 advancementId: talentId,
-                advancementName: talentsData.find(t => t.id === talentId) ? talentsData.find(t => t.id === talentId)!.name : 'Unknown',
+                advancementName: talents.find(t => t.id === talentId) ? talents.find(t => t.id === talentId)!.name : 'Unknown',
                 timestamp: Date.now().toString(),
             }
 

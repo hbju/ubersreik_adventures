@@ -1,0 +1,2080 @@
+{
+    "mapImage": "assets/maps/ubersreik-map.jpg",
+    "locations": [
+        {
+            "id": "artisans_quarter",
+            "name": "Artisans' Quarter",
+            "coords": {
+                "x": 2260,
+                "y": 1310
+            },
+            "playerDescription": "The Artisans' Quarter is the industrial heart of Ubersreik. It lies to the east of the Grey Lady Road, on the north bank of the Teufel, where raw materials and finished goods are loaded and unloaded on wharves. By day the ringing sounds of hammers striking metal blends with the acrid stench of the town's tanners and chandlers. The quarter contains several slum districts at the periphery supporting taverns and cheap shops servicing the town's workers. Even at night the streets are rarely empty as workers relax after a hard day's graft.",
+            "gmNotes": "Since the Jungfreuds were ousted and their trade embargo began, coal has become scarce. Now the streets are full of apprentices on the scrounge for anything to burn.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "bridge_house_inn",
+            "name": "Bridge House Inn",
+            "coords": {
+                "x": 2085,
+                "y": 1425
+            },
+            "playerDescription": "Bridge House is perfectly situated in the centre of Ubersreik on the main thoroughfares near Ubersreik Bridge, offering spectacular views of the Dwarf-made marvel. The inn has large stables and a sizeable coach house, and also serves as Ubersreik's bustling post office. \n\nThe inn has a spacious kitchen, a sizeable larder, two offices, two private dining rooms, and staff quarters. The two upper floors are set aside for private rooms, with rooms above the coach house and stables for visiting coachmen. The largest private room on the top floor commands an impressive view of Ubersreik Bridge. The lower floor has a broad taproom with several curtained booths for more clandestine meetings.",
+            "gmNotes": "The inn is managed by Gunther Abend, a retired coachman, his wife Hanna, and their three children, plus nine other staff. An Altdorfer by birth, Abend has been very welcoming towards the visiting Imperial troops, upsetting his few local customers.\n Although locals rarely eat or drink here, balking at the prices, the fare is good, the portions generous, and the selection of beverages broad. Because of this, it is a common haunt for wealthier merchants, travellers, and those with coin to burn. ",
+            "hooks": [
+                "Gustav Schtupp, Gunther's postmaster, is a spy. He quietly intercepts mail passing through his hands, trafficking the juicier gossip in coded messages. Whether he serves now the Imperial Herald, House Bruner, or a darker master, is uncertain.",
+                "Gunther proudly maintains his independence, servicing coaches from three local Coaching Houses — Cannon Ball Express, Four Seasons, and Imperial Expressways. Elicha Hochs, a representative of the Four Seasons, is seeking capable folk to disrupt rival coaches and put pressure on Gunther to sell the inn to the Four Seasons for their exclusive use."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "inn"
+        },
+        {
+            "id": "carpenters_guild",
+            "name": "Carpenters' Guild",
+            "coords": {
+                "x": 2355,
+                "y": 1370
+            },
+            "playerDescription": "The Carpenters' Guild building's facade is cunningly wrought with complex wooden leaf scrollwork, framed by two pillars constructed from the trunks of great oak trees. The building houses guildmembers' demonstrations of their skill arrayed in the Masters' Hall, a long wood-panelled gallery used for ceremonial events and business meetings. Guildmembers' workshops are mostly located nearby.",
+            "gmNotes": "Ernst Zimmerman, the current guildmaster, is remarkably tall with a booming voice. He is missing a finger on his right hand from a mishap with a chisel as an apprentice. His speciality is cabinet making. He is a friend of the Burgomeister, a popular figure amongst the town's middle-classes, and a lay-member of the Cult of Sigmar.",
+            "hooks": [
+                "Zimmerman is leading a double life, moonlighting as a thief. Much of the guild's seeming affluence is a result of his illicit indiscretions. As a cabinet maker, he has access to his clients' homes and uses this to scout future burglaries. Some of his customers are growing suspicious, so he is on the lookout for bodyguards, or possibly scapegoats...",
+                "Quality timber is hard to secure given the demand for wood to burn now that coal is scarce in Ubersreik. The party are hired by Zimmerman to accompany him into the woods in search of a particular grove, little realising it is home to a small herd of Beastmen driven into the area by something bigger..."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "cordelias_apothecary",
+            "name": "Cordelia's Apothecary",
+            "coords": {
+                "x": 2750,
+                "y": 1210
+            },
+            "playerDescription": "Cordelia's Apothecary lies on a small, cobbled platz at the end of the Wizard's Way. A painted wooden mortar and pestle hang above a stout wooden door. Garlands of sweet-smelling flowers and herbs are strung above the wooden door in the hope of enticing more customers.",
+            "gmNotes": "Cordelia Wesselingh is a handsome woman with silver hair who has maintained the shop for decades. She is a kind, friendly soul, always ready to lend an ear, making her a good source of gossip (though nothing salacious). Her prices are fair, and she offers discounts to customers of good standing. \nUnknown to most, Cordelia apprenticed in the Jade College in Altdorf, though she lacked the strength to become a full wizard. She remains well-disposed towards the Colleges.",
+            "hooks": [
+                "Cordelia is friendly with the local network of Hedgefolk. Ida Vernt, a recently arrived Hedgewitch, is concerned over malicious spirits in the area that are beyond her capabilities. Aiding Ida would earn Cordelia's trust.",
+                "Cordelia hides a deeper secret; she provides intelligence to the Grey Order of wizards. Her shop's cellar hides a secret entrance to Christoph Engel's tower. When she finds the door open with a bloody trail leading into the passageway, she knows the wizard must need help and looks for someone brave and discreet enough to investigate."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "locksmiths_guild",
+            "name": "Locksmith's Guild",
+            "coords": {
+                "x": 2590,
+                "y": 1330
+            },
+            "playerDescription": "A narrow building with steel-barred windows, this guildhouse is maintained by Ubersreik's only locksmith, Ludwig Schlüsselfert. The locksmith only works for a few hours a day, and only four days a week, making it a challenge to find him. The ground floor is his workshop, with tools neatly hanging around the walls. Upstairs are his personal quarters, a small parlour and surprisingly sumptuous bedchambers.",
+            "gmNotes": "Ludwig Schlüsselfert is a cantankerous old curmudgeon in his eighth decade. Fiercely litigious, he has exercised his right to refuse membership to any visiting locksmiths, ensuring he has an absolute monopoly (except for Dwarf craftsmen). He regularly hires a team to check the locks of buildings in Ubersreik for non-sanctioned work. Should he discover any illegal locks, he will summon the Watch to remove them (and charge extra to replace them). His lawyer, Melina Spirren-Hirsch, is on retainer.",
+            "hooks": [
+                "Schlüsselfert is, in truth, a member and blessed priest of the Crooked Fingers sect of the Cult of Ranald. Though he has no apprentice locksmiths, he uses his cellar to train aspiring thieves in the fine art of lockpicking, should they be good Ranaldans and able to pay.",
+                "After several houses are broken into, Schlüsselfert hires the party to check a number locks for his customers. Though he had nothing to do with it, he cannot afford to have the Watch asking questions, so the players need to solve the crime or secure a scapegoat, and quickly."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "metalworkers_guild",
+            "name": "Metalworkers' Guild",
+            "coords": {
+                "x": 2710,
+                "y": 1370
+            },
+            "playerDescription": "The Metalworkers' Guildhouse is a squat, unassuming, soot-stained building just off the Bögenhafen road. It is surrounded by forges, smithies, and workshops that ring with the sound of hammers on steel from dawn to dusk. The interior of the guildhouse is dark, and low-ceilinged, an attempt to appeal to the city's Dwarf populace.",
+            "gmNotes": "The Dwarf craftsmen are polite to a fault, but do not view their inferior 'shortbeard' counterparts as rivals. Petronilla Merkle is the current master, a short woman with broad shoulders and calloused palms. Though generally stoic, when roused to anger her temper is fearsome. As she is often busy in her workshop, the guildhouse is generally staffed by one of her skittish apprentices.",
+            "hooks": [
+                "Johann Messing, one of Merkle's rivals in the guild, is seeking to mount a coup. He is looking for adventurers to engage in a little river piracy. If the party can hijack one of the Jungfreud's (well guarded) coal barges before it enters the Hagercryb Canal, and bring it safely to Ubersreik, they will be richly rewarded.",
+                "Following a terrible accident in one of the city's forges, Merkle is looking for someone to quietly investigate the explosion. Given the rumours of flickering green flames and unholy screams, volunteers are thin on the ground. Should the players investigate, they will be noticed by Watch Sergeant Knopf, who is subtly ignoring the explosion, and by the Skaven who are paying him to do so."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "satriolis_sausage_shop",
+            "name": "Satrioli's Sausage Shop",
+            "coords": {
+                "x": 2225,
+                "y": 1370
+            },
+            "playerDescription": "Satrioli's Sausage Shop is a thriving business that offers a wide selection of sausages, cured meats, imported cheeses, and other delicacies. It occupies the ground floor of a stone building. There are a number of tables and benches outside the shop, but many customers take their food away to eat at home or in their place of work. Gino Satrioli, a charming Tilean, tends the shop with his wife Carla and their son Furio. They employ a gaggle of Halflings to assist with day-to-day tasks.",
+            "gmNotes": "The wooden storey above is rented out by the large family of Halflings. Beneath the shop, there is a sizeable cellar used as a storeroom which also has a shrine to Myrmidia. Rumours suggest many of the sausages are in fact made by the Halflings, not by the Satriolis, but given the diminutive folk's reputation for culinary skill, nobody is complaining. In truth, Satrioli's is a front for the infamous Lowhaven clan of Halflings. Under the leadership of Mercy Lowhaven, they are muscling in on the other organised crime in town and are always on the lookout for more help.",
+            "hooks": [
+                "The Lowhaven clan's standard operating procedure is to get someone in debt, before exploiting that weakness, so if any members of the party are looking for a loan...",
+                "'White Gold' is the most profitable product in Satrioli's, a particularly creamy cheese imported from Tilea. Recently, their supplier has signed an exclusive contract with Harzert's, a rival cheesemonger. Mercy Lowhaven is willing to pay handsomely for Harzert's supply, and won't ask any questions. Securing the contract for Satrioli's would earn a favour from the Lowhavens."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "wandiene_rookery",
+            "name": "Wandiene Rookery",
+            "coords": {
+                "x": 1050,
+                "y": 2030
+            },
+            "playerDescription": "Of all Ubersreik's slums, Wandiene rookery is the largest and most notorious. It lies in the north-west of the Artisans' Quarter, packed tight to the high town-walls. Its tall, unstable houses lean precariously against each other, and any available space between is filled with shacks and makeshift hovels. The few paths and alleyways are narrow, gloomy, filthy, and untrod by the Watch.",
+            "gmNotes": "The rookery is uncensused and massively overcrowded, and is known for its many bawds, thieves, and ne'erdowells. Its houses have no access to Ubersreik's extensive sewers. Guido Falck, a retired and decorated captain loyal to Duke Sigismund Jungfreud, has retreated here. He leads a resistance of over 50 fighters against the 'Altdorf invasion' from the depths of the slums. He is a patient man, and will not attack his enemy openly.",
+            "hooks": [
+                "Falck plans to blow up Black Rock Castle during an important gathering of Altdorf luminaries. He has access to the sewers beneath the castle and needs unfortunate fools to buy large quantities of blackpowder then deliver it to him. Of course, when the Watch investigate, Falck expects it's the blackpowder buyers that will be pursued, giving him time to retreat.",
+                "Karolus Dichens, author and journalist, is researching his next book, 'Nonnie Verdreh'. He wants a tour of Wandiene, but can't find anyone he trusts to guide him. He hovers near its periphery taking notes, then retires to the Bridge House Inn. He doesn't have much money, but will offer to include the party in his next book as incidental characters if they protect him."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "the_worshipful_guild_of_cutlers",
+            "name": "The Worshipful Guild of Cutlers",
+            "coords": {
+                "x": 2595,
+                "y": 1185
+            },
+            "playerDescription": "This guild has grown significantly in wealth and influence. In addition to forks and knives, they have begun selling weaponry. The building comprises the old guildhouse, which has been expanded to include a large forge and workshop area, and a small showroom. Here shoppers can purchase blades, which are of high quality and surprisingly good value.",
+            "gmNotes": "While the bylaws of Ubersreik specify that only members of the Metalworkers' Guild may make swords, the cutlers have exploited a loophole regarding how the handle is attached to the tang, allowing them to class their blades as knives (albeit knives with blades several feet long). The guildmaster is Rudy Schlau, a skilled politician. Unknown to almost all, Dordean Mournflair is the secret behind his guild's success. Dordean is an Elf who has called Ubersreik home for centuries. Dordean was spurned by the Metalworkers' Guild due to their Dwarf sympathies, so the Cutlers (who now worship Vaul) are benefitting from his calling.",
+            "hooks": [
+                "Petronilla Merkle, guildmaster of the Metalworkers' Guild, is livid at the Cutlers' circumvention of the town's bylaws, especially as they are producing a superior product for a lower cost. She is very interested in finding out the secrets of their methods and, if possible, destroying their guildhouse. Any morally flexible parties could profit by assisting her.",
+                "Recently, Dordean's sibling arrived in Ubersreik, eager to persuade Dordean to return to Ulthuan. The party are offered a generous payment to out Dordean as an Elf, capitalising on resentment of Elf interference."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "black_rock",
+            "name": "Black Rock",
+            "coords": {
+                "x": 1077,
+                "y": 1090
+            },
+            "playerDescription": "Black Rock is less a district, and more a castle complex named for the dark granite that forms its ancient walls. It dominates Ubersreik, covering almost an eighth of the town. It is ringed by huge parapets connecting directly to the town's walls, making it integral to Ubersreik's defence. The invading troops from Altdorf made Black Rock their home, tearing down the silver and blue banners of the von Jungfreuds and replacing them with Altdorf's red and blue, a gesture of disrespect many locals find galling.",
+            "gmNotes": "For centuries it was the bastion of the Jungfreuds. A secure tunnel leads from Black Rock to the Magnus Tower, allowing for troops and messages to pass. Within Black Rock's walls lies a bustling community, a town within a town. It contains grain stores, workshops, museums, chapels, housing, animal pens, and more. When Ubersreik was seized, any remaining local staff were forcibly ejected, leading to much resentment. All five Altdorf regiments are barracked here, though rarely more than a thousand soldiers are present at any one time.",
+            "hooks": [
+                "A small group of locals is determined to wreak vengeance on the Altdorf forces for evicting them from their homes, and driving out the rightful rulers of Ubersreik. They are looking for accomplices to sneak into the castle and poison the garrison's supplies, and General von Dabernick's dinner, with Spritzenberries, a naturally powerful laxative."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "black_rock_castle",
+            "name": "Black Rock Castle",
+            "coords": {
+                "x": 890,
+                "y": 975
+            },
+            "playerDescription": "Black Rock Castle is enormous, easily the largest fortification in the southern Vorbergland. It is a warren of halls, salons, barracks, and private chambers. The castle's corridors, which once thronged with servants, now ring with the hollow echo of the invaders' footsteps. The huge fireplace in the Great Hall — once a beacon welcoming guests — lies empty and unlit.",
+            "gmNotes": "Beneath the castle lie the extensive Ubersreik dungeons, where many Jungfreud enemies spent their remaining years. General Jendrick von Dabernick now rules the castle, and he puts on a good show of ruling the rest of Ubersreik with all the power and none of the responsibility of a duke. Von Dabernick is the scion of a minor noble line with a historic grudge against the Jungfreuds. An abrasive presence, he is determined to root out any sympathisers for the exiled Jungfreuds, which earns him few friends locally.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "grauer_palast",
+            "name": "Grauer Palast",
+            "coords": {
+                "x": 1085,
+                "y": 850
+            },
+            "playerDescription": "The Grauer Palast is a squat keep to the north-east of Black Rock Castle. It contains the largest ballroom in the Vorbergland, and is where the Jungfreuds once conducted their social functions and weddings.",
+            "gmNotes": "The keep was long used as the official residence of the Baron of Lady's Vale, the heir to the duchy of Ubersreik. It now houses Lady Emmanuelle Nacht, the Imperial Herald, and the true power in Ubersreik. The daughter of Duke Gregor Nacht, an ex-ambassador to Grand Cathay, her life changed when her father was assassinated six years ago. She is investigating the 'Purple Hand', a mysterious group she believes is responsible for her father's death, and is in Ubersreik at Emperor Karl-Franz's personal request to oversee the pacification of the town.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "saint_arnolds_chapel",
+            "name": "Saint Arnold's Chapel",
+            "coords": {
+                "x": 1060,
+                "y": 970
+            },
+            "playerDescription": "Black Rock's chapel to Sigmar is dedicated to Saint Arnold. As with most Sigmarite temples, its walls form the plan of a hammer, although the ravages of time and subsidence have left the nave somewhat crooked. Its walls remain stout, though slightly crumbling. It contains a beautiful stained-glass window from Nuln, and many fine carvings depicting Sigmar's victories. Since the occupying forces took Black Rock, few now attend Sister Habercorn's services.",
+            "gmNotes": "Sister Habercorn, previously the personal confessor to the Jungfreuds, maintains her chapel and performs her sermons to the near-empty chapel. Unbeknownst to the occupiers, a network of tunnels lie beneath the chapel, lined with Orc graffiti from a past invasion. Sister Habercorn and the von Jungfreuds are the only ones aware of the tunnels' existence. When the Altdorf forces arrived, Graf Sigismund von Jungfreud fled, but his youngest son, Wendelin, was overlooked. Sister Habercorn found him and hid him in the tunnels beneath the chapel. She now keeps him fed and watered, and is desperate to smuggle the boy from the castle.",
+            "hooks": [
+                "In desperation, Sister Habercorn has turned to the party to help her smuggle young Lord Wendelin out of Black Rock. If he is caught, the Altdorfers may injure or even kill him, given their general's attitude to the von Jungfreuds. They could seek out the rumoured secret passageway, or try to brazenly smuggle him out a main gate."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "temple"
+        },
+        {
+            "id": "lokhids_ammunition_depot",
+            "name": "Lokhid's Ammunition Depot",
+            "coords": {
+                "x": 985,
+                "y": 1145
+            },
+            "playerDescription": "Lokhid's Ammunition Depot is a stout stone building with thick walls and a reinforced door. It lies within Black Rock's walls, close to the main gate. The depot stores gunpowder, shot, and other munitions for the Altdorf garrison. It is heavily guarded, with soldiers posted both inside and outside the building at all times.",
+            "gmNotes": "The depot is managed by Master Gunner Fritz Lokhid, a grizzled veteran of many campaigns. He is a stickler for safety, and enforces strict rules regarding the handling and storage of munitions. The depot has a number of secret compartments and hidden rooms, known only to Lokhid and his most trusted assistants.",
+            "hooks": [
+                "Lokhid is secretly sympathetic to the von Jungfreuds, and is looking for a way to sabotage the Altdorf garrison. He is willing to pay handsomely for anyone who can help him steal a significant quantity of gunpowder from the depot without being caught.",
+                "A group of Skaven agents has infiltrated Black Rock, seeking to steal munitions for their own nefarious purposes. The party could be hired by Lokhid to root out these infiltrators, or they could be approached by the Skaven themselves to assist in their theft."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "dawihafen",
+            "name": "Dawihafen",
+            "coords": {
+                "x": 1485,
+                "y": 2545
+            },
+            "playerDescription": "Dawihafen, Ubersreik's Dwarf Quarter, is a tightly knit community of local Dwarfs. Only a handful of Humans and Halflings inhabit the area; mostly just the town's 1000 or so Dwarfs gather here. The Dwarf population largely keep to themselves.",
+            "gmNotes": "Ubersreik has maintained close ties with the Dwarfs since Magnus the Pious appealed to them for their aid in rebuilding the town following the Great War Against Chaos. In addition to the soaring bridge, the town's walls and many of its stone buildings are of solid Dwarf construction.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "borguns_brewery",
+            "name": "Borgun's Brewery",
+            "coords": {
+                "x": 1645,
+                "y": 2640
+            },
+            "playerDescription": "Butted up against the Axe and Hammer lies Borgun's Brewery, Ubersreik's only Dwarf brewer and purveyor of strong, dark ales. The brewery consists of a number of discrete stone buildings, each housing a distinct stage of the brewing process. There is a mill, a mash-house, a boiler room, and a number of storage sheds. A covered passageway leads directly to The Axe and Hammer, Borgun's biggest customer.",
+            "gmNotes": "Pink-faced Brewmaster Borgun Foambeard, who proudly claims to be a cousin to master brewer Josef Bugman, makes a number of ales, including Crownpeak, Old Subterranean, and Skullsplitter. Foambeard is assisted by his two brothers, Hargan and Dwargun, and his grey-bearded uncle, Glavic Boarhand. Glavic spends most of his time drinking and reminiscing about when his grandfather ran the brewery, wounding Foambeard with every careless word.",
+            "hooks": [
+                "The party discover that Foambeard is not, in truth, related to Josef Bugman, but has made the claim falsely to boost sales. Should he be confronted publicly, he would be shamed and would likely take the Slayer Oath. Perhaps the Characters can leverage this knowledge in some way that would be profitable?",
+                "Sahra Tanner, a human brewer from the Artisan Quarter, is jealous of Foambeard's success. She has poisoned a number of his barrels, bound for a reception on the Hill, with warpstone, little realising the danger this poses. Can the party intercept the contaminated beer before the nobles begin to drink from it?"
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "harataken_hold",
+            "name": "Harataken Hold",
+            "coords": {
+                "x": 1250,
+                "y": 2610
+            },
+            "playerDescription": "This suite of rooms within a large, squat block is the home of the Harataki clan of Dwarfs. A once noble line, they have over the years sold off rooms and sections of the building to fund ill-fated expeditions to reclaim their ancestral Hold, leaving them with only a handful of rooms to their name.",
+            "gmNotes": "Queen Vilda is the clan leader and has overseen the dwindling resources of her clan for over a century. Though her family have become increasingly desperate, she is determined to regain both their Lost Hold, Karak Branar, and their lost status amongst other Dwarfs. As such, she is alert to any insult or disrespect, and keeps her clan's Book of Grudges close to hand.",
+            "hooks": [
+                "Queen Vilda is planning another expedition to Karak Branar's ruins, which lie to the north of Grey Lady Pass. She needs a small party to range ahead, scouting and assessing the strength of the Greenskin forces arrayed against them. She will reward any volunteers handsomely, if she successfully retakes the Hold.",
+                "Gjur Farlson, Karak Azgaraz's ambassador, publicly supports the Harataki clan's aspirations, but lacks the resources to offer any tangible support. If the players have any means to convince the ambassador to offer funds or troops, they will earn Queen Vilda's respect (though they may earn Karak Azgaraz's ire in the process)."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "khazalgirt",
+            "name": "Khazalgirt",
+            "coords": {
+                "x": 1145,
+                "y": 2615
+            },
+            "playerDescription": "Beneath Dawihafen, a network of sturdy Dwarf-built tunnels forms its own subterranean street network. The tunnels are regular, well-constructed, and well-lit, not to mention well-patrolled. A large shrine to Grimnir lies at the nexus of the passages — a natural meeting point for local Slayers to gather.",
+            "gmNotes": "The tunnels lead to most major Dwarf locations in Ubersreik. They are separate and discrete from both the Human sewers, and the Dwarfs' own sewer system, which lies deeper underground. Should any non-Dwarfs find their way into the network, they will be politely, if forcibly, ejected. Repeat offenders will not be treated gently.",
+            "hooks": [
+                "When the party stumble across the body of a rat-like beastman, they discover a neatly detailed map of the Khazalgirt, with a crudely drawn addition indicating another tunnel network seemingly connecting to the Dwarfs' passages. The party could warn the Dwarfs, or they could keep the map and perhaps use it to rob a number of wealthy Dwarf merchants.",
+                "When the players wipe out a small party of Goblins beyond the town walls, they discover the entrance to a tunnel leading beneath the Khazalgirt. Should they follow the tunnel they will see it leads to a number of barrels, full of blackpowder with the letters 'B-O-M' crudely daubed on the side, and the fuses are already lit!"
+            ],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "nordwander_and_sons_expeditionary_supplies",
+            "name": "Nordwander and Son's Expeditionary Supplies",
+            "coords": {
+                "x": 1760,
+                "y": 2440
+            },
+            "playerDescription": "A large, low-ceilinged building, Nordwander and Son's prides itself on selling everything its clientele will need to mount expeditions into the Grey Mountains. A one-stop-shop for mountaineering and camping, it carries pitons, ropes, mallets, rations, tents, and anything else a party may need. Despite their broader clientele, the shop is still set up with Dwarfs in mind, with low ceilings and broad aisles.",
+            "gmNotes": "The shop initially catered exclusively to Dwarfs, but word of the quality of their gear spread. They now stock clothing and tools for non-Dwarfs. Gudrum Nordwander is good natured for a Dwarf and happy to share his high-quality wares, though he is quick to lecture customers expressing ignorance on mining or climbing. Belorn, his energetic son, assists in the shop and dreams of leaving Ubersreik. He will gab excitedly to all customers, quizzing them on where they are going and their plans.",
+            "hooks": [
+                "Belorn Nordwander offers the party a discount if he can accompany them on their expedition. Though charming and intelligent, Belorn has little experience of life beyond Ubersreik's walls, and will be something of a hindrance, a fact to which he is entirely oblivious.",
+                "Legendary explorer Ernst von Schäkeldorf is planning an expedition to climb Mount Frugelhorn, and the party are to travel with him. He has managed to upset Nordwander by expecting a hefty discount based on his fame. Can the party resolve the tensions and bring everyone to a mutually satisfactory agreement, or will the expedition be called off?"
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "vorgims_herbs_and_liquors",
+            "name": "Vorgim's Herbs and Liquors",
+            "coords": {
+                "x": 1385,
+                "y": 2535
+            },
+            "playerDescription": "Vorgim's Herbs and Liquors is a small, cluttered shop filled with the scent of dried herbs and strong spirits. The shelves are lined with jars of various herbs, roots, and tinctures, as well as bottles of potent liquors and medicinal concoctions. The shop is dimly lit, with a single window letting in a slant of light.",
+            "gmNotes": "Vorgim Stonebeard is a knowledgeable Dwarf herbalist and apothecary. He is well-versed in the medicinal properties of various plants and herbs, and is happy to share his knowledge with customers. Vorgim is also a skilled distiller, producing a range of potent liquors that are popular among both Dwarfs and Humans alike.",
+            "hooks": [
+                "Vorgim is seeking rare herbs that grow only in the Grey Mountains. He offers a generous reward to anyone who can bring him samples of these plants, which he believes have powerful medicinal properties.",
+                "A rival herbalist has been spreading rumours about Vorgim's products, claiming they are ineffective and overpriced. Vorgim is looking for someone to investigate and put a stop to these rumours, restoring his reputation."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "teubrucke_the_docks",
+            "name": "Teubrücke (The Docks)",
+            "coords": {
+                "x": 1770,
+                "y": 1965
+            },
+            "playerDescription": "Ubersreik docks spread the length of the Teufel in the centre of the town. The Docks comprise the usual mixture of wharves, warehouses, inns, guildhouses, cheap services, and tax and customs offices. Slums lie behind the bustle of these buildings — the housing quality dipping with every step taken from the river.",
+            "gmNotes": "Though officially listed as Teubrücke in the town's charter, this quarter, and all its attached slum and warehouse districts, is generally referred to as 'The Docks'.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "boatmens_guild",
+            "name": "Boatmen's Guild",
+            "coords": {
+                "x": 1670,
+                "y": 2000
+            },
+            "playerDescription": "The Boatmen's Guild meets in a converted two-storey riverfront warehouse on the southside of the Teufel. The lower floor has a subsidised tavern and dormitory for its members with almost everything sold at cost, and several private rooms also available. The food and drink is decent and plentiful. The upper floor, looking down over the drinking hall, contains the guild's offices and the guildmaster's quarters.",
+            "gmNotes": "The guild is affiliated with the Boatmen's Guilds of Auerswald, Kemperbad, and Altdorf, giving members benefits across the guilds. Guildmaster Karsten Rugger is a cantankerous old man, though still respected. Rumours that he runs the majority of the river smuggling in Upper Teufel have never been proven. Robbo Brambledown, a Halfling, runs the kitchens.",
+            "hooks": [
+                "The guild's working relationship with Altdorf has kept them neutral in the town's political turmoil. For their part, the Altdorf troops have been turning a blind eye to any smuggling they discover. Should this be known publicly, it would undermine the authority of the Altdorfers, but will anger the guild.",
+                "A shipment of brandy from Bretonnia is due to be smuggled into Ubersreik tonight. Nixie Dunkelstange is overseeing things, but cannot use guild members, as she suspects someone is feeding information to Geldfinger in Customs House. It's a dangerous venture, but profit awaits those willing to take the risk."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "the_crooked_hammer",
+            "name": "The Crooked Hammer",
+            "coords": {
+                "x": 1800,
+                "y": 1430
+            },
+            "playerDescription": "The Crooked Hammer is a slightly seedy, rough-looking tavern typical of those found in the Teubrücke. It serves a variety of hard spirits and watery ales, at cheap prices. It is an open secret that the drinking house is a front for a gambling den. To the rear of the building, they operate a soup kitchen, providing basic sustenance to the poor and needy of Ubersreik.",
+            "gmNotes": "The gambling den is run by the Crosses, adherents of Ranald, the God of Trickery, who view such activities as holy work. Gert Hunder runs the bar and acts as a lookout. Silvi Kreutzhame, a formidable woman in her 50s, is the leader of the Ranaldan cult in Ubersreik. The authorities tolerate the gambling, in part because of the charitable work and because many influential citizens frequent the Hammer.",
+            "hooks": [
+                "While most are aware of the gambling den, less well known is the clandestine fencing operation run behind the book-keeper's office. Here, the Crooked Fingers buy, sell, and trade stolen goods. If the party has been robbed, their goods will likely be there, if they can talk their way past the Ranaldans.",
+                "Dannel Meer, legendary thief, is putting together a crew to raid Black Rock Castle. He claims taxes from the Duchy of Ubersreik are simply piling up unclaimed in the vaults. There is a fortune there for the taking. Assuming Meer is correct..."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "tavern"
+        },
+        {
+            "id": "customs_house",
+            "name": "Customs House",
+            "coords": {
+                "x": 2025,
+                "y": 1590
+            },
+            "playerDescription": "All tax collected in Ubersreik comes through Customs House, a large, sturdy building with a commanding view over the wharves and the river-traffic. All boats unloading in the town pay a tax of one silver coin plus an additional charge depending upon the cargo, as well as potential docking fees. Wagons of trading goods pay their taxes at the town gates.",
+            "gmNotes": "Ernst Geldfinger runs the operation. He is a thuggish man in his 40s who tightly controls his clerks. He has a reputation for meticulous detail and unimpeachable honesty.\n\nTAXING SITUATION: Before the Jungfreuds were removed, taxes were collated here and transferred to Black Rock. The right to gather these taxes lies solely with the duke of Ubersreik, but there is no duke. No one knows who should collect them. General von Dabernick favours enforcing tax collection, legal or not, while Lady Nacht prefers to organise a legal and stable replacement for the duke.",
+            "hooks": [
+                "When the party witness Detlef Schädler, one of Geldfinger's clerks, murdered en route to his post, they see an opportunity. If they hide the body, they could take his place and pocket the day's taxes. All they need to do is fool the town guards and the merchants, keep the body hidden, and avoid whomever killed Schädler.",
+                "Geldfinger has noted a drop off on tax revenue on brandy, due to a smuggling ring. He suspects one of his clerks is on the payroll, so he is looking to hire 'independent contractors' to investigate quietly and shut down the operation. He is willing to pay handsomely."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "dockers_arm",
+            "name": "Dockers' Arm",
+            "coords": {
+                "x": 1745,
+                "y": 1530
+            },
+            "playerDescription": "This sprawling, timber and lathe tavern caters almost exclusively to the town's stevedores and teamsters, who have a monopoly on the loading and unloading of all trade goods in Ubersreik. Without paying their fees, none of your cargo moves. At any one time, several teams of Dockers will be drinking in the tavern, and many more will be working the wharves.",
+            "gmNotes": "The Dockers' Arms is effectively the Guildhouse for the Dockers' Guild. It is owned and managed by the guildmaster: Wilhelm 'Big Willi' Docker, a giant of a man with arms bigger than most men's thighs. The lower floor is given over to two tap rooms and a small kitchen. Upstairs is the Docker family living quarters.",
+            "hooks": [
+                "Aloysius Thorncobble III, a Halfling merchant has employed the party. He is in dispute with the Dockers' Guild, who are refusing to unload for him until he settles an outstanding debt. As he believes he paid the debt (to the Dockers' Guild in Altdorf), he is unwilling to do so. As the party begin to unload his barge, a group of dockers arrive to point out the error in their ways.",
+                "Little Willi, Big Willi's even-taller son, has been smuggling luxury foodstuffs for the Lowhaven Clan. But when the Watch confiscated his last load on Geldfinger's orders, that left him owing the Halflings a lot of money. He is willing to offer free Guild Membership to the party if they help him break into the warehouse and steal the goods back."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "grail_chapel",
+            "name": "Grail Chapel",
+            "coords": {
+                "x": 1610,
+                "y": 1520
+            },
+            "playerDescription": "The exterior of the Bretonnian Grail Chapel is unassuming, a modest warehouse. Only the innocuous wooden inscriptions of fleur-de-lys along the eaves mark it as anything special. Within the walls, however, the building is sumptuous. Its walls and columns are intricately carved and beautifully painted, redolent with frescoes depicting legends of the Lady of the Lake, and brave knights of Bretonnian Lore.",
+            "gmNotes": "The building was used as an internment camp decades ago during the Fifth Parravon War. The Bretonnian captives decorated the chapel, which has been maintained by the Carpenters' Guild ever since. Hugo is the only permanent resident, an ancient Bretonnian with a white beard and kind eyes, whom local children are convinced was once a knight.",
+            "hooks": [
+                "Hugo was, in fact, a knight, but he left Bretonnia in disgrace. A recent visitor, Sir Pierre De L'Arbaque, recognised the old man and has forcibly ejected him from his home. Hugo is determined to fight the much younger Pierre to reclaim his honour, but the party are convinced that if he does, he will be slaughtered.",
+                "Nils Scherzer, an agitator, has been whipping up a frenzy of anti-Bretonnian sentiment. He has raised a mob, intent on driving Bretonnians out of Ubersreik. He plans to burn the chapel to the ground, killing those within. There is no time to summon the Watch, only the party can intervene!"
+            ],
+            "image": "",
+            "music": "",
+            "tag": "temple"
+        },
+        {
+            "id": "the_guild_of_boatbuilders_and_chandlers",
+            "name": "The Guild of Boatbuilders and Chandlers",
+            "coords": {
+                "x": 1990,
+                "y": 1915
+            },
+            "playerDescription": "This unassuming wooden building not far from Ubersreik's two dry docks on the southside of the river houses the offices for the combined Guild of Boatbuilders and Chandlers. Although called the Guild of Boatbuilders and Chandlers, the guild doesn't actually build boats or ships. It builds barges, which have flat bottoms for shallow-river travel.",
+            "gmNotes": "Thirty years ago, the two small guilds combined forces to amplify their voices. Today, the guild is still small, but undeniably powerful. Kurt Prochnow is the current Guildmaster, a lean, muscled man in his early 30s. He is driven and intelligent with a voracious appetite for new approaches to construction, currently experimenting with metal and stone. His thriving business landed him the unwanted title of 'Most Eligible Bachelor of Ubersreik'.",
+            "hooks": [
+                "Prochnow's latest prototype was stolen by river pirates. Should the riverwardens take it down, they will likely damage the boat or ask awkward questions, so he is willing to pay handsomely for a party to quietly recover the vessel, with a significant bonus should it be unscathed.",
+                "Prochnow's travels and letters are a facade. He is a member of a widespread Cult, the Fractured Eye, who pursue knowledge at all costs. Beneath the guildhouse he keeps a profane and illegal library. He seeks a particular scroll from the Temple of Verena, and would very much like some patsies to steal it for him."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "the_hog_pit",
+            "name": "The Hog Pit",
+            "coords": {
+                "x": 1360,
+                "y": 1960
+            },
+            "playerDescription": "The Schwarzehalle slum's Hog Pit is a sprawling series of open pig pens. The pigs dine on the town's scraps and filth, which are sold to swineherds by enterprising gong farmers. Citizens wishing to cross the Hog Pit use a series of elevated wooden platforms. These boards are treacherous, and more than one burgher has slipped, falling into the mud, waste, and pigs below.",
+            "gmNotes": "Gart Fünke, an old farmer, is the Hog Pit's most influential man. Theoretically, any citizen can keep pigs in the Pit, but in practice they need Fünke's approval, which he only gives with the promise of purchasing any pig 'feed' directly from him. Fünke ensures his racket is unchallenged by providing the local Watch with a ready supply of pork.",
+            "hooks": [
+                "Dirk Schwengen, a protagonist who charges a toll to cross the Hog Pit, offers a choice: pay him, or end up in the muck.",
+                "Rumours claim Fünke feeds his pigs mortal remains. Fünke recently provided 'pork' to Satrioli's Sausage Shop, leading to whispers that he disposes bodies for the Lowhavens. When the Ghost of Benno Nusbaum haunts his daughter, she seeks help to retrieve his remains from the Hog Pit without alienating the Halfling criminals who put it there."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "the_kat_house",
+            "name": "The Kat House",
+            "coords": {
+                "x": 1460,
+                "y": 1505
+            },
+            "playerDescription": "A stylised brass cat hangs above the Kat House, a dockside brothel dedicated to Katya, the Goddess of Disarming Beauty. The sizeable four-storey building caters to clientèle of all species and classes, and is protected by ever-present bouncers. Although most of its staff present as female, all tastes are catered for.",
+            "gmNotes": "Frau Jalla Krump, a solidly built woman in her 50s, handles all the day-to-day business. Krump is entirely beholden to Adelheidis 'Alisha' Keller, a young, blessed priestess of Katya who is committed to converting followers sworn to a single god to a polytheistic path. Alisha has formed close relations with the new watch captain, Andrea Pfeffer, and provides intelligence on those she believes are cultists of the Dark Gods, but only if she believes their souls are irrevocably lost.",
+            "hooks": [
+                "The Kat House is ablaze. Onlookers panic, and a number of Alisha's staff, as well as some wealthy patrons, are trapped in the burning building. It's a deathtrap, but helping could be profitable, and possibly troublesome when evidence seems to point to an outraged Initiate of the Cult of Sigmar.",
+                "Albrecht Horsten, a wealthy grain merchant, is a frequent visitor. Alisha believes he has fallen to the Prince of Pleasure, so he, noting her suspicion, has placed a bounty on her head. Alisha needs an escort to the Precinct to meet with Captain Pfeffer, but a high bounty can be very tempting..."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "ruggers_boarding_house",
+            "name": "Rugger's Boarding House",
+            "coords": {
+                "x": 1335,
+                "y": 1565
+            },
+            "playerDescription": "Rugger's is Ubersreik's cheapest inn, and for good reason: the beds are infested and the common room mouldy and damp. The lower floor has a dirty kitchen, a creaky dining hall, and the common room. The upper floor squeezes four private rooms (each with two double bunks) and the proprietor's room into a tiny space.",
+            "gmNotes": "Anna Rugger, known on the docks as Gram'ma, is the aging proprietor of the boarding house. She is married to the master of the Boatmen's Guild, Karsten. Because of this, anyone causing Rugger trouble is likely to find a gang of hook-wielding men on their tail, all eager to help their Gram'ma out in any way they can.",
+            "hooks": [
+                "Gram'ma has a job. One of her lodgers, Herr Bleanich, passed away in the night. She'd rather not deal with the Watch, so make the body go away and Gram'ma will owe you.",
+                "Gram'ma has another job. This one's a little bigger. Her husband, Karsten Rugger, is too scrupulous for her liking. She will be thankful if someone makes him vanish. Permanently."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "inn"
+        },
+        {
+            "id": "strohmann_markt",
+            "name": "Strohmann Markt",
+            "coords": {
+                "x": 1490,
+                "y": 1250
+            },
+            "playerDescription": "Strohmann Markt lies at the edge of the Teubrücke, where it connects to the fortified Precinct district. A relatively small, open square, it hosts a number of stalls by day, selling a wide variety of food and clothing. Hocheim's Livery Stables dominates one side of the platz, where visitors to Ubersreik can stable their horses. Next door to the stables, Marlies Zeitflug recently opened a small shop selling hourglasses and timepieces.",
+            "gmNotes": "Scarred and wrinkled Sabina Hocheim owns Hocheim's Livery Stables. An enterprising veteran of the last Parravon War, she spends her last days watching while her nephews and nieces do the work, intending for them to inherit the business. Marlies Zeitflug's shop is struggling in the current uncertain environment, and she is growing more concerned every day.",
+            "hooks": [
+                "Hocheim has altered her will so her stables will be sold off on her death, the money being used to support soldiers' widows and children. Her nephew, Tilman, would rather she support her more immediate family. Should the party be able to produce a good forgery of the will, they will stand to profit, following Sabina's eventual demise.",
+                "Marlies Zeitflug needs some influential customers, in the hope that they may make her time-pieces more fashionable. Should the party be able to convince someone wealthy to buy a clock, they will earn a commission."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "ubersreik_bridge_dunkelfeucht",
+            "name": "Ubersreik Bridge & Dunkelfeucht",
+            "coords": {
+                "x": 1940,
+                "y": 1700
+            },
+            "playerDescription": "Two centuries old, the Dwarf-built Ubersreik Bridge still dominates the city. It is supported by great, stone pillars sunk deep into the riverbed, rising to a height making it visible from much of the town. Local laws prohibit building atop the bridge, so those traversing it are greeted with fine views. Unseen from this vantage, a small shanty town known as Dunkelfeucht has sprung up under the bridge's shadow. The homeless and desperate gather here, and only the desperate now venture there.",
+            "gmNotes": "Gangs and footpads prowl Dunkelfeucht, and the Altdorf-led Watch avoids the place completely. This freedom from law-enforcement has allowed several makeshift jetties to be built by smuggling gangs. Recent rumours suggest the gangs are being bound together by a new leader known only as 'The Baron', a criminal mastermind known for his ambition and utter ruthlessness. The Baron is Katerine Eule, a woman from the rookeries of Altdorf who followed the army south to exploit the power vacuum.",
+            "hooks": [
+                "The party have been hired by Klaus Osfer to locate his brother Ulli, who is somewhere in Dunkelfeucht. Ulli was kicked out of home by his father, who has now passed away, and Klaus wants him to come back. To get to him, the party will need to negotiate with The Baron, and her thugs.",
+                "Barrels of explosives have been reported stolen from the Miners' Guild, and the trail seems to lead to Dunkelfeucht. If the party investigate, they will discover the explosives are being stockpiled against some of the pillars of the bridge, with a view to destroying it. This plan is being orchestrated by Ernst Elsen, a destitute Human mason resentful of Dwarf influence on Ubersreik."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "marktplatz",
+            "name": "Marktplatz",
+            "coords": {
+                "x": 1930,
+                "y": 2265
+            },
+            "playerDescription": "Ubersreik's Marktplatz quarter stands at the heart of the town. Every Marktag (the weekly market day), farmers bring their produce from the surrounding villages to trade in the busy market squares, while pedlars and merchants display cloth and other produce. Most retailers within Ubersreik also pitch stalls on Marktag. At the centre of the Market Square, an imposing statue of Magnus the Pious stands, commemorating his pivotal role in rebuilding Ubersreik. The Marktplatz bustles with activity on most days, and is often used as a meeting point.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "the_physicians_guild",
+            "name": "The Physicians' Guild",
+            "coords": {
+                "x": 2070,
+                "y": 2345
+            },
+            "playerDescription": "Across the square from the Temple of Shallya lies the Physicians' Guild, a modest but well-appointed building. Each of the town's three licensed physicians has an office and consultation room on the timber-and-lathe first floor, while the stone-walled ground floor contains a shared reception area and waiting room, and a thoroughly sound-proofed operating theatre.",
+            "gmNotes": "Doktor Otto Krupp is the eldest physician and Guildmaster; his principle concern is advertising his services, rather than patient care. Doktor Theodosia Grat is a bookish, driven graduate of the University of Altdorf, keen to learn as much as she can about illness and disease. Doktor Bernhardt Bayer is the youngest; charming and confident, he sees his profession as an opportunity to meet and impress the young men of Ubersreik.",
+            "hooks": [
+                "Doktor Krupp is willing to pay a bounty of a shilling to anyone who can provide proof of a barber surgeon performing restricted work (such as the stitching of wounds) within the walls of Ubersreik. Of course, doing so would mean one's only future recourse for healing would be the Physicians' Guild, and their fees are steep.",
+                "Doktor Grat is a member of the Tinean Fellowship. Her obsession with diseases led to her worshipping Nurgle, the Chaos God of Disease. She has a secret shrine to the Plague Lord in the cupboard of her office, and has been injecting her patients with Bronze Fever to observe the effects."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "doctor"
+        },
+        {
+            "id": "the_temple_of_shallya",
+            "name": "The Temple of Shallya",
+            "coords": {
+                "x": 1895,
+                "y": 2135
+            },
+            "playerDescription": "The white walls of the Temple of Shallya, Goddess of Mercy, soar skywards near the Temple of Verena. It is a high-ceilinged building with a wide dome, all built in a classical style. Inside, there is an open space for worship and tending the sick. A series of curtained alcoves lie along both sides of the temple, where those with more severe or less dignified afflictions are placed. The inside of the dome is painted with a beautiful fresco of crying Shallya.",
+            "gmNotes": "Marianne Altenblum is the High Priestess, a matronly widow who joined the cult over a decade ago. She has a bottomless well of empathy, but no tolerance for flippancy or timewasters. She is assisted by a number of initiates and lay-members, who tend the sick and provide alms to the poor.",
+            "hooks": [
+                "Altenbum has plans. She wishes to expand into the vacant building next to the temple, to create a hospice and infirmary for the town's poor. But to do so she will need donations and the blessing of the town's rulers. Any party able to secure either will find themselves in her good graces, and in receipt of free healing in perpetuity!",
+                "Esther Schultz, a dairy farmer, was taken ill last Marktag. High Priestess Altenblum would like the party to escort Esther home, so that she may die in peace. Unfortunately, Esther is dying due to exposure to warpstone. Over the course of the journey, she will gradually mutate. The horrors awaiting at her farm can only be imagined. And what about anyone who ate her cheese?"
+            ],
+            "image": "",
+            "music": "",
+            "tag": "temple"
+        },
+        {
+            "id": "the_temple_of_verena",
+            "name": "The Temple of Verena",
+            "coords": {
+                "x": 1885,
+                "y": 2460
+            },
+            "playerDescription": "The Temple of Verena, Goddess of Wisdom, stands at the south-east corner of Handel Square. A modest building, its services are attended regularly by scholars, including members of Ubersreik's judiciary. Behind the single-storey temple lies the 'Annexe', a large library open to all. The Annexe contains a broad, well-lit reading room and many cases of books and scrolls, including the town's charter and bylaws.",
+            "gmNotes": "The more valuable, or dangerous, books are located in a locked room, only accessible with the high priest's blessing. Heinrich Gutenberg is the high priest. A kindly man, with a long, flowing beard, Gutenberg believes knowledge is Verena's gift, and sees it as his sacred duty to share it. He is assisted by Dagmar Schirma, a shortsighted librarian who is clearly besotted with the high priest, a fact of which Gutenberg remains sadly ignorant.",
+            "hooks": [
+                "After a theft from the Annexe, librarian Schirma asks the party to hunt down and bring back the books from various dealers and private collectors around town. She doesn't want Gutenberg to know, so won't involve the authorities. She will reimburse the party the cost of repurchasing the books plus a small amount. If the party can secure the books without paying, they could turn a profit.",
+                "Andreas von Bruner badly wants to read a restricted book, but Gutenberg refuses him. Anyone smuggling Andreas into the locked section will be paid handsomely. Of course, as he's secretly a cultist in thrall to the Chaos God Slaanesh, doing so may prove a very bad idea."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "temple"
+        },
+        {
+            "id": "town_hall",
+            "name": "Town Hall",
+            "coords": {
+                "x": 2030,
+                "y": 2005
+            },
+            "playerDescription": "Ubersreik's Town Hall is an imposing stone building, two storeys high with four towers, that looms over the northern side of Marktplatz. In addition to banks of offices belonging to the Burgomeister and his staff, it contains the stately Nobles' Court, a grand hall in which the Jungfreud rulers historically made rulings. The towers were reserved for the Jungfreuds and visiting nobles to use as a residence but now lie unused.",
+            "gmNotes": "Since the removal of the Jungfreuds, the status and influence of the Town Council has risen dramatically. Ernst Maler is the current Burgomeister of Ubersreik and leader of the Town Council. His role was, until the arrival of Altdorf's troops, chiefly clerical. Given the potential for the town to become a Freiburg, things have changed — he is courted by Guildmasters and resented by the nobility loyal to the Jungfreuds.",
+            "hooks": [
+                "Beneath the Town Hall, there is an old, disused gaol, with a half-dozen cells. Maler would like the cells cleared, 'as a precaution, only!'. Unbeknownst to Maler, a colony of giant spiders are nesting there, so clearing the basement will take more than merely moving boxes.",
+                "If the party have made contact with Maler, they will immediately come to the attention of the aspiring guildmasters, any of whom may contract the characters to lobby Maler on their behalf. Should different guilds coerce different party-members, the fallout could be messy..."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "sprichstumpf",
+            "name": "Sprichstumpf",
+            "coords": {
+                "x": 1890,
+                "y": 2320
+            },
+            "playerDescription": "The Sprichstumpf is the stump of a great oak tree that once stood in what is now Market Square. It was felled during Magnus' reconstruction of the town. The remaining stump, which is around eight feet wide, stands not far from the statue of Magnus. It has become the focal point for the town's agitators and pamphleteers, an impromptu pulpit from whence they can rant and extort to the masses.",
+            "gmNotes": "",
+            "hooks": [
+                "Anton Grimski, a firebrand agitator, has taken to visiting the Sprichstumpf most mornings, railing against the bourgeois corruption of Maler and the guilds. Grimski is, in truth, in the pay of the Jungfreuds, who wish to show the Burgomeister is unable to maintain order.",
+                "On Festag, a wandering Sigmarite mendicant begins to preach of the decadence of the Cult of Sigmar, drawing quite a crowd. The mood of the crowd begins to turn sour. A riot may erupt, unless the players take action."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "theatre_variete",
+            "name": "Theatre Varieté",
+            "coords": {
+                "x": 2010,
+                "y": 2125
+            },
+            "playerDescription": "Originally a merchant's storehouse, this building was converted a decade ago into a proscenium arch theatre, which plays host to actors, musicians, and entertainers of all sorts. It is a large, stone building, with an expansive, vaulted, wooden ceiling. A large chalkboard hangs beneath the painted sign, on which the owner writes the name of the next performance. Inside, there are fifty seats in the stalls, another fifty in the upper circle, and two boxes reserved for the town's elite.",
+            "gmNotes": "Benedict Gurkenfeld, an actor and playwright of some renown, now runs the Theatre Varieté. During most days he can be found strolling around the Marktplatz observing the busking entertainers, scouting for talent. He has a number of stage-hands and ushers on staff, and directs a company of local amateurs who perform on occasion.",
+            "hooks": [
+                "Disaster has struck. On the night of a sell-out performance, all of Gurkenfeld's performers have fallen ill after eating some dodgy shellfish. If the party have any skill at performing, this could be their big break.",
+                "Like all good theatres, the Theatre Varieté is haunted. The ghost is tormenting the visiting performers, and Gurkenfeld is desperate. Should the party investigate, they will discover that one of the stagehands, a Dwarf named Ragnar Torsson, has been faking the ghost in the hope of boosting ticket sales so he won't be fired."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "watchstation",
+            "name": "Watchstation",
+            "coords": {
+                "x": 1905,
+                "y": 1895
+            },
+            "playerDescription": "This small building, not far from the Town Hall, is not more than four-foot across at its base. It has a heavy, oak door daubed with a crude rendition of the heraldry of Ubersreik. Inside, there is a waist-height metal pole against one wall with manacles attached.",
+            "gmNotes": "The Watch once used the Watchstation to hold drunks or to imprison criminals during night-time patrols. However, the keys to this and the other 11 Watchstations spread through Ubersreik, went missing during the Altdorf invasion.",
+            "hooks": [
+                "Captain Pfeffer wants access to the Watchstations. She is advertising for any with the relevant skills to help her gain entry without causing damage so she can then replace the locks. However, the existing locks are Dwarf-wrought, and require a Very Hard (-30) Pick Lock Test. There is a reward of 2 GC on offer.",
+                "The Baron has the keys for the Watchstations, and is using them to store smuggled goods. She will not be happy should others gain access, and will seek vengeance if her contraband is taken."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "merchant_quarter",
+            "name": "Merchant Quarter",
+            "coords": {
+                "x": 2065,
+                "y": 2505
+            },
+            "playerDescription": "The Merchant Quarter extends eastwards from Marktplatz to the base of the Hill. It contains the Merchants' Guild, as well as a number of traders, retailers, and offices, as well as some smaller warehouses. Most of the buildings here are part stone, part timber, and even in these difficult times, several are being extended and redeveloped as trade in Ubersreik swells. By day, the quarter is usually busy, filled with burghers of all classes, but at night it grows quieter the further you stray from the Market Square, though it is well-patrolled by the Watch.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "the_dog_pens",
+            "name": "The Dog Pens",
+            "coords": {
+                "x": 1900,
+                "y": 2620
+            },
+            "playerDescription": "The Dog Pens is a wide square near the centre of the Merchant Quarter. It used to house kennels for dog fighting, but now hosts a number of middle-class eateries and taverns, including Frau Dehne's Tearoom and Sauer's Slophouse. The platz is popular amongst the burghers who live and work in the district, although it lies slightly off the beaten track.",
+            "gmNotes": "Frau Dehne runs her tearoom efficiently, selling no alcoholic beverages, but a range of hot brews and cold cordials, with cakes and pastries. In contrast, Sascha Sauer offers 'slop', a boiled down, congealed stew of vegetable tops and off-cuts of meat, which is tasty and nutritious, costing just 3d for a bowl and pint.",
+            "hooks": [
+                "Perhaps the name 'The Dog Pens' is more accurate than many believe. Sauer frequently finds affordable meat hard to acquire, and will resort to unconventional sources when needs must. When the party, or a close ally, loses their small but vicious dog, they may not be consoled with a large portion of viscous slop.",
+                "Frau Dehne is a devout follower of Verena. After the death of her alcoholic husband, she came to believe that alcohol is the root of the Empire's current woes. She has started a temperance movement and asks the party to publicly abstain from drinking to help her garner support. She can't pay much money, but her raspberry cordial is to die for."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "the_exploding_pig",
+            "name": "The Exploding Pig",
+            "coords": {
+                "x": 1525,
+                "y": 2260
+            },
+            "playerDescription": "Just off Abrechnungsplatz lies the Exploding Pig, a large tavern frequented by merchants, traders, and, on Marktags, visiting farmers. Its two floors are a hive of gossip, especially among local burghers with an interest in trade and local politics. Since the arrival of the State Soldiers from Altdorf, the Pig is much busier than usual as Ubersreik's chattering middle classes gather to discuss the latest developments.",
+            "gmNotes": "Hanno Rader, the landlord, named the inn after an accident in Dawihafen involving an abattoir and an armoury. He is as gossipy as a Nordlander fishwife and rarely gives others a moment to talk. He is also notorious as a reliable source of unreliable information. Rader's open support of the Burgomeister has earned him the disdain of locals loyal to the Jungfreuds.",
+            "hooks": [
+                "While exiting at closing time, masked brigands attack the party and other patrons. If they decide to report the assault to the Watch, they realise that one of the assailants was Watch Sergeant Tirza Bronstein. He's quite prepared to lock up any with wild claims of corrupt watchmen.",
+                "Rader uses one of his private rooms upstairs to host a group of guildmasters who are consolidating their efforts to influence the Burgomeister. Kurt Prochnow, guildmaster of the Boatbuilders and Chandlers' Guild, will pay the party 1 GC to spy on the meeting and report back what they discover."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "tavern"
+        },
+        {
+            "id": "furlisdottirs_corn_exchange",
+            "name": "Furlisdottir's Corn Exchange",
+            "coords": {
+                "x": 2155,
+                "y": 2155
+            },
+            "playerDescription": "A large, two-storey, stone building, the Corn Exchange has been reconfigured as an indoor market, with numerous small retail stalls present on most days. The ground floor is a maze of stalls selling clothes, food, homewares, and knick-knacks of all kinds. A mezzanine gallery circles the building. More expensive items may be purchased there, and guards circulate to ensure customers don't try to lift stack without paying.",
+            "gmNotes": "Numerous traders offer their wares here, including: Ekkehard Eich, trader in rare books; Heinz Giegerich, a scribe who will read or write letters for a fee; and Malasa Nusa, an Arabyan textile merchant. The stallholders all pay rent to scowling Elke Furlisdottir, the Dwarf landlord. Elke's brother, 'Mighty' Borin Bozaksson, is responsible for security. Only the fastest or most foolish of thieves consider shoplifting under Borin's watch.",
+            "hooks": [
+                "As the PCs browse the stalls, a worried merchant asks them to cover his stall while he nips to the privy. After half a bell, the real owner returns, wondering what happened to his good-for-nothing nephew and the day's takings.",
+                "Greta Klopstock, a young thief and initiate of the Crooked Fingers sect of the Cult of Ranald, is on her way out of the market, pursued by Borin. The party could intervene on either party's behalf, attempting to catch the thief in the hopes of a reward, or slowing the guard to ensure her escape in the hope of a future favour."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "merchants_guild",
+            "name": "Merchants' Guild",
+            "coords": {
+                "x": 2220,
+                "y": 2340
+            },
+            "playerDescription": "The Merchants' Guild has become the political powerhouse of Ubersreik overnight. The guildhouse is currently a mass of wooden scaffolding, swarming with surly tradesmen, as it undergoes a series of renovations to ensure its facade reflects both civic pride and opulent wealth. There's a private club for local merchants on the ground floor. Upstairs there is a suite of more formal meeting rooms.",
+            "gmNotes": "Guildmaster Marta Müller is keen to exploit the guild's new influential force. Müller is a shrewd businesswoman with a jolly demeanour. Her family specialise in dairy products. She has been the master of the guild for three years, but the position is contested annually, drawing from representatives of the town's four main trading houses: Brauninger, Hertie, Karstadt, and Müller.",
+            "hooks": [
+                "Müller is secretly a member of the Brotherhood, part of the Cult of Ranald. She is instrumental in moving funds from the cult's illicit activities in the Crooked Hammer to more legitimate ventures. If the party contains a Ranaldan, or have assisted the cult, she can smuggle them out of Ubersreik to Altdorf in a cheese barge.",
+                "Bengt Hertie, whose Merchant House trades in cloth and clothing, is very much the junior partner in the guild. He wishes to acquire gossip on his Brauninger, Karstadt, or Müller rivals, and will pay for any dirt. However, he's not the brightest man, and is easily fooled with any plausible 'secrets'."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "the_old_granary",
+            "name": "The Old Granary",
+            "coords": {
+                "x": 2350,
+                "y": 2005
+            },
+            "playerDescription": "Dominating the skyline in the south of Ubersreik, the Old Granary is one of the fortress-town's tallest buildings. The conical construction is entirely built from stone, and has many doors up its north-facing side. It is wrapped with an external staircase that has seen better decades. It is currently the only granary within the town's walls.",
+            "gmNotes": "As flour is extremely flammable, the Old Granary is heavily guarded, and no naked flames, engineers, or wizards are permitted within ten feet by law. The Blessed Guild of Lady's Vale's Master Millers owns and maintains it. Flour is sold from a small kiosk; purchasers receive a clay chitty that can be redeemed at the Granary. The chitty set is changed daily to make it difficult for counterfeits. Ruprecht Adelmann is the guild's Ubersreik representative. He is often found after hours entertaining young men and women he picks up from local taverns.",
+            "hooks": [
+                "The troops from Altdorf have come with their own supply of flour, which has driven down local prices and initiated a trade war. Should something happen to the Old Granary, it would devastate the local market, opening it up to importers. Marta Kroll, an Altdorfer merchant, is hoping this happens so she can trade with importers.",
+                "Adelmann's system of chitties is efficient and easy to counterfeit. The party is asked to acquire a chitty and deliver it to a fence in the Red Moon Inn. The 'Fence' is actually an agent of Captain Pfeffer of the Watch, on the lookout for a ring of counterfeiters. Quick-talking by the PCs might see them hired as her agents."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "saint_bastians_hospital",
+            "name": "Saint Bastian's Hospital",
+            "coords": {
+                "x": 2350,
+                "y": 2305
+            },
+            "playerDescription": "Ubersreik's Merchants' Guild maintain this orphanage and school as a philanthropic gesture. It is a tall, narrow building in the Merchant Quarter. The ground floor contains a reception area, office space, a refectory and kitchens. The first floor contains classrooms and bathrooms, and the top floor contains the children's dormitory. Staff quarters are in the basement.",
+            "gmNotes": "Frederich Gewinnguter runs the Hospital, a charming middle-aged man who lives on site with his wife Hilde. During the day, additional staff attend, including Wolfram Weissman and Molrella Tüsch, who teach a broad curriculum to the children.",
+            "hooks": [
+                "Mistress Tüsch wishes to take some of the children on a field trip into the Hagercrybs to observe the natural flora and fauna. Given rumours of bandits in the area, the Merchants' Guild are willing to pay for an escort. In fact, there are no bandits there, but the children are sure to provide trouble enough!",
+                "Unbeknownst to his employers, or his wife, Gewinnguter is a Daemonologist. In the evenings, he pores over his arcane grimoire, summoning lesser daemons. Despite dabbling in the dark arts, Gewinnguter is not yet in thrall to the ruinous powers, using the knowledge to blackmail a number of rivals. Gunther Grabbe, one of his victims, hires the party to investigate just how Gewinnguter gets his information."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "sisters_bakery",
+            "name": "Sisters' Bakery",
+            "coords": {
+                "x": 2225,
+                "y": 2450
+            },
+            "playerDescription": "A modest, stone built building, Sister's Bakery is tucked in between a leather shop and a milliner. It's a single storey, noticeably shorter than the other buildings on its street. Inside, there is a small area for serving customers, lined with shelves laden with bread and pies, with more delicate confections kept behind the counter. Most of the building's deep footprint is taken up by the bakery itself.",
+            "gmNotes": "Om and Nom Tumbleberry, twin Halfling sisters, run the bakery. They are identical and have a tendency to finish each other's sentences. They will happily interject into their customers' conversations. Om specialises in fine confectionery, while Nom is more experimental, and has recently been aping various Altdorf recipes, such as her popular lamprey pies.",
+            "hooks": [
+                "Nom needs some very specific ingredients from Satrioli's Sausage Shop, but cannot buy them directly out of fear of the Lowhaven Clan. If the party can buy the ingredients without arousing suspicion, free pies all round!",
+                "The bakery is vandalised — the brick ovens hammered and the produce spoiled. When the short-staffed Watch take no interest, the Tumbleberrys turn to the party to investigate. If they follow the clues, they will discover a group of locals were riled up by Anton Grimski to target businesses fraternising with troops from Altdorf."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "spirren_hirsch_and_gartner",
+            "name": "Spirren-Hirsch and Gärtner",
+            "coords": {
+                "x": 2250,
+                "y": 2565
+            },
+            "playerDescription": "Spirren-Hirsch and Gärtner are the foremost practitioners of law in Ubersreik. The timber and lathe office is currently being extended to allow for their growing number of clerks. The building is notable for its multiple entrances and exits, to allow discretion on the part of their clientele, particularly useful given the firm's propensity for representing both parties in civil cases.",
+            "gmNotes": "Wilhelm Gärtner and Melina Spirren-Hirsch are the firm's chief partners. Spirren-Hirsch is an intelligent, sophisticated woman in her 60s. Gärtner is only 30, with a brash, arrogant streak. Many student lawyers and clerks assist the partners.",
+            "hooks": [
+                "In addition to their numerous street-front entrances, there is a secret entrance into the sewers, used by the firm's less savoury clientele. Bjorn Fellstren, a skittish racketeer, requires an escort, and the firm will pay well for the party to offer protection from sewer jacks, rats, or anything nastier.",
+                "Prosperity Lowhaven, a lawyer and representative of the Lowhaven Clan, is in litigation with one of Gärtner's clients. He will pay the party handsomely, if they can pose as clients, infiltrate Gärtner's office, and steal the relevant documents."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "thulmannplatz",
+            "name": "Thulmannplatz",
+            "coords": {
+                "x": 1420,
+                "y": 2275
+            },
+            "playerDescription": "A small square, Thulmannplatz is home to Ubersreik's stocks. In addition to criminals being punished by Magistrates, the Altdorf forces have taken to imprisoning anyone resisting their instructions, or publicly supporting the Jungfreuds. Sometimes these poor unfortunates remain locked up for hours, or even days. Ever enterprising, a number of Halfling stallholders have begun selling rotting fruit and vegetables to public-spirited Ubersreikers, which they can hurl at wrongdoers.",
+            "gmNotes": "",
+            "hooks": [
+                "Genoveva Grün, an agitator who supports the expulsion of the Jungfreuds, has taken to riling crowds up. Sharp-eyed Characters may note that she is being paid in turn by the Halflings for increasing their trade. She is also employed by a crooked Sergeant in the Altdorf troops. When the party find themselves in his crosshairs, will this knowledge protect them?",
+                "When Severin Pfister, a visiting wool merchant, is arrested on trumped up charges, the crowd is so incensed that it swarms the stocks, intent on tearing him limb from limb. Will the party stand by and watch an innocent man be murdered? Will they step in and save him? Or join in, and loot his corpse?"
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "unterdaumen_warehouses",
+            "name": "Unterdaumen Warehouses",
+            "coords": {
+                "x": 2515,
+                "y": 1815
+            },
+            "playerDescription": "Seven small warehouses are ringfenced to the north of the Merchant's District and well-patrolled by private guards. They are owned by the Unterdaumen Merchant House. Each warehouse has large double-doors, is around ten-yards long, and has no windows.",
+            "gmNotes": "Grigerid Underdaumen is an octogenarian with a nose for profit. She is utterly ruthless, and enjoys nothing more than to destroy her rivals completely. She lives frugally in Underdaumen Warehouse VI, and has her favourite guard, Fritz Fritzman, wheel her to the Merchant Guild every morning.",
+            "hooks": [
+                "Underdaumen deals with the Baron, the Lowhavens, Guido Falk, and several other criminal gangs. However, she doesn't want her guards caught up in obvious unlawful activity, so hires cheap outsiders to run errands and collect contraband.",
+                "Fritzman is a Yellowbelly who spies on criminal families for his masters. He reports to Slippery Jacob, a bawd from the Docks, and is overheard sharing Lowhaven secrets. They could be lucrative if sold to the correct party."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "von_holzenauers_potion_shop",
+            "name": "Von Holzenauer's Potion Shop",
+            "coords": {
+                "x": 2125,
+                "y": 2745
+            },
+            "playerDescription": "A spacious three-storey building, the Potion Shop has large arched windows illuminating the ground floor, where potions are made and sold. The first floor holds the spacious and well-lit private quarters of the owner, Siegfried von Holzenauer. The staff quarters lie above this, in the cramped attic rooms.",
+            "gmNotes": "Siegfried von Holzenauer, a minor scion of a noble family, dabbles in potion-making as a hobby. He is far more interested in discovering and devising new recipes and sourcing rare ingredients than in turning a profit. As such, his staff will happily acquiesce to hagglers, offering potions at significantly discounted prices.\n\nPOTIONS FOR ALL SEASONS:\n- Ameliorative Elixir (1/4): +10 WP, -10 Agi, Ini, Int. Duration 1d10x10 min.\n- Focusing Philtre (5/-): +20 Int, End. Gain 1 Fatigued for a day after. Duration 1d10 hours.\n- Liquor of Luck (1GC): +1 Fortune. On double d100 roll when spending Fortune, regain it. Lose all Fortune and gain 1 Fatigued after. Duration 1d10 min.\n- Katya's Cordial (6/-): Gain Attractive Talent. Suffer -20 Fellowship for 1d10 days after. Duration 1d10 hours.\n- The Marvellous Medicinal Mixture (8/-): Average(+20) Cool Test to drink. Gain 1 Fatigued. No other effect, but customers believe it works.\n- Reactionary Restorative (1GC): Never gain Surprised Condition. Gain 1 Fatigued after. Duration 1d10 hours.\n- Tonic of Sight Beyond Sight (10/-): Roll 1d10 for temporary Talent(s): 1-2: Acute Sense (Sight); 3-4: Holy Visions; 5-6: Magical Sense; 7-8: Second Sight; 9-10: all of the above. Duration 1d10 min.",
+            "hooks": [
+                "Though von Holzenauer developed his Ameliorative Elixir as a painkiller, it is often used recreationally. The potion is almost absurdly cheap, and is sold at a markup in seedy establishments in the Docks. Viktoria Häussler, a bawd, will pay the party to purchase large quantities of the potion and bring them to her.",
+                "Gustavus Guggenheimer, a Wizard Lord of the Gold Order, is concerned that von Holzenauer's potions have unnatural effects. Given Holzenauer's noble status, Guggenheimer is reluctant to officially intervene, so has asked the party to investigate and determine what goes into the mysterious potions."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "wahlunds_rat_catchers",
+            "name": "Wahlund's Rat Catchers",
+            "coords": {
+                "x": 2420,
+                "y": 2890
+            },
+            "playerDescription": "This guild is located in a former tavern on Grossweg. The tavern's sign had depicted a snarling, fat shark, so it now has a dead rat painted hastily into its mouth. The old taproom serves as a meeting room and clubhouse for the rat catchers and their visitors. The cellar houses a kennel for their dogs, and also contains a secure entrance into Ubersreik's sewer complex.",
+            "gmNotes": "Until recently, the rat catchers of Ubersreik barely had a guild. But then Wahlund, a foreign rat catcher, arrived with his 'Exterminators'. Wahlund bought an old inn, which he offered the guild if it let him lead them. The guild is lead by Guildmaster Wahlund, a scarred veteran Sewer Jack from the north. Unbeknownst to most, he is also a High Priest of Stromfels. He and his three compatriots are all that remain of a secret cult wiped out by a Skaven assault. They travel the Empire, slaughtering the ratmen, and seeking out Grey Seer Rasknitt, the architect of their cult's destruction. They have followed rumours of Rasknitt to Ubersreik and secreted a small shrine to Stromfels in the basement.",
+            "hooks": [
+                "Wahlund wishes to hire the players to hunt rats, freeing him up to focus on hunting Skaven. Their discretion is appreciated and will be rewarded. Of course, once down there, it's likely they will inevitably encounter the four northerners on the hunt, and may well become embroiled in their secret quest for vengeance.",
+                "Thormo Hakenbein, one of the guild's most unassuming members, is secretly a Witch. With the guild's expansion, he fears discovery and will hire the party to investigate Wahlund and his friends, hoping that his coin will prevent them from looking into his own activities."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "morgenseite_the_hill",
+            "name": "Morgenseite (The Hill)",
+            "coords": {
+                "x": 2745,
+                "y": 2260
+            },
+            "playerDescription": "Morgenseite, known locally as 'The Hill', is the most affluent quarter of Ubersreik. The homes of Ubersreik's wealthier middle-class families form a terrace leading up the Hill to the manors, mansions, and small estates of the wealthiest nobles, guildmasters, and clerics. Curving around the bottom of the Hill, Osterstrasse hosts the town's elite shops, including high-class couturiers, eateries, jewellers, armourers, and other luxury goods. The Watch patrol Morgenseite enthusiastically. Undesirables and those inappropriately dressed are likely to be moved along with a swift boot.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "aschaffenberg_manor",
+            "name": "Aschaffenberg Manor",
+            "coords": {
+                "x": 3095,
+                "y": 2330
+            },
+            "playerDescription": "The Aschaffenberg residence is the second largest estate on the Hill. The striking two-storey manor has a coach-house and stables built into the north side, and a selection of out-buildings to the south, all of which are built in a classical style. It is officially the home of Duke Brynich of House Aschaffenberg and his wife, Duchess Eleanor.",
+            "gmNotes": "The uncertain future of Ubersreik has persuaded the duke to retire to his lands, leaving his wife to wrap up their affairs. However, Duchess Eleanor has no desire to leave her palatial residence and plans to do everything she can to never leave Ubersreik. Tancred Davieu is the head of staff and has been tasked with cataloguing and preparing the manor's contents for auction, work which is seriously impeded by Eleanor. Ten of the Duke's personal guard are garrisoned here.",
+            "hooks": [
+                "In the chaos following the Duke's departure, Davieu's daughter, Krystal, pilfered some of the silver. Now the goods are to be sold in auction, and she needs to get the silver back to avoid suspicion. The silver is in a warehouse in the Docks belonging to Pip Shufflepig, a low ranking member of the Lowhaven Clan.",
+                "A shifty stranger claiming to be working for Duchess Aschaffenberg wants to hire the party to disrupt the impending auction, by stealing Davieu's list of goods. Entrance through the grounds should be relatively straightforward, there's just the matter of the Duke's guards to contend with."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "brauninger_house",
+            "name": "Brauninger House",
+            "coords": {
+                "x": 2840,
+                "y": 2170
+            },
+            "playerDescription": "Owned by the Brauninger merchant family, this building is modest for The Hill. It contains 16 rooms, a large servants' quarters, and separate stables and coach house. The merchant house has contracts with several noble families and mercenary outfits across the Empire to supply arms: the family's primary business.",
+            "gmNotes": "Many of the town's forges are under the family's control, and the Metalworking Guild is a close ally. Sigmar Brauninger is a slight man in his early 50s. His house's business has grown impressively, with offices in Nuln, Altdorf, Carroburg, and Marienburg. This last acquisition may prove costly as the competition in that city is cut-throat.",
+            "hooks": [
+                "Marius Strooper, a 'freelance consultant' from Marienburg, wants to hire a group to deliver a 'message' to Brauninger. The 'message' is to be secretly delivered directly into his office. Should his employees succeed, they will be ‘wealthy’. Should they fail, they may cause a diplomatic incident.",
+                "A shipment of Brauninger's arms is missing. Three wagons, containing blackpowder weapons, were en route from Nuln to Ubersreik. In the power vacuum, Brauninger was keen to secure a contract with the burgomeister to supply the Watch. He will pay generously for a party to hunt down his missing weapons and bring the culprits to justice."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "emperors_rest_hostel",
+            "name": "Emperor's Rest Hostel",
+            "coords": {
+                "x": 2710,
+                "y": 2065
+            },
+            "playerDescription": "The six-storey Emperor's Rest sits at the base of the Hill by the northern end of the Osterstrasse and provides suites of rooms and fine dining for the wealthiest of Ubersreik. The prohibitive prices, and burly, if well-liveried, guards ensure the riff-raff are kept at bay. Political uncertainty has led to a drop in business, which concerns the staff.",
+            "gmNotes": "The fabulously wealthy Duke of Telland owns the impressive hostel. Managing the hostel on his behalf, the scrupulously clean Hedrich Hann monitors his 37 staff with a general's eye and a firm tongue. He's an especially devout man, and confesses to the priests of Sigmar in the High Temple every Festag.",
+            "hooks": [
+                "Hann has a rodent problem. Should word of the rats in the basement get out, it could further affect trade, so he would like it taken care of quickly and quietly, which means no Ratcatchers' Guild. The evidence of the rats is clear to see, though the holes seem awfully large...",
+                "One of the characters recognises a customer staying at the Hostel. It's Mikhail Ziegel, a Charlatan, posing as a noble, and clearly planning something bigger. The party could reveal the truth, earning Hann's thanks. Or they could speak to Mikhail, and get in on his scam."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "bruner_palace",
+            "name": "Bruner Palace",
+            "coords": {
+                "x": 2820,
+                "y": 2410
+            },
+            "playerDescription": "Von Bruners have lived on the site of Bruner Palace for centuries. The family is rich from its mines in the Hagercrybs, and it spends lavishly on the palace. It is the largest building on the Hill, with an impressive 239 rooms. It is in such a prominent position it can be seen from almost every part of the town. A large stables and coach house are built to the east end of the walled grounds, and a small jetty juts out into the Teufel at the foot of the Hill, where painted boathouses hold several pleasure barges.",
+            "gmNotes": "The estate is nominally controlled by Heinrich von Bruner, but in truth, his mother, Lady Kisaiya von Bruner, rules. Indomitable and authoritarian, she is currently raising three of her grandchildren: Andreas, Gutele, and Boniel. They hold lavish balls and salons that often last for days. Rumours of decadent pursuits persist, despite generous donations to the Cult of Sigmar.",
+            "hooks": [
+                "The party are invited to the Palace, not realising they are the entertainment. Ordered to fight for their betters' amusements. Do they fight one another, in the hopes of securing funds and patronage, or do they try to fight their way out, past the von Bruners' guards?",
+                "Liesel Mair, an investigator, has been following up rumours of Andreas's corruption. She (rightly) believes he is part of a profane cult, planning some kind of unholy ritual. But nobody at the Watch will take her seriously. Will the party help her uncover a monster?"
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "karstadt_estate",
+            "name": "Karstadt Estate",
+            "coords": {
+                "x": 2635,
+                "y": 2785
+            },
+            "playerDescription": "House Karstadt, the richest merchant family of Ubersreik, owns this bustling, and continually expanding, estate. The fortified grounds are the third highest on the Hill. The main building has two floors containing a score or so rooms. Beside the manor is a stables and coach house with space for 24 horses and four coaches. Other buildings are spotted across the grounds, which also contain several copses of trees, ornamental ponds, and an impressive maze to amuse visiting guests.",
+            "gmNotes": "House Karstadt is known for trading in ores, metal, and luxury goods, running mines, and moneylending. Unknown to most, the Karstadts were formerly nobles of Ubersreik. Decades ago, Baron Victor Karstadt chose to surrender his nobility to secure a loan. The family fortunes have significantly changed for the better since. Hellin Karstadt-Stampf is the current head of the family. Her husband, Leuthold, rarely leaves their offices in Altdorf, leading to gossip that their marriage has broken down. Helping Hellin, Josef Specht, the purser, is never far from her side. An unassuming fellow, Specht is an almost invisible presence, yet is quickly on hand with a quill or a supply of coins.",
+            "hooks": [
+                "Hellin's son, Alfred, yearns for a title to complement the wealth he will inherit. He is convinced the von Bruners retain his Grandfather's patents of nobility. He will richly reward anyone who will break into the Bruner Palace to retrieve them.",
+                "Hellin's daughter, Annika, has no interest in trade, longing instead to pursue a martial career. She will pay the party to train her in secret, hiring them to complete odd jobs around the estate to cover their furtive martial activities. But when Annika gets injured sparring, they will have to think fast."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "luigi_salvatore",
+            "name": "Luigi & Salvatore",
+            "coords": {
+                "x": 2820,
+                "y": 2310
+            },
+            "playerDescription": "Luigi & Salvatore is where the wealthy and indulgent of Ubersreik shop. It is a dark granite, three-storey building faced with large windows. Within, shoppers encounter a labyrinthine tangle of columns and shelves with dozens of attendants ready to help customers, or eject time-wasters and riff-raff. All manner of high quality, high priced goods can be purchased here: clothing, arms and armour, supplies, writing materials, and so much more.",
+            "gmNotes": "Adriana Corolla manages the opulent shop. She spends most of her time dealing with paperwork in her office in the basement. She will personally serve her most influential clientele, and takes regular breaks to stride the shopfloor, making loud, supportive comments in her distinctive Tilean accent.",
+            "hooks": [
+                "The party are hired by Corolla to act as mystery shoppers. She believes one of her attendants, Tamara, is skimming. The party are given 20 silver shillings to spend, on the proviso that they catch Tamara in the act.",
+                "To ingratiate themselves with Silvi Kreutzhame, Priestess of Ranald, the party must each steal an item of value from the store and donate it to the poor. The item must be of use, and the theft must go unnoticed."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "wings_of_the_pegasus",
+            "name": "Wings of the Pegasus",
+            "coords": {
+                "x": 2560,
+                "y": 2350
+            },
+            "playerDescription": "The Wings of the Pegasus is the finest eatery in Ubersreik, and, so its owners claim, all of Reikland. It sits near the top of Osterstrasse, with a commanding view of the town spread below it. Customers willing to pay their exorbitant rates are treated to food that is both exotic and subtly cooked. They often serve selections from rare and exotic animals and monsters. There is a small private dining room and balcony on the first floor.",
+            "gmNotes": "Johann Zustrass is the head chef, assisted by a team of Halfling sous-chefs. Zustrass is as legendary for his fiery temper, as for his varied menu. Maître d' Laurent Bonappetit manages the front of house staff. Bonappetit is a reed-thin Bretonnian with a wispy moustache and oily manners.",
+            "hooks": [
+                "Zustrass is about to entertain an influential customer, but he lacks a key ingredient: Manticore liver. His normal supplier is away. Zustrass has a map and a wagon, and will pay the party to fetch a fresh Manticore corpse.",
+                "Bonappetit is a fraud. He is really Dante Blau, a charlatan. He is trying to stay out of crime, but a noble lord he once conned has a reservation for this evening. He has to work, so he is offering the party a free meal in exchange for them running interference, with one of them masquerading as Bonappetit while serving the lord in the private dining room."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "madame_beaumarteaus",
+            "name": "Madame Beaumarteau's",
+            "coords": {
+                "x": 2695,
+                "y": 2330
+            },
+            "playerDescription": "The stone facade of this long, low shop is carved with the shapes of traditional masks. The carving is beautifully wrought, making the shop stand out. Madame Beaumarteau's is the premiere boutique for an array of fine costumes as well as fancy masks and more austere garb.",
+            "gmNotes": "Madame Beaumarteau is an aging spinster, stout of limb and heart. She sews much of her work herself, but employs a gaggle of Halfling seamstresses to assist her. Despite her stern demeanour, she is a kind soul, and will often offer reduced prices to less well-off clients, while overcharging those who are arrogant and abrasive.",
+            "hooks": [
+                "One of Beaumarteau's seamstresses, Lolly Skelfsider, has gone missing. Madame Beaumarteau believes the Lowhavens have kidnapped her and are holding her in Satrioli's Sausage Shop. She will pay the party to return her, but the truth is that Lolly is in love with Sunny Lowhaven and has recently eloped with him. The Lowhavens are not happy.",
+                "Given her position in society, Madam Beaumarteau is privy to all manner of secret intelligence. When the Characters pay a visit, they find the owner missing and her staff in disarray. They believe a gang of brigands have kidnapped her, looking to extort information from her. They left no clues, though the door looks like it was forced with some kind of curved metal blade, like a boot hook."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "auld_odenhaus_pantera",
+            "name": "Auld Odenhaus Pantera",
+            "coords": {
+                "x": 2975,
+                "y": 2735
+            },
+            "playerDescription": "Built in 1589 IC by the Knights Panther — a wealthy order of secular knights — this chapterhouse is a small, opulent building on the Hill. Stairs lead to an upper floor of grand chambers, including a smoky club house and library. Beneath lies an ornate stable, training square, and servant halls. For all its splendour, the building is crooked, sagging, and alarmingly creaky.",
+            "gmNotes": "No Knights Panther permanently lodge there, and it's rare for more than five to be in residence. Chamberlain Adella Markel leads the Odenhaus's 6 staff and 13 guards. All wear blue livery with a snarling panther on their chest.",
+            "hooks": [
+                "Man-at-arms Helrella Markel has waited all her 53 years to be Chamberlain, and will wait no longer. She needs a group willing to murder a 76 year-old grandmother, and will pay well. But she won't mention Adella trained with Knights Panther all her life, and is likely the finest swordswoman in Ubersreik.",
+                "Knight-Captain Brander von Gerlbach of the Knights Panther is deeply suspicious of the motivations behind the seizure of Ubersreik, and has arrived to investigate. He works from the Odenhaus, and is looking for alert mercenaries to help him."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "the_precinct",
+            "name": "The Precinct",
+            "coords": {
+                "x": 1530,
+                "y": 865
+            },
+            "playerDescription": "The Precinct is Ubersreik's military district, centred around the fortress of Magnus's Tower. It was built using some of the foundations of the town from before it was razed. It is separated from the rest of Ubersreik by stout walls. Though the gates are rarely closed, in cases of civil unrest, they can be used to turn the district into a defacto fortress. In simpler times, the State Army, the Watch, and provincial guards were stationed here.",
+            "gmNotes": "Since the arrival of the troops from Altdorf, tensions have noticeably escalated. The uncertainty regarding jurisdiction has led to clashes between the local troops and the interlopers, resulting in fighting in the streets. While there have been no deaths as yet, commanding officers fear it is only a matter of time before one side or the other takes things too far.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "chapel_of_ulric",
+            "name": "Chapel of Ulric",
+            "coords": {
+                "x": 1650,
+                "y": 1010
+            },
+            "playerDescription": "Though called the Chapel of Ulric, it is actually a temple. It is a large, cold building with an imposing stone façade — resembling a fortress more than a temple. Within, a flame burns day and night, beside a large statue of a grim-faced Ulric. The intense concentration of military folk in Ubersreik means this temple is more frequently attended than might be expected.",
+            "gmNotes": "Denfather Holst Kretschmer, a heavily bearded Middenlander, tends the temple. In addition to two other priests, Kretschmer has a small contingent of Knights of the White Wolf stationed in the temple. Mostly older, they all bear some injury, but they are fearsome fighters, meaning the temple has been spared the worst of the recent troubles, ironically making it one of the calmest places in town.",
+            "hooks": [
+                "Captain Steyer, an Altdorfer, believes that Father Kretschmer has been assisting the local troops. Keen to discredit the Ulricans, he wants the party to enter the temple and douse the flame that burns within. Doing so is a blasphemous insult, and one the temple's knights are unlikely to take kindly to.",
+                "Brother Yannik, a young priest of Ulric, is not especially devout. At a recent conclave, he encountered Sister Gabriela Brestrich, a Shallyan initiate. He tells the party that they have fallen deeply in love and now plan to elope. Should the party help, they may be surprised to discover she is unaware of his existence."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "temple"
+        },
+        {
+            "id": "magnuss_tower",
+            "name": "Magnus's Tower",
+            "coords": {
+                "x": 1680,
+                "y": 850
+            },
+            "playerDescription": "Magnus's Tower is an imposing building, a tall spire surrounded by sturdy walls, a fortress at the heart of The Precinct. The tallest structure in Ubersreik, it has a commanding view of the surrounding countryside and dominates the town's skyline. Access to the tower is gained through a complex series of Dwarf-engineered elevators, powered by cunning use of counterweights and levers.",
+            "gmNotes": "The Tower is the only military position not controlled by the Altdorf State Army, and is instead manned by local soldiers who have disavowed the Jungfreuds. Captain Erwin Blucher commands the troops. He is 'advised' by Field Marshall Antonin Sieber, an aged veteran whose wits have largely fled. Sieber's honour guard comprises a small detachment of Reiksguard Knights from Altdorf.",
+            "hooks": [
+                "The Reiksguard are in a unique position to ease tensions. Captain Preis, their de facto leader, is keen to do so, but cannot act without the Field Marshal's explicit authorisation, and he will not listen to her. However, it so happens he served with one of the Characters' grandfathers, and is keen to reminisce. Perhaps they can convince him?",
+                "Blucher is an arch-opportunist. While most of his men still secretly support the ousted Graf Sigismund, he is enjoying his freedom. He is keen to ensure Ubersreik becomes a strong, independent Freiburg. If Blucher is seen meeting with the Burgomeister, there will be mutiny, so he needs the party to smuggle him to the Town Hall."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "the_mess_and_bucket",
+            "name": "The Mess and Bucket",
+            "coords": {
+                "x": 1805,
+                "y": 1000
+            },
+            "playerDescription": "The Mess and Bucket is an inn that caters almost exclusively to the soldiery of Ubersreik. It has a large common room that is technically open to the public, although civilian patrons will draw disapproving scowls and jeers. The furniture is cheap, given how regularly it is broken in bar fights. Upstairs, the inn offers a private club, with membership available to officers. Access is via an external staircase.",
+            "gmNotes": "Otto 'Cabbage' Klemp is head bouncer, a retired Sergeant. Dietmar Varttiger is the maître d' of the private First Floor Club, a supercilious, oily fellow. Berthold 'Big Bert' Hanson tends bar downstairs and is the owner of the establishment.",
+            "hooks": [
+                "Tensions in the Club have been strained after the Altdorfers arrived. When Lieutenant Eisner, an officer in an Altdorf handgunner regiment, seemingly breaks his neck falling down the stairs, Varttiger employs the party to tidy things up, without involving Cabbage, or the Watch.",
+                "Cabbage is always on the lookout for strong arms and brave hearts. PCs short on cash could work a few shifts breaking up brawling infantrymen, assuming they don't mind losing a few teeth."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "inn"
+        },
+        {
+            "id": "north_temple_of_sigmar",
+            "name": "North Temple of Sigmar",
+            "coords": {
+                "x": 1545,
+                "y": 960
+            },
+            "playerDescription": "The North Temple of Sigmar is functional, without clever carvings or glittering icons. It is most commonly frequented by soldiers and non-commissioned officers. The higher ranks favour the High Temple, and the social and political opportunities it confers.",
+            "gmNotes": "The high priestess in residence, Mother Dörflinger, lost her arm fighting Greenskins in the Grey Mountains. She was later stationed in Ubersreik to train the town's militia. Since the arrival of the forces from Altdorf, attendance at her weekly throngs and training sessions has significantly increased.",
+            "hooks": [
+                "Disgruntled locals are using the militia drills to train for an assault against the invading forces from Altdorf. Wise to this, General von Dabernick sends his men to infiltrate. When the party attend the temple, sparks fly.",
+                "News of Goblin attacks in nearby villages concerns Mother Dörflinger. She believes Skarrik, the Wolfrider that took her arm, leads the raids. She needs help and vengeance."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "temple"
+        },
+        {
+            "id": "reinigers_outfitters",
+            "name": "Reiniger's Outfitters",
+            "coords": {
+                "x": 1810,
+                "y": 795
+            },
+            "playerDescription": "Reiniger's has been the principal outfitters for Ubersreik's military forces for decades. A large, two-storey building, it bears an air of genteel charm at odds with its surroundings. The ground floor services rank and file uniforms, with a small office and the bulk of the space used for storage and for a small army of seamstresses. The first floor is reserved for Officers, where they can have their measurements taken.",
+            "gmNotes": "Florian Reiniger is the chief tailor, with a relaxed and easy manner. He is skilled at stitching and at talking his customers into buying an extra jacket.",
+            "hooks": [
+                "Florian is working for High Lord Holzgrug, the Imperial Spymaster. It was his intelligence that allowed Altdorf to take the town so quickly. Olla Olwin, a former colleague, knows Florian's secret. Olla is languishing in the cells at the Watch Barracks, and Florian needs the PCs to infiltrate the cells and eliminate the threat.",
+                "Reiniger's assistant, Herr Katz, has a secret. Reiniger rescued Katz from slavery over twenty years ago. His former owner, Mario Malpensi, has a long memory and deep pockets. He has an agent, Davide Avido, in town, who will approach the PCs, seeking their assistance in returning Katz to captivity. The reward is great, but slavery is illegal in the Empire."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "ubersreik_3rd_barracks",
+            "name": "Ubersreik 3rd Barracks",
+            "coords": {
+                "x": 1450,
+                "y": 970
+            },
+            "playerDescription": "This sizeable barracks once billeted Ubersreik 3rd Regiment of Foot, the Reikland 33rd, nicknamed: 'the Fighting Stags'. The regiment retreated as the State Army of Altdorf approached, so the building now lies empty. A large wall rings the muster ground where the soldiers once drilled. Against the wall are towers, workshops, barracks, kitchens, refectories, and chapels, most of which are locked and quiet.",
+            "gmNotes": "Aware the barracks may become a rallying point for Jungfreud sympathies, General von Dabernick ordered the walls patrolled with Altdorf soldiers. At any one time, two squads of eight halberdiers march around the periphery. Sergeant Rikard Jaekel is making the best he can of the barracks. He's managed to requisition several barrels of ale. Since the nearby chapels are locked, he's built a small shrine to Ranald and another to Ulric in the north tower.",
+            "hooks": [
+                "The banner of the Fighting Stags hangs in the main refectory. Gunner Wictor Franko recently arrived from the duchy of Black Rock intending to reclaim it for his regiment. However, he didn't expect security in his old barracks to be so high, so he's looking for help, or just a simple distraction...",
+                "Rikard really misses his pregnant wife, Hanna. She works in a Ranaldan gambling den in Altdorf. Should Rikard die, he will not go quietly, and will persistently haunt any responsible until certain his wife is safe."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "watch_barracks",
+            "name": "Watch Barracks",
+            "coords": {
+                "x": 1855,
+                "y": 1070
+            },
+            "playerDescription": "The Watch barracks include a number of offices, an array of holding cells, and basic quarters. The Watch regularly patrol the town in groups ranging from two to six. While their patrols should cover the entire town outside Black Rock, in practice they concentrate on wealthier areas, seldom venturing far into the Docks or the Dunkelfeucht.",
+            "gmNotes": "The bulk of the old Watch members were recently dismissed due to suspicion they were loyal to the von Jungfreuds. So, much of the current Watch is made up of Altdorf soldiers who've been pressed into service, and who resent it. They have little interest in justice and swiftly resort to busting heads to keep order. Captain Andrea Pfeffer commands the Watch. She is a no-nonsense woman in her 20s. The newly appointed Captain is concerned with the disruptions and is keen for the Burgomeister's position to be consolidated, or a new noble family installed.",
+            "hooks": [
+                "Captain Pfeffer believes one of her watch sergeants, Trudi Shrieber, is on the pay of the Lowhaven Clan of Halflings. Unable to trust her Watch, she enlists the party to follow Shrieber and secure evidence of her wrongdoing.",
+                "When resolving a bar fight in The Exploding Pig, older members of the Watch want to arrest an off-duty Altdorfer, while his comrades, along with some 'newer' watch members, want him set free. The PCs stumble into this tense standoff..."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "fleshmarket",
+            "name": "Fleshmarket",
+            "coords": {
+                "x": 2725,
+                "y": 210
+            },
+            "playerDescription": "The Ubersreik fleshmarket lies to the north-east of the town. Given the law against stone buildings near the walls, it comprises a handful of wooden buildings, with a number of stakes forming pens alongside pitches for tents and wagons, including a stables and a kennel which are permanent fixtures. Other beasts (pigs, cattle, sheep, and similar) are driven to the pens on a rotational basis.",
+            "gmNotes": "Juna Sattelrücken is Ubersreik's main horse-coper. A wiry Averlander in her 30s, she drives a hard bargain, but a fair one, and treats her horses kindly. On the other hand, Stanislaus Stockman, the hundsman, is a brute. In his 40s, he is handsome and tall, but his glittering eyes betray the cold heart lying within. He believes in discipline, and is not above beating his dogs, employees, and anyone else.",
+            "hooks": [
+                "On their way to Ubersreik, the party meet a downhearted farmer, Jan Boehm, whose precious pigs were stolen by bandits. When they arrive, they see the pigs have already been sold to Sartioli's Sausage Shop. All they need to do is ask the Halfling crime family who sold them their pigs, and hope they weren't in on the theft.",
+                "Juna Sattelrücken has heard there are wild horses, of good Bretonnian stock, loose in the foothills of the Grey Mountains. She needs an escort to accompany her as she tries to capture them. Unfortunately, there are monsters out there, but she can pay, or offer a good deal on a steed..."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "morrs_field",
+            "name": "Morr's Field",
+            "coords": {
+                "x": 3425,
+                "y": 220
+            },
+            "playerDescription": "To the northwest of Ubersreik lies the town's graveyard, Morr's Field. It is surrounded by tall and crumbling stone walls. Within lie the graves and ravenstones of Ubersreik. Mass graves for paupers, single plots for the middle-classes, and great mausoleums for the wealthiest families in town. Additionally, there is a shrine to Morr, which is attached to a larger hall, used by the Mourners' Society, an informal group of locals who offer solace to the grieving.",
+            "gmNotes": "Schadrach Bürke is the ranking priest of Morr, the God of Death. Bürke is a tall, angular man with a long nose and a mournful aspect. He rarely leaves the Field, and has little Human contact, save when comforting those who have lost loved ones, or issuing instructions to his two gravediggers, Ewald and Oswald.",
+            "hooks": [
+                "Holst Rosenstock is a graverobber and a drunk. Having recently incapacitated himself by falling into the jakes of the Crooked Hammer, he is unable to fulfil a contract and owes Doktor Krupp a body. Holst will pay the party over the odds (up to 2 GC each) to do the job for him in order to preserve his reputation.",
+                "Father Bürke has noticed someone or something disturbing the graves, and he would like to pay the party to deal with it. If they accept, and are brave enough to spend the night, they will discover a group of Ghouls that have been feasting on the dead."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "the_tin_spur",
+            "name": "The Tin Spur",
+            "coords": {
+                "x": 980,
+                "y": 3130
+            },
+            "playerDescription": "The Tin Spur is a large, open-roofed, circular building near the southern Nuln Gate. It is used for various entertainments, including bear-baiting, dog fights, and pitfighting. It is occasionally used by entertainers to put on plays. The building lies outside the town's walls, owing to a bylaw put in place because the sight of blood offended Lady Jungfreud. There are three floors of galleries for watching the performances. A series of pens lie attached to the rear.",
+            "gmNotes": "The Esteemed Company of Ubersreik Players own and maintain the building. Chief among them is their playwright, Wilhelm Shütteln, whose works tend to be overlong and wordy. Nonetheless, as the chief stakeholder in the company, he chooses the plays performed. It is a source of constant frustration for Shütteln that animal and pit fights always make significantly more money, meaning he performs but rarely.",
+            "hooks": [
+                "The Lowhaven Clan of Halflings plan to run their own pitfights in the Docks, but need a main attraction. As such, they're willing to pay the party to get Felix Seite, The Tin Spur's champion, drunk, before kidnapping him and taking him to their warehouse.",
+                "Ubersreik's Animals Front (UAF) is an active group of concerned citizens led by a Shallyan initiate, Konstance Pfleger. They plan to sneak backstage during one of Shütteln's interminable plays and set all the animals free. As the members of UAF lack any real physical skills, they have hired the party to assist."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "red-moon-inn",
+            "name": "The Red Moon Inn",
+            "coords": {
+                "x": 1900,
+                "y": 2000
+            },
+            "playerDescription": "The two-storey Red Moon Inn primarily caters to boatmen plying their trade up and down the Teufel. It’s the cleanest of the dock-side hostels, though still somewhat shabby. The lower floor is built from solid stone and includes a large drinking hall, common room, and small kitchen. The upper floor is timber and lathe and contains the inn’s private rooms, and a room for the owner. The main drinking hall has a row of quiet booths all slung with heavy curtains and tattered linen to provide a little privacy.",
+            "gmNotes": "Franz Lohner owns and runs the inn. A no-nonsense Mercenary done-good, Lohner is a slightly overweight, dishevelled man in his 40s. He employs Ilse Frecht, a matronly woman in her 50s, to clean rooms and wait tables. Gunter Bisset works in the kitchens, cooking dinner, and two younger lads to help serve during busier times. All Bisset ever produces is potato and fish stew. A wholesome meal, but one that doesn’t make the best breakfast in the morning when served as cold leftovers. ",
+            "hooks": [
+                "While enjoying a tasty stew, the party overhear plans to allow brigands in through the town gates at midnight. One of the conspirators is in the Watch, but they didn’t get a clear view of him, and without proof, the authorities will never believe them. The watchman had a distinctive voice, though. Have they got time to talk to all the watchmen in Ubersreik before nightfall?",
+                "As the party are celebrating being paid by settling in to a round of good, strong beers, two masked hoodlums enter the Inn, bearing loaded pistols. Kürbis and Honighäschen, a pair of legendary married brigands, urge everyone to stay calm and hand over all their wealth. Honighäschen warns that should anyone move, she will execute every last patron in the inn."
+            ],
+            "image": "assets/images/red-moon-inn.png",
+            "music": "assets/music/Shady Rest.mp3",
+            "tag": "inn"
+        },
+        {
+            "id": "axe-and-hammer",
+            "name": "The Axe and Hammer",
+            "coords": {
+                "x": 1515,
+                "y": 2615
+            },
+            "playerDescription": "The Axe and Hammer is the only dedicated tavern in Dawihafen, though there are also three inns. The Axe and Hammer has one floor above ground, containing a large common room and a number of smaller booths and meeting rooms. The walls, floors, tables, and chairs are all made of stone, and intricately wrought with images of Dwarf ancestors. The ceilings are low, and the building has no windows, being lit by lamps and a great fire roaring in the centre of the large open space. Although most customers are Dwarfs, all folk are welcome.",
+            "gmNotes": "The basement level of the inn is for Dwarfs only, and it resembles the great hall of a Dwarf hold. It contains shrines to Grungni and Valaya — two Dwarf ancestor Gods. It is also the site of the Dwarf Engineers’ Guild in town. Grodni Surehammer, a longbeard, leads this august institution. He answered Magnus’s call for aid centuries ago, and has remained in Ubersreik ever since. He is the de facto leader of the Dwarf community in Ubersreik. Visiting Dwarfs consider it a great honour to meet Surehammer, and often frequent the inn just to shake his hand.",
+            "hooks": [
+                "Tunnels connect the tavern to the Khazalgirt, and from thence to the homes of a number of prominent Dwarfs. In pursuit of a Skaven menace, the Characters find themselves blundering into the basement, bringing them face to face with a group of irate Dwarfs convinced they are raiding the inn!",
+                "Ivar Broadthumb, a Dwarf metalworker, is enraptured by Dordean Mournflair, the Elf behind the Cutlers’ Guild. He wants to meet the secretive smith to discuss methodology, in defiance of traditional Dwarf attitudes to metalworking, and Elves. He needs the party to convey a message, secretly, and arrange a secure, private, neutral space for the meeting, if they can convince Mournflair to come"
+            ],
+            "image": "assets/images/axe-and-hammer.png",
+            "music": "assets/music/Lion's Pride.mp3",
+            "tag": "tavern"
+        },
+        {
+            "id": "wizards-way",
+            "name": "Wizards' Way",
+            "coords": {
+                "x": 2540,
+                "y": 1130
+            },
+            "playerDescription": "Graf Otto Strasse is a long, winding street that snakes through the eastern end of the Artisan Quarter. It is known colloquially as Wizard’s Way, as it is home to the town’s only permanent wizard. The street mostly comprises small shops selling herbs, books, and other esoterica, but it is dominated by the Grey Wizard’s tower — a crooked, slate-roofed turret — that peeps above the other stone and timber buildings. Although the tower can be clearly seen, its actual entrance is seemingly impossible to locate. Curious visitors have circumnavigated the tower repeatedly in search of a door or alleyway, but to no avail; locals gave up long ago.",
+            "gmNotes": "Grey Guardian Christoph Engel has called Ubersreik his home for as long as anyone can remember. He is a wiry, unassuming fellow with dark-grey eyes and a neatly trimmed grey beard. On official business, he tends to dress formally, in flowing grey robes, with a pointed, wide-brimmed hat and a staff. However, when seeking to pass incognito, he favours the nondescript clothing of a burgher, the better to blend in and avoid a scene.",
+            "hooks": [
+                "Engel is often bored with the responsibilities of his rank. He is not above quietly misusing his magic to create minor illusions to trick and disturb citizens for his own amusement. If he hears one of the party disparage wizards while out and about in disguise, he determines to make the party the butt of his jokes until they repent.",
+                "A coalition of local burghers, concerned at plummeting property prices on the Wizard’s Way, have clubbed together to pay a Witch Hunter to obtain proof of Engel’s misuse of magic, and have him evicted (or burned). The Witch Hunter, Mattheus Hüpfen, is not above framing his targets. He has decided to hire some local muscle to help him confront the wizard."
+            ],
+            "image": "assets/images/wizards-way.png",
+            "music": "assets/music/Arendella.mp3",
+            "tag": "district"
+        },
+        {
+            "id": "high-temple-of-sigmar",
+            "name": "The High Temple of Sigmar",
+            "coords": {
+                "x": 1655,
+                "y": 2080
+            },
+            "playerDescription": "The High Temple of Sigmar, the Empire’s patron god, was the first building rebuilt on the orders of Magnus the Pious after the old one was levelled by Greenskins during the Great War Against Chaos. It is the largest temple in town, dwarfing those in other quarters. The facade is lined with pillars, and the temple itself can hold hundreds of worshippers.",
+            "gmNotes": " On especially busy Festags (festival days), poorer worshippers huddle outside the doors, straining to hear the service. Recently, locals have found the temple significantly busier, as it is filled with officers and soldiers from Altdorf. Father Gunther Emming is the High Priest. A stern looking man in his 50s with thinning silver hair, Emming is famed for the severity of his sermons, and the sobriety of his demeanour. Though not unkind, he laces even his praise and comforting words with dire warnings of the consequences of vice.",
+            "hooks": [
+                "Irma Brantl, a pious if somewhat naive, young priestess of Sigmar has recently arrived in Ubersreik. Father Emming finds her gentle nature and incessant blithe chat incompatible with his view of the world. He is seeking ways to keep her out of his hair. He will pay the party well to escort her on a tour of the surrounding villages, to meet with the priests there. He will pay double if they take their time. Two or three months should do…",
+                "Dark dreams haunt those who spend too much time in the basement. Recently a farmer’s child disappeared on Marktag. TThe clues seem to suggest it was taken to the temple of Sigmar. Ernst Ricker, of the Order of the Cleansing Flame, is the only person with rooms in the basement of the temple. He may have lost his mind to the Ruinous Powers, but who is righteous enough to accuse him of heresy?"
+            ],
+            "image": "assets/images/high-temple-of-sigmar.png",
+            "music": "assets/music/Song of Elune.mp3",
+            "tag": "temple"
+        },
+        {
+            "id": "gravediggers",
+            "name": "Gravediggers",
+            "coords": {
+                "x": 3250,
+                "y": 270
+            },
+            "playerDescription": "Next to Morr's Field lies the modest home of Ubersreik's gravediggers, Ewald and Oswald. The two brothers live a simple life, rising early to tend to their duties in the graveyard. Their home is a small, stone cottage with a thatched roof, surrounded by a modest garden where they grow vegetables and herbs. Inside, the cottage is sparsely furnished but clean and orderly, reflecting the brothers' practical nature.",
+            "gmNotes": "Ewald and Oswald are quiet, unassuming men in their late 40s. They have worked as gravediggers for most of their lives, and take great pride in their work. Despite the morbid nature of their profession, they are kind-hearted and respectful individuals who treat the dead with dignity. They are well-known in the community and are often sought out for their knowledge of local history and customs related to death and burial.",
+            "hooks": [
+                "Ewald has recently discovered a hidden chamber beneath Morr's Field, filled with ancient relics and inscriptions. He believes these artifacts hold significant historical value and wishes to share them with a reputable scholar. However, he fears that the local authorities may not take kindly to his discovery. He seeks the party's assistance in safely transporting the relics to Altdorf for study.",
+                "Oswald has been plagued by strange visions and nightmares since the arrival of the Altdorf soldiers in Ubersreik. He believes that a restless spirit is haunting him, seeking justice for an unresolved crime. Desperate for relief, he turns to the party for help in uncovering the truth behind the spirit's unrest and putting it to rest."
+            ],
+            "image": "assets/images/",
+            "music": "assets/music/",
+            "tag": "misc"
+        },
+        {
+            "id": "elises_exquisites",
+            "name": "Elise's Exquisites",
+            "coords": {
+                "x": 2810,
+                "y": 525
+            },
+            "playerDescription": "Just outside the northern Magnus the Pious Gate stands a small, crooked cottage with a sign depicting a smiling porcelain doll. The shop, 'Elise's Exquisites', is a riot of colour and form. Dolls of every conceivable size and material — wood, cloth, porcelain, wax — are crammed onto shelves, hang from the ceiling on strings, and stare out from the dusty shop window with unnervingly lifelike glass eyes.",
+            "gmNotes": "The shop is run by Elise Schmidt, a hunched old woman with a deceptively sweet smile and nimble, spidery fingers. She is a delight to talk to, especially for children. In truth, Elise is a hedge-necromancer who binds the spirits of the recently deceased into her creations. She doesn't see it as evil, merely 'giving them a bit more time in the sun.' The most expensive dolls are eerily realistic because they incorporate real hair, teeth, and fingernails sourced from the gravediggers at Morr's Field.",
+            "hooks": [
+                "A wealthy merchant's daughter received a beautiful custom-made doll from Elise a week ago and has since been struck by a terrible wasting sickness. The doll has been heard whispering to the child at night. The merchant will pay anything to have the 'curse' investigated and lifted.",
+                "While passing the shop, one of the party members spots a brand new doll in the window that is a perfect, uncanny replica of themselves, right down to a specific scar or piece of equipment. Elise just smiles and says 'a little inspiration struck,' but will not say where she got the idea... or the materials."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "eisbog_brewery",
+            "name": "Eisbog Brewery",
+            "coords": {
+                "x": 2625,
+                "y": 3260
+            },
+            "playerDescription": "South of the city, amidst the rolling farmland, stands the Eisbog Brewery. It's a large complex of stone and timber buildings, constantly venting clouds of steam that smell of boiling grain and hops. The brewery is famous for 'Eisbog Lager,' a potent beer known for being served unnaturally cold, even in the height of summer. A taproom attached to the main building serves the brew straight from the source, and is popular with off-duty soldiers and farmers.",
+            "gmNotes": "The brewery is run by Gunther Eisbog, a large, bearded man with a booming laugh. The Eisbogs are an old family, and their brewing secret is a source of immense pride. The secret is a fist-sized chunk of glowing green rock — warpstone — that Gunther's grandfather found in a crater. It's kept in a lead-lined net and lowered into the main fermentation tank to chill the brew. The family is ignorant of its true nature. The prolonged, low-level exposure is what gives the beer its 'kick,' but it is also slowly corrupting the brewery's most loyal patrons.",
+            "hooks": [
+                "The brewery's long-time bouncer, a massive fellow named 'Stomper' Hans, has gone berserk in the taproom, babbling about 'the icy voice in the beer' before sprouting a tentacle from his shoulder. Gunther Eisbog needs the situation 'handled' before the Watch gets involved and starts asking questions.",
+                "Borgun Foambeard, the Dwarf brewer in Dawihafen, is losing business to the popular Eisbog Lager. Convinced no human could brew such a fine, cold beer without cheating, he hires the party to infiltrate the brewery and discover the Eisbog family's secret."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "little_teufel_outpost",
+            "name": "Little Teufel Outpost",
+            "coords": {
+                "x": 875,
+                "y": 1540
+            },
+            "playerDescription": "West of the city, where the smaller Teufelia river flows into the mighty Teufel, stands a fortified toll-station known as the Little Teufel Outpost. Consisting of a sturdy stone watchtower, a ferryman's hut, and a small jetty, it controls both river traffic and the ferry crossing. The post is manned by a handful of grizzled Riverwardens, their livery faded and worn.",
+            "gmNotes": "The outpost is commanded by Warden Hella Stark, a pragmatic and world-weary woman in her forties. Officially, she serves the state, collecting tolls and inspecting cargo. Unofficially, the outpost is a major chokepoint for smugglers, and Warden Stark gets a cut of everything that passes. She walks a tightrope, placating the Lowhaven Clan who use her services, while filing just enough reports to keep the newly-installed Altdorf authorities from looking too closely.",
+            "hooks": [
+                "The party is hired to smuggle a cargo of Bretonnian brandy. When they reach the rendezvous point, their contact turns out to be Warden Stark herself. She needs an independent crew to move a 'special shipment' under the noses of both her own guards and a Lowhaven agent who is watching her.",
+                "An ambitious junior officer from the Altdorf garrison, Lieutenant Kettner, suspects the outpost is a nest of corruption. Lacking the authority to launch a formal investigation, he hires the party as 'concerned citizens' to travel to the outpost and find concrete proof of Stark's illegal activities."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "fronich_woodcutters_company",
+            "name": "Fronich Woodcutters Company",
+            "coords": {
+                "x": 215,
+                "y": 1030
+            },
+            "playerDescription": "Deep in the forests west of Ubersreik lies the sprawling lumber camp of the Fronich Woodcutters Company. The air is filled with the rhythmic thud of axes and the scent of pine sap and sawdust. Dozens of rough-looking men and women work felling trees and processing lumber, their temporary settlement a muddy collection of huts, tents, and a large cookhouse.",
+            "gmNotes": "The camp is run by the grizzled and grim-faced Old Man Fronich. The recent coal shortage has been a boon for business, but it has forced his crews to push deeper into the forest than ever before. In doing so, they have encroached upon the hunting grounds of a Beastman warherd. Several woodcutters have vanished, and Fronich, fearing a panic that would shut down his lucrative operation, has been covering up the disappearances and blaming them on 'accidents' or desertion.",
+            "hooks": [
+                "Fronich hires the party as guards for the lumber camp, offering a generous wage. He claims they've had trouble with bandits and wolves, but forbids the party from venturing into the 'deep woods,' insisting the area is too dangerous to patrol.",
+                "The wife of a missing woodcutter approaches the party in Ubersreik. Her husband vanished from the Fronich camp two weeks ago, and Fronich claims he ran off with his pay. She doesn't believe it for a second and begs the party to travel to the camp and find out the truth."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "magnustor_district",
+            "name": "The Magnustor District",
+            "coords": {
+                "x": 2365,
+                "y": 990
+            },
+            "playerDescription": "North of the Artisan's Quarter, the grime and noise of industry give way to the clean, orderly streets of the Magnustor District. This respectable quarter, nestled against the walls of the Precinct, is the administrative and financial heart of the town outside of the Town Hall itself. Well-maintained stone buildings house banks, law offices, and the headquarters of the more 'scholarly' guilds. The air is quiet, filled only with the rustle of paper and the murmur of serious business. Watch patrols are a common sight, ensuring the peace is kept for the district's influential inhabitants.",
+            "gmNotes": "Magnustor, or 'Magnus Gate,' is where the real power outside the castles is brokered. Influence here is traded not with swords, but with contracts, loans, and legal writs. The district's proximity to the Precinct means it's heavily influenced by the military, but its lifeblood is the city's commerce. Beneath the veneer of respectability, however, the same struggles for power that plague the rest of Ubersreik play out in backroom deals and shadowy bargains.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "brown_beards_bank",
+            "name": "Brown Beard's Bank",
+            "coords": {
+                "x": 1995,
+                "y": 1195
+            },
+            "playerDescription": "A formidable, windowless granite building that looks more like a small fortress than a bank. A single, iron-banded door is flanked by two impassive Dwarf guards in gleaming mail. The sign, a finely carved slab of slate, reads simply 'Brown Beard's Bank.' It has a reputation for being the most secure place to store valuables in Ubersreik.",
+            "gmNotes": "The bank is owned and operated by Borin Grudgebearer, a venerable Dwarf longbeard. While scrupulously honest in his business dealings, Borin holds an ancient and bitter grudge against the von Bruner family over a mining rights dispute that cost his clan dearly a century ago. Seeing the current turmoil as an opportunity, Borin is secretly using his vast wealth to fund anti-Altdorf and anti-Jungfreud agitators, hoping to destabilize the city and weaken the von Bruners' standing.",
+            "hooks": [
+                "An agent of Lady Kisaiya von Bruner hires the party for a delicate task: break into Brown Beard's Bank. They don't want to steal gold, but to retrieve an old contract from Borin's personal vault that proves the von Bruners' claim to the disputed mine.",
+                "Borin Grudgebearer, seeking deniable agents, hires the party for a simple courier job: deliver a heavy, sealed coffer to a 'patriot' at the Sprichstumpf. The recipient is the firebrand agitator Anton Grimski, and the coffer is full of coin to fund a new wave of riots."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "halls_of_justice",
+            "name": "The Halls of Justice",
+            "coords": {
+                "x": 1880,
+                "y": 1200
+            },
+            "playerDescription": "A grand, symmetrical building of white stone, its entrance supported by pillars carved with the iconography of Verena and the scales of justice. One wing is designated the Prosecutors' Lodge, the other the Judges' Lodge. Clerks in sober robes hurry up and down the steps, their arms laden with scrolls and books, while lawyers argue cases in hushed but intense tones.",
+            "gmNotes": "This is the center of Ubersreik's legal system. The Chief Prosecutor, Alaric Haupt, is a brilliant legal mind but a man with a weakness for decadence. He is being blackmailed with evidence of his attendance at a Slaaneshi revel by Andreas von Bruner. The Head Judge, Isolde Richter, is a stern and famously incorruptible woman, but she is old and finds it difficult to navigate the city's new political reality.",
+            "hooks": [
+                "A friend of the party is arrested on trumped-up charges. Their case is assigned to Prosecutor Haupt, who seems intent on securing a guilty verdict regardless of the evidence. The party must discover the source of Haupt's blackmail to have any hope of getting a fair trial.",
+                "Judge Richter, unable to trust the compromised Watch or the city's prosecutors, summons the party to her private chambers. She has reason to believe a prominent guild master is a secret chaos cultist and wants the party to conduct a highly illegal and discreet investigation to find proof."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "carters_guild",
+            "name": "Carters' Guild",
+            "coords": {
+                "x": 1990,
+                "y": 1080
+            },
+            "playerDescription": "A large, utilitarian stone building with wide doors to accommodate the comings and goings of carts and wagons. Inside, the air is thick with the smell of hay, leather, and horse sweat. The guildhall serves as a meeting place for carters, a storage facility for goods in transit, and a hub for coordinating deliveries throughout Ubersreik and beyond.",
+            "gmNotes": "The Carters' Guild is led by Guildmaster Hans Fuhrmann, a close ally of the burgomeister. Fuhrmann is a shrewd and pragmatic man who sees the guild as a vital cog in the city's economy. However, he is also under pressure from both the Altdorf military authorities, who want to control supply lines, and the Lowhaven Clan, who seek to use the guild's resources for smuggling operations. Fuhrmann walks a fine line, trying to keep both sides satisfied while maintaining the guild's independence.",
+            "hooks": [
+                "The party is hired to escort a valuable shipment of supplies from the Carters' Guild to the Altdorf garrison. However, they soon discover that the Lowhaven Clan has plans to intercept the shipment for their own purposes. The party must navigate this dangerous situation and ensure the supplies reach their destination.",
+                "Guildmaster Fuhrmann suspects that one of his trusted carters is secretly working for the Lowhaven Clan, smuggling goods under the guild's banner. He hires the party to investigate and gather evidence of the carter's illicit activities, promising a generous reward for their discretion and success."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "old_vixen_tavern",
+            "name": "The Old Vixen Tavern",
+            "coords": {
+                "x": 2205,
+                "y": 700
+            },
+            "playerDescription": "A respectable, quiet tavern known for its expensive wine and discretion. The interior is paneled in dark wood, with numerous curtained booths offering privacy to the clientele of lawyers, city officials, and guild representatives. The air is thick with pipe smoke and the murmur of hushed negotiations.",
+            "gmNotes": "The owner, 'Mother' Magda, is a sharp-witted woman in her sixties with eyes that miss nothing. The tavern is a major hub for information, and Magda is its foremost broker. She trades in the secrets she overhears, selling them to all sides in the city's struggles. Her primary client is Lady Emmanuelle Nacht, the Imperial Herald, who uses Magda's network to keep a finger on the pulse of the city's political undercurrents.",
+            "hooks": [
+                "The party is hired to disrupt a secret meeting between a representative of the Altdorf army and several guild masters. They must infiltrate the Old Vixen, get past Magda's watchful eyes, and plant a forged document that will sow distrust among the attendees.",
+                "The party needs to learn the secret schedule of Watch patrols in the Merchant Quarter. They are told the only person who would know is Mother Magda, but she won't accept coin. She wants them to steal a specific bottle of rare Estalian wine from the cellar of the Bruner Palace."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "tavern"
+        },
+        {
+            "id": "the_gilded_cage",
+            "name": "The Gilded Cage",
+            "coords": {
+                "x": 1980,
+                "y": 950
+            },
+            "playerDescription": "A high-class establishment that glitters with polished brass and red velvet. The ground floor houses a small theatre for plays and musical performances ('Violetta's Variety'), while the upper floors contain an exclusive, high-stakes gambling salon ('Martin's Game House'). The clientele is exclusively the wealthy and powerful, and burly, well-dressed guards ensure no undesirables get past the door.",
+            "gmNotes": "The Gilded Cage is owned and operated by Martin Violetta, a flamboyant and charming Tilean. However, the entire operation is a front for the Lowhaven Clan. It serves as a way to launder their criminal profits and, more importantly, to ensnare the city's elite in gambling debts, which Mercy Lowhaven then leverages for information and influence. Martin is merely a manager, trapped by his own substantial debts to the Halflings.",
+            "hooks": [
+                "After an incredible run of luck at the card table, a player character wins a massive pot. The house manager, Martin, nervously refuses to pay out, claiming there was a misdeal. Insisting on payment will draw the attention of the Lowhaven's surprisingly brutal Halfling enforcers.",
+                "A panicked young noble hires the party. He lost his family's ancestral signet ring in a game of cards to a visiting 'merchant' who was cheating. The 'merchant' was Sunny Lowhaven in disguise, and now Mercy Lowhaven is using the ring to blackmail the noble's family. The party must get the ring back."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "tavern"
+        },
+        {
+            "id": "neuners_herbs_and_tinctures",
+            "name": "Neuner's Herbs and Tinctures",
+            "coords": {
+                "x": 1890,
+                "y": 885
+            },
+            "playerDescription": "A traditional herbalist's shop, with bunches of dried herbs hanging from the rafters and the air filled with a hundred competing earthy aromas. Jars of powders, poultices, and preserved plants line the shelves. Old Man Neuner, a wizened man with dirt under his nails, can be found grinding ingredients with a mortar and pestle.",
+            "gmNotes": "Neuner is a master herbalist, practicing the craft as his family has for generations. He despises the 'newfangled nonsense' of alchemy and sees his rival, Simon's Pharmacy, as a dangerous perversion of the healing arts. He is a purist and something of a luddite, but his remedies are undeniably effective.",
+            "hooks": [
+                "Neuner has received a rare order from Cordelia's Apothecary for a large quantity of Glimmercap mushrooms, which only grow in a specific, Beastman-infested cave in the Hagercrybs. He is too old to make the journey himself and needs a brave party to harvest them for him.",
+                "After a series of his supply shipments are spoiled or go missing, Neuner is convinced his rival Simon is sabotaging him. He wants to hire the party to retaliate by sneaking into Simon's Pharmacy and replacing his stock of refined alchemical reagents with inert, but identical-looking, powders."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "simons_pharmacy",
+            "name": "Simon's Pharmacy",
+            "coords": {
+                "x": 1890,
+                "y": 810
+            },
+            "playerDescription": "A clean, modern-looking shop with large glass windows displaying neatly arranged bottles of brightly coloured liquids. The air smells of alcohol and strange chemicals. Behind the counter, the young and ambitious Simon von Holtz offers consultations, promising alchemical solutions to any ailment.",
+            "gmNotes": "Simon is a talented alchemist who was expelled from the Gold Order in Altdorf for conducting unsanctioned experiments. He sees Ubersreik as a provincial backwater, but also an opportunity to make his fortune. He considers traditional herbalists like Neuner to be fools and is not above using underhanded tactics to put his rival out of business and secure the market for himself.",
+            "hooks": [
+                "Simon is trying to create a revolutionary healing draught but lacks a key ingredient: the venom of a Sewer Wyrm, a rare creature said to live in the deepest parts of Ubersreik's sewer network. He offers a substantial reward for a fresh, unspoiled vial of the venom.",
+                "One of Simon's 'experimental' potions has had an unforeseen side effect on a wealthy client, who now has shimmering, rainbow-coloured skin. The client has locked himself in his manor and his family hires the party to discreetly bring Simon to the estate to brew an antidote before the scandal becomes public."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "stork_loans",
+            "name": "Stork Loans",
+            "coords": {
+                "x": 2380,
+                "y": 885
+            },
+            "playerDescription": "A discreet, respectable-looking office with a simple sign depicting a stork carrying a heavy bag of coins. Inside, a well-dressed clerk sits at a polished desk, ready to discuss financial matters with potential clients. The atmosphere is professional and reassuring.",
+            "gmNotes": "This is a classic honey trap. Herr Stork, a tall, gaunt man who resembles his namesake, runs a ruthless loan shark operation. The business is a subsidiary of The Baron's expanding criminal network, providing her with a foothold in the more respectable parts of town. Stork offers loans at impossible-to-repay rates, then uses a team of brutal enforcers, disguised as 'debt collectors', to seize assets or claim a pound of flesh.",
+            "hooks": [
+                "A contact of the party, perhaps a craftsman or minor merchant, took a loan from Stork to stay afloat and has now defaulted. Thugs have broken his legs and are threatening his family. He begs the party for help before the collectors come back to seize his shop.",
+                "Marta Müller, master of the Merchants' Guild, is concerned about Stork's activities and how he is preying on guild members. She hires the party to investigate his operation, find proof of his illegal methods, and, most importantly, discover who he is working for."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "builders_company",
+            "name": "Ubersreik Builders' Company",
+            "coords": {
+                "x": 2740,
+                "y": 1045
+            },
+            "playerDescription": "A large, busy yard filled with stacks of lumber, blocks of cut stone, and piles of sand and gravel. The air rings with the sound of hammering and sawing. The main office is a simple, functional building where Guildmaster Otto Kessel can be seen arguing with foremen and clients.",
+            "gmNotes": "The Builders' Company handles all major stone construction in the city. Guildmaster Kessel is a pragmatist who believes a coin is a coin, no matter whose hand it comes from. He has taken lucrative contracts from the Altdorf occupiers to repair the town walls, earning him the scorn of Jungfreud loyalists. He is also in a bitter jurisdictional feud with Ernst Zimmerman's Carpenters' Guild.",
+            "hooks": [
+                "A crane at a major construction site 'accidentally' collapses, killing a foreman. Kessel is convinced it was sabotage by the Carpenters' Guild and hires the party to find proof before the feud escalates into open street brawls between the guilds.",
+                "A Jungfreud loyalist group wants to send a message to collaborators. They hire the party to sneak into the Builders' yard at night and burn their supply of seasoned lumber, a costly blow that will delay the Altdorfers' fortification projects."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "the_enchanters_wardrobe",
+            "name": "The Enchanter's Wardrobe",
+            "coords": {
+                "x": 2825,
+                "y": 1185
+            },
+            "playerDescription": "An elegant tailor's shop, distinct from any other in Ubersreik. The window displays a single, magnificent robe on a mannequin, its threads seeming to shift and catch the light in impossible ways. Inside, the air is calm and smells of lavender. Bolts of impossibly fine cloth line the walls.",
+            "gmNotes": "The proprietor is Elara, a High Elf seamstress who came to the Empire centuries ago. She is quiet, graceful, and carries an air of ancient sadness. Elara is a minor practitioner of Elven lore, and she can weave subtle enchantments into her garments — a cloak that billows without wind, a gown that resists stains, gloves that always stay warm. She keeps to herself, but is being watched by agents of Dordean Mournflair's visiting sibling, who is deeply suspicious of any Elf 'meddling' in the Old World.",
+            "hooks": [
+                "Christoph Engel, the Grey Wizard, requires a new set of robes that can help conceal his presence. He needs specific, magically-attuned materials woven into the fabric: the silk of a phase spider and three feathers from a raven that has fed on a wizard's corpse. He hires the party to acquire these rare components for Elara.",
+                "A brash young noble bought an enchanted cape from Elara that was meant to enhance his charisma. Instead, he now uncontrollably speaks every thought that enters his head. He storms into the shop with his house guards, accusing Elara of witchcraft and demanding his money back, threatening to escalate the matter to the Witch Hunters."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "blucher_estate",
+            "name": "The Blucher Estate",
+            "coords": {
+                "x": 3180,
+                "y": 3305
+            },
+            "playerDescription": "A respectable, walled estate with a finely manicured rose garden and an elegant, if somewhat dated, manor house. The wrought iron gates are emblazoned with a blue shield crest. The estate is quiet, with only a few elderly servants occasionally seen tending the grounds.",
+            "gmNotes": "This is the ancestral home of Captain Erwin Blucher, the commander of Magnus's Tower. It is currently inhabited by his formidable aunt, Lady Isolde Blucher. Lady Isolde is a staunch supporter of the von Jungfreuds and is utterly ashamed of her nephew's opportunism in siding with the Altdorf invaders. She uses her home to host clandestine 'poetry circles' which are, in fact, strategy meetings for high-ranking Jungfreud loyalists, including Guido Falck.",
+            "hooks": [
+                "Captain Blucher hires the party for a deeply personal and risky mission. Before he left home to join the army, he hid a series of compromising letters from a former lover in a secret compartment in his old bedroom. With his aunt now hosting conspirators, he needs those letters retrieved before they can be found and used against him.",
+                "The party is approached by one of Lady Isolde's servants. The next 'poetry circle' is happening tonight, and she has learned that a spy from the Altdorf forces has infiltrated the guest list. The party is hired to attend the gathering, identify the spy, and neutralize them without revealing the true nature of the meeting."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "reuter_estate",
+            "name": "The Reuter Estate",
+            "coords": {
+                "x": 185,
+                "y": 3000
+            },
+            "playerDescription": "A sprawling estate on the outskirts of Ubersreik, surrounded by high stone walls and dense hedges. The main house is a grand, two-story building with large windows and a well-tended garden. The estate exudes an air of old wealth and quiet dignity.",
+            "gmNotes": "The Reuter Estate is the home of the merchant Albrecht Reuter, a man of considerable wealth and influence. Reuter is a pragmatist who has managed to maintain his business interests through the city's turbulent times by carefully navigating the shifting political landscape. He is known for his discreet dealings with both the Altdorf authorities and the Jungfreud loyalists, making him a valuable ally or a dangerous enemy.", 
+            "hooks": [
+                "Rutger Reuter, the son of Albrecht Reuter, has reportedly been killed by the legendary Beast of the Ortschlamm, while he was supervising a windmill construction project outside the city. Albrecht is devastated and hires the party to investigate the circumstances of his son's death, suspecting foul play rather than a mere accident.",
+                "Albrecht Reuter hires the party to deliver a sensitive message to a contact within the Altdorf garrison. The message contains information about a planned Jungfreud uprising, and Reuter wants to ensure it reaches the right ears without falling into the wrong hands.",
+                "A trusted employee of Reuter's has gone missing, and Reuter fears they may have been kidnapped by Jungfreud loyalists seeking leverage against him. He hires the party to investigate the disappearance and bring his employee back safely."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "araworns_estate",
+            "name": "The Araworn's Estate",
+            "coords": {
+                "x": 3585,
+                "y": 2765
+            },
+            "playerDescription": "A grand estate perched on a hill overlooking the city. The main house is an imposing stone structure with tall, narrow windows and a steeply pitched roof. The grounds are meticulously maintained, with manicured lawns, ornate fountains, and a small orchard.",
+            "gmNotes": "The Araworn Estate is the ancestral home of the Araworn elfs, a family with deep roots in Ubersreik's history. The current head of the family, Thalion Araworn, is a reclusive figure who rarely leaves the estate. He is known for his eccentric interests in ancient lore and arcane studies. The estate itself is rumored to contain hidden chambers and secret libraries filled with forbidden knowledge. In reality, Thalion is a secret member of the Fractured Eye, a cult dedicated to Tzeentch, using his resources to further their inscrutable goals.",
+            "hooks": [
+                "Thalion Araworn has recently acquired a rare and powerful artifact, a crystal orb said to contain visions of the future. However, the orb has attracted unwanted attention from rival factions within the city. Thalion hires the party to act as discreet guards during a private viewing of the orb, ensuring its safety from potential thieves or saboteurs.",
+                "A scholar from Altdorf approaches the party with a request. He believes that Thalion Araworn possesses a lost tome of ancient elven magic that could be invaluable to his research. The scholar hires the party to infiltrate the estate and retrieve the tome without alerting Thalion or his staff."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "pious_cup_tearoom",
+            "name": "The Pious Cup Tearoom",
+            "coords": {
+                "x": 2605,
+                "y": 735
+            },
+            "playerDescription": "A prim, proper, and spotlessly clean tearoom. The walls are adorned with stern-looking portraits of Magnus the Pious and other famous Sigmarite saints. The clientele consists mainly of devout elderly ladies and the occasional off-duty priest. The air smells of chamomile tea and righteousness. No alcohol is served.",
+            "gmNotes": "The owner, Greta Schmidt, is a fervent Sigmarite. The tearoom is a front for a cell of the Order of the Cleansing Flame, a secret society of Sigmarite fanatics who believe the established cult is too soft on heresy and corruption. They are the same order as Ernst Ricker, who lurks in the High Temple's basement. They use the tearoom to identify new recruits and plan their own unsanctioned purges against those they deem heretical.",
+            "hooks": [
+                "The party overhears a group of patrons in the tearoom discussing the 'moral failings' of a local artisan and the need for 'Sigmar's fire to cleanse the wicked.' The next day, the artisan's workshop is burned to the ground. The Watch rules it an accident, but the artisan's family suspects otherwise and hires the party to investigate.",
+                "Father Emming is concerned about the pious young priestess, Irma Brantl. She has started attending 'special prayer meetings' at the Pious Cup. Fearing she is falling in with extremists, he asks the party to discreetly attend the next meeting and report back on what is really being discussed."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "tavern"
+        },
+        {
+            "id": "stiegler_house",
+            "name": "The Stiegler House",
+            "coords": {
+                "x": 2575,
+                "y": 1065
+            },
+            "playerDescription": "A modest, well-kept townhouse just between the Artisans' Quarter and the Magnustor District. The exterior is plain, with little decoration aside from a small brass plaque beside the door bearing the family name 'Stiegler.' Inside, the house is in a constant state of panic, with papers strewn about and a general air of disarray.",
+            "gmNotes": "The Stiegler House is the home of the Stiegler family, an up and coming merchant family from Grausee, a village not far-distant from Ubersreik. The patriarch, Wilhelm Stiegler, recently moved his family to the city to expand his trading business. However, Wilhelm has become increasingly paranoid, convinced that rival merchants and guilds are plotting against him. In reality, Wilhelm has fallen under the influence of a minor chaos cult that preys on his fears, urging him to take drastic measures to 'protect' his family and business. Johanna, his daughter, is unaware of her father's descent into madness and struggles to keep the family together amidst the turmoil. She recently departed for a new windmill project with Rutger Reuter, hoping to find some peace and stability away from her father's increasingly erratic behaviour.",
+            "hooks": [
+                "Wilhelm Stiegler has disappeared, leaving behind a frantic note warning of an imminent threat to his family. Johanna hires the party to find her father and bring him back safely, fearing that his paranoia has led him into danger.",
+                "The party is approached by a mysterious figure who claims to have information about Wilhelm Stiegler's involvement with a chaos cult. They offer to share this information in exchange for a favour: retrieve a specific item from the Stiegler House without alerting the family."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "guild_of_horologists_and_cogsmiths",
+            "name": "Guild of Horologists and Cogsmiths",
+            "coords": {
+                "x": 2455,
+                "y": 940
+            },
+            "playerDescription": "A narrow, tall building with a massive, ornate clock face built into its facade, which somehow manages to show the correct time. From within, a constant, gentle cacophony of a thousand ticking, whirring, and chiming mechanisms can be heard. The ground floor is a shop displaying marvels of clockwork, from tiny automated songbirds to grand father clocks.",
+            "gmNotes": "Guildmaster Thadeus Mitzeltot is a man obsessed with precision, order, and time. This obsession has led him to become a secret devotee of a minor cult of Astasis, an obscure deity of absolute stasis and law. Thadeus believes chaos is the ultimate evil and that every action should be pre-ordained and measured. He uses his skills to build incredibly complex clockwork listening devices, which he hides inside the clocks he sells to Ubersreik's most powerful citizens, gathering information for his own inscrutable purposes.",
+            "hooks": [
+                "The Burgomeister, Ernst Maler, suspects someone is leaking information from his private office in the Town Hall. The only recent addition to the room is a magnificent new clock, a gift from the guild. He hires the party to investigate the clock and its maker without causing a public scandal.",
+                "Thadeus is building his masterpiece: a clock that can, he believes, calculate the future. It requires a 'Heart of Crystal,' a perfectly regular crystal formation found only in a Skaven-infested abandoned mine. He will pay an astronomical sum for this component, claiming it is for a commission for a Nuln baron."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "relics_and_reveries",
+            "name": "Relics & Reveries",
+            "coords": {
+                "x": 2225,
+                "y": 1250
+            },
+            "playerDescription": "A cramped, dusty antique shop overflowing with a bizarre collection of items: a stuffed two-headed calf, a tarnished suit of Tilean armour, stacks of yellowed books, and countless other curiosities. The air is thick with the smell of decay and forgotten things. The shopkeeper, Caspian, is a man of indeterminate age with mismatched eyes who seems to appear from the shadows whenever a customer touches something.",
+            "gmNotes": "Caspian is an unaligned servant of Tzeentch, the Changer of Ways. He is not part of any organized cult but a 'Dilettante' who delights in sowing subtle chaos. He trades in items with strange histories and minor curses, finding joy in seeing how these objects change the lives of their new owners. The shop itself is a minor nexus of chaotic energy, and its layout seems to shift when no one is looking.",
+            "hooks": [
+                "While browsing, a party member finds an item they lost years ago in a completely different part of the Empire. Caspian smiles and says, 'It found its way here.' He will not sell it for money, but will trade it for 'an object of equal emotional significance' from the character's current possessions.",
+                "The party is hired by Ludwig Schlüsselfert, the locksmith. He has been tasked with opening a puzzle box that has defied all his attempts. He traced its origin to Caspian's shop. Caspian claims he cannot remember the box, but will gladly sell them a 'key that opens not what is locked, but what is hidden' for a steep price."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "the_seven_veils",
+            "name": "The Seven Veils",
+            "coords": {
+                "x": 2660,
+                "y": 1210
+            },
+            "playerDescription": "An esoteric bookshop, its windows painted over with complex astrological charts and arcane symbols. A faint, sweet smell of incense wafts from beneath the door. The sign above depicts a seven-pointed star. Inside, the shop is dimly lit, filled with strange books, star-charts, and occult paraphernalia.",
+            "gmNotes": "The shop is run by Friedrich von Happe, a well-spoken scholar and astrologer. It is a recruitment front for the Order of the Unblinking Eye, the Slaaneshi cult that counts Andreas von Bruner among its members. Friedrich uses his position to identify citizens with hidden lusts and ambitions, offering them 'forbidden knowledge' and 'paths to true fulfillment' that lead them straight into the cult's perfumed embrace.",
+            "hooks": [
+                "A young scribe from the Town Hall has gone missing. His worried family last saw him heading to The Seven Veils for an 'astrological reading.' They hire the party to find out what has happened to him.",
+                "The party is given a package to deliver to the shop by a hooded figure, who pays them well and asks no questions. The package writhes slightly and emits a faint moan. Inside the shop, Friedrich is expecting them and offers them a glass of exquisite, strangely intoxicating wine while he inspects the delivery."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "the_artisans_repose",
+            "name": "The Artisan's Repose",
+            "coords": {
+                "x": 2080,
+                "y": 695
+            },
+            "playerDescription": "A large, well-organized store that serves as a high-end supplier for the city's master craftsmen. There are no common goods here; instead, one can find rare hardwoods from the Laurelorn Forest, billets of gromril-veined iron, and tools of unparalleled quality. Access is restricted to guild members, and the prices are astronomical.",
+            "gmNotes": "The store is managed by a consortium of the city's main craft guilds, but this cooperation is a thin veneer over a hotbed of intense rivalry. The store's fussy manager, Klaus, is an expert at playing the guilds against each other. For a small bribe, he will provide information on what materials a rival guild is purchasing, offering clues to their secret projects and commissions. He is currently on the payrolls of at least three different guild masters.",
+            "hooks": [
+                "Rudy Schlau, master of the Cutlers' Guild, hires the party for an act of industrial espionage. He wants them to get into The Artisan's Repose and find the purchase ledger to see what kind of steel Petronilla Merkle and the Metalworkers' Guild have been buying, suspecting they have found a new source.",
+                "A shipment of rare wood has been stolen en route to the store. The guilds are blaming each other, and tensions are high. Klaus, fearing the loss of business, pools a reward from the guilds and hires the party to track down the real thieves and recover the cargo before the situation devolves into open conflict."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
+        },
+        {
+            "id": "ubersreik_patriots_club",
+            "name": "The Ubersreik Patriot's Club",
+            "coords": {
+                "x": 2780,
+                "y": 855
+            },
+            "playerDescription": "An unassuming but well-kept townhouse with a small, discreet brass plaque reading 'Ubersreik Patriot's Club.' Inside, the rooms are decorated with faded von Jungfreud banners, portraits of the Duke, and maps of the Duchy. A few grim-faced men and women sit in quiet conversation, sipping ale and looking suspiciously at any newcomers.",
+            "gmNotes": "This is one of Guido Falck's Jungfreud resistance movement's secret headquarters. While posing as a social club for those with 'traditionalist sympathies,' it is one of the nerve center for planning acts of sabotage against the Altdorf occupiers, printing seditious pamphlets, and coordinating with loyalists throughout the city. The members are dedicated but paranoid, and desperately short on weapons and coin.",
+            "hooks": [
+                "If the party has gained a reputation for being anti-Altdorf, they are approached by a club member and invited to a meeting. Guido Falck will offer them a dangerous mission: raid a warehouse owned by the Duane Brothers to steal a shipment of black powder meant for the Altdorf garrison.",
+                "Captain Andrea Pfeffer of the Watch has her suspicions about the club but lacks the political clout to raid it openly. She hires the party as deniable agents to infiltrate the club, pose as sympathizers, and gather concrete proof of their seditious activities, or better yet, the location of Guido Falck himself."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "duane_brothers_shipping_haulage",
+            "name": "Duane Brothers Shipping & Haulage",
+            "coords": {
+                "x": 2490,
+                "y": 730
+            },
+            "playerDescription": "A large, muddy yard dominated by a sprawling warehouse and stables. Wagons are in constant motion, being loaded and unloaded by a small army of sweating labourers. Bellowing orders over the chaos are the two Duane brothers, Otto and Ulli, a pair of massive, identical men with furious tempers and fists the size of hams.",
+            "gmNotes": "The Duane Brothers have secured the highly lucrative contract to handle all logistics for the occupying Altdorf army. They are growing rich, but their collaboration has made them pariahs among many locals. They are also fantastically corrupt, routinely skimming from army shipments and selling the stolen goods on the black market through intermediaries connected to the Lowhaven Clan.",
+            "hooks": [
+                "A quartermaster in the Altdorf army is convinced he's being shorted on supplies but can't prove it. He hires the party to get jobs as labourers in the Duane Brothers' yard, hoping they can find evidence of the theft from the inside.",
+                "The brothers are trying to buy out a smaller, rival haulage company. When the owner refuses, his prize-winning draft horse has its legs broken. The owner hires the party for protection, fearing the Duane Brothers' next move will be against him and his family."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "magnusson_collegiate_school",
+            "name": "The Magnusson Collegiate School",
+            "coords": {
+                "x": 2180,
+                "y": 1090
+            },
+            "playerDescription": "A large, three-story building of grey stone, its seriousness broken by the sounds of children shouting and playing in the walled yard. This is the premier school for the children of Ubersreik's prosperous citizens: merchants, guild leaders, and bureaucrats. Through the windows, you can see classrooms where stern-faced tutors drill students in letters and numbers.",
+            "gmNotes": "The school is run by Headmaster Albus Posen, a gentle scholar and devout follower of Verena, the goddess of wisdom. He genuinely believes that education and rational discourse can solve any problem. However, the school has become a bitter microcosm of the city's political division. The children of Jungfreud loyalists have formed gangs that fight the children of 'collaborators.' Posen is struggling to maintain order as playground squabbles escalate into politically-charged violence.",
+            "hooks": [
+                "After a particularly nasty brawl in the schoolyard where a child's arm was broken, Headmaster Posen hires the party to act as 'groundskeepers.' Their real job is to provide security, mediate disputes, and try to uncover which parents are encouraging their children's violent behavior.",
+                "A priceless, illuminated history of the von Jungfreud line has been stolen from the school's locked library. Posen is terrified of the political fallout if the theft becomes public. He suspects one of the older, more radicalized students and needs the party to investigate the theft quietly and recover the book before it is destroyed or used for seditious purposes."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "misc"   
+        }
+    ],
+    "characters": [
+        {
+            "id": "hbju",
+            "name": "Hbju Arakasai",
+            "currentCareerId": "pit-fighter",
+            "currentCareerLevelId": "pugilist",
+            "userId": "",
+            "xp": {
+                "current": 250,
+                "spent": 500
+            },
+            "careerHistory": [],
+            "unlockedCharacteristicIds": [],
+            "unlockedSkillIds": [],
+            "unlockedTalentIds": [],
+            "characteristics": {
+                "ws": {
+                    "initial": 30,
+                    "advances": 5,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "bs": {
+                    "initial": 25,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "s": {
+                    "initial": 35,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "t": {
+                    "initial": 40,
+                    "advances": 5,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "i": {
+                    "initial": 30,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "ag": {
+                    "initial": 20,
+                    "advances": 5,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "dex": {
+                    "initial": 25,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "int": {
+                    "initial": 30,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "wp": {
+                    "initial": 25,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "fel": {
+                    "initial": 20,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                }
+            },
+            "skills": [
+                {
+                    "id": "melee",
+                    "name": "Melee (Basic)",
+                    "characteristic": "ws",
+                    "advances": 10,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                {
+                    "id": "dodge",
+                    "name": "Dodge",
+                    "characteristic": "ag",
+                    "advances": 5,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                {
+                    "id": "intimidate",
+                    "name": "Intimidate",
+                    "characteristic": "s",
+                    "advances": 5,
+                    "talents": 0,
+                    "modifier": 0
+                }
+            ],
+            "status": {
+                "wounds": {
+                    "current": 12,
+                    "max": 12
+                },
+                "fate": {
+                    "current": 1,
+                    "max": 3
+                },
+                "fortune": {
+                    "current": 2,
+                    "max": 2
+                },
+                "resilience": {
+                    "current": 0,
+                    "max": 3
+                },
+                "resolve": {
+                    "current": 0,
+                    "max": 3
+                },
+                "corruption": {
+                    "current": 0,
+                    "max": 8
+                }
+            },
+            "conditions": [],
+            "talents": {
+                "fearless": 1,
+                "strong-back": 1
+            },
+            "inventory": {
+                "armor": {
+                    "armour_mail_coat": 1
+                },
+                "weapons": {
+                    "weapon_twohanded_great_axe": 1,
+                    "weapon_basic_dagger": 1
+                },
+                "items": {}
+            },
+            "currency": {
+                "gc": 1,
+                "ss": 5,
+                "bp": 20
+            }
+        },
+        {
+            "id": "frazaie",
+            "name": "Frazaie Arakasai",
+            "currentCareerId": "racketeer",
+            "currentCareerLevelId": "thug",
+            "userId": "",
+            "xp": {
+                "current": 300,
+                "spent": 400
+            },
+            "careerHistory": [],
+            "unlockedCharacteristicIds": [],
+            "unlockedSkillIds": [],
+            "unlockedTalentIds": [],
+            "characteristics": {
+                "ws": {
+                    "initial": 25,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "bs": {
+                    "initial": 45,
+                    "advances": 10,
+                    "talents": 5,
+                    "modifier": 0
+                },
+                "s": {
+                    "initial": 25,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "t": {
+                    "initial": 20,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "i": {
+                    "initial": 35,
+                    "advances": 5,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "ag": {
+                    "initial": 30,
+                    "advances": 5,
+                    "talents": 5,
+                    "modifier": 0
+                },
+                "dex": {
+                    "initial": 37,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "int": {
+                    "initial": 29,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "wp": {
+                    "initial": 35,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                "fel": {
+                    "initial": 29,
+                    "advances": 0,
+                    "talents": 0,
+                    "modifier": 0
+                }
+            },
+            "skills": [
+                {
+                    "id": "ranged-bow",
+                    "name": "Ranged (Bow)",
+                    "characteristic": "bs",
+                    "advances": 10,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                {
+                    "id": "dodge",
+                    "name": "Dodge",
+                    "characteristic": "ag",
+                    "advances": 5,
+                    "talents": 0,
+                    "modifier": 0
+                },
+                {
+                    "id": "intimidate",
+                    "name": "Intimidate",
+                    "characteristic": "s",
+                    "advances": 5,
+                    "talents": 0,
+                    "modifier": 0
+                }
+            ],
+            "status": {
+                "wounds": {
+                    "current": 12,
+                    "max": 12
+                },
+                "fate": {
+                    "current": 1,
+                    "max": 3
+                },
+                "fortune": {
+                    "current": 2,
+                    "max": 2
+                },
+                "resilience": {
+                    "current": 0,
+                    "max": 3
+                },
+                "resolve": {
+                    "current": 0,
+                    "max": 3
+                },
+                "corruption": {
+                    "current": 0,
+                    "max": 8
+                }
+            },
+            "conditions": [],
+            "talents": {
+                "fearless": 1,
+                "strong-back": 1
+            },
+            "inventory": {
+                "armor": {
+                    "armour_leather_leggings": 1,
+                    "armour_leather_jerkin": 1
+                },
+                "weapons": {
+                    "weapon_bow_shortbow": 1,
+                    "weapon_basic_dagger": 1
+                },
+                "items": {
+                    "item_trade_tools": 1,
+                    "item_cloak": 1
+                }
+            },
+            "currency": {
+                "gc": 0,
+                "ss": 10,
+                "bp": 15
+            }
+        }
+    ]
+}

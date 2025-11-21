@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Character, Talent, calculateTalentAdvanceCost, talentsData, careersData, getAvailableAdvancements } from '@wfrp/shared';
+import { Character, Talent, calculateTalentAdvanceCost, useGameData, getAvailableAdvancements } from '@wfrp/shared';
 import styles from './TalentModal.module.css';
 
 interface TalentModalProps {
@@ -11,8 +11,12 @@ interface TalentModalProps {
 export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, onBuyTalent }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
+    const gameData = useGameData();
+    const careers = gameData.careers;
+    const talents = gameData.talents;
+
     const availableTalentIds = useMemo(() => {
-        const careers = careersData as any[];
+
         const career = careers.find((c: any) => c.id === character.currentCareerId);
         if (!career) return [];
 
@@ -44,8 +48,6 @@ export const TalentModal: React.FC<TalentModalProps> = ({ character, onClose, on
     };
 
     const filteredTalents = useMemo(() => {
-        const talents = talentsData as Talent[];
-
         // Filter by career availability first
         let careerFilteredTalents = talents.filter(talent => availableTalentIds.includes(talent.id));
 

@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import {
     getCareerLevelsForCharacter,
-    allSkillsAndCharacteristics,
-    talentsData,
-    careersData,
     Character,
     Career,
     CareerLevel,
-    CareerHistoryEntry
+    CareerHistoryEntry,
+    useGameData
 } from '@wfrp/shared';
 import styles from './CareerManager.module.css';
 
@@ -18,7 +16,10 @@ interface CareerManagerProps {
 }
 
 const CareerManager: React.FC<CareerManagerProps> = ({ character, onCharacterUpdate, onClose }) => {
-    const careers = careersData as Career[];
+    const careers = useGameData().careers;
+    const talents = useGameData().talents;
+    const skills = useGameData().skills;
+
     const [selectedUnlockTab, setSelectedUnlockTab] = useState<'characteristics' | 'skills' | 'talents'>('characteristics');
 
     const currentCareer = careers.find(c => c.id === character.currentCareerId);
@@ -28,13 +29,13 @@ const CareerManager: React.FC<CareerManagerProps> = ({ character, onCharacterUpd
 
     const characteristicOptions = ['WS', 'BS', 'S', 'T', 'I', 'Ag', 'Dex', 'Int', 'WP', 'Fel'];
 
-    const skillOptions = allSkillsAndCharacteristics
+    const skillOptions = skills
         .filter((sc: any) => sc.type === 'skill')
         .map((sc: any) => ({ id: sc.id, name: sc.name }))
         .concat(character.skills.map(s => ({ id: s.id, name: s.name })))
         .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
 
-    const talentOptions = (talentsData as any[]).map(t => ({ id: t.id, name: t.name }));
+    const talentOptions = (talents as any[]).map(t => ({ id: t.id, name: t.name }));
 
     const toggleCharacteristic = (charId: string) => {
         const updatedCharacter = { ...character };

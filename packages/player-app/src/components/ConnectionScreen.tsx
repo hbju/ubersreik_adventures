@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@wfrp/shared';
 import styles from './ConnectionScreen.module.css';
 
 interface ConnectionScreenProps {
@@ -8,6 +10,7 @@ interface ConnectionScreenProps {
 }
 
 export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, error, isConnecting }) => {
+  const { t } = useTranslation();
   const [ip, setIp] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -24,16 +27,19 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
   return (
     <div className={styles.connectionContainer}>
       <div className={styles.connectionBox}>
-        <h1 className={styles.title}>Ubersreik Adventures</h1>
-        <p className={styles.subtitle}>Enter your credentials to join the adventure</p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+            <LanguageSwitcher />
+        </div>
+        <h1 className={styles.title}>{t('connection.title')}</h1>
+        <p className={styles.subtitle}>{t('connection.subtitle')}</p>
         
         <div className={styles.formGroup}>
-          <label className={styles.label}>Game Master's IP Address</label>
+          <label className={styles.label}>{t('connection.ipLabel')}</label>
           <input
             type="text"
             value={ip}
             onChange={(e) => setIp(e.target.value)}
-            placeholder="e.g., 192.168.1.100"
+            placeholder={t('connection.placeholderIp')}
             onKeyUp={(e) => e.key === 'Enter' && isFormValid && handleConnect()}
             className={styles.input}
             disabled={isConnecting}
@@ -41,12 +47,12 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>Username</label>
+          <label className={styles.label}>{t('connection.usernameLabel')}</label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
+            placeholder={t('connection.placeholderUsername')}
             onKeyUp={(e) => e.key === 'Enter' && isFormValid && handleConnect()}
             className={styles.input}
             disabled={isConnecting}
@@ -55,13 +61,13 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
         </div>
 
         <div className={styles.formGroup}>
-          <label className={styles.label}>Password</label>
+          <label className={styles.label}>{t('connection.passwordLabel')}</label>
           <div className={styles.passwordContainer}>
             <input
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder={t('connection.placeholderPassword')}
               onKeyUp={(e) => e.key === 'Enter' && isFormValid && handleConnect()}
               className={styles.input}
               disabled={isConnecting}
@@ -89,11 +95,11 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
           className={styles.connectButton}
           disabled={!isFormValid || isConnecting}
         >
-          {isConnecting ? '🔄 Connecting...' : 'Login & Join Game'}
+          {isConnecting ? t('connection.connecting') : t('connection.connectButton')}
         </button>
 
         <div className={styles.helpText}>
-          Contact your Game Master if you need login credentials.
+          {t('connection.helpText')}
         </div>
       </div>
     </div>

@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { Character, Armor, Weapon, Item, Currency } from '../types/wfrp.types';
 import { calculateTotalEncumbrance } from '../utils/inventory';
 import { calculateCharacteristicBonus } from '../utils/skills';
-import ArmorData from '../data/armor.json';
-import WeaponData from '../data/weapons.json';
-import ItemData from '../data/items.json';
 import './InventoryView.css';
 import { calculateEffectiveMaxEncumbrance } from '../utils/talents';
+import { useGameData } from '..';
+
 
 interface InventoryViewProps {
     character: Character;
@@ -16,11 +15,16 @@ interface InventoryViewProps {
     onAddItem?: () => void;
 }
 
-const armorsById = Object.groupBy(ArmorData as Armor[], a => a.id);
-const weaponsById = Object.groupBy(WeaponData as Weapon[], w => w.id);
-const itemsById = Object.groupBy(ItemData as Item[], i => i.id);
-
 const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClick, showPurchaseButton = false, onRemoveItem, onAddItem }) => {
+    const gameData = useGameData();
+    const ArmorData = gameData.armor;
+    const WeaponData = gameData.weapons;
+    const ItemData = gameData.items;
+
+    const armorsById = Object.groupBy(ArmorData as Armor[], a => a.id);
+    const weaponsById = Object.groupBy(WeaponData as Weapon[], w => w.id);
+    const itemsById = Object.groupBy(ItemData as Item[], i => i.id);
+
     const [armorExpanded, setArmorExpanded] = useState(true);
     const [weaponsExpanded, setWeaponsExpanded] = useState(true);
     const [itemsExpanded, setItemsExpanded] = useState(true);

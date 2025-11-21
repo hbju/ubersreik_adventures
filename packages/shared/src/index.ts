@@ -8,7 +8,10 @@ export { default as LocationInfoPanel } from './components/LocationInfoPanel';
 export { CriticalHitModal } from './components/CriticalHitModal';
 export { FumbleModal } from './components/FumbleModal';
 export { ConditionPromptModal } from './components/ConditionPromptModal';
+export { LanguageSwitcher } from './components/LanguageSwitcher';
 export * from './components/GameLog';
+export * from './hooks/useGameData';
+export * from './i18n';
 export * from './types/wfrp.types';
 export * from './types/messaging.types';
 export * from './utils/advancement';
@@ -20,15 +23,8 @@ export * from './utils/socket';
 export * from './utils/talents';
 export * from './utils/conditions';
 export * from './utils/career';
-export { default as ArmorData } from './data/armor.json';
-export { default as ItemData } from './data/items.json';
-export { default as WeaponData } from './data/weapons.json';
-export { default as gameData } from './data/ubersreik.json';
-export { default as allSkillsAndCharacteristics } from './data/skillsAndCharacteristics.json';
-export { default as talentsData } from './data/talents.json';
-export { default as conditionsData } from './data/conditions.json';
+
 export { default as criticalHitsData } from './data/critical_hits.json';
 export { default as fumblesData } from './data/fumbles.json';
-export { default as careersData } from './data/careers.json';
 export { default as speciesData } from './data/species.json';
 

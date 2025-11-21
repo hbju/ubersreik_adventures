@@ -1,5 +1,5 @@
+import { useGameData } from '..';
 import { Skill, Characteristic, Character, SkillCharDefinition } from '../types/wfrp.types';
-import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
 
 export function calculateSkillValue(skill: Skill, character: Character): number {
     const char = character.characteristics[skill.characteristic as keyof typeof character.characteristics];
@@ -20,7 +20,7 @@ export function getGroupedSkill(skillId: string): Skill | null {
     // skill id will be in format 'skill-id_group', where skill-id is the base skill id, and _group is the group suffix. For example, melee_basic should map to {id: 'melee_basic', name: 'Melee (Basic)', characteristic: 'ws', ...} as the base skill 'melee' with group 'basic'.
     const baseSkillId = skillId.split('_')[0];
 
-    const skillDef = (allSkillsAndCharacteristics as SkillCharDefinition[]).find(s => s.id === baseSkillId && s.type === 'skill');
+    const skillDef = useGameData().skills.find(s => s.id === baseSkillId && s.type === 'skill');
     if (!skillDef) return null;
 
     const group = skillId.split('_')[1];

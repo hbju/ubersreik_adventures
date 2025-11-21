@@ -1,8 +1,5 @@
 import React, { useMemo } from 'react';
-import { Armor, Weapon, Item, Currency, RequestPurchaseMessage } from '@wfrp/shared';
-import { ArmorData } from '@wfrp/shared';
-import { WeaponData } from '@wfrp/shared';
-import { ItemData } from '@wfrp/shared';
+import { Armor, Weapon, Item, Currency, useGameData } from '@wfrp/shared';
 import styles from './ShopModal.module.css';
 
 interface ShopModalProps {
@@ -12,16 +9,17 @@ interface ShopModalProps {
     onRequestPurchase: (item: Armor | Weapon | Item) => void;
 }
 
-const armorsById = Object.groupBy(ArmorData as Armor[], a => a.id);
-const weaponsById = Object.groupBy(WeaponData as Weapon[], w => w.id);
-const itemsById = Object.groupBy(ItemData as Item[], i => i.id);
-
 export const ShopModal: React.FC<ShopModalProps> = ({ 
     shopItems, 
     playerCurrency,
     onClose, 
     onRequestPurchase 
 }) => {
+    const gameData = useGameData();
+    const armorsById = Object.groupBy(gameData.armor, a => a.id);
+    const weaponsById = Object.groupBy(gameData.weapons, w => w.id);
+    const itemsById = Object.groupBy(gameData.items, i => i.id);
+    
     // Load all available items from the shop
     const availableItems = useMemo(() => {
         const items: (Armor | Weapon | Item)[] = [];

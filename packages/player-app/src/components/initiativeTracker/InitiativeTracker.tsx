@@ -1,5 +1,5 @@
 import React from 'react';
-import { Combatant, conditionsData, Advantages } from '@wfrp/shared';
+import { Combatant, useGameData, Advantages } from '@wfrp/shared';
 import styles from './InitiativeTracker.module.css';
 
 interface InitiativeTrackerProps {
@@ -11,6 +11,9 @@ interface InitiativeTrackerProps {
 const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
     combatants, currentTurnId, advantages
 }) => {
+    const gameData = useGameData();
+    const conditionsData = gameData.conditions;
+    
     if (combatants.length === 0) {
         return null; // Don't show tracker if no combat is active
     }

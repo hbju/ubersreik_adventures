@@ -1,23 +1,35 @@
 import { Character, Skill } from '../types/wfrp.types';
 import { rollDice } from './mechanics';
 import { SkillCharDefinition } from '../types/wfrp.types';
-import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
-import { careersData } from '..';
+import { useGameData } from '..';
+
+function getSkillsData(): SkillCharDefinition[] {
+    const gameData = useGameData();
+    return gameData.skills;
+}
+
+function getBasicSkills(): Skill[] {
+    return getSkillsData().filter(skill => skill.type === 'skill' && skill.classification === 'basic').map(skill => ({
+        id: skill.id,
+        name: skill.name,
+        characteristic: skill.characteristic,
+        advances: 0,
+        talents: 0,
+        modifier: 0
+    }));
+}
+
+function getCareersData() {
+    const gameData = useGameData();
+    return gameData.careers;
+}
 
 const firstNames = ["Albrecht", "Gunnar", "Elsa", "Katrin", "Hanz", "Sigrid", "Ludwig", "Mathilde", "Ulrich"];
 const lastNames = ["Weber", "Hoffman", "Schmidt", "Fischer", "Schneider", "Bauer", "Klein", "Vogt"];
 
-const basicSkills = (allSkillsAndCharacteristics as SkillCharDefinition[]).filter(skill => skill.type === 'skill' && skill.classification === 'basic').map(skill => ({
-    id: skill.id,
-    name: skill.name,
-    characteristic: skill.characteristic,
-    advances: 0,
-    talents: 0,
-    modifier: 0
-}));
-
 export const generateRandomNpc = (): Character => {
     const name = `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+    const careersData = getCareersData();
     const career = careersData[Math.floor(Math.random() * careersData.length)];
     const careerLevel = career.career_level[0];
 
@@ -53,7 +65,7 @@ export const generateRandomNpc = (): Character => {
             corruption: { current: 0, max: 10 },
         },
         conditions: [],
-        skills: [...basicSkills],
+        skills: [...getBasicSkills()],
         talents: {},
         inventory: {
             weapons: {},
@@ -99,7 +111,7 @@ export const createBlankCharacter = (): Character => {
             corruption: { current: 0, max: 10 },
         },
         conditions: [],
-        skills: [...basicSkills],
+        skills: [...getBasicSkills()],
         talents: {},
         inventory: {
             weapons: {},

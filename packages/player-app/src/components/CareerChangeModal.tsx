@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Character, Career, CareerLevel, careersData, getAvailableCareerChanges } from '@wfrp/shared';
+import { Character, Career, CareerLevel, useGameData, getAvailableCareerChanges } from '@wfrp/shared';
 import styles from './CareerChangeModal.module.css';
 
 interface CareerChangeModalProps {
@@ -19,7 +19,9 @@ export const CareerChangeModal: React.FC<CareerChangeModalProps> = ({
     cost: number;
   } | null>(null);
 
-  const careers = careersData as Career[];
+  const gameData = useGameData();
+  const careers = gameData.careers as Career[];
+  
   const availableChanges = getAvailableCareerChanges(character, careers);
 
   // Group by cost and career class

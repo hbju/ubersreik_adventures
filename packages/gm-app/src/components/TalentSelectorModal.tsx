@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { calculateTalentAdvanceCost, Character, getMaxRanks, Talent, talentsData } from '@wfrp/shared';
+import { calculateTalentAdvanceCost, Character, getMaxRanks, Talent, useGameData } from '@wfrp/shared';
 import styles from './TalentSelectorModal.module.css';
 
 interface TalentSelectorModalProps {
@@ -11,7 +11,8 @@ interface TalentSelectorModalProps {
 export const TalentSelectorModal: React.FC<TalentSelectorModalProps> = ({ onClose, onSelect, character }) => {
     const [searchTerm, setSearchTerm] = useState('');
 
-    const allTalents = useMemo(() => talentsData as Talent[], []);
+    const gameData = useGameData();
+    const allTalents = useMemo(() => gameData.talents as Talent[], [gameData]);
 
     const filteredTalents = useMemo(() => {
         if (!searchTerm.trim()) return allTalents;

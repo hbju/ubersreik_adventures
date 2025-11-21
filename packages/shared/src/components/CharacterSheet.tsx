@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages, Talent, Career } from '../types/wfrp.types';
 import { calculateCharacteristicBonus, getGroupedSkill, isSkillGrouped } from '../utils/skills';
-import allSkillsAndCharacteristics from '../data/skillsAndCharacteristics.json';
-import { getAvailableAdvancements, talentsData } from '..';
-import { conditionsData } from '..';
-import { careersData } from '..';
+import { getAvailableAdvancements } from '..';
+import { useGameData } from '../hooks/useGameData';
 import InventoryView from './InventoryView';
 import './CharacterSheet.css';
 import { getTalentCharacteristicBonus } from '../utils/talents';
-
-const talents = talentsData as Talent[];
 
 interface CharacterSheetProps {
     character: Character;
@@ -54,6 +51,8 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     onRemoveItem,
     onAddItem
 }) => {
+    const { t } = useTranslation();
+    const { skills: allSkills, talents, careers: careersData, conditions: conditionsData } = useGameData();
     const [activeTab, setActiveTab] = useState<'stats' | 'talents' | 'inventory'>('stats');
 
     if (!character) {
@@ -139,7 +138,6 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
         onCharacterUpdate(updatedCharacter);
     }
 
-    const allSkills = allSkillsAndCharacteristics as SkillCharDefinition[]
     const charSkills = character.skills
     const remainingBasicSkills: Skill[] = allSkills.filter(skill => charSkills.filter(s => s.id === skill.id).length == 0 && skill.type === 'skill' && skill.classification === 'basic').map(skill => ({
         id: skill.id,
@@ -272,31 +270,42 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                     className={`tab ${activeTab === 'stats' ? 'active' : ''}`}
                     onClick={() => setActiveTab('stats')}
                 >
-                    Stats & Skills
+                    {t('sheet.characteristics')} & {t('sheet.skills')}
                 </button>
                 <button
                     className={`tab ${activeTab === 'talents' ? 'active' : ''}`}
                     onClick={() => setActiveTab('talents')}
                 >
-                    Talents
+                    {t('sheet.talents')}
                 </button>
                 <button
                     className={`tab ${activeTab === 'inventory' ? 'active' : ''}`}
                     onClick={() => setActiveTab('inventory')}
                 >
-                    Inventory
+                    {t('sheet.inventory')}
                 </button>
             </div>
 
             {activeTab === 'stats' && (
                 <main className="mainGrid">
                     <div className="characteristicsPanel">
-                        <h3>Characteristics</h3>
+                        <h3>{t('sheet.characteristics')}</h3>
                         <div className={advancementMode ? "characteristicsGridAdvancement" : "characteristicsGrid"}>
-                            <span></span><span>Initial</span><span>Adv</span>{advancementMode && <span></span>}<span>Mod</span><span>Talents</span><span>Total</span>
+                            <span></span><span>Initial</span><span>Adv</span>{advancementMode && <span></span>}<span>Mod</span><span>{t('sheet.talents')}</span><span>Total</span>
                             {Object.entries(character.characteristics).map(([key, char]) => {
                                 const charKey = key as keyof Character['characteristics'];
-                                const charNames: { [key: string]: string } = { "ws": "Weapon Skill", "bs": "Ballistic Skill", "s": "Strength", "t": "Toughness", "i": "Initiative", "ag": "Agility", "int": "Intelligence", "dex": "Dexterity", "wp": "Willpower", "fel": "Fellowship" };
+                                const charNames: { [key: string]: string } = {
+                                    "ws": t('stats.WS'),
+                                    "bs": t('stats.BS'),
+                                    "s": t('stats.S'),
+                                    "t": t('stats.T'),
+                                    "i": t('stats.I'),
+                                    "ag": t('stats.Ag'),
+                                    "int": t('stats.Int'),
+                                    "dex": t('stats.Dex'),
+                                    "wp": t('stats.WP'),
+                                    "fel": t('stats.Fel')
+                                };
                                 const charTalents = getTalentCharacteristicBonus(character, charKey);
                                 const total = char.initial + char.advances + charTalents + char.modifier;
                                 const isUnlocked = !character.unlockedCharacteristicIds || character.unlockedCharacteristicIds.map(id => id.toLowerCase()).includes(charKey);
@@ -329,9 +338,9 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                     </div>
 
                     <div className="statusPanel">
-                        <h3>Status</h3>
+                        <h3>{t('sheet.status')}</h3>
                         <div className="statusGrid">
-                            <label>Wounds</label>
+                            <label>{t('sheet.wounds')}</label>
                             {readonly ? (<span>{character.status.wounds.current}</span>) : (
                                 <input
                                     type="number"
@@ -347,9 +356,9 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                     title="Test Corruption"
                                     className="rollButton"
                                 >
-                                    Corruption
+                                    {t('sheet.corruption')}
                                 </button>
-                            ) : <label>Corruption</label>}
+                            ) : <label>{t('sheet.corruption')}</label>}
                             {readonly ? (<span>{character.status.corruption.current}</span>) : (
                                 <input
                                     type="number"
@@ -358,7 +367,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                     className="numericInput"
                                 />)}
                             <span>/ {character.status.corruption.max}</span>
-                            <label>Fate</label>
+                            <label>{t('sheet.fate')}</label>
                             {readonly ? (<span>{character.status.fate.current}</span>) : (
                                 <input
                                     type="number"
@@ -367,7 +376,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                     className="numericInput"
                                 />)}
                             <span>/ {character.status.fate.max}</span>
-                            <label>Fortune</label>
+                            <label>{t('sheet.fortune')}</label>
                             {readonly ? (<span>{character.status.fortune.current}</span>) : (
                                 <input
                                     type="number"
@@ -376,7 +385,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                     className="numericInput"
                                 />)}
                             <span>/ {character.status.fortune.max}</span>
-                            <label>Resilience</label>
+                            <label>{t('sheet.resilience')}</label>
                             {readonly ? (<span>{character.status.resilience.current}</span>) : (
                                 <input
                                     type="number"
@@ -385,7 +394,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                     className="numericInput"
                                 />)}
                             <span>/ {character.status.resilience.max}</span>
-                            <label>Resolve</label>
+                            <label>{t('sheet.resolve')}</label>
                             {readonly ? (<span>{character.status.resolve.current}</span>) : (
                                 <input
                                     type="number"
@@ -423,7 +432,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                     )}
 
                     <div className="skillsPanel">
-                        <h3>Skills</h3>
+                        <h3>{t('sheet.skills')}</h3>
                         <div className={advancementMode ? "skillsGridAdvancement" : "skillsGrid"}>
                             <span></span><span>Base</span><span>Char</span><span>Adv</span>{advancementMode && <span></span>}<span>Mod</span><span>Total</span><span></span>
                             {baseSkills.map(skill => {
@@ -483,10 +492,10 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                 <main className="mainGrid">
                     <div className="talentsPanel">
                         <div className="talentsHeader" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h3>Talents</h3>
+                            <h3>{t('sheet.talents')}</h3>
                             {!readonly && onAddTalent && (
                                 <button onClick={onAddTalent} className="addTalentButton">
-                                    + Add Talent
+                                    + {t('common.add')} {t('sheet.talents')}
                                 </button>
                             )}
                         </div>

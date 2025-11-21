@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import styles from './CharacterCreationWizard.module.css';
 import {
     speciesData,
-    careersData,
     Character,
     createBlankCharacter,
-    allSkillsAndCharacteristics,
-    talentsData,
     Career,
     Skill,
     Characteristic,
-    calculateCharacteristicBonus
+    calculateCharacteristicBonus,
+    useGameData
 } from '@wfrp/shared';
 
 interface CharacterCreationWizardProps {
@@ -21,6 +19,8 @@ interface CharacterCreationWizardProps {
 type Step = 'species' | 'career' | 'attributes' | 'details' | 'summary';
 
 const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClose, onComplete }) => {
+    const gameData = useGameData();
+    
     const [currentStep, setCurrentStep] = useState<Step>('species');
     const [character, setCharacter] = useState<Character>(createBlankCharacter());
     const [xpLog, setXpLog] = useState<{ reason: string, amount: number }[]>([]);
@@ -80,7 +80,7 @@ const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClo
         if (!species) return;
 
         // Filter careers available to species
-        const availableCareers = (careersData as Career[]).filter(c => c.races.includes(species.name) || c.races.includes(species.id)); // Check data consistency later
+        const availableCareers = gameData.careers.filter(c => c.races.includes(species.name) || c.races.includes(species.id)); // Check data consistency later
 
         const rolled: Career[] = [];
         for (let i = 0; i < count; i++) {
@@ -151,7 +151,7 @@ const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClo
     const finish = () => {
         // Construct final character object
         const species = speciesData.find(s => s.id === selectedSpeciesId);
-        const career = (careersData as Career[]).find(c => c.id === selectedCareerId);
+        const career = gameData.careers.find(c => c.id === selectedCareerId);
         if (!species || !career) return;
 
         const finalChar = { ...character };
@@ -235,7 +235,7 @@ const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClo
                                         <h4>🎲 Roll 3, Choose 1</h4>
                                         <p>Gain +25 XP</p>
                                     </div>
-                                    <div className={styles.optionCard} onClick={() => setRolledCareers((careersData as Career[]))}>
+                                    <div className={styles.optionCard} onClick={() => setRolledCareers(gameData.careers)}>
                                         <h4>Select Manually</h4>
                                         <p>0 XP</p>
                                     </div>
@@ -307,7 +307,7 @@ const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClo
                 <div className={styles.footer}>
                     <span>Total XP Bonus: {xpLog.reduce((a, b) => a + b.amount, 0)}</span>
                     {selectedSpeciesId && <span>Species: {speciesData.find(s => s.id === selectedSpeciesId)?.name}</span>}
-                    {selectedCareerId && <span>Career: {(careersData as Career[]).find(c => c.id === selectedCareerId)?.name}</span>}
+                    {selectedCareerId && <span>Career: {gameData.careers.find(c => c.id === selectedCareerId)?.name}</span>}
                 </div>
             </div>
         </div>

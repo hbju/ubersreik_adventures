@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import {
     Combatant,
     rollDice,
-    conditionsData,
     Advantages,
     ConditionPromptModal,
     applyEndOfRoundConditionEffects,
     checkConditionEffects,
     Character,
     RequestConditionTestMessage,
-    calculateSkillValue
+    calculateSkillValue,
+    useGameData
 } from '@wfrp/shared';
 import styles from './InitiativeTracker.module.css';
 
@@ -29,6 +29,8 @@ interface InitiativeTrackerProps {
 const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
     combatants, onSetCombatants, onUpdateCombatant, onClearCombatants, currentTurnId, onSetCurrentTurnId, advantages, onUpdateAdvantages, characters, onSendToPlayer
 }) => {
+    const conditions = useGameData().conditions;
+    
     const [expandedCombatantId, setExpandedCombatantId] = useState<string | null>(null);
     const [conditionPromptCombatant, setConditionPromptCombatant] = useState<Combatant | null>(null);
     const [roundNumber, setRoundNumber] = useState<number>(0);
@@ -171,7 +173,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
         const combatant = combatants.find(c => c.id === combatantId);
         if (!combatant) return;
 
-        const condition = conditionsData.find(cond => cond.id === conditionId);
+        const condition = conditions.find(cond => cond.id === conditionId);
         if (!condition) return;
 
         const updatedConditions = [...(combatant.conditions || [])];
@@ -207,12 +209,12 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
     };
 
     const getConditionName = (conditionId: string): string => {
-        const condition = conditionsData.find(c => c.id === conditionId);
+        const condition = conditions.find(c => c.id === conditionId);
         return condition ? condition.name : conditionId;
     };
 
     const getConditionDescription = (conditionId: string): string => {
-        const condition = conditionsData.find(c => c.id === conditionId);
+        const condition = conditions.find(c => c.id === conditionId);
         return condition ? condition.description : '';
     };
 
@@ -308,7 +310,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                                             className={styles.conditionSelect}
                                         >
                                             <option value="">Select...</option>
-                                            {conditionsData.map(condition => (
+                                            {conditions.map(condition => (
                                                 <option key={condition.id} value={condition.id}>
                                                     {condition.name}
                                                 </option>

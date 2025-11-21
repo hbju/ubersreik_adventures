@@ -1,7 +1,12 @@
 import { Character, Talent, TalentEffect } from '../types/wfrp.types';
-import talentsData from '../data/talents.json';
 import { calculateCharacteristicBonus } from './skills';
 import { rolld100 } from './mechanics';
+import { useGameData } from '..';
+
+function getTalentsData(): Talent[] {
+    const gameData = useGameData();
+    return gameData.talents;
+}
 
 /**
  * Gets all talents that could apply to a given skill or characteristic test
@@ -20,7 +25,7 @@ export function getApplicableTalents(character: Character, testId: string): Arra
         if (rank <= 0) continue;
 
         // Find the talent definition
-        const talentDef = (talentsData as Talent[]).find(t => t.id === talentId);
+        const talentDef = getTalentsData().find(t => t.id === talentId);
         if (!talentDef) continue;
 
         // Check if this talent has effects that could apply to this test
@@ -98,7 +103,7 @@ export function applyTalentSLBonuses(
 
     for (const { name, rank } of usedTalents) {
         // Find the talent definition by name
-        const talentDef = (talentsData as Talent[]).find(t => t.name === name || t.id === name);
+        const talentDef = getTalentsData().find(t => t.name === name || t.id === name);
         if (!talentDef || !talentDef.effects) continue;
 
         // Check for SL bonus effects
@@ -153,7 +158,7 @@ export function getTalentTestBonus(character: Character, testName: string): numb
 export function getTalentDamageBonus(talents: { name: string; rank: number }[], skillId: string): number {
     let bonus = 0;
     for (const { name, rank } of talents) {
-        const talentDef = (talentsData as Talent[]).find(t => t.name === name);
+        const talentDef = getTalentsData().find(t => t.name === name);
         if (!talentDef || !talentDef.effects) continue;
         for (const effect of talentDef.effects) {
             if (effect.type === 'DAMAGE_BONUS' && typeof effect.value === 'number') {
@@ -189,7 +194,7 @@ function calculateTalentBonus(character: Character, talentType : string): number
         const rank = character.talents[talentId];
         if (rank <= 0) continue;
 
-        const talentDef = (talentsData as Talent[]).find(t => t.id === talentId);
+        const talentDef = getTalentsData().find(t => t.id === talentId);
         if (!talentDef || !talentDef.effects) continue;
 
         for (const effect of talentDef.effects) {
@@ -262,7 +267,7 @@ export function getTalentCharacteristicBonus(
         if (rank <= 0) continue;
 
         // Find the talent definition
-        const talentDef = (talentsData as Talent[]).find(t => t.id === talentId);
+        const talentDef = getTalentsData().find(t => t.id === talentId);
         if (!talentDef || !talentDef.effects) continue;
 
         // Check for characteristic bonuses
@@ -295,7 +300,7 @@ export function getTalentFearRating(character: Character): number {
         if (rank <= 0) continue;
 
         // Find the talent definition
-        const talentDef = (talentsData as Talent[]).find(t => t.id === talentId);
+        const talentDef = getTalentsData().find(t => t.id === talentId);
         if (!talentDef || !talentDef.effects) continue;
 
         // Check for fear rating effects
@@ -323,7 +328,7 @@ export function canIgnoreBleeding(character: Character): boolean {
         if (rank <= 0) continue;
 
         // Find the talent definition
-        const talentDef = (talentsData as Talent[]).find(t => t.id === talentId);
+        const talentDef = getTalentsData().find(t => t.id === talentId);
         if (!talentDef || !talentDef.effects) continue;
 
         // Check for bleeding ignore effects

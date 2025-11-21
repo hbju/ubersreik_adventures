@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Career } from '@wfrp/shared';
-import { careersData } from '@wfrp/shared';
+import { useGameData } from '@wfrp/shared';
 import styles from './CareerChangeApprovalModal.module.css';
 
 interface CareerChangeRequest {
@@ -31,7 +31,7 @@ const CareerChangeApprovalModal: React.FC<CareerChangeApprovalModalProps> = ({
 
   if (!request) return null;
 
-  const careers = careersData as Career[];
+  const careers = useGameData().careers;
   const newCareer = careers.find(c => c.id === request.newCareerId);
   const newLevel = newCareer?.career_level.find(lvl => lvl.id === request.newCareerLevelId);
 

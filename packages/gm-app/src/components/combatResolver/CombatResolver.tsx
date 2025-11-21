@@ -4,7 +4,6 @@ import {
     rolld100,
     calculateSuccessLevel,
     getHitLocation,
-    allSkillsAndCharacteristics,
     Character,
     Combatant,
     SkillCharDefinition,
@@ -22,10 +21,12 @@ import {
     getTalentDamageBonus,
     getTalentTestBonus,
     applyTalentSLBonuses,
+    useGameData,
 } from '@wfrp/shared';
 
 import CharacterSelector from './CharacterSelector';
 import { cp } from 'node:fs';
+import { use } from 'i18next';
 
 interface CombatResolverProps {
     characters: Character[];
@@ -94,6 +95,8 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     onUpdateAdvantage,
     onClose
 }) => {
+    const skills = useGameData().skills;
+
     const [selectedAttackerId, setSelectedAttackerId] = useState<string>(characters[0]?.id || 'manual');
     const [selectedDefenderId, setSelectedDefenderId] = useState<string>(characters[1]?.id || 'manual');
 
@@ -177,7 +180,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         const defender = characters.find(char => char.id === selectedDefenderId);
         if (defender) {
             const toughnessBonus = calculateCharacteristicBonus(defender.characteristics.t);
-            const skillInfo = allSkillsAndCharacteristics.find(s => s.id === defenderSkillId);
+            const skillInfo = skills.find(s => s.id === defenderSkillId);
 
             // Get applicable talents for the selected skill
             const applicableTalents = skillInfo ? getApplicableTalents(defender, skillInfo.id) : [];
@@ -576,7 +579,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                 className={styles.skillSelect}
                             >
                                 <optgroup label="Characteristics">
-                                    {allSkillsAndCharacteristics.filter(s => s.type === 'characteristic').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                    {skills.filter(s => s.type === 'characteristic').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                 </optgroup>
                                 <optgroup label="Skills">
                                     {characters.find(c => c.id === selectedAttackerId) && characters.find(c => c.id === selectedAttackerId)!.skills.sort((a, b) => a.name.localeCompare(b.name)).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -711,7 +714,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                 className={styles.skillSelect}
                             >
                                 <optgroup label="Characteristics">
-                                    {allSkillsAndCharacteristics.filter(s => s.type === 'characteristic').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                                    {skills.filter(s => s.type === 'characteristic').map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                 </optgroup>
                                 <optgroup label="Skills">
                                     {characters.find(c => c.id === selectedDefenderId) && characters.find(c => c.id === selectedDefenderId)!.skills.sort((a, b) => a.name.localeCompare(b.name)).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
