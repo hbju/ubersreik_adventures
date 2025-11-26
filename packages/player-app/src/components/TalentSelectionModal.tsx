@@ -6,7 +6,8 @@ import {
     applyTalentSLBonuses,
     checkCriticalResult,
     Character,
-    Talent
+    Talent,
+    useGameData
 } from '@wfrp/shared';
 import styles from './TalentSelectionModal.module.css';
 
@@ -49,9 +50,11 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
     onClose,
     onRoll
 }) => {
+    const { talents } = useGameData();
+
     const [localModifier, setLocalModifier] = useState(modifier);
     const [selectedTalents, setSelectedTalents] = useState<UsedTalent[]>([]);
-    const [applicableTalents, setApplicableTalents] = useState<{ talent: Talent; rank: number }[]>(getApplicableTalents(character, testId));
+    const [applicableTalents, setApplicableTalents] = useState<{ talent: Talent; rank: number }[]>(getApplicableTalents(character, testId, talents));
     const [showResult, setShowResult] = useState(false);
     const [rollCount, setRollCount] = useState(0);
     const [fortuneSpent, setFortuneSpent] = useState(0);
@@ -102,7 +105,7 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
     const handleRoll = () => {
         const roll = rolld100();
         const baseSL = calculateSuccessLevel(roll, finalTarget);
-        const finalSL = applyTalentSLBonuses(baseSL, selectedTalents, character);
+        const finalSL = applyTalentSLBonuses(baseSL, selectedTalents, talents, character);
         const { isCritical, isFumble } = checkCriticalResult(roll, finalTarget);
 
         setRollResult({
@@ -133,7 +136,7 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
 
         const result = rolld100();
         const sl = calculateSuccessLevel(result, finalTarget);
-        const finalSL = applyTalentSLBonuses(sl, selectedTalents, character);
+        const finalSL = applyTalentSLBonuses(sl, selectedTalents, talents, character);
         const { isCritical, isFumble } = checkCriticalResult(result, finalTarget);
 
         setRollResult({

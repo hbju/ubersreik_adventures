@@ -63,7 +63,7 @@ function App() {
     const {skills, talents, careers, items, weapons, armor, conditions, gameData } = useGameData();
 
     const calculateMaxWounds = (character: Character) => {
-        return calculateEffectiveMaxWounds(character);
+        return calculateEffectiveMaxWounds(character, talents);
     }
 
     const calculateMaxCorruption = (character: Character) => {
@@ -146,18 +146,20 @@ function App() {
     }, [characters, users, journal, mapPinStates]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
+        const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
+        
         const updatedCharacters = charactersRef.current.map(char =>
-            char.id === updatedCharacter.id ? updatedCharacter : char
+            char.id === recaculatedCharacter.id ? recaculatedCharacter : char
         );
 
         setCharacters(updatedCharacters);
 
         const newMessage: AssignCharacterMessage = {
             type: "ASSIGN_CHARACTER",
-            payload: { character: updatedCharacter }
+            payload: { character: recaculatedCharacter }
         };
 
-        window.ipcRenderer.sendToPlayer(updatedCharacter.userId || '', newMessage);
+        window.ipcRenderer.sendToPlayer(recaculatedCharacter.userId || '', newMessage);
     }
 
     const handleToggleCharacterSheet = (characterId: string) => {
@@ -222,7 +224,7 @@ function App() {
     };
 
     const handleGenerateNPC = () => {
-        const newNPC = generateRandomNpc();
+        const newNPC = generateRandomNpc(careers, skills);
         const updatedCharacters = [...charactersRef.current, newNPC];
         setCharacters(updatedCharacters);
     }
@@ -251,7 +253,7 @@ function App() {
             initiative: null,
             currentWounds: character.status.wounds.current,
             maxWounds: calculateMaxWounds(character),
-            baseInitiative: calculateCharacteristicBonus(character.characteristics.i) + getTalentInitiativeBonus(character),
+            baseInitiative: calculateCharacteristicBonus(character.characteristics.i) + getTalentInitiativeBonus(character, talents),
             baseAg: calculateCharacteristicBonus(character.characteristics.ag),
             isPlayer: assignedCharacters.includes(character.id),
             conditions: character.conditions.map(cond => [cond.id, ...Array(cond.stack - 1).fill(cond.id)]).flat(),
@@ -463,7 +465,7 @@ function App() {
         const character = charactersRef.current.find(c => c.id === characterId);
         if (!character) return;
 
-        const totalWp = character.characteristics.wp.initial + character.characteristics.wp.advances + character.characteristics.wp.modifier + getTalentCharacteristicBonus(character, 'wp');
+        const totalWp = character.characteristics.wp.initial + character.characteristics.wp.advances + character.characteristics.wp.modifier + getTalentCharacteristicBonus(character, talents,'wp');
 
         const roll = Math.floor(Math.random() * 100) + 1;
         const success = roll <= totalWp;
@@ -868,15 +870,15 @@ function App() {
         const updatedCharacter: Character = {
             ...character
         };
-        const talents = updatedCharacter.talents;
-        if (Object.keys(talents).includes(talent.id)) {
-            talents[talent.id] += 1;
+        const updatedTalents = updatedCharacter.talents;
+        if (Object.keys(updatedTalents).includes(talent.id)) {
+            updatedTalents[talent.id] += 1;
         }
         else {
-            talents[talent.id] = 1;
+            updatedTalents[talent.id] = 1;
         }
 
-        updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter);
+        updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter, talents);
 
         handleCharacterUpdate(updatedCharacter);
         addLogEntry('system', `${talent.name} added to ${character.name}'s talents.`, 'logs.talent_added', { talentName: talent.name, characterName: character.name });
@@ -896,7 +898,7 @@ function App() {
                 left: '10px',
                 display: 'flex',
                 gap: '10px',
-                zIndex: 1010
+                zIndex: 1002
             }}>
                 <button
                     onClick={() => setShowUserManager(true)}
@@ -1030,8 +1032,7 @@ function App() {
                 height: '100vh',
                 position: 'fixed',
                 top: 0,
-                left: 0,
-                zIndex: 1000
+                left: 0
             }}>
                 <div style={{ flex: 1 }}>
                     <MapView
@@ -1307,7 +1308,7 @@ function App() {
                                     ...character.skills,
                                     ...newCareerLevel.skills_ids.filter(skillId => !character.skills.some(s => s.id === skillId)).map((skillId: string) => {
                                         if (isSkillGrouped(skillId)) {
-                                            const grouped = getGroupedSkill(skillId);
+                                            const grouped = getGroupedSkill(skillId, skills);
                                             if (!grouped) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
                                             return grouped;
                                         }
@@ -1376,8 +1377,8 @@ function App() {
                                 const updatedTalents = { ...character.talents };
                                 delete updatedTalents[talentId];
                                 const updatedCharacter = { ...character, talents: updatedTalents };
-                                updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter);
-                                handleCharacterUpdate(recalculateCharacterTalentBonuses(updatedCharacter));
+                                updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter, talents);
+                                handleCharacterUpdate(updatedCharacter);
                             }}
                             onAddTalent={() => setShowTalentSelector(character.id)}
                             onCorruptionTest={() => handleCorruptionTest(character.id)}

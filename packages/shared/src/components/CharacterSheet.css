@@ -508,6 +508,7 @@
     color: var(--color-ink);
     margin-top: 8px;
     border-radius: 0 2px 2px 0;
+    overflow-wrap: break-word;
 }
 
 .talentTests strong {

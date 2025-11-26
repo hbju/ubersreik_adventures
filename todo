@@ -4,6 +4,7 @@
 - Création de personnage guidée v1.0
 - vf v1.0
 - gm add talents and inventory v1.0
+- Fix issue with pins and journal not sent to players when they connect v1.1
 - equipment stats v1.1
 - boutiques automatiquement générées v1.1
 - tracks configurables par scènes v1.1

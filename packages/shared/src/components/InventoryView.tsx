@@ -31,7 +31,7 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
 
     // Calculate encumbrance
     const currentEncumbrance = calculateTotalEncumbrance(character);
-    const maxEncumbrance = calculateEffectiveMaxEncumbrance(character);
+    const maxEncumbrance = calculateEffectiveMaxEncumbrance(character, gameData.talents);
 
     // Get armor items
     const armorItems = Object.entries(character.inventory.armor)

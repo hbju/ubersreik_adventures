@@ -16,11 +16,11 @@ export function calculateCharacteristicBonus(characteristic: Characteristic): nu
     return Math.floor(value / 10);
 }
 
-export function getGroupedSkill(skillId: string): Skill | null {
+export function getGroupedSkill(skillId: string, skillsData: SkillCharDefinition[]): Skill | null {
     // skill id will be in format 'skill-id_group', where skill-id is the base skill id, and _group is the group suffix. For example, melee_basic should map to {id: 'melee_basic', name: 'Melee (Basic)', characteristic: 'ws', ...} as the base skill 'melee' with group 'basic'.
     const baseSkillId = skillId.split('_')[0];
 
-    const skillDef = useGameData().skills.find(s => s.id === baseSkillId && s.type === 'skill');
+    const skillDef = skillsData.find(s => s.id === baseSkillId && s.type === 'skill');
     if (!skillDef) return null;
 
     const group = skillId.split('_')[1];

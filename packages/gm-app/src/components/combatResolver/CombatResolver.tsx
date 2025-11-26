@@ -96,6 +96,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     onClose
 }) => {
     const skills = useGameData().skills;
+    const talents = useGameData().talents;
 
     const [selectedAttackerId, setSelectedAttackerId] = useState<string>(characters[0]?.id || 'manual');
     const [selectedDefenderId, setSelectedDefenderId] = useState<string>(characters[1]?.id || 'manual');
@@ -152,7 +153,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             const skillInfo = attacker.skills.find(s => s.id === attackerSkillId);
 
             console.log("Attacker Skill Info:", skillInfo);
-            const applicableTalents = skillInfo ? getApplicableTalents(attacker, skillInfo.id) : [];
+            const applicableTalents = skillInfo ? getApplicableTalents(attacker, skillInfo.id, talents) : [];
             setAttackerApplicableTalents(applicableTalents);
 
             // Auto-select SL bonus talents
@@ -160,7 +161,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 .filter(({ talent }) => talent.effects?.some((e: any) => e.type === 'SL_BONUS_ON_SUCCESS'))
                 .map(({ talent, rank }) => ({ name: talent.name, rank }));
 
-            const talentDamageBonus = getTalentDamageBonus(autoSelectedTalents, attackerSkillId);
+            const talentDamageBonus = getTalentDamageBonus(autoSelectedTalents, attackerSkillId, talents);
 
             setAttackerStats(prevStats => ({
                 ...prevStats,
@@ -183,7 +184,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             const skillInfo = skills.find(s => s.id === defenderSkillId);
 
             // Get applicable talents for the selected skill
-            const applicableTalents = skillInfo ? getApplicableTalents(defender, skillInfo.id) : [];
+            const applicableTalents = skillInfo ? getApplicableTalents(defender, skillInfo.id, talents) : [];
             setDefenderApplicableTalents(applicableTalents);
 
             // Auto-select SL bonus talents
@@ -239,12 +240,12 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             // Apply talent SL bonuses
             if (attackerStats.selectedTalents && attackerStats.selectedTalents.length > 0 && attackerSL >= 0) {
                 const attacker = characters.find(c => c.id === selectedAttackerId);
-                attackerSL = applyTalentSLBonuses(attackerSL, attackerStats.selectedTalents, attacker);
+                attackerSL = applyTalentSLBonuses(attackerSL, attackerStats.selectedTalents, talents, attacker);
             }
 
             if (defenderStats.selectedTalents && defenderStats.selectedTalents.length > 0 && defenderSL >= 0) {
                 const defender = characters.find(c => c.id === selectedDefenderId);
-                defenderSL = applyTalentSLBonuses(defenderSL, defenderStats.selectedTalents, defender);
+                defenderSL = applyTalentSLBonuses(defenderSL, defenderStats.selectedTalents, talents, defender);
             }
 
             // Check for criticals and fumbles
@@ -326,12 +327,12 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         // Apply talent SL bonuses
         if (attackerStats.selectedTalents && attackerStats.selectedTalents.length > 0 && attackSuccessLevel >= 0) {
             const attacker = characters.find(c => c.id === selectedAttackerId);
-            attackSuccessLevel = applyTalentSLBonuses(attackSuccessLevel, attackerStats.selectedTalents, attacker);
+            attackSuccessLevel = applyTalentSLBonuses(attackSuccessLevel, attackerStats.selectedTalents, talents, attacker);
         }
 
         if (defenderStats.selectedTalents && defenderStats.selectedTalents.length > 0 && defenseSuccessLevel >= 0) {
             const defender = characters.find(c => c.id === selectedDefenderId);
-            defenseSuccessLevel = applyTalentSLBonuses(defenseSuccessLevel, defenderStats.selectedTalents, defender);
+            defenseSuccessLevel = applyTalentSLBonuses(defenseSuccessLevel, defenderStats.selectedTalents, talents, defender);
         }
 
         // Check for criticals and fumbles
@@ -627,7 +628,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                                     ...prev,
                                                     selectedTalents: newTalents
                                                 }));
-                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId);
+                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId, talents);
                                                 setAttackerStats(prev => ({
                                                     ...prev,
                                                     weaponDamage: 4 + calculateCharacteristicBonus(characters.find(c => c.id === selectedAttackerId)!.characteristics.s) + weaponDamage,
@@ -638,7 +639,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                                                     ...prev,
                                                     selectedTalents: newTalents
                                                 }));
-                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId);
+                                                const weaponDamage = getTalentDamageBonus(newTalents, attackerSkillId, talents);
                                                 setAttackerStats(prev => ({
                                                     ...prev,
                                                     weaponDamage: 4 + calculateCharacteristicBonus(characters.find(c => c.id === selectedAttackerId)!.characteristics.s) + weaponDamage,

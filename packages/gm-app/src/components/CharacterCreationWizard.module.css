@@ -40,14 +40,15 @@
 
 .steps {
     display: flex;
-    gap: 10px;
+    gap: 5px;
+    flex-wrap: wrap;
 }
 
 .step {
-    padding: 5px 10px;
+    padding: 4px 8px;
     background: #333;
     border-radius: 4px;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     color: #888;
 }
 
@@ -70,12 +71,13 @@
 
 .attributeGrid {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto auto auto;
     grid-auto-flow: row;
     max-height: 400px;
     overflow-y: auto;
     width: fit-content;
     padding: 20px;
+    gap: 5px 15px;
 }
 
 .attributeGrid > span {
@@ -166,4 +168,45 @@
     border-radius: 10px;
     font-size: 0.8rem;
     margin-left: 10px;
+}
+
+.attributeGridSummary {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-auto-flow: row;
+    max-height: 400px;
+    overflow-y: auto;
+    width: fit-content;
+    padding: 20px;
+    gap: 5px 15px;
+}
+
+.attributeGridSummary > span {
+    font-weight: 700;
+    color: var(--color-gold-dark);
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.attributeGridSummary > label {
+    font-weight: 700;
+    color: var(--color-parchment);
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 1rem;
+    margin-right: 5px;
+    text-align: center;
+}
+
+.optionCard.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.steps {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
 }

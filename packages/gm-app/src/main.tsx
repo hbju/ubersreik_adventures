@@ -13,18 +13,6 @@ import { resources } from '@wfrp/shared';
 
 console.log("Starting GM Tools App")
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: 'en',
-    debug: true,
-    interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
-    },
-  });
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />

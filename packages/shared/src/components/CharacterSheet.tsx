@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages, Talent, Career } from '../types/wfrp.types';
-import { calculateCharacteristicBonus, getGroupedSkill, isSkillGrouped } from '../utils/skills';
+import { calculateCharacteristicBonus, calculateCharacteristicValue, getGroupedSkill, isSkillGrouped } from '../utils/skills';
 import { getAvailableAdvancements } from '..';
 import { useGameData } from '../hooks/useGameData';
 import InventoryView from './InventoryView';
@@ -29,6 +29,69 @@ interface CharacterSheetProps {
     onRemoveItem?: (itemId: string, type: 'weapon' | 'armor' | 'item') => void;
     onAddItem?: () => void;
 }
+
+const CharacterSheetRow: React.FC<{
+    charKey: keyof Character['characteristics'];
+    char: Characteristic;
+    character: Character;
+    readonly?: boolean;
+    advancementMode?: boolean;
+    onCharacteristicClick?: (charId: string, charName: string, charValue: number) => void;
+    onCharacteristicAdvance?: (charKey: keyof Character['characteristics']) => void;
+    onCharacteristicChange: (charKey: keyof Characteristic, newValue: number) => void;
+}> = ({
+    charKey,
+    char,
+    character,
+    readonly,
+    advancementMode,
+    onCharacteristicClick,
+    onCharacteristicAdvance,
+    onCharacteristicChange
+}) => {
+        const { t } = useTranslation();
+        const { talents } = useGameData();
+
+        const charNames: { [key: string]: string } = {
+            "ws": t('stats.WS'),
+            "bs": t('stats.BS'),
+            "s": t('stats.S'),
+            "t": t('stats.T'),
+            "i": t('stats.I'),
+            "ag": t('stats.Ag'),
+            "int": t('stats.Int'),
+            "dex": t('stats.Dex'),
+            "wp": t('stats.WP'),
+            "fel": t('stats.Fel')
+        };
+        const charTalents = getTalentCharacteristicBonus(character, talents, charKey);
+        const total = char.initial + char.advances + charTalents + char.modifier;
+        const isUnlocked = !character.unlockedCharacteristicIds || character.unlockedCharacteristicIds.map(id => id.toLowerCase()).includes(charKey);
+        return (
+            <React.Fragment>
+                <button className={!isUnlocked ? "rollButton" : "rollButtonUnlocked"} onClick={() => onCharacteristicClick && onCharacteristicClick(charKey, charNames[charKey], total)}>{charKey.toUpperCase()}</button>
+                <span>{char.initial}</span>
+                {readonly ? (<span>{char.advances}</span>) :
+                    (<input
+                        type="number"
+                        value={char.advances}
+                        onChange={e => onCharacteristicChange('advances', parseInt(e.target.value, 10) || 0)}
+                        className="numericInput"
+                    />)}
+                {advancementMode && isUnlocked && <button onClick={() => onCharacteristicAdvance?.(charKey)} className="advanceButton">+</button>}
+                {advancementMode && !isUnlocked && <span></span>}
+                {readonly ? (<span>{char.modifier}</span>) : (
+                    <input
+                        type="number"
+                        value={char.modifier}
+                        onChange={e => onCharacteristicChange('modifier', parseInt(e.target.value, 10) || 0)}
+                        className="numericInput"
+                    />)}
+                <span>{charTalents}</span>
+                <span className="totalValue">{total}</span>
+            </React.Fragment>
+        );
+    };
 
 const CharacterSheet: React.FC<CharacterSheetProps> = ({
     character,
@@ -101,7 +164,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                 ...character.skills,
                 ...newCareerLevel.skills_ids.filter(skillId => !character.skills.some(s => s.id === skillId)).map((skillId: string) => {
                     if (isSkillGrouped(skillId)) {
-                        const grouped = getGroupedSkill(skillId);
+                        const grouped = getGroupedSkill(skillId, allSkills);
                         if (!grouped) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
                         return grouped;
                     }
@@ -294,45 +357,17 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                             <span></span><span>Initial</span><span>Adv</span>{advancementMode && <span></span>}<span>Mod</span><span>{t('sheet.talents')}</span><span>Total</span>
                             {Object.entries(character.characteristics).map(([key, char]) => {
                                 const charKey = key as keyof Character['characteristics'];
-                                const charNames: { [key: string]: string } = {
-                                    "ws": t('stats.WS'),
-                                    "bs": t('stats.BS'),
-                                    "s": t('stats.S'),
-                                    "t": t('stats.T'),
-                                    "i": t('stats.I'),
-                                    "ag": t('stats.Ag'),
-                                    "int": t('stats.Int'),
-                                    "dex": t('stats.Dex'),
-                                    "wp": t('stats.WP'),
-                                    "fel": t('stats.Fel')
-                                };
-                                const charTalents = getTalentCharacteristicBonus(character, charKey);
-                                const total = char.initial + char.advances + charTalents + char.modifier;
-                                const isUnlocked = !character.unlockedCharacteristicIds || character.unlockedCharacteristicIds.map(id => id.toLowerCase()).includes(charKey);
-                                return (
-                                    <React.Fragment key={key}>
-                                        <button className={!isUnlocked ? "rollButton" : "rollButtonUnlocked"} onClick={() => onCharacteristicClick && onCharacteristicClick(charKey, charNames[key], total)}>{key.toUpperCase()}</button>
-                                        <span>{char.initial}</span>
-                                        {readonly ? (<span>{char.advances}</span>) :
-                                            (<input
-                                                type="number"
-                                                value={char.advances}
-                                                onChange={e => handleCharacteristicChange(charKey, 'advances', parseInt(e.target.value, 10) || 0)}
-                                                className="numericInput"
-                                            />)}
-                                        {advancementMode && isUnlocked && <button onClick={() => onCharacteristicAdvance?.(charKey)} className="advanceButton">+</button>}
-                                        {advancementMode && !isUnlocked && <span></span>}
-                                        {readonly ? (<span>{char.modifier}</span>) : (
-                                            <input
-                                                type="number"
-                                                value={char.modifier}
-                                                onChange={e => handleCharacteristicChange(charKey, 'modifier', parseInt(e.target.value, 10) || 0)}
-                                                className="numericInput"
-                                            />)}
-                                        <span>{charTalents}</span>
-                                        <span className="totalValue">{total}</span>
-                                    </React.Fragment>
-                                );
+                                return (<CharacterSheetRow
+                                    key={key}
+                                    charKey={charKey}
+                                    char={char}
+                                    character={character}
+                                    readonly={readonly}
+                                    advancementMode={advancementMode}
+                                    onCharacteristicClick={onCharacteristicClick}
+                                    onCharacteristicAdvance={onCharacteristicAdvance}
+                                    onCharacteristicChange={(field, newValue) => handleCharacteristicChange(charKey, field, newValue)}
+                                />)
                             })}
                         </div>
                     </div>
@@ -438,7 +473,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                             {baseSkills.map(skill => {
                                 let charKey = skill.characteristic.toLowerCase() as keyof Character['characteristics'];
                                 const characteristicValue = character.characteristics[charKey];
-                                const baseValue = characteristicValue.initial + characteristicValue.advances + characteristicValue.talents + characteristicValue.modifier;
+                                const baseValue = calculateCharacteristicValue(characteristicValue);
                                 const skillAdvances = skill.advances;
                                 const skillTalents = skill.talents;
                                 const skillModifier = skill.modifier;

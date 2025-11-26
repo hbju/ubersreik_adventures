@@ -3,7 +3,7 @@
   left: 0;
   top: 0;
   width: 20vw;
-  height: 100vh;
+  height: 95vh;
   background: var(--color-parchment);
   border-right: 4px solid var(--color-leather-dark);
   box-shadow: 
@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: column;
   z-index: 1001;
+  overflow-y: auto;
 }
 
 .header {

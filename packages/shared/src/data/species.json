@@ -8,7 +8,7 @@
     "extra_points": 3,
     "movement": 4,
     "skills": ["animal-care", "charm", "cool", "evaluate", "gossip", "haggle", "language_bretonnian", "language_wastelander", "leadership", "lore_reikland", "melee", "ranged_bow"],
-    "talents": ["doomed", "savvy", "suave", "random", "random", "random"]
+    "talents": [["doomed"], ["savvy", "suave"], ["random"], ["random"], ["random"]]
   },
   {
     "id": "dwarf",
@@ -19,7 +19,7 @@
     "extra_points": 2,
     "movement": 3,
     "skills": ["consume-alcohol", "cool", "endurance", "entertain_storytelling", "evaluate", "intimidate", "language_khazalid", "lore_dwarfs", "lore_geology", "lore_metallurgy", "melee", "trade"],
-    "talents": ["magic-resistance", "night-vision", "read-write", "relentless", "resolute", "stout-hearted", "strong-minded"]
+    "talents": [["magic-resistance"], ["night-vision"], ["read-write", "relentless"], ["resolute", "strong-minded"], ["sturdy"]]
   },
   {
     "id": "halfling",
@@ -30,7 +30,7 @@
     "extra_points": 3,
     "movement": 3,
     "skills": ["charm", "consume-alcohol", "dodge", "gamble", "haggle", "intuition", "language_mootish", "lore_reikland", "perception", "sleight-of-hand", "stealth", "trade_cook"],
-    "talents": ["acute-sense_taste", "night-vision", "resistance_chaos", "small", "random", "random"]
+    "talents": [["acute-sense_taste"], ["night-vision"], ["resistance_chaos"], ["small"], ["random"], ["random"]]
   },
   {
     "id": "elf",
@@ -41,7 +41,7 @@
     "extra_points": 2,
     "movement": 5,
     "skills": ["cool", "entertain_sing", "evaluate", "language_eltharin", "leadership", "melee", "navigation", "perception", "play", "ranged_bow", "sail", "swim"],
-    "talents": ["acute-sense_sight", "coolheaded", "night-vision", "second-sight", "read-write"]
+    "talents": [["acute-sense_sight"], ["coolheaded", "savy"], ["night-vision"], ["second-sight", "sixth-sense"], ["read-write"]]
   },
   {
     "id": "wood_elf",
@@ -52,6 +52,6 @@
     "extra_points": 2,
     "movement": 5,
     "skills": ["athletics", "climb", "endurance", "entertain_sing", "intimidate", "language_eltharin", "melee", "outdoor_survival", "perception", "ranged_bow", "stealth", "track"],
-    "talents": ["acute-sense_sight", "hardy", "night-vision", "read-write", "rover"]
+    "talents": [["acute-sense_sight"], ["hardy", "second-sight"], ["night-vision"], ["read-write", "very-resilient"], ["rover"]]
   }
 ]

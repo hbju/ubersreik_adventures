@@ -190,7 +190,7 @@ const PlayerApp: React.FC = () => {
             const newDraft = { ...draftCharacter, careerHistory: newCareerHistory };
             newDraft.xp.current -= cost;
             newDraft.talents[talentId] = (newDraft.talents[talentId] || 0) + 1;
-            setDraftCharacter(recalculateCharacterTalentBonuses(newDraft));
+            setDraftCharacter(recalculateCharacterTalentBonuses(newDraft, talents));
         } else {
             alert("Not enough XP!");
         }
