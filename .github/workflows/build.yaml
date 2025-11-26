@@ -1,13 +1,10 @@
 name: Build/Release
 
-on:
-  push:
-    tags:
-      - 'v*' # Trigger on version tags (e.g., v1.0.0)
+on: push
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ matrix.os }}"
 
     strategy:
       matrix:
