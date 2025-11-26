@@ -1,0 +1,43 @@
+name: Build/Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger on version tags (e.g., v1.0.0)
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+
+      # Build the Shared Library first
+      - name: Build Shared
+        run: npm run build:shared
+
+      # Build the Player App
+      - name: Build Player App
+        run: npm run build:player
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload the result so you can download it
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: player-app-${{ matrix.os }}
+          path: packages/player-app/dist/*.*
