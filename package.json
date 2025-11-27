@@ -6,6 +6,10 @@
   "workspaces": [
     "packages/*"
   ],
+    "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hbju/ubersreik_adventures.git"
+  },
   "scripts": {
     "install:all": "npm install",
     "dev:gm": "npm run dev -w @wfrp/gm-app",

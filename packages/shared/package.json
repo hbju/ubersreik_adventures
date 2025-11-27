@@ -7,6 +7,10 @@
   "scripts": {
     "build": "tsc"
   },
+    "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hbju/ubersreik_adventures.git"
+  },
   "files": [
     "dist"
   ],
