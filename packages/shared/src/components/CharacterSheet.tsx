@@ -28,6 +28,7 @@ interface CharacterSheetProps {
     onCorruptionTest?: () => void;
     onRemoveItem?: (itemId: string, type: 'weapon' | 'armor' | 'item') => void;
     onAddItem?: () => void;
+    onClose?: () => void;
 }
 
 const CharacterSheetRow: React.FC<{
@@ -70,7 +71,13 @@ const CharacterSheetRow: React.FC<{
         return (
             <React.Fragment>
                 <button className={!isUnlocked ? "rollButton" : "rollButtonUnlocked"} onClick={() => onCharacteristicClick && onCharacteristicClick(charKey, charNames[charKey], total)}>{charKey.toUpperCase()}</button>
-                <span>{char.initial}</span>
+                {readonly ? (<span>{char.initial}</span>) :
+                    (<input
+                        type="number"
+                        value={char.initial}
+                        onChange={e => onCharacteristicChange('initial', parseInt(e.target.value, 10) || 0)}
+                        className="numericInput"
+                    />)}
                 {readonly ? (<span>{char.advances}</span>) :
                     (<input
                         type="number"
@@ -112,7 +119,8 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     onAddTalent,
     onCorruptionTest,
     onRemoveItem,
-    onAddItem
+    onAddItem,
+    onClose
 }) => {
     const { t } = useTranslation();
     const { skills: allSkills, talents, careers: careersData, conditions: conditionsData } = useGameData();
@@ -242,6 +250,9 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                     onChange={e => handleNameChange(e.target.value)}
                     className="charNameInput"
                 />
+                {onClose && (
+                    <button onClick={onClose} className="closeButton">✖</button>
+                )}
             </header>
 
             <div className="xpPanel">
@@ -556,7 +567,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                             <p className="talentDescription">{talentDef.description}</p>
                                             {talentDef.effects && talentDef.effects.length > 0 && talentDef.effects.some(effect => effect.type === 'SL_BONUS_ON_SUCCESS') && (
                                                 <div className="talentTests">
-                                                    <strong>Tests:</strong> {talentDef.effects.filter(effect => effect.type === 'SL_BONUS_ON_SUCCESS').map(effect => effect.appliesTo).join(', ')}
+                                                    <strong>Tests:</strong> {talentDef.tests.join(', ')}
                                                 </div>
                                             )}
                                         </div>

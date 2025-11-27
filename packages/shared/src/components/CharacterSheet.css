@@ -3,7 +3,7 @@
     right: 1vw;
     bottom: 2vh;
     width: 75vw;
-    height: 88vh;
+    height: 95vh;
     background:
         linear-gradient(to bottom, var(--color-parchment) 0%, var(--color-parchment-dark) 100%),
         repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139, 26, 26, 0.02) 2px, rgba(139, 26, 26, 0.02) 4px);
@@ -48,6 +48,26 @@
     box-shadow: 0 0 8px var(--color-gold);
     padding: 2px 8px;
     color: var(--color-ink);
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: var(--color-parchment);
+    font-size: 1.2rem;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+    background: var(--color-gold);
+    border-color: var(--color-gold-dark);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
 /* XP panel */
@@ -300,7 +320,7 @@
 .skillsGrid {
     grid-template-columns: auto auto repeat(5, 2fr);
     grid-auto-flow: row;
-    max-height: 400px;
+    max-height: 60vh;
     overflow-y: auto;
 }
 
@@ -402,7 +422,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 15px;
-    max-height: 500px;
+    max-height: 60vh;
     overflow-y: auto;
     padding: 5px;
 }

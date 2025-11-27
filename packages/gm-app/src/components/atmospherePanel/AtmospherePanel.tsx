@@ -36,7 +36,11 @@ const musicTracks = [
     }
 ]
 
-const AtmospherePanel: React.FC = () => {
+interface AtmospherePanelProps {
+    onClose: () => void,
+}
+
+const AtmospherePanel: React.FC<AtmospherePanelProps> = ({ onClose }) => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const fadeIntervalRef = useRef<number | null>(null);
 
@@ -104,6 +108,7 @@ const AtmospherePanel: React.FC = () => {
         <div className={styles.panel}>
             {/* This audio element is invisible but does all the work. It must be present. */}
             <audio ref={audioRef} loop />
+
             <div className={styles.buttons}>
                 {musicTracks.map(track =>
                     <button
@@ -120,6 +125,9 @@ const AtmospherePanel: React.FC = () => {
                 >
                     Stop
                 </button>
+
+                <button onClick={onClose} className={styles.closeButton}>✖</button>
+
             </div>
         </div>
     )

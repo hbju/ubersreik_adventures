@@ -1,16 +1,15 @@
-import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData } from '@wfrp/shared';
+import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
-import ServerStatus from './components/server/ServerStatus';
+import Footer from './components/footer/Footer';
 import { ShopManager } from './components/ShopManager';
 import { PurchaseRequestModal } from './components/PurchaseRequestModal';
 import { JournalManager } from './components/JournalManager';
 import { UserManager } from './components/UserManager';
 import CareerChangeApprovalModal from './components/CareerChangeApprovalModal';
 import DiceTray from './components/DiceTray';
-import CharacterCreationWizard from './components/CharacterCreationWizard';
 import { ItemSelectorModal } from './components/ItemSelectorModal';
 import { TalentSelectorModal } from './components/TalentSelectorModal';
 
@@ -41,7 +40,8 @@ import {
     CareerChangeResponseMessage,
     Career,
     Location,
-    Talent
+    Talent,
+    TalentSelectionModal
 } from '@wfrp/shared';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -60,7 +60,7 @@ interface ServerStatusData {
 function App() {
     const { t } = useTranslation();
 
-    const {skills, talents, careers, items, weapons, armor, conditions, gameData } = useGameData();
+    const { skills, talents, careers, items, weapons, armor, conditions, gameData } = useGameData();
 
     const calculateMaxWounds = (character: Character) => {
         return calculateEffectiveMaxWounds(character, talents);
@@ -98,6 +98,8 @@ function App() {
     const [showJournalManager, setShowJournalManager] = useState(false);
     const [showUserManager, setShowUserManager] = useState(false);
     const [showCareerManager, setShowCareerManager] = useState<Character | null>(null);
+    const [showAtmospherePanel, setShowAtmospherePanel] = useState(false);
+    const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number, charId: string } | null>(null);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
         item: Armor | Weapon | Item;
@@ -147,7 +149,7 @@ function App() {
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
-        
+
         const updatedCharacters = charactersRef.current.map(char =>
             char.id === recaculatedCharacter.id ? recaculatedCharacter : char
         );
@@ -219,8 +221,6 @@ function App() {
         setCharacters(updatedCharacters);
         setShowCharacterWizard(false);
         addLogEntry('system', `Created new character: ${newCharacter.name}`, 'logs.character_created', { name: newCharacter.name });
-
-        // If we want to assign it immediately or just let it be in the roster
     };
 
     const handleGenerateNPC = () => {
@@ -465,7 +465,7 @@ function App() {
         const character = charactersRef.current.find(c => c.id === characterId);
         if (!character) return;
 
-        const totalWp = character.characteristics.wp.initial + character.characteristics.wp.advances + character.characteristics.wp.modifier + getTalentCharacteristicBonus(character, talents,'wp');
+        const totalWp = character.characteristics.wp.initial + character.characteristics.wp.advances + character.characteristics.wp.modifier + getTalentCharacteristicBonus(character, talents, 'wp');
 
         const roll = Math.floor(Math.random() * 100) + 1;
         const success = roll <= totalWp;
@@ -519,6 +519,26 @@ function App() {
             offsetY: targetY,
         });
     };
+
+    const handleRoll = (result: {
+        characterId: string;
+        testName: string;
+        targetNumber: number;
+        rollResult: number;
+        successLevel: number;
+        usedTalents?: { name: string; rank: number; }[];
+        fortuneSpent: number;
+        corruptionGained: number;
+    }) => {
+        const character = charactersRef.current.find(c => c.id === result.characterId);
+        if (!character) return;
+
+        addLogEntry(
+            'roll',
+            `${character.name} tests ${result.testName}: Rolled ${result.rollResult} vs ${result.targetNumber}. [${result.successLevel >= 0 ? `${result.successLevel} Success Level(s)` : `${Math.abs(result.successLevel)} Failure Level(s)`}] Fortune spent: ${result.fortuneSpent}, Corruption gained: ${result.corruptionGained}`,
+        );
+    }
+
 
     useEffect(() => {
         // Load initial data on component mount
@@ -629,6 +649,28 @@ function App() {
                 );
             }
 
+            if (message.type === 'CHARACTER_CREATE') {
+                const newChar = message.payload.character;
+                const currUsers = usersRef.current;
+                const user = currUsers.find(u => u.username === message.payload.userId);
+                if (user) {
+                    newChar.userId = user.id;
+                    const newUser = { ...user, characterId: newChar.id };
+                    const updatedUsers = currUsers.map(u => u.id === user.id ? newUser : u);
+                    setUsers(updatedUsers);
+                }
+
+                handleWizardComplete(newChar);
+
+                const assignMessage: AssignCharacterMessage = {
+                    type: "ASSIGN_CHARACTER",
+                    payload: { character: newChar }
+                };
+                window.ipcRenderer.sendToPlayer(newChar.userId || '', assignMessage);
+
+                addLogEntry('system', `New character created: ${newChar.name}`, 'logs.character_created', { name: newChar.name });
+            }
+
             if (message.type === 'CHARACTER_UPDATE') {
                 const updatedChar = message.payload.character;
                 handleCharacterUpdate(updatedChar);
@@ -637,7 +679,7 @@ function App() {
 
             if (message.type === 'REQUEST_PURCHASE') {
                 const item = message.payload.item;
-                // Find the character associated with this socket
+
                 const character = charactersRef.current.find(c => c.id === message.payload.characterId);
                 if (character) {
                     setPurchaseRequest({
@@ -887,110 +929,18 @@ function App() {
 
     return (
         <div className="App">
-            <ServerStatus
+            <Footer
                 ip={serverInfo.ip}
                 port={serverInfo.port}
-                clients={connectedPlayers} />
-
-            <div style={{
-                position: 'fixed',
-                bottom: '40px',
-                left: '10px',
-                display: 'flex',
-                gap: '10px',
-                zIndex: 1002
-            }}>
-                <button
-                    onClick={() => setShowUserManager(true)}
-                    style={{
-                        padding: '10px 20px',
-                        background: '#2d5016',
-                        color: '#d4af37',
-                        border: '2px solid #3d6f1f',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold',
-                        fontSize: '14px'
-                    }}
-                >
-                    👤 {t('menu.users')}
-                </button>
-                <button
-                    onClick={handleBackupCampaign}
-                    style={{
-                        padding: '10px 20px',
-                        background: '#2d5016',
-                        color: '#d4af37',
-                        border: '2px solid #3d6f1f',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold',
-                        fontSize: '14px'
-                    }}
-                >
-                    💾 {t('menu.backup')}
-                </button>
-                <button
-                    onClick={handleStartSession}
-                    style={{
-                        padding: '10px 20px',
-                        background: '#2d5016',
-                        color: '#d4af37',
-                        border: '2px solid #3d6f1f',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold',
-                        fontSize: '14px'
-                    }}
-                >
-                    🌅 {t('menu.startSession')}
-                </button>
-                <button
-                    onClick={() => setShowJournalManager(true)}
-                    style={{
-                        padding: '10px 20px',
-                        background: '#2d5016',
-                        color: '#d4af37',
-                        border: '2px solid #3d6f1f',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold',
-                        fontSize: '14px'
-                    }}
-                >
-                    📜 {t('menu.journal')}
-                </button>
-                <button
-                    onClick={() => setShowShopManager(!showShopManager)}
-                    style={{
-                        padding: '10px 20px',
-                        background: showShopManager ? '#8b6914' : '#2c1810',
-                        color: '#d4af37',
-                        border: '2px solid #8b6914',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold',
-                        fontSize: '14px'
-                    }}
-                >
-                    🏪 {t('menu.shop')}
-                </button>
-                <button
-                    onClick={() => setShowDiceTray(!showDiceTray)}
-                    style={{
-                        padding: '10px 20px',
-                        background: showDiceTray ? '#8b6914' : '#2c1810',
-                        color: '#d4af37',
-                        border: '2px solid #8b6914',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontWeight: 'bold',
-                        fontSize: '14px'
-                    }}
-                >
-                    🎲 {t('menu.dice')}
-                </button>
-            </div>
+                clients={connectedPlayers}
+                onShowUserManager={() => setShowUserManager(true)}
+                onBackup={handleBackupCampaign}
+                onStartSession={handleStartSession}
+                onShowJournal={() => setShowJournalManager(true)}
+                onShowShop={() => setShowShopManager(!showShopManager)}
+                onShowDiceTray={() => setShowDiceTray(!showDiceTray)}
+                onShowAtmospherePanel={() => setShowAtmospherePanel(!showAtmospherePanel)}
+            />
 
             <GameLog entries={logEntries} />
 
@@ -1045,7 +995,7 @@ function App() {
                         onTogglePinDiscovery={handleTogglePinDiscovery}
                     />
                 </div>
-                <div style={{ width: '350px', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
+                <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
                     <DiscoveredLocationsList
                         locations={gameData.locations}
                         mapPinStates={mapPinStates}
@@ -1084,7 +1034,7 @@ function App() {
             />
             )}
 
-            <AtmospherePanel />
+            {showAtmospherePanel && <AtmospherePanel onClose={() => setShowAtmospherePanel(false)} />}
 
             {showShopManager && <ShopManager onClose={() => setShowShopManager(false)} />}
 
@@ -1369,6 +1319,8 @@ function App() {
                         <CharacterSheet
                             key={character.id}
                             character={character}
+                            onCharacteristicClick={(charId, charName, charValue) => setTestModalInfo({ id: charId, name: charName, value: charValue, charId: character.id })}
+                            onSkillClick={(skillId, skillName, skillValue) => setTestModalInfo({ id: skillId, name: skillName, value: skillValue, charId: character.id })}
                             onCharacterUpdate={handleCharacterUpdate}
                             onXpAward={(amount) => handleXpAward(character.id, amount)}
                             onCareerManagementModalOpen={(char) => setShowCareerManager(char)}
@@ -1384,6 +1336,7 @@ function App() {
                             onCorruptionTest={() => handleCorruptionTest(character.id)}
                             onRemoveItem={(itemId, type) => handleRemoveItemFromCharacter(itemId, character.id)}
                             onAddItem={() => setShowItemSelector(character.id)}
+                            onClose={() => handleToggleCharacterSheet(character.id)}
                         />
                     );
                 })}
@@ -1412,6 +1365,20 @@ function App() {
                         handleCharacterUpdate(char);
                         setShowCareerManager(char);
                     }}
+                />
+            )}
+
+            {testModalInfo && (
+                <TalentSelectionModal
+                    character={characters.find(c => c.id === testModalInfo.charId)!}
+                    testName={testModalInfo.name}
+                    testId={testModalInfo.id}
+                    baseTarget={testModalInfo.value}
+                    fortunePoints={characters.find(c => c.id === testModalInfo.charId)!.status.fortune.current}
+                    corruptionCurrent={characters.find(c => c.id === testModalInfo.charId)!.status.corruption.current}
+                    corruptionMax={characters.find(c => c.id === testModalInfo.charId)!.status.corruption.max}
+                    onClose={() => setTestModalInfo(null)}
+                    onRoll={handleRoll}
                 />
             )}
         </div>

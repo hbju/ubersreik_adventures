@@ -85,11 +85,12 @@
   "menu" : {
     "users": "Utilisateurs",
     "backup": "Sauvegarde",
-    "startSession": "Démarrer la Session",
+    "startSession": "Débuter",
     "journal": "Journal",
     "shop": "Boutique",
     "dice": "Dés",
     "createCharacter": "Créer un Personnage",
-    "generateNPC": "Générer un PNJ"
+    "generateNPC": "Générer un PNJ",
+    "atmosphere": "Musique"
   }
 }

@@ -55,6 +55,7 @@ export type TestResultMessage = BaseMessage<'TEST_RESULT', {
     fortuneSpent: number;
     corruptionGained: number;
 }>;
+export type CharacterCreateMessage = BaseMessage<'CHARACTER_CREATE', { character: Character, userId?: string }>;
 export type CharacterUpdateMessage = BaseMessage<'CHARACTER_UPDATE', { character: Character }>;
 export type RequestPurchaseMessage = BaseMessage<'REQUEST_PURCHASE', { item: Armor | Weapon | Item, characterId: string }>;
 export type OpposedTestResultMessage = BaseMessage<'OPPOSED_TEST_RESULT', {
@@ -84,4 +85,4 @@ export type CareerChangeRequestMessage = BaseMessage<'CAREER_CHANGE_REQUEST', {
     xpCost: number;
 }>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage;
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage;

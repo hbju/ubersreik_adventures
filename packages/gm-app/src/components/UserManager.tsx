@@ -147,7 +147,7 @@ export const UserManager: React.FC<UserManagerProps> = ({
                     className={styles.deleteButton}
                     onClick={() => handleDeleteUser(user.id)}
                   >
-                    🗑️ Delete
+                    🗑️
                   </button>
                 </div>
               </div>

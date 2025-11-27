@@ -3,6 +3,7 @@
   bottom: 0;
   right: 0;
   width: 100%;
+  height: 8vh;
   background: repeating-linear-gradient(
     90deg,
     var(--color-parchment-dark) 0px,

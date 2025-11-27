@@ -168,7 +168,6 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
     };
 
     const canReroll = () => {
-        console.log('Checking canReroll with rollCount:', rollCount, 'fortuneSpent:', fortuneSpent, 'corruptionGained:', corruptionGained);
         if (rollCount >= 3) return false; // Max 3 rolls total (1 initial + 2 rerolls)
         if (rollCount === 1) {
             return (fortunePoints - fortuneSpent > 0) || (corruptionCurrent + corruptionGained < corruptionMax);
@@ -370,3 +369,5 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
         </div>
     );
 };
+
+export default TalentSelectionModal;

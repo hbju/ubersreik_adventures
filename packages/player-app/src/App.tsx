@@ -3,8 +3,8 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, recalculateCharacterTalentBonuses, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, Location, useGameData } from '@wfrp/shared';
-import { TalentSelectionModal } from './components/TalentSelectionModal';
+import { CharacterSheet, Character, CharacterCreationWizard, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, recalculateCharacterTalentBonuses, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, Location, useGameData, CharacterCreateMessage } from '@wfrp/shared';
+import { TalentSelectionModal } from '@wfrp/shared';
 import {
     TestResultMessage,
     calculateCharacteristicAdvanceCost,
@@ -26,6 +26,7 @@ const PlayerApp: React.FC = () => {
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number } | null>(null);
+    const [createCharacterWizardOpen, setCreateCharacterWizardOpen] = useState(false);
     const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
     const [currentView, setCurrentView] = useState<'character' | 'journal' | 'map'>('character');
@@ -76,6 +77,16 @@ const PlayerApp: React.FC = () => {
 
         setIsAdvancementMode(false);
         setDraftCharacter(null);
+    };
+
+    const handleCreateCharacterComplete = (newCharacter: Character) => {
+        console.log('Creating character:', username, newCharacter);
+        const message: CharacterCreateMessage = {
+            type: 'CHARACTER_CREATE',
+            payload: { character: newCharacter, userId: username || '' },
+        };
+        sendMessage(message);
+        setCreateCharacterWizardOpen(false);
     };
 
     const handleAdvanceCharacteristic = (charName: keyof Character['characteristics']) => {
@@ -308,7 +319,7 @@ const PlayerApp: React.FC = () => {
                     position: 'fixed',
                     top: '10px',
                     left: '10px',
-                    display: 'flex',
+                    display: 'grid',
                     gap: '10px',
                     zIndex: 1100
                 }}>
@@ -461,6 +472,7 @@ const PlayerApp: React.FC = () => {
                         <div className="waiting-screen">
                             <h1>Connected to the Game</h1>
                             <p>Waiting for the GM to assign your character...</p>
+                            <button onClick={() => setCreateCharacterWizardOpen(true)}>Create Character</button>
                             <button onClick={disconnect}>Disconnect</button>
                         </div>
                     )}
@@ -506,7 +518,7 @@ const PlayerApp: React.FC = () => {
                             onViewStateChange={setMapViewState}
                         />
                     </div>
-                    <div style={{ width: '350px', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
+                    <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
                         <DiscoveredLocationsList
                             locations={gameData.locations}
                             mapPinStates={mapPinStates}
@@ -514,6 +526,13 @@ const PlayerApp: React.FC = () => {
                         />
                     </div>
                 </div>
+            )}
+
+            {createCharacterWizardOpen && (
+                <CharacterCreationWizard
+                    onClose={() => setCreateCharacterWizardOpen(false)}
+                    onComplete={handleCreateCharacterComplete}
+                />
             )}
         </div>
     );

@@ -27,10 +27,9 @@
   margin-top: 0;
   color: var(--color-gold);
   font-family: var(--font-warhammer);
-  font-size: 2rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  font-size: 3rem;
+  text-transform: capitalize;
+  text-shadow: none;
   border-bottom: 3px double var(--color-gold);
   padding-bottom: 15px;
   margin-bottom: 10px;

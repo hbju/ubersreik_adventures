@@ -90,6 +90,7 @@
         "shop": "Shop",
         "dice": "Dice",
         "createCharacter": "Create Character",
-        "generateNPC": "Generate NPC"
+        "generateNPC": "Generate NPC",
+        "atmosphere": "Atmosphere"
     }
 }

@@ -1,12 +1,8 @@
-- bouton sauvegarde backup v1.0
-- regular dices v1.0
-- points de fortune et de corruption automatiques v1.0
-- Création de personnage guidée v1.0
 - vf v1.0
-- gm add talents and inventory v1.0
 - Fix issue with pins and journal not sent to players when they connect v1.1
 - equipment stats v1.1
 - boutiques automatiquement générées v1.1
 - tracks configurables par scènes v1.1
 - fil rouge pour GM v1.1
 - pnjs templates v1.1
+- Details panel for player (background and notes) v1.1

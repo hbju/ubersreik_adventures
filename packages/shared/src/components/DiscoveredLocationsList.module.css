@@ -1,8 +1,9 @@
 .listContainer {
-    display: flex;
-    flex-direction: column;
+    position: absolute;
+    top: 0;
+    right: 0;
     height: 100%;
-    width: 340px;
+    width: 25vw;
     background: linear-gradient(135deg, #2c1810 0%, #1a1410 100%);
     border-left: 2px solid #8b6914;
     color: #d4af37;
