@@ -390,6 +390,13 @@ const PlayerApp: React.FC = () => {
                 </div>
             )}
 
+            <InitiativeTracker
+                combatants={combatants}
+                currentTurnId={currentTurnId}
+                advantages={currentAdvantage}
+                currentCharacterId={character?.id}
+            />
+
             {currentView === 'character' && (
                 <>
                     {character && !isAdvancementMode && (
@@ -448,12 +455,6 @@ const PlayerApp: React.FC = () => {
                             onClose={() => setOpposedTestRequest(null)}
                         />
                     )}
-
-                    <InitiativeTracker
-                        combatants={combatants}
-                        currentTurnId={currentTurnId}
-                        advantages={currentAdvantage}
-                    />
 
                     {character ? (
                         <CharacterSheet

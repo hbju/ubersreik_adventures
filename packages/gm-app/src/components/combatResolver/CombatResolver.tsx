@@ -561,7 +561,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 <CharacterSelector
                     characters={characters}
                     selectedCharacterId={selectedAttackerId}
-                    onCharacterSelect={setSelectedAttackerId}
+                    onCharacterSelect={(id) => {setSelectedAttackerId(id); setAttackerSkillId('melee');}}
                 />
                 <div className={styles.statInput}>
                     <label>Test</label>
@@ -696,7 +696,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 <CharacterSelector
                     characters={characters}
                     selectedCharacterId={selectedDefenderId}
-                    onCharacterSelect={setSelectedDefenderId}
+                    onCharacterSelect={(id) => {setSelectedDefenderId(id); setDefenderSkillId('melee');}}
                 />
                 <div className={styles.statInput}>
                     <label>Test</label>

@@ -6,10 +6,11 @@ interface InitiativeTrackerProps {
     combatants: Combatant[];
     currentTurnId: string | null;
     advantages?: Advantages;
+    currentCharacterId?: string;
 }
 
 const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
-    combatants, currentTurnId, advantages
+    combatants, currentTurnId, advantages, currentCharacterId
 }) => {
     const gameData = useGameData();
     const conditionsData = gameData.conditions;
@@ -52,16 +53,17 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
             <ol className={styles.combatantList}>
                 {combatants.map(c => {
                     const conditionCounts = getConditionCounts(c.conditions || []);
-
                     return (
                         <li key={c.id} className={c.id === currentTurnId ? styles.activeTurn : ''}>
                             <div className={styles.combatantRow}>
                                 <span className={styles.initiative}>{c.initiative ?? '-'}</span>
                                 <span className={styles.name}>{c.name}</span>
                                 <div className={styles.wounds}>
+                                    {currentCharacterId && c.sourceId === currentCharacterId && (
                                     <span className={styles.woundsDisplay}>
                                         {c.currentWounds} / {c.maxWounds}
                                     </span>
+                                    )}
                                 </div>
                             </div>
 

@@ -247,7 +247,7 @@ const MapView: React.FC<MapViewProps> = ({
                             : '🌟 Reveal to All'}
                     </button>
                     <div className={styles.contextMenuDivider} />
-                    {characters.map((character) => {
+                    {characters.filter(character => character.userId != null).map((character) => {
                         const isDiscovered = mapPinStates[contextMenu.locationId]?.playerDiscovered.includes(character.id);
                         return (
                             <button
