@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { JournalEntry, Character } from '@wfrp/shared';
 import styles from './JournalManager.module.css';
 
@@ -17,13 +17,14 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
 }) => {
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [editingEntry, setEditingEntry] = useState<JournalEntry | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCreateEntry = () => {
     const newEntry: JournalEntry = {
       id: crypto.randomUUID(),
       title: 'New Entry',
       content: '',
-      imageUrl: '',
+      imageData: undefined,
       sharedWith: [],
     };
     setSelectedEntry(newEntry);
@@ -72,10 +73,42 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
 
   const handleFieldChange = (
     field: keyof JournalEntry,
-    value: string | string[]
+    value: string | string[] | undefined
   ) => {
     if (!editingEntry) return;
     setEditingEntry({ ...editingEntry, [field]: value });
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      alert('Image must be less than 10MB');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64Data = e.target?.result as string;
+      handleFieldChange('imageData', base64Data);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = () => {
+    handleFieldChange('imageData', undefined);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleToggleCharacter = (characterId: string) => {
@@ -173,13 +206,32 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label>Image URL (Optional)</label>
-                  <input
-                    type="text"
-                    value={editingEntry.imageUrl || ''}
-                    onChange={(e) => handleFieldChange('imageUrl', e.target.value)}
-                    placeholder="https://example.com/image.jpg"
-                  />
+                  <label>Image (Optional, max 2MB)</label>
+                  <div className={styles.imageUploadSection}>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className={styles.fileInput}
+                    />
+                    {editingEntry.imageData && (
+                      <div className={styles.imagePreview}>
+                        <img
+                          src={editingEntry.imageData}
+                          alt="Preview"
+                          className={styles.previewImage}
+                        />
+                        <button
+                          type="button"
+                          className={styles.removeImageButton}
+                          onClick={handleRemoveImage}
+                        >
+                          ✕ Remove Image
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className={styles.sharingSection}>

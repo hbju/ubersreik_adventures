@@ -295,3 +295,76 @@
 .editor::-webkit-scrollbar-thumb:hover {
   background: #d4af37;
 }
+
+/* Image Upload Styles */
+.imageUploadSection {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.fileInput {
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px dashed #8b6914;
+  border-radius: 6px;
+  color: #d4af37;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fileInput:hover {
+  border-color: #d4af37;
+  background: rgba(139, 105, 20, 0.1);
+}
+
+.fileInput::file-selector-button {
+  background: #2d5016;
+  color: #d4af37;
+  border: 2px solid #3d6f1f;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 12px;
+  transition: all 0.2s;
+}
+
+.fileInput::file-selector-button:hover {
+  background: #3d6f1f;
+}
+
+.imagePreview {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.previewImage {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 6px;
+  border: 2px solid #8b6914;
+  display: block;
+}
+
+.removeImageButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #8b0000;
+  color: #fff;
+  border: 2px solid #660000;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.removeImageButton:hover {
+  background: #a00000;
+  transform: scale(1.05);
+}

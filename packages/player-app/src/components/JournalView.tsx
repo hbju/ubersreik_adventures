@@ -59,9 +59,9 @@ export const JournalView: React.FC<JournalViewProps> = ({ journal }) => {
               {isExpanded && (
                 <>
                   <div className={styles.entryContent}>{entry.content}</div>
-                  {entry.imageUrl && (
+                  {entry.imageData && (
                     <img
-                      src={entry.imageUrl}
+                      src={entry.imageData}
                       alt={entry.title}
                       className={styles.entryImage}
                       onClick={(e) => e.stopPropagation()}

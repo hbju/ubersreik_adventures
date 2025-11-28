@@ -237,7 +237,7 @@ export interface JournalEntry {
   id: string;
   title: string;
   content: string;
-  imageUrl?: string;
+  imageData?: string; // Base64 encoded image data (data:image/...;base64,...)
   sharedWith: ('all' | string)[]; // Array of character IDs or 'all'
 }
 
