@@ -11,7 +11,7 @@
             "playerDescription": "The Artisans' Quarter is the industrial heart of Ubersreik. It lies to the east of the Grey Lady Road, on the north bank of the Teufel, where raw materials and finished goods are loaded and unloaded on wharves. By day the ringing sounds of hammers striking metal blends with the acrid stench of the town's tanners and chandlers. The quarter contains several slum districts at the periphery supporting taverns and cheap shops servicing the town's workers. Even at night the streets are rarely empty as workers relax after a hard day's graft.",
             "gmNotes": "Since the Jungfreuds were ousted and their trade embargo began, coal has become scarce. Now the streets are full of apprentices on the scrounge for anything to burn.",
             "hooks": [],
-            "image": "",
+            "image": "assets/images/artisans_quarter.png",
             "music": "",
             "tag": "district"
         },
@@ -28,7 +28,7 @@
                 "Gustav Schtupp, Gunther's postmaster, is a spy. He quietly intercepts mail passing through his hands, trafficking the juicier gossip in coded messages. Whether he serves now the Imperial Herald, House Bruner, or a darker master, is uncertain.",
                 "Gunther proudly maintains his independence, servicing coaches from three local Coaching Houses — Cannon Ball Express, Four Seasons, and Imperial Expressways. Elicha Hochs, a representative of the Four Seasons, is seeking capable folk to disrupt rival coaches and put pressure on Gunther to sell the inn to the Four Seasons for their exclusive use."
             ],
-            "image": "",
+            "image": "assets/images/bridge_house_inn.png",
             "music": "",
             "tag": "inn"
         },
@@ -163,7 +163,7 @@
             "hooks": [
                 "A small group of locals is determined to wreak vengeance on the Altdorf forces for evicting them from their homes, and driving out the rightful rulers of Ubersreik. They are looking for accomplices to sneak into the castle and poison the garrison's supplies, and General von Dabernick's dinner, with Spritzenberries, a naturally powerful laxative."
             ],
-            "image": "",
+            "image": "assets/images/black_rock.png",
             "music": "",
             "tag": "district"
         },
@@ -207,7 +207,7 @@
             "hooks": [
                 "In desperation, Sister Habercorn has turned to the party to help her smuggle young Lord Wendelin out of Black Rock. If he is caught, the Altdorfers may injure or even kill him, given their general's attitude to the von Jungfreuds. They could seek out the rumoured secret passageway, or try to brazenly smuggle him out a main gate."
             ],
-            "image": "",
+            "image": "assets/images/saint_arnolds_chapel.png",
             "music": "",
             "tag": "temple"
         },
@@ -306,7 +306,7 @@
                 "Belorn Nordwander offers the party a discount if he can accompany them on their expedition. Though charming and intelligent, Belorn has little experience of life beyond Ubersreik's walls, and will be something of a hindrance, a fact to which he is entirely oblivious.",
                 "Legendary explorer Ernst von Schäkeldorf is planning an expedition to climb Mount Frugelhorn, and the party are to travel with him. He has managed to upset Nordwander by expecting a hefty discount based on his fame. Can the party resolve the tensions and bring everyone to a mutually satisfactory agreement, or will the expedition be called off?"
             ],
-            "image": "",
+            "image": "assets/images/nordwander_and_sons_expeditionary_supplies.png",
             "music": "",
             "tag": "shop"
         },
@@ -354,7 +354,7 @@
                 "The guild's working relationship with Altdorf has kept them neutral in the town's political turmoil. For their part, the Altdorf troops have been turning a blind eye to any smuggling they discover. Should this be known publicly, it would undermine the authority of the Altdorfers, but will anger the guild.",
                 "A shipment of brandy from Bretonnia is due to be smuggled into Ubersreik tonight. Nixie Dunkelstange is overseeing things, but cannot use guild members, as she suspects someone is feeding information to Geldfinger in Customs House. It's a dangerous venture, but profit awaits those willing to take the risk."
             ],
-            "image": "",
+            "image": "assets/images/boatmens_guild.png",
             "music": "",
             "tag": "misc"
         },
@@ -371,7 +371,7 @@
                 "While most are aware of the gambling den, less well known is the clandestine fencing operation run behind the book-keeper's office. Here, the Crooked Fingers buy, sell, and trade stolen goods. If the party has been robbed, their goods will likely be there, if they can talk their way past the Ranaldans.",
                 "Dannel Meer, legendary thief, is putting together a crew to raid Black Rock Castle. He claims taxes from the Duchy of Ubersreik are simply piling up unclaimed in the vaults. There is a fortune there for the taking. Assuming Meer is correct..."
             ],
-            "image": "",
+            "image": "assets/images/the_crooked_hammer.png",
             "music": "",
             "tag": "tavern"
         },
@@ -405,7 +405,7 @@
                 "Aloysius Thorncobble III, a Halfling merchant has employed the party. He is in dispute with the Dockers' Guild, who are refusing to unload for him until he settles an outstanding debt. As he believes he paid the debt (to the Dockers' Guild in Altdorf), he is unwilling to do so. As the party begin to unload his barge, a group of dockers arrive to point out the error in their ways.",
                 "Little Willi, Big Willi's even-taller son, has been smuggling luxury foodstuffs for the Lowhaven Clan. But when the Watch confiscated his last load on Geldfinger's orders, that left him owing the Halflings a lot of money. He is willing to offer free Guild Membership to the party if they help him break into the warehouse and steal the goods back."
             ],
-            "image": "",
+            "image": "assets/images/dockers_arm.png",
             "music": "",
             "tag": "misc"
         },
@@ -422,7 +422,7 @@
                 "Hugo was, in fact, a knight, but he left Bretonnia in disgrace. A recent visitor, Sir Pierre De L'Arbaque, recognised the old man and has forcibly ejected him from his home. Hugo is determined to fight the much younger Pierre to reclaim his honour, but the party are convinced that if he does, he will be slaughtered.",
                 "Nils Scherzer, an agitator, has been whipping up a frenzy of anti-Bretonnian sentiment. He has raised a mob, intent on driving Bretonnians out of Ubersreik. He plans to burn the chapel to the ground, killing those within. There is no time to summon the Watch, only the party can intervene!"
             ],
-            "image": "",
+            "image": "assets/images/grail_chapel.png",
             "music": "",
             "tag": "temple"
         },
@@ -490,7 +490,7 @@
                 "Gram'ma has a job. One of her lodgers, Herr Bleanich, passed away in the night. She'd rather not deal with the Watch, so make the body go away and Gram'ma will owe you.",
                 "Gram'ma has another job. This one's a little bigger. Her husband, Karsten Rugger, is too scrupulous for her liking. She will be thankful if someone makes him vanish. Permanently."
             ],
-            "image": "",
+            "image": "assets/images/ruggers_boarding_house.png",
             "music": "",
             "tag": "inn"
         },
@@ -507,24 +507,38 @@
                 "Hocheim has altered her will so her stables will be sold off on her death, the money being used to support soldiers' widows and children. Her nephew, Tilman, would rather she support her more immediate family. Should the party be able to produce a good forgery of the will, they will stand to profit, following Sabina's eventual demise.",
                 "Marlies Zeitflug needs some influential customers, in the hope that they may make her time-pieces more fashionable. Should the party be able to convince someone wealthy to buy a clock, they will earn a commission."
             ],
-            "image": "",
+            "image": "assets/images/strohmann_markt.png",
             "music": "",
             "tag": "shop"
         },
         {
-            "id": "ubersreik_bridge_dunkelfeucht",
-            "name": "Ubersreik Bridge & Dunkelfeucht",
+            "id": "ubersreik_bridge",
+            "name": "Ubersreik Bridge",
             "coords": {
                 "x": 1940,
                 "y": 1700
             },
-            "playerDescription": "Two centuries old, the Dwarf-built Ubersreik Bridge still dominates the city. It is supported by great, stone pillars sunk deep into the riverbed, rising to a height making it visible from much of the town. Local laws prohibit building atop the bridge, so those traversing it are greeted with fine views. Unseen from this vantage, a small shanty town known as Dunkelfeucht has sprung up under the bridge's shadow. The homeless and desperate gather here, and only the desperate now venture there.",
-            "gmNotes": "Gangs and footpads prowl Dunkelfeucht, and the Altdorf-led Watch avoids the place completely. This freedom from law-enforcement has allowed several makeshift jetties to be built by smuggling gangs. Recent rumours suggest the gangs are being bound together by a new leader known only as 'The Baron', a criminal mastermind known for his ambition and utter ruthlessness. The Baron is Katerine Eule, a woman from the rookeries of Altdorf who followed the army south to exploit the power vacuum.",
+            "playerDescription": "Two centuries old, the Dwarf-built Ubersreik Bridge still dominates the city. It is supported by great, stone pillars sunk deep into the riverbed, rising to a height making it visible from much of the town. Local laws prohibit building atop the bridge, so those traversing it are greeted with fine views.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "assets/images/ubersreik_bridge.webp",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "Dunkelfeucht",
+            "name": "Dunkelfeucht",
+            "coords": {
+                "x": 1800,
+                "y": 1700
+            },
+            "playerDescription": "Beneath the shadow of Ubersreik Bridge lies Dunkelfeucht, a squalid shanty town built on stilts above the Teufel's banks. The area is a haven for the desperate and destitute, who eke out a living through petty crime, scavenging, and working for the various smuggling gangs that operate from here. The stench of waste and rot hangs heavy in the air, and the constant sound of rushing water drowns out most other noises.",
+            "gmNotes": "Dunkelfeucht is ruled by 'The Baron', a ruthless criminal mastermind who has united the various gangs under her banner. The Baron is Katerine Eule, a woman from the rookeries of Altdorf who followed the army south to exploit the power vacuum. The gangs operate with impunity here, as the Altdorf-led Watch avoids the area completely.",
             "hooks": [
                 "The party have been hired by Klaus Osfer to locate his brother Ulli, who is somewhere in Dunkelfeucht. Ulli was kicked out of home by his father, who has now passed away, and Klaus wants him to come back. To get to him, the party will need to negotiate with The Baron, and her thugs.",
                 "Barrels of explosives have been reported stolen from the Miners' Guild, and the trail seems to lead to Dunkelfeucht. If the party investigate, they will discover the explosives are being stockpiled against some of the pillars of the bridge, with a view to destroying it. This plan is being orchestrated by Ernst Elsen, a destitute Human mason resentful of Dwarf influence on Ubersreik."
             ],
-            "image": "",
+            "image": "assets/images/dunkelfeucht.png",
             "music": "",
             "tag": "district"
         },
@@ -538,7 +552,7 @@
             "playerDescription": "Ubersreik's Marktplatz quarter stands at the heart of the town. Every Marktag (the weekly market day), farmers bring their produce from the surrounding villages to trade in the busy market squares, while pedlars and merchants display cloth and other produce. Most retailers within Ubersreik also pitch stalls on Marktag. At the centre of the Market Square, an imposing statue of Magnus the Pious stands, commemorating his pivotal role in rebuilding Ubersreik. The Marktplatz bustles with activity on most days, and is often used as a meeting point.",
             "gmNotes": "",
             "hooks": [],
-            "image": "",
+            "image": "assets/images/marktplatz.png",
             "music": "",
             "tag": "district"
         },
@@ -705,7 +719,7 @@
                 "While exiting at closing time, masked brigands attack the party and other patrons. If they decide to report the assault to the Watch, they realise that one of the assailants was Watch Sergeant Tirza Bronstein. He's quite prepared to lock up any with wild claims of corrupt watchmen.",
                 "Rader uses one of his private rooms upstairs to host a group of guildmasters who are consolidating their efforts to influence the Burgomeister. Kurt Prochnow, guildmaster of the Boatbuilders and Chandlers' Guild, will pay the party 1 GC to spy on the meeting and report back what they discover."
             ],
-            "image": "",
+            "image": "assets/images/the_exploding_pig.png",
             "music": "",
             "tag": "tavern"
         },
@@ -722,7 +736,7 @@
                 "As the PCs browse the stalls, a worried merchant asks them to cover his stall while he nips to the privy. After half a bell, the real owner returns, wondering what happened to his good-for-nothing nephew and the day's takings.",
                 "Greta Klopstock, a young thief and initiate of the Crooked Fingers sect of the Cult of Ranald, is on her way out of the market, pursued by Borin. The party could intervene on either party's behalf, attempting to catch the thief in the hopes of a reward, or slowing the guard to ensure her escape in the hope of a future favour."
             ],
-            "image": "",
+            "image": "assets/images/furlisdottirs_corn_exchange.png",
             "music": "",
             "tag": "shop"
         },
@@ -858,7 +872,7 @@
                 "Though von Holzenauer developed his Ameliorative Elixir as a painkiller, it is often used recreationally. The potion is almost absurdly cheap, and is sold at a markup in seedy establishments in the Docks. Viktoria Häussler, a bawd, will pay the party to purchase large quantities of the potion and bring them to her.",
                 "Gustavus Guggenheimer, a Wizard Lord of the Gold Order, is concerned that von Holzenauer's potions have unnatural effects. Given Holzenauer's noble status, Guggenheimer is reluctant to officially intervene, so has asked the party to investigate and determine what goes into the mysterious potions."
             ],
-            "image": "",
+            "image": "assets/images/von_holzenauers_potion_shop.png",
             "music": "",
             "tag": "shop"
         },
@@ -869,13 +883,13 @@
                 "x": 2420,
                 "y": 2890
             },
-            "playerDescription": "This guild is located in a former tavern on Grossweg. The tavern's sign had depicted a snarling, fat shark, so it now has a dead rat painted hastily into its mouth. The old taproom serves as a meeting room and clubhouse for the rat catchers and their visitors. The cellar houses a kennel for their dogs, and also contains a secure entrance into Ubersreik's sewer complex.",
+            "playerDescription": "This guild is located in a former tavern on Grossweg. The tavern's sign depicts a snarling, fat shark, in whose jaws a dead rat has been painted hastily. The old taproom serves as a meeting room and clubhouse for the rat catchers and their visitors. The cellar houses a kennel for their dogs, and also contains a secure entrance into Ubersreik's sewer complex.",
             "gmNotes": "Until recently, the rat catchers of Ubersreik barely had a guild. But then Wahlund, a foreign rat catcher, arrived with his 'Exterminators'. Wahlund bought an old inn, which he offered the guild if it let him lead them. The guild is lead by Guildmaster Wahlund, a scarred veteran Sewer Jack from the north. Unbeknownst to most, he is also a High Priest of Stromfels. He and his three compatriots are all that remain of a secret cult wiped out by a Skaven assault. They travel the Empire, slaughtering the ratmen, and seeking out Grey Seer Rasknitt, the architect of their cult's destruction. They have followed rumours of Rasknitt to Ubersreik and secreted a small shrine to Stromfels in the basement.",
             "hooks": [
                 "Wahlund wishes to hire the players to hunt rats, freeing him up to focus on hunting Skaven. Their discretion is appreciated and will be rewarded. Of course, once down there, it's likely they will inevitably encounter the four northerners on the hunt, and may well become embroiled in their secret quest for vengeance.",
                 "Thormo Hakenbein, one of the guild's most unassuming members, is secretly a Witch. With the guild's expansion, he fears discovery and will hire the party to investigate Wahlund and his friends, hoping that his coin will prevent them from looking into his own activities."
             ],
-            "image": "",
+            "image": "assets/images/wahlunds_rat_catchers.png",
             "music": "",
             "tag": "misc"
         },
@@ -889,7 +903,7 @@
             "playerDescription": "Morgenseite, known locally as 'The Hill', is the most affluent quarter of Ubersreik. The homes of Ubersreik's wealthier middle-class families form a terrace leading up the Hill to the manors, mansions, and small estates of the wealthiest nobles, guildmasters, and clerics. Curving around the bottom of the Hill, Osterstrasse hosts the town's elite shops, including high-class couturiers, eateries, jewellers, armourers, and other luxury goods. The Watch patrol Morgenseite enthusiastically. Undesirables and those inappropriately dressed are likely to be moved along with a swift boot.",
             "gmNotes": "",
             "hooks": [],
-            "image": "",
+            "image": "assets/images/morgenseite_the_hill.png",
             "music": "",
             "tag": "district"
         },

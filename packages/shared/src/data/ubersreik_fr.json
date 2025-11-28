@@ -11,7 +11,7 @@
             "playerDescription": "Le Quartier des Artisans est le cœur industriel d'Ubersreik. Il se situe à l'est de la route de la Dame Grise, sur la rive nord du Teufel, où les matières premières et les produits finis sont chargés et déchargés sur les quais. De jour, le tintement des marteaux frappant le métal se mêle à la puanteur âcre des tanneurs et des chandeliers de la ville. Le quartier contient plusieurs zones de taudis en périphérie, soutenant des tavernes et des boutiques bon marché au service des travailleurs de la ville. Même la nuit, les rues sont rarement vides car les ouvriers se détendent après une dure journée de labeur.",
             "gmNotes": "Depuis que les Jungfreud ont été évincés et que leur embargo commercial a commencé, le charbon est devenu rare. Désormais, les rues sont pleines d'apprentis à la recherche de n'importe quoi à brûler.",
             "hooks": [],
-            "image": "",
+            "image": "assets/images/artisans_quarter.png",
             "music": "",
             "tag": "district"
         },
@@ -28,7 +28,7 @@
                 "Gustav Schtupp, le maître de poste de Gunther, est un espion. Il intercepte discrètement le courrier passant entre ses mains, trafiquant les ragots les plus juteux dans des messages codés. Qu'il serve le Héraut Impérial, la Maison Bruner ou un maître plus sombre, nul ne le sait.",
                 "Gunther maintient fièrement son indépendance, desservant les coches de trois maisons locales — Cannon Ball Express, Four Seasons et Imperial Expressways. Elicha Hochs, un représentant de Four Seasons, cherche des gens capables de perturber les coches rivaux et de faire pression sur Gunther pour qu'il vende l'auberge à Four Seasons pour leur usage exclusif."
             ],
-            "image": "",
+            "image": "assets/images/bridge_house_inn.png",
             "music": "",
             "tag": "inn"
         },
@@ -163,7 +163,7 @@
             "hooks": [
                 "Un petit groupe de locaux est déterminé à se venger des forces d'Altdorf pour les avoir expulsés de leurs maisons et avoir chassé les dirigeants légitimes d'Ubersreik. Ils cherchent des complices pour s'introduire dans le château et empoisonner les réserves de la garnison, ainsi que le dîner du Général von Dabernick, avec des baies de Spritzen, un laxatif naturellement puissant."
             ],
-            "image": "",
+            "image": "assets/images/black_rock.png",
             "music": "",
             "tag": "district"
         },
@@ -207,7 +207,7 @@
             "hooks": [
                 "En désespoir de cause, Sœur Habercorn s'est tournée vers le groupe pour l'aider à faire sortir le jeune Seigneur Wendelin de Black Rock. S'il est attrapé, les Altdorfers pourraient le blesser ou même le tuer, étant donné l'attitude de leur général envers les von Jungfreud. Ils pourraient chercher le passage secret dont on parle, ou essayer de le faire sortir effrontément par une porte principale."
             ],
-            "image": "",
+            "image": "assets/images/saint_arnolds_chapel.png",
             "music": "",
             "tag": "temple"
         },
@@ -306,7 +306,7 @@
                 "Belorn Nordwander offre au groupe une réduction s'il peut les accompagner dans leur expédition. Bien que charmant et intelligent, Belorn a peu d'expérience de la vie au-delà des murs d'Ubersreik, et sera un peu un fardeau, un fait dont il est totalement inconscient.",
                 "L'explorateur légendaire Ernst von Schäkeldorf prévoit une expédition pour escalader le Mont Frugelhorn, et le groupe doit voyager avec lui. Il a réussi à contrarier Nordwander en s'attendant à une grosse réduction basée sur sa renommée. Le groupe peut-il résoudre les tensions et amener tout le monde à un accord mutuellement satisfaisant, ou l'expédition sera-t-elle annulée ?"
             ],
-            "image": "",
+            "image": "assets/images/nordwander_and_sons_expeditionary_supplies.png",
             "music": "",
             "tag": "shop"
         },
@@ -354,7 +354,7 @@
                 "La relation de travail de la guilde avec Altdorf les a maintenus neutres dans les troubles politiques de la ville. De leur côté, les troupes d'Altdorf ont fermé les yeux sur toute contrebande qu'ils découvrent. Si cela devait être connu publiquement, cela saperait l'autorité des Altdorfers, mais mettrait la guilde en colère.",
                 "Une cargaison de brandy de Bretonnie doit être introduite en contrebande à Ubersreik ce soir. Nixie Dunkelstange supervise les choses, mais ne peut pas utiliser les membres de la guilde, car elle soupçonne quelqu'un de fournir des informations à Geldfinger à la Douane. C'est une entreprise dangereuse, mais le profit attend ceux qui sont prêts à prendre le risque."
             ],
-            "image": "",
+            "image": "assets/images/boatmens_guild.png",
             "music": "",
             "tag": "misc"
         },
@@ -371,7 +371,7 @@
                 "Alors que la plupart sont au courant du repaire de jeu, l'opération clandestine de recel dirigée derrière le bureau du comptable est moins connue. Ici, les Doigts Tordus achètent, vendent et échangent des biens volés. Si le groupe a été volé, leurs biens seront probablement là, s'ils peuvent parlementer pour passer les Ranaldains.",
                 "Dannel Meer, voleur légendaire, rassemble une équipe pour attaquer le Château de Black Rock. Il prétend que les taxes du Duché d'Ubersreik s'entassent simplement non réclamées dans les coffres. Il y a une fortune là-bas à prendre. En supposant que Meer ait raison..."
             ],
-            "image": "",
+            "image": "assets/images/the_crooked_hammer.png",
             "music": "",
             "tag": "tavern"
         },
@@ -405,7 +405,7 @@
                 "Aloysius Thorncobble III, un marchand Halfling, a employé le groupe. Il est en litige avec la Guilde des Dockers, qui refuse de décharger pour lui tant qu'il n'aura pas réglé une dette impayée. Comme il croit avoir payé la dette (à la Guilde des Dockers d'Altdorf), il n'est pas disposé à le faire. Alors que le groupe commence à décharger sa barge, un groupe de dockers arrive pour souligner l'erreur de leurs manières.",
                 "Little Willi, le fils encore plus grand de Big Willi, a fait de la contrebande de produits alimentaires de luxe pour le clan Lowhaven. Mais lorsque le Guet a confisqué son dernier chargement sur ordre de Geldfinger, cela l'a laissé avec une grosse dette envers les Halflings. Il est prêt à offrir une adhésion gratuite à la Guilde au groupe s'ils l'aident à s'introduire dans l'entrepôt et à voler les marchandises."
             ],
-            "image": "",
+            "image": "assets/images/dockers_arm.png",
             "music": "",
             "tag": "misc"
         },
@@ -422,7 +422,7 @@
                 "Hugo était, en fait, un chevalier, mais il a quitté la Bretonnie en disgrâce. Un visiteur récent, Sir Pierre De L'Arbaque, a reconnu le vieil homme et l'a expulsé de force de sa maison. Hugo est déterminé à combattre Pierre, beaucoup plus jeune, pour récupérer son honneur, mais le groupe est convaincu que s'il le fait, il sera massacré.",
                 "Nils Scherzer, un agitateur, a attisé une frénésie de sentiment anti-bretonnien. Il a levé une foule, déterminée à chasser les Bretonniens d'Ubersreik. Il prévoit de brûler la chapelle jusqu'au sol, tuant ceux qui s'y trouvent. Il n'y a pas le temps de convoquer le Guet, seul le groupe peut intervenir !"
             ],
-            "image": "",
+            "image": "assets/images/grail_chapel.png",
             "music": "",
             "tag": "temple"
         },
@@ -490,7 +490,7 @@
                 "Grand-Mère a un travail. L'un de ses locataires, Herr Bleanich, est décédé dans la nuit. Elle préférerait ne pas avoir affaire au Guet, donc faites disparaître le corps et Grand-Mère vous en devra une.",
                 "Grand-Mère a un autre travail. Celui-ci est un peu plus gros. Son mari, Karsten Rugger, est trop scrupuleux à son goût. Elle serait reconnaissante si quelqu'un le faisait disparaître. De façon permanente."
             ],
-            "image": "",
+            "image": "assets/images/ruggers_boarding_house.png",
             "music": "",
             "tag": "inn"
         },
@@ -507,24 +507,39 @@
                 "Hocheim a modifié son testament pour que ses écuries soient vendues à sa mort, l'argent étant utilisé pour soutenir les veuves et les enfants de soldats. Son neveu, Tilman, préférerait qu'elle soutienne sa famille plus immédiate. Si le groupe est capable de produire un bon faux testament, ils pourraient en tirer profit après le décès éventuel de Sabina.",
                 "Marlies Zeitflug a besoin de quelques clients influents, dans l'espoir qu'ils puissent rendre ses horloges plus à la mode. Si le groupe parvient à convaincre quelqu'un de riche d'acheter une horloge, ils gagneront une commission."
             ],
-            "image": "",
+            "image": "assets/images/strohmann_markt.png",
             "music": "",
             "tag": "shop"
         },
         {
-            "id": "ubersreik_bridge_dunkelfeucht",
-            "name": "Pont d'Ubersreik & Dunkelfeucht",
+            "id": "ubersreik_bridge",
+            "name": "Pont d'Ubersreik",
             "coords": {
                 "x": 1940,
                 "y": 1700
             },
-            "playerDescription": "Vieux de deux siècles, le pont d'Ubersreik, construit par les Nains, domine toujours la ville. Il est soutenu par de grands piliers de pierre enfoncés profondément dans le lit de la rivière, s'élevant à une hauteur le rendant visible depuis une grande partie de la ville. Les lois locales interdisent de construire au sommet du pont, de sorte que ceux qui le traversent sont accueillis par de belles vues. Invisible depuis ce point de vue, un petit bidonville connu sous le nom de Dunkelfeucht a surgi à l'ombre du pont. Les sans-abri et les désespérés s'y rassemblent, et seuls les désespérés s'y aventurent désormais.",
-            "gmNotes": "Les gangs et les voleurs rôdent dans le Dunkelfeucht, et le Guet dirigé par Altdorf évite complètement l'endroit. Cette absence de forces de l'ordre a permis à plusieurs jetées de fortune d'être construites par des gangs de contrebande. Des rumeurs récentes suggèrent que les gangs sont en train d'être liés par un nouveau chef connu uniquement sous le nom de « La Baronne », un cerveau criminel connu pour son ambition et son impitoyabilité totale. La Baronne est Katerine Eule, une femme des bas-fonds d'Altdorf qui a suivi l'armée vers le sud pour exploiter le vide de pouvoir.",
+            "playerDescription": "Vieux de deux siècles, le pont d'Ubersreik, construit par les Nains, domine toujours la ville. Il est soutenu par de grands piliers de pierre enfoncés profondément dans le lit de la rivière, s'élevant à une hauteur le rendant visible depuis une grande partie de la ville. Les lois locales interdisent de construire au sommet du pont, de sorte que ceux qui le traversent sont accueillis par de belles vues.",
+            "gmNotes": "Le pont est un point de passage stratégique crucial pour Ubersreik, reliant les deux moitiés de la ville. Il est patrouillé en permanence par le Guet, et des postes de garde se trouvent à chaque extrémité. Sous le pont, dans l'ombre des piliers massifs, se trouve le bidonville de Dunkelfeucht, un repaire pour les gangs et les contrebandiers.",
+            "hooks": [
+            ],
+            "image": "assets/images/ubersreik_bridge.webp",
+            "music": "",
+            "tag": "district"
+        },
+        {
+            "id": "dunkelfeucht",
+            "name": "Dunkelfeucht",
+            "coords": {
+                "x": 1800,
+                "y": 1700
+            },
+            "playerDescription": "Dunkelfeucht est un bidonville qui s'est développé sous le pont d'Ubersreik. C'est un endroit sombre et lugubre, où les sans-abri et les désespérés se rassemblent. Les bâtiments sont des structures de fortune faites de bois récupéré, de tôle et de tout autre matériau que les habitants peuvent trouver. Les rues sont étroites et sinueuses, souvent inondées par les crues du Teufel.",
+            "gmNotes": "Dunkelfeucht est un repaire pour les gangs et les voleurs, et le Guet évite complètement l'endroit. Plusieurs jetées de fortune ont été construites par des gangs de contrebande. Le chef de ces gangs est connu sous le nom du « Baron », une femme des bas-fonds d'Altdorf qui a suivi l'armée vers le sud pour exploiter le vide de pouvoir.",
             "hooks": [
                 "Le groupe a été engagé par Klaus Osfer pour localiser son frère Ulli, qui se trouve quelque part dans le Dunkelfeucht. Ulli a été chassé de chez lui par son père, qui est maintenant décédé, et Klaus veut qu'il revienne. Pour l'atteindre, le groupe devra négocier avec La Baronne et ses voyous.",
                 "Des barils d'explosifs ont été signalés volés à la Guilde des Mineurs, et la piste semble mener au Dunkelfeucht. Si le groupe enquête, il découvrira que les explosifs sont stockés contre certains des piliers du pont, en vue de le détruire. Ce plan est orchestré par Ernst Elsen, un maçon humain indigent, rancunier de l'influence naine sur Ubersreik."
             ],
-            "image": "",
+            "image": "assets/images/dunkelfeucht.png",
             "music": "",
             "tag": "district"
         },
@@ -538,7 +553,7 @@
             "playerDescription": "Le quartier de la Marktplatz d'Ubersreik se trouve au cœur de la ville. Chaque Marktag (le jour de marché hebdomadaire), les fermiers apportent leurs produits des villages environnants pour faire du commerce sur les places de marché animées, tandis que les colporteurs et les marchands exposent des tissus et d'autres produits. La plupart des détaillants d'Ubersreik installent également des étals le jour du Marktag. Au centre de la place du marché, une statue imposante de Magnus le Pieux se dresse, commémorant son rôle central dans la reconstruction d'Ubersreik. La Marktplatz bourdonne d'activité la plupart des jours et sert souvent de point de rencontre.",
             "gmNotes": "",
             "hooks": [],
-            "image": "",
+            "image": "assets/images/marktplatz.png",
             "music": "",
             "tag": "district"
         },
@@ -705,7 +720,7 @@
                 "En sortant à l'heure de la fermeture, des brigands masqués attaquent le groupe et d'autres clients. S'ils décident de signaler l'agression au Guet, ils réalisent que l'un des assaillants était le Sergent du Guet Tirza Bronstein. Il est tout à fait prêt à enfermer quiconque ayant des affirmations folles sur des gardes corrompus.",
                 "Rader utilise l'une de ses salles privées à l'étage pour accueillir un groupe de maîtres de guilde qui consolident leurs efforts pour influencer le Bourgmestre. Kurt Prochnow, maître de la Guilde des Constructeurs de Bateaux et Avitailleurs, paiera le groupe 1 CO pour espionner la réunion et rapporter ce qu'ils découvrent."
             ],
-            "image": "",
+            "image": "assets/images/the_exploding_pig.png",
             "music": "",
             "tag": "tavern"
         },
@@ -722,7 +737,7 @@
                 "Alors que les PJ parcourent les étals, un marchand inquiet leur demande de surveiller son étal pendant qu'il file aux cabinets. Après une demi-cloche, le vrai propriétaire revient, se demandant ce qui est arrivé à son bon à rien de neveu et à la recette du jour.",
                 "Greta Klopstock, une jeune voleuse et initiée de la secte des Doigts Tordus du Culte de Ranald, est sur le point de sortir du marché, poursuivie par Borin. Le groupe pourrait intervenir au nom de l'une ou l'autre partie, tentant d'attraper la voleuse dans l'espoir d'une récompense, ou ralentissant le garde pour assurer sa fuite dans l'espoir d'une future faveur."
             ],
-            "image": "",
+            "image": "assets/images/furlisdottirs_corn_exchange.png",
             "music": "",
             "tag": "shop"
         },
@@ -858,7 +873,7 @@
                 "Bien que von Holzenauer ait développé son Élixir Amélioratif comme analgésique, il est souvent utilisé de manière récréative. La potion est presque absurdement bon marché et est vendue avec une marge dans des établissements louches des Quais. Viktoria Häussler, une maquerelle, paiera le groupe pour acheter de grandes quantités de la potion et les lui apporter.",
                 "Gustavus Guggenheimer, un Seigneur Sorcier de l'Ordre Doré, s'inquiète du fait que les potions de von Holzenauer aient des effets non naturels. Étant donné le statut noble de Holzenauer, Guggenheimer hésite à intervenir officiellement, il a donc demandé au groupe d'enquêter et de déterminer ce qui entre dans les mystérieuses potions."
             ],
-            "image": "",
+            "image": "assets/images/von_holzenauers_potion_shop.png",
             "music": "",
             "tag": "shop"
         },
@@ -869,13 +884,13 @@
                 "x": 2420,
                 "y": 2890
             },
-            "playerDescription": "Cette guilde est située dans une ancienne taverne sur le Grossweg. L'enseigne de la taverne représentait un requin gras grondant, elle a donc maintenant un rat mort peint à la hâte dans sa bouche. L'ancienne salle de débit de boissons sert de salle de réunion et de club-house pour les attrapeurs de rats et leurs visiteurs. La cave abrite un chenil pour leurs chiens, et contient également une entrée sécurisée vers le complexe d'égouts d'Ubersreik.",
+            "playerDescription": "Cette guilde est située dans une ancienne taverne sur le Grossweg. L'enseigne de la taverne représente un requin gras grondant, entre les dents duquel un rat mort peint à la hâte a été rajouté. L'ancienne salle de débit de boissons sert de salle de réunion et de club-house pour les attrapeurs de rats et leurs visiteurs. La cave abrite un chenil pour leurs chiens, et contient également une entrée sécurisée vers le complexe d'égouts d'Ubersreik.",
             "gmNotes": "Jusqu'à récemment, les attrapeurs de rats d'Ubersreik avaient à peine une guilde. Mais alors Wahlund, un attrapeur de rats étranger, est arrivé avec ses « Exterminateurs ». Wahlund a acheté une vieille auberge, qu'il a offerte à la guilde si elle le laissait la diriger. La guilde est dirigée par le Maître de Guilde Wahlund, un vétéran Valet d'Égout cicatrisé du nord. À l'insu de la plupart, il est aussi un Grand Prêtre de Stromfels. Lui et ses trois compatriotes sont tout ce qui reste d'un culte secret anéanti par un assaut Skaven. Ils parcourent l'Empire, massacrant les hommes-rats et recherchant le Prophète Gris Rasknitt, l'architecte de la destruction de leur culte. Ils ont suivi les rumeurs de Rasknitt jusqu'à Ubersreik et caché un petit autel à Stromfels dans le sous-sol.",
             "hooks": [
                 "Wahlund souhaite engager les joueurs pour chasser les rats, le libérant pour se concentrer sur la chasse aux Skavens. Leur discrétion est appréciée et sera récompensée. Bien sûr, une fois là-bas, il est probable qu'ils rencontreront inévitablement les quatre nordiques en chasse, et pourraient bien se retrouver mêlés à leur quête secrète de vengeance.",
                 "Thormo Hakenbein, l'un des membres les plus modestes de la guilde, est secrètement une Sorcière. Avec l'expansion de la guilde, il craint d'être découvert et engagera le groupe pour enquêter sur Wahlund et ses amis, espérant que son argent les empêchera de s'intéresser à ses propres activités."
             ],
-            "image": "",
+            "image": "assets/images/wahlunds_rat_catchers.png",
             "music": "",
             "tag": "misc"
         },
@@ -889,7 +904,7 @@
             "playerDescription": "Morgenseite, connu localement sous le nom de « La Colline », est le quartier le plus riche d'Ubersreik. Les maisons des familles bourgeoises les plus aisées d'Ubersreik forment une terrasse menant en haut de la Colline vers les manoirs, demeures et petits domaines des nobles, maîtres de guilde et clercs les plus riches. S'incurvant autour du bas de la Colline, l'Osterstrasse accueille les boutiques d'élite de la ville, y compris des couturiers de grande classe, des restaurants, des bijoutiers, des armuriers et d'autres produits de luxe. Le Guet patrouille Morgenseite avec enthousiasme. Les indésirables et ceux qui sont habillés de manière inappropriée sont susceptibles d'être déplacés d'un coup de botte rapide.",
             "gmNotes": "",
             "hooks": [],
-            "image": "",
+            "image": "assets/images/morgenseite_the_hill.png",
             "music": "",
             "tag": "district"
         },
@@ -1096,12 +1111,12 @@
         },
         {
             "id": "the_mess_and_bucket",
-            "name": "Le Mess et le Seau",
+            "name": "Le Désordre et le Seau",
             "coords": {
                 "x": 1805,
                 "y": 1000
             },
-            "playerDescription": "Le Mess et le Seau est une auberge qui s'adresse presque exclusivement à la soldatesque d'Ubersreik. Elle dispose d'une grande salle commune qui est techniquement ouverte au public, bien que les clients civils s'attirent des regards désapprobateurs et des railleries. Le mobilier est bon marché, étant donné la régularité avec laquelle il est cassé dans les bagarres de bar. À l'étage, l'auberge propose un club privé, dont l'adhésion est accessible aux officiers. L'accès se fait par un escalier extérieur.",
+            "playerDescription": "Le Désordre et le Seau est une auberge qui s'adresse presque exclusivement à la soldatesque d'Ubersreik. Elle dispose d'une grande salle commune qui est techniquement ouverte au public, bien que les clients civils s'attirent des regards désapprobateurs et des railleries. Le mobilier est bon marché, étant donné la régularité avec laquelle il est cassé dans les bagarres de bar. À l'étage, l'auberge propose un club privé, dont l'adhésion est accessible aux officiers. L'accès se fait par un escalier extérieur.",
             "gmNotes": "Otto « Chou » Klemp est le chef videur, un Sergent à la retraite. Dietmar Varttiger est le maître d'hôtel du Club Privé du Premier Étage, un individu arrogant et huileux. Berthold « Big Bert » Hanson tient le bar en bas et est le propriétaire de l'établissement.",
             "hooks": [
                 "Les tensions au Club ont été tendues après l'arrivée des Altdorfers. Lorsque le Lieutenant Eisner, un officier d'un régiment d'arquebusiers d'Altdorf, se brise apparemment le cou en tombant dans les escaliers, Varttiger emploie le groupe pour arranger les choses, sans impliquer Chou ou le Guet.",
