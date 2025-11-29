@@ -36,6 +36,7 @@ export const useSocket = () => {
   const [conditionTestRequest, setConditionTestRequest] = useState<ConditionTestRequest | null>(null);
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
   const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
+  const [mapPing, setMapPing] = useState<{ x: number; y: number } | null>(null);
 
 
   const connect = useCallback((ipAddress: string, username: string, password: string) => {
@@ -157,6 +158,12 @@ export const useSocket = () => {
         setMapPinStates(message.payload.pinStates);
       }
 
+      if (message.type === 'MAP_PING') {
+        console.log('[CLIENT] Map ping received:', message.payload);
+        setMapPing({ x: message.payload.x, y: message.payload.y });
+        setTimeout(() => setMapPing(null), 100);
+      }
+
       // Task 3.4: Handle career change response
       if (message.type === 'CAREER_CHANGE_RESPONSE') {
         console.log('[CLIENT] Career change response received:', message.payload);
@@ -204,7 +211,8 @@ export const useSocket = () => {
     conditionTestRequest,
     setConditionTestRequest,
     journalEntries, 
-    mapPinStates, 
+    mapPinStates,
+    mapPing,
     connect, 
     disconnect, 
     sendMessage 

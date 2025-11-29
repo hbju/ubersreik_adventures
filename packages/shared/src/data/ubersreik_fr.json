@@ -612,8 +612,8 @@
             "id": "town_hall",
             "name": "Hôtel de Ville",
             "coords": {
-                "x": 2030,
-                "y": 2005
+                "x": 2010,
+                "y": 2125
             },
             "playerDescription": "L'Hôtel de Ville d'Ubersreik est un imposant bâtiment en pierre, haut de deux étages avec quatre tours, qui domine le côté nord de la Marktplatz. En plus des rangées de bureaux appartenant au Bourgmestre et à son personnel, il contient la majestueuse Cour des Nobles, une grande salle dans laquelle les dirigeants Jungfreud rendaient historiquement leurs décisions. Les tours étaient réservées aux Jungfreud et aux nobles en visite pour servir de résidence, mais elles sont maintenant inutilisées.",
             "gmNotes": "Depuis la destitution des Jungfreud, le statut et l'influence du Conseil Municipal ont augmenté de façon spectaculaire. Ernst Maler est l'actuel Bourgmestre d'Ubersreik et chef du Conseil Municipal. Son rôle était, jusqu'à l'arrivée des troupes d'Altdorf, principalement administratif. Compte tenu du potentiel pour la ville de devenir une ville franche (Freiburg), les choses ont changé — il est courtisé par les Maîtres de Guilde et ressenti par la noblesse fidèle aux Jungfreud.",
@@ -646,8 +646,8 @@
             "id": "theatre_variete",
             "name": "Théâtre des Variétés",
             "coords": {
-                "x": 2010,
-                "y": 2125
+                "x": 2030,
+                "y": 2005
             },
             "playerDescription": "À l'origine un entrepôt de marchand, ce bâtiment a été converti il y a une décennie en un théâtre à l'italienne, qui accueille des acteurs, des musiciens et des artistes de toutes sortes. C'est un grand bâtiment en pierre, avec un vaste plafond en bois voûté. Un grand tableau noir est suspendu sous l'enseigne peinte, sur lequel le propriétaire écrit le nom de la prochaine représentation. À l'intérieur, il y a cinquante sièges au parterre, cinquante autres au balcon supérieur, et deux loges réservées à l'élite de la ville.",
             "gmNotes": "Benedict Gurkenfeld, un acteur et dramaturge d'une certaine renommée, dirige maintenant le Théâtre des Variétés. La plupart des jours, on peut le trouver en train de flâner autour de la Marktplatz à observer les artistes de rue, à la recherche de talents. Il a un certain nombre de techniciens et d'ouvreurs dans son personnel, et dirige une troupe d'amateurs locaux qui se produisent à l'occasion.",

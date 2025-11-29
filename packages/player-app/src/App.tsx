@@ -22,7 +22,7 @@ import { CareerChangeModal } from './components/CareerChangeModal';
 const PlayerApp: React.FC = () => {
     const { skills, talents, careers, items, weapons, armor, conditions, gameData } = useGameData();
 
-    const { isConnected, isAuthenticated, authError, username, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, connect, disconnect, sendMessage } = useSocket();
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number } | null>(null);
@@ -517,6 +517,7 @@ const PlayerApp: React.FC = () => {
                             isGM={false}
                             viewState={mapViewState}
                             onViewStateChange={setMapViewState}
+                            incomingPing={mapPing}
                         />
                     </div>
                     <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>

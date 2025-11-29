@@ -33,13 +33,14 @@ export type RequestConditionTestMessage = BaseMessage<'REQUEST_CONDITION_TEST', 
 }>;
 export type JournalUpdateMessage = BaseMessage<'JOURNAL_UPDATE', { entries: JournalEntry[] }>;
 export type MapStateUpdateMessage = BaseMessage<'MAP_STATE_UPDATE', { pinStates: Record<string, MapPinState> }>;
+export type MapPingMessage = BaseMessage<'MAP_PING', { x: number; y: number }>;
 export type CareerChangeResponseMessage = BaseMessage<'CAREER_CHANGE_RESPONSE', {
     success: boolean;
     character?: Character;
     reason?: string
 }>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | CareerChangeResponseMessage;
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage;
 
 // == Player to GM Messages ==
 

@@ -59,3 +59,67 @@
   background: #8b6914;
   margin: 4px 8px;
 }
+
+/* Map Ping Animation Styles */
+.mapPing {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.pingCenter {
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle, #ffd700 0%, #ff8c00 100%);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 20px #ffd700, 0 0 40px #ff8c00;
+  animation: pingPulse 2s ease-out forwards;
+}
+
+.pingRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 20px solid #ffa200;
+  border-radius: 50%;
+  animation: pingExpand 2s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes pingExpand {
+  0% {
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+    border-width: 10px;
+  }
+  100% {
+    width: 500px;
+    height: 500px;
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+@keyframes pingPulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}

@@ -611,8 +611,8 @@
             "id": "town_hall",
             "name": "Town Hall",
             "coords": {
-                "x": 2030,
-                "y": 2005
+                "x": 2010,
+                "y": 2125
             },
             "playerDescription": "Ubersreik's Town Hall is an imposing stone building, two storeys high with four towers, that looms over the northern side of Marktplatz. In addition to banks of offices belonging to the Burgomeister and his staff, it contains the stately Nobles' Court, a grand hall in which the Jungfreud rulers historically made rulings. The towers were reserved for the Jungfreuds and visiting nobles to use as a residence but now lie unused.",
             "gmNotes": "Since the removal of the Jungfreuds, the status and influence of the Town Council has risen dramatically. Ernst Maler is the current Burgomeister of Ubersreik and leader of the Town Council. His role was, until the arrival of Altdorf's troops, chiefly clerical. Given the potential for the town to become a Freiburg, things have changed — he is courted by Guildmasters and resented by the nobility loyal to the Jungfreuds.",
@@ -645,8 +645,8 @@
             "id": "theatre_variete",
             "name": "Theatre Varieté",
             "coords": {
-                "x": 2010,
-                "y": 2125
+                "x": 2030,
+                "y": 2005
             },
             "playerDescription": "Originally a merchant's storehouse, this building was converted a decade ago into a proscenium arch theatre, which plays host to actors, musicians, and entertainers of all sorts. It is a large, stone building, with an expansive, vaulted, wooden ceiling. A large chalkboard hangs beneath the painted sign, on which the owner writes the name of the next performance. Inside, there are fifty seats in the stalls, another fifty in the upper circle, and two boxes reserved for the town's elite.",
             "gmNotes": "Benedict Gurkenfeld, an actor and playwright of some renown, now runs the Theatre Varieté. During most days he can be found strolling around the Marktplatz observing the busking entertainers, scouting for talent. He has a number of stage-hands and ushers on staff, and directs a company of local amateurs who perform on occasion.",

@@ -58,7 +58,7 @@ export const JournalView: React.FC<JournalViewProps> = ({ journal }) => {
 
               {isExpanded && (
                 <>
-                  <div className={styles.entryContent}>{entry.content}</div>
+                  {entry.content !== '' && <div className={styles.entryContent}>{entry.content}</div> }
                   {entry.imageData && (
                     <img
                       src={entry.imageData}

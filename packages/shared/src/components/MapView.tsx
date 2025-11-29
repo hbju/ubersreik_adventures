@@ -10,6 +10,12 @@ interface ViewState {
     offsetY: number;
 }
 
+interface MapPing {
+    x: number;
+    y: number;
+    id: number;
+}
+
 interface MapViewProps {
     gameData: GameData;
     mapPinStates?: Record<string, MapPinState>;
@@ -18,6 +24,8 @@ interface MapViewProps {
     isGM?: boolean;
     viewState?: ViewState;
     onViewStateChange?: (viewState: ViewState) => void;
+    onMapPing?: (x: number, y: number) => void;
+    incomingPing?: { x: number; y: number } | null;
 }
 
 interface ContextMenu {
@@ -34,6 +42,8 @@ const MapView: React.FC<MapViewProps> = ({
     isGM = false,
     viewState: externalViewState,
     onViewStateChange,
+    onMapPing,
+    incomingPing,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +58,10 @@ const MapView: React.FC<MapViewProps> = ({
 
     const [isPanning, setIsPanning] = useState(false);
     const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+    const [hasMoved, setHasMoved] = useState(false);
     const [selectedLocationId, setSelectedLocationId] = useState<string | null>(null);
+    const [activePings, setActivePings] = useState<MapPing[]>([]);
+    const pingIdRef = useRef(0);
 
     const [contextMenu, setContextMenu] = useState<ContextMenu | null>(null);
 
@@ -80,6 +93,7 @@ const MapView: React.FC<MapViewProps> = ({
     const handleMouseDown = useCallback((e: React.MouseEvent) => {
         if (e.button === 0) { // Left mouse button
             setIsPanning(true);
+            setHasMoved(false);
             setContextMenu(null);
             setPanStart({ x: e.clientX, y: e.clientY });
         }
@@ -89,6 +103,10 @@ const MapView: React.FC<MapViewProps> = ({
         if (isPanning) {
             const deltaX = e.clientX - panStart.x;
             const deltaY = e.clientY - panStart.y;
+
+            if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
+                setHasMoved(true);
+            }
 
             setViewState({
                 ...viewState,
@@ -100,9 +118,31 @@ const MapView: React.FC<MapViewProps> = ({
         }
     }, [isPanning, panStart, viewState, setViewState]);
 
-    const handleMouseUp = useCallback(() => {
+    const handleMouseUp = useCallback((e: MouseEvent) => {
+        if (!hasMoved && isGM && onMapPing && containerRef.current) {
+            // This was a click, not a drag - send a ping
+            const rect = containerRef.current.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+            
+            // Convert screen coordinates to map coordinates
+            const mapX = (clickX - viewState.offsetX) / viewState.scale;
+            const mapY = (clickY - viewState.offsetY) / viewState.scale;
+            
+            onMapPing(mapX, mapY);
+            
+            // Also show the ping locally for the GM
+            const newPingId = ++pingIdRef.current;
+            setActivePings(prev => [...prev, { x: mapX, y: mapY, id: newPingId }]);
+            
+            // Remove ping after animation
+            setTimeout(() => {
+                setActivePings(prev => prev.filter(p => p.id !== newPingId));
+            }, 2000);
+        }
         setIsPanning(false);
-    }, []);
+        setHasMoved(false);
+    }, [hasMoved, isGM, onMapPing, viewState]);
 
     const handlePinClick = (locationId: string) => {
         selectedLocationId === locationId ? setSelectedLocationId(null) : setSelectedLocationId(locationId);
@@ -156,10 +196,6 @@ const MapView: React.FC<MapViewProps> = ({
         onTogglePinDiscovery(contextMenu.locationId, [characterId]);
     };
 
-    const handleCloseContextMenu = () => {
-        setContextMenu(null);
-    };
-
     // Close context menu when clicking elsewhere
     useEffect(() => {
         const handleClick = () => {
@@ -170,6 +206,19 @@ const MapView: React.FC<MapViewProps> = ({
         document.addEventListener('click', handleClick);
         return () => document.removeEventListener('click', handleClick);
     }, [contextMenu]);
+
+    // Handle incoming pings from GM
+    useEffect(() => {
+        if (incomingPing) {
+            const newPingId = ++pingIdRef.current;
+            setActivePings(prev => [...prev, { x: incomingPing.x, y: incomingPing.y, id: newPingId }]);
+            
+            // Remove ping after animation
+            setTimeout(() => {
+                setActivePings(prev => prev.filter(p => p.id !== newPingId));
+            }, 2000);
+        }
+    }, [incomingPing]);
 
 
 
@@ -214,6 +263,21 @@ const MapView: React.FC<MapViewProps> = ({
                         isGM={isGM}
                         onClickPin={handlePinClick}
                     />
+                    {/* Render active pings */}
+                    {activePings.map(ping => (
+                        <div
+                            key={ping.id}
+                            className={styles.mapPing}
+                            style={{
+                                left: `${ping.x}px`,
+                                top: `${ping.y}px`,
+                            }}
+                        >
+                            <div className={styles.pingRing} />
+                            <div className={styles.pingRing} style={{ animationDelay: '0.3s' }} />
+                            <div className={styles.pingCenter} />
+                        </div>
+                    ))}
                 </div>
             </div>
 

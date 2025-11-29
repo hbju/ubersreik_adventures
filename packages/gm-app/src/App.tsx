@@ -909,7 +909,7 @@ function App() {
         const character = characters.find(c => c.id === charId);
         if (!character) return;
 
-        const updatedCharacter: Character = {
+        let updatedCharacter: Character = {
             ...character
         };
         const updatedTalents = updatedCharacter.talents;
@@ -920,7 +920,9 @@ function App() {
             updatedTalents[talent.id] = 1;
         }
 
-        updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter, talents);
+        updatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
+
+        updatedCharacter.status.wounds.max = calculateMaxWounds(updatedCharacter);
 
         handleCharacterUpdate(updatedCharacter);
         addLogEntry('system', `${talent.name} added to ${character.name}'s talents.`, 'logs.talent_added', { talentName: talent.name, characterName: character.name });
@@ -993,6 +995,12 @@ function App() {
                         viewState={mapViewState}
                         onViewStateChange={setMapViewState}
                         onTogglePinDiscovery={handleTogglePinDiscovery}
+                        onMapPing={(x, y) => {
+                            window.ipcRenderer.sendToAllPlayers({
+                                type: 'MAP_PING',
+                                payload: { x, y }
+                            });
+                        }}
                     />
                 </div>
                 <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>

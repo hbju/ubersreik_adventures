@@ -3,9 +3,21 @@ import styles from './AtmospherePanel.module.css';
 
 const musicTracks = [
     {
+        id: 'calm', name: 'Calm', src: [
+            "assets/music/WHG_Dwarfs(main).ogg",
+            "assets/music/The City Gates.mp3",
+            "assets/music/Ancient Stones.mp3",
+            "assets/music/Geheimnisnacht.mp3",
+            "assets/music/General Tavern B.wav",
+            "assets/music/Outskirts of Novigrad.mp3",
+        ]
+    },
+    {
         id: 'tavern', name: 'Tavern', src: [
             "assets/music/Lion's Pride.mp3",
-            "assets/music/Shady Rest.mp3"
+            "assets/music/Shady Rest.mp3",
+            "assets/music/Around the Fire.mp3",
+            "assets/music/Out of the Cold.mp3",
         ]
     },
     {
@@ -18,20 +30,41 @@ const musicTracks = [
         id: 'tense', name: 'Tense', src: [
             'assets/music/Decide.wav',
             'assets/music/Hybrid String Ambience.wav',
-            'assets/music/Conspiracy Theme.wav',
             'assets/music/Combat Atmos.wav',
-            'assets/music/Cello Atmos.wav'
+            'assets/music/Cello Atmos.wav',
+            'assets/music/WHG_Chaos(ambient-01).ogg',
+            "assets/music/WHG_Chaos(aux-01).wav",
+        ]
+    },
+    {
+        id: "intrigue", name: "Intrigue", src: [
+            "assets/music/Conspiracy Theme.wav",
+            "assets/music/Silent Footsteps.mp3",
+            "assets/music/Starting Zone.wav",
         ]
     },
     {
         id: 'epic', name: 'Epic', src: [
-            'assets/music/Song of Elune.mp3'
+            'assets/music/Song of Elune.mp3',
+            "assets/music/Khadgar's Plan.mp3",
+            "assets/music/Unbroken Road.mp3",
+            "assets/music/Sigmar's Glorious Empire.mp3",
         ]
     },
     {
         id: 'battle', name: 'Battle', src: [
             "assets/music/Epic Battle.wav",
             "assets/music/Hatred.wav",
+            "assets/music/Combat Braams.wav",
+            "assets/music/Combat Sequence.wav",
+            "assets/music/Daring Strings.wav",
+            "assets/music/Death or Sovngarde.mp3",
+            "assets/music/Tooth and Claw.mp3",
+        ]
+    },
+    {
+        id: 'mysterious', name: 'Mysterious', src: [
+            "assets/music/Whispering Harps.wav",
         ]
     }
 ]
