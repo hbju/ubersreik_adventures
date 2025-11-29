@@ -37,4 +37,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: player-app-${{ matrix.os }}
-          path: packages/player-app/dist/*.*
+          path: packages/player-app/release/1.0.0/*.*
