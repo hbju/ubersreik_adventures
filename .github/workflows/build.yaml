@@ -2,6 +2,9 @@ name: Build/Release
 
 on: push
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: "${{ matrix.os }}"
@@ -32,6 +35,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: production
+
+      - name: List Output Files
+        run: ls -R packages/player-app/release/
 
       # Upload the result so you can download it
       - name: Upload Artifacts
