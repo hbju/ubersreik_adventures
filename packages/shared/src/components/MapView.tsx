@@ -67,7 +67,7 @@ const MapView: React.FC<MapViewProps> = ({
 
     const handleWheel = useCallback((e: WheelEvent) => {
         e.preventDefault();
-        const zoomIntensity = 0.1;
+        const zoomIntensity = 0.03;
         const delta = e.deltaY > 0 ? -zoomIntensity : zoomIntensity;
         const newScale = Math.max(0.2, Math.min(3, viewState.scale + delta));
 

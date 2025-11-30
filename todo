@@ -1,9 +1,12 @@
-- vf v1.0
-- Fix issue with pins and journal not sent to players when they connect v1.1
-- equipment stats v1.1
-- boutiques automatiquement générées v1.1
-- tracks configurables par scènes v1.1
-- fil rouge pour GM v1.1
-- pnjs templates v1.1
-- Details panel for player (background and notes) v1.1
-- Poursuites v1.1
+v1.1 TODO:
+- Fix issue with pins and journal not sent to players when they connect
+- equipment stats et vf
+- randomly generated shops
+- better music management
+- npcs templates
+- Details panel for player (background and notes)
+- pursuits implementation
+- quests implementation
+- multiple maps per adventure
+- better pin management
+- reputation and npc relationship system
