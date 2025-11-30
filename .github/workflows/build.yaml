@@ -36,9 +36,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: production
 
-      - name: List Output Files
-        run: ls -R packages/player-app/release/
-
       # Upload the result so you can download it
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
