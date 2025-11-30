@@ -60,3 +60,5 @@ packages/*/yarn.lock
 packages/*/test-results/
 packages/*/playwright-report/
 packages/*/playwright/.cache/
+
+out/
