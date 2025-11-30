@@ -32,10 +32,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_ENV: production
-
+  
       # Upload the result so you can download it
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: player-app-${{ matrix.os }}
-          path: packages/player-app/release/1.0.0/*.*
+          path: packages/player-app/dist/*.*
