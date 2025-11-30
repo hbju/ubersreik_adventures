@@ -1,6 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "com.hbju.ubersreikadventures.player",
+  "productName": "WFRP Player Client",
+  "executableName": "WFRPPlayerClient",    
+  "artifactName": "WFRPPlayerClient-${version}-${os}.${ext}",
+
   "asar": true,
   "directories": {
     "output": "release/${version}"
@@ -10,7 +14,7 @@
     "dist"
   ],
   "mac": {
-    "artifactName": "WFRP_.${ext}",
+    "artifactName": "WFRPPlayerClient.${ext}",
     "target": [
       "dmg",
       "zip"
