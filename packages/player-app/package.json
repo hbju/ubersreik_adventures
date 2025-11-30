@@ -33,7 +33,7 @@
   "scripts": {
     "dev": "vite",
     "build:renderer": "vite build",
-    "build": "vite build && electron-builder",
+    "build": "vite build && electron-builder -p \"always\"",
     "preview": "vite preview",
     "pretest": "vite build --mode=test",
     "test": "vitest run"
