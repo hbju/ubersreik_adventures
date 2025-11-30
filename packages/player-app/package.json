@@ -11,6 +11,35 @@
       "VITE_DEV_SERVER_URL": "http://127.0.0.1:7777/"
     }
   },
+  "build" : {
+    "appId": "com.hbju.ubersreikadventures.player",
+    "productName": "Ubersreik Adventures - Player App",
+    "files": [
+      "dist-electron/main/**/*",
+      "dist-electron/renderer/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ]
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hbju/ubersreik_adventures.git"
