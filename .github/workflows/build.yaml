@@ -31,6 +31,7 @@ jobs:
         run: npm run build:player
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_ENV: production
 
       # Upload the result so you can download it
       - name: Upload Artifacts
