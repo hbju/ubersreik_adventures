@@ -10,7 +10,7 @@
     "dist"
   ],
   "mac": {
-    "artifactName": "${productName}_${version}.${ext}",
+    "artifactName": "WFRP_.${ext}",
     "target": [
       "dmg",
       "zip"
