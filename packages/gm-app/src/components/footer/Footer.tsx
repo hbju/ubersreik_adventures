@@ -15,6 +15,8 @@ interface FooterProps {
     onShowShop: () => void,
     onShowDiceTray: () => void,
     onShowAtmospherePanel: () => void,
+    onShowFactionManager: () => void,
+    onShowReputationPanel: () => void,
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -28,6 +30,8 @@ export const Footer: React.FC<FooterProps> = ({
     onShowShop,
     onShowDiceTray,
     onShowAtmospherePanel,
+    onShowFactionManager,
+    onShowReputationPanel,
 }) => {
     const { t } = useTranslation();
     const connectionCount = clients.length;
@@ -147,6 +151,36 @@ export const Footer: React.FC<FooterProps> = ({
                 }}
             >
                 🌅 {t('menu.atmosphere')}
+            </button>
+            <button
+                onClick={onShowFactionManager}
+                style={{
+                    padding: '10px 20px',
+                    background: '#2c1810',
+                    color: '#d4af37',
+                    border: '2px solid #8b6914',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '14px'
+                }}
+            >
+                🏰 {t('menu.factions')}
+            </button>
+            <button
+                onClick={onShowReputationPanel}
+                style={{
+                    padding: '10px 20px',
+                    background: '#2c1810',
+                    color: '#d4af37',
+                    border: '2px solid #8b6914',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '14px'
+                }}
+            >
+                ⚖️ {t('menu.reputation')}
             </button>
 
             <LanguageSwitcher />

@@ -12,6 +12,8 @@ import CareerChangeApprovalModal from './components/CareerChangeApprovalModal';
 import DiceTray from './components/DiceTray';
 import { ItemSelectorModal } from './components/ItemSelectorModal';
 import { TalentSelectorModal } from './components/TalentSelectorModal';
+import { FactionManager } from './components/factions/FactionManager';
+import { CharacterReputationPanel } from './components/factions/CharacterReputationPanel';
 
 import {
     Character,
@@ -41,7 +43,9 @@ import {
     Career,
     Location,
     Talent,
-    TalentSelectionModal
+    TalentSelectionModal,
+    Faction,
+    FactionUpdateMessage
 } from '@wfrp/shared';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -99,6 +103,10 @@ function App() {
     const [showUserManager, setShowUserManager] = useState(false);
     const [showCareerManager, setShowCareerManager] = useState<Character | null>(null);
     const [showAtmospherePanel, setShowAtmospherePanel] = useState(false);
+    const [showFactionManager, setShowFactionManager] = useState(false);
+    const [showReputationPanel, setShowReputationPanel] = useState(false);
+    const [factions, setFactions] = useState<Faction[]>([]);
+    const factionsRef = useRef(factions);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number, charId: string } | null>(null);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
@@ -135,6 +143,7 @@ function App() {
             users: users,
             journal: journal,
             mapPinStates: mapPinStates,
+            factions: factions,
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
@@ -144,8 +153,9 @@ function App() {
         usersRef.current = users;
         journalRef.current = journal;
         mapPinStatesRef.current = mapPinStates;
+        factionsRef.current = factions;
 
-    }, [characters, users, journal, mapPinStates]);
+    }, [characters, users, journal, mapPinStates, factions]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -580,6 +590,12 @@ function App() {
                 });
                 setMapPinStates(initialMapPinStates);
             }
+
+            // Load factions if present
+            if (data.factions) {
+                setFactions(data.factions);
+            }
+            
             setSaving(true);
         }).catch((error: any) => {
             console.error('Failed to load initial data:', error);
@@ -942,6 +958,8 @@ function App() {
                 onShowShop={() => setShowShopManager(!showShopManager)}
                 onShowDiceTray={() => setShowDiceTray(!showDiceTray)}
                 onShowAtmospherePanel={() => setShowAtmospherePanel(!showAtmospherePanel)}
+                onShowFactionManager={() => setShowFactionManager(true)}
+                onShowReputationPanel={() => setShowReputationPanel(true)}
             />
 
             <GameLog entries={logEntries} />
@@ -1047,6 +1065,32 @@ function App() {
             {showShopManager && <ShopManager onClose={() => setShowShopManager(false)} />}
 
             {showDiceTray && <DiceTray onClose={() => setShowDiceTray(false)} onLogEntry={addLogEntry} />}
+
+            {showFactionManager && (
+                <FactionManager
+                    factions={factions}
+                    locations={gameData.locations}
+                    onUpdateFactions={(updatedFactions) => {
+                        setFactions(updatedFactions);
+                        // Broadcast faction update to all players
+                        const message: FactionUpdateMessage = {
+                            type: 'FACTION_UPDATE',
+                            payload: { factions: updatedFactions }
+                        };
+                        window.ipcRenderer.sendToAllPlayers(message);
+                    }}
+                    onClose={() => setShowFactionManager(false)}
+                />
+            )}
+
+            {showReputationPanel && (
+                <CharacterReputationPanel
+                    characters={characters}
+                    factions={factions}
+                    onCharacterUpdate={handleCharacterUpdate}
+                    onClose={() => setShowReputationPanel(false)}
+                />
+            )}
 
             {showCharacterWizard && (
                 <CharacterCreationWizard

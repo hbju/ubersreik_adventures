@@ -1,0 +1,239 @@
+.container {
+    padding: 20px 20px 50px 200px;
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #8b6914;
+}
+
+.header h2 {
+    margin: 0 0 10px 0;
+    font-size: 28px;
+    color: #d4af37;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.subtitle {
+    color: #888;
+    font-size: 14px;
+    margin: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.section {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    border: 2px solid #555;
+}
+
+.sectionTitle {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #d4af37;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #555;
+}
+
+.factionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 15px;
+}
+
+.factionCard {
+    background: linear-gradient(135deg, #2c1810 0%, #3e2723 100%);
+    border: 2px solid #8b6914;
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.2s;
+}
+
+.factionCard:hover {
+    border-color: #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    transform: translateY(-2px);
+}
+
+.factionHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.factionIcon {
+    font-size: 36px;
+    margin-right: 12px;
+    min-width: 45px;
+    text-align: center;
+}
+
+.factionIconImage {
+    width: 40px;
+    height: 40px;
+    scale: 1.3;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+.factionInfo {
+    flex: 1;
+}
+
+.factionName {
+    font-weight: bold;
+    font-size: 16px;
+    color: #d4af37;
+    margin-bottom: 2px;
+}
+
+.factionCategory {
+    font-size: 12px;
+    color: #888;
+}
+
+.standingBadge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 8px;
+    min-width: 80px;
+}
+
+.standingValue {
+    font-size: 22px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.standingLabel {
+    font-size: 10px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+}
+
+.factionDescription {
+    font-size: 13px;
+    color: #ccc;
+    line-height: 1.5;
+    font-family: 'Georgia', serif;
+    padding-top: 10px;
+    border-top: 1px solid #555;
+}
+
+/* Rumored Faction Styles */
+.rumoredCard {
+    background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
+    border-color: #666;
+}
+
+.rumoredCard .factionName {
+    color: #aaa;
+}
+
+.rumoredBadge {
+    background: rgba(100, 100, 100, 0.4);
+    color: #999;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rumoredDescription {
+    font-size: 13px;
+    color: #777;
+    font-style: italic;
+    line-height: 1.5;
+    font-family: 'Georgia', serif;
+    padding-top: 10px;
+    border-top: 1px solid #444;
+    filter: blur(0px);
+}
+
+/* Unknown Faction Styles */
+.unknownCard {
+    background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+    border-color: #444;
+    opacity: 0.7;
+}
+
+.unknownCard .factionIcon {
+    filter: blur(1px);
+}
+
+.unknownCard .factionName {
+    color: #666;
+}
+
+.unknownDescription {
+    font-size: 13px;
+    color: #555;
+    font-style: italic;
+    line-height: 1.5;
+    font-family: 'Georgia', serif;
+    padding-top: 10px;
+    border-top: 1px solid #333;
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Scrollbar styling */
+.content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.content::-webkit-scrollbar-thumb {
+    background: #8b6914;
+    border-radius: 5px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+    background: #d4af37;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .factionsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .factionCard {
+        padding: 12px;
+    }
+
+    .factionIcon {
+        font-size: 28px;
+        min-width: 35px;
+    }
+}

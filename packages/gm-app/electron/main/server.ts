@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage } from '@wfrp/shared';
 import { getCampaignData } from './dataManager';
 
 const PORT = 3003;
@@ -333,5 +333,28 @@ export function broadcastJournalEntries(journal: JournalEntry[]) {
 
     socket.emit('gm-message', message);
     console.log(`[SERVER] Sent ${filteredEntries.length} journal entries to player ${socketId}`);
+  });
+}
+
+/**
+ * Broadcast factions to all connected players
+ * All players receive the full faction list (filtering is done client-side based on knowledge level)
+ * @param factions The complete factions array
+ */
+export function broadcastFactions(factions: Faction[]) {
+  if (!io || connectedClients.size === 0) {
+    console.log('[SERVER] No clients connected, skipping faction broadcast');
+    return;
+  }
+
+  console.log(`[SERVER] Broadcasting ${factions.length} factions to ${connectedClients.size} players`);
+
+  const message: FactionUpdateMessage = {
+    type: 'FACTION_UPDATE',
+    payload: { factions },
+  };
+
+  connectedClients.forEach((socket) => {
+    socket.emit('gm-message', message);
   });
 }

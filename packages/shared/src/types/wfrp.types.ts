@@ -226,11 +226,13 @@ export interface Character {
     items: Record<string, number>;
   };
   currency: Currency;
+  reputations: ReputationEntry[]; // Character's standing with various factions
 }
 
 export interface GameData {
   mapImage: string;
   locations: Location[];
+  factions: Faction[]; // Global list of factions for the game
 }
 
 export interface JournalEntry {
@@ -245,11 +247,43 @@ export interface MapPinState {
   playerDiscovered: string[]; // Array of character IDs who have discovered this location
 }
 
+// Faction & Reputation System Types
+export type FactionCategory = 
+  | 'government' 
+  | 'noble_house' 
+  | 'guild' 
+  | 'criminal' 
+  | 'religious' 
+  | 'military' 
+  | 'cult' 
+  | 'other';
+
+export interface Faction {
+  id: string;
+  name: string;
+  description: string;
+  category: FactionCategory;
+  icon?: string;
+  hq: string;
+  head: string;
+  defaultReputation: number; // Default starting reputation for new characters (-100 to 100)
+}
+
+export type KnowledgeLevel = 'unknown' | 'rumored' | 'known';
+
+export interface ReputationEntry {
+  factionId: string;
+  value: number; // -100 to 100
+  knowledgeLevel: KnowledgeLevel;
+  notes?: string; // Optional GM notes about this relationship
+}
+
 export interface CampaignState {
   characters: Character[];
   users: User[]; 
   journal: JournalEntry[];
   mapPinStates: Record<string, MapPinState>; // locationId -> MapPinState
+  factions: Faction[]; // Global list of factions
   version: string;
   lastModified: string;
 }

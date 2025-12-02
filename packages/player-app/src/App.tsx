@@ -17,19 +17,20 @@ import { ConditionTestModal } from './components/ConditionTestModal';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
 import { JournalView } from './components/JournalView';
 import { CareerChangeModal } from './components/CareerChangeModal';
+import { ReputationDisplay } from './components/ReputationDisplay';
 
 
 const PlayerApp: React.FC = () => {
     const { skills, talents, careers, items, weapons, armor, conditions, gameData } = useGameData();
 
-    const { isConnected, isAuthenticated, authError, username, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, connect, disconnect, sendMessage } = useSocket();
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number } | null>(null);
     const [createCharacterWizardOpen, setCreateCharacterWizardOpen] = useState(false);
     const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
-    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'map'>('character');
+    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'map' | 'reputation'>('character');
     const [isCareerChangeModalOpen, setIsCareerChangeModalOpen] = useState(false);
     const [canChangeCareer, setCanChangeCareer] = useState(false);
     const [mapViewState, setMapViewState] = useState({ scale: 0.3, offsetX: 126, offsetY: -26 });
@@ -387,6 +388,21 @@ const PlayerApp: React.FC = () => {
                     >
                         🗺️ Map
                     </button>
+                    <button
+                        onClick={() => setCurrentView('reputation')}
+                        style={{
+                            padding: '10px 20px',
+                            background: currentView === 'reputation' ? '#2d5016' : '#2c1810',
+                            color: '#d4af37',
+                            border: currentView === 'reputation' ? '2px solid #3d6f1f' : '2px solid #8b6914',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: '14px'
+                        }}
+                    >
+                        ⚖️ Reputation
+                    </button>
                 </div>
             )}
 
@@ -528,6 +544,11 @@ const PlayerApp: React.FC = () => {
                         />
                     </div>
                 </div>
+            )}
+
+            {/* Reputation View */}
+            {currentView === 'reputation' && character && (
+                <ReputationDisplay character={character} factions={factions} />
             )}
 
             {createCharacterWizardOpen && (

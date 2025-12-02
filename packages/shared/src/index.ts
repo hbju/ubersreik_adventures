@@ -25,6 +25,7 @@ export * from './utils/socket';
 export * from './utils/talents';
 export * from './utils/conditions';
 export * from './utils/career';
+export * from './utils/reputation';
 
 export { default as criticalHitsData } from './data/critical_hits.json';
 export { default as fumblesData } from './data/fumbles.json';

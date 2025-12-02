@@ -91,6 +91,62 @@
         "dice": "Dice",
         "createCharacter": "Create Character",
         "generateNPC": "Generate NPC",
-        "atmosphere": "Atmosphere"
+        "atmosphere": "Atmosphere",
+        "factions": "Factions",
+        "reputation": "Reputation"
+    },
+    "factions": {
+        "title": "Faction Management",
+        "addFaction": "Add Faction",
+        "editFaction": "Edit Faction",
+        "deleteFaction": "Delete Faction",
+        "factionName": "Faction Name",
+        "description": "Description",
+        "category": "Category",
+        "icon": "Icon",
+        "defaultReputation": "Default Reputation",
+        "noFactions": "No factions defined. Click 'Add Faction' to create one.",
+        "selectFaction": "Select a faction to edit",
+        "confirmDelete": "Are you sure you want to delete this faction?",
+        "categories": {
+            "noble": "Noble House",
+            "guild": "Guild",
+            "cult": "Religious Cult",
+            "military": "Military Order",
+            "criminal": "Criminal Organization",
+            "merchant": "Merchant Company",
+            "academic": "Academic Institution",
+            "other": "Other"
+        }
+    },
+    "reputations": {
+        "title": "Faction Standing",
+        "characterReputation": "Character Reputation",
+        "standing": "Standing",
+        "standingsDescription": "Your character's reputation with various factions in Ubersreik.",
+        "knowledge": "Knowledge",
+        "notes": "Notes",
+        "noCharacters": "No characters to display.",
+        "noFactions": "No factions have been defined yet.",
+        "revealAll": "Reveal All",
+        "levels": {
+            "hated": "Hated",
+            "hostile": "Hostile",
+            "unfriendly": "Unfriendly",
+            "wary": "Wary",
+            "neutral": "Neutral",
+            "cordial": "Cordial",
+            "friendly": "Friendly",
+            "trusted": "Trusted",
+            "allied": "Allied"
+        },
+        "knowledge_levels": {
+            "unknown": "Unknown",
+            "rumored": "Rumored",
+            "known": "Known"
+        },
+        "undiscovered": "Undiscovered Faction",
+        "rumored_faction": "Rumored Organization",
+        "your_standing": "Your Standing with Factions"
     }
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction } from '@wfrp/shared';
 
 interface OpposedTestRequest {
   testId: string;
@@ -37,6 +37,7 @@ export const useSocket = () => {
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([]);
   const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
   const [mapPing, setMapPing] = useState<{ x: number; y: number } | null>(null);
+  const [factions, setFactions] = useState<Faction[]>([]);
 
 
   const connect = useCallback((ipAddress: string, username: string, password: string) => {
@@ -174,6 +175,12 @@ export const useSocket = () => {
           alert(`Career change request denied${message.payload.reason ? ': ' + message.payload.reason : '.'}`);
         }
       }
+
+      // Handle faction updates
+      if (message.type === 'FACTION_UPDATE') {
+        console.log('[CLIENT] Faction update received:', message.payload);
+        setFactions(message.payload.factions);
+      }
     });
 
     setSocket(newSocket);
@@ -213,6 +220,7 @@ export const useSocket = () => {
     journalEntries, 
     mapPinStates,
     mapPing,
+    factions,
     connect, 
     disconnect, 
     sendMessage 

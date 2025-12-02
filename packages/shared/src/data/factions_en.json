@@ -1,0 +1,242 @@
+[
+  {
+    "id": "altdorf_occupation",
+    "name": "Altdorf Occupying Forces",
+    "description": "The military and political force sent by Emperor Karl-Franz to seize Ubersreik from the Jungfreuds. They control the city's defenses and tax collection but are viewed as interlopers by many locals.",
+    "head_character": "General Jendrick von Dabernick",
+    "character_names": [
+      "Lady Emmanuelle Nacht",
+      "Captain Steyer",
+      "Lieutenant Eisner",
+      "Captain Erwin Blucher"
+    ],
+    "hq": "Black Rock Castle"
+  },
+  {
+    "id": "town_council",
+    "name": "Ubersreik Town Council",
+    "description": "The local governing body, formerly ceremonial, now wielding genuine power in the absence of a Duke. They are pushing for Ubersreik to become a 'Freiburg' (free city).",
+    "head_character": "Burgomeister Ernst Maler",
+    "character_names": [
+      "Guildmaster Hans Fuhrmann"
+    ],
+    "hq": "Town Hall"
+  },
+  {
+    "id": "house_jungfreud",
+    "name": "House Jungfreud",
+    "description": "The former ruling family of Ubersreik, recently deposed by the Emperor. Though exiled to Neufaljung, they retain many loyalists within the city and control the surrounding Duchy of Black Rock.",
+    "head_character": "Graf Sigismund von Jungfreud",
+    "character_names": [
+      "Ludmilla von Jungfreud",
+      "Wendelin von Jungfreud",
+      "Rudolf Trocheim",
+      "Guido Falck"
+    ],
+    "hq": "Neufaljung Castle (Exiled) / Formerly Black Rock Castle"
+  },
+  {
+    "id": "ubersreik_watch",
+    "name": "The Town Watch",
+    "description": "The local law enforcement. Much of the old guard was dismissed for Jungfreud loyalty; the new Watch is a mix of Altdorf soldiers and new recruits, struggling to maintain order.",
+    "head_character": "Captain Andrea Pfeffer",
+    "character_names": [
+      "Sergeant Tirza Bronstein",
+      "Sergeant Trudi Shrieber",
+      "Corporal Vielfrass"
+    ],
+    "hq": "Watch Barracks"
+  },
+  {
+    "id": "merchants_guild",
+    "name": "Merchants' Guild",
+    "description": "The political powerhouse of the city, currently leading the push for Freiburg status. They control trade and influence the Town Council heavily.",
+    "head_character": "Marta Müller",
+    "character_names": [
+      "Bengt Hertie",
+      "Ruprecht Adelmann"
+    ],
+    "hq": "Merchants' Guildhouse"
+  },
+  {
+    "id": "lowhaven_clan",
+    "name": "Lowhaven Clan",
+    "description": "A powerful Halfling crime family running rackets, smuggling, and loan sharking. They use Satrioli's Sausage Shop as a front.",
+    "head_character": "Mercy Lowhaven",
+    "character_names": [
+      "Sunny Lowhaven",
+      "Pip Shufflepig",
+      "Prosperity Lowhaven"
+    ],
+    "hq": "Satrioli's Sausage Shop"
+  },
+  {
+    "id": "barons_gang",
+    "name": "The Baron's Gang",
+    "description": "A rising criminal organization based in the shanty town under the bridge. They are ruthlessly expanding and opposing the Lowhavens.",
+    "head_character": "Katerine Eule (The Baron)",
+    "character_names": [
+      "The Eel (Klaus Schleimischer)"
+    ],
+    "hq": "Dunkelfeucht (Under Ubersreik Bridge)"
+  },
+  {
+    "id": "house_bruner",
+    "name": "House Bruner",
+    "description": "A fabulously wealthy noble house enriched by mining. They are long-time rivals of the Jungfreuds and are using the occupation to increase their power.",
+    "head_character": "Lady Kisaiya von Bruner",
+    "character_names": [
+      "Heinrich von Bruner",
+      "Andreas von Bruner"
+    ],
+    "hq": "Bruner Palace"
+  },
+  {
+    "id": "house_aschaffenberg",
+    "name": "House Aschaffenberg",
+    "description": "A prominent noble family. The Duke has retreated to his lands, but his wife remains in the city trying to maintain their status.",
+    "head_character": "Duchess Eleanor Aschaffenberg",
+    "character_names": [
+      "Duke Brynich Aschaffenberg",
+      "Margrave Tobias Aschaffenberg"
+    ],
+    "hq": "Aschaffenberg Manor"
+  },
+  {
+    "id": "house_karstadt",
+    "name": "House Karstadt (Karstadt-Stampf)",
+    "description": "The richest merchant family in Ubersreik, formerly noble. They control banking and trade, with deep ties to Altdorf capital.",
+    "head_character": "Hellin Karstadt-Stampf",
+    "character_names": [
+      "Josef Specht",
+      "Alfred Karstadt-Stampf",
+      "Annika Karstadt-Stampf"
+    ],
+    "hq": "Karstadt Estate"
+  },
+  {
+    "id": "metalworkers_guild",
+    "name": "Metalworkers' Guild",
+    "description": "Controls the smithing and metal trade. They have close ties to the Dwarf community but are currently threatened by the Cutlers.",
+    "head_character": "Petronilla Merkle",
+    "character_names": [
+      "Johann Messing"
+    ],
+    "hq": "Metalworkers' Guildhouse"
+  },
+  {
+    "id": "cutlers_guild",
+    "name": "Worshipful Guild of Cutlers",
+    "description": "A rising guild exploiting loopholes to sell weaponry. Secretly guided by an Elven smith.",
+    "head_character": "Rudy Schlau",
+    "character_names": [
+      "Dordean Mournflair"
+    ],
+    "hq": "Cutlers' Guildhouse"
+  },
+  {
+    "id": "boatmens_guild",
+    "name": "Boatmen's Guild",
+    "description": "Represents the river workers. They maintain neutrality in politics but are heavily involved in river smuggling.",
+    "head_character": "Karsten Rugger",
+    "character_names": [
+      "Anna 'Gram'ma' Rugger",
+      "Nixie Dunkelstange"
+    ],
+    "hq": "Boatmen's Guildhouse / Rugger's Boarding House"
+  },
+  {
+    "id": "boatbuilders_guild",
+    "name": "Guild of Boatbuilders and Chandlers",
+    "description": "A small but powerful guild vital to the local economy. Its leader is secretly involved in a Chaos cult.",
+    "head_character": "Kurt Prochnow",
+    "character_names": [],
+    "hq": "Boatbuilders' Guildhouse"
+  },
+  {
+    "id": "dockers_guild",
+    "name": "Dockers' Guild",
+    "description": "Controls the loading and unloading of cargo. They hold a monopoly on the wharves.",
+    "head_character": "Wilhelm 'Big Willi' Docker",
+    "character_names": [
+      "Little Willi"
+    ],
+    "hq": "Dockers' Arms"
+  },
+  {
+    "id": "rat_catchers_guild",
+    "name": "Wahlund's Rat Catchers",
+    "description": "A newly reorganized guild led by foreigners, aggressively hunting rats and secret enemies in the sewers.",
+    "head_character": "Guildmaster Wahlund",
+    "character_names": [
+      "Melina Heilbronn",
+      "Thormo Hakenbein"
+    ],
+    "hq": "Former tavern on Grossweg"
+  },
+  {
+    "id": "cult_of_sigmar",
+    "name": "Cult of Sigmar",
+    "description": "The dominant religious order, currently supporting the Altdorf occupation and calling for unity.",
+    "head_character": "Father Gunther Emming",
+    "character_names": [
+      "Sister Habercorn",
+      "Mother Dörflinger",
+      "Irma Brantl"
+    ],
+    "hq": "The High Temple of Sigmar"
+  },
+  {
+    "id": "cult_of_ranald",
+    "name": "The Crosses (Cult of Ranald)",
+    "description": "A semi-open secret society of gamblers and thieves who run a soup kitchen and fencing operation.",
+    "head_character": "Silvi Kreutzhame",
+    "character_names": [
+      "Gert Hunder",
+      "Greta Klopstock"
+    ],
+    "hq": "The Crooked Hammer"
+  },
+  {
+    "id": "dawihafen",
+    "name": "Dwarfs of Dawihafen",
+    "description": "The insular Dwarf community of Ubersreik. They generally stay out of human politics but maintain the city's walls and bridges.",
+    "head_character": "Grodni Surehammer",
+    "character_names": [
+      "Borgun Foambeard",
+      "Queen Vilda (Harataki Clan)"
+    ],
+    "hq": "The Axe and Hammer / Khazalgirt"
+  },
+  {
+    "id": "fractured_eye",
+    "name": "The Fractured Eye",
+    "description": "A clandestine Tzeentchian spy network and cult seeking knowledge and influence.",
+    "head_character": "Unknown (Handler)",
+    "character_names": [
+      "Kurt Prochnow"
+    ],
+    "hq": "Secret (Operatives within Guilds)"
+  },
+  {
+    "id": "shifting_grasp",
+    "name": "The Shifting Grasp",
+    "description": "A Tzeentch cult of smugglers and riverfolk who believe mutation and change will bring prosperity.",
+    "head_character": "Alette Niedlich",
+    "character_names": [
+      "The Eel",
+      "Elmeric Herzog"
+    ],
+    "hq": "The Docks / River Stir origins"
+  },
+  {
+    "id": "yellowbellies",
+    "name": "The Yellowbellies",
+    "description": "Skaven slaves and human thralls serving the Skaven Under-Empire, often acting as spies.",
+    "head_character": "Slippery Jacob",
+    "character_names": [
+      "Fritz Fritzman"
+    ],
+    "hq": "The Sewers"
+  }
+]

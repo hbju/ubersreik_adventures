@@ -1,4 +1,4 @@
-import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState } from './wfrp.types';
+import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction } from './wfrp.types';
 
 interface BaseMessage<T extends string, P> {
     type: T;
@@ -40,7 +40,11 @@ export type CareerChangeResponseMessage = BaseMessage<'CAREER_CHANGE_RESPONSE', 
     reason?: string
 }>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage;
+export type FactionUpdateMessage = BaseMessage<'FACTION_UPDATE', {
+    factions: Faction[];
+}>;
+
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage;
 
 // == Player to GM Messages ==
 

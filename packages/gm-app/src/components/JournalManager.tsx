@@ -159,9 +159,8 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
               {journal.map((entry) => (
                 <div
                   key={entry.id}
-                  className={`${styles.entryItem} ${
-                    selectedEntry?.id === entry.id ? styles.selected : ''
-                  }`}
+                  className={`${styles.entryItem} ${selectedEntry?.id === entry.id ? styles.selected : ''
+                    }`}
                   onClick={() => handleSelectEntry(entry)}
                 >
                   <div className={styles.entryTitle}>{entry.title}</div>
@@ -169,8 +168,8 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
                     {entry.sharedWith.includes('all')
                       ? 'Shared with: All'
                       : entry.sharedWith.length > 0
-                      ? `Shared with: ${entry.sharedWith.length} character(s)`
-                      : 'Not shared'}
+                        ? `Shared with: ${entry.sharedWith.length} character(s)`
+                        : 'Not shared'}
                   </div>
                 </div>
               ))}

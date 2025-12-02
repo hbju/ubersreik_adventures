@@ -1,0 +1,457 @@
+.panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  max-width: 1400px;
+  height: 85vh;
+  background: linear-gradient(135deg, #2c1810 0%, #3e2723 100%);
+  border: 3px solid #8b6914;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  z-index: 1010;
+  color: #d4af37;
+  font-family: 'Cinzel', serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #8b6914;
+}
+
+.header h2 {
+  margin: 0;
+  color: #d4af37;
+  font-size: 24px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.headerActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.viewButton {
+  background: rgba(0, 0, 0, 0.4);
+  color: #888;
+  border: 2px solid #555;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.viewButton:hover {
+  background: rgba(139, 105, 20, 0.2);
+  border-color: #8b6914;
+  color: #d4af37;
+}
+
+.viewButton.active {
+  background: rgba(139, 105, 20, 0.3);
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+.closeButton {
+  background: #8b0000;
+  color: #fff;
+  border: 2px solid #660000;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+  margin-left: 10px;
+}
+
+.closeButton:hover {
+  background: #a00000;
+  transform: scale(1.05);
+}
+
+.content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.characterSelector {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.characterSelector label {
+  font-weight: bold;
+  color: #d4af37;
+}
+
+.characterSelector select {
+  padding: 10px 15px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #8b6914;
+  border-radius: 6px;
+  color: #d4af37;
+  font-family: inherit;
+  font-size: 14px;
+  min-width: 200px;
+}
+
+.quickActions {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.revealButton {
+  background: #2d5016;
+  color: #d4af37;
+  border: 2px solid #3d6f1f;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.revealButton:hover {
+  background: #3d6f1f;
+}
+
+.resetButton {
+  background: rgba(139, 105, 20, 0.3);
+  color: #d4af37;
+  border: 2px solid #8b6914;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.resetButton:hover {
+  background: rgba(139, 105, 20, 0.5);
+}
+
+.factionsList {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 15px;
+  padding-right: 10px;
+}
+
+.factionCard {
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid #8b6914;
+  border-radius: 8px;
+  padding: 15px;
+  transition: all 0.2s;
+}
+
+.factionCard:hover {
+  border-color: #d4af37;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.factionHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #555;
+}
+
+.factionIcon {
+  font-size: 32px;
+  margin-right: 12px;
+}
+
+.factionIconImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.factionInfo {
+  flex: 1;
+}
+
+.factionName {
+  font-weight: bold;
+  color: #d4af37;
+  font-size: 16px;
+}
+
+.factionCategory {
+  font-size: 12px;
+  color: #888;
+}
+
+.reputationBadge {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+
+.reputationLabel {
+  font-size: 10px;
+  margin-top: 2px;
+  opacity: 0.8;
+}
+
+.factionControls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.controlGroup label {
+  font-size: 12px;
+  color: #888;
+  font-weight: bold;
+}
+
+.sliderContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sliderContainer input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: linear-gradient(to right, #8b0000, #eab308, #22c55e);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sliderContainer input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #d4af37;
+  border: 2px solid #8b6914;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.numberInput {
+  width: 60px;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #8b6914;
+  border-radius: 4px;
+  color: #d4af37;
+  text-align: center;
+  font-weight: bold;
+}
+
+.knowledgeButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.knowledgeButton {
+  flex: 1;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #555;
+  border-radius: 4px;
+  color: #888;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.knowledgeButton:hover {
+  border-color: #8b6914;
+  color: #d4af37;
+}
+
+.badgeUnknown {
+  background: rgba(100, 100, 100, 0.4) !important;
+  border-color: #666 !important;
+  color: #999 !important;
+}
+
+.badgeRumored {
+  background: rgba(139, 105, 20, 0.3) !important;
+  border-color: #8b6914 !important;
+  color: #d4af37 !important;
+}
+
+.badgeKnown {
+  background: rgba(45, 80, 22, 0.4) !important;
+  border-color: #3d6f1f !important;
+  color: #84cc16 !important;
+}
+
+.notesInput {
+  width: 100%;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #555;
+  border-radius: 4px;
+  color: #d4af37;
+  font-size: 12px;
+}
+
+.notesInput:focus {
+  outline: none;
+  border-color: #8b6914;
+}
+
+.emptyMessage {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: #888;
+  font-style: italic;
+}
+
+/* Matrix View Styles */
+.matrixContainer {
+  flex: 1;
+  overflow: auto;
+}
+
+.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: max-content;
+}
+
+.matrix th,
+.matrix td {
+  border: 1px solid #555;
+  padding: 10px;
+  text-align: center;
+}
+
+.cornerCell {
+  background: rgba(0, 0, 0, 0.4);
+  color: #888;
+  font-weight: bold;
+  min-width: 150px;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.factionHeaderCell {
+  background: rgba(0, 0, 0, 0.3);
+  min-width: 100px;
+  max-width: 120px;
+  vertical-align: top;
+  padding: 8px;
+}
+
+.matrixFactionIcon {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.matrixFactionName {
+  display: block;
+  font-size: 11px;
+  color: #d4af37;
+  word-wrap: break-word;
+  line-height: 1.2;
+}
+
+.characterCell {
+  background: rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  color: #d4af37;
+  text-align: left;
+  padding-left: 15px;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.reputationCell {
+  transition: all 0.2s;
+  cursor: default;
+}
+
+.cellContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.knowledgeIndicator {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1009;
+}
+
+/* Scrollbar styling */
+.factionsList::-webkit-scrollbar,
+.matrixContainer::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.factionsList::-webkit-scrollbar-track,
+.matrixContainer::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.factionsList::-webkit-scrollbar-thumb,
+.matrixContainer::-webkit-scrollbar-thumb {
+  background: #8b6914;
+  border-radius: 5px;
+}
+
+.factionsList::-webkit-scrollbar-thumb:hover,
+.matrixContainer::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
