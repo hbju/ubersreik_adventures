@@ -79,7 +79,8 @@ export function generateRandomNpc(careersData: Career[], skillsData: SkillCharDe
             armor: {},
             items: {}
         },
-        currency: { gc: 0, ss: rollDice(1, 6), bp: rollDice(1, 12) }
+        currency: { gc: 0, ss: rollDice(1, 6), bp: rollDice(1, 12) },
+        reputations : []
     };
 };
 
@@ -125,6 +126,7 @@ export function createBlankCharacter(skillsData: SkillCharDefinition[]): Charact
             armor: {},
             items: {}
         },
-        currency: { gc: 0, ss: 0, bp: 0 }
+        currency: { gc: 0, ss: 0, bp: 0 },
+        reputations : []
     }
 }
