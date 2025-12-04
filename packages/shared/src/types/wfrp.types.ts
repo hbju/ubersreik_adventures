@@ -186,9 +186,23 @@ export interface CareerHistoryEntry {
   timestamp: string;
 }
 
+export interface CharacterDetails {
+  age: string;
+  height: string;
+  hair: string;
+  eyes: string;
+  partyName: string;
+  shortTermAmbition: string;
+  longTermAmbition: string;
+  partyShortTermAmbition: string;
+  partyLongTermAmbition: string;
+}
+
 export interface Character {
   id: string;
   name: string;
+  species: string; // Human, Dwarf, Elf, Halfling
+  class: string; // Warrior, Ranger, etc.
   currentCareerId: string;
   currentCareerLevelId: string;
   userId: string | null; // null if unassigned
@@ -197,6 +211,8 @@ export interface Character {
   unlockedCharacteristicIds: string[]; // GM-granted unlocks
   unlockedSkillIds: string[]; // GM-granted unlocks
   unlockedTalentIds: string[]; // GM-granted unlocks
+  details: CharacterDetails; // Personal details
+  movement: number; // Walk speed (based on species)
   characteristics: {
     ws: Characteristic;
     bs: Characteristic;

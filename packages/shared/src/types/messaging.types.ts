@@ -90,4 +90,10 @@ export type CareerChangeRequestMessage = BaseMessage<'CAREER_CHANGE_REQUEST', {
     xpCost: number;
 }>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage;
+// Player editing their own character (Edit Mode)
+export type PlayerUpdateCharacterMessage = BaseMessage<'PLAYER_UPDATE_CHARACTER', {
+    characterId: string;
+    updates: Partial<Character>;
+}>;
+
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage;

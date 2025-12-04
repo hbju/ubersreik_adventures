@@ -494,8 +494,9 @@ const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClo
         const career = gameData.careers.find(c => c.id === selectedCareerId);
         if (!species || !career) return;
 
-        const finalChar = { ...character };
+        const finalChar: Character = { ...character };
         finalChar.name = characterName || "New Character";
+        finalChar.species = species.id;
         finalChar.currentCareerId = career.id;
         finalChar.currentCareerLevelId = career.career_level[0].id;
 

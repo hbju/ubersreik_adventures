@@ -1,5 +1,6 @@
 export { default as CharacterCreationWizard } from './components/CharacterCreationWizard';
 export { default as CharacterSheet } from './components/CharacterSheet';
+export { default as EditableField } from './components/EditableField';
 export { default as InventoryView } from './components/InventoryView';
 export { default as MapDisplay } from './components/MapDisplay';
 export { default as MapView } from './components/MapView';

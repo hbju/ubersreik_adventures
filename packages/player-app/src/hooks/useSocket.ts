@@ -181,6 +181,19 @@ export const useSocket = () => {
         console.log('[CLIENT] Faction update received:', message.payload);
         setFactions(message.payload.factions);
       }
+
+      // Handle character updates (from Edit Mode or GM updates)
+      if (message.type === 'CHARACTER_UPDATE') {
+        console.log('[CLIENT] Character update received:', message.payload);
+        // Only update if this is our character
+        const updatedChar = message.payload.character;
+        setCharacter(prevChar => {
+          if (prevChar && prevChar.id === updatedChar.id) {
+            return updatedChar;
+          }
+          return prevChar;
+        });
+      }
     });
 
     setSocket(newSocket);

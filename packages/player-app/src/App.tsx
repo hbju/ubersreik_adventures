@@ -3,7 +3,7 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterCreationWizard, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, recalculateCharacterTalentBonuses, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, Location, useGameData, CharacterCreateMessage } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterCreationWizard, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, recalculateCharacterTalentBonuses, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, Location, useGameData, CharacterCreateMessage, PlayerUpdateCharacterMessage } from '@wfrp/shared';
 import { TalentSelectionModal } from '@wfrp/shared';
 import {
     TestResultMessage,
@@ -18,6 +18,7 @@ import InitiativeTracker from './components/initiativeTracker/InitiativeTracker'
 import { JournalView } from './components/JournalView';
 import { CareerChangeModal } from './components/CareerChangeModal';
 import { ReputationDisplay } from './components/ReputationDisplay';
+import PlayerCharacterSheet from './components/PlayerCharacterSheet';
 
 
 const PlayerApp: React.FC = () => {
@@ -34,6 +35,8 @@ const PlayerApp: React.FC = () => {
     const [isCareerChangeModalOpen, setIsCareerChangeModalOpen] = useState(false);
     const [canChangeCareer, setCanChangeCareer] = useState(false);
     const [mapViewState, setMapViewState] = useState({ scale: 0.3, offsetX: 126, offsetY: -26 });
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [useNewSheet, setUseNewSheet] = useState(true); // Toggle between old and new sheet
 
     const handleSkillClick = (skillId: string, skillName: string, skillValue: number) => {
         setTestModalInfo({ id: skillId, name: skillName, value: skillValue });
@@ -283,6 +286,20 @@ const PlayerApp: React.FC = () => {
         alert('Career change request sent to GM. Awaiting approval...');
     };
 
+    // Edit Mode: Handle character updates from the new PlayerCharacterSheet
+    const handleEditModeCharacterUpdate = (updates: Partial<Character>) => {
+        if (!character) return;
+        
+        const message: PlayerUpdateCharacterMessage = {
+            type: 'PLAYER_UPDATE_CHARACTER',
+            payload: {
+                characterId: character.id,
+                updates
+            }
+        };
+        sendMessage(message);
+    };
+
     const handleLocationSelect = (location: Location) => {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
@@ -473,18 +490,34 @@ const PlayerApp: React.FC = () => {
                     )}
 
                     {character ? (
-                        <CharacterSheet
-                            character={activeCharacter!}
-                            onCharacterUpdate={() => { }}
-                            onSkillClick={handleSkillClick}
-                            onCharacteristicClick={handleCharacteristicClick}
-                            readonly={true}
-                            advancementMode={isAdvancementMode}
-                            onCharacteristicAdvance={handleAdvanceCharacteristic}
-                            onSkillAdvance={handleAdvanceSkill}
-                            onPurchaseClick={() => setIsShopModalOpen(true)}
-                            showPurchaseButton={!isAdvancementMode}
-                        />
+                        useNewSheet ? (
+                            <PlayerCharacterSheet
+                                character={activeCharacter!}
+                                isEditMode={isEditMode}
+                                onEditModeToggle={() => setIsEditMode(!isEditMode)}
+                                onCharacterUpdate={handleEditModeCharacterUpdate}
+                                onSkillClick={handleSkillClick}
+                                onCharacteristicClick={handleCharacteristicClick}
+                                advancementMode={isAdvancementMode}
+                                onCharacteristicAdvance={handleAdvanceCharacteristic}
+                                onSkillAdvance={handleAdvanceSkill}
+                                onPurchaseClick={() => setIsShopModalOpen(true)}
+                                showPurchaseButton={!isAdvancementMode}
+                            />
+                        ) : (
+                            <CharacterSheet
+                                character={activeCharacter!}
+                                onCharacterUpdate={() => { }}
+                                onSkillClick={handleSkillClick}
+                                onCharacteristicClick={handleCharacteristicClick}
+                                readonly={true}
+                                advancementMode={isAdvancementMode}
+                                onCharacteristicAdvance={handleAdvanceCharacteristic}
+                                onSkillAdvance={handleAdvanceSkill}
+                                onPurchaseClick={() => setIsShopModalOpen(true)}
+                                showPurchaseButton={!isAdvancementMode}
+                            />
+                        )
                     ) : (
                         <div className="waiting-screen">
                             <h1>Connected to the Game</h1>

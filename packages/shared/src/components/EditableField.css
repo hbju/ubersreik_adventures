@@ -1,0 +1,32 @@
+.editable-field-display {
+    display: inline-block;
+    min-width: 1.5em;
+}
+
+.editable-field-input {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(139, 105, 20, 0.6);
+    border-radius: 3px;
+    padding: 2px 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.editable-field-input:focus {
+    outline: none;
+    border-color: #d4af37;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.editable-field-input[type="number"] {
+    width: 4em;
+    text-align: center;
+}
+
+.editable-field-textarea {
+    resize: vertical;
+    min-height: 2em;
+}

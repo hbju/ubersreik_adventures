@@ -1,0 +1,352 @@
+/* Import WFRP-style font */
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap');
+
+.player-sheet-container {
+    font-family: 'IM Fell English', Georgia, serif;
+    background-color: #1a1410;
+    background-image: 
+        linear-gradient(rgba(30, 20, 10, 0.9), rgba(30, 20, 10, 0.9)),
+        url('/assets/images/parchment-texture.png');
+    background-size: cover;
+    min-height: 95vh;
+    max-height: 95vh;
+    min-width: 60vw;
+    overflow-y: auto;
+    color: #e8dcc4;
+    padding-bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+}
+
+/* ========== HEADER ========== */
+.sheet-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(to bottom, #2c1810, #1a1410);
+    border: 4px double #8b6914;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.header-row-main {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(139, 105, 20, 0.3);
+}
+
+.header-logo {
+    font-size: 2rem;
+}
+
+.header-field {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.header-label {
+    color: #8b6914;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.header-value {
+    color: #d4af37;
+    font-size: 1.1rem;
+}
+
+.name-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.edit-toggle {
+    margin-left: auto;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #8b6914;
+}
+
+.toggle-label input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-slider {
+    position: relative;
+    width: 48px;
+    height: 24px;
+    background: #3d2817;
+    border: 2px solid #5a3d1f;
+    border-radius: 12px;
+    transition: all 0.3s;
+}
+
+.toggle-slider::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    background: #8b6914;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.toggle-label input:checked + .toggle-slider {
+    background: #2d5016;
+    border-color: #3d6f1f;
+}
+
+.toggle-label input:checked + .toggle-slider::after {
+    left: calc(100% - 18px);
+    background: #4ade80;
+}
+
+/* ========== TABS ========== */
+.sheet-tabs {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0 0.5rem;
+    margin-top: 0.5rem;
+    border-bottom: 2px solid #8b6914;
+}
+
+.tab-button {
+    padding: 0.75rem 1.5rem;
+    background: #2c1810;
+    border: 2px solid #5a3d1f;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    color: #8b6914;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-button:hover {
+    background: #3d2817;
+    color: #d4af37;
+}
+
+.tab-button.active {
+    background: #3d2817;
+    border-color: #8b6914;
+    color: #d4af37;
+    font-weight: bold;
+    position: relative;
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #3d2817;
+}
+
+/* ========== CONTENT ========== */
+.sheet-content {
+    padding: 1rem;
+}
+
+/* ========== MAIN TAB LAYOUT ========== */
+.main-tab {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+    .main-tab {
+        grid-template-columns: 1fr;
+    }
+}
+
+.main-tab-left,
+.main-tab-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ========== PANELS ========== */
+.panel {
+    background: rgba(44, 24, 16, 0.8);
+    border: 2px solid #5a3d1f;
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+.panel-title {
+    margin: 0 0 0.75rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #5a3d1f;
+    color: #d4af37;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* ========== STATUS BOX ========== */
+.status-box {
+    background: rgba(44, 24, 16, 0.8);
+    border: 2px solid #5a3d1f;
+    border-radius: 4px;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.status-row {
+    display: contents;
+}
+
+.status-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.status-label {
+    color: #8b6914;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.status-values {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 1.2rem;
+    color: #e8dcc4;
+}
+
+.movement-row {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #5a3d1f;
+}
+
+/* ========== TALENTS PANEL ========== */
+.talents-panel {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.talents-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.talent-item {
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    border-left: 3px solid #8b6914;
+}
+
+.talent-name {
+    color: #d4af37;
+    font-weight: bold;
+}
+
+.talent-rank {
+    color: #8b6914;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+.talent-description {
+    font-size: 0.85rem;
+    color: #b8a88c;
+    margin: 0.25rem 0 0 0;
+    font-style: italic;
+}
+
+/* ========== AMBITIONS PANEL ========== */
+.ambitions-panel .ambition-item {
+    margin-bottom: 0.75rem;
+}
+
+.ambitions-panel .ambition-item:last-child {
+    margin-bottom: 0;
+}
+
+.ambition-label {
+    color: #8b6914;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* ========== DETAILS PANEL ========== */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.detail-label {
+    color: #8b6914;
+    font-size: 0.85rem;
+    min-width: 50px;
+}
+
+/* ========== EMPTY MESSAGE ========== */
+.empty-message {
+    color: #6b5c4c;
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* ========== SCROLLBAR ========== */
+.player-sheet-container ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.player-sheet-container ::-webkit-scrollbar-track {
+    background: #1a1410;
+}
+
+.player-sheet-container ::-webkit-scrollbar-thumb {
+    background: #5a3d1f;
+    border-radius: 4px;
+}
+
+.player-sheet-container ::-webkit-scrollbar-thumb:hover {
+    background: #8b6914;
+}

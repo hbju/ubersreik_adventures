@@ -1,0 +1,283 @@
+.combat-tab {
+    display: grid;
+    grid-template-columns: 1fr 300px 300px;
+    gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+    .combat-tab {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .silhouette-panel {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 800px) {
+    .combat-tab {
+        grid-template-columns: 1fr;
+    }
+}
+
+.combat-panel {
+    background: rgba(44, 24, 16, 0.8);
+    border: 2px solid #5a3d1f;
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+/* ========== WEAPONS PANEL ========== */
+.weapons-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.weapon-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #5a3d1f;
+    border-radius: 4px;
+    padding: 0.75rem;
+}
+
+.weapon-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.weapon-name {
+    color: #d4af37;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.weapon-group {
+    color: #8b6914;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.weapon-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.weapon-stat {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.stat-label {
+    color: #6b5c4c;
+    font-size: 0.85rem;
+}
+
+.stat-value {
+    color: #e8dcc4;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.weapon-qualities {
+    font-size: 0.8rem;
+}
+
+.qualities-label {
+    color: #6b5c4c;
+    margin-right: 0.25rem;
+}
+
+.qualities-list {
+    color: #b8a88c;
+    font-style: italic;
+}
+
+/* ========== SILHOUETTE PANEL ========== */
+.silhouette-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.body-silhouette {
+    width: 180px;
+    height: auto;
+}
+
+.body-part {
+    fill: rgba(90, 61, 31, 0.5);
+    stroke: #8b6914;
+    stroke-width: 2;
+    transition: fill 0.2s;
+}
+
+.body-part:hover {
+    fill: rgba(139, 105, 20, 0.5);
+}
+
+.ap-text {
+    fill: #d4af37;
+    font-size: 18px;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    font-family: 'IM Fell English', Georgia, serif;
+}
+
+.ap-text-small {
+    font-size: 14px;
+}
+
+.silhouette-legend {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.legend-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.legend-label {
+    color: #8b6914;
+    font-size: 0.85rem;
+}
+
+.legend-value {
+    color: #d4af37;
+    font-weight: bold;
+}
+
+/* ========== STATUS PANEL ========== */
+.wounds-section {
+    margin-bottom: 1rem;
+}
+
+.wounds-label {
+    color: #8b6914;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.wounds-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.wounds-current {
+    color: #e8dcc4;
+    font-weight: bold;
+}
+
+.wounds-separator {
+    color: #6b5c4c;
+}
+
+.wounds-max {
+    color: #8b6914;
+}
+
+.wounds-input {
+    width: 60px;
+    padding: 0.25rem;
+    text-align: center;
+    font-family: inherit;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #e8dcc4;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5a3d1f;
+    border-radius: 3px;
+}
+
+.wounds-bar {
+    height: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5a3d1f;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.wounds-fill {
+    height: 100%;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+.advantage-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.advantage-label {
+    color: #8b6914;
+}
+
+.advantage-value {
+    color: #d4af37;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* ========== CONDITIONS ========== */
+.conditions-section {
+    border-top: 1px solid #5a3d1f;
+    padding-top: 0.75rem;
+}
+
+.conditions-title {
+    margin: 0 0 0.5rem 0;
+    color: #8b6914;
+    font-size: 0.9rem;
+}
+
+.conditions-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.condition-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(139, 0, 0, 0.3);
+    border: 1px solid #8b0000;
+    border-radius: 4px;
+}
+
+.condition-name {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+}
+
+.condition-stack {
+    color: #ffb3b3;
+    font-size: 0.75rem;
+}
+
+.empty-message {
+    color: #6b5c4c;
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}

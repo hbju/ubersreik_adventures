@@ -1,8 +1,8 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage } from '@wfrp/shared';
-import { getCampaignData } from './dataManager';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage } from '@wfrp/shared';
+import { getCampaignData, saveCampaignData } from './dataManager';
 
 const PORT = 3003;
 const connectedClients = new Map<string, Socket>();
@@ -186,6 +186,61 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
             const userId = socketToUserId.get(socket.id);
             if (!userId) {
                 console.log(`[SERVER] Unauthenticated message ignored from ${socket.id}`);
+                return;
+            }
+
+            // Handle player character updates (Edit Mode)
+            if (message.type === 'PLAYER_UPDATE_CHARACTER') {
+                const { characterId, updates } = message.payload;
+                const campaignData = getCampaignData();
+                if (!campaignData) {
+                    console.log(`[SERVER] No campaign data available`);
+                    return;
+                }
+
+                // Find the character and validate ownership
+                const characterIndex = campaignData.characters.findIndex(c => c.id === characterId);
+                if (characterIndex === -1) {
+                    console.log(`[SERVER] Character ${characterId} not found`);
+                    return;
+                }
+
+                const character = campaignData.characters[characterIndex];
+                
+                // Validate that this player owns this character
+                const userCharacter = getUserCharacter(userId);
+                if (!userCharacter || userCharacter.id !== characterId) {
+                    console.log(`[SERVER] Player ${userId} does not own character ${characterId}`);
+                    return;
+                }
+
+                // Merge the updates into the character
+                const updatedCharacter: Character = {
+                    ...character,
+                    ...updates,
+                    // Ensure ID cannot be changed
+                    id: character.id,
+                    userId: character.userId,
+                };
+
+                // Update the campaign data
+                campaignData.characters[characterIndex] = updatedCharacter;
+                saveCampaignData(campaignData);
+
+                // Broadcast the character update to all connected clients
+                const updateMessage: CharacterUpdateMessage = {
+                    type: 'CHARACTER_UPDATE',
+                    payload: { character: updatedCharacter }
+                };
+
+                connectedClients.forEach((clientSocket) => {
+                    clientSocket.emit('gm-message', updateMessage);
+                });
+
+                // Also notify the GM app
+                mainWindow.webContents.send('data-updated', { characters: campaignData.characters });
+
+                console.log(`[SERVER] Player ${userId} updated character ${characterId}`);
                 return;
             }
 

@@ -1,0 +1,143 @@
+.notes-tab {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 900px) {
+    .notes-tab {
+        grid-template-columns: 1fr;
+    }
+}
+
+.notes-panel {
+    background: rgba(44, 24, 16, 0.8);
+    border: 2px solid #5a3d1f;
+    border-radius: 4px;
+    padding: 1rem;
+}
+
+/* ========== AMBITIONS ========== */
+.ambitions-panel {
+    grid-column: 1 / -1;
+}
+
+.ambition-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+@media (max-width: 900px) {
+    .ambition-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ambition-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ambition-label {
+    color: #8b6914;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.ambition-value {
+    color: #e8dcc4;
+    min-height: 2.5em;
+}
+
+/* ========== PARTY ========== */
+.party-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.party-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.party-label {
+    color: #8b6914;
+    font-size: 0.9rem;
+    min-width: 100px;
+}
+
+.party-value {
+    color: #d4af37;
+    font-size: 1.1rem;
+}
+
+/* ========== DETAILS ========== */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0;
+}
+
+.detail-label {
+    color: #8b6914;
+    font-size: 0.9rem;
+    min-width: 60px;
+}
+
+.detail-value {
+    color: #e8dcc4;
+}
+
+/* ========== HISTORY ========== */
+.history-panel {
+    grid-column: 1 / -1;
+}
+
+.history-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.history-table th {
+    text-align: left;
+    padding: 0.5rem;
+    color: #8b6914;
+    border-bottom: 1px solid #5a3d1f;
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.history-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(90, 61, 31, 0.3);
+    color: #e8dcc4;
+}
+
+.history-table tr:hover td {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.empty-message {
+    color: #6b5c4c;
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
