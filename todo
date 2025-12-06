@@ -1,6 +1,6 @@
 v1.1 TODO:
-- Fix issue with pins and journal not sent to players when they connect
-- equipment stats et vf
+- Fix issue with pins and journal not sent to players when they connect ✅
+- equipment stats et vf ✅
 - randomly generated shops
 - better music management
 - npcs templates
@@ -11,3 +11,4 @@ v1.1 TODO:
 - better pin management
 - reputation and npc relationship system
 - improve character roster UI
+- improve combat resolver logic

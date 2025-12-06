@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { rolld100, calculateSuccessLevel } from '@wfrp/shared';
+import { 
+    rolld100, 
+    calculateSuccessLevel
+} from '@wfrp/shared';
 import styles from './OpposedTestModal.module.css';
 
 interface OpposedTestModalProps {
@@ -11,7 +14,12 @@ interface OpposedTestModalProps {
     fortunePoints: number;
     corruptionCurrent: number;
     corruptionMax: number;
-    onRollComplete: (rollResult: number, successLevel: number, fortuneSpent: number, corruptionGained: number) => void;
+    onRollComplete: (
+        rollResult: number, 
+        successLevel: number, 
+        fortuneSpent: number, 
+        corruptionGained: number
+    ) => void;
     onClose: () => void;
 }
 

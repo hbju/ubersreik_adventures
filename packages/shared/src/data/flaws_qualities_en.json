@@ -1,0 +1,317 @@
+[
+    {
+        "id": "impenetrable",
+        "name": "Impenetrable",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "The armour is especially resilient, most attacks simply cannot penetrate it. All Critical Wounds caused by attacks scoring an odd number to hit you, such as an 11 or 33, are ignored."
+    },
+    {
+        "id": "overcoat",
+        "name": "Overcoat",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "Certain types of armour can be worn on top of other types. These can be worn on top of either Leather or Mail armour."
+    },
+    {
+        "id": "reinforced",
+        "name": "Reinforced",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "The armour has been reinforced with additional plates or layers, providing extra protection. You gain +1 Armour Rating (AR) when wearing this armor."
+    },
+    {
+        "id": "visor",
+        "name": "Visor",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "Some helmets come with a visor that can be raised to provide a wider field of vision. If the visor is closed the helmet performs as described. If the visor is opened the helmet loses any special abilities associated with its design and gains the Partial Flaw. Perception Tests are made with a –10% penalty when visors are open. It takes an Action to open or close a visor."
+    },
+    {
+        "id": "partial",
+        "name": "Partial",
+        "type": "flaw",
+        "equipment": "armor",
+        "description": "The armour does not cover the entire Hit Location. An opponent who rolls an even number to determine hit location, or a Critical Hit, ignores the partial armour’s APs"
+    },
+    {
+        "id": "requires_kit",
+        "name": "Requires Kit",
+        "type": "flaw",
+        "equipment": "armor",
+        "description": "Armour with this flaw can only be worn if a Soft Kit is worn underneath it."
+    },
+    {
+        "id": "weakpoint",
+        "name": "Weakpoint",
+        "type": "flaw",
+        "equipment": "armor",
+        "description": "The armour has small weakpoints where a blade can slip through. If your opponent has a weapon with the Impale Quality and scores a Critical, any APs of your armour are ignored."
+    },
+    {
+        "id": "durable",
+        "name": "Durable",
+        "type": "quality",
+        "equipment": "item",
+        "description": "Laboriously crafted using strong materials, the item can take +Durable Damage points before it suffers any negatives and gains a saving throw of 9+ on a 1d10 roll against instant breakage from sources like Trap Blade. This Quality can be taken multiple times. Each time it is taken, the saving throw improves by 1."
+    },
+    {
+        "id": "fine",
+        "name": "Fine",
+        "type": "quality",
+        "equipment": "item",
+        "description": "Meticulously crafted to please the eye. This Quality is a sign of social status and can be taken multiple times. The higher the quality, the more impressive it seems."
+    },
+    {
+        "id": "lightweight",
+        "name": "Lightweight",
+        "type": "quality",
+        "equipment": "item",
+        "description": "Cleverly crafted for ease of carrying. Reduce Encumbrance points by 1."
+    },
+    {
+        "id": "practical",
+        "name": "Practical",
+        "type": "quality",
+        "equipment": "item",
+        "description": "Expertly crafted with utility in mind. A failed test using this item receives +1 SL. If the item is a piece of armour, any penalties for wearing it are reduced by one level (for example from -30 to -20)."
+    },
+    {
+        "id": "ugly",
+        "name": "Ugly",
+        "type": "flaw",
+        "equipment": "item",
+        "description": "Crafted without any aesthetic awareness whatsoever, Ugly items attract negative attention, and related Fellowship Tests might even suffer a -10 penalty."
+    },
+    {
+        "id": "shoddy",
+        "name": "Shoddy",
+        "type": "flaw",
+        "equipment": "item",
+        "description": "Hastily crafted by an amateur or fraudster. The item breaks when used in any failed Test rolling a double. Similarly, Shoddy armour breaks if any Critical Hit is sustained to a Hit Location it protects."
+    },
+    {
+        "id": "unreliable",
+        "name": "Unreliable",
+        "type": "flaw",
+        "equipment": "item",
+        "description": "Crafted without attention to functionality, a failed test using this item receives -1 SL. Further, penalties for wearing Unreliable armour are doubled."
+    },
+    {
+        "id": "bulky",
+        "name": "Bulky",
+        "type": "flaw",
+        "equipment": "item",
+        "description": "An awkward design crafted clumsily. Increase Encumbrance by +1. Bulky clothing and armour are Enc 1 even when worn, and Fatigue penalties for armour are doubled."
+    },
+    {
+        "id": "accurate",
+        "name": "Accurate",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "The weapon is accurate and easy to hit with. Gain a bonus of +10 to any Test when firing this weapon."
+    },
+    {
+        "id": "blackpowder",
+        "name": "Blackpowder",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "The crack of gunfire followed by gouts of smoke and confusion can be terrifying. If you are targeted by a Blackpowder weapon, you must pass an Average (+20) Cool Test or take a Broken Condition, even if the shot misses."
+    },
+    {
+        "id": "blast",
+        "name": "Blast (Rating)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "All Characters within (Rating) yards of the struck target point take SL+Weapon Damage, and suffer any Conditions the weapon inflicts."
+    },
+    {
+        "id": "damaging",
+        "name": "Damaging",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "A Damaging weapon can use the higher score from either the units die or the SL to determine the Damage caused from a successful hit."
+    },
+    {
+        "id": "defensive",
+        "name": "Defensive",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Defensive weapons are designed to parry incoming attacks. If you are wielding such a weapon, gain a bonus of +1 SL to any Melee Test when you oppose an incoming attack."
+    },
+    {
+        "id": "distract",
+        "name": "Distract",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Distracting weapons can be used to drive an opponent back due to their dangerous or whip-like natures. Instead of causing Damage, a successful attack with a Distracting weapon can force an opponent back 1 yard per SL by which you win the Opposed Test."
+    },
+    {
+        "id": "entangle",
+        "name": "Entangle",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Your weapon wraps around your opponents, entangling them. Any opponent successfully hit by your weapon gains the Entangled Condition with a Strength value equal to your Strength Characteristic. When Entangling an opponent, you cannot otherwise use the weapon to hit."
+    },
+    {
+        "id": "fast",
+        "name": "Fast",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Fast weapons are designed to strike out with such speed that parrying is not an option. A wielder of a Fast weapon can choose to attack with the Fast weapon outside of the normal Initiative sequence. Further, all Melee Tests to defend against Fast weapons suffer a penalty of -10 if your opponent is using a weapon without the Fast Quality."
+    },
+    {
+        "id": "hack",
+        "name": "Hack",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Hacking weapons have heavy blades that can hack through armour with horrific ease. If you hit an opponent, you Damage a struck piece of armour or shield by 1 point as well as wounding the target."
+    },
+    {
+        "id": "impact",
+        "name": "Impact",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Some weapons are just huge or cause terrible damage due to their weight or design. On a successful hit, add the result of the units die of the attack roll to any Damage caused by an Impact weapon."
+    },
+    {
+        "id": "impale",
+        "name": "Impale",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Impale weapons can kill with a single clean blow. Impale weapons cause a Critical Hit on any number divisible by 10 (i.e.: 10, 20, 30, etc.) as well as on doubles. If the impale comes from a ranged weapon, the ammunition used has firmly lodged itself in the target's body. Arrows and bolts require a successful Challenging (+0) Heal Test to remove."
+    },
+    {
+        "id": "penetrating",
+        "name": "Penetrating",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "The weapon is highly effective at penetrating armour. Non-metal APs are ignored, and the first point of all other armour is ignored."
+    },
+    {
+        "id": "pistol",
+        "name": "Pistol",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "You can use this weapon to attack in Close Combat."
+    },
+    {
+        "id": "precise",
+        "name": "Precise",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "The weapon is easy to get on target. Gain a bonus of +1 SL to any successful Test when attacking with this weapon."
+    },
+    {
+        "id": "pummel",
+        "name": "Pummel",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Pummel weapons are especially good at battering foes into submission. If you score a Head hit with a Pummel weapon, attempt an Opposed Strength/Endurance test against the struck opponent. If you win the test, your opponent gains a Stunned Condition."
+    },
+    {
+        "id": "repeater",
+        "name": "Repeater (Rating)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Your weapon holds (Rating) shots, automatically reloading after each time you fire. When you use all your shots, you must fully reload the weapon using the normal rules."
+    },
+    {
+        "id": "shield",
+        "name": "Shield (Rating)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Any time you Oppose an attack you benefit from additional AP equal to the Shield Rating. If your weapon has a Shield Rating of 2 or higher you may also use your shield to Oppose incoming missile shots in your line of sight. This means that you may use a melee weapon in your primary hand to oppose an opponent’s melee attack at no penalty and gain the AP benefit of the shield in your secondary hand even though you did not specifically use the shield to oppose the attack."
+    },
+    {
+        "id": "slash",
+        "name": "Slash (Rating)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Slash weapons concentrate their cutting power in such a way as to open up gaping wounds. If you cause Critical Damage with the weapon, the target takes a Bleeding Condition in addition to any other effects of the critical hit. You may spend (Rating) Advantage to have your opponent suffer 1 additional Bleeding Condition."
+    },
+    {
+        "id": "spread",
+        "name": "Spread (Rating)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Weapons with the Spread quality fire an expanding cloud of projectiles which may strike several targets. Depending on the range to the target, weapons with this quality behave somewhat differently.\nPoint Blank: The shot targets a single individual. Add (Rating) to the weapon’s Damage.\nShort Range to Long Range: The shot targets a single individual, and the next (Rating) closest visible creatures. No two targets may be more than (Rating) yards apart.\nExtreme Range: As for Short to Long Range, but reduce the weapon’s damage by (Rating) as well."
+    },
+    {
+        "id": "trap_blade",
+        "name": "Trap Blade",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Some weapons are designed to trap other weapons, and sometimes even break them. If you score a Critical when defending against an attack from a bladed weapon you can choose to trap it instead of causing a Critical Hit. This initiates an Opposed Strength Test to disarm or break the opponent's blade."
+    },
+    {
+        "id": "trip",
+        "name": "Trip",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Trip weapons are designed to hook an opponent’s leg or otherwise drive them from their feet. After hitting your opponent, you may spend 2 Advantage and make an opposed Strength/Athletics Test. If you win, your opponent gains the Prone Condition (if they are mounted, they suffer a 2-yard fall and then gain the Prone Condition). If you lose, nothing happens other than standard effects for losing an Opposed Test in combat."
+    },
+    {
+        "id": "unbreakable",
+        "name": "Unbreakable",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "The weapon is exquisitely well-made or constructed from an especially strong material. Under almost all circumstances, this weapon will not break, corrode, or lose its edge."
+    },
+    {
+        "id": "wrap",
+        "name": "Wrap",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Wrap weapons typically have long chains with weights at the end, making it very difficult to parry them effectively. Melee Tests opposing an attack from a Wrap weapon suffer a penalty of -1 SL, as parried strikes wrap over the top of shields, or around blades."
+    },
+    {
+        "id": "dangerous",
+        "name": "Dangerous",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "Some weapons are almost as likely to hurt you as your opponent. Any failed test including an 9 on either 10s or units die results in a Fumble."
+    },
+    {
+        "id": "imprecise",
+        "name": "Imprecise",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "Imprecise weapons are difficult to bring to bear as they are unwieldy or hard to aim. Suffer a penalty of -1 SL when using the weapon to attack. An Imprecise Weapon can never be Precise."
+    },
+    {
+        "id": "reload",
+        "name": "Reload (Rating)",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "The weapon is slow to reload. An unloaded weapon with this flaw requires an Extended Ranged Test for the appropriate Weapon Group scoring (Rating) SL to reload. If you are interrupted while reloading, you must start again from scratch."
+    },
+    {
+        "id": "slow",
+        "name": "Slow",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "Slow weapons are unwieldy and heavy, making them difficult to use properly. Characters using Slow weapons always strike last in a Round, regardless of Initiative order. Further, opponents gain a bonus of +1 SL to any Test to defend against your attacks."
+    },
+    {
+        "id": "tiring",
+        "name": "Tiring",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "The weapon is fatiguing to use or difficult to bring to bear. You only gain the benefit of the Impact and Damaging Weapon Traits on a Turn you Charge."
+    },
+    {
+        "id": "unbalanced",
+        "name": "Unbalanced",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "The weight of some weapons is concentrated at the head, making them inefficient for parrying. When this weapon is used to oppose an incoming attack, it suffers a –1 SL penalty to the attack."
+    },
+    {
+        "id": "undamaging",
+        "name": "Undamaging",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "Some weapons are not very good at penetrating armour. All APs are doubled against Undamaging weapons. Further, you do not automatically inflict a minimum of 1 Wound on a successful hit in combat."
+    }
+]

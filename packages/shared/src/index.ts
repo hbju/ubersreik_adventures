@@ -12,6 +12,8 @@ export { CriticalHitModal } from './components/CriticalHitModal';
 export { FumbleModal } from './components/FumbleModal';
 export { ConditionPromptModal } from './components/ConditionPromptModal';
 export { LanguageSwitcher } from './components/LanguageSwitcher';
+export { Tooltip } from './components/ui/Tooltip';
+export { QualityTooltip } from './components/ui/QualityTooltip';
 export * from './components/GameLog';
 export * from './hooks/useGameData';
 export * from './i18n';
@@ -27,6 +29,7 @@ export * from './utils/talents';
 export * from './utils/conditions';
 export * from './utils/career';
 export * from './utils/reputation';
+export * from './utils/qualities';
 
 export { default as criticalHitsData } from './data/critical_hits.json';
 export { default as fumblesData } from './data/fumbles.json';

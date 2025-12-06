@@ -5,7 +5,8 @@ import {
     Weapon,
     useGameData,
     EditableField,
-    calculateCharacteristicValue
+    calculateCharacteristicValue,
+    QualityTooltip
 } from '@wfrp/shared';
 import './CombatTab.css';
 
@@ -80,6 +81,8 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         .map(([weaponId]) => weaponById[weaponId])
         .filter(Boolean) as Weapon[];
 
+    console.log(equippedWeapons)
+
     // Get condition names
     const getConditionName = (conditionId: string): string => {
         const condition = conditionsData.find((c: any) => c.id === conditionId);
@@ -145,7 +148,14 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                                 {weapon.qualities && weapon.qualities.length > 0 && (
                                     <div className="weapon-qualities">
                                         <span className="qualities-label">Qualities:</span>
-                                        <span className="qualities-list">{weapon.qualities.join(', ')}</span>
+                                        <span className="qualities-list">
+                                            {weapon.qualities.map((quality, index) => (
+                                                <React.Fragment key={quality}>
+                                                    <QualityTooltip qualityString={quality} className="quality-tag" />
+                                                    {index < weapon.qualities.length - 1 && ', '}
+                                                </React.Fragment>
+                                            ))}
+                                        </span>
                                     </div>
                                 )}
                             </div>

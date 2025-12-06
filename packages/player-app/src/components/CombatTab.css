@@ -96,6 +96,17 @@
     font-style: italic;
 }
 
+.quality-tag {
+    cursor: help;
+    border-bottom: 1px dotted #8b6914;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.quality-tag:hover {
+    color: #c9a227;
+    border-color: #c9a227;
+}
+
 /* ========== SILHOUETTE PANEL ========== */
 .silhouette-container {
     display: flex;

@@ -1,0 +1,317 @@
+[
+    {
+        "id": "impenetrable",
+        "name": "Impénétrable",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "L'armure est particulièrement résistante, la plupart des attaques ne peuvent tout simplement pas la pénétrer. Toutes les Blessures Critiques causées par des attaques obtenant un chiffre impair pour vous toucher, comme 11 ou 33, sont ignorées."
+    },
+    {
+        "id": "overcoat",
+        "name": "Surcouche",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "Certains types d'armures peuvent être portés par-dessus d'autres. Celles-ci peuvent être portées par-dessus une armure de Cuir ou de Mailles."
+    },
+    {
+        "id": "reinforced",
+        "name": "Renforcée",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "L'armure a été renforcée avec des plaques ou des couches supplémentaires, offrant une protection accrue. Vous gagnez +1 Point d'Armure (PA) lorsque vous portez cette armure."
+    },
+    {
+        "id": "visor",
+        "name": "Visière",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "Certains casques sont dotés d'une visière qui peut être relevée pour offrir un champ de vision plus large. Si la visière est fermée, le casque fonctionne comme décrit. Si la visière est ouverte, le casque perd toute capacité spéciale liée à sa conception et gagne le Défaut Partielle. Les Tests de Perception sont effectués avec une pénalité de –10% lorsque les visières sont ouvertes. Il faut une Action pour ouvrir ou fermer une visière."
+    },
+    {
+        "id": "partial",
+        "name": "Partielle",
+        "type": "flaw",
+        "equipment": "armor",
+        "description": "L'armure ne couvre pas la totalité de la Localisation. Un adversaire qui obtient un chiffre pair pour déterminer la localisation, ou un Coup Critique, ignore les PA de l'armure partielle."
+    },
+    {
+        "id": "requires_kit",
+        "name": "Nécessite un Sous-vêtement",
+        "type": "flaw",
+        "equipment": "armor",
+        "description": "Une armure avec ce défaut ne peut être portée que si un Vêtement Matelassé (Soft Kit) est porté en dessous."
+    },
+    {
+        "id": "weakpoint",
+        "name": "Point Faible",
+        "type": "flaw",
+        "equipment": "armor",
+        "description": "L'armure présente de petits points faibles où une lame peut se glisser. Si votre adversaire possède une arme avec la Qualité Perforante (Impale) et obtient un Critique, tous les PA de votre armure sont ignorés."
+    },
+    {
+        "id": "durable",
+        "name": "Durable",
+        "type": "quality",
+        "equipment": "item",
+        "description": "Laboriously fabriquée à partir de matériaux solides, l'objet peut subir +Durable points de Dégâts avant de souffrir de pénalités et gagne un jet de sauvegarde de 9+ sur 1d10 contre la casse instantanée provenant de sources comme Brise-Lame. Cette Qualité peut être prise plusieurs fois. Chaque fois qu'elle est prise, le jet de sauvegarde s'améliore de 1."
+    },
+    {
+        "id": "fine",
+        "name": "De Qualité",
+        "type": "quality",
+        "equipment": "item",
+        "description": "Méticuleusement fabriqué pour plaire à l'œil. Cette Qualité est un signe de statut social et peut être prise plusieurs fois. Plus la qualité est élevée, plus l'objet semble impressionnant."
+    },
+    {
+        "id": "lightweight",
+        "name": "Léger",
+        "type": "quality",
+        "equipment": "item",
+        "description": "Astucieusement conçu pour faciliter le transport. Réduit l'Encombrement de 1."
+    },
+    {
+        "id": "practical",
+        "name": "Pratique",
+        "type": "quality",
+        "equipment": "item",
+        "description": "Savamment conçu avec l'utilité à l'esprit. Un test raté utilisant cet objet reçoit +1 ND (Niveau de Réussite). Si l'objet est une pièce d'armure, toutes les pénalités pour son port sont réduites d'un niveau (par exemple de -30 à -20)."
+    },
+    {
+        "id": "ugly",
+        "name": "Laid",
+        "type": "flaw",
+        "equipment": "item",
+        "description": "Fabriqué sans aucune conscience esthétique, les objets Laids attirent l'attention négative, et les Tests de Sociabilité associés peuvent même subir une pénalité de -10."
+    },
+    {
+        "id": "shoddy",
+        "name": "De Camelote",
+        "type": "flaw",
+        "equipment": "item",
+        "description": "Hâtivement fabriqué par un amateur ou un escroc. L'objet se brise lorsqu'il est utilisé lors de tout Test raté obtenant un double. De même, une armure de Camelote se brise si un Coup Critique est subi sur une Localisation qu'elle protège."
+    },
+    {
+        "id": "unreliable",
+        "name": "Peu Fiable",
+        "type": "flaw",
+        "equipment": "item",
+        "description": "Fabriqué sans attention à la fonctionnalité, un test raté utilisant cet objet reçoit -1 ND. De plus, les pénalités pour le port d'une armure Peu Fiable sont doublées."
+    },
+    {
+        "id": "bulky",
+        "name": "Encombrant",
+        "type": "flaw",
+        "equipment": "item",
+        "description": "Une conception maladroite réalisée grossièrement. Augmente l'Encombrement de +1. Les vêtements et armures Encombrants ont un Enc de 1 même lorsqu'ils sont portés, et les pénalités de Fatigue pour l'armure sont doublées."
+    },
+    {
+        "id": "accurate",
+        "name": "Précise",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "L'arme est précise et il est facile de toucher avec. Gagnez un bonus de +10 à tout Test lors du tir avec cette arme."
+    },
+    {
+        "id": "blackpowder",
+        "name": "Poudre Noire",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Le claquement du coup de feu suivi de bouffées de fumée et de confusion peut être terrifiant. Si vous êtes ciblé par une arme à Poudre Noire, vous devez réussir un Test de Sang-froid Moyen (+20) ou subir un État Brisé, même si le tir manque."
+    },
+    {
+        "id": "blast",
+        "name": "Explosion (Valeur)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Tous les Personnages à moins de (Valeur) yards du point d'impact subissent ND+Dégâts de l'Arme, et souffrent de tous les États que l'arme inflige."
+    },
+    {
+        "id": "damaging",
+        "name": "Percutante",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Une arme Percutante peut utiliser le score le plus élevé entre le dé des unités ou le ND pour déterminer les Dégâts causés par une touche réussie."
+    },
+    {
+        "id": "defensive",
+        "name": "Défensive",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes défensives sont conçues pour parer les attaques entrantes. Si vous maniez une telle arme, gagnez un bonus de +1 ND à tout Test de Corps à Corps lorsque vous vous opposez à une attaque entrante."
+    },
+    {
+        "id": "distract",
+        "name": "Distrayante",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes Distrayantes peuvent être utilisées pour repousser un adversaire en raison de leur nature dangereuse ou semblable à un fouet. Au lieu de causer des Dégâts, une attaque réussie avec une arme Distrayante peut forcer un adversaire à reculer de 1 yard par ND avec lequel vous gagnez le Test Opposé."
+    },
+    {
+        "id": "entangle",
+        "name": "Enchevêtrement",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Votre arme s'enroule autour de vos adversaires, les enchevêtrant. Tout adversaire touché avec succès par votre arme gagne l'État Enchevêtré avec une valeur de Force égale à votre Caractéristique de Force. Lorsque vous Enchevêtrez un adversaire, vous ne pouvez pas utiliser l'arme autrement pour frapper."
+    },
+    {
+        "id": "fast",
+        "name": "Rapide",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes Rapides sont conçues pour frapper avec une telle vitesse que la parade n'est pas une option. Un porteur d'une arme Rapide peut choisir d'attaquer avec l'arme Rapide en dehors de la séquence d'Initiative normale. De plus, tous les Tests de Corps à Corps pour se défendre contre des armes Rapides subissent une pénalité de -10 si votre adversaire utilise une arme sans la Qualité Rapide."
+    },
+    {
+        "id": "hack",
+        "name": "Entaillante",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes Entaillantes ont des lames lourdes qui peuvent tailler à travers l'armure avec une facilité horrifiante. Si vous touchez un adversaire, vous endommagez une pièce d'armure ou un bouclier touché de 1 point en plus de blesser la cible."
+    },
+    {
+        "id": "impact",
+        "name": "Impact",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Certaines armes sont simplement énormes ou causent des dégâts terribles en raison de leur poids ou de leur conception. Sur une touche réussie, ajoutez le résultat du dé des unités du jet d'attaque à tout Dégât causé par une arme à Impact."
+    },
+    {
+        "id": "impale",
+        "name": "Perforante",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes Perforantes peuvent tuer d'un seul coup net. Les armes Perforantes causent un Coup Critique sur tout nombre divisible par 10 (c'est-à-dire : 10, 20, 30, etc.) ainsi que sur les doubles. Si la perforation provient d'une arme à distance, la munition utilisée s'est fermement logée dans le corps de la cible. Les flèches et les carreaux nécessitent un Test de Soins Difficile (+0) réussi pour être retirés."
+    },
+    {
+        "id": "penetrating",
+        "name": "Pénétrante",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "L'arme est très efficace pour pénétrer l'armure. Les PA non métalliques sont ignorés, et le premier point de toute autre armure est ignoré."
+    },
+    {
+        "id": "pistol",
+        "name": "Pistolet",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Vous pouvez utiliser cette arme pour attaquer au Corps à Corps."
+    },
+    {
+        "id": "precise",
+        "name": "Précise",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "L'arme est facile à aligner sur la cible. Gagnez un bonus de +1 ND à tout Test réussi lors d'une attaque avec cette arme."
+    },
+    {
+        "id": "pummel",
+        "name": "Assommante",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes Assommantes sont particulièrement efficaces pour battre les ennemis jusqu'à la soumission. Si vous obtenez une touche à la Tête avec une arme Assommante, tentez un test Opposé de Force/Endurance contre l'adversaire touché. Si vous gagnez le test, votre adversaire gagne un État Étourdi."
+    },
+    {
+        "id": "repeater",
+        "name": "Répétition (Valeur)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Votre arme contient (Valeur) coups, se rechargeant automatiquement après chaque tir. Lorsque vous avez utilisé tous vos coups, vous devez recharger complètement l'arme en utilisant les règles normales."
+    },
+    {
+        "id": "shield",
+        "name": "Bouclier (Valeur)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Chaque fois que vous vous opposez à une attaque, vous bénéficiez de PA supplémentaires égaux à la Valeur de Bouclier. Si votre arme a une Valeur de Bouclier de 2 ou plus, vous pouvez également utiliser votre bouclier pour vous opposer aux tirs de projectiles entrants dans votre ligne de vue. Cela signifie que vous pouvez utiliser une arme de mêlée dans votre main principale pour vous opposer à l'attaque de mêlée d'un adversaire sans pénalité et bénéficier du bonus de PA du bouclier dans votre main secondaire même si vous n'avez pas spécifiquement utilisé le bouclier pour vous opposer à l'attaque."
+    },
+    {
+        "id": "slash",
+        "name": "Tranchante (Valeur)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes Tranchantes concentrent leur pouvoir de coupe de manière à ouvrir des plaies béantes. Si vous causez des Dégâts Critiques avec l'arme, la cible subit un État Hémorragie en plus de tout autre effet du coup critique. Vous pouvez dépenser (Valeur) Avantages pour que votre adversaire subisse 1 État Hémorragie supplémentaire."
+    },
+    {
+        "id": "spread",
+        "name": "Dispersion (Valeur)",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes avec la qualité Dispersion tirent un nuage de projectiles en expansion qui peut frapper plusieurs cibles. Selon la portée de la cible, les armes avec cette qualité se comportent un peu différemment.\nÀ Bout Portant : Le tir cible un seul individu. Ajoutez (Valeur) aux Dégâts de l'arme.\nDe Portée Courte à Longue : Le tir cible un seul individu, et les (Valeur) créatures visibles les plus proches. Aucune cible ne peut être éloignée de plus de (Valeur) yards l'une de l'autre.\nPortée Extrême : Comme pour la Portée Courte à Longue, mais réduisez également les dégâts de l'arme de (Valeur)."
+    },
+    {
+        "id": "trap_blade",
+        "name": "Brise-Lame",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Certaines armes sont conçues pour piéger d'autres armes, et parfois même les briser. Si vous obtenez un Critique en défendant contre une attaque d'une arme à lame, vous pouvez choisir de la piéger au lieu de causer un Coup Critique. Cela initie un Test de Force Opposé pour désarmer ou briser la lame de l'adversaire."
+    },
+    {
+        "id": "trip",
+        "name": "Croc-en-jambe",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes avec Croc-en-jambe sont conçues pour accrocher la jambe d'un adversaire ou le faire tomber. Après avoir touché votre adversaire, vous pouvez dépenser 2 Avantages et faire un Test opposé de Force/Athlétisme. Si vous gagnez, votre adversaire gagne l'État À Terre (s'il est monté, il subit une chute de 2 yards puis gagne l'État À Terre). Si vous perdez, rien ne se passe d'autre que les effets standard pour avoir perdu un Test Opposé en combat."
+    },
+    {
+        "id": "unbreakable",
+        "name": "Indestructible",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "L'arme est d'une facture exquise ou construite à partir d'un matériau particulièrement solide. Dans presque toutes les circonstances, cette arme ne se brisera pas, ne se corrodera pas et ne perdra pas son tranchant."
+    },
+    {
+        "id": "wrap",
+        "name": "Enlaçante",
+        "type": "quality",
+        "equipment": "weapon",
+        "description": "Les armes Enlaçantes ont généralement de longues chaînes avec des poids à l'extrémité, ce qui les rend très difficiles à parer efficacement. Les Tests de Corps à Corps s'opposant à une attaque d'une arme Enlaçante subissent une pénalité de -1 ND, car les coups parés s'enroulent par-dessus les boucliers ou autour des lames."
+    },
+    {
+        "id": "dangerous",
+        "name": "Dangereuse",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "Certaines armes sont presque aussi susceptibles de vous blesser que votre adversaire. Tout test raté incluant un 9 sur le dé des dizaines ou des unités entraîne un Fumble."
+    },
+    {
+        "id": "imprecise",
+        "name": "Imprécise",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "Les armes Imprécises sont difficiles à manier car elles sont peu maniables ou difficiles à viser. Subissez une pénalité de -1 ND lors de l'utilisation de l'arme pour attaquer. Une Arme Imprécise ne peut jamais être Précise."
+    },
+    {
+        "id": "reload",
+        "name": "Rechargement (Valeur)",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "L'arme est lente à recharger. Une arme déchargée avec ce défaut nécessite un Test Étendu de Tir pour le Groupe d'Armes approprié, nécessitant (Valeur) ND pour recharger. Si vous êtes interrompu pendant le rechargement, vous devez recommencer à zéro."
+    },
+    {
+        "id": "slow",
+        "name": "Lente",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "Les armes Lentes sont peu maniables et lourdes, ce qui les rend difficiles à utiliser correctement. Les Personnages utilisant des armes Lentes frappent toujours en dernier dans un Round, quel que soit l'ordre d'Initiative. De plus, les adversaires gagnent un bonus de +1 ND à tout Test pour se défendre contre vos attaques."
+    },
+    {
+        "id": "tiring",
+        "name": "Épuisante",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "L'arme est fatigante à utiliser ou difficile à manier. Vous ne bénéficiez des Traits d'Arme Impact et Percutante que lors d'un Tour où vous Chargez."
+    },
+    {
+        "id": "unbalanced",
+        "name": "Mal Équilibrée",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "Le poids de certaines armes est concentré au niveau de la tête, ce qui les rend inefficaces pour parer. Lorsque cette arme est utilisée pour s'opposer à une attaque entrante, elle subit une pénalité de –1 ND à l'attaque."
+    },
+    {
+        "id": "undamaging",
+        "name": "Inoffensive",
+        "type": "flaw",
+        "equipment": "weapon",
+        "description": "Certaines armes ne sont pas très bonnes pour pénétrer l'armure. Tous les PA sont doublés contre les armes Inoffensives. De plus, vous n'infligez pas automatiquement un minimum de 1 Blessure sur une touche réussie en combat."
+    }
+]

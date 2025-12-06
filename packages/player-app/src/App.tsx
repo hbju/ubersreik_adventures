@@ -226,7 +226,12 @@ const PlayerApp: React.FC = () => {
         alert(`Purchase request sent to GM for ${item.name}`);
     };
 
-    const handleOpposedTestRoll = (rollResult: number, successLevel: number, fortuneSpent: number, corruptionGained: number) => {
+    const handleOpposedTestRoll = (
+        rollResult: number, 
+        successLevel: number, 
+        fortuneSpent: number, 
+        corruptionGained: number
+    ) => {
         if (!character || !opposedTestRequest) return;
 
         // Send the opposed test result

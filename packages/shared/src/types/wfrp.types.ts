@@ -303,3 +303,21 @@ export interface CampaignState {
   version: string;
   lastModified: string;
 }
+
+// Item Quality/Flaw Types
+export type ItemQualityType = 'quality' | 'flaw';
+
+export interface ItemQualityDefinition {
+  id: string;
+  name: string;
+  type: ItemQualityType;
+  equipment: string; // 'weapon' | 'armor' | 'item' | 'any'
+  description: string;
+}
+
+// Parsed quality with optional rating (e.g., "Blast 5" -> { name: "Blast", rating: 5 })
+export interface ParsedQuality {
+  name: string;
+  rating?: number;
+  definition?: ItemQualityDefinition;
+}

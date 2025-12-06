@@ -1,0 +1,112 @@
+.tooltipTrigger {
+  display: inline;
+  cursor: help;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 10000;
+  pointer-events: none;
+  animation: tooltipFadeIn 0.15s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1);
+  }
+}
+
+.tooltip.bottom {
+  animation: tooltipFadeInBottom 0.15s ease-out;
+}
+
+@keyframes tooltipFadeInBottom {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+.tooltip.left {
+  animation: tooltipFadeInLeft 0.15s ease-out;
+}
+
+@keyframes tooltipFadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate(-100%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-100%, -50%) scale(1);
+  }
+}
+
+.tooltip.right {
+  animation: tooltipFadeInRight 0.15s ease-out;
+}
+
+@keyframes tooltipFadeInRight {
+  from {
+    opacity: 0;
+    transform: translate(0, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, -50%) scale(1);
+  }
+}
+
+.tooltipContent {
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+  border: 1px solid #c9a227;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.tooltipContent h4 {
+  margin: 0 0 4px 0;
+  color: #c9a227;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.tooltipContent p {
+  margin: 0;
+  color: #ccc;
+  font-size: 0.8rem;
+}
+
+.tooltipContent .qualityType {
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.tooltipContent .qualityType.flaw {
+  color: #e74c3c;
+}
+
+.tooltipContent .qualityType.quality {
+  color: #27ae60;
+}
+
+.tooltipArrow {
+  display: none; /* Arrow can be added later if needed */
+}

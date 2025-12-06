@@ -5,6 +5,7 @@ import { calculateCharacteristicBonus } from '../utils/skills';
 import './InventoryView.css';
 import { calculateEffectiveMaxEncumbrance } from '../utils/talents';
 import { useGameData } from '..';
+import { QualityTooltip } from './ui/QualityTooltip';
 
 
 interface InventoryViewProps {
@@ -106,7 +107,14 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
                                             {armor.qualities && armor.qualities.length > 0 && (
                                                 <div className="detailRow">
                                                     <span className="detailLabel">Qualities:</span>
-                                                    <span className="detailValue">{armor.qualities.join(', ')}</span>
+                                                    <span className="detailValue">
+                                                        {armor.qualities.map((quality, index) => (
+                                                            <React.Fragment key={quality}>
+                                                                <QualityTooltip qualityString={quality} className="qualityTag" />
+                                                                {index < armor.qualities.length - 1 && ', '}
+                                                            </React.Fragment>
+                                                        ))}
+                                                    </span>
                                                 </div>
                                             )}
                                         </div>
@@ -173,7 +181,14 @@ const InventoryView: React.FC<InventoryViewProps> = ({ character, onPurchaseClic
                                                 {weapon.qualities && weapon.qualities.length > 0 && (
                                                     <div className="detailRow">
                                                         <span className="detailLabel">Qualities:</span>
-                                                        <span className="detailValue">{weapon.qualities.join(', ')}</span>
+                                                        <span className="detailValue">
+                                                            {weapon.qualities.map((quality, qIndex) => (
+                                                                <React.Fragment key={quality}>
+                                                                    <QualityTooltip qualityString={quality} className="qualityTag" />
+                                                                    {qIndex < weapon.qualities.length - 1 && ', '}
+                                                                </React.Fragment>
+                                                            ))}
+                                                        </span>
                                                     </div>
                                                 )}
                                             </div>

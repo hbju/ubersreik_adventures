@@ -22,6 +22,7 @@ import {
     getTalentTestBonus,
     applyTalentSLBonuses,
     useGameData,
+    Weapon,
 } from '@wfrp/shared';
 
 import CharacterSelector from './CharacterSelector';
@@ -96,6 +97,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     onClose
 }) => {
     const skills = useGameData().skills;
+    const weaponsData = useGameData().weapons as Weapon[];
     const talents = useGameData().talents;
 
     const [selectedAttackerId, setSelectedAttackerId] = useState<string>(characters[0]?.id || 'manual');
@@ -434,7 +436,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             armourPoints: defenderStats.armourPoints,
         };
 
-        // Calculate SL for NPC rolls
+        // Calculate SL for NPC rolls (including weapon modifiers)
         if (newOpposedTestState.attackerRoll !== null) {
             newOpposedTestState.attackerSL = calculateSuccessLevel(newOpposedTestState.attackerRoll, newOpposedTestState.attackerTarget);
             const attackerName = selectedAttackerId === 'manual' ? 'Manual Attacker' : characters.find(c => c.id === selectedAttackerId)?.name || 'NPC';

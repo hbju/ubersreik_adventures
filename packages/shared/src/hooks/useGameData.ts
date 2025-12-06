@@ -15,7 +15,9 @@ import conditionsEn from '../data/conditions_en.json';
 import conditionsFr from '../data/conditions_fr.json';
 import gameDataEn from '../data/ubersreik_en.json';
 import gameDataFr from '../data/ubersreik_fr.json';
-import { SkillCharDefinition, Talent, Career, Item, Weapon, Armor, Condition, GameData } from '../types/wfrp.types';
+import qualitiesEn from '../data/flaws_qualities_en.json';
+import qualitiesFr from '../data/flaws_qualities_fr.json';
+import { SkillCharDefinition, Talent, Career, Item, Weapon, Armor, Condition, GameData, ItemQualityDefinition } from '../types/wfrp.types';
 
 export const useGameData = () => {
     const { i18n } = useTranslation();
@@ -31,6 +33,7 @@ export const useGameData = () => {
             armor: armorEn as Armor[],
             conditions: conditionsEn as Condition[],
             gameData: gameDataEn as GameData,
+            qualities: qualitiesEn as ItemQualityDefinition[],
         },
         fr: {
             skills: skillsFr as SkillCharDefinition[],
@@ -41,6 +44,7 @@ export const useGameData = () => {
             armor: armorFr as Armor[],
             conditions: conditionsFr as Condition[],
             gameData: gameDataFr as GameData,
+            qualities: qualitiesFr as ItemQualityDefinition[],
         },
     };
 

@@ -15,6 +15,12 @@
     box-sizing: border-box;
 }
 
+.editable-field-input[type="text"] {
+    border: 1px solid rgba(139, 105, 20, 0.6);
+    background: rgba(255, 255, 255, 0.1);
+    color: #e8dcc4;
+}
+
 .editable-field-input:focus {
     outline: none;
     border-color: #d4af37;
@@ -24,6 +30,9 @@
 .editable-field-input[type="number"] {
     width: 4em;
     text-align: center;
+    border: 1px solid rgba(139, 105, 20, 0.6);
+    background: rgba(255, 255, 255, 0.1);
+    color: #e8dcc4;
 }
 
 .editable-field-textarea {

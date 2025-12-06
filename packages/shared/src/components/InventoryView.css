@@ -118,6 +118,17 @@
     font-family: var(--font-body);
 }
 
+.qualityTag {
+    cursor: help;
+    border-bottom: 1px dotted var(--color-gold, #8b6914);
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.qualityTag:hover {
+    color: var(--color-gold-light, #c9a227);
+    border-color: var(--color-gold-light, #c9a227);
+}
+
 .emptyMessage {
     text-align: center;
     color: var(--color-leather-light);

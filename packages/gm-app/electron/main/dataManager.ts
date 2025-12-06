@@ -40,6 +40,7 @@ export function loadCampaignData(): CampaignState {
         users: [],
         journal: [],
         mapPinStates: {},
+        factions: [],
         version: '1.0.0',
         lastModified: new Date().toISOString(),
       };
@@ -53,6 +54,7 @@ export function loadCampaignData(): CampaignState {
       users: [],
       journal: [],
       mapPinStates: {},
+      factions: [],
       version: '1.0.0',
       lastModified: new Date().toISOString(),
     };
