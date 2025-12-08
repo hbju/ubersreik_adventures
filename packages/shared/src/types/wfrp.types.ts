@@ -301,6 +301,7 @@ export interface CampaignState {
   mapPinStates: Record<string, MapPinState>; // locationId -> MapPinState
   factions: Faction[]; // Global list of factions
   shopInventory?: ShopInventoryState; // Shop inventory state
+  customShopDefinitions?: ShopDefinition[]; // Custom shop definitions created/edited by GM
   version: string;
   lastModified: string;
 }

@@ -363,7 +363,7 @@
 }
 
 .cornerCell {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 1);
   color: #888;
   font-weight: bold;
   min-width: 150px;
@@ -395,7 +395,7 @@
 }
 
 .characterCell {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 1);
   font-weight: bold;
   color: #d4af37;
   text-align: left;

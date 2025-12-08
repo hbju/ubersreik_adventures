@@ -83,12 +83,13 @@
     "talent_added": "{{talentName}} ajouté aux talents de {{characterName}}.",
     "purchase": "{{name}} a acheté {{itemName}} pour {{price}}."
   },
-  "menu" : {
+  "menu": {
     "users": "Utilisateurs",
     "backup": "Sauvegarde",
     "startSession": "Débuter",
     "journal": "Journal",
     "shop": "Boutique",
+    "shopConfig": "Config. Boutiques",
     "dice": "Dés",
     "createCharacter": "Créer un Personnage",
     "generateNPC": "Générer un PNJ",
@@ -154,7 +155,7 @@
     "notes": "Notes",
     "noCharacters": "Aucun personnage à afficher.",
     "selectCharacter": "Sélectionnez un personnage",
-    "characterFaction" : "Personnage / Faction",
+    "characterFaction": "Personnage / Faction",
     "noFactions": "Aucune faction n'a été définie pour le moment.",
     "noFactionsYet": "Aucune faction découverte pour le moment.",
     "revealAll": "Tout Révéler",
@@ -181,5 +182,49 @@
     "undiscovered": "Faction Inconnue",
     "rumored_faction": "Organisation Suspectée",
     "your_standing": "Vos Relations avec les Factions"
+  },
+  "shops": {
+    "config": {
+      "title": "Configuration des Boutiques",
+      "createNew": "Créer Nouveau",
+      "allCategories": "Toutes Catégories",
+      "noShops": "Aucune boutique trouvée",
+      "shopCount": "{{count}} boutiques",
+      "noLocation": "Pas d'emplacement",
+      "selectShop": "Sélectionnez une boutique à modifier ou créez-en une nouvelle",
+      "newShop": "Nouvelle Boutique",
+      "editing": "Modification : {{name}}",
+      "shopName": "Nom",
+      "enterName": "Entrez le nom de la boutique...",
+      "location": "Emplacement",
+      "selectLocation": "-- Sélectionner un Emplacement --",
+      "category": "Catégorie",
+      "currentStock": "Stock de Base Actuel",
+      "items": "articles",
+      "noItems": "Aucun article en stock. Ajoutez des articles depuis le catalogue.",
+      "itemCatalog": "Catalogue d'Articles",
+      "searchItems": "Rechercher des articles...",
+      "allTypes": "Tous Types",
+      "weapons": "Armes",
+      "armor": "Armures",
+      "noMatchingItems": "Aucun article correspondant trouvé",
+      "allItemsInStock": "Tous les articles disponibles sont en stock",
+      "itemsShown": "{{count}} articles",
+      "addToStock": "Ajouter au Stock",
+      "removeItem": "Retirer du stock",
+      "saveShop": "Enregistrer la Boutique",
+      "nameRequired": "Le nom de la boutique est requis",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette boutique ?",
+      "unsavedChanges": "Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir changer ?",
+      "discardChanges": "Annuler les modifications non enregistrées ?"
+    },
+    "categories": {
+      "weapon": "Arme",
+      "armor": "Armure",
+      "general": "Général",
+      "apothecary": "Apothicaire",
+      "tavern": "Taverne",
+      "specialty": "Spécialité"
+    }
   }
 }

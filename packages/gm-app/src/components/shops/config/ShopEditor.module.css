@@ -1,0 +1,277 @@
+.editorContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.editorHeader {
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid #8b6914;
+}
+
+.editorHeader h3 {
+    margin: 0;
+    color: #d4af37;
+    font-size: 20px;
+    font-family: 'Cinzel', serif;
+}
+
+.editorContent {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.emptyState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: rgba(212, 175, 55, 0.5);
+    font-style: italic;
+    font-size: 16px;
+}
+
+/* Form Section */
+.formSection {
+    background: rgba(44, 24, 16, 0.5);
+    border: 2px solid #8b6914;
+    border-radius: 6px;
+    padding: 16px;
+}
+
+.formGroup {
+    margin-bottom: 12px;
+}
+
+.formGroup:last-child {
+    margin-bottom: 0;
+}
+
+.formGroup label {
+    display: block;
+    color: #d4af37;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+.formRow {
+    display: flex;
+    gap: 16px;
+}
+
+.formRow .formGroup {
+    flex: 1;
+}
+
+.textInput,
+.selectInput {
+    width: 100%;
+    padding: 10px 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid #8b6914;
+    border-radius: 4px;
+    color: #d4af37;
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.textInput:focus,
+.selectInput:focus {
+    outline: none;
+    border-color: #d4af37;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}
+
+.textInput::placeholder {
+    color: rgba(212, 175, 55, 0.5);
+}
+
+.selectInput option {
+    background: #2c1810;
+    color: #d4af37;
+}
+
+/* Stock Section */
+.stockSection {
+    flex: 1;
+    min-height: 300px;
+}
+
+.stockColumns {
+    display: flex;
+    gap: 16px;
+    height: 100%;
+}
+
+.currentStock,
+.catalogPanel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+}
+
+.currentStock {
+    background: rgba(44, 24, 16, 0.5);
+    border: 2px solid #8b6914;
+    border-radius: 6px;
+}
+
+.stockHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid #8b6914;
+}
+
+.stockHeader h4 {
+    margin: 0;
+    color: #d4af37;
+    font-size: 16px;
+    font-family: 'Cinzel', serif;
+}
+
+.stockCount {
+    color: rgba(212, 175, 55, 0.6);
+    font-size: 12px;
+}
+
+.stockList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.stockItem {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5a4a32;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.stockItem:hover {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: #8b6914;
+}
+
+.itemIcon {
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+.itemName {
+    flex: 1;
+    color: #d4af37;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.removeButton {
+    width: 24px;
+    height: 24px;
+    background: #8b0000;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.removeButton:hover {
+    background: #a00000;
+    transform: scale(1.1);
+}
+
+.emptyStock {
+    padding: 20px;
+    text-align: center;
+    color: rgba(212, 175, 55, 0.5);
+    font-style: italic;
+}
+
+/* Footer */
+.editorFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 2px solid #8b6914;
+}
+
+.leftActions,
+.rightActions {
+    display: flex;
+    gap: 10px;
+}
+
+.saveButton,
+.cancelButton,
+.deleteButton {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.saveButton {
+    background: #2d5016;
+    color: #d4af37;
+    border: 2px solid #3d6f1f;
+}
+
+.saveButton:hover:not(:disabled) {
+    background: #3d6f1f;
+    transform: scale(1.02);
+}
+
+.saveButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.cancelButton {
+    background: rgba(0, 0, 0, 0.4);
+    color: #d4af37;
+    border: 2px solid #8b6914;
+}
+
+.cancelButton:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.deleteButton {
+    background: #8b0000;
+    color: #fff;
+    border: 2px solid #660000;
+}
+
+.deleteButton:hover {
+    background: #a00000;
+    transform: scale(1.02);
+}

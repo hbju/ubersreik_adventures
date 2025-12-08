@@ -14,6 +14,7 @@ import { ItemSelectorModal } from './components/ItemSelectorModal';
 import { TalentSelectorModal } from './components/TalentSelectorModal';
 import { FactionManager } from './components/factions/FactionManager';
 import { CharacterReputationPanel } from './components/factions/CharacterReputationPanel';
+import { ShopConfigurator } from './components/shops/config';
 
 import {
     Character,
@@ -46,10 +47,11 @@ import {
     TalentSelectionModal,
     Faction,
     FactionUpdateMessage,
-    ShopInventoryState
+    ShopInventoryState,
+    ShopDefinition
 } from '@wfrp/shared';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 import './App.css';
 import CareerManager from './components/CareerManager';
@@ -98,6 +100,7 @@ function App() {
     const [currentAdvantage, setCurrentAdvantage] = useState<Advantages>({ playerAdvantage: 0, enemyAdvantage: 0 });
 
     const [showShopManager, setShowShopManager] = useState(false);
+    const [showShopConfigurator, setShowShopConfigurator] = useState(false);
     const [showDiceTray, setShowDiceTray] = useState(false);
     const [showCharacterWizard, setShowCharacterWizard] = useState(false);
     const [showCombatResolver, setShowCombatResolver] = useState(false);
@@ -109,6 +112,8 @@ function App() {
     const [showReputationPanel, setShowReputationPanel] = useState(false);
     const [factions, setFactions] = useState<Faction[]>([]);
     const factionsRef = useRef(factions);
+    const [customShopDefinitions, setCustomShopDefinitions] = useState<ShopDefinition[]>([]);
+    const customShopDefinitionsRef = useRef(customShopDefinitions);
     const [shopInventory, setShopInventory] = useState<ShopInventoryState | undefined>(undefined);
     const shopInventoryRef = useRef(shopInventory);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number, charId: string } | null>(null);
@@ -147,6 +152,14 @@ function App() {
 
     const [browsingShopId, setBrowsingShopId] = useState<string | null>(null);
 
+    // Merge default shop definitions with custom ones
+    // Custom definitions override defaults with the same ID
+    const allShopDefinitions = useMemo(() => {
+        const customIds = new Set(customShopDefinitions.map(s => s.id));
+        const baseShops = shopDefinitions.filter(s => !customIds.has(s.id));
+        return [...baseShops, ...customShopDefinitions];
+    }, [shopDefinitions, customShopDefinitions]);
+
     const addLogEntry = (type: LogEntry['type'], content: string, messageCode?: string, params?: Record<string, any>) => {
         const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content, messageCode, params };
         setLogEntries(prev => [...prev, newEntry]);
@@ -164,6 +177,7 @@ function App() {
             mapPinStates: mapPinStates,
             factions: factions,
             shopInventory: shopInventory,
+            customShopDefinitions: customShopDefinitions,
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
@@ -175,8 +189,9 @@ function App() {
         mapPinStatesRef.current = mapPinStates;
         factionsRef.current = factions;
         shopInventoryRef.current = shopInventory;
+        customShopDefinitionsRef.current = customShopDefinitions;
 
-    }, [characters, users, journal, mapPinStates, factions, shopInventory]);
+    }, [characters, users, journal, mapPinStates, factions, shopInventory, customShopDefinitions]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -580,7 +595,7 @@ function App() {
         ? shopInventoryRef.current?.shops[browsingShopId]!
         : null;
     const currentBrowsingShopDefinition = browsingShopId
-        ? shopDefinitions.find(sd => sd.id === browsingShopId)!
+        ? allShopDefinitions.find(sd => sd.id === browsingShopId)!
         : null;
 
 
@@ -633,6 +648,11 @@ function App() {
             // Load shop inventory if present
             if (data.shopInventory) {
                 setShopInventory(data.shopInventory);
+            }
+
+            // Load custom shop definitions if present
+            if (data.customShopDefinitions) {
+                setCustomShopDefinitions(data.customShopDefinitions);
             }
 
             setSaving(true);
@@ -1026,6 +1046,7 @@ function App() {
                 onStartSession={handleStartSession}
                 onShowJournal={() => setShowJournalManager(true)}
                 onShowShop={() => setShowShopManager(!showShopManager)}
+                onShowShopConfigurator={() => setShowShopConfigurator(true)}
                 onShowDiceTray={() => setShowDiceTray(!showDiceTray)}
                 onShowAtmospherePanel={() => setShowAtmospherePanel(!showAtmospherePanel)}
                 onShowFactionManager={() => setShowFactionManager(true)}
@@ -1142,6 +1163,7 @@ function App() {
                         setShopInventory(updatedInventory);
                     }}
                     characters={characters}
+                    shops={allShopDefinitions}
                 />
             )}
 
@@ -1180,6 +1202,16 @@ function App() {
                     factions={factions}
                     onCharacterUpdate={handleCharacterUpdate}
                     onClose={() => setShowReputationPanel(false)}
+                />
+            )}
+
+            {showShopConfigurator && (
+                <ShopConfigurator
+                    shops={allShopDefinitions}
+                    onUpdateShops={(updatedShops) => {
+                        setCustomShopDefinitions(updatedShops);
+                    }}
+                    onClose={() => setShowShopConfigurator(false)}
                 />
             )}
 

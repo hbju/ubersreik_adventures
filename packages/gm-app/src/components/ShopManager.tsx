@@ -21,20 +21,19 @@ interface ShopManagerProps {
     shopInventory: ShopInventoryState | undefined;
     onShopInventoryChange: (inventory: ShopInventoryState) => void;
     characters: Character[];
+    shops: ShopDefinition[];
 }
 
 export const ShopManager: React.FC<ShopManagerProps> = ({ 
     onClose, 
     shopInventory,
     onShopInventoryChange,
-    characters 
+    characters,
+    shops
 }) => {
     const gameData = useGameData();
     const [selectedShopId, setSelectedShopId] = useState<string | null>(null);
     const [expandedShops, setExpandedShops] = useState<Set<string>>(new Set());
-
-    // Get shops from game data
-    const shops = gameData.shops || [];
 
     // Create lookup maps for items
     const weaponsById = useMemo(() => new Map(gameData.weapons.map(w => [w.id, w])), [gameData.weapons]);
