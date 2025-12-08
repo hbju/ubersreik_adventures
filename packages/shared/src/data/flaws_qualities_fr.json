@@ -36,7 +36,7 @@
     },
     {
         "id": "requires_kit",
-        "name": "Nécessite un Sous-vêtement",
+        "name": "Nécessite un Kit",
         "type": "flaw",
         "equipment": "armor",
         "description": "Une armure avec ce défaut ne peut être portée que si un Vêtement Matelassé (Soft Kit) est porté en dessous."
@@ -50,14 +50,14 @@
     },
     {
         "id": "durable",
-        "name": "Durable",
+        "name": "Solide",
         "type": "quality",
         "equipment": "item",
         "description": "Laboriously fabriquée à partir de matériaux solides, l'objet peut subir +Durable points de Dégâts avant de souffrir de pénalités et gagne un jet de sauvegarde de 9+ sur 1d10 contre la casse instantanée provenant de sources comme Brise-Lame. Cette Qualité peut être prise plusieurs fois. Chaque fois qu'elle est prise, le jet de sauvegarde s'améliore de 1."
     },
     {
         "id": "fine",
-        "name": "De Qualité",
+        "name": "Raffiné",
         "type": "quality",
         "equipment": "item",
         "description": "Méticuleusement fabriqué pour plaire à l'œil. Cette Qualité est un signe de statut social et peut être prise plusieurs fois. Plus la qualité est élevée, plus l'objet semble impressionnant."
@@ -74,7 +74,7 @@
         "name": "Pratique",
         "type": "quality",
         "equipment": "item",
-        "description": "Savamment conçu avec l'utilité à l'esprit. Un test raté utilisant cet objet reçoit +1 ND (Niveau de Réussite). Si l'objet est une pièce d'armure, toutes les pénalités pour son port sont réduites d'un niveau (par exemple de -30 à -20)."
+        "description": "Savamment conçu avec l'utilité à l'esprit. Un test raté utilisant cet objet reçoit +1 DR (Niveau de Réussite). Si l'objet est une pièce d'armure, toutes les pénalités pour son port sont réduites d'un niveau (par exemple de -30 à -20)."
     },
     {
         "id": "ugly",
@@ -85,7 +85,7 @@
     },
     {
         "id": "shoddy",
-        "name": "De Camelote",
+        "name": "Bâclé",
         "type": "flaw",
         "equipment": "item",
         "description": "Hâtivement fabriqué par un amateur ou un escroc. L'objet se brise lorsqu'il est utilisé lors de tout Test raté obtenant un double. De même, une armure de Camelote se brise si un Coup Critique est subi sur une Localisation qu'elle protège."
@@ -95,11 +95,11 @@
         "name": "Peu Fiable",
         "type": "flaw",
         "equipment": "item",
-        "description": "Fabriqué sans attention à la fonctionnalité, un test raté utilisant cet objet reçoit -1 ND. De plus, les pénalités pour le port d'une armure Peu Fiable sont doublées."
+        "description": "Fabriqué sans attention à la fonctionnalité, un test raté utilisant cet objet reçoit -1 DR. De plus, les pénalités pour le port d'une armure Peu Fiable sont doublées."
     },
     {
         "id": "bulky",
-        "name": "Encombrant",
+        "name": "Volumineux",
         "type": "flaw",
         "equipment": "item",
         "description": "Une conception maladroite réalisée grossièrement. Augmente l'Encombrement de +1. Les vêtements et armures Encombrants ont un Enc de 1 même lorsqu'ils sont portés, et les pénalités de Fatigue pour l'armure sont doublées."
@@ -113,7 +113,7 @@
     },
     {
         "id": "blackpowder",
-        "name": "Poudre Noire",
+        "name": "À Poudre Noire",
         "type": "quality",
         "equipment": "weapon",
         "description": "Le claquement du coup de feu suivi de bouffées de fumée et de confusion peut être terrifiant. Si vous êtes ciblé par une arme à Poudre Noire, vous devez réussir un Test de Sang-froid Moyen (+20) ou subir un État Brisé, même si le tir manque."
@@ -123,32 +123,32 @@
         "name": "Explosion (Valeur)",
         "type": "quality",
         "equipment": "weapon",
-        "description": "Tous les Personnages à moins de (Valeur) yards du point d'impact subissent ND+Dégâts de l'Arme, et souffrent de tous les États que l'arme inflige."
+        "description": "Tous les Personnages à moins de (Valeur) yards du point d'impact subissent DR+Dégâts de l'Arme, et souffrent de tous les États que l'arme inflige."
     },
     {
         "id": "damaging",
-        "name": "Percutante",
+        "name": "Dévastatrice",
         "type": "quality",
         "equipment": "weapon",
-        "description": "Une arme Percutante peut utiliser le score le plus élevé entre le dé des unités ou le ND pour déterminer les Dégâts causés par une touche réussie."
+        "description": "Une arme Dévastatrice peut utiliser le score le plus élevé entre le dé des unités ou le DR pour déterminer les Dégâts causés par une touche réussie."
     },
     {
         "id": "defensive",
         "name": "Défensive",
         "type": "quality",
         "equipment": "weapon",
-        "description": "Les armes défensives sont conçues pour parer les attaques entrantes. Si vous maniez une telle arme, gagnez un bonus de +1 ND à tout Test de Corps à Corps lorsque vous vous opposez à une attaque entrante."
+        "description": "Les armes défensives sont conçues pour parer les attaques entrantes. Si vous maniez une telle arme, gagnez un bonus de +1 DR à tout Test de Corps à Corps lorsque vous vous opposez à une attaque entrante."
     },
     {
         "id": "distract",
-        "name": "Distrayante",
+        "name": "Perturbante",
         "type": "quality",
         "equipment": "weapon",
-        "description": "Les armes Distrayantes peuvent être utilisées pour repousser un adversaire en raison de leur nature dangereuse ou semblable à un fouet. Au lieu de causer des Dégâts, une attaque réussie avec une arme Distrayante peut forcer un adversaire à reculer de 1 yard par ND avec lequel vous gagnez le Test Opposé."
+        "description": "Les armes Perturbantes peuvent être utilisées pour repousser un adversaire en raison de leur nature dangereuse ou semblable à un fouet. Au lieu de causer des Dégâts, une attaque réussie avec une arme Perturbante peut forcer un adversaire à reculer de 1 yard par DR avec lequel vous gagnez le Test Opposé."
     },
     {
         "id": "entangle",
-        "name": "Enchevêtrement",
+        "name": "Immobilisante",
         "type": "quality",
         "equipment": "weapon",
         "description": "Votre arme s'enroule autour de vos adversaires, les enchevêtrant. Tout adversaire touché avec succès par votre arme gagne l'État Enchevêtré avec une valeur de Force égale à votre Caractéristique de Force. Lorsque vous Enchevêtrez un adversaire, vous ne pouvez pas utiliser l'arme autrement pour frapper."
@@ -169,21 +169,21 @@
     },
     {
         "id": "impact",
-        "name": "Impact",
+        "name": "Percutante",
         "type": "quality",
         "equipment": "weapon",
-        "description": "Certaines armes sont simplement énormes ou causent des dégâts terribles en raison de leur poids ou de leur conception. Sur une touche réussie, ajoutez le résultat du dé des unités du jet d'attaque à tout Dégât causé par une arme à Impact."
+        "description": "Certaines armes sont simplement énormes ou causent des dégâts terribles en raison de leur poids ou de leur conception. Sur une touche réussie, ajoutez le résultat du dé des unités du jet d'attaque à tout Dégât causé par une arme Percutante."
     },
     {
         "id": "impale",
-        "name": "Perforante",
+        "name": "Empaleuse",
         "type": "quality",
         "equipment": "weapon",
-        "description": "Les armes Perforantes peuvent tuer d'un seul coup net. Les armes Perforantes causent un Coup Critique sur tout nombre divisible par 10 (c'est-à-dire : 10, 20, 30, etc.) ainsi que sur les doubles. Si la perforation provient d'une arme à distance, la munition utilisée s'est fermement logée dans le corps de la cible. Les flèches et les carreaux nécessitent un Test de Soins Difficile (+0) réussi pour être retirés."
+        "description": "Les armes Empaleuses peuvent tuer d'un seul coup net. Les armes Empaleuses causent un Coup Critique sur tout nombre divisible par 10 (c'est-à-dire : 10, 20, 30, etc.) ainsi que sur les doubles. Si la perforation provient d'une arme à distance, la munition utilisée s'est fermement logée dans le corps de la cible. Les flèches et les carreaux nécessitent un Test de Soins Difficile (+0) réussi pour être retirés."
     },
     {
         "id": "penetrating",
-        "name": "Pénétrante",
+        "name": "Perforante",
         "type": "quality",
         "equipment": "weapon",
         "description": "L'arme est très efficace pour pénétrer l'armure. Les PA non métalliques sont ignorés, et le premier point de toute autre armure est ignoré."
@@ -200,7 +200,7 @@
         "name": "Précise",
         "type": "quality",
         "equipment": "weapon",
-        "description": "L'arme est facile à aligner sur la cible. Gagnez un bonus de +1 ND à tout Test réussi lors d'une attaque avec cette arme."
+        "description": "L'arme est facile à aligner sur la cible. Gagnez un bonus de +1 DR à tout Test réussi lors d'une attaque avec cette arme."
     },
     {
         "id": "pummel",
@@ -211,7 +211,7 @@
     },
     {
         "id": "repeater",
-        "name": "Répétition (Valeur)",
+        "name": "À Répétition (Valeur)",
         "type": "quality",
         "equipment": "weapon",
         "description": "Votre arme contient (Valeur) coups, se rechargeant automatiquement après chaque tir. Lorsque vous avez utilisé tous vos coups, vous devez recharger complètement l'arme en utilisant les règles normales."
@@ -232,7 +232,7 @@
     },
     {
         "id": "spread",
-        "name": "Dispersion (Valeur)",
+        "name": "À Dispersion (Valeur)",
         "type": "quality",
         "equipment": "weapon",
         "description": "Les armes avec la qualité Dispersion tirent un nuage de projectiles en expansion qui peut frapper plusieurs cibles. Selon la portée de la cible, les armes avec cette qualité se comportent un peu différemment.\nÀ Bout Portant : Le tir cible un seul individu. Ajoutez (Valeur) aux Dégâts de l'arme.\nDe Portée Courte à Longue : Le tir cible un seul individu, et les (Valeur) créatures visibles les plus proches. Aucune cible ne peut être éloignée de plus de (Valeur) yards l'une de l'autre.\nPortée Extrême : Comme pour la Portée Courte à Longue, mais réduisez également les dégâts de l'arme de (Valeur)."
@@ -253,17 +253,17 @@
     },
     {
         "id": "unbreakable",
-        "name": "Indestructible",
+        "name": "Incassable",
         "type": "quality",
         "equipment": "weapon",
         "description": "L'arme est d'une facture exquise ou construite à partir d'un matériau particulièrement solide. Dans presque toutes les circonstances, cette arme ne se brisera pas, ne se corrodera pas et ne perdra pas son tranchant."
     },
     {
         "id": "wrap",
-        "name": "Enlaçante",
+        "name": "À Enroulement",
         "type": "quality",
         "equipment": "weapon",
-        "description": "Les armes Enlaçantes ont généralement de longues chaînes avec des poids à l'extrémité, ce qui les rend très difficiles à parer efficacement. Les Tests de Corps à Corps s'opposant à une attaque d'une arme Enlaçante subissent une pénalité de -1 ND, car les coups parés s'enroulent par-dessus les boucliers ou autour des lames."
+        "description": "Les armes à Enroulement ont généralement de longues chaînes avec des poids à l'extrémité, ce qui les rend très difficiles à parer efficacement. Les Tests de Corps à Corps s'opposant à une attaque d'une arme À Enroulement subissent une pénalité de -1 DR, car les coups parés s'enroulent par-dessus les boucliers ou autour des lames."
     },
     {
         "id": "dangerous",
@@ -277,21 +277,21 @@
         "name": "Imprécise",
         "type": "flaw",
         "equipment": "weapon",
-        "description": "Les armes Imprécises sont difficiles à manier car elles sont peu maniables ou difficiles à viser. Subissez une pénalité de -1 ND lors de l'utilisation de l'arme pour attaquer. Une Arme Imprécise ne peut jamais être Précise."
+        "description": "Les armes Imprécises sont difficiles à manier car elles sont peu maniables ou difficiles à viser. Subissez une pénalité de -1 DR lors de l'utilisation de l'arme pour attaquer. Une Arme Imprécise ne peut jamais être Précise."
     },
     {
         "id": "reload",
-        "name": "Rechargement (Valeur)",
+        "name": "Recharge (Valeur)",
         "type": "flaw",
         "equipment": "weapon",
-        "description": "L'arme est lente à recharger. Une arme déchargée avec ce défaut nécessite un Test Étendu de Tir pour le Groupe d'Armes approprié, nécessitant (Valeur) ND pour recharger. Si vous êtes interrompu pendant le rechargement, vous devez recommencer à zéro."
+        "description": "L'arme est lente à recharger. Une arme déchargée avec ce défaut nécessite un Test Étendu de Tir pour le Groupe d'Armes approprié, nécessitant (Valeur) DR pour recharger. Si vous êtes interrompu pendant le rechargement, vous devez recommencer à zéro."
     },
     {
         "id": "slow",
         "name": "Lente",
         "type": "flaw",
         "equipment": "weapon",
-        "description": "Les armes Lentes sont peu maniables et lourdes, ce qui les rend difficiles à utiliser correctement. Les Personnages utilisant des armes Lentes frappent toujours en dernier dans un Round, quel que soit l'ordre d'Initiative. De plus, les adversaires gagnent un bonus de +1 ND à tout Test pour se défendre contre vos attaques."
+        "description": "Les armes Lentes sont peu maniables et lourdes, ce qui les rend difficiles à utiliser correctement. Les Personnages utilisant des armes Lentes frappent toujours en dernier dans un Round, quel que soit l'ordre d'Initiative. De plus, les adversaires gagnent un bonus de +1 DR à tout Test pour se défendre contre vos attaques."
     },
     {
         "id": "tiring",
@@ -305,7 +305,7 @@
         "name": "Mal Équilibrée",
         "type": "flaw",
         "equipment": "weapon",
-        "description": "Le poids de certaines armes est concentré au niveau de la tête, ce qui les rend inefficaces pour parer. Lorsque cette arme est utilisée pour s'opposer à une attaque entrante, elle subit une pénalité de –1 ND à l'attaque."
+        "description": "Le poids de certaines armes est concentré au niveau de la tête, ce qui les rend inefficaces pour parer. Lorsque cette arme est utilisée pour s'opposer à une attaque entrante, elle subit une pénalité de –1 DR à l'attaque."
     },
     {
         "id": "undamaging",

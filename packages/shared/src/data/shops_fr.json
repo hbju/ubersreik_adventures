@@ -1,0 +1,152 @@
+[
+  {
+    "id": "shop_metalworkers_guild",
+    "name": "Guilde des Métallurgistes",
+    "locationId": "metalworkers_guild",
+    "category": "weapon",
+    "baseStock": [
+      "weapon_basic_axe",
+      "weapon_basic_dagger",
+      "weapon_basic_sword",
+      "weapon_basic_mace",
+      "weapon_basic_warhammer",
+      "weapon_basic_shield",
+      "weapon_basic_shield_buckler",
+      "weapon_basic_shield_large",
+      "weapon_polearm_halberd",
+      "weapon_polearm_spear",
+      "armour_mail_coat",
+      "armour_mail_coif",
+      "armour_mail_chausses",
+      "armour_breastplate",
+      "armour_bracers",
+      "armour_open_helm",
+      "armour_plate_leggings",
+      "armour_leather_jack",
+      "armour_leather_jerkin"
+    ]
+  },
+  {
+    "id": "shop_cutlers_guild",
+    "name": "La Vénérable Guilde des Couteliers",
+    "locationId": "the_worshipful_guild_of_cutlers",
+    "category": "weapon",
+    "baseStock": [
+      "weapon_basic_dagger",
+      "weapon_basic_knife",
+      "weapon_basic_sword",
+      "weapon_basic_ballock_knife",
+      "weapon_basic_scimitar",
+      "weapon_fencing_foil",
+      "weapon_fencing_rapier",
+      "weapon_parry_main_gauche",
+      "weapon_throwing_throwing_knife"
+    ]
+  },
+  {
+    "id": "shop_cordelias_apothecary",
+    "name": "Apothicairerie de Cordelia",
+    "locationId": "cordelias_apothecary",
+    "category": "apothecary",
+    "baseStock": [
+      "item_healing_poultice",
+      "item_healing_draught",
+      "item_antitoxin_kit",
+      "item_bandages",
+      "item_salve",
+      "item_herbs",
+      "item_charm",
+      "item_candle",
+      "item_religious_symbol"
+    ]
+  },
+  {
+    "id": "shop_neuners_herbs",
+    "name": "Herbes et Teintures de Neuner",
+    "locationId": "neuners_herbs_and_tinctures",
+    "category": "apothecary",
+    "baseStock": [
+      "item_herbs",
+      "item_healing_poultice",
+      "item_antitoxin_kit",
+      "item_salve",
+      "item_candle",
+      "item_bottle"
+    ]
+  },
+  {
+    "id": "shop_simons_pharmacy",
+    "name": "Pharmacie de Simon",
+    "locationId": "simons_pharmacy",
+    "category": "apothecary",
+    "baseStock": [
+      "item_healing_draught",
+      "item_antitoxin_kit",
+      "item_flask_of_spirits",
+      "item_bottle",
+      "item_vial_of_poison"
+    ]
+  },
+  {
+    "id": "shop_satriolis",
+    "name": "Charcuterie de Satrioli",
+    "locationId": "satriolis_sausage_shop",
+    "category": "general",
+    "baseStock": [
+      "item_food_groceries_day",
+      "item_meal_inn",
+      "item_rations_1_day"
+    ]
+  },
+  {
+    "id": "shop_elises_exquisites",
+    "name": "Raretés d'Élise",
+    "locationId": "elises_exquisites",
+    "category": "specialty",
+    "baseStock": [
+      "item_amulet",
+      "item_charm",
+      "item_jewellery"
+    ]
+  },
+  {
+    "id": "shop_general_store",
+    "name": "Magasin Général",
+    "locationId": "general_store",
+    "category": "general",
+    "baseStock": [
+      "item_backpack",
+      "item_blanket",
+      "item_bottle",
+      "item_candle",
+      "item_clothing",
+      "item_rope_10_yards",
+      "item_sack",
+      "item_torch",
+      "item_boots",
+      "item_cloak",
+      "item_coat",
+      "item_gloves",
+      "item_hood_or_mask",
+      "item_lantern",
+      "item_oil_pint",
+      "item_waterskin"
+    ]
+  },
+  {
+    "id": "shop_bridge_house_inn",
+    "name": "Auberge du Pont",
+    "locationId": "bridge_house_inn",
+    "category": "tavern",
+    "baseStock": [
+      "item_ale_pint",
+      "item_ale_keg",
+      "item_wine_bottle",
+      "item_spirits_bottle",
+      "item_meal_inn",
+      "item_rations_1_day",
+      "item_room_common_night",
+      "item_room_private_night"
+    ]
+  }
+]

@@ -1,0 +1,123 @@
+.container {
+    position: absolute;
+    padding: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--color-parchment);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.title {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 3px double var(--color-gold);
+}
+
+.shopsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.shopCard {
+    background: var(--color-paper, #f5f5dc);
+    border: 2px solid var(--color-leather);
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    width: 100%;
+}
+
+.shopCard:hover {
+    border-color: var(--color-gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.shopHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.shopIcon {
+    font-size: 2rem;
+}
+
+.shopInfo {
+    flex: 1;
+}
+
+.shopName {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: var(--color-leather-dark);
+}
+
+.shopLocation {
+    font-size: 0.9rem;
+    color: var(--color-ink);
+    opacity: 0.7;
+}
+
+.shopMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-leather);
+}
+
+.itemCount {
+    font-size: 0.9rem;
+    color: var(--color-ink);
+}
+
+.viewButton {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Empty state */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    min-height: 60vh;
+}
+
+.emptyIcon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.emptyState h3 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-leather-dark);
+    margin-bottom: 12px;
+}
+
+.emptyState p {
+    font-size: 1rem;
+    color: var(--color-ink);
+    opacity: 0.7;
+    max-width: 300px;
+}

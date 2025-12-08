@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './MapView.module.css';
-import { GameData, MapPinState, Character, Location } from '../types/wfrp.types';
+import { GameData, MapPinState, Character, Location, ShopState } from '../types/wfrp.types';
 import MapDisplay from './MapDisplay';
 import LocationInfoPanel from './LocationInfoPanel';
 
@@ -26,6 +26,8 @@ interface MapViewProps {
     onViewStateChange?: (viewState: ViewState) => void;
     onMapPing?: (x: number, y: number) => void;
     incomingPing?: { x: number; y: number } | null;
+    shops?: ShopState[];
+    onViewWares?: (shopId: string) => void;
 }
 
 interface ContextMenu {
@@ -44,6 +46,8 @@ const MapView: React.FC<MapViewProps> = ({
     onViewStateChange,
     onMapPing,
     incomingPing,
+    shops = [],
+    onViewWares
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -287,6 +291,8 @@ const MapView: React.FC<MapViewProps> = ({
                     location={selectedLocation}
                     onClose={handleClosePanel}
                     isGM={isGM}
+                    shops={shops}
+                    onViewWares={onViewWares}
                 />
             )}
 

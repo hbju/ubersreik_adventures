@@ -216,7 +216,7 @@
         "availability": "Scarce"
     },
     {
-        "id": "armour_breastplate_plate",
+        "id": "armour_breastplate",
         "name": "Cuirasse",
         "type": "Plate",
         "price": "10 GC",

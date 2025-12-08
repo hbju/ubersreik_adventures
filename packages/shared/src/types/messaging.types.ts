@@ -1,4 +1,4 @@
-import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction } from './wfrp.types';
+import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction, ShopState, ShopInventoryItem } from './wfrp.types';
 
 interface BaseMessage<T extends string, P> {
     type: T;
@@ -44,7 +44,25 @@ export type FactionUpdateMessage = BaseMessage<'FACTION_UPDATE', {
     factions: Faction[];
 }>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage;
+// Shop system messages
+export type ShopStateUpdateMessage = BaseMessage<'SHOP_STATE_UPDATE', {
+    shops: ShopState[]; // Array of shops player has access to
+}>;
+
+export type ShopItemRevealedMessage = BaseMessage<'SHOP_ITEM_REVEALED', {
+    shopId: string;
+    item: ShopInventoryItem;
+}>;
+
+export type ShopPurchaseResponseMessage = BaseMessage<'SHOP_PURCHASE_RESPONSE', {
+    success: boolean;
+    shopId: string;
+    item: ShopInventoryItem;
+    character?: Character;
+    reason?: string;
+}>;
+
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage;
 
 // == Player to GM Messages ==
 
@@ -96,4 +114,22 @@ export type PlayerUpdateCharacterMessage = BaseMessage<'PLAYER_UPDATE_CHARACTER'
     updates: Partial<Character>;
 }>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage;
+// Shop purchase request from player
+export type ShopPurchaseRequestMessage = BaseMessage<'SHOP_PURCHASE_REQUEST', {
+    shopId: string;
+    instanceId: string; // The specific item instance to purchase
+    characterId: string;
+    quantity: number;
+}>;
+
+// Player requesting to evaluate an item
+export type ShopEvaluateRequestMessage = BaseMessage<'SHOP_EVALUATE_REQUEST', {
+    shopId: string;
+    instanceId: string;
+    characterId: string;
+    characterName: string;
+    rollResult: number;
+    successLevel: number;
+}>;
+
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage;

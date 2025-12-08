@@ -1,13 +1,24 @@
 import React from 'react';
-import { Location } from '@wfrp/shared';
+import { Location, ShopState } from '@wfrp/shared';
 import styles from './LocationInfoPanel.module.css';
 
 interface LocationInfoPanelProps {
   location: Location;
   onClose: () => void;
+  shops?: ShopState[];
+  onViewWares?: (shopId: string) => void;
 }
 
-const LocationInfoPanel: React.FC<LocationInfoPanelProps> = ({ location, onClose }) => {
+const LocationInfoPanel: React.FC<LocationInfoPanelProps> = ({ 
+  location, 
+  onClose, 
+  shops = [],
+  onViewWares
+}) => {
+  // Check if this location has an accessible shop
+  const locationShop = shops.find(shop => shop.shopId.includes(location.id.toLowerCase().replace(/\s+/g, '_')));
+  const hasAccessibleShop = !!locationShop;
+
   return (
     <div className={styles.panel}>
         <button className={styles.closeButton} onClick={onClose}>
@@ -30,12 +41,16 @@ const LocationInfoPanel: React.FC<LocationInfoPanelProps> = ({ location, onClose
                 </div>
             )}
 
-            <hr className={styles.divider} />
-
-            <div className={styles.gmSection}>
-                <h3>GM Notes</h3>
-                <p className={styles.gmNotes}>{location.gmNotes}</p>
-            </div>
+            {hasAccessibleShop && onViewWares && locationShop && (
+                <div className={styles.shopSection}>
+                    <button 
+                        className={styles.viewWaresButton}
+                        onClick={() => onViewWares(locationShop.shopId)}
+                    >
+                        🛒 View Wares
+                    </button>
+                </div>
+            )}
         </div>
     </div>
     );

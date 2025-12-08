@@ -45,7 +45,8 @@ import {
     Talent,
     TalentSelectionModal,
     Faction,
-    FactionUpdateMessage
+    FactionUpdateMessage,
+    ShopInventoryState
 } from '@wfrp/shared';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -54,6 +55,7 @@ import './App.css';
 import CareerManager from './components/CareerManager';
 import { useTranslation } from 'react-i18next';
 import i18n from './i18n';
+import ShopBrowser from './components/ShopBrowser';
 
 interface ServerStatusData {
     ip: string;
@@ -64,7 +66,7 @@ interface ServerStatusData {
 function App() {
     const { t } = useTranslation();
 
-    const { skills, talents, careers, items, weapons, armor, conditions, gameData } = useGameData();
+    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, gameData } = useGameData();
 
     const calculateMaxWounds = (character: Character) => {
         return calculateEffectiveMaxWounds(character, talents);
@@ -107,6 +109,8 @@ function App() {
     const [showReputationPanel, setShowReputationPanel] = useState(false);
     const [factions, setFactions] = useState<Faction[]>([]);
     const factionsRef = useRef(factions);
+    const [shopInventory, setShopInventory] = useState<ShopInventoryState | undefined>(undefined);
+    const shopInventoryRef = useRef(shopInventory);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number, charId: string } | null>(null);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
@@ -123,10 +127,25 @@ function App() {
         newCareerLevelName: string;
         xpCost: number;
     } | null>(null);
+    const [shopEvaluateRequest, setShopEvaluateRequest] = useState<{
+        shopId: string;
+        instanceId: string;
+        characterId: string;
+        characterName: string;
+    } | null>(null);
+    const [shopPurchaseRequest, setShopPurchaseRequest] = useState<{
+        shopId: string;
+        instanceId: string;
+        characterId: string;
+        characterName: string;
+        quantity: number;
+    } | null>(null);
     const [opposedTestResults, setOpposedTestResults] = useState<Map<string, OpposedTestResultMessage['payload']>>(new Map());
 
     const [showItemSelector, setShowItemSelector] = useState<string | null>(null);
     const [showTalentSelector, setShowTalentSelector] = useState<string | null>(null);
+
+    const [browsingShopId, setBrowsingShopId] = useState<string | null>(null);
 
     const addLogEntry = (type: LogEntry['type'], content: string, messageCode?: string, params?: Record<string, any>) => {
         const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content, messageCode, params };
@@ -144,6 +163,7 @@ function App() {
             journal: journal,
             mapPinStates: mapPinStates,
             factions: factions,
+            shopInventory: shopInventory,
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
@@ -154,8 +174,9 @@ function App() {
         journalRef.current = journal;
         mapPinStatesRef.current = mapPinStates;
         factionsRef.current = factions;
+        shopInventoryRef.current = shopInventory;
 
-    }, [characters, users, journal, mapPinStates, factions]);
+    }, [characters, users, journal, mapPinStates, factions, shopInventory]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -549,6 +570,19 @@ function App() {
         );
     }
 
+    // Handle opening shop browser from location panel
+    const handleViewWares = (shopId: string) => {
+        setBrowsingShopId(shopId);
+    };
+
+    // Get current shop being browsed
+    const currentBrowsingShop = browsingShopId
+        ? shopInventoryRef.current?.shops[browsingShopId]!
+        : null;
+    const currentBrowsingShopDefinition = browsingShopId
+        ? shopDefinitions.find(sd => sd.id === browsingShopId)!
+        : null;
+
 
     useEffect(() => {
         // Load initial data on component mount
@@ -595,7 +629,12 @@ function App() {
             if (data.factions) {
                 setFactions(data.factions);
             }
-            
+
+            // Load shop inventory if present
+            if (data.shopInventory) {
+                setShopInventory(data.shopInventory);
+            }
+
             setSaving(true);
         }).catch((error: any) => {
             console.error('Failed to load initial data:', error);
@@ -798,6 +837,37 @@ function App() {
                             addLogEntry('system', `${character.name} removed ${conditionsToRemove} ${conditionId} condition(s).`);
                         }
                     }
+                }
+            }
+
+            // Handle shop evaluate request
+            if (message.type === 'SHOP_EVALUATE_REQUEST') {
+                const { shopId, instanceId, characterId, characterName } = message.payload;
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (character) {
+                    setShopEvaluateRequest({
+                        shopId,
+                        instanceId,
+                        characterId,
+                        characterName: character.name
+                    });
+                    addLogEntry('system', `${character.name} requests to evaluate an item in shop ${shopId}.`);
+                }
+            }
+
+            // Handle shop purchase request
+            if (message.type === 'SHOP_PURCHASE_REQUEST') {
+                const { shopId, instanceId, characterId, quantity } = message.payload;
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (character) {
+                    setShopPurchaseRequest({
+                        shopId,
+                        instanceId,
+                        characterId,
+                        characterName: character.name,
+                        quantity
+                    });
+                    addLogEntry('system', `${character.name} requests to purchase from shop ${shopId}.`);
                 }
             }
         });
@@ -1019,6 +1089,8 @@ function App() {
                                 payload: { x, y }
                             });
                         }}
+                        shops={shopInventory ? Object.values(shopInventory.shops) : []}
+                        onViewWares={handleViewWares}
                     />
                 </div>
                 <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
@@ -1062,7 +1134,26 @@ function App() {
 
             {showAtmospherePanel && <AtmospherePanel onClose={() => setShowAtmospherePanel(false)} />}
 
-            {showShopManager && <ShopManager onClose={() => setShowShopManager(false)} />}
+            {showShopManager && (
+                <ShopManager
+                    onClose={() => setShowShopManager(false)}
+                    shopInventory={shopInventory}
+                    onShopInventoryChange={(updatedInventory) => {
+                        setShopInventory(updatedInventory);
+                    }}
+                    characters={characters}
+                />
+            )}
+
+            {currentBrowsingShop && (
+                <ShopBrowser
+                    shop={currentBrowsingShop}
+                    shopDefinition={currentBrowsingShopDefinition ? currentBrowsingShopDefinition : undefined}
+                    onClose={() => setBrowsingShopId(null)}
+                    isGm={true}
+                />
+            )}
+
 
             {showDiceTray && <DiceTray onClose={() => setShowDiceTray(false)} onLogEntry={addLogEntry} />}
 

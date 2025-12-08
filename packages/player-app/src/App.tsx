@@ -3,7 +3,7 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterCreationWizard, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, recalculateCharacterTalentBonuses, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, Location, useGameData, CharacterCreateMessage, PlayerUpdateCharacterMessage } from '@wfrp/shared';
+import { CharacterSheet, Character, CharacterCreationWizard, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, recalculateCharacterTalentBonuses, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, Location, useGameData, CharacterCreateMessage, PlayerUpdateCharacterMessage, ShopEvaluateRequestMessage, ShopPurchaseRequestMessage, ShopState } from '@wfrp/shared';
 import { TalentSelectionModal } from '@wfrp/shared';
 import {
     TestResultMessage,
@@ -12,6 +12,8 @@ import {
 } from '@wfrp/shared';
 import { TalentModal } from './components/TalentModal';
 import { ShopModal } from './components/ShopModal';
+import { ShopBrowser } from '../../gm-app/src/components/ShopBrowser';
+import { ShopsList } from './components/ShopsList';
 import { OpposedTestModal } from './components/OpposedTestModal';
 import { ConditionTestModal } from './components/ConditionTestModal';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
@@ -22,9 +24,9 @@ import PlayerCharacterSheet from './components/PlayerCharacterSheet';
 
 
 const PlayerApp: React.FC = () => {
-    const { skills, talents, careers, items, weapons, armor, conditions, gameData } = useGameData();
+    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, gameData } = useGameData();
 
-    const { isConnected, isAuthenticated, authError, username, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, connect, disconnect, sendMessage } = useSocket();
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number } | null>(null);
@@ -226,10 +228,46 @@ const PlayerApp: React.FC = () => {
         alert(`Purchase request sent to GM for ${item.name}`);
     };
 
+    // Handle shop evaluation request (LEGACY)
+    const handleRequestEvaluate = (shopId: string, instanceId: string) => {
+        if (!character) return;
+
+        const message: ShopEvaluateRequestMessage = {
+            type: 'SHOP_EVALUATE_REQUEST',
+            payload: {
+                shopId,
+                instanceId,
+                characterId: character.id,
+                characterName: character.name,
+                rollResult: 0, // GM will handle the roll
+                successLevel: 0
+            }
+        };
+        sendMessage(message);
+        alert('Evaluation request sent to GM');
+    };
+
+    // Handle shop purchase request (LEGACY)
+    const handleShopPurchaseRequest = (shopId: string, instanceId: string, quantity: number) => {
+        if (!character) return;
+
+        const message: ShopPurchaseRequestMessage = {
+            type: 'SHOP_PURCHASE_REQUEST',
+            payload: {
+                shopId,
+                instanceId,
+                characterId: character.id,
+                quantity
+            }
+        };
+        sendMessage(message);
+        alert('Purchase request sent to GM');
+    };
+
     const handleOpposedTestRoll = (
-        rollResult: number, 
-        successLevel: number, 
-        fortuneSpent: number, 
+        rollResult: number,
+        successLevel: number,
+        fortuneSpent: number,
         corruptionGained: number
     ) => {
         if (!character || !opposedTestRequest) return;
@@ -294,7 +332,7 @@ const PlayerApp: React.FC = () => {
     // Edit Mode: Handle character updates from the new PlayerCharacterSheet
     const handleEditModeCharacterUpdate = (updates: Partial<Character>) => {
         if (!character) return;
-        
+
         const message: PlayerUpdateCharacterMessage = {
             type: 'PLAYER_UPDATE_CHARACTER',
             payload: {

@@ -23,6 +23,6 @@
       "@wfrp/shared": ["../shared/src/index.ts"]
     },
   },
-  "include": ["src", "electron", "../shared/src"],
+  "include": ["src", "electron", "../shared/src", "../gm-app/src/components/ShopBrowser.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

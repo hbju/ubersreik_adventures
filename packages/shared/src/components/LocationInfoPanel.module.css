@@ -129,3 +129,33 @@
 .panel::-webkit-scrollbar-thumb:hover {
   background: var(--color-gold-light);
 }
+
+
+/* Shop section */
+.shopSection {
+  margin: 20px;
+  padding-top: 20px;
+  border-top: 2px solid var(--color-leather-dark);
+}
+
+.viewWaresButton {
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, var(--color-leather) 0%, var(--color-leather-dark) 100%);
+  border: 2px solid var(--color-gold);
+  color: var(--color-gold);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.viewWaresButton:hover {
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark, #8B7355) 100%);
+  color: var(--color-leather-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}

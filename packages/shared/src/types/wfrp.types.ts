@@ -300,6 +300,7 @@ export interface CampaignState {
   journal: JournalEntry[];
   mapPinStates: Record<string, MapPinState>; // locationId -> MapPinState
   factions: Faction[]; // Global list of factions
+  shopInventory?: ShopInventoryState; // Shop inventory state
   version: string;
   lastModified: string;
 }
@@ -320,4 +321,58 @@ export interface ParsedQuality {
   name: string;
   rating?: number;
   definition?: ItemQualityDefinition;
+}
+
+// ========================================
+// Shop System Types
+// ========================================
+
+export type ItemAvailability = 'Common' | 'Scarce' | 'Rare' | 'Exotic';
+
+export type ItemModification = 'standard' | 'quality' | 'flawed';
+
+/**
+ * Definition of a shop that can generate inventory
+ */
+export interface ShopDefinition {
+  id: string;
+  name: string;
+  locationId: string; // Reference to the map location
+  category: 'weapon' | 'armor' | 'general' | 'apothecary' | 'tavern' | 'specialty';
+  baseStock: string[]; // Array of item IDs that this shop can potentially stock
+}
+
+/**
+ * A specific item instance in a shop's inventory
+ */
+export interface ShopInventoryItem {
+  instanceId: string; // Unique ID for this specific item instance
+  baseItemId: string; // Reference to the base item (weapon, armor, or item)
+  baseItemType: 'weapon' | 'armor' | 'item'; // Type of the base item
+  nameOverride?: string; // e.g., "Unbalanced Dagger" or "Fine Sword"
+  modification: ItemModification; // Whether standard, quality, or flawed
+  qualities: string[]; // Applied quality IDs (e.g., ["durable", "fine"])
+  flaws: string[]; // Applied flaw IDs (e.g., ["shoddy", "ugly"])
+  basePrice: number; // Price in brass pennies (calculated based on modifiers)
+  displayPrice: string; // Original display price for reference
+  quantity: number; // How many of this item are available
+  isIdentified: boolean; // If false, shows generic name/price to players
+}
+
+/**
+ * Current state of a shop's inventory
+ */
+export interface ShopState {
+  shopId: string;
+  lastRestockDate: string; // ISO date string
+  inventory: ShopInventoryItem[];
+  playerAccess: string[]; // Array of character IDs who can access this shop
+}
+
+/**
+ * Complete shop inventory state across all shops
+ */
+export interface ShopInventoryState {
+  shops: Record<string, ShopState>; // shopId -> ShopState
+  lastGlobalRestock: string; // ISO date string of last "Restock Day" action
 }

@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem } from '@wfrp/shared';
 import { getCampaignData, saveCampaignData } from './dataManager';
 
 const PORT = 3003;
@@ -244,6 +244,20 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 return;
             }
 
+            // Handle shop evaluate request - forward to GM
+            if (message.type === 'SHOP_EVALUATE_REQUEST') {
+                console.log(`[SERVER] Shop evaluate request from ${userId}:`, message.payload);
+                mainWindow.webContents.send('player-message-received', message);
+                return;
+            }
+
+            // Handle shop purchase request - forward to GM
+            if (message.type === 'SHOP_PURCHASE_REQUEST') {
+                console.log(`[SERVER] Shop purchase request from ${userId}:`, message.payload);
+                mainWindow.webContents.send('player-message-received', message);
+                return;
+            }
+
             // Forward authenticated messages to GM
             mainWindow.webContents.send('player-message-received', message);
         });
@@ -362,6 +376,47 @@ function sendInitialStateToPlayer(socket: Socket, userId: string, characterId: s
         socket.emit('gm-message', factionMessage);
         console.log(`[SERVER] Sent ${campaignData.factions.length} factions to player ${socket.id}`);
     }
+
+    // Send shop inventory filtered for player access
+    if (campaignData.shopInventory && characterId) {
+        const shopInventory = campaignData.shopInventory;
+        const accessibleShops: ShopState[] = [];
+
+        if (shopInventory.shops) {
+            for (const [shopId, shopState] of Object.entries(shopInventory.shops)) {
+                if (shopState.playerAccess.includes(characterId)) {
+                    // Filter inventory items to hide quality/flaw for unidentified items
+                    const filteredInventory: ShopInventoryItem[] = shopState.inventory.map(item => {
+                        if (!item.isIdentified) {
+                            return {
+                                ...item,
+                                modification: 'standard' as const,
+                                quality: undefined,
+                                flaw: undefined,
+                                modifiedPrice: item.basePrice
+                            };
+                        }
+                        return item;
+                    });
+
+                    accessibleShops.push({
+                        ...shopState,
+                        inventory: filteredInventory,
+                        playerAccess: [characterId]
+                    });
+                }
+            }
+        }
+
+        if (accessibleShops.length > 0) {
+            const shopMessage: ShopStateUpdateMessage = {
+                type: 'SHOP_STATE_UPDATE',
+                payload: { shops: accessibleShops }
+            };
+            socket.emit('gm-message', shopMessage);
+            console.log(`[SERVER] Sent ${accessibleShops.length} shops to player ${socket.id}`);
+        }
+    }
 }
 
 /**
@@ -475,5 +530,122 @@ export function broadcastFactions(factions: Faction[]) {
 
     connectedClients.forEach((socket) => {
         socket.emit('gm-message', message);
+    });
+}
+
+/**
+ * Broadcast shop inventory to all connected players
+ * Each player receives only shops they have access to
+ * Items are filtered to hide quality/flaw info for unidentified items
+ * @param shopInventory The complete shop inventory state
+ */
+export function broadcastShopInventory(shopInventory: ShopInventoryState) {
+    if (!io || connectedClients.size === 0) {
+        console.log('[SERVER] No clients connected, skipping shop broadcast');
+        return;
+    }
+
+    console.log(`[SERVER] Broadcasting shop inventory to ${connectedClients.size} players`);
+
+    connectedClients.forEach((socket, socketId) => {
+        const userId = socketToUserId.get(socketId);
+        const assignedCharacterId = userId ? getUserCharacter(userId)?.id : undefined;
+
+        if (!assignedCharacterId || !shopInventory.shops) {
+            console.log(`[SERVER] Skipping shop broadcast for unassigned player ${socketId}`);
+            return;
+        }
+
+        // Filter shops to only include those the player has access to
+        const filteredShops: Record<string, ShopState> = {};
+
+        for (const [shopId, shopState] of Object.entries(shopInventory.shops)) {
+            if (shopState.playerAccess.includes(assignedCharacterId)) {
+                // Filter inventory items to hide quality/flaw for unidentified items
+                const filteredInventory: ShopInventoryItem[] = shopState.inventory.map(item => {
+                    if (!item.isIdentified) {
+                        // Hide modification details for unidentified items
+                        return {
+                            ...item,
+                            modification: 'standard' as const,
+                            quality: undefined,
+                            flaw: undefined,
+                            // Show base price instead of modified price
+                            modifiedPrice: item.basePrice
+                        };
+                    }
+                    return item;
+                });
+
+                filteredShops[shopId] = {
+                    ...shopState,
+                    inventory: filteredInventory,
+                    playerAccess: [assignedCharacterId] // Only include this character's access
+                };
+            }
+        }
+
+        if (Object.keys(filteredShops).length > 0) {
+            // Convert to array format expected by ShopStateUpdateMessage
+            const shopsArray: ShopState[] = Object.values(filteredShops);
+            
+            const message: ShopStateUpdateMessage = {
+                type: 'SHOP_STATE_UPDATE',
+                payload: {
+                    shops: shopsArray
+                }
+            };
+
+            socket.emit('gm-message', message);
+            console.log(`[SERVER] Sent ${shopsArray.length} shops to player ${socketId}`);
+        }
+    });
+}
+
+/**
+ * Broadcast a single item reveal to players who have access to that shop
+ * @param shopId The shop containing the item
+ * @param itemInstanceId The specific item that was revealed
+ * @param shopInventory The complete shop inventory to get the revealed item details
+ */
+export function broadcastShopItemReveal(shopId: string, itemInstanceId: string, shopInventory: ShopInventoryState) {
+    if (!io || connectedClients.size === 0) {
+        console.log('[SERVER] No clients connected, skipping item reveal broadcast');
+        return;
+    }
+
+    const shopState = shopInventory.shops?.[shopId];
+    if (!shopState) {
+        console.log(`[SERVER] Shop ${shopId} not found for item reveal`);
+        return;
+    }
+
+    const revealedItem = shopState.inventory.find(item => item.instanceId === itemInstanceId);
+    if (!revealedItem) {
+        console.log(`[SERVER] Item ${itemInstanceId} not found in shop ${shopId}`);
+        return;
+    }
+
+    console.log(`[SERVER] Broadcasting item reveal for ${itemInstanceId} in shop ${shopId}`);
+
+    connectedClients.forEach((socket, socketId) => {
+        const userId = socketToUserId.get(socketId);
+        const assignedCharacterId = userId ? getUserCharacter(userId)?.id : undefined;
+
+        if (!assignedCharacterId) return;
+
+        // Only broadcast to players with access to this shop
+        if (shopState.playerAccess.includes(assignedCharacterId)) {
+            const message: ShopItemRevealedMessage = {
+                type: 'SHOP_ITEM_REVEALED',
+                payload: {
+                    shopId,
+                    item: revealedItem
+                }
+            };
+
+            socket.emit('gm-message', message);
+            console.log(`[SERVER] Sent item reveal to player ${socketId}`);
+        }
     });
 }

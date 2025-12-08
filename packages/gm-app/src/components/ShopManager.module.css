@@ -548,3 +548,336 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ========================================
+   New Shop Manager Styles
+   ======================================== */
+
+/* Global Controls */
+.globalControls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0;
+}
+
+.restockAllButton {
+    padding: 12px 24px;
+    background: linear-gradient(180deg, var(--color-gold-light), var(--color-gold));
+    border: 2px solid var(--color-leather-dark);
+    border-radius: 0;
+    color: var(--color-leather-dark);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    box-shadow: 
+        0 3px 0 var(--color-leather-dark),
+        0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.restockAllButton:hover {
+    background: linear-gradient(180deg, #f4d971, var(--color-gold-light));
+    box-shadow: 
+        0 3px 0 var(--color-leather-dark),
+        0 6px 12px rgba(212, 175, 55, 0.4);
+    transform: translateY(-1px);
+}
+
+.lastRestock {
+    color: var(--color-leather-light);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Shops Container */
+.shopsContainer {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Shop Card */
+.shopCard {
+    background: var(--color-parchment);
+    border: 2px solid var(--color-leather-dark);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.shopHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(180deg, var(--color-vellum), var(--color-parchment));
+    cursor: pointer;
+    border-bottom: 1px solid var(--color-leather-light);
+}
+
+.shopHeader:hover {
+    background: linear-gradient(180deg, var(--color-parchment-light), var(--color-vellum));
+}
+
+.shopInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.expandIcon {
+    color: var(--color-gold);
+    font-size: 0.8rem;
+}
+
+.shopName {
+    margin: 0;
+    color: var(--color-gold);
+    font-size: 1.1rem;
+    font-family: var(--font-heading);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.shopCategory {
+    background: linear-gradient(180deg, var(--color-leather-light), var(--color-leather-dark));
+    padding: 2px 8px;
+    color: var(--color-parchment);
+    text-transform: capitalize;
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.itemCount {
+    color: var(--color-leather-dark);
+    font-size: 0.85rem;
+    font-family: var(--font-body);
+}
+
+.accessBadge {
+    background: linear-gradient(180deg, #4a9c5d, #357a44);
+    padding: 2px 8px;
+    color: white;
+    font-size: 0.75rem;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+}
+
+.shopActions {
+    display: flex;
+    gap: 8px;
+}
+
+.restockButton {
+    padding: 6px 12px;
+    background: linear-gradient(180deg, var(--color-parchment-light), var(--color-parchment));
+    border: 2px solid var(--color-leather-dark);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.restockButton:hover {
+    background: linear-gradient(180deg, var(--color-gold-light), var(--color-gold));
+    transform: scale(1.1);
+}
+
+/* Shop Content */
+.shopContent {
+    padding: 16px;
+    background: var(--color-parchment-light);
+    border-top: 1px solid var(--color-leather-light);
+}
+
+.accessControl {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--color-leather-light);
+}
+
+.accessControl h4 {
+    margin: 0 0 8px 0;
+    color: var(--color-leather-dark);
+    font-size: 0.9rem;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+}
+
+.characterCheckboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.characterLabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--color-ink);
+}
+
+.characterLabel input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-gold);
+}
+
+/* Inventory List */
+.inventoryList h4 {
+    margin: 0 0 12px 0;
+    color: var(--color-leather-dark);
+    font-size: 0.9rem;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+}
+
+.emptyInventory {
+    color: var(--color-leather-light);
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Inventory Item */
+.inventoryItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: var(--color-parchment);
+    border: 1px solid var(--color-leather-light);
+    margin-bottom: 8px;
+}
+
+.inventoryItem:hover {
+    background: var(--color-vellum);
+}
+
+.itemDetails {
+    flex: 1;
+}
+
+.itemMainInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.itemName.quality {
+    color: #4a9c5d;
+}
+
+.itemName.flawed {
+    color: var(--color-blood-red);
+}
+
+.modificationBadge {
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+}
+
+.modificationBadge.quality {
+    background: linear-gradient(180deg, #5bb06d, #4a9c5d);
+    color: white;
+}
+
+.modificationBadge.flawed {
+    background: linear-gradient(180deg, #c9302c, #ac2925);
+    color: white;
+}
+
+.quantity {
+    color: var(--color-leather-dark);
+    font-weight: 600;
+}
+
+.price {
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.qualities {
+    color: #4a9c5d;
+    font-size: 0.8rem;
+}
+
+.flaws {
+    color: var(--color-blood-red);
+    font-size: 0.8rem;
+}
+
+/* Item Actions */
+.itemActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.actionButton {
+    padding: 4px 10px;
+    background: linear-gradient(180deg, var(--color-parchment-light), var(--color-parchment));
+    border: 1px solid var(--color-leather-dark);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: var(--font-heading);
+    transition: all 0.2s;
+}
+
+.actionButton:hover {
+    background: linear-gradient(180deg, var(--color-vellum), var(--color-parchment-light));
+}
+
+.actionButton.identified {
+    background: linear-gradient(180deg, #5bb06d, #4a9c5d);
+    color: white;
+    border-color: #357a44;
+}
+
+.quantityControls {
+    display: flex;
+    gap: 2px;
+}
+
+.quantityButton {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: linear-gradient(180deg, var(--color-parchment-light), var(--color-parchment));
+    border: 1px solid var(--color-leather-dark);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1;
+    transition: all 0.2s;
+}
+
+.quantityButton:hover {
+    background: linear-gradient(180deg, var(--color-gold-light), var(--color-gold));
+}
+
+.removeButton {
+    padding: 4px 8px;
+    background: transparent;
+    border: 1px solid var(--color-blood-red);
+    color: var(--color-blood-red);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.removeButton:hover {
+    background: var(--color-blood-red);
+    color: white;
+}

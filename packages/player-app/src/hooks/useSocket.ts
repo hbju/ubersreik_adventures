@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem } from '@wfrp/shared';
 
 interface OpposedTestRequest {
   testId: string;
@@ -29,6 +29,7 @@ export const useSocket = () => {
   const [username, setUsername] = useState<string | null>(null);
   const [character, setCharacter] = useState<Character | null>(null);
   const [shopItems, setShopItems] = useState<string[]>([]);
+  const [shops, setShops] = useState<ShopState[]>([]);
   const [combatants, setCombatants] = useState<Combatant[]>([]);
   const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
   const [currentAdvantage, setCurrentAdvantage] = useState<Advantages>({ playerAdvantage: 0, enemyAdvantage: 0 });
@@ -182,6 +183,32 @@ export const useSocket = () => {
         setFactions(message.payload.factions);
       }
 
+      // Handle shop state updates
+      if (message.type === 'SHOP_STATE_UPDATE') {
+        console.log('[CLIENT] Shop state update received:', message.payload);
+        setShops(message.payload.shops);
+      }
+
+      // Handle individual item reveal
+      if (message.type === 'SHOP_ITEM_REVEALED') {
+        console.log('[CLIENT] Shop item revealed:', message.payload);
+        const { shopId, item } = message.payload;
+        setShops(prevShops => {
+          return prevShops.map(shop => {
+            if (shop.shopId === shopId) {
+              const updatedInventory = shop.inventory.map(i => {
+                if (i.instanceId === item.instanceId) {
+                  return item; // Replace with fully revealed item
+                }
+                return i;
+              });
+              return { ...shop, inventory: updatedInventory };
+            }
+            return shop;
+          });
+        });
+      }
+
       // Handle character updates (from Edit Mode or GM updates)
       if (message.type === 'CHARACTER_UPDATE') {
         console.log('[CLIENT] Character update received:', message.payload);
@@ -222,7 +249,8 @@ export const useSocket = () => {
     authError, 
     username,
     character, 
-    shopItems, 
+    shopItems,
+    shops,
     combatants, 
     currentTurnId, 
     currentAdvantage, 

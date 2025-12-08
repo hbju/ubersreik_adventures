@@ -997,7 +997,7 @@
         "availability": "scarce"
     },
     {
-        "id": "weapon_throwing_bolas",
+        "id": "weapon_throwing_throwing_bolas",
         "name": "Bolas",
         "group": "throwing",
         "price": "10 S",
@@ -1010,7 +1010,7 @@
         "availability": "rare"
     },
     {
-        "id": "weapon_throwing_dart",
+        "id": "weapon_throwing_throwing_dart",
         "name": "Fléchette",
         "group": "throwing",
         "price": "2 S",
@@ -1023,7 +1023,7 @@
         "availability": "scarce"
     },
     {
-        "id": "weapon_throwing_javelin",
+        "id": "weapon_throwing_throwing_javelin",
         "name": "Javelot",
         "group": "throwing",
         "price": "10 S 6 B",
@@ -1036,7 +1036,7 @@
         "availability": "scarce"
     },
     {
-        "id": "weapon_throwing_rock",
+        "id": "weapon_throwing_throwing_rock",
         "name": "Rocher",
         "group": "throwing",
         "price": null,
@@ -1047,7 +1047,7 @@
         "availability": "common"
     },
     {
-        "id": "weapon_throwing_axe",
+        "id": "weapon_throwing_throwing_axe",
         "name": "Hache de lancer",
         "group": "throwing",
         "price": "1 GC",
@@ -1060,7 +1060,7 @@
         "availability": "common"
     },
     {
-        "id": "weapon_throwing_knife",
+        "id": "weapon_throwing_throwing_knife",
         "name": "Couteau de lancer",
         "group": "throwing",
         "price": "18 S",

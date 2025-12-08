@@ -1,163 +1,364 @@
 import React, { useState, useMemo } from 'react';
-import { Armor, Weapon, Item, useGameData } from '@wfrp/shared';
+import { 
+    Armor, 
+    Weapon, 
+    Item, 
+    useGameData, 
+    ShopDefinition, 
+    ShopState, 
+    ShopInventoryItem,
+    ShopInventoryState,
+    generateAllShopsStock,
+    generateDailyStock,
+    formatPriceFromBrass,
+    Character,
+    QualityTooltip
+} from '@wfrp/shared';
 import styles from './ShopManager.module.css';
-import useLocalStorageState from '@/hooks/useLocalStorageState';
-
-type ShopItem = (Armor | Weapon | Item) & { category: 'armor' | 'weapon' | 'item' };
-
-interface ShopBookmark {
-    name: string;
-    itemIds: string[];
-}
-
-const DEFAULT_BOOKMARKS: ShopBookmark[] = [
-    {
-        name: 'Blacksmith',
-        itemIds: [
-            'armour_leather_jack', 'armour_leather_jerkin', 'armour_leather_leggings',
-            'armour_mail_coat', 'armour_mail_coif', 'armour_plate_breastplate',
-            'weapon_basic_axe', 'weapon_basic_dagger', 'weapon_basic_sword',
-            'weapon_cavalry_lance', 'weapon_basic_shield',
-        ]
-    },
-    {
-        name: 'Potion Shop',
-        itemIds: [
-            'item_healing_poultice', 'item_healing_draught', 'item_antitoxin',
-            'item_bandages', 'item_salve', 'item_herbs',
-        ]
-    },
-    {
-        name: 'Library',
-        itemIds: [
-            'item_book', 'item_pamphlet', 'item_map', 'item_parchment',
-            'item_quill_and_ink', 'item_scroll_case',
-        ]
-    },
-    {
-        name: 'General Store',
-        itemIds: [
-            'item_backpack', 'item_blanket', 'item_bottle', 'item_candle',
-            'item_clothing', 'item_rope', 'item_sack', 'item_torch',
-        ]
-    },
-    {
-        name: 'Tavern Supplies',
-        itemIds: [
-            'item_ale', 'item_wine', 'item_spirits', 'item_rations',
-            'item_meal', 'item_waterskin',
-        ]
-    },
-];
 
 interface ShopManagerProps {
     onClose: () => void;
+    shopInventory: ShopInventoryState | undefined;
+    onShopInventoryChange: (inventory: ShopInventoryState) => void;
+    characters: Character[];
 }
 
-export const ShopManager: React.FC<ShopManagerProps> = ({ onClose }) => {
+export const ShopManager: React.FC<ShopManagerProps> = ({ 
+    onClose, 
+    shopInventory,
+    onShopInventoryChange,
+    characters 
+}) => {
     const gameData = useGameData();
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState<'all' | 'armor' | 'weapon' | 'item'>('all');
-    const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
-    const [customBookmarks, setCustomBookmarks] = useLocalStorageState<ShopBookmark[]>("wfrp-shop-bookmarks", []);
-    const [bookmarkName, setBookmarkName] = useState('');
+    const [selectedShopId, setSelectedShopId] = useState<string | null>(null);
+    const [expandedShops, setExpandedShops] = useState<Set<string>>(new Set());
 
-    // Combine all items with category tags
-    const allItems = useMemo<ShopItem[]>(() => {
-        const armor = (gameData.armor as Armor[]).map(item => ({ ...item, category: 'armor' as const }));
-        const weapons = (gameData.weapons as Weapon[]).map(item => ({ ...item, category: 'weapon' as const }));
-        const items = (gameData.items as Item[]).map(item => ({ ...item, category: 'item' as const }));
-        return [...armor, ...weapons, ...items];
-    }, []);
+    // Get shops from game data
+    const shops = gameData.shops || [];
 
-    // Filter items based on search and category
-    const filteredItems = useMemo(() => {
-        let filtered = allItems;
+    // Create lookup maps for items
+    const weaponsById = useMemo(() => new Map(gameData.weapons.map(w => [w.id, w])), [gameData.weapons]);
+    const armorById = useMemo(() => new Map(gameData.armor.map(a => [a.id, a])), [gameData.armor]);
+    const itemsById = useMemo(() => new Map(gameData.items.map(i => [i.id, i])), [gameData.items]);
+    const qualitiesById = useMemo(() => new Map(gameData.qualities.map(q => [q.id, q])), [gameData.qualities]);
 
-        if (selectedCategory !== 'all') {
-            filtered = filtered.filter(item => item.category === selectedCategory);
+    // Get item name from ID
+    const getItemName = (itemId: string): string => {
+        return weaponsById.get(itemId)?.name || 
+               armorById.get(itemId)?.name || 
+               itemsById.get(itemId)?.name || 
+               itemId;
+    };
+
+    // Get quality/flaw name from ID
+    const getQualityFlawName = (id: string): string => {
+        return qualitiesById.get(id)?.name || id;
+    };
+
+    // Handle restock all shops
+    const handleRestockAll = () => {
+        const generatorData = {
+            weapons: gameData.weapons,
+            armor: gameData.armor,
+            items: gameData.items,
+            qualitiesFlaws: gameData.qualities
+        };
+
+        const newShopStates = generateAllShopsStock(shops, generatorData);
+        
+        // Preserve player access from existing inventory
+        if (shopInventory?.shops) {
+            for (const [shopId, oldState] of Object.entries(shopInventory.shops)) {
+                if (newShopStates[shopId]) {
+                    newShopStates[shopId].playerAccess = oldState.playerAccess;
+                }
+            }
         }
 
-        if (searchTerm.trim()) {
-            const lowerSearch = searchTerm.toLowerCase();
-            filtered = filtered.filter(item =>
-                item.name.toLowerCase().includes(lowerSearch) ||
-                item.id.toLowerCase().includes(lowerSearch)
-            );
-        }
+        const newInventory: ShopInventoryState = {
+            shops: newShopStates,
+            lastGlobalRestock: new Date().toISOString()
+        };
 
-        return filtered;
-    }, [allItems, searchTerm, selectedCategory]);
+        onShopInventoryChange(newInventory);
 
-    const handleToggleItem = (itemId: string) => {
-        setSelectedItems(prev => {
+        // Broadcast to players
+        broadcastShopUpdate(newInventory);
+    };
+
+    // Handle restock single shop
+    const handleRestockShop = (shop: ShopDefinition) => {
+        const generatorData = {
+            weapons: gameData.weapons,
+            armor: gameData.armor,
+            items: gameData.items,
+            qualitiesFlaws: gameData.qualities
+        };
+
+        const newInventory = generateDailyStock(shop, generatorData);
+        
+        const existingAccess = shopInventory?.shops?.[shop.id]?.playerAccess || [];
+
+        const newShopState: ShopState = {
+            shopId: shop.id,
+            lastRestockDate: new Date().toISOString(),
+            inventory: newInventory,
+            playerAccess: existingAccess
+        };
+
+        const updatedShops = {
+            ...(shopInventory?.shops || {}),
+            [shop.id]: newShopState
+        };
+
+        const newInventoryState: ShopInventoryState = {
+            shops: updatedShops,
+            lastGlobalRestock: shopInventory?.lastGlobalRestock || new Date().toISOString()
+        };
+
+        onShopInventoryChange(newInventoryState);
+        broadcastShopUpdate(newInventoryState);
+    };
+
+    // Toggle player access to a shop
+    const handleTogglePlayerAccess = (shopId: string, characterId: string) => {
+        if (!shopInventory?.shops?.[shopId]) return;
+
+        const currentAccess = shopInventory.shops[shopId].playerAccess;
+        const hasAccess = currentAccess.includes(characterId);
+
+        const newAccess = hasAccess
+            ? currentAccess.filter(id => id !== characterId)
+            : [...currentAccess, characterId];
+
+        const updatedShops = {
+            ...shopInventory.shops,
+            [shopId]: {
+                ...shopInventory.shops[shopId],
+                playerAccess: newAccess
+            }
+        };
+
+        const newInventoryState: ShopInventoryState = {
+            ...shopInventory,
+            shops: updatedShops
+        };
+
+        onShopInventoryChange(newInventoryState);
+        broadcastShopUpdate(newInventoryState);
+    };
+
+    // Toggle item identification (reveal to players)
+    const handleToggleIdentified = (shopId: string, instanceId: string) => {
+        if (!shopInventory?.shops?.[shopId]) return;
+
+        const shopState = shopInventory.shops[shopId];
+        const updatedInventory = shopState.inventory.map(item => {
+            if (item.instanceId === instanceId) {
+                return { ...item, isIdentified: !item.isIdentified };
+            }
+            return item;
+        });
+
+        const updatedShops = {
+            ...shopInventory.shops,
+            [shopId]: {
+                ...shopState,
+                inventory: updatedInventory
+            }
+        };
+
+        const newInventoryState: ShopInventoryState = {
+            ...shopInventory,
+            shops: updatedShops
+        };
+
+        onShopInventoryChange(newInventoryState);
+        broadcastShopUpdate(newInventoryState);
+    };
+
+    // Remove item from shop inventory
+    const handleRemoveItem = (shopId: string, instanceId: string) => {
+        if (!shopInventory?.shops?.[shopId]) return;
+
+        const shopState = shopInventory.shops[shopId];
+        const updatedInventory = shopState.inventory.filter(item => item.instanceId !== instanceId);
+
+        const updatedShops = {
+            ...shopInventory.shops,
+            [shopId]: {
+                ...shopState,
+                inventory: updatedInventory
+            }
+        };
+
+        const newInventoryState: ShopInventoryState = {
+            ...shopInventory,
+            shops: updatedShops
+        };
+
+        onShopInventoryChange(newInventoryState);
+        broadcastShopUpdate(newInventoryState);
+    };
+
+    // Adjust item quantity
+    const handleAdjustQuantity = (shopId: string, instanceId: string, delta: number) => {
+        if (!shopInventory?.shops?.[shopId]) return;
+
+        const shopState = shopInventory.shops[shopId];
+        const updatedInventory = shopState.inventory.map(item => {
+            if (item.instanceId === instanceId) {
+                const newQuantity = Math.max(0, item.quantity + delta);
+                return { ...item, quantity: newQuantity };
+            }
+            return item;
+        }).filter(item => item.quantity > 0);
+
+        const updatedShops = {
+            ...shopInventory.shops,
+            [shopId]: {
+                ...shopState,
+                inventory: updatedInventory
+            }
+        };
+
+        const newInventoryState: ShopInventoryState = {
+            ...shopInventory,
+            shops: updatedShops
+        };
+
+        onShopInventoryChange(newInventoryState);
+        broadcastShopUpdate(newInventoryState);
+    };
+
+    // Toggle shop expansion
+    const toggleShopExpanded = (shopId: string) => {
+        setExpandedShops(prev => {
             const newSet = new Set(prev);
-            if (newSet.has(itemId)) {
-                newSet.delete(itemId);
+            if (newSet.has(shopId)) {
+                newSet.delete(shopId);
             } else {
-                newSet.add(itemId);
+                newSet.add(shopId);
             }
             return newSet;
         });
     };
 
-    const handleToggleAll = () => {
-        if (selectedItems.size === filteredItems.length) {
-            setSelectedItems(new Set());
-        } else {
-            setSelectedItems(new Set(filteredItems.map(item => item.id)));
-        }
-    };
+    // Broadcast shop update to players
+    const broadcastShopUpdate = (inventory: ShopInventoryState) => {
+        // Send filtered shop data to each player based on their access
+        characters.forEach(character => {
+            const accessibleShops: ShopState[] = [];
+            
+            for (const [shopId, shopState] of Object.entries(inventory.shops)) {
+                if (shopState.playerAccess.includes(character.id)) {
+                    accessibleShops.push(shopState);
+                }
+            }
 
-    const handleClearSelection = () => {
-        setSelectedItems(new Set());
-    };
-
-    const handleLoadBookmark = (bookmark: ShopBookmark) => {
-        setSelectedItems(new Set(bookmark.itemIds));
-    };
-
-    const handleSaveBookmark = () => {
-        if (!bookmarkName.trim()) return;
-
-        const newBookmark: ShopBookmark = {
-            name: bookmarkName.trim(),
-            itemIds: Array.from(selectedItems),
-        };
-
-        setCustomBookmarks(prev => [...prev, newBookmark]);
-        setBookmarkName('');
-    };
-
-    const handleDeleteBookmark = (index: number) => {
-        setCustomBookmarks(prev => prev.filter((_, i) => i !== index));
-    };
-
-    const handlePublishToPlayers = () => {
-        if (selectedItems.size === 0) {
-            alert('No items selected to publish!');
-            return;
-        }
-
-        // Create inventory map with item IDs and quantities (default to 1 for shop availability)
-        const inventory: Record<string, number> = {};
-        selectedItems.forEach(itemId => {
-            inventory[itemId] = 1; // Quantity 1 means available in shop
+            if (accessibleShops.length > 0 && window.ipcRenderer) {
+                const message = {
+                    type: 'SHOP_STATE_UPDATE' as const,
+                    payload: { shops: accessibleShops }
+                };
+                
+                // Find user ID for this character
+                // Note: This would need the user ID, for now broadcast to all
+            }
         });
-
-        const message = {
-            type: 'UPDATE_SHOP_INVENTORY' as const,
-            payload: { items: inventory },
-        };
 
         // Broadcast to all players
         if (window.ipcRenderer?.sendToAllPlayers) {
+            const allShops = Object.values(inventory.shops);
+            const message = {
+                type: 'SHOP_STATE_UPDATE' as const,
+                payload: { shops: allShops }
+            };
             window.ipcRenderer.sendToAllPlayers(message);
-            alert(`Shop published with ${selectedItems.size} items to all players!`);
-        } else {
-            console.error('sendToAllPlayers not available');
-            alert('Error: Unable to broadcast to players. Check server connection.');
         }
+    };
+
+    // Get shop state
+    const getShopState = (shopId: string): ShopState | undefined => {
+        return shopInventory?.shops?.[shopId];
+    };
+
+    // Render item row
+    const renderInventoryItem = (shopId: string, item: ShopInventoryItem) => {
+        const baseName = getItemName(item.baseItemId);
+        const displayName = item.nameOverride || baseName;
+        const priceDisplay = formatPriceFromBrass(item.basePrice);
+
+        return (
+            <div key={item.instanceId} className={styles.inventoryItem}>
+                <div className={styles.itemDetails}>
+                    <div className={styles.itemMainInfo}>
+                        <span className={`${styles.itemName} ${item.modification !== 'standard' ? styles[item.modification] : ''}`}>
+                            {displayName}
+                        </span>
+                        {item.modification !== 'standard' && (
+                            <span className={`${styles.modificationBadge} ${styles[item.modification]}`}>
+                                {item.modification === 'quality' ? '★ Quality' : '⚠ Flawed'}
+                            </span>
+                        )}
+                    </div>
+                    <div className={styles.itemMeta}>
+                        <span className={styles.quantity}>Qty: {item.quantity}</span>
+                        <span className={styles.price}>{priceDisplay}</span>
+                        {item.qualities.length > 0 && (
+                            <span className={styles.qualities}>
+                                + {item.qualities.map(q => 
+                                    <QualityTooltip
+                                        key={q}
+                                        qualityString={getQualityFlawName(q)}
+                                        />
+                                )}
+                            </span>
+                        )}
+                        {item.flaws.length > 0 && (
+                            <span className={styles.flaws}>
+                                - {item.flaws.map(f => 
+                                    <QualityTooltip
+                                        key={f}
+                                        qualityString={getQualityFlawName(f)}
+                                        />
+                                )}
+                            </span>
+                        )}
+                    </div>
+                </div>
+                <div className={styles.itemActions}>
+                    <button
+                        className={`${styles.actionButton} ${item.isIdentified ? styles.identified : ''}`}
+                        onClick={() => handleToggleIdentified(shopId, item.instanceId)}
+                        title={item.isIdentified ? 'Hide from players' : 'Reveal to players'}
+                    >
+                        {item.isIdentified ? '👁️ Revealed' : '🔒 Hidden'}
+                    </button>
+                    <div className={styles.quantityControls}>
+                        <button
+                            className={styles.quantityButton}
+                            onClick={() => handleAdjustQuantity(shopId, item.instanceId, -1)}
+                        >
+                            -
+                        </button>
+                        <button
+                            className={styles.quantityButton}
+                            onClick={() => handleAdjustQuantity(shopId, item.instanceId, 1)}
+                        >
+                            +
+                        </button>
+                    </div>
+                    <button
+                        className={styles.removeButton}
+                        onClick={() => handleRemoveItem(shopId, item.instanceId)}
+                        title="Remove from inventory"
+                    >
+                        ✕
+                    </button>
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -169,155 +370,94 @@ export const ShopManager: React.FC<ShopManagerProps> = ({ onClose }) => {
                 </div>
 
                 <div className={styles.controls}>
-                    <div className={styles.searchBar}>
-                        <input
-                            type="text"
-                            placeholder="Search items..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className={styles.searchInput}
-                        />
-                    </div>
-
-                    <div className={styles.categoryFilters}>
-                        <button
-                            className={selectedCategory === 'all' ? styles.active : ''}
-                            onClick={() => setSelectedCategory('all')}
+                    <div className={styles.globalControls}>
+                        <button 
+                            className={styles.restockAllButton}
+                            onClick={handleRestockAll}
                         >
-                            All ({allItems.length})
+                            🔄 Restock Day (All Shops)
                         </button>
-                        <button
-                            className={selectedCategory === 'armor' ? styles.active : ''}
-                            onClick={() => setSelectedCategory('armor')}
-                        >
-                            Armor ({gameData.armor.length})
-                        </button>
-                        <button
-                            className={selectedCategory === 'weapon' ? styles.active : ''}
-                            onClick={() => setSelectedCategory('weapon')}
-                        >
-                            Weapons ({gameData.weapons.length})
-                        </button>
-                        <button
-                            className={selectedCategory === 'item' ? styles.active : ''}
-                            onClick={() => setSelectedCategory('item')}
-                        >
-                            Items ({gameData.items.length})
-                        </button>
-                    </div>
-
-                    <div className={styles.selectionControls}>
-                        <span className={styles.selectionCount}>
-                            Selected: {selectedItems.size} items
-                        </span>
-                        <button onClick={handleToggleAll} className={styles.secondaryButton}>
-                            {selectedItems.size === filteredItems.length ? 'Deselect All' : 'Select All'}
-                        </button>
-                        <button onClick={handleClearSelection} className={styles.secondaryButton}>
-                            Clear
-                        </button>
-                    </div>
-                </div>
-
-                <div className={styles.mainLayout}>
-                    <div className={styles.bookmarksPanel}>
-                        <h3>Shop Bookmarks</h3>
-
-                        <div className={styles.bookmarkSection}>
-                            <h4>Default Shops</h4>
-                            {DEFAULT_BOOKMARKS.map((bookmark, index) => (
-                                <button
-                                    key={index}
-                                    className={styles.bookmarkButton}
-                                    onClick={() => handleLoadBookmark(bookmark)}
-                                >
-                                    {bookmark.name}
-                                </button>
-                            ))}
-                        </div>
-
-                        {customBookmarks.length > 0 && (
-                            <div className={styles.bookmarkSection}>
-                                <h4>Custom Shops</h4>
-                                {customBookmarks.map((bookmark, index) => (
-                                    <div key={index} className={styles.customBookmark}>
-                                        <button
-                                            className={styles.bookmarkButton}
-                                            onClick={() => handleLoadBookmark(bookmark)}
-                                        >
-                                            {bookmark.name}
-                                        </button>
-                                        <button
-                                            className={styles.deleteButton}
-                                            onClick={() => handleDeleteBookmark(index)}
-                                        >
-                                            &times;
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
+                        {shopInventory?.lastGlobalRestock && (
+                            <span className={styles.lastRestock}>
+                                Last restock: {new Date(shopInventory.lastGlobalRestock).toLocaleDateString()}
+                            </span>
                         )}
-
-                        <div className={styles.bookmarkSection}>
-                            <h4>Save Current Selection</h4>
-                            <input
-                                type="text"
-                                placeholder="Bookmark name..."
-                                value={bookmarkName}
-                                onChange={(e) => setBookmarkName(e.target.value)}
-                                className={styles.bookmarkInput}
-                            />
-                            <button
-                                onClick={handleSaveBookmark}
-                                disabled={!bookmarkName.trim() || selectedItems.size === 0}
-                                className={styles.saveButton}
-                            >
-                                Save Bookmark
-                            </button>
-                        </div>
-                    </div>
-
-                    <div className={styles.itemsPanel}>
-                        <div className={styles.itemsList}>
-                            {filteredItems.length === 0 ? (
-                                <p className={styles.noItems}>No items found</p>
-                            ) : (
-                                filteredItems.map(item => (
-                                    <div key={item.id} className={styles.itemCard}>
-                                        <label className={styles.itemLabel}>
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedItems.has(item.id)}
-                                                onChange={() => handleToggleItem(item.id)}
-                                                className={styles.checkbox}
-                                            />
-                                            <div className={styles.itemInfo}>
-                                                <div className={styles.itemHeader}>
-                                                    <span className={styles.itemName}>{item.name}</span>
-                                                    <span className={styles.itemPrice}>{item.price}</span>
-                                                </div>
-                                                <div className={styles.itemMeta}>
-                                                    <span className={styles.itemCategory}>{item.category}</span>
-                                                    <span className={styles.itemAvailability}>{item.availability}</span>
-                                                    {'group' in item && <span className={styles.itemGroup}>{item.group}</span>}
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                ))
-                            )}
-                        </div>
                     </div>
                 </div>
 
-                <div className={styles.footer}>
-                    <button
-                        onClick={handlePublishToPlayers}
-                        disabled={selectedItems.size === 0}
-                        className={styles.publishButton}
-                    >
-                        Publish Shop to Players ({selectedItems.size} items)
-                    </button>
+                <div className={styles.shopsContainer}>
+                    {shops.map(shop => {
+                        const shopState = getShopState(shop.id);
+                        const isExpanded = expandedShops.has(shop.id);
+                        const itemCount = shopState?.inventory.length || 0;
+                        const hasAccess = characters.some(c => shopState?.playerAccess.includes(c.id));
+
+                        return (
+                            <div key={shop.id} className={styles.shopCard}>
+                                <div 
+                                    className={styles.shopHeader}
+                                    onClick={() => toggleShopExpanded(shop.id)}
+                                >
+                                    <div className={styles.shopInfo}>
+                                        <span className={styles.expandIcon}>{isExpanded ? '▼' : '▶'}</span>
+                                        <h3 className={styles.shopName}>{shop.name}</h3>
+                                        <span className={styles.shopCategory}>{shop.category}</span>
+                                        <span className={styles.itemCount}>
+                                            {itemCount} items
+                                        </span>
+                                        {hasAccess && (
+                                            <span className={styles.accessBadge}>Players have access</span>
+                                        )}
+                                    </div>
+                                    <div className={styles.shopActions}>
+                                        <button
+                                            className={styles.restockButton}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleRestockShop(shop);
+                                            }}
+                                            title="Restock this shop"
+                                        >
+                                            🔄
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {isExpanded && (
+                                    <div className={styles.shopContent}>
+                                        <div className={styles.accessControl}>
+                                            <h4>Player Access:</h4>
+                                            <div className={styles.characterCheckboxes}>
+                                                {characters.map(character => (
+                                                    <label key={character.id} className={styles.characterLabel}>
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={shopState?.playerAccess.includes(character.id) || false}
+                                                            onChange={() => handleTogglePlayerAccess(shop.id, character.id)}
+                                                        />
+                                                        {character.name}
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.inventoryList}>
+                                            <h4>Current Inventory:</h4>
+                                            {!shopState || shopState.inventory.length === 0 ? (
+                                                <p className={styles.emptyInventory}>
+                                                    No items in stock. Click restock to generate inventory.
+                                                </p>
+                                            ) : (
+                                                shopState.inventory.map(item => 
+                                                    renderInventoryItem(shop.id, item)
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>
