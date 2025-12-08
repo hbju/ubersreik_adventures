@@ -156,6 +156,7 @@
 
 .locationItem:hover {
     background: rgba(139, 105, 20, 0.3);
+    color: #d4af37;
     border-color: #b8941f;
     transform: translateX(4px);
 }
