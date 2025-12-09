@@ -6333,5 +6333,28 @@
                 ]
             }
         ]
+    },
+    {
+        "id": "youngblood",
+        "name": "Youngblood",
+        "description": "Your family are considered newcomers to the Laurelorn and are treated with condescension by Eonir of the older birth kindreds. You are always considered of lower Status than other Eonir, unless they also have the Youngblood Talent. Second generation Youngbloods can lose this Talent by passing a trial to join the Forestborn Kindred.",
+        "tests": ["Any Social Test involving other Eonir"],
+        "max_ranks": "1",
+        "careers": {},
+        "racial": [
+            "Eonir"
+        ],
+        "effects": [
+            {
+                "type": "STATUS_TIER_MODIFIER",
+                "value": -1,
+                "appliesTo": [
+                    "Fellowship",
+                    "Charm",
+                    "Intimidate",
+                    "Leadership"
+                ]
+            }
+        ]
     }
 ]
