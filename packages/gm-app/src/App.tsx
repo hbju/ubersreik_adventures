@@ -17,6 +17,7 @@ import { CharacterReputationPanel } from './components/factions/CharacterReputat
 import { ShopConfigurator } from './components/shops/config';
 import { TemplateManager } from './components/TemplateManager';
 import MinionSheet from './components/MinionSheet';
+import { SecretsManager } from './components/SecretsManager';
 
 import {
     Character,
@@ -1572,6 +1573,14 @@ function App() {
                         onAddItem={() => setShowItemSelector(character.id)}
                         onMinionViewClick={() => handleCharacterUpdate({ ...character, isMinion: true })}
                         onClose={() => handleToggleCharacterSheet(character.id)}
+                        users={users}
+                        renderSecretsManager={(props) => (
+                            <SecretsManager
+                                character={props.character}
+                                users={props.users}
+                                onCharacterUpdate={props.onCharacterUpdate}
+                            />
+                        )}
                     />
                 );
             })}

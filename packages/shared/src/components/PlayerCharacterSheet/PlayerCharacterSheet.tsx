@@ -6,6 +6,7 @@ import {
     Career,
     Location,
     Currency,
+    User,
     useGameData,
     EditableField,
     calculateCharacteristicValue,
@@ -46,6 +47,14 @@ interface PlayerCharacterSheetProps {
     onRemoveItem?: (itemId: string, type: 'weapon' | 'armor' | 'item') => void;
     onAddItem?: () => void;
     onMinionViewClick?: () => void; // Toggle back to minion view (for generated minions)
+    // Secrets system props
+    users?: User[]; // List of users (for GM to share secrets)
+    currentUserId?: string; // Current player's user ID (for player view)
+    renderSecretsManager?: (props: {
+        character: Character;
+        users: User[];
+        onCharacterUpdate: (updates: Partial<Character>) => void;
+    }) => React.ReactNode; // Custom secrets manager renderer (GM only)
 }
 
 const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
@@ -72,6 +81,10 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
     onRemoveItem,
     onAddItem,
     onMinionViewClick,
+    // Secrets system props
+    users = [],
+    currentUserId,
+    renderSecretsManager,
 }) => {
     const { skills, careers, talents, gameData } = useGameData();
     const [activeTab, setActiveTab] = useState<TabType>('main');
@@ -627,6 +640,10 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                         character={character}
                         isEditMode={isEditMode}
                         onCharacterUpdate={onCharacterUpdate}
+                        isGM={isGM}
+                        users={users}
+                        currentUserId={currentUserId}
+                        renderSecretsManager={renderSecretsManager}
                     />
                 )}
             </div>

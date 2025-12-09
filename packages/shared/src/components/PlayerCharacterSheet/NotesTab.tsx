@@ -1,11 +1,20 @@
 import React from 'react';
-import { Character, EditableField } from '@wfrp/shared';
+import { Character, EditableField, User, CharacterLore, KnowledgeEntry } from '@wfrp/shared';
 import './NotesTab.css';
 
 interface NotesTabProps {
     character: Character;
     isEditMode: boolean;
     onCharacterUpdate: (updates: Partial<Character>) => void;
+    // Optional secrets system props
+    isGM?: boolean;
+    users?: User[]; // For GM to select who to share with
+    currentUserId?: string; // For player to see only their visible entries
+    renderSecretsManager?: (props: {
+        character: Character;
+        users: User[];
+        onCharacterUpdate: (updates: Partial<Character>) => void;
+    }) => React.ReactNode; // Custom renderer for GM secrets manager
 }
 
 // Default details object for backwards compatibility
@@ -24,7 +33,11 @@ const defaultDetails = {
 export const NotesTab: React.FC<NotesTabProps> = ({
     character,
     isEditMode,
-    onCharacterUpdate
+    onCharacterUpdate,
+    isGM = false,
+    users = [],
+    currentUserId,
+    renderSecretsManager
 }) => {
     const characterDetails = character.details || defaultDetails;
 
@@ -188,7 +201,99 @@ export const NotesTab: React.FC<NotesTabProps> = ({
                     )}
                 </div>
             </div>
+
+            {/* GM Secrets Manager - rendered via prop for app-specific component */}
+            {isGM && renderSecretsManager && (
+                <div className="notes-panel secrets-panel">
+                    <h3 className="panel-title">🔒 Knowledge & Secrets</h3>
+                    {renderSecretsManager({ character, users, onCharacterUpdate })}
+                </div>
+            )}
+
+            {/* Player Notes - show their own notes and discovered knowledge */}
+            {!isGM && currentUserId && (
+                <PlayerLoreSection
+                    character={character}
+                    currentUserId={currentUserId}
+                    onCharacterUpdate={onCharacterUpdate}
+                />
+            )}
         </div>
+    );
+};
+
+/**
+ * Player's view of lore - their own notes and discovered knowledge entries
+ */
+const PlayerLoreSection: React.FC<{
+    character: Character;
+    currentUserId: string;
+    onCharacterUpdate: (updates: Partial<Character>) => void;
+}> = ({ character, currentUserId, onCharacterUpdate }) => {
+    const lore = character.lore || { gmNotes: '', background: [], playerNotes: '' };
+
+    // Filter knowledge entries to only show those visible to this player
+    const visibleEntries = lore.background.filter(entry =>
+        entry.visibility.includes(currentUserId)
+    );
+
+    const handlePlayerNotesChange = (value: string) => {
+        onCharacterUpdate({
+            lore: {
+                ...lore,
+                playerNotes: value
+            }
+        });
+    };
+
+    // Group entries by topic
+    const entriesByTopic = visibleEntries.reduce((acc, entry) => {
+        if (!acc[entry.topic]) {
+            acc[entry.topic] = [];
+        }
+        acc[entry.topic].push(entry);
+        return acc;
+    }, {} as Record<string, KnowledgeEntry[]>);
+
+    return (
+        <>
+            {/* Player's Personal Notes */}
+            <div className="notes-panel player-notes-panel">
+                <h3 className="panel-title">📝 My Notes</h3>
+                <p className="notes-description">
+                    Write your own notes, theories, and reminders. Only you and the GM can see this.
+                </p>
+                <textarea
+                    className="player-notes-textarea"
+                    value={lore.playerNotes || ''}
+                    onChange={(e) => handlePlayerNotesChange(e.target.value)}
+                    placeholder="Write personal notes, theories, NPC observations..."
+                    rows={6}
+                />
+            </div>
+
+            {/* Discovered Knowledge */}
+            {visibleEntries.length > 0 && (
+                <div className="notes-panel discovered-lore-panel">
+                    <h3 className="panel-title">📖 Discovered Lore</h3>
+                    <div className="knowledge-list">
+                        {Object.keys(entriesByTopic).sort().map(topic => (
+                            <div key={topic} className="topic-group">
+                                <h4 className="topic-title">{topic}</h4>
+                                {entriesByTopic[topic].map(entry => (
+                                    <div key={entry.id} className="knowledge-entry">
+                                        <p className="knowledge-content">{entry.content}</p>
+                                        <span className="discovered-date">
+                                            Discovered: {new Date(entry.updatedAt).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </>
     );
 };
 

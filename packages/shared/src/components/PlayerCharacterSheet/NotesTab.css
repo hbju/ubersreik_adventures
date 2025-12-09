@@ -141,3 +141,97 @@
     text-align: center;
     padding: 1rem;
 }
+
+/* ========== SECRETS PANEL ========== */
+.secrets-panel {
+    grid-column: 1 / -1;
+}
+
+/* ========== PLAYER NOTES PANEL ========== */
+.player-notes-panel {
+    grid-column: 1 / -1;
+}
+
+.notes-description {
+    color: rgba(232, 220, 196, 0.7);
+    font-size: 0.85rem;
+    margin: 0 0 0.75rem 0;
+    font-style: italic;
+}
+
+.player-notes-textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5a3d1f;
+    border-radius: 4px;
+    color: #e8dcc4;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 0.95rem;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.player-notes-textarea::placeholder {
+    color: rgba(232, 220, 196, 0.5);
+}
+
+.player-notes-textarea:focus {
+    outline: none;
+    border-color: #8b6914;
+    box-shadow: 0 0 5px rgba(139, 105, 20, 0.3);
+}
+
+/* ========== DISCOVERED LORE PANEL ========== */
+.discovered-lore-panel {
+    grid-column: 1 / -1;
+}
+
+.knowledge-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.topic-group {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    padding: 0.75rem;
+}
+
+.topic-title {
+    color: #d4af37;
+    font-size: 0.95rem;
+    margin: 0 0 0.75rem 0;
+    padding-left: 0.5rem;
+    border-left: 3px solid #8b6914;
+}
+
+.knowledge-entry {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(90, 61, 31, 0.5);
+    border-radius: 4px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.knowledge-entry:last-child {
+    margin-bottom: 0;
+}
+
+.knowledge-content {
+    color: #e8dcc4;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.discovered-date {
+    display: block;
+    color: rgba(232, 220, 196, 0.5);
+    font-size: 0.75rem;
+    font-style: italic;
+    text-align: right;
+}

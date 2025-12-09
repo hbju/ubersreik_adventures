@@ -1,0 +1,128 @@
+/* PlayerNotesDisplay.module.css */
+.playerNotesDisplay {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.section {
+    background: linear-gradient(to bottom, rgba(44, 24, 16, 0.9), rgba(26, 20, 16, 0.95));
+    border: 2px solid #5a3d1f;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #d4af37;
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(139, 105, 20, 0.3);
+}
+
+.sectionDescription {
+    color: rgba(232, 220, 196, 0.7);
+    font-size: 0.85rem;
+    margin: 0 0 0.75rem 0;
+    font-style: italic;
+}
+
+.noteIcon,
+.bookIcon {
+    font-size: 1.2rem;
+}
+
+/* Notes Textarea */
+.notesTextarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5a3d1f;
+    border-radius: 4px;
+    color: #e8dcc4;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 0.95rem;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.notesTextarea::placeholder {
+    color: rgba(232, 220, 196, 0.5);
+}
+
+.notesTextarea:focus {
+    outline: none;
+    border-color: #8b6914;
+    box-shadow: 0 0 5px rgba(139, 105, 20, 0.3);
+}
+
+/* Empty Message */
+.emptyMessage {
+    color: rgba(232, 220, 196, 0.6);
+    font-style: italic;
+    text-align: center;
+    padding: 2rem 1rem;
+    line-height: 1.6;
+}
+
+/* Knowledge List */
+.knowledgeList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Topic Group */
+.topicGroup {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 6px;
+    padding: 0.75rem;
+}
+
+.topicTitle {
+    color: #d4af37;
+    font-size: 0.95rem;
+    margin: 0 0 0.75rem 0;
+    padding-left: 0.5rem;
+    border-left: 3px solid #8b6914;
+}
+
+.entriesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Knowledge Entry */
+.knowledgeEntry {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(90, 61, 31, 0.5);
+    border-radius: 4px;
+    padding: 0.75rem;
+    transition: border-color 0.2s;
+}
+
+.knowledgeEntry:hover {
+    border-color: #5a3d1f;
+}
+
+.entryContent {
+    color: #e8dcc4;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 0.5rem 0;
+    white-space: pre-wrap;
+}
+
+.discoveredDate {
+    display: block;
+    color: rgba(232, 220, 196, 0.5);
+    font-size: 0.75rem;
+    font-style: italic;
+    text-align: right;
+}

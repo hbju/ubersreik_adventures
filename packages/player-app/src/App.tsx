@@ -562,6 +562,7 @@ const PlayerApp: React.FC = () => {
                                 onSkillAdvance={handleAdvanceSkill}
                                 onPurchaseClick={() => setIsShopModalOpen(true)}
                                 showPurchaseButton={!isAdvancementMode}
+                                currentUserId={character.userId || undefined}
                             />
                         ) : (
                             <CharacterSheet

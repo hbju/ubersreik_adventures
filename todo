@@ -3,14 +3,14 @@ v1.1 TODO:
 - equipment stats et vf ✅
 - randomly generated shops ✅
 - better music management
-- npcs templates
-- Details panel for player (background and notes)
+- npcs templates ✅
+- Details panel for player (background and notes) ✅
 - pursuits implementation
 - quests implementation
 - multiple maps per adventure
 - better pin management
 - reputation and npc relationship system ✅
-- improve character roster UI
+- improve character roster UI ✅
 - improve combat resolver logic
 - gang territories and turf wars
 - in game chat + rolls

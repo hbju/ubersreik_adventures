@@ -198,6 +198,31 @@ export interface CharacterDetails {
   partyLongTermAmbition: string;
 }
 
+// ========================================
+// Knowledge & Secrets System Types
+// ========================================
+
+/**
+ * A single piece of knowledge or secret about a character
+ */
+export interface KnowledgeEntry {
+  id: string;
+  topic: string; // e.g., "Origin", "Secret Agenda", "Weakness"
+  content: string; // The actual text content
+  visibility: string[]; // Array of Player IDs who can see this entry (empty = GM only)
+  createdAt: string; // ISO timestamp
+  updatedAt: string; // ISO timestamp
+}
+
+/**
+ * Character's lore container
+ */
+export interface CharacterLore {
+  gmNotes: string; // Plain text, always private to GM
+  background: KnowledgeEntry[]; // Structured knowledge entries
+  playerNotes?: string; // Player's own notes about themselves (only for player-owned characters)
+}
+
 export interface Character {
   id: string;
   name: string;
@@ -245,6 +270,7 @@ export interface Character {
   };
   currency: Currency;
   reputations: ReputationEntry[]; // Character's standing with various factions
+  lore?: CharacterLore; // Knowledge, secrets, and notes about the character
   isMinion?: boolean; // If true, opens in condensed Minion View instead of full sheet
   templateId?: string; // Reference to the CharacterTemplate this character was generated from
 }
