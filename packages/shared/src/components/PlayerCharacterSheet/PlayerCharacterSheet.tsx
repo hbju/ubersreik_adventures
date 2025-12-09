@@ -4,11 +4,15 @@ import {
     Characteristic,
     Skill,
     Career,
+    Location,
+    Currency,
     useGameData,
     EditableField,
-    calculateCharacteristicValue
+    calculateCharacteristicValue,
+    getAvailableAdvancements,
+    isSkillGrouped,
+    getGroupedSkill
 } from '@wfrp/shared';
-import { getTalentCharacteristicBonus } from '@wfrp/shared';
 import './PlayerCharacterSheet.css';
 import { CharacteristicsTable } from './CharacteristicsTable';
 import { SkillsPanel } from './SkillsPanel';
@@ -30,6 +34,17 @@ interface PlayerCharacterSheetProps {
     onSkillAdvance?: (skillId: string) => void;
     onPurchaseClick?: () => void;
     showPurchaseButton?: boolean;
+    isGM?: boolean; // GM-only features (tags, location)
+    onClose?: () => void; // Close button callback
+    // GM-specific callbacks
+    onXpAward?: (amount: number) => void;
+    onCareerManagementModalOpen?: (character: Character) => void;
+    onCurrencyAward?: (newCurrency: Currency) => void;
+    onRemoveTalent?: (talentId: string) => void;
+    onAddTalent?: () => void;
+    onCorruptionTest?: () => void;
+    onRemoveItem?: (itemId: string, type: 'weapon' | 'armor' | 'item') => void;
+    onAddItem?: () => void;
 }
 
 const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
@@ -44,8 +59,19 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
     onSkillAdvance,
     onPurchaseClick,
     showPurchaseButton = false,
+    isGM = false,
+    onClose,
+    // GM-specific callbacks
+    onXpAward,
+    onCareerManagementModalOpen,
+    onCurrencyAward,
+    onRemoveTalent,
+    onAddTalent,
+    onCorruptionTest,
+    onRemoveItem,
+    onAddItem,
 }) => {
-    const { careers, talents } = useGameData();
+    const { skills, careers, talents, gameData } = useGameData();
     const [activeTab, setActiveTab] = useState<TabType>('main');
 
     const career = careers.find((c: Career) => c.id === character.currentCareerId);
@@ -110,6 +136,46 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
         });
     };
 
+    const handleCareerChange = (newCareerId: string, newCareerLevelId?: string) => {
+        const newCareer = careers.find((c: any) => c.id === newCareerId);
+        if (!newCareer) return;
+
+        const newCareerLevel = newCareerLevelId ? newCareer.career_level.find((lvl: any) => lvl.id === newCareerLevelId) : newCareer.career_level.find((lvl: any) => lvl.lvl === 1);
+        if (!newCareerLevel) return;
+
+        const availableAdvancements = getAvailableAdvancements(newCareer, newCareerLevel.lvl);
+
+        const updatedCharacter: Character = {
+            ...character,
+            currentCareerId: newCareerId,
+            currentCareerLevelId: newCareerLevel.id,
+            unlockedCharacteristicIds: availableAdvancements.characteristics,
+            unlockedSkillIds: availableAdvancements.skills,
+            unlockedTalentIds: availableAdvancements.talents,
+            skills: [
+                ...character.skills,
+                ...newCareerLevel.skills_ids.filter(skillId => !character.skills.some(s => s.id === skillId)).map((skillId: string) => {
+                    if (isSkillGrouped(skillId)) {
+                        const grouped = getGroupedSkill(skillId, skills);
+                        if (!grouped) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
+                        return grouped;
+                    }
+                    const skillDef = skills.find((s: any) => s.id === skillId && s.type === 'skill');
+                    if (!skillDef) return { id: "", name: "Unknown Skill", characteristic: "ws", advances: 0, talents: 0, modifier: 0 };
+                    return {
+                        id: skillDef.id,
+                        name: skillDef.name,
+                        characteristic: skillDef.characteristic,
+                        advances: 0,
+                        talents: 0,
+                        modifier: 0
+                    };
+                }).filter((s: Skill) => s.id !== "") // Filter out unknown skills
+            ]
+        };
+        onCharacterUpdate(updatedCharacter);
+    };
+
     return (
         <div className="player-sheet-container">
             {/* Fixed Header */}
@@ -144,14 +210,32 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                     </div>
                 </div>
                 <div className="header-row">
-                    <div className="header-field">
-                        <span className="header-label">Career:</span>
-                        <span className="header-value">{career?.name || '—'}</span>
-                    </div>
-                    <div className="header-field">
-                        <span className="header-label">Level:</span>
-                        <span className="header-value">{careerLevel?.name || '—'}</span>
-                    </div>
+                    {!isEditMode ? (
+                        <div>
+                            <div className="header-field">
+                                <span className="header-label">Career:</span>
+                                <span className="header-value">{career?.name || '—'}</span>
+                            </div>
+                            <div className="header-field">
+                                <span className="header-label">Level:</span>
+                                <span className="header-value">{careerLevel?.name || '—'}</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <div><span className="header-label">Career : </span>
+                            <select value={character.currentCareerId} onChange={e => handleCareerChange(e.target.value)}>
+                                {careers.map(c => {
+                                    return (<option key={c.id} value={c.id}>{c.name}</option>);
+                                }).sort((a, b) => a.props.children.localeCompare(b.props.children))}
+                            </select>
+                            <span className="header-label"> Level : </span>
+                            <select value={character.currentCareerLevelId} onChange={e => handleCareerChange(character.currentCareerId, e.target.value)}>
+                                {careers.filter(c => c.id === character.currentCareerId).flatMap(c => c.career_level).map(level => {
+                                    return (<option key={level.id} value={level.id}>{level.name}</option>);
+                                })}
+                            </select>
+                        </div>
+                    )}
                     <div className="header-field">
                         <span className="header-label">Status:</span>
                         <span className="header-value">{statusStr || '—'}</span>
@@ -171,8 +255,112 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                             <span className="toggle-slider"></span>
                         </label>
                     </div>
+                    {/* GM Action Buttons */}
+                    {isGM && (
+                        <div className="gm-header-actions">
+                            {onXpAward && (
+                                <div>
+                                    <input
+                                        type="number"
+                                        className="xp-award-input"
+                                        placeholder="XP Amount"
+                                        min={0}
+                                    />
+                                    <button
+                                        className="gm-header-btn"
+                                        onClick={() => {
+                                            const input = document.querySelector('.xp-award-input') as HTMLInputElement;
+                                            const amount = input.value;
+                                            if (amount) onXpAward(parseInt(amount) || 0);
+                                        }}
+                                        title="Award XP"
+                                    >
+                                        +XP
+                                    </button>
+                                </div>
+                            )}
+                            {onCareerManagementModalOpen && (
+                                <button
+                                    className="gm-header-btn"
+                                    onClick={() => onCareerManagementModalOpen(character)}
+                                    title="Manage Career"
+                                >
+                                    Career
+                                </button>
+                            )}
+                            {onCorruptionTest && (
+                                <button
+                                    className="gm-header-btn corruption-btn"
+                                    onClick={onCorruptionTest}
+                                    title="Corruption Test"
+                                >
+                                    Corruption
+                                </button>
+                            )}
+                        </div>
+                    )}
+                    {onClose && (
+                        <button className="close-button" onClick={onClose}>✖</button>
+                    )}
                 </div>
             </header>
+
+            {/* GM-Only Panel: Tags and Location */}
+            {isGM && (
+                <div className="gm-panel">
+                    <div className="gm-panel-section tags-section">
+                        <span className="gm-panel-label">Tags:</span>
+                        <div className="tags-container">
+                            {(character.tags || []).map((tag, index) => (
+                                <span key={index} className="tag-chip">
+                                    {tag}
+                                    <button
+                                        className="tag-remove-btn"
+                                        onClick={() => {
+                                            const newTags = (character.tags || []).filter((_, i) => i !== index);
+                                            onCharacterUpdate({ tags: newTags });
+                                        }}
+                                    >×</button>
+                                </span>
+                            ))}
+                            <input
+                                type="text"
+                                placeholder="Add tag..."
+                                className="tag-input"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        const input = e.target as HTMLInputElement;
+                                        const newTag = input.value.trim();
+                                        if (newTag && !(character.tags || []).includes(newTag)) {
+                                            onCharacterUpdate({
+                                                tags: [...(character.tags || []), newTag]
+                                            });
+                                            input.value = '';
+                                        }
+                                    }
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="gm-panel-section location-section">
+                        <span className="gm-panel-label">Location:</span>
+                        <select
+                            value={character.locationId || ''}
+                            onChange={(e) => {
+                                onCharacterUpdate({
+                                    locationId: e.target.value || null
+                                });
+                            }}
+                            className="location-select"
+                        >
+                            <option value="">No Location</option>
+                            {(gameData?.locations || []).map((loc: Location) => (
+                                <option key={loc.id} value={loc.id}>{loc.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            )}
 
             {/* Tab Navigation */}
             <nav className="sheet-tabs">
@@ -299,7 +487,12 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                         <div className="main-tab-right">
                             {/* Talents */}
                             <div className="panel talents-panel">
-                                <h3 className="panel-title">Talents</h3>
+                                <div className="panel-header">
+                                    <h3 className="panel-title">Talents</h3>
+                                    {isGM && onAddTalent && (
+                                        <button className="gm-action-btn add-btn" onClick={onAddTalent} title="Add Talent">+</button>
+                                    )}
+                                </div>
                                 <div className="talents-list">
                                     {Object.entries(character.talents).length === 0 ? (
                                         <p className="empty-message">No talents acquired yet.</p>
@@ -309,8 +502,17 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                                             if (!talentDef) return null;
                                             return (
                                                 <div key={talentId} className="talent-item">
-                                                    <span className="talent-name">{talentDef.name}</span>
-                                                    <span className="talent-rank">({rank})</span>
+                                                    <div className="talent-header">
+                                                        <span className="talent-name">{talentDef.name}</span>
+                                                        <span className="talent-rank">({rank})</span>
+                                                        {isGM && onRemoveTalent && (
+                                                            <button
+                                                                className="gm-action-btn remove-btn"
+                                                                onClick={() => onRemoveTalent(talentId)}
+                                                                title="Remove Talent"
+                                                            >×</button>
+                                                        )}
+                                                    </div>
                                                     <p className="talent-description">{talentDef.description}</p>
                                                 </div>
                                             );
@@ -403,6 +605,9 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                         onCharacterUpdate={onCharacterUpdate}
                         onPurchaseClick={onPurchaseClick}
                         showPurchaseButton={showPurchaseButton}
+                        isGM={isGM}
+                        onAddItem={onAddItem}
+                        onRemoveItem={onRemoveItem}
                     />
                 )}
 

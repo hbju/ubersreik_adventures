@@ -24,7 +24,7 @@ import {
     generateRandomNpc,
     createBlankCharacter,
     calculateCharacteristicBonus,
-    CharacterSheet,
+    PlayerCharacterSheet,
     AssignCharacterMessage,
     ClientToServerMessage,
     GameLog,
@@ -1036,7 +1036,7 @@ function App() {
     }
 
     return (
-        <div className="App">
+        <div>
             <Footer
                 ip={serverInfo.ip}
                 port={serverInfo.port}
@@ -1484,38 +1484,39 @@ function App() {
                 />
             )}
 
-            <div className="character-sheets-container">
-                {openSheetIds.map(characterId => {
-                    const character = characters.find(char => char.id === characterId);
+            {openSheetIds.map(characterId => {
+                const character = characters.find(char => char.id === characterId);
 
-                    if (!character) return null;
+                if (!character) return null;
 
-                    return (
-                        <CharacterSheet
-                            key={character.id}
-                            character={character}
-                            onCharacteristicClick={(charId, charName, charValue) => setTestModalInfo({ id: charId, name: charName, value: charValue, charId: character.id })}
-                            onSkillClick={(skillId, skillName, skillValue) => setTestModalInfo({ id: skillId, name: skillName, value: skillValue, charId: character.id })}
-                            onCharacterUpdate={handleCharacterUpdate}
-                            onXpAward={(amount) => handleXpAward(character.id, amount)}
-                            onCareerManagementModalOpen={(char) => setShowCareerManager(char)}
-                            onCurrencyAward={(amount) => handleCurrencyAward(character.id, amount)}
-                            onRemoveTalent={(talentId) => {
-                                const updatedTalents = { ...character.talents };
-                                delete updatedTalents[talentId];
-                                const updatedCharacter = { ...character, talents: updatedTalents };
-                                updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter, talents);
-                                handleCharacterUpdate(updatedCharacter);
-                            }}
-                            onAddTalent={() => setShowTalentSelector(character.id)}
-                            onCorruptionTest={() => handleCorruptionTest(character.id)}
-                            onRemoveItem={(itemId, type) => handleRemoveItemFromCharacter(itemId, character.id)}
-                            onAddItem={() => setShowItemSelector(character.id)}
-                            onClose={() => handleToggleCharacterSheet(character.id)}
-                        />
-                    );
-                })}
-            </div>
+                return (
+                    <PlayerCharacterSheet
+                        key={character.id}
+                        character={character}
+                        isEditMode={true}
+                        onEditModeToggle={() => { }}
+                        onCharacteristicClick={(charId, charName, charValue) => setTestModalInfo({ id: charId, name: charName, value: charValue, charId: character.id })}
+                        onSkillClick={(skillId, skillName, skillValue) => setTestModalInfo({ id: skillId, name: skillName, value: skillValue, charId: character.id })}
+                        onCharacterUpdate={(updates) => handleCharacterUpdate({ ...character, ...updates })}
+                        isGM={true}
+                        onXpAward={(amount) => handleXpAward(character.id, amount)}
+                        onCareerManagementModalOpen={(char) => setShowCareerManager(char)}
+                        onCurrencyAward={(amount) => handleCurrencyAward(character.id, amount)}
+                        onRemoveTalent={(talentId) => {
+                            const updatedTalents = { ...character.talents };
+                            delete updatedTalents[talentId];
+                            const updatedCharacter = { ...character, talents: updatedTalents };
+                            updatedCharacter.status.wounds.max = calculateEffectiveMaxWounds(updatedCharacter, talents);
+                            handleCharacterUpdate(updatedCharacter);
+                        }}
+                        onAddTalent={() => setShowTalentSelector(character.id)}
+                        onCorruptionTest={() => handleCorruptionTest(character.id)}
+                        onRemoveItem={(itemId, type) => handleRemoveItemFromCharacter(itemId, character.id)}
+                        onAddItem={() => setShowItemSelector(character.id)}
+                        onClose={() => handleToggleCharacterSheet(character.id)}
+                    />
+                );
+            })}
 
             {showItemSelector && (
                 <ItemSelectorModal

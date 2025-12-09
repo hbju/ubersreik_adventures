@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages, Talent, Career } from '../types/wfrp.types';
+import { Character, Characteristic, Skill, SkillCharDefinition, Currency, Advantages, Talent, Career, Location } from '../types/wfrp.types';
 import { calculateCharacteristicBonus, calculateCharacteristicValue, getGroupedSkill, isSkillGrouped } from '../utils/skills';
 import { getAvailableAdvancements } from '..';
 import { useGameData } from '../hooks/useGameData';
@@ -123,7 +123,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     onClose
 }) => {
     const { t } = useTranslation();
-    const { skills: allSkills, talents, careers: careersData, conditions: conditionsData } = useGameData();
+    const { skills: allSkills, talents, careers: careersData, conditions: conditionsData, gameData } = useGameData();
     const [activeTab, setActiveTab] = useState<'stats' | 'talents' | 'inventory'>('stats');
 
     if (!character) {
@@ -335,6 +335,65 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                 bp: amountBp
                             });
                         }}>Award Currency</button>
+                    </div>
+                </div>
+            )}
+
+            {/* Tag and Location Management (GM only, when not readonly) */}
+            {!readonly && (
+                <div className="tagLocationPanel">
+                    <div className="tagSection">
+                        <label className="panelLabel">Tags:</label>
+                        <div className="tagsContainer">
+                            {(character.tags || []).map((tag, index) => (
+                                <span key={index} className="tagChip">
+                                    {tag}
+                                    <button
+                                        className="tagRemoveBtn"
+                                        onClick={() => {
+                                            const newTags = (character.tags || []).filter((_, i) => i !== index);
+                                            onCharacterUpdate({ ...character, tags: newTags });
+                                        }}
+                                    >×</button>
+                                </span>
+                            ))}
+                            <input
+                                type="text"
+                                placeholder="Add tag..."
+                                className="tagInput"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        const input = e.target as HTMLInputElement;
+                                        const newTag = input.value.trim();
+                                        if (newTag && !(character.tags || []).includes(newTag)) {
+                                            onCharacterUpdate({
+                                                ...character,
+                                                tags: [...(character.tags || []), newTag]
+                                            });
+                                            input.value = '';
+                                        }
+                                    }
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="locationSection">
+                        <label className="panelLabel">Location:</label>
+                        <select
+                            value={character.locationId || ''}
+                            onChange={(e) => {
+                                onCharacterUpdate({
+                                    ...character,
+                                    locationId: e.target.value || null
+                                });
+                            }}
+                            className="locationSelect"
+                        >
+                            <option value="">No Location</option>
+                            {(gameData?.locations || []).map((loc: Location) => (
+                                <option key={loc.id} value={loc.id}>{loc.name}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>
             )}

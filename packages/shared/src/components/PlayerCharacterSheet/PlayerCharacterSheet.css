@@ -5,8 +5,7 @@
     font-family: 'IM Fell English', Georgia, serif;
     background-color: #1a1410;
     background-image: 
-        linear-gradient(rgba(30, 20, 10, 0.9), rgba(30, 20, 10, 0.9)),
-        url('/assets/images/parchment-texture.png');
+        linear-gradient(rgba(30, 20, 10, 0.9), rgba(30, 20, 10, 0.9));
     background-size: cover;
     min-height: 95vh;
     max-height: 95vh;
@@ -15,8 +14,10 @@
     color: #e8dcc4;
     padding-bottom: 2rem;
     left: 50%;
-    transform: translateX(-50%);
-    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    z-index: 1010;
 }
 
 /* ========== HEADER ========== */
@@ -349,4 +350,253 @@
 
 .player-sheet-container ::-webkit-scrollbar-thumb:hover {
     background: #8b6914;
+}
+
+/* ========== CLOSE BUTTON ========== */
+.close-button {
+    background: transparent;
+    border: 2px solid #5a3d1f;
+    color: #8b6914;
+    font-size: 1.2rem;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 1rem;
+    border-radius: 4px;
+}
+
+.close-button:hover {
+    background: #8b6914;
+    color: #1a1410;
+    border-color: #d4af37;
+}
+
+/* ========== GM PANEL ========== */
+.gm-panel {
+    display: flex;
+    gap: 1.5rem;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem;
+    background: linear-gradient(to right, rgba(139, 26, 26, 0.2), rgba(44, 24, 16, 0.9));
+    border: 2px solid #8b1a1a;
+    border-radius: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.gm-panel-section {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gm-panel-label {
+    color: #8b1a1a;
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tags-section {
+    flex: 2;
+}
+
+.location-section {
+    flex: 1;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: #8b6914;
+    color: #1a1410;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.tag-remove-btn {
+    background: none;
+    border: none;
+    color: #1a1410;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 2px;
+    margin-left: 2px;
+    opacity: 0.7;
+}
+
+.tag-remove-btn:hover {
+    opacity: 1;
+    color: #8b1a1a;
+}
+
+.tag-input {
+    padding: 4px 8px;
+    border: 2px solid #5a3d1f;
+    background: rgba(30, 20, 10, 0.8);
+    color: #e8dcc4;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: 0.75rem;
+    min-width: 100px;
+    max-width: 150px;
+}
+
+.tag-input:focus {
+    outline: none;
+    border-color: #8b6914;
+}
+
+.tag-input::placeholder {
+    color: #5a3d1f;
+    font-style: italic;
+}
+
+.location-select {
+    padding: 6px 10px;
+    border: 2px solid #5a3d1f;
+    background: rgba(30, 20, 10, 0.8);
+    color: #e8dcc4;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-width: 150px;
+}
+
+.location-select:focus {
+    outline: none;
+    border-color: #8b6914;
+}
+
+/* ========== GM ACTION BUTTONS ========== */
+.gm-header-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+    margin-right: 0.5rem;
+}
+
+.xp-award-input {
+    width: 60px;
+    padding: 4px 8px;
+    margin-right: 0.5rem;
+    border: 2px solid #5a3d1f;
+    background: rgba(30, 20, 10, 0.8);
+    color: #e8dcc4;
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: 0.75rem;
+}
+
+.gm-header-btn {
+    padding: 4px 10px;
+    background: linear-gradient(to bottom, #8b1a1a, #5a1010);
+    border: 2px solid #8b1a1a;
+    border-radius: 3px;
+    color: #e8dcc4;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+}
+
+.gm-header-btn:hover {
+    background: linear-gradient(to bottom, #a52020, #8b1a1a);
+    border-color: #d4af37;
+}
+
+.gm-header-btn.corruption-btn {
+    background: linear-gradient(to bottom, #4a1a5a, #2a0a3a);
+    border-color: #6a2a7a;
+}
+
+.gm-header-btn.corruption-btn:hover {
+    background: linear-gradient(to bottom, #5a2a6a, #4a1a5a);
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.panel-header .panel-title {
+    margin-bottom: 0;
+}
+
+.gm-action-btn {
+    padding: 2px 8px;
+    background: linear-gradient(to bottom, #8b1a1a, #5a1010);
+    border: 1px solid #8b1a1a;
+    border-radius: 3px;
+    color: #e8dcc4;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.gm-action-btn.add-btn {
+    background: linear-gradient(to bottom, #1a5a1a, #0a3a0a);
+    border-color: #2a7a2a;
+}
+
+.gm-action-btn.add-btn:hover {
+    background: linear-gradient(to bottom, #2a7a2a, #1a5a1a);
+    border-color: #d4af37;
+}
+
+.gm-action-btn.remove-btn {
+    padding: 0 6px;
+    font-size: 1rem;
+    line-height: 1;
+    margin-left: 4px;
+}
+
+.gm-action-btn.remove-btn:hover {
+    background: linear-gradient(to bottom, #a52020, #8b1a1a);
+    border-color: #d4af37;
+}
+
+.talent-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.close-button {
+    padding: 4px 10px;
+    background: linear-gradient(to bottom, #5a3d1f, #3d2817);
+    border: 2px solid #5a3d1f;
+    border-radius: 3px;
+    color: #e8dcc4;
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 0.5rem;
+}
+
+.close-button:hover {
+    background: linear-gradient(to bottom, #8b1a1a, #5a1010);
+    border-color: #8b1a1a;
 }

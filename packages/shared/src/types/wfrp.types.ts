@@ -206,6 +206,8 @@ export interface Character {
   currentCareerId: string;
   currentCareerLevelId: string;
   userId: string | null; // null if unassigned
+  tags: string[]; // e.g., "City Watch", "Cultist", "Merchant"
+  locationId: string | null; // Reference to a location
   xp: XP;
   careerHistory: CareerHistoryEntry[]; // full history of all XP spent
   unlockedCharacteristicIds: string[]; // GM-granted unlocks

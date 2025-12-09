@@ -314,3 +314,22 @@
         justify-content: flex-end;
     }
 }
+
+/* ========== GM INVENTORY ACTIONS ========== */
+.gm-inventory-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem;
+    background: linear-gradient(to right, rgba(139, 26, 26, 0.2), rgba(44, 24, 16, 0.6));
+    border: 2px solid #8b1a1a;
+    border-radius: 4px;
+}
+
+.gm-inventory-actions .gm-action-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.item-remove {
+    margin-left: 0.5rem;
+}

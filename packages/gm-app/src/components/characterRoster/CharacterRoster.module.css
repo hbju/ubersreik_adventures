@@ -12,7 +12,6 @@
   display: flex;
   flex-direction: column;
   z-index: 1001;
-  overflow-y: auto;
 }
 
 .header {
@@ -21,6 +20,7 @@
   border-bottom: 3px double var(--color-gold);
   color: var(--color-ink);
   align-items: center;
+  flex-shrink: 0;
 }
 
 .header h2 {
@@ -212,4 +212,82 @@
 
 .characterList::-webkit-scrollbar-thumb:hover {
   background: var(--color-gold-light);
+}
+
+/* Roster Content Area */
+.rosterContent {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* No Results Message */
+.noResults {
+  padding: 20px;
+  text-align: center;
+  color: var(--color-leather-light);
+  font-style: italic;
+  font-family: var(--font-body);
+}
+
+/* Tag Badges in Character Item */
+.tagBadges {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.tagBadge {
+  font-size: 0.6rem;
+  font-weight: normal;
+  color: var(--color-ink);
+  background: var(--color-parchment-dark);
+  padding: 1px 5px;
+  border-radius: 2px;
+  border: 1px solid var(--color-leather-light);
+}
+
+/* Accordion Group Styles */
+.accordionGroup {
+  border-bottom: 1px solid var(--color-leather-light);
+}
+
+.accordionHeader {
+  width: 100%;
+  padding: 10px 15px;
+  border: none;
+  background: linear-gradient(180deg, var(--color-parchment-dark), var(--color-parchment));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 2px solid var(--color-leather-light);
+}
+
+.accordionHeader:hover {
+  background: var(--color-vellum);
+}
+
+.accordionArrow {
+  font-size: 0.7rem;
+  color: var(--color-leather-dark);
+  width: 12px;
+}
+
+.accordionTitle {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  flex: 1;
+  text-align: left;
+}
+
+.accordionCount {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--color-leather-dark);
 }

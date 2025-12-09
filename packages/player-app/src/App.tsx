@@ -3,24 +3,40 @@ import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { CharacterSheet, Character, CharacterCreationWizard, CharacterUpdateMessage, RequestPurchaseMessage, OpposedTestResultMessage, ConditionTestResultMessage, MapView, DiscoveredLocationsList, recalculateCharacterTalentBonuses, getAvailableAdvancements, hasCompletedCurrentLevel, CareerHistoryEntry, Location, useGameData, CharacterCreateMessage, PlayerUpdateCharacterMessage, ShopEvaluateRequestMessage, ShopPurchaseRequestMessage, ShopState } from '@wfrp/shared';
-import { TalentSelectionModal } from '@wfrp/shared';
-import {
+import { 
+    CharacterSheet, 
+    Character, 
+    CharacterCreationWizard, 
+    CharacterUpdateMessage, 
+    RequestPurchaseMessage, 
+    OpposedTestResultMessage, 
+    ConditionTestResultMessage, 
+    MapView,
+    DiscoveredLocationsList, 
+    recalculateCharacterTalentBonuses, 
+    getAvailableAdvancements, 
+    hasCompletedCurrentLevel, 
+    CareerHistoryEntry, 
+    Location,
+    useGameData, 
+    CharacterCreateMessage, 
+    PlayerUpdateCharacterMessage, 
+    ShopEvaluateRequestMessage, 
+    ShopPurchaseRequestMessage,
+    TalentSelectionModal,
+    PlayerCharacterSheet,
     TestResultMessage,
     calculateCharacteristicAdvanceCost,
-    calculateSkillAdvanceCost
+    calculateSkillAdvanceCost,
 } from '@wfrp/shared';
+
 import { TalentModal } from './components/TalentModal';
 import { ShopModal } from './components/ShopModal';
-import { ShopBrowser } from '../../gm-app/src/components/ShopBrowser';
-import { ShopsList } from './components/ShopsList';
 import { OpposedTestModal } from './components/OpposedTestModal';
-import { ConditionTestModal } from './components/ConditionTestModal';
 import InitiativeTracker from './components/initiativeTracker/InitiativeTracker';
 import { JournalView } from './components/JournalView';
 import { CareerChangeModal } from './components/CareerChangeModal';
 import { ReputationDisplay } from './components/ReputationDisplay';
-import PlayerCharacterSheet from './components/PlayerCharacterSheet';
 
 
 const PlayerApp: React.FC = () => {

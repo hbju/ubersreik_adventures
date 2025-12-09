@@ -17,6 +17,9 @@ interface InventoryTabProps {
     onCharacterUpdate: (updates: Partial<Character>) => void;
     onPurchaseClick?: () => void;
     showPurchaseButton?: boolean;
+    isGM?: boolean;
+    onAddItem?: () => void;
+    onRemoveItem?: (itemId: string, type: 'weapon' | 'armor' | 'item') => void;
 }
 
 export const InventoryTab: React.FC<InventoryTabProps> = ({
@@ -24,7 +27,10 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
     isEditMode,
     onCharacterUpdate,
     onPurchaseClick,
-    showPurchaseButton = false
+    showPurchaseButton = false,
+    isGM = false,
+    onAddItem,
+    onRemoveItem,
 }) => {
     const { weapons: weaponsData, armor: armorData, items: itemsData, talents } = useGameData();
 
@@ -130,6 +136,13 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
 
     return (
         <div className="inventory-tab">
+            {/* GM Add Item Button */}
+            {isGM && onAddItem && (
+                <div className="gm-inventory-actions">
+                    <button className="gm-action-btn add-btn" onClick={onAddItem}>+ Add Item</button>
+                </div>
+            )}
+            
             {/* Encumbrance Bar */}
             <div className="encumbrance-panel">
                 <div className="encumbrance-header">
@@ -285,6 +298,15 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                                                     +
                                                 </button>
                                             )}
+                                            {isGM && onRemoveItem && (
+                                                <button 
+                                                    className="gm-action-btn remove-btn item-remove"
+                                                    onClick={() => onRemoveItem(weapon.id, 'weapon')}
+                                                    title="Remove"
+                                                >
+                                                    ×
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 ))}
@@ -338,6 +360,15 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                                                     +
                                                 </button>
                                             )}
+                                            {isGM && onRemoveItem && (
+                                                <button 
+                                                    className="gm-action-btn remove-btn item-remove"
+                                                    onClick={() => onRemoveItem(armor.id, 'armor')}
+                                                    title="Remove"
+                                                >
+                                                    ×
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 ))}
@@ -386,6 +417,15 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                                                     onClick={() => handleItemQuantityChange(item.id, 1)}
                                                 >
                                                     +
+                                                </button>
+                                            )}
+                                            {isGM && onRemoveItem && (
+                                                <button 
+                                                    className="gm-action-btn remove-btn item-remove"
+                                                    onClick={() => onRemoveItem(item.id, 'item')}
+                                                    title="Remove"
+                                                >
+                                                    ×
                                                 </button>
                                             )}
                                         </div>

@@ -25,6 +25,8 @@ export function generateRandomNpc(careersData: Career[], skillsData: SkillCharDe
     return {
         id: crypto.randomUUID(),
         userId: null,
+        tags: [],
+        locationId: null,
         name: name,
         species: "Human",
         class: career.class || "",
@@ -104,6 +106,8 @@ export function createBlankCharacter(skillsData: SkillCharDefinition[]): Charact
     return {
         id: crypto.randomUUID(),
         userId: null,
+        tags: [],
+        locationId: null,
         name: "New Character",
         species: "Human",
         class: "",
