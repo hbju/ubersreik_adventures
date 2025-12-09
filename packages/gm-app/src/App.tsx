@@ -1,4 +1,4 @@
-import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard } from '@wfrp/shared';
+import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -15,6 +15,8 @@ import { TalentSelectorModal } from './components/TalentSelectorModal';
 import { FactionManager } from './components/factions/FactionManager';
 import { CharacterReputationPanel } from './components/factions/CharacterReputationPanel';
 import { ShopConfigurator } from './components/shops/config';
+import { TemplateManager } from './components/TemplateManager';
+import MinionSheet from './components/MinionSheet';
 
 import {
     Character,
@@ -110,8 +112,11 @@ function App() {
     const [showAtmospherePanel, setShowAtmospherePanel] = useState(false);
     const [showFactionManager, setShowFactionManager] = useState(false);
     const [showReputationPanel, setShowReputationPanel] = useState(false);
+    const [showTemplateManager, setShowTemplateManager] = useState(false);
     const [factions, setFactions] = useState<Faction[]>([]);
     const factionsRef = useRef(factions);
+    const [characterTemplates, setCharacterTemplates] = useState<CharacterTemplate[]>([]);
+    const characterTemplatesRef = useRef(characterTemplates);
     const [customShopDefinitions, setCustomShopDefinitions] = useState<ShopDefinition[]>([]);
     const customShopDefinitionsRef = useRef(customShopDefinitions);
     const [shopInventory, setShopInventory] = useState<ShopInventoryState | undefined>(undefined);
@@ -160,6 +165,15 @@ function App() {
         return [...baseShops, ...customShopDefinitions];
     }, [shopDefinitions, customShopDefinitions]);
 
+    // Merge default templates with custom ones
+    // Custom templates override defaults with the same ID
+    const { defaultTemplates } = useGameData();
+    const allTemplates = useMemo(() => {
+        const customIds = new Set(characterTemplates.map(t => t.id));
+        const baseTemplates = (defaultTemplates || []).filter(t => !customIds.has(t.id));
+        return [...baseTemplates, ...characterTemplates];
+    }, [defaultTemplates, characterTemplates]);
+
     const addLogEntry = (type: LogEntry['type'], content: string, messageCode?: string, params?: Record<string, any>) => {
         const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content, messageCode, params };
         setLogEntries(prev => [...prev, newEntry]);
@@ -178,6 +192,7 @@ function App() {
             factions: factions,
             shopInventory: shopInventory,
             customShopDefinitions: customShopDefinitions,
+            characterTemplates: characterTemplates,
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
@@ -190,8 +205,9 @@ function App() {
         factionsRef.current = factions;
         shopInventoryRef.current = shopInventory;
         customShopDefinitionsRef.current = customShopDefinitions;
+        characterTemplatesRef.current = characterTemplates;
 
-    }, [characters, users, journal, mapPinStates, factions, shopInventory, customShopDefinitions]);
+    }, [characters, users, journal, mapPinStates, factions, shopInventory, customShopDefinitions, characterTemplates]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -655,6 +671,11 @@ function App() {
                 setCustomShopDefinitions(data.customShopDefinitions);
             }
 
+            // Load character templates if present
+            if (data.characterTemplates) {
+                setCharacterTemplates(data.characterTemplates);
+            }
+
             setSaving(true);
         }).catch((error: any) => {
             console.error('Failed to load initial data:', error);
@@ -1051,6 +1072,7 @@ function App() {
                 onShowAtmospherePanel={() => setShowAtmospherePanel(!showAtmospherePanel)}
                 onShowFactionManager={() => setShowFactionManager(true)}
                 onShowReputationPanel={() => setShowReputationPanel(true)}
+                onShowTemplateManager={() => setShowTemplateManager(true)}
             />
 
             <GameLog entries={logEntries} />
@@ -1164,6 +1186,23 @@ function App() {
                     }}
                     characters={characters}
                     shops={allShopDefinitions}
+                />
+            )}
+
+            {showTemplateManager && (
+                <TemplateManager
+                    onClose={() => setShowTemplateManager(false)}
+                    templates={allTemplates}
+                    onTemplatesChange={(updatedTemplates) => {
+                        // Only save custom templates (those modified from default)
+                        setCharacterTemplates(updatedTemplates);
+                    }}
+                    onGenerateCharacter={(newCharacter) => {
+                        const updatedCharacters = [...charactersRef.current, newCharacter];
+                        setCharacters(updatedCharacters);
+                        addLogEntry('system', `Generated NPC from template: ${newCharacter.name}`, 'logs.npc_generated', { name: newCharacter.name });
+                    }}
+                    existingCharacterNames={characters.map(c => c.name)}
                 />
             )}
 
@@ -1489,6 +1528,24 @@ function App() {
 
                 if (!character) return null;
 
+                // Use MinionSheet for minions, PlayerCharacterSheet for full characters
+                if (character.isMinion) {
+                    return (
+                        <MinionSheet
+                            key={character.id}
+                            character={character}
+                            onCharacterUpdate={(updates) => handleCharacterUpdate({ ...character, ...updates })}
+                            onCharacteristicClick={(charId, charName, charValue) => setTestModalInfo({ id: charId, name: charName, value: charValue, charId: character.id })}
+                            onSkillClick={(skillId, skillName, skillValue) => setTestModalInfo({ id: skillId, name: skillName, value: skillValue, charId: character.id })}
+                            onFullViewClick={() => {
+                                // Toggle isMinion to switch to full view
+                                handleCharacterUpdate({ ...character, isMinion: false });
+                            }}
+                            onClose={() => handleToggleCharacterSheet(character.id)}
+                        />
+                    );
+                }
+
                 return (
                     <PlayerCharacterSheet
                         key={character.id}
@@ -1513,6 +1570,7 @@ function App() {
                         onCorruptionTest={() => handleCorruptionTest(character.id)}
                         onRemoveItem={(itemId, type) => handleRemoveItemFromCharacter(itemId, character.id)}
                         onAddItem={() => setShowItemSelector(character.id)}
+                        onMinionViewClick={() => handleCharacterUpdate({ ...character, isMinion: true })}
                         onClose={() => handleToggleCharacterSheet(character.id)}
                     />
                 );

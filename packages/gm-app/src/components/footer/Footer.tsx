@@ -18,6 +18,7 @@ interface FooterProps {
     onShowAtmospherePanel: () => void,
     onShowFactionManager: () => void,
     onShowReputationPanel: () => void,
+    onShowTemplateManager: () => void,
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -34,6 +35,7 @@ export const Footer: React.FC<FooterProps> = ({
     onShowAtmospherePanel,
     onShowFactionManager,
     onShowReputationPanel,
+    onShowTemplateManager,
 }) => {
     const { t } = useTranslation();
     const connectionCount = clients.length;
@@ -198,6 +200,21 @@ export const Footer: React.FC<FooterProps> = ({
                 }}
             >
                 ⚖️ {t('menu.reputation')}
+            </button>
+            <button
+                onClick={onShowTemplateManager}
+                style={{
+                    padding: '10px 20px',
+                    background: '#2c1810',
+                    color: '#d4af37',
+                    border: '2px solid #8b6914',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '14px'
+                }}
+            >
+                👥 {t('menu.templates', 'NPC Templates')}
             </button>
 
             <LanguageSwitcher />

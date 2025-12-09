@@ -38,6 +38,11 @@
     font-size: 0.95rem;
 }
 
+.char-cell.unlocked {
+    background: rgba(45, 80, 22, 0.5);
+    border-radius: 10px;
+}
+
 .char-cell.char-label {
     justify-content: flex-start;
     color: #8b6914;

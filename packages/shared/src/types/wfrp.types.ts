@@ -245,6 +245,69 @@ export interface Character {
   };
   currency: Currency;
   reputations: ReputationEntry[]; // Character's standing with various factions
+  isMinion?: boolean; // If true, opens in condensed Minion View instead of full sheet
+  templateId?: string; // Reference to the CharacterTemplate this character was generated from
+}
+
+// ========================================
+// NPC Template System Types
+// ========================================
+
+export type CharacterTemplateCategory = 'Human' | 'Dwarf' | 'Elf' | 'Halfling' | 'Creature' | 'Undead' | 'Chaos' | 'Other';
+
+/**
+ * Defines variance for a characteristic value
+ */
+export interface CharacteristicVariance {
+  base: number;
+  variance: number; // ±variance applied to base
+}
+
+/**
+ * Skill definition for a template
+ */
+export interface TemplateSkill {
+  id: string;
+  advances: number;
+  advancesVariance?: number; // ±variance for advances
+}
+
+/**
+ * Template for generating NPCs with slight stat variations
+ */
+export interface CharacterTemplate {
+  id: string;
+  name: string;
+  category: CharacterTemplateCategory;
+  description?: string;
+  species: string;
+  careerId?: string; // Optional career reference
+  careerLevelId?: string;
+  movement: number;
+  nameList?: string[]; // Custom name list for this template (e.g., ["Hans", "Klaus", "Wilhelm"])
+  characteristics: {
+    ws: CharacteristicVariance;
+    bs: CharacteristicVariance;
+    s: CharacteristicVariance;
+    t: CharacteristicVariance;
+    i: CharacteristicVariance;
+    ag: CharacteristicVariance;
+    dex: CharacteristicVariance;
+    int: CharacteristicVariance;
+    wp: CharacteristicVariance;
+    fel: CharacteristicVariance;
+  };
+  skills: TemplateSkill[];
+  talents: string[]; // Array of talent IDs
+  trappings: {
+    weapons: string[]; // Array of weapon IDs
+    armor: string[]; // Array of armor IDs
+    items: string[]; // Array of item IDs
+  };
+  baseWounds?: number; // If not provided, calculated from characteristics
+  woundsVariance?: number; // ±variance for wounds
+  isMinion: boolean; // Whether generated characters should use Minion View
+  tags?: string[]; // Default tags for generated characters
 }
 
 export interface GameData {

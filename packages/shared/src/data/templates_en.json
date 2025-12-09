@@ -1,0 +1,280 @@
+[
+  {
+    "id": "tpl_city_watchman",
+    "name": "City Watchman",
+    "category": "Human",
+    "description": "A typical city guard, enforcing law and order on the streets. Usually found in pairs patrolling districts or guarding gates.",
+    "species": "Human",
+    "movement": 4,
+    "characteristics": {
+      "ws": { "base": 35, "variance": 5 },
+      "bs": { "base": 30, "variance": 5 },
+      "s": { "base": 30, "variance": 5 },
+      "t": { "base": 35, "variance": 5 },
+      "i": { "base": 30, "variance": 5 },
+      "ag": { "base": 30, "variance": 5 },
+      "dex": { "base": 25, "variance": 5 },
+      "int": { "base": 25, "variance": 5 },
+      "wp": { "base": 30, "variance": 5 },
+      "fel": { "base": 25, "variance": 5 }
+    },
+    "skills": [
+      { "id": "melee_basic", "advances": 10, "advancesVariance": 5 },
+      { "id": "perception", "advances": 5 },
+      { "id": "intimidate", "advances": 5 },
+      { "id": "dodge", "advances": 5 }
+    ],
+    "talents": [],
+    "trappings": {
+      "weapons": ["sword", "dagger"],
+      "armor": ["leather_jack", "leather_skullcap"],
+      "items": ["lantern"]
+    },
+    "baseWounds": 12,
+    "woundsVariance": 2,
+    "isMinion": true,
+    "tags": ["City Watch", "Human", "Guard"]
+  },
+  {
+    "id": "tpl_street_thug",
+    "name": "Street Thug",
+    "category": "Human",
+    "description": "A common criminal found in back alleys and shady taverns. Dangerous in numbers but cowardly alone.",
+    "species": "Human",
+    "movement": 4,
+    "characteristics": {
+      "ws": { "base": 30, "variance": 5 },
+      "bs": { "base": 25, "variance": 5 },
+      "s": { "base": 35, "variance": 5 },
+      "t": { "base": 30, "variance": 5 },
+      "i": { "base": 30, "variance": 5 },
+      "ag": { "base": 30, "variance": 5 },
+      "dex": { "base": 30, "variance": 5 },
+      "int": { "base": 20, "variance": 5 },
+      "wp": { "base": 25, "variance": 5 },
+      "fel": { "base": 20, "variance": 5 }
+    },
+    "skills": [
+      { "id": "melee_basic", "advances": 5 },
+      { "id": "dodge", "advances": 5 },
+      { "id": "stealth_urban", "advances": 10 }
+    ],
+    "talents": [],
+    "trappings": {
+      "weapons": ["club", "knife"],
+      "armor": [],
+      "items": []
+    },
+    "baseWounds": 10,
+    "woundsVariance": 2,
+    "isMinion": true,
+    "tags": ["Criminal", "Human", "Thug"]
+  },
+  {
+    "id": "tpl_cultist",
+    "name": "Chaos Cultist",
+    "category": "Chaos",
+    "description": "A follower of the Dark Gods, hidden among the populace. Fanatical and dangerous.",
+    "species": "Human",
+    "movement": 4,
+    "characteristics": {
+      "ws": { "base": 30, "variance": 5 },
+      "bs": { "base": 25, "variance": 5 },
+      "s": { "base": 30, "variance": 5 },
+      "t": { "base": 30, "variance": 5 },
+      "i": { "base": 30, "variance": 5 },
+      "ag": { "base": 30, "variance": 5 },
+      "dex": { "base": 25, "variance": 5 },
+      "int": { "base": 30, "variance": 5 },
+      "wp": { "base": 35, "variance": 5 },
+      "fel": { "base": 30, "variance": 5 }
+    },
+    "skills": [
+      { "id": "melee_basic", "advances": 5 },
+      { "id": "dodge", "advances": 5 },
+      { "id": "cool", "advances": 10 }
+    ],
+    "talents": [],
+    "trappings": {
+      "weapons": ["dagger"],
+      "armor": [],
+      "items": []
+    },
+    "baseWounds": 10,
+    "woundsVariance": 2,
+    "isMinion": true,
+    "tags": ["Cultist", "Chaos", "Human"]
+  },
+  {
+    "id": "tpl_bandit",
+    "name": "Bandit",
+    "category": "Human",
+    "description": "Highway robbers and outlaws who prey on travelers. Often desperate men with little to lose.",
+    "species": "Human",
+    "movement": 4,
+    "characteristics": {
+      "ws": { "base": 35, "variance": 5 },
+      "bs": { "base": 30, "variance": 5 },
+      "s": { "base": 30, "variance": 5 },
+      "t": { "base": 30, "variance": 5 },
+      "i": { "base": 35, "variance": 5 },
+      "ag": { "base": 35, "variance": 5 },
+      "dex": { "base": 30, "variance": 5 },
+      "int": { "base": 25, "variance": 5 },
+      "wp": { "base": 25, "variance": 5 },
+      "fel": { "base": 25, "variance": 5 }
+    },
+    "skills": [
+      { "id": "melee_basic", "advances": 10 },
+      { "id": "ranged_bow", "advances": 5 },
+      { "id": "outdoor_survival", "advances": 5 },
+      { "id": "stealth_rural", "advances": 10 }
+    ],
+    "talents": [],
+    "trappings": {
+      "weapons": ["hand_weapon", "bow"],
+      "armor": ["leather_jack"],
+      "items": []
+    },
+    "baseWounds": 11,
+    "woundsVariance": 2,
+    "isMinion": true,
+    "tags": ["Bandit", "Human", "Outlaw"]
+  },
+  {
+    "id": "tpl_skeleton",
+    "name": "Skeleton Warrior",
+    "category": "Undead",
+    "description": "An animated skeleton, bound by dark magic. Mindless but relentless.",
+    "species": "Undead",
+    "movement": 4,
+    "characteristics": {
+      "ws": { "base": 25, "variance": 5 },
+      "bs": { "base": 15, "variance": 5 },
+      "s": { "base": 25, "variance": 5 },
+      "t": { "base": 30, "variance": 0 },
+      "i": { "base": 20, "variance": 0 },
+      "ag": { "base": 20, "variance": 5 },
+      "dex": { "base": 20, "variance": 5 },
+      "int": { "base": 0, "variance": 0 },
+      "wp": { "base": 20, "variance": 0 },
+      "fel": { "base": 0, "variance": 0 }
+    },
+    "skills": [
+      { "id": "melee_basic", "advances": 10 }
+    ],
+    "talents": [],
+    "trappings": {
+      "weapons": ["sword"],
+      "armor": [],
+      "items": []
+    },
+    "baseWounds": 8,
+    "woundsVariance": 0,
+    "isMinion": true,
+    "tags": ["Undead", "Skeleton"]
+  },
+  {
+    "id": "tpl_zombie",
+    "name": "Zombie",
+    "category": "Undead",
+    "description": "A shambling corpse animated by necromantic magic. Slow but frighteningly tough.",
+    "species": "Undead",
+    "movement": 3,
+    "characteristics": {
+      "ws": { "base": 20, "variance": 5 },
+      "bs": { "base": 0, "variance": 0 },
+      "s": { "base": 30, "variance": 5 },
+      "t": { "base": 40, "variance": 5 },
+      "i": { "base": 10, "variance": 0 },
+      "ag": { "base": 15, "variance": 5 },
+      "dex": { "base": 15, "variance": 5 },
+      "int": { "base": 0, "variance": 0 },
+      "wp": { "base": 20, "variance": 0 },
+      "fel": { "base": 0, "variance": 0 }
+    },
+    "skills": [
+      { "id": "melee_brawling", "advances": 5 }
+    ],
+    "talents": [],
+    "trappings": {
+      "weapons": [],
+      "armor": [],
+      "items": []
+    },
+    "baseWounds": 12,
+    "woundsVariance": 2,
+    "isMinion": true,
+    "tags": ["Undead", "Zombie"]
+  },
+  {
+    "id": "tpl_beastman",
+    "name": "Beastman Gor",
+    "category": "Chaos",
+    "description": "A savage mutant creature of Chaos, part man and part beast. Brutal and cunning hunters.",
+    "species": "Beastman",
+    "movement": 5,
+    "characteristics": {
+      "ws": { "base": 40, "variance": 5 },
+      "bs": { "base": 25, "variance": 5 },
+      "s": { "base": 35, "variance": 5 },
+      "t": { "base": 40, "variance": 5 },
+      "i": { "base": 30, "variance": 5 },
+      "ag": { "base": 35, "variance": 5 },
+      "dex": { "base": 25, "variance": 5 },
+      "int": { "base": 20, "variance": 5 },
+      "wp": { "base": 30, "variance": 5 },
+      "fel": { "base": 20, "variance": 5 }
+    },
+    "skills": [
+      { "id": "melee_basic", "advances": 15 },
+      { "id": "dodge", "advances": 10 },
+      { "id": "outdoor_survival", "advances": 10 }
+    ],
+    "talents": [],
+    "trappings": {
+      "weapons": ["hand_weapon"],
+      "armor": [],
+      "items": []
+    },
+    "baseWounds": 14,
+    "woundsVariance": 2,
+    "isMinion": true,
+    "tags": ["Chaos", "Beastman"]
+  },
+  {
+    "id": "tpl_dwarf_slayer",
+    "name": "Dwarf Trollslayer",
+    "category": "Dwarf",
+    "description": "A Dwarf seeking an honorable death in battle. Fearless and deadly with an axe.",
+    "species": "Dwarf",
+    "movement": 3,
+    "characteristics": {
+      "ws": { "base": 45, "variance": 5 },
+      "bs": { "base": 25, "variance": 5 },
+      "s": { "base": 40, "variance": 5 },
+      "t": { "base": 45, "variance": 5 },
+      "i": { "base": 35, "variance": 5 },
+      "ag": { "base": 25, "variance": 5 },
+      "dex": { "base": 30, "variance": 5 },
+      "int": { "base": 25, "variance": 5 },
+      "wp": { "base": 50, "variance": 5 },
+      "fel": { "base": 20, "variance": 5 }
+    },
+    "skills": [
+      { "id": "melee_two_handed", "advances": 20 },
+      { "id": "dodge", "advances": 10 },
+      { "id": "intimidate", "advances": 15 }
+    ],
+    "talents": [],
+    "trappings": {
+      "weapons": ["great_weapon"],
+      "armor": [],
+      "items": []
+    },
+    "baseWounds": 16,
+    "woundsVariance": 2,
+    "isMinion": false,
+    "tags": ["Dwarf", "Slayer"]
+  }
+]

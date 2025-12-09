@@ -100,7 +100,7 @@ export const SkillsPanel: React.FC<SkillsPanelProps> = ({
         return (
             <div 
                 key={skill.id} 
-                className={`skill-row ${hasAdvances ? 'has-advances' : ''} ${isUnlocked ? 'unlocked' : ''}`}
+                className={`skill-row ${isUnlocked ? 'unlocked' : ''}`}
             >
                 <span className={`skill-name ${isUnlocked ? 'skill-unlocked' : ''}`}>
                     {skill.name}

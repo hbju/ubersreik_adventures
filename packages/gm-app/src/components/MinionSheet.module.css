@@ -1,0 +1,387 @@
+/* MinionSheet - Compact combat-focused character card */
+.minionSheet {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 340px;
+    background: var(--color-parchment);
+    border: 3px solid var(--color-leather-dark);
+    box-shadow: 
+        inset 0 0 0 1px var(--color-gold),
+        0 8px 24px rgba(0, 0, 0, 0.6);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    z-index: 1000;
+    /* Allow dragging later */
+    cursor: default;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: linear-gradient(180deg, var(--color-leather-dark), #2a2218);
+    border-bottom: 2px solid var(--color-gold);
+}
+
+.name {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--color-gold);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.headerActions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.fullViewButton {
+    padding: 4px 8px;
+    background: transparent;
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+}
+
+.fullViewButton:hover {
+    background: var(--color-gold);
+    color: var(--color-leather-dark);
+}
+
+.closeButton {
+    background: transparent;
+    border: none;
+    color: var(--color-gold);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.closeButton:hover {
+    color: var(--color-blood-red);
+}
+
+/* Quick Stats Row */
+.quickStats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--color-vellum);
+    border-bottom: 1px solid var(--color-leather-light);
+}
+
+.woundsControl {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.statLabel {
+    font-weight: 600;
+    color: var(--color-leather-dark);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.woundButton {
+    width: 22px;
+    height: 22px;
+    background: var(--color-parchment-light);
+    border: 1px solid var(--color-leather-dark);
+    color: var(--color-ink);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+
+.woundButton:hover {
+    background: var(--color-gold-light);
+    border-color: var(--color-gold);
+}
+
+.woundsValue {
+    font-weight: bold;
+    font-size: 1rem;
+    color: var(--color-ink);
+    min-width: 50px;
+    text-align: center;
+}
+
+.woundsValue.woundsCritical {
+    color: var(--color-blood-red);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.quickStat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.statValue {
+    font-weight: bold;
+    color: var(--color-ink);
+}
+
+/* Characteristics Grid */
+.characteristicsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    padding: 6px;
+    background: var(--color-parchment);
+    border-bottom: 2px solid var(--color-leather-light);
+}
+
+.charButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 4px;
+    background: linear-gradient(180deg, var(--color-parchment-light), var(--color-parchment));
+    border: 1px solid var(--color-leather-light);
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.charButton:hover {
+    background: var(--color-gold-light);
+    border-color: var(--color-gold);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.charLabel {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: var(--color-leather-dark);
+    text-transform: uppercase;
+}
+
+.charValue {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--color-ink);
+}
+
+/* Section Styling */
+.section {
+    border-bottom: 1px solid var(--color-leather-light);
+}
+
+.sectionHeader {
+    padding: 6px 12px;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--color-parchment-dark) 0px,
+        var(--color-parchment) 2px,
+        var(--color-parchment-dark) 4px
+    );
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 1px solid var(--color-gold);
+}
+
+/* Attacks List */
+.attacksList {
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.attackButton {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 8px;
+    align-items: center;
+    padding: 6px 10px;
+    background: linear-gradient(180deg, var(--color-parchment-light), var(--color-parchment));
+    border: 1px solid var(--color-leather-light);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+}
+
+.attackButton:hover {
+    background: var(--color-gold-light);
+    border-color: var(--color-gold);
+}
+
+.weaponName {
+    font-weight: 600;
+    color: var(--color-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.weaponSkill {
+    font-weight: bold;
+    color: var(--color-gold);
+    font-size: 0.9rem;
+}
+
+.weaponDamage {
+    color: var(--color-blood-red);
+    font-size: 0.8rem;
+}
+
+.weaponReach {
+    color: var(--color-leather-light);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+.emptyMessage {
+    color: var(--color-leather-light);
+    font-style: italic;
+    text-align: center;
+    padding: 8px;
+    font-size: 0.8rem;
+}
+
+/* Defence Grid */
+.defenceGrid {
+    padding: 8px 12px;
+}
+
+.armourInfo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.armourLabel {
+    font-weight: 600;
+    color: var(--color-leather-dark);
+    font-size: 0.8rem;
+}
+
+.armourValues {
+    color: var(--color-ink);
+    font-size: 0.8rem;
+}
+
+.defenceStats {
+    display: flex;
+    gap: 8px;
+}
+
+.defenceButton {
+    flex: 1;
+    padding: 6px 10px;
+    background: linear-gradient(180deg, var(--color-parchment-light), var(--color-parchment));
+    border: 1px solid var(--color-leather-light);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    transition: all 0.15s;
+}
+
+.defenceButton:hover {
+    background: var(--color-gold-light);
+    border-color: var(--color-gold);
+}
+
+/* Traits List */
+.traitsList {
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.traitItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+    color: var(--color-ink);
+    font-size: 0.85rem;
+}
+
+.talentBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: var(--color-gold);
+    color: var(--color-leather-dark);
+    font-size: 0.65rem;
+    font-weight: bold;
+    border-radius: 2px;
+}
+
+.skillItem {
+    display: block;
+    padding: 4px 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: var(--color-ink);
+    font-size: 0.85rem;
+    transition: all 0.15s;
+    width: 100%;
+}
+
+.skillItem:hover {
+    background: var(--color-gold-light);
+    color: var(--color-leather-dark);
+}
+
+/* Scrollbar styling */
+.traitsList::-webkit-scrollbar {
+    width: 6px;
+}
+
+.traitsList::-webkit-scrollbar-track {
+    background: var(--color-parchment);
+}
+
+.traitsList::-webkit-scrollbar-thumb {
+    background: var(--color-leather-light);
+    border-radius: 3px;
+}
+
+.traitsList::-webkit-scrollbar-thumb:hover {
+    background: var(--color-leather-dark);
+}

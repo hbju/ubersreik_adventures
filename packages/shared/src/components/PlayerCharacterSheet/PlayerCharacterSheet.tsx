@@ -45,6 +45,7 @@ interface PlayerCharacterSheetProps {
     onCorruptionTest?: () => void;
     onRemoveItem?: (itemId: string, type: 'weapon' | 'armor' | 'item') => void;
     onAddItem?: () => void;
+    onMinionViewClick?: () => void; // Toggle back to minion view (for generated minions)
 }
 
 const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
@@ -70,6 +71,7 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
     onCorruptionTest,
     onRemoveItem,
     onAddItem,
+    onMinionViewClick,
 }) => {
     const { skills, careers, talents, gameData } = useGameData();
     const [activeTab, setActiveTab] = useState<TabType>('main');
@@ -298,6 +300,15 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                                 </button>
                             )}
                         </div>
+                    )}
+                    {onMinionViewClick && (
+                        <button 
+                            className="minion-view-button" 
+                            onClick={onMinionViewClick}
+                            title="Switch to Minion View"
+                        >
+                            📋
+                        </button>
                     )}
                     {onClose && (
                         <button className="close-button" onClick={onClose}>✖</button>

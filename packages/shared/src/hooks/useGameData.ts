@@ -19,7 +19,8 @@ import qualitiesEn from '../data/flaws_qualities_en.json';
 import qualitiesFr from '../data/flaws_qualities_fr.json';
 import shopsEn from '../data/shops_en.json';
 import shopsFr from '../data/shops_fr.json';
-import { SkillCharDefinition, Talent, Career, Item, Weapon, Armor, Condition, GameData, ItemQualityDefinition, ShopDefinition } from '../types/wfrp.types';
+import templatesEn from '../data/templates_en.json';
+import { SkillCharDefinition, Talent, Career, Item, Weapon, Armor, Condition, GameData, ItemQualityDefinition, ShopDefinition, CharacterTemplate } from '../types/wfrp.types';
 
 export const useGameData = () => {
     const { i18n } = useTranslation();
@@ -37,6 +38,7 @@ export const useGameData = () => {
             gameData: gameDataEn as GameData,
             qualities: qualitiesEn as ItemQualityDefinition[],
             shops: shopsEn as ShopDefinition[],
+            defaultTemplates: templatesEn as CharacterTemplate[],
         },
         fr: {
             skills: skillsFr as SkillCharDefinition[],
@@ -49,6 +51,7 @@ export const useGameData = () => {
             gameData: gameDataFr as GameData,
             qualities: qualitiesFr as ItemQualityDefinition[],
             shops: shopsFr as ShopDefinition[],
+            defaultTemplates: templatesEn as CharacterTemplate[], // Use English templates for now
         },
     };
 

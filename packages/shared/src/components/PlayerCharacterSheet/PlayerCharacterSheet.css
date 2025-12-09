@@ -352,6 +352,25 @@
     background: #8b6914;
 }
 
+/* ========== MINION VIEW BUTTON ========== */
+.minion-view-button {
+    background: transparent;
+    border: 2px solid #5a3d1f;
+    color: #8b6914;
+    font-size: 1.2rem;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: auto;
+    border-radius: 4px;
+}
+
+.minion-view-button:hover {
+    background: #2a4a2a;
+    color: #1a1410;
+    border-color: #4a8b4a;
+}
+
 /* ========== CLOSE BUTTON ========== */
 .close-button {
     background: transparent;

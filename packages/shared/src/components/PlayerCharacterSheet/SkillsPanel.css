@@ -49,11 +49,11 @@
     background: rgba(0, 0, 0, 0.2);
 }
 
-.skill-row.has-advances {
+.skill-row.unlocked {
     background: rgba(45, 80, 22, 0.15);
 }
 
-.skill-row.has-advances:hover {
+.skill-row.unlocked:hover {
     background: rgba(45, 80, 22, 0.25);
 }
 

@@ -1,12 +1,13 @@
 import React from 'react';
-import { 
-  Character, 
-  Faction, 
-  ReputationEntry, 
+import {
+  Character,
+  Faction,
+  ReputationEntry,
   getReputationLabel,
   getReputationColorStyle,
   getFactionCategoryIcon,
-  getFactionCategoryName
+  getFactionCategoryName,
+  useGameData
 } from '@wfrp/shared';
 import styles from './ReputationDisplay.module.css';
 import { useTranslation } from 'react-i18next';
@@ -21,6 +22,7 @@ export const ReputationDisplay: React.FC<ReputationDisplayProps> = ({
   factions,
 }) => {
   const { t } = useTranslation();
+  const { gameData } = useGameData();
 
   const getCharacterReputation = (factionId: string): ReputationEntry | null => {
     return character.reputations?.find(r => r.factionId === factionId) || null;
@@ -31,13 +33,24 @@ export const ReputationDisplay: React.FC<ReputationDisplayProps> = ({
     return rep?.knowledgeLevel || 'unknown';
   };
 
-  // Sort factions by knowledge level (known first, then rumored, then unknown)
+  // Sort factions by knowledge level (known first, then rumored, then unknown; then by status; then name)
   const sortedFactions = [...factions].sort((a, b) => {
     const levelOrder = { known: 0, rumored: 1, unknown: 2 };
     const levelA = getFactionKnowledgeLevel(a.id);
     const levelB = getFactionKnowledgeLevel(b.id);
-    return levelOrder[levelA] - levelOrder[levelB];
+    if (levelOrder[levelA] !== levelOrder[levelB]) {
+      return levelOrder[levelA] - levelOrder[levelB];
+    }
+    const repA = getCharacterReputation(a.id);
+    const repB = getCharacterReputation(b.id);
+    const valueA = repA?.value || 0;
+    const valueB = repB?.value || 0;
+    if (valueA !== valueB) {
+      return valueB - valueA; // Higher reputation first
+    }
+    return a.name.localeCompare(b.name);
   });
+  
 
   const knownFactions = sortedFactions.filter(f => getFactionKnowledgeLevel(f.id) === 'known');
   const rumoredFactions = sortedFactions.filter(f => getFactionKnowledgeLevel(f.id) === 'rumored');
@@ -53,11 +66,11 @@ export const ReputationDisplay: React.FC<ReputationDisplayProps> = ({
         <div className={styles.factionHeader}>
           <span className={styles.factionIcon}>
             {faction.icon !== '' ? (
-                <img
-                    src={faction.icon!}
-                    alt={faction.name}
-                    className={styles.factionIconImage}
-                />
+              <img
+                src={faction.icon!}
+                alt={faction.name}
+                className={styles.factionIconImage}
+              />
             ) : getFactionCategoryIcon(faction.category)}
           </span>
           <div className={styles.factionInfo}>
@@ -66,9 +79,9 @@ export const ReputationDisplay: React.FC<ReputationDisplayProps> = ({
               {getFactionCategoryName(faction.category)}
             </div>
           </div>
-          <div 
+          <div
             className={styles.standingBadge}
-            style={{ 
+            style={{
               color: colorStyle.color,
               backgroundColor: colorStyle.backgroundColor
             }}
@@ -81,8 +94,15 @@ export const ReputationDisplay: React.FC<ReputationDisplayProps> = ({
             </span>
           </div>
         </div>
-        <div className={styles.factionDescription}>
-          {faction.description}
+        <div className={styles.factionContent}>
+          <div className={styles.factionDescription}>
+            {faction.description}
+          </div>
+          <div className={styles.factionNotes}>
+            <b style={{color: "#d4af37"}}>Faction Leader :</b> {faction.head || t('reputations.unknown')}
+            <br />
+            <b style={{color: "#d4af37"}}>Faction HQ :</b> {gameData.locations.find(loc => loc.id === faction.hq)?.name || t('reputations.unknown')}
+          </div>
         </div>
       </div>
     );

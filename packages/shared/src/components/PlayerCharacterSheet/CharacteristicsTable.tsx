@@ -77,11 +77,15 @@ export const CharacteristicsTable: React.FC<CharacteristicsTableProps> = ({
                 {/* Header Row */}
                 <div className="char-table-row header-row">
                     <div className="char-cell char-label"></div>
-                    {charKeys.map(key => (
-                        <div key={key} className="char-cell char-header" title={CHAR_FULL_NAMES[key]}>
-                            {CHAR_NAMES[key]}
-                        </div>
-                    ))}
+                    {charKeys.map(key => {
+                        const isUnlocked = !character.unlockedCharacteristicIds ||
+                            character.unlockedCharacteristicIds.map(id => id.toLowerCase()).includes(key);
+                        return (
+                            <div key={key} className={`char-cell char-header ${isUnlocked ? 'unlocked' : ''}`} title={CHAR_FULL_NAMES[key]}>
+                                {CHAR_NAMES[key]}
+                            </div>
+                        )
+                    })}
                 </div>
 
                 {/* Initial Row */}
@@ -89,8 +93,10 @@ export const CharacteristicsTable: React.FC<CharacteristicsTableProps> = ({
                     <div className="char-cell char-label">Initial</div>
                     {charKeys.map(key => {
                         const char = character.characteristics[key];
+                        const isUnlocked = !character.unlockedCharacteristicIds ||
+                            character.unlockedCharacteristicIds.map(id => id.toLowerCase()).includes(key);
                         return (
-                            <div key={key} className="char-cell">
+                            <div key={key} className={`char-cell`}>
                                 {isEditMode ? (
                                     <input
                                         type="number"
@@ -112,7 +118,7 @@ export const CharacteristicsTable: React.FC<CharacteristicsTableProps> = ({
                     <div className="char-cell char-label">Advances</div>
                     {charKeys.map(key => {
                         const char = character.characteristics[key];
-                        const isUnlocked = !character.unlockedCharacteristicIds || 
+                        const isUnlocked = !character.unlockedCharacteristicIds ||
                             character.unlockedCharacteristicIds.map(id => id.toLowerCase()).includes(key);
                         return (
                             <div key={key} className={`char-cell ${advancementMode && isUnlocked ? 'advanceable' : ''}`}>
