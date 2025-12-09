@@ -87,6 +87,7 @@
         "backup": "Backup",
         "startSession": "Start Session",
         "journal": "Journal",
+        "quests": "Quests",
         "shop": "Shop",
         "dice": "Dice",
         "createCharacter": "Create Character",
@@ -94,6 +95,35 @@
         "atmosphere": "Atmosphere",
         "factions": "Factions",
         "reputation": "Reputation"
+    },
+    "quests": {
+        "title": "Quest Journal",
+        "searchPlaceholder": "Search quests...",
+        "newQuest": "New Quest",
+        "noQuests": "No quests yet",
+        "noActiveQuests": "No active quests",
+        "noCompletedQuests": "No completed quests",
+        "noFailedQuests": "No failed quests",
+        "selectQuest": "Select a quest or create a new one",
+        "questTitle": "Quest Title",
+        "description": "Description",
+        "descriptionPlaceholder": "Describe your quest objectives and notes...",
+        "objectives": "Objectives",
+        "addObjective": "Add Objective",
+        "objectivePlaceholder": "Describe this objective...",
+        "selectLocation": "Select Location...",
+        "goToMap": "Go to Map",
+        "markCompleted": "Mark Completed",
+        "markFailed": "Mark Failed",
+        "reactivate": "Reactivate Quest",
+        "delete": "Delete",
+        "confirmDelete": "Are you sure you want to delete this quest? This cannot be undone.",
+        "status": {
+            "active": "Active",
+            "completed": "Completed",
+            "failed": "Failed"
+        },
+        "gmViewTitle": "Party Quest Journal (Read-Only)"
     },
     "factions": {
     "title": "Factions Management",

@@ -350,6 +350,29 @@ export interface JournalEntry {
   sharedWith: ('all' | string)[]; // Array of character IDs or 'all'
 }
 
+// ========================================
+// Quest Journal System Types
+// ========================================
+
+export type QuestStatus = 'active' | 'completed' | 'failed';
+
+export interface QuestObjective {
+  id: string;
+  text: string;
+  isCompleted: boolean;
+  locationId?: string; // Optional link to a discovered map location
+}
+
+export interface Quest {
+  id: string;
+  title: string;
+  description: string; // Rich text or multiline string
+  status: QuestStatus;
+  objectives: QuestObjective[];
+  createdAt: number; // Timestamp
+  updatedAt: number;
+}
+
 export interface MapPinState {
   playerDiscovered: string[]; // Array of character IDs who have discovered this location
 }
@@ -389,6 +412,7 @@ export interface CampaignState {
   characters: Character[];
   users: User[]; 
   journal: JournalEntry[];
+  quests: Quest[]; // Party-wide quest journal
   mapPinStates: Record<string, MapPinState>; // locationId -> MapPinState
   factions: Faction[]; // Global list of factions
   shopInventory?: ShopInventoryState; // Shop inventory state

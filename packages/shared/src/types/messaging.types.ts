@@ -1,4 +1,4 @@
-import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction, ShopState, ShopInventoryItem } from './wfrp.types';
+import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction, ShopState, ShopInventoryItem, Quest } from './wfrp.types';
 
 interface BaseMessage<T extends string, P> {
     type: T;
@@ -62,7 +62,12 @@ export type ShopPurchaseResponseMessage = BaseMessage<'SHOP_PURCHASE_RESPONSE', 
     reason?: string;
 }>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage;
+// Quest Journal messages
+export type QuestSyncMessage = BaseMessage<'QUEST_SYNC', {
+    quests: Quest[];
+}>;
+
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage;
 
 // == Player to GM Messages ==
 
@@ -132,4 +137,13 @@ export type ShopEvaluateRequestMessage = BaseMessage<'SHOP_EVALUATE_REQUEST', {
     successLevel: number;
 }>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage;
+// Quest Journal messages (client to server)
+export type QuestUpdateMessage = BaseMessage<'QUEST_UPDATE', {
+    quest: Quest;
+}>;
+
+export type QuestDeleteMessage = BaseMessage<'QUEST_DELETE', {
+    questId: string;
+}>;
+
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage;

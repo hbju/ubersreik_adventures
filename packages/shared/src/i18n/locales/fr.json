@@ -88,6 +88,7 @@
     "backup": "Sauvegarde",
     "startSession": "Débuter",
     "journal": "Journal",
+    "quests": "Quêtes",
     "shop": "Boutique",
     "shopConfig": "Config. Boutiques",
     "dice": "Dés",
@@ -96,6 +97,35 @@
     "atmosphere": "Musique",
     "factions": "Factions",
     "reputation": "Réputation"
+  },
+  "quests": {
+    "title": "Journal des Quêtes",
+    "searchPlaceholder": "Rechercher des quêtes...",
+    "newQuest": "Nouvelle Quête",
+    "noQuests": "Aucune quête",
+    "noActiveQuests": "Aucune quête active",
+    "noCompletedQuests": "Aucune quête terminée",
+    "noFailedQuests": "Aucune quête échouée",
+    "selectQuest": "Sélectionnez une quête ou créez-en une nouvelle",
+    "questTitle": "Titre de la Quête",
+    "description": "Description",
+    "descriptionPlaceholder": "Décrivez vos objectifs et notes...",
+    "objectives": "Objectifs",
+    "addObjective": "Ajouter un Objectif",
+    "objectivePlaceholder": "Décrivez cet objectif...",
+    "selectLocation": "Sélectionner un Lieu...",
+    "goToMap": "Voir sur la Carte",
+    "markCompleted": "Marquer Terminée",
+    "markFailed": "Marquer Échouée",
+    "reactivate": "Réactiver la Quête",
+    "delete": "Supprimer",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette quête ? Cette action est irréversible.",
+    "status": {
+      "active": "Active",
+      "completed": "Terminée",
+      "failed": "Échouée"
+    },
+    "gmViewTitle": "Journal des Quêtes du Groupe (Lecture Seule)"
   },
   "factions": {
     "title": "Gestion des Factions",

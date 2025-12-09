@@ -1,0 +1,163 @@
+.objectiveItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5c4a1f;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.objectiveItem:hover {
+    border-color: #8b6914;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.objectiveItem.completed {
+    opacity: 0.7;
+}
+
+.objectiveItem.completed .objectiveText {
+    text-decoration: line-through;
+    color: #666;
+}
+
+/* Checkbox */
+.checkbox {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border: 2px solid #8b6914;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    margin-top: 2px;
+}
+
+.checkbox:hover {
+    border-color: #d4af37;
+    background: rgba(139, 105, 20, 0.2);
+}
+
+.checkbox.checked {
+    background: rgba(76, 175, 80, 0.4);
+    border-color: #4caf50;
+}
+
+.checkmark {
+    color: #81c784;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Content */
+.objectiveContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.objectiveText {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #d4d4d4;
+    font-size: 14px;
+    font-family: 'Georgia', serif;
+    transition: all 0.3s;
+}
+
+.objectiveText:focus {
+    outline: none;
+    border-color: #8b6914;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.objectiveText::placeholder {
+    color: #666;
+}
+
+/* Location Row */
+.locationRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 5px;
+}
+
+.locationIcon {
+    color: #888;
+    font-size: 14px;
+}
+
+.locationSelect {
+    flex: 1;
+    max-width: 250px;
+    padding: 6px 10px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #5c4a1f;
+    border-radius: 4px;
+    color: #d4af37;
+    font-size: 12px;
+    font-family: 'Georgia', serif;
+    cursor: pointer;
+}
+
+.locationSelect:focus {
+    outline: none;
+    border-color: #8b6914;
+}
+
+.locationSelect option {
+    background: #1a1410;
+    color: #d4af37;
+}
+
+/* Go to Map Button */
+.goToMapButton {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    background: rgba(33, 150, 243, 0.2);
+    border: 1px solid #2196f3;
+    border-radius: 4px;
+    color: #90caf9;
+    font-size: 11px;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+.goToMapButton:hover {
+    background: rgba(33, 150, 243, 0.4);
+    transform: translateX(2px);
+}
+
+/* Delete Button */
+.deleteObjectiveButton {
+    padding: 5px 8px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 2px;
+}
+
+.deleteObjectiveButton:hover {
+    color: #ef9a9a;
+    border-color: #f44336;
+    background: rgba(244, 67, 54, 0.1);
+}

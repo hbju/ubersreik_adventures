@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage } from '@wfrp/shared';
 import { getCampaignData, saveCampaignData } from './dataManager';
 
 const PORT = 3003;
@@ -258,6 +258,66 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 return;
             }
 
+            // Handle quest update from player
+            if (message.type === 'QUEST_UPDATE') {
+                const { quest } = message.payload;
+                const campaignData = getCampaignData();
+                if (!campaignData) {
+                    console.log(`[SERVER] No campaign data available`);
+                    return;
+                }
+
+                // Initialize quests array if not exists
+                if (!campaignData.quests) {
+                    campaignData.quests = [];
+                }
+
+                // Find existing quest or add new one
+                const existingIndex = campaignData.quests.findIndex(q => q.id === quest.id);
+                if (existingIndex >= 0) {
+                    campaignData.quests[existingIndex] = quest;
+                } else {
+                    campaignData.quests.push(quest);
+                }
+
+                saveCampaignData(campaignData);
+
+                // Broadcast quest sync to all connected players
+                broadcastQuests(campaignData.quests);
+
+                // Notify GM app
+                mainWindow.webContents.send('data-updated', { quests: campaignData.quests });
+
+                console.log(`[SERVER] Quest updated: ${quest.title} by user ${userId}`);
+                return;
+            }
+
+            // Handle quest delete from player
+            if (message.type === 'QUEST_DELETE') {
+                const { questId } = message.payload;
+                const campaignData = getCampaignData();
+                if (!campaignData) {
+                    console.log(`[SERVER] No campaign data available`);
+                    return;
+                }
+
+                if (!campaignData.quests) {
+                    return;
+                }
+
+                campaignData.quests = campaignData.quests.filter(q => q.id !== questId);
+                saveCampaignData(campaignData);
+
+                // Broadcast quest sync to all connected players
+                broadcastQuests(campaignData.quests);
+
+                // Notify GM app
+                mainWindow.webContents.send('data-updated', { quests: campaignData.quests });
+
+                console.log(`[SERVER] Quest deleted: ${questId} by user ${userId}`);
+                return;
+            }
+
             // Forward authenticated messages to GM
             mainWindow.webContents.send('player-message-received', message);
         });
@@ -416,6 +476,16 @@ function sendInitialStateToPlayer(socket: Socket, userId: string, characterId: s
             socket.emit('gm-message', shopMessage);
             console.log(`[SERVER] Sent ${accessibleShops.length} shops to player ${socket.id}`);
         }
+    }
+
+    // Send quests - party-wide, so all authenticated players get all quests
+    if (campaignData.quests && campaignData.quests.length > 0) {
+        const questMessage: QuestSyncMessage = {
+            type: 'QUEST_SYNC',
+            payload: { quests: campaignData.quests },
+        };
+        socket.emit('gm-message', questMessage);
+        console.log(`[SERVER] Sent ${campaignData.quests.length} quests to player ${socket.id}`);
     }
 }
 
@@ -647,5 +717,28 @@ export function broadcastShopItemReveal(shopId: string, itemInstanceId: string, 
             socket.emit('gm-message', message);
             console.log(`[SERVER] Sent item reveal to player ${socketId}`);
         }
+    });
+}
+
+/**
+ * Broadcast quests to all connected players
+ * Quests are party-wide, so all authenticated players see all quests
+ * @param quests The complete quests array
+ */
+export function broadcastQuests(quests: Quest[]) {
+    if (!io || connectedClients.size === 0) {
+        console.log('[SERVER] No clients connected, skipping quest broadcast');
+        return;
+    }
+
+    console.log(`[SERVER] Broadcasting ${quests.length} quests to ${connectedClients.size} players`);
+
+    const message: QuestSyncMessage = {
+        type: 'QUEST_SYNC',
+        payload: { quests },
+    };
+
+    connectedClients.forEach((socket) => {
+        socket.emit('gm-message', message);
     });
 }

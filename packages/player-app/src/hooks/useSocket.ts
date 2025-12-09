@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest } from '@wfrp/shared';
 
 interface OpposedTestRequest {
   testId: string;
@@ -39,6 +39,7 @@ export const useSocket = () => {
   const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
   const [mapPing, setMapPing] = useState<{ x: number; y: number } | null>(null);
   const [factions, setFactions] = useState<Faction[]>([]);
+  const [quests, setQuests] = useState<Quest[]>([]);
 
 
   const connect = useCallback((ipAddress: string, username: string, password: string) => {
@@ -221,6 +222,12 @@ export const useSocket = () => {
           return prevChar;
         });
       }
+
+      // Handle quest sync updates
+      if (message.type === 'QUEST_SYNC') {
+        console.log('[CLIENT] Quest sync received:', message.payload);
+        setQuests(message.payload.quests);
+      }
     });
 
     setSocket(newSocket);
@@ -262,6 +269,7 @@ export const useSocket = () => {
     mapPinStates,
     mapPing,
     factions,
+    quests,
     connect, 
     disconnect, 
     sendMessage 

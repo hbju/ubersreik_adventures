@@ -37,19 +37,21 @@ import InitiativeTracker from './components/initiativeTracker/InitiativeTracker'
 import { JournalView } from './components/JournalView';
 import { CareerChangeModal } from './components/CareerChangeModal';
 import { ReputationDisplay } from './components/ReputationDisplay';
+import { QuestJournal } from './components/journal/QuestJournal';
+import { Quest, QuestUpdateMessage, QuestDeleteMessage } from '@wfrp/shared';
 
 
 const PlayerApp: React.FC = () => {
     const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, gameData } = useGameData();
 
-    const { isConnected, isAuthenticated, authError, username, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, quests, connect, disconnect, sendMessage } = useSocket();
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number } | null>(null);
     const [createCharacterWizardOpen, setCreateCharacterWizardOpen] = useState(false);
     const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
-    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'map' | 'reputation'>('character');
+    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'quests' | 'map' | 'reputation'>('character');
     const [isCareerChangeModalOpen, setIsCareerChangeModalOpen] = useState(false);
     const [canChangeCareer, setCanChangeCareer] = useState(false);
     const [mapViewState, setMapViewState] = useState({ scale: 0.3, offsetX: 126, offsetY: -26 });
@@ -375,6 +377,31 @@ const PlayerApp: React.FC = () => {
         });
     };
 
+    // Quest Journal handlers
+    const handleQuestUpdate = (quest: Quest) => {
+        const message: QuestUpdateMessage = {
+            type: 'QUEST_UPDATE',
+            payload: { quest },
+        };
+        sendMessage(message);
+    };
+
+    const handleQuestDelete = (questId: string) => {
+        const message: QuestDeleteMessage = {
+            type: 'QUEST_DELETE',
+            payload: { questId },
+        };
+        sendMessage(message);
+    };
+
+    const handleGoToMapFromQuest = (locationId: string) => {
+        const location = gameData.locations.find(l => l.id === locationId);
+        if (location) {
+            setCurrentView('map');
+            handleLocationSelect(location);
+        }
+    };
+
     const activeCharacter = isAdvancementMode ? draftCharacter : character;
 
     // Show connection screen if not authenticated
@@ -463,6 +490,40 @@ const PlayerApp: React.FC = () => {
                         }}
                     >
                         🗺️ Map
+                    </button>
+                    <button
+                        onClick={() => setCurrentView('quests')}
+                        style={{
+                            padding: '10px 20px',
+                            background: currentView === 'quests' ? '#2d5016' : '#2c1810',
+                            color: '#d4af37',
+                            border: currentView === 'quests' ? '2px solid #3d6f1f' : '2px solid #8b6914',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: '14px',
+                            position: 'relative'
+                        }}
+                    >
+                        📋 Quests
+                        {quests.filter(q => q.status === 'active').length > 0 && (
+                            <span style={{
+                                position: 'absolute',
+                                top: '-5px',
+                                right: '-5px',
+                                background: '#2d5016',
+                                color: '#fff',
+                                borderRadius: '50%',
+                                width: '20px',
+                                height: '20px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '12px'
+                            }}>
+                                {quests.filter(q => q.status === 'active').length}
+                            </span>
+                        )}
                     </button>
                     <button
                         onClick={() => setCurrentView('reputation')}
@@ -605,6 +666,19 @@ const PlayerApp: React.FC = () => {
             {/* Journal View */}
             {currentView === 'journal' && (
                 <JournalView journal={journalEntries} />
+            )}
+
+            {/* Quest Journal View */}
+            {currentView === 'quests' && (
+                <QuestJournal
+                    quests={quests}
+                    locations={gameData.locations}
+                    mapPinStates={mapPinStates}
+                    characterId={character?.id}
+                    onQuestUpdate={handleQuestUpdate}
+                    onQuestDelete={handleQuestDelete}
+                    onGoToMap={handleGoToMapFromQuest}
+                />
             )}
 
             {/* Map View */}

@@ -12,6 +12,7 @@ interface FooterProps {
     onBackup: () => void,
     onStartSession: () => void,
     onShowJournal: () => void,
+    onShowQuestJournal: () => void,
     onShowShop: () => void,
     onShowShopConfigurator: () => void,
     onShowDiceTray: () => void,
@@ -29,6 +30,7 @@ export const Footer: React.FC<FooterProps> = ({
     onBackup,
     onStartSession,
     onShowJournal,
+    onShowQuestJournal,
     onShowShop,
     onShowShopConfigurator,
     onShowDiceTray,
@@ -110,6 +112,21 @@ export const Footer: React.FC<FooterProps> = ({
                 }}
             >
                 📜 {t('menu.journal')}
+            </button>
+            <button
+                onClick={onShowQuestJournal}
+                style={{
+                    padding: '10px 20px',
+                    background: '#2d5016',
+                    color: '#d4af37',
+                    border: '2px solid #3d6f1f',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '14px'
+                }}
+            >
+                📋 {t('menu.quests', 'Quests')}
             </button>
             <button
                 onClick={onShowShop}

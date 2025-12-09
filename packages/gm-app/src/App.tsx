@@ -18,6 +18,7 @@ import { ShopConfigurator } from './components/shops/config';
 import { TemplateManager } from './components/TemplateManager';
 import MinionSheet from './components/MinionSheet';
 import { SecretsManager } from './components/SecretsManager';
+import { QuestJournalViewer } from './components/quests/QuestJournalViewer';
 
 import {
     Character,
@@ -51,7 +52,9 @@ import {
     Faction,
     FactionUpdateMessage,
     ShopInventoryState,
-    ShopDefinition
+    ShopDefinition,
+    Quest,
+    QuestSyncMessage
 } from '@wfrp/shared';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
@@ -114,8 +117,11 @@ function App() {
     const [showFactionManager, setShowFactionManager] = useState(false);
     const [showReputationPanel, setShowReputationPanel] = useState(false);
     const [showTemplateManager, setShowTemplateManager] = useState(false);
+    const [showQuestJournal, setShowQuestJournal] = useState(false);
     const [factions, setFactions] = useState<Faction[]>([]);
     const factionsRef = useRef(factions);
+    const [quests, setQuests] = useState<Quest[]>([]);
+    const questsRef = useRef(quests);
     const [characterTemplates, setCharacterTemplates] = useState<CharacterTemplate[]>([]);
     const characterTemplatesRef = useRef(characterTemplates);
     const [customShopDefinitions, setCustomShopDefinitions] = useState<ShopDefinition[]>([]);
@@ -189,6 +195,7 @@ function App() {
             characters: characters,
             users: users,
             journal: journal,
+            quests: quests,
             mapPinStates: mapPinStates,
             factions: factions,
             shopInventory: shopInventory,
@@ -202,13 +209,14 @@ function App() {
         charactersRef.current = characters;
         usersRef.current = users;
         journalRef.current = journal;
+        questsRef.current = quests;
         mapPinStatesRef.current = mapPinStates;
         factionsRef.current = factions;
         shopInventoryRef.current = shopInventory;
         customShopDefinitionsRef.current = customShopDefinitions;
         characterTemplatesRef.current = characterTemplates;
 
-    }, [characters, users, journal, mapPinStates, factions, shopInventory, customShopDefinitions, characterTemplates]);
+    }, [characters, users, journal, quests, mapPinStates, factions, shopInventory, customShopDefinitions, characterTemplates]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -677,6 +685,11 @@ function App() {
                 setCharacterTemplates(data.characterTemplates);
             }
 
+            // Load quests if present
+            if (data.quests) {
+                setQuests(data.quests);
+            }
+
             setSaving(true);
         }).catch((error: any) => {
             console.error('Failed to load initial data:', error);
@@ -693,6 +706,9 @@ function App() {
             }
             if (data && data.mapPinStates) {
                 setMapPinStates(data.mapPinStates);
+            }
+            if (data && data.quests) {
+                setQuests(data.quests);
             }
         });
 
@@ -1067,6 +1083,7 @@ function App() {
                 onBackup={handleBackupCampaign}
                 onStartSession={handleStartSession}
                 onShowJournal={() => setShowJournalManager(true)}
+                onShowQuestJournal={() => setShowQuestJournal(true)}
                 onShowShop={() => setShowShopManager(!showShopManager)}
                 onShowShopConfigurator={() => setShowShopConfigurator(true)}
                 onShowDiceTray={() => setShowDiceTray(!showDiceTray)}
@@ -1313,6 +1330,14 @@ function App() {
                     characters={characters}
                     onUpdateJournal={handleUpdateJournal}
                     onClose={() => setShowJournalManager(false)}
+                />
+            )}
+
+            {showQuestJournal && (
+                <QuestJournalViewer
+                    quests={quests}
+                    locations={gameData.locations}
+                    onClose={() => setShowQuestJournal(false)}
                 />
             )}
 
