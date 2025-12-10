@@ -123,3 +123,101 @@
     opacity: 0;
   }
 }
+
+/* Pin Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+
+.pinModal {
+  background: linear-gradient(135deg, #2c1810 0%, #3e2723 100%);
+  border: 2px solid #8b6914;
+  border-radius: 12px;
+  padding: 20px;
+  min-width: 300px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+  font-family: 'Cinzel', serif;
+}
+
+.modalHeader {
+  color: #d4af37;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.pinInput {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #8b6914;
+  border-radius: 6px;
+  color: #e8d4a8;
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.pinInput:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+.pinInput::placeholder {
+  color: rgba(232, 212, 168, 0.5);
+}
+
+.modalButtons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.cancelButton,
+.confirmButton {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelButton {
+  background: transparent;
+  border: 1px solid #8b6914;
+  color: #d4af37;
+}
+
+.cancelButton:hover {
+  background: rgba(139, 105, 20, 0.2);
+}
+
+.confirmButton {
+  background: linear-gradient(135deg, #8b6914 0%, #d4af37 100%);
+  border: none;
+  color: #1a1410;
+  font-weight: bold;
+}
+
+.confirmButton:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+  transform: translateY(-1px);
+}
+
+.confirmButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

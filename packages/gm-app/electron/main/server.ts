@@ -1,7 +1,8 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage } from '@wfrp/shared';
+import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 import { getCampaignData, saveCampaignData } from './dataManager';
 
 const PORT = 3003;
@@ -14,6 +15,18 @@ interface UserSession {
     username: string;
     socketId: string;
 }
+
+// Color palette for player identification
+const PLAYER_COLORS = [
+    '#4a9c4a', // Green
+    '#4a7ba7', // Blue
+    '#9c4a9c', // Purple
+    '#c4884a', // Orange
+    '#c44a4a', // Red
+    '#4ac4c4', // Teal
+    '#c4c44a', // Yellow
+    '#7a4ac4', // Violet
+];
 
 const activeSessions = new Map<string, UserSession>(); // userId -> UserSession
 const socketToUserId = new Map<string, string>(); // socketId -> userId
@@ -82,6 +95,33 @@ function getUserCharacter(userId: string): Character | null {
 
     const character = campaignData.characters.find(c => c.id === user.characterId);
     return character || null;
+}
+
+/**
+ * Get or assign a color for a user
+ */
+function getPlayerColor(userId: string): string {
+    const campaignData = getCampaignData();
+    if (!campaignData) return PLAYER_COLORS[0];
+
+    // Initialize playerColors if not exists
+    if (!campaignData.playerColors) {
+        campaignData.playerColors = {};
+    }
+
+    // Return existing color if assigned
+    if (campaignData.playerColors[userId]) {
+        return campaignData.playerColors[userId];
+    }
+
+    // Assign a new color from the palette
+    const usedColors = Object.values(campaignData.playerColors);
+    const availableColor = PLAYER_COLORS.find(c => !usedColors.includes(c)) || PLAYER_COLORS[0];
+    
+    campaignData.playerColors[userId] = availableColor;
+    saveCampaignData(campaignData);
+    
+    return availableColor;
 }
 
 export function sendToPlayer(socketId: string, message: ServerToClientMessage) {
@@ -154,17 +194,21 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
 
                 // Get character if assigned
                 const character = getUserCharacter(user.id);
+                
+                // Get or assign player color
+                const playerColor = getPlayerColor(user.id);
 
                 // Send success message
                 const successMessage: LoginSuccessMessage = {
                     type: 'LOGIN_SUCCESS',
                     payload: {
                         character: character,
-                        username: user.username
+                        username: user.username,
+                        playerColor: playerColor
                     }
                 };
                 socket.emit('gm-message', successMessage);
-                console.log(`[AUTH] Login successful: ${username} (character: ${character?.name || 'none'})`);
+                console.log(`[AUTH] Login successful: ${username} (character: ${character?.name || 'none'}, color: ${playerColor})`);
 
                 sendInitialStateToPlayer(socket, user.id, character?.id);
 
@@ -315,6 +359,142 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 mainWindow.webContents.send('data-updated', { quests: campaignData.quests });
 
                 console.log(`[SERVER] Quest deleted: ${questId} by user ${userId}`);
+                return;
+            }
+
+            // Handle token move from player
+            if (message.type === 'TOKEN_MOVE') {
+                const { tokenId, x, y } = message.payload;
+                const campaignData = getCampaignData();
+                if (!campaignData) {
+                    console.log(`[SERVER] No campaign data available`);
+                    return;
+                }
+
+                // Initialize tokens array if not exists
+                if (!campaignData.tokens) {
+                    campaignData.tokens = [];
+                }
+
+                // Find and update the token
+                const tokenIndex = campaignData.tokens.findIndex(t => t.id === tokenId);
+                if (tokenIndex >= 0) {
+                    const token = campaignData.tokens[tokenIndex];
+                    
+                    // Validate permission: player can only move their own token
+                    const userCharacter = getUserCharacter(userId);
+                    if (!userCharacter || token.characterId !== userCharacter.id) {
+                        console.log(`[SERVER] Player ${userId} not authorized to move token ${tokenId}`);
+                        return;
+                    }
+                    
+                    campaignData.tokens[tokenIndex] = { ...token, x, y };
+                    saveCampaignData(campaignData);
+                    
+                    // Broadcast token update to all players
+                    broadcastTokens(campaignData.tokens);
+                    
+                    // Notify GM app
+                    mainWindow.webContents.send('data-updated', { tokens: campaignData.tokens });
+                    
+                    console.log(`[SERVER] Token ${tokenId} moved to (${x}, ${y}) by user ${userId}`);
+                }
+                return;
+            }
+
+            // Handle add pin from player
+            if (message.type === 'MAP_ADD_PIN') {
+                const { pin } = message.payload;
+                const campaignData = getCampaignData();
+                if (!campaignData) {
+                    console.log(`[SERVER] No campaign data available`);
+                    return;
+                }
+
+                // Initialize userPins array if not exists
+                if (!campaignData.userPins) {
+                    campaignData.userPins = [];
+                }
+
+                // Validate the pin belongs to this user
+                if (pin.playerId !== userId) {
+                    console.log(`[SERVER] Invalid pin owner for user ${userId}`);
+                    return;
+                }
+
+                campaignData.userPins.push(pin);
+                saveCampaignData(campaignData);
+
+                // Send updated pins to this player only (pins are private)
+                const playerPins = campaignData.userPins.filter(p => p.playerId === userId);
+                const pinsMessage: UserPinsUpdateMessage = {
+                    type: 'USER_PINS_UPDATE',
+                    payload: { pins: playerPins }
+                };
+                socket.emit('gm-message', pinsMessage);
+
+                console.log(`[SERVER] Pin added by user ${userId}: ${pin.label}`);
+                return;
+            }
+
+            // Handle remove pin from player
+            if (message.type === 'MAP_REMOVE_PIN') {
+                const { pinId } = message.payload;
+                const campaignData = getCampaignData();
+                if (!campaignData || !campaignData.userPins) {
+                    console.log(`[SERVER] No campaign data or pins available`);
+                    return;
+                }
+
+                // Find the pin and validate ownership
+                const pinIndex = campaignData.userPins.findIndex(p => p.id === pinId);
+                if (pinIndex >= 0) {
+                    const pin = campaignData.userPins[pinIndex];
+                    if (pin.playerId !== userId) {
+                        console.log(`[SERVER] User ${userId} not authorized to delete pin ${pinId}`);
+                        return;
+                    }
+
+                    campaignData.userPins.splice(pinIndex, 1);
+                    saveCampaignData(campaignData);
+
+                    // Send updated pins to this player only
+                    const playerPins = campaignData.userPins.filter(p => p.playerId === userId);
+                    const pinsMessage: UserPinsUpdateMessage = {
+                        type: 'USER_PINS_UPDATE',
+                        payload: { pins: playerPins }
+                    };
+                    socket.emit('gm-message', pinsMessage);
+
+                    console.log(`[SERVER] Pin ${pinId} deleted by user ${userId}`);
+                }
+                return;
+            }
+
+            // Handle ping from player
+            if (message.type === 'MAP_PING_REQUEST') {
+                const { x, y } = message.payload;
+                const playerColor = getPlayerColor(userId);
+
+                // Broadcast ping to all connected players (including sender for feedback)
+                const pingMessage: MapPingMessage = {
+                    type: 'MAP_PING',
+                    payload: { x, y, color: playerColor, userId }
+                };
+
+                const filteredClients = Array.from(connectedClients.values()).filter(s => {
+                    const sid = socketToUserId.get(s.id);
+                    return sid !== userId;
+                });
+
+                filteredClients.forEach((clientSocket) => {
+                    clientSocket.emit('gm-message', pingMessage);
+                });
+
+                // Also notify GM app
+                mainWindow.webContents.send('map-ping', { x, y, color: playerColor, userId });
+
+                console.log(`[SERVER] Ping at (${x}, ${y}) from user ${userId}`);
                 return;
             }
 
@@ -486,6 +666,29 @@ function sendInitialStateToPlayer(socket: Socket, userId: string, characterId: s
         };
         socket.emit('gm-message', questMessage);
         console.log(`[SERVER] Sent ${campaignData.quests.length} quests to player ${socket.id}`);
+    }
+
+    // Send map tokens - all players see all tokens
+    if (campaignData.tokens && campaignData.tokens.length > 0) {
+        const tokensMessage: MapTokensUpdateMessage = {
+            type: 'MAP_TOKENS_UPDATE',
+            payload: { tokens: campaignData.tokens },
+        };
+        socket.emit('gm-message', tokensMessage);
+        console.log(`[SERVER] Sent ${campaignData.tokens.length} tokens to player ${socket.id}`);
+    }
+
+    // Send user's personal pins (only their own)
+    if (campaignData.userPins && campaignData.userPins.length > 0) {
+        const playerPins = campaignData.userPins.filter(pin => pin.playerId === userId);
+        if (playerPins.length > 0) {
+            const pinsMessage: UserPinsUpdateMessage = {
+                type: 'USER_PINS_UPDATE',
+                payload: { pins: playerPins },
+            };
+            socket.emit('gm-message', pinsMessage);
+            console.log(`[SERVER] Sent ${playerPins.length} personal pins to player ${socket.id}`);
+        }
     }
 }
 
@@ -736,6 +939,54 @@ export function broadcastQuests(quests: Quest[]) {
     const message: QuestSyncMessage = {
         type: 'QUEST_SYNC',
         payload: { quests },
+    };
+
+    connectedClients.forEach((socket) => {
+        socket.emit('gm-message', message);
+    });
+}
+
+/**
+ * Broadcast map tokens to all connected players
+ * All players see all tokens
+ * @param tokens The complete tokens array
+ */
+export function broadcastTokens(tokens: MapToken[]) {
+    if (!io || connectedClients.size === 0) {
+        console.log('[SERVER] No clients connected, skipping token broadcast');
+        return;
+    }
+
+    console.log(`[SERVER] Broadcasting ${tokens.length} tokens to ${connectedClients.size} players`);
+
+    const message: MapTokensUpdateMessage = {
+        type: 'MAP_TOKENS_UPDATE',
+        payload: { tokens },
+    };
+
+    connectedClients.forEach((socket) => {
+        socket.emit('gm-message', message);
+    });
+}
+
+/**
+ * Broadcast a ping to all connected players
+ * @param x Map X coordinate
+ * @param y Map Y coordinate
+ * @param color Color of the ping
+ * @param userId User who sent the ping
+ */
+export function broadcastPing(x: number, y: number, color: string, userId: string) {
+    if (!io || connectedClients.size === 0) {
+        console.log('[SERVER] No clients connected, skipping ping broadcast');
+        return;
+    }
+
+    console.log(`[SERVER] Broadcasting ping at (${x}, ${y}) to ${connectedClients.size} players`);
+
+    const message: MapPingMessage = {
+        type: 'MAP_PING',
+        payload: { x, y, color, userId },
     };
 
     connectedClients.forEach((socket) => {

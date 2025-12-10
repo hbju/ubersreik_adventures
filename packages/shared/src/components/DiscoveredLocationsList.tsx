@@ -7,12 +7,14 @@ interface DiscoveredLocationsListProps {
     mapPinStates: Record<string, MapPinState>;
     onLocationSelect: (location: Location) => void;
     isGm?: boolean;
+    onFilterTagsChange?: (tags: string[]) => void;
 }
 
 const DiscoveredLocationsList: React.FC<DiscoveredLocationsListProps> = ({
     locations,
     mapPinStates,
     onLocationSelect,
+    onFilterTagsChange,
     isGm,
 }) => {
     const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
@@ -59,10 +61,16 @@ const DiscoveredLocationsList: React.FC<DiscoveredLocationsListProps> = ({
             newSelectedTags.add(tag);
         }
         setSelectedTags(newSelectedTags);
+        if (onFilterTagsChange) {
+            onFilterTagsChange(Array.from(newSelectedTags));
+        }
     };
 
     const handleClearFilters = () => {
         setSelectedTags(new Set());
+        if (onFilterTagsChange) {
+            onFilterTagsChange([]);
+        }
     };
 
     const getTagIcon = (tag: string): string => {

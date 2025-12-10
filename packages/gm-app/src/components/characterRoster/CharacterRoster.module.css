@@ -196,6 +196,32 @@
   color: var(--color-parchment);
 }
 
+.tokenBtn {
+  color: #7b4a9e;
+  border-color: #7b4a9e;
+}
+
+.tokenBtn:hover {
+  background: #7b4a9e;
+  color: var(--color-parchment);
+}
+
+.removeTokenBtn {
+  color: #c44;
+  border-color: #c44;
+  font-size: 0.65rem !important;
+}
+
+.removeTokenBtn:hover {
+  background: #c44;
+  color: var(--color-parchment);
+}
+
+.tokenBadge {
+  font-size: 0.7rem;
+  margin-left: 4px;
+}
+
 /* Scrollbar styling */
 .characterList::-webkit-scrollbar {
   width: 10px;

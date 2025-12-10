@@ -1,0 +1,51 @@
+.userPin {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    cursor: pointer;
+    z-index: 90;
+    transition: transform 0.2s ease;
+}
+
+.userPin:hover {
+    transform: translate(-50%, -100%) scale(1.1);
+    z-index: 95;
+}
+
+.pinIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+
+.pinLabel {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 4px;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: 'Cinzel', serif;
+    white-space: nowrap;
+    max-width: 500px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-left: 3px solid #4a90d9;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.userPin:hover .pinLabel {
+    opacity: 1;
+}

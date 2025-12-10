@@ -1,33 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSocket } from './hooks/useSocket';
 import './App.css';
 
 import { ConnectionScreen } from './components/ConnectionScreen';
-import { 
-    CharacterSheet, 
-    Character, 
-    CharacterCreationWizard, 
-    CharacterUpdateMessage, 
-    RequestPurchaseMessage, 
-    OpposedTestResultMessage, 
-    ConditionTestResultMessage, 
+import {
+    CharacterSheet,
+    Character,
+    CharacterCreationWizard,
+    CharacterUpdateMessage,
+    RequestPurchaseMessage,
+    OpposedTestResultMessage,
+    ConditionTestResultMessage,
     MapView,
-    DiscoveredLocationsList, 
-    recalculateCharacterTalentBonuses, 
-    getAvailableAdvancements, 
-    hasCompletedCurrentLevel, 
-    CareerHistoryEntry, 
+    DiscoveredLocationsList,
+    recalculateCharacterTalentBonuses,
+    getAvailableAdvancements,
+    hasCompletedCurrentLevel,
+    CareerHistoryEntry,
     Location,
-    useGameData, 
-    CharacterCreateMessage, 
-    PlayerUpdateCharacterMessage, 
-    ShopEvaluateRequestMessage, 
+    useGameData,
+    CharacterCreateMessage,
+    PlayerUpdateCharacterMessage,
+    ShopEvaluateRequestMessage,
     ShopPurchaseRequestMessage,
     TalentSelectionModal,
     PlayerCharacterSheet,
     TestResultMessage,
     calculateCharacteristicAdvanceCost,
     calculateSkillAdvanceCost,
+    TokenMoveMessage,
+    MapAddPinMessage,
+    MapRemovePinMessage,
+    MapPingRequestMessage,
+    UserMapPin,
 } from '@wfrp/shared';
 
 import { TalentModal } from './components/TalentModal';
@@ -44,7 +49,7 @@ import { Quest, QuestUpdateMessage, QuestDeleteMessage } from '@wfrp/shared';
 const PlayerApp: React.FC = () => {
     const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, gameData } = useGameData();
 
-    const { isConnected, isAuthenticated, authError, username, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, quests, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, quests, tokens, userPins, connect, disconnect, sendMessage } = useSocket();
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number } | null>(null);
@@ -55,6 +60,7 @@ const PlayerApp: React.FC = () => {
     const [isCareerChangeModalOpen, setIsCareerChangeModalOpen] = useState(false);
     const [canChangeCareer, setCanChangeCareer] = useState(false);
     const [mapViewState, setMapViewState] = useState({ scale: 0.3, offsetX: 126, offsetY: -26 });
+    const [locationTags, setLocationTags] = useState<string[]>([]);
     const [isEditMode, setIsEditMode] = useState(false);
     const [useNewSheet, setUseNewSheet] = useState(true); // Toggle between old and new sheet
 
@@ -402,6 +408,52 @@ const PlayerApp: React.FC = () => {
         }
     };
 
+    // Map token movement handler
+    const handleTokenMove = useCallback((tokenId: string, x: number, y: number) => {
+        const message: TokenMoveMessage = {
+            type: 'TOKEN_MOVE',
+            payload: { tokenId, x, y }
+        };
+        sendMessage(message);
+    }, [sendMessage]);
+
+    // Map pin handlers
+    const handleAddPin = useCallback((x: number, y: number, label: string) => {
+        if (!userId || !character) return;
+
+        const pin: UserMapPin = {
+            id: `pin-${userId}-${Date.now()}`,
+            playerId: userId,
+            characterId: character.id,
+            x,
+            y,
+            label,
+            color: playerColor || '#888888'
+        };
+        const message: MapAddPinMessage = {
+            type: 'MAP_ADD_PIN',
+            payload: { pin }
+        };
+        sendMessage(message);
+    }, [userId, character, playerColor, sendMessage]);
+
+    const handleRemovePin = useCallback((pinId: string) => {
+        const message: MapRemovePinMessage = {
+            type: 'MAP_REMOVE_PIN',
+            payload: { pinId }
+        };
+        sendMessage(message);
+    }, [sendMessage]);
+
+    // Map ping handler
+    const handleMapPing = useCallback((x: number, y: number) => {
+        const message: MapPingRequestMessage = {
+            type: 'MAP_PING_REQUEST',
+            payload: { x, y }
+        };
+        sendMessage(message);
+    }, [sendMessage]);
+
     const activeCharacter = isAdvancementMode ? draftCharacter : character;
 
     // Show connection screen if not authenticated
@@ -437,7 +489,7 @@ const PlayerApp: React.FC = () => {
                             borderRadius: '6px',
                             cursor: 'pointer',
                             fontWeight: 'bold',
-                            fontSize: '14px'
+                            fontSize: '0.75rem'
                         }}
                     >
                         ⚔️ Character
@@ -452,7 +504,7 @@ const PlayerApp: React.FC = () => {
                             borderRadius: '6px',
                             cursor: 'pointer',
                             fontWeight: 'bold',
-                            fontSize: '14px',
+                            fontSize: '0.75rem',
                             position: 'relative'
                         }}
                     >
@@ -486,7 +538,7 @@ const PlayerApp: React.FC = () => {
                             borderRadius: '6px',
                             cursor: 'pointer',
                             fontWeight: 'bold',
-                            fontSize: '14px'
+                            fontSize: '0.75rem'
                         }}
                     >
                         🗺️ Map
@@ -501,7 +553,7 @@ const PlayerApp: React.FC = () => {
                             borderRadius: '6px',
                             cursor: 'pointer',
                             fontWeight: 'bold',
-                            fontSize: '14px',
+                            fontSize: '0.75rem',
                             position: 'relative'
                         }}
                     >
@@ -519,7 +571,7 @@ const PlayerApp: React.FC = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                fontSize: '12px'
+                                fontSize: '0.75rem'
                             }}>
                                 {quests.filter(q => q.status === 'active').length}
                             </span>
@@ -535,7 +587,8 @@ const PlayerApp: React.FC = () => {
                             borderRadius: '6px',
                             cursor: 'pointer',
                             fontWeight: 'bold',
-                            fontSize: '14px'
+                            fontSize: '0.75rem',
+                            minWidth: '10%'
                         }}
                     >
                         ⚖️ Reputation
@@ -701,6 +754,15 @@ const PlayerApp: React.FC = () => {
                             viewState={mapViewState}
                             onViewStateChange={setMapViewState}
                             incomingPing={mapPing}
+                            tokens={tokens}
+                            locationTags={locationTags}
+                            userPins={userPins.filter(p => p.playerId === userId)}
+                            onTokenMove={handleTokenMove}
+                            onAddPin={handleAddPin}
+                            onRemovePin={handleRemovePin}
+                            onMapPing={handleMapPing}
+                            playerColor={playerColor || undefined}
+                            currentUserId={userId || undefined}
                         />
                     </div>
                     <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
@@ -708,6 +770,7 @@ const PlayerApp: React.FC = () => {
                             locations={gameData.locations}
                             mapPinStates={mapPinStates}
                             onLocationSelect={handleLocationSelect}
+                            onFilterTagsChange={setLocationTags}
                         />
                     </div>
                 </div>

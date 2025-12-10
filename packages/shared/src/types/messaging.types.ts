@@ -1,4 +1,4 @@
-import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction, ShopState, ShopInventoryItem, Quest } from './wfrp.types';
+import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction, ShopState, ShopInventoryItem, Quest, MapToken, UserMapPin } from './wfrp.types';
 
 interface BaseMessage<T extends string, P> {
     type: T;
@@ -7,7 +7,7 @@ interface BaseMessage<T extends string, P> {
 
 // == GM to Player Messages ==
 
-export type LoginSuccessMessage = BaseMessage<'LOGIN_SUCCESS', { character: Character | null; username: string }>;
+export type LoginSuccessMessage = BaseMessage<'LOGIN_SUCCESS', { character: Character | null; username: string; playerColor: string }>;
 export type LoginFailureMessage = BaseMessage<'LOGIN_FAILURE', { reason: string }>;
 export type AssignCharacterMessage = BaseMessage<'ASSIGN_CHARACTER', { character: Character }>;
 export type RequestTestMessage = BaseMessage<'REQUEST_TEST', { skillName: string; characteristicName: string; modifier: number; }>;
@@ -33,7 +33,7 @@ export type RequestConditionTestMessage = BaseMessage<'REQUEST_CONDITION_TEST', 
 }>;
 export type JournalUpdateMessage = BaseMessage<'JOURNAL_UPDATE', { entries: JournalEntry[] }>;
 export type MapStateUpdateMessage = BaseMessage<'MAP_STATE_UPDATE', { pinStates: Record<string, MapPinState> }>;
-export type MapPingMessage = BaseMessage<'MAP_PING', { x: number; y: number }>;
+export type MapPingMessage = BaseMessage<'MAP_PING', { x: number; y: number; color: string; userId: string }>;
 export type CareerChangeResponseMessage = BaseMessage<'CAREER_CHANGE_RESPONSE', {
     success: boolean;
     character?: Character;
@@ -67,7 +67,16 @@ export type QuestSyncMessage = BaseMessage<'QUEST_SYNC', {
     quests: Quest[];
 }>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage;
+// Map Token System messages
+export type MapTokensUpdateMessage = BaseMessage<'MAP_TOKENS_UPDATE', {
+    tokens: MapToken[];
+}>;
+
+export type UserPinsUpdateMessage = BaseMessage<'USER_PINS_UPDATE', {
+    pins: UserMapPin[];
+}>;
+
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage;
 
 // == Player to GM Messages ==
 
@@ -146,4 +155,24 @@ export type QuestDeleteMessage = BaseMessage<'QUEST_DELETE', {
     questId: string;
 }>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage;
+// Map Token & Pin messages (client to server)
+export type TokenMoveMessage = BaseMessage<'TOKEN_MOVE', {
+    tokenId: string;
+    x: number;
+    y: number;
+}>;
+
+export type MapAddPinMessage = BaseMessage<'MAP_ADD_PIN', {
+    pin: UserMapPin;
+}>;
+
+export type MapRemovePinMessage = BaseMessage<'MAP_REMOVE_PIN', {
+    pinId: string;
+}>;
+
+export type MapPingRequestMessage = BaseMessage<'MAP_PING_REQUEST', {
+    x: number;
+    y: number;
+}>;
+
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage | TokenMoveMessage | MapAddPinMessage | MapRemovePinMessage | MapPingRequestMessage;

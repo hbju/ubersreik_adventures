@@ -6,9 +6,9 @@ v1.1 TODO:
 - npcs templates ✅
 - Details panel for player (background and notes) ✅
 - pursuits implementation
-- quests implementation
+- quests implementation ✅
 - multiple maps per adventure
-- better pin management
+- better pin management ✅
 - reputation and npc relationship system ✅
 - improve character roster UI ✅
 - NPCs dedicated view with easy notes for GM

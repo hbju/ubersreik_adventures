@@ -7,6 +7,7 @@ import LocationInfoPanel from './LocationInfoPanel';
 interface MapDisplayProps {
     gameData: GameData;
     mapPinStates?: Record<string, MapPinState>;
+    locationTags?: string[];
     onPinContextMenu?: (event: React.MouseEvent, locationId: string) => void;
     isGM?: boolean;
     onClickPin?: (locationId: string) => void;
@@ -15,6 +16,7 @@ interface MapDisplayProps {
 const MapDisplay: React.FC<MapDisplayProps> = ({
     gameData,
     mapPinStates = {},
+    locationTags = [],
     onPinContextMenu,
     isGM = false,
     onClickPin,
@@ -89,7 +91,8 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
                     const scaledY = location.coords.y 
                     const pinState = mapPinStates[location.id];
                     const anyDiscovered = pinState?.playerDiscovered && pinState.playerDiscovered.length > 0;
-
+                    const matchesTagFilter = locationTags.length === 0 || locationTags.includes(location.tag);
+                    
                     return (
                         <LocationPin
                             key={location.id}
@@ -97,7 +100,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
                             y={scaledY}
                             onClick={() => (isGM || anyDiscovered) && onClickPin && onClickPin(location.id)}
                             onContextMenu={isGM && onPinContextMenu ? (e) => onPinContextMenu(e, location.id) : undefined}
-                            isDiscovered={anyDiscovered}
+                            isDiscovered={anyDiscovered && matchesTagFilter}
                             locationName={location.name}
                             tag={location.tag}
                             isGm={isGM}

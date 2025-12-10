@@ -1,0 +1,96 @@
+.controlsPanel {
+    position: absolute;
+    top: 5%;
+    left: 12%;
+    background: linear-gradient(135deg, rgba(44, 24, 16, 0.95) 0%, rgba(62, 39, 35, 0.95) 100%);
+    border: 2px solid #8b6914;
+    border-radius: 8px;
+    padding: 12px;
+    min-width: 180px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    z-index: 500;
+    font-family: 'Cinzel', serif;
+    color: #d4af37;
+}
+
+.header {
+    font-size: 14px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(139, 105, 20, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon {
+    font-size: 16px;
+}
+
+.filterList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filterItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.filterItem:hover {
+    background: rgba(139, 105, 20, 0.2);
+}
+
+.checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #8b6914;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.checkbox:checked {
+    background: linear-gradient(135deg, #8b6914 0%, #d4af37 100%);
+    border-color: #d4af37;
+}
+
+.checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #1a1410;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.checkbox:hover {
+    border-color: #d4af37;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}
+
+.filterIcon {
+    font-size: 14px;
+    width: 20px;
+    text-align: center;
+}
+
+.filterLabel {
+    font-size: 12px;
+    color: #e8d4a8;
+    flex: 1;
+}

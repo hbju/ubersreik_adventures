@@ -1,4 +1,4 @@
-import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate } from '@wfrp/shared';
+import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -56,6 +56,7 @@ import {
     Quest,
     QuestSyncMessage
 } from '@wfrp/shared';
+import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp.types';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
@@ -98,6 +99,7 @@ function App() {
     const journalRef = useRef(journal);
     const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
     const mapPinStatesRef = useRef(mapPinStates);
+    const [mapPing, setMapPing] = useState<{ x: number; y: number; color: string; userId: string } | null>(null);
     const [mapViewState, setMapViewState] = useState<{ scale: number; offsetX: number; offsetY: number }>({ scale: 0.3, offsetX: 126, offsetY: -26 });
     const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
     const [openSheetIds, setOpenSheetIds] = useState<string[]>([]);
@@ -128,6 +130,10 @@ function App() {
     const customShopDefinitionsRef = useRef(customShopDefinitions);
     const [shopInventory, setShopInventory] = useState<ShopInventoryState | undefined>(undefined);
     const shopInventoryRef = useRef(shopInventory);
+    const [tokens, setTokens] = useState<MapToken[]>([]);
+    const tokensRef = useRef(tokens);
+    const [userPins, setUserPins] = useState<UserMapPin[]>([]);
+    const userPinsRef = useRef(userPins);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number, charId: string } | null>(null);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
@@ -191,7 +197,7 @@ function App() {
         if (!saving) return;
 
         console.log("Saving data, characters:", characters);
-        const campaignData = {
+        const campaignData: CampaignState = {
             characters: characters,
             users: users,
             journal: journal,
@@ -201,6 +207,9 @@ function App() {
             shopInventory: shopInventory,
             customShopDefinitions: customShopDefinitions,
             characterTemplates: characterTemplates,
+            tokens: tokens,
+            userPins: userPins,
+            playerColors: {},
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
@@ -215,6 +224,8 @@ function App() {
         shopInventoryRef.current = shopInventory;
         customShopDefinitionsRef.current = customShopDefinitions;
         characterTemplatesRef.current = characterTemplates;
+        tokensRef.current = tokens;
+        userPinsRef.current = userPins;
 
     }, [characters, users, journal, quests, mapPinStates, factions, shopInventory, customShopDefinitions, characterTemplates]);
 
@@ -311,6 +322,37 @@ function App() {
             setCharacters(updatedCharacters);
             setOpenSheetIds(prev => prev.filter(id => id !== characterId));
         }
+    };
+
+    const handlePlaceToken = (characterId: string) => {
+        const character = charactersRef.current.find(c => c.id === characterId);
+        if (!character) return;
+        const newToken: MapToken = {
+            id: crypto.randomUUID(),
+            characterId: character.id,
+            x: 1000,
+            y: 1000,
+        };
+        setTokens(prev => [...prev, newToken]);
+    }
+
+    const handleTokenMove = (tokenId: string, x: number, y: number) => {
+        setTokens(prev =>
+            prev.map(token =>
+                token.id === tokenId ? { ...token, x, y } : token
+            )
+        );
+
+        const message : MapTokensUpdateMessage = {
+            type: 'MAP_TOKENS_UPDATE',
+            payload: {
+                tokens: tokensRef.current.map(token =>
+                    token.id === tokenId ? { ...token, x, y } : token
+                )
+            }
+        };
+
+        window.ipcRenderer.sendToAllPlayers(message);
     };
 
     const handleAddCombatant = (character: Character) => {
@@ -690,6 +732,14 @@ function App() {
                 setQuests(data.quests);
             }
 
+            if (data.tokens) {
+                setTokens(data.tokens);
+            }
+
+            if (data.userPins) {
+                setUserPins(data.userPins);
+            }
+
             setSaving(true);
         }).catch((error: any) => {
             console.error('Failed to load initial data:', error);
@@ -710,10 +760,25 @@ function App() {
             if (data && data.quests) {
                 setQuests(data.quests);
             }
+            if (data && data.tokens) {
+                setTokens(data.tokens);
+            }
+            if (data && data.userPins) {
+                setUserPins(data.userPins);
+            }
         });
+
+        const cleanupMapPingReceivedListener = window.ipcRenderer.onMapPingReceived(({ x, y, color, userId }: { x: number, y: number, color: string, userId: string }) => {
+            setMapPing({ x, y, color, userId });
+            setTimeout(() => {
+                setMapPing(null);
+            }, 300);
+        });
+
 
         return () => {
             cleanupDataUpdateListener();
+            cleanupMapPingReceivedListener();
         };
     }, []);
 
@@ -1106,6 +1171,9 @@ function App() {
                 onDeleteCharacter={handleDeleteCharacter}
                 onAddCombatant={handleAddCombatant}
                 onFightButtonClick={() => setShowCombatResolver(true)}
+                tokens={tokens}
+                onPlaceToken={handlePlaceToken}
+                onRemoveToken={(tokenId) => setTokens(prev => prev.filter(t => t.id !== tokenId))}
             />
 
             {Object.keys(combatants).length > 0 && (
@@ -1150,8 +1218,12 @@ function App() {
                                 payload: { x, y }
                             });
                         }}
+                        incomingPing={mapPing}
                         shops={shopInventory ? Object.values(shopInventory.shops) : []}
                         onViewWares={handleViewWares}
+                        tokens={tokens}
+                        onTokenMove={handleTokenMove}
+                        userPins={userPins}
                     />
                 </div>
                 <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
