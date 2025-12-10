@@ -1,5 +1,5 @@
-import React from 'react';
-import { Character, EditableField, User, CharacterLore, KnowledgeEntry } from '@wfrp/shared';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { Character, EditableField, User, CharacterLore, KnowledgeEntry, useDebouncedCallback } from '@wfrp/shared';
 import './NotesTab.css';
 
 interface NotesTabProps {
@@ -232,19 +232,22 @@ const PlayerLoreSection: React.FC<{
 }> = ({ character, currentUserId, onCharacterUpdate }) => {
     const lore = character.lore || { gmNotes: '', background: [], playerNotes: '' };
 
+    const [localNotes, setLocalNotes] = useState(lore.playerNotes || '');
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const debouncedSave = useDebouncedCallback((notes: string) => {
+        onCharacterUpdate({
+            lore: {
+                ...lore,
+                playerNotes: notes
+            }
+        });
+    }, 300);
+
     // Filter knowledge entries to only show those visible to this player
     const visibleEntries = lore.background.filter(entry =>
         entry.visibility.includes(currentUserId)
     );
-
-    const handlePlayerNotesChange = (value: string) => {
-        onCharacterUpdate({
-            lore: {
-                ...lore,
-                playerNotes: value
-            }
-        });
-    };
 
     // Group entries by topic
     const entriesByTopic = visibleEntries.reduce((acc, entry) => {
@@ -254,6 +257,12 @@ const PlayerLoreSection: React.FC<{
         acc[entry.topic].push(entry);
         return acc;
     }, {} as Record<string, KnowledgeEntry[]>);
+
+    const handlePlayerNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const newNotes = e.target.value;
+        setLocalNotes(newNotes);
+        debouncedSave(newNotes);
+    };
 
     return (
         <>
@@ -265,8 +274,8 @@ const PlayerLoreSection: React.FC<{
                 </p>
                 <textarea
                     className="player-notes-textarea"
-                    value={lore.playerNotes || ''}
-                    onChange={(e) => handlePlayerNotesChange(e.target.value)}
+                    value={localNotes}
+                    onChange={handlePlayerNotesChange}
                     placeholder="Write personal notes, theories, NPC observations..."
                     rows={6}
                 />

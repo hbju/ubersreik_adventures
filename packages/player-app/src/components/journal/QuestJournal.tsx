@@ -1,8 +1,7 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { Quest, QuestStatus, QuestObjective, Location, MapPinState } from '@wfrp/shared';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import { Quest, QuestStatus, QuestObjective, Location, MapPinState, useDebouncedCallback } from '@wfrp/shared';
 import { ObjectiveItem } from './ObjectiveItem';
 import styles from './QuestJournal.module.css';
-import  { useDebounce, useDebouncedCallback } from '@/hooks/useDebounce';
 
 interface QuestJournalProps {
     quests: Quest[];
@@ -26,6 +25,23 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
     const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<QuestStatus>('active');
     const [searchQuery, setSearchQuery] = useState('');
+    
+    // Local state for text fields to make typing responsive
+    const [localTitle, setLocalTitle] = useState('');
+    const [localDescription, setLocalDescription] = useState('');
+
+    // Debounced update function - only syncs to parent after 300ms of no typing
+    const debouncedQuestUpdate = useDebouncedCallback((quest: Quest) => {
+        onQuestUpdate(quest);
+    }, 300);
+
+    // Sync local state when selected quest changes (from props)
+    useEffect(() => {
+        if (selectedQuest) {
+            setLocalTitle(selectedQuest.title);
+            setLocalDescription(selectedQuest.description);
+        }
+    }, [selectedQuestId]); // Only when selection changes, not on every selectedQuest update
 
     // Filter quests based on tab and search
     const filteredQuests = useMemo(() => {
@@ -62,25 +78,36 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
         onQuestUpdate(newQuest);
         setSelectedQuestId(newQuest.id);
         setActiveTab('active');
+        // Set local state immediately for the new quest
+        setLocalTitle('New Quest');
+        setLocalDescription('');
     }, [onQuestUpdate]);
 
     const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if (!selectedQuest) return;
-        onQuestUpdate({
+        const newTitle = e.target.value;
+        // Update local state immediately for responsive typing
+        setLocalTitle(newTitle);
+        // Debounce the sync to parent
+        debouncedQuestUpdate({
             ...selectedQuest,
-            title: e.target.value,
+            title: newTitle,
             updatedAt: Date.now(),
         });
-    }, [selectedQuest, onQuestUpdate]);
+    }, [selectedQuest, debouncedQuestUpdate]);
 
     const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (!selectedQuest) return;
-        onQuestUpdate({
+        const newDescription = e.target.value;
+        // Update local state immediately for responsive typing
+        setLocalDescription(newDescription);
+        // Debounce the sync to parent
+        debouncedQuestUpdate({
             ...selectedQuest,
-            description: e.target.value,
+            description: newDescription,
             updatedAt: Date.now(),
         });
-    }, [selectedQuest, onQuestUpdate]);
+    }, [selectedQuest, debouncedQuestUpdate]);
 
     const handleAddObjective = useCallback(() => {
         if (!selectedQuest) return;
@@ -225,7 +252,7 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
                         <input
                             type="text"
                             className={styles.questTitleInput}
-                            value={selectedQuest.title}
+                            value={localTitle}
                             onChange={handleTitleChange}
                             placeholder="Quest Title"
                         />
@@ -233,7 +260,7 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
                         <div className={styles.questDescriptionLabel}>Description</div>
                         <textarea
                             className={styles.questDescriptionInput}
-                            value={selectedQuest.description}
+                            value={localDescription}
                             onChange={handleDescriptionChange}
                             placeholder="Describe your quest objectives and notes..."
                         />

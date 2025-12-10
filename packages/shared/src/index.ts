@@ -17,6 +17,7 @@ export { Tooltip } from './components/ui/Tooltip';
 export { QualityTooltip } from './components/ui/QualityTooltip';
 export * from './components/GameLog';
 export * from './hooks/useGameData';
+export * from './hooks/useDebounce';
 export * from './i18n';
 export * from './types/wfrp.types';
 export * from './types/messaging.types';
