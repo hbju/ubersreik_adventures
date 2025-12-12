@@ -1,4 +1,4 @@
-import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage } from '@wfrp/shared';
+import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -120,6 +120,8 @@ function App() {
     const [showReputationPanel, setShowReputationPanel] = useState(false);
     const [showTemplateManager, setShowTemplateManager] = useState(false);
     const [showQuestJournal, setShowQuestJournal] = useState(false);
+    const [showChat, setShowChat] = useState(false);
+    const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
     const [factions, setFactions] = useState<Faction[]>([]);
     const factionsRef = useRef(factions);
     const [quests, setQuests] = useState<Quest[]>([]);
@@ -775,10 +777,21 @@ function App() {
             }, 300);
         });
 
+        window.ipcRenderer.getChatHistory().then((history: ChatMessage[]) => {
+            if (history && history.length > 0) {
+                setChatMessages(history);
+            }
+        });
+
+        const cleanupChatMessageListener = window.ipcRenderer.onChatMessage((message: ChatMessage) => {
+            setChatMessages(prev => [...prev, message]);
+        });
+
 
         return () => {
             cleanupDataUpdateListener();
             cleanupMapPingReceivedListener();
+            cleanupChatMessageListener();
         };
     }, []);
 
@@ -1027,6 +1040,53 @@ function App() {
         }
     }, [combatants, currentTurnId, currentAdvantage]);
 
+    const handleSendChatMessage = (content: string) => {
+        const parsed = parseChatCommand(content);
+        
+        let chatMessage: ChatMessage;
+
+        if (parsed.isRollCommand) {
+            if (parsed.diceRequest) {
+                const rollResult = executeDiceRoll(parsed.diceRequest);
+                chatMessage = {
+                    id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    timestamp: Date.now(),
+                    senderId: 'gm',
+                    senderName: 'GM',
+                    senderColor: '#d4af37', 
+                    type: 'roll',
+                    content: `Rolling ${rollResult.formula}`,
+                    data: rollResult
+                };
+            } else {
+                const errorMessage: ChatMessage = {
+                    id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    timestamp: Date.now(),
+                    senderId: 'system',
+                    senderName: 'System',
+                    type: 'error',
+                    content: parsed.errorMessage || 'Invalid dice syntax'
+                };
+                setChatMessages(prev => [...prev, errorMessage]);
+                return;
+            }
+        } else {
+            chatMessage = {
+                id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                timestamp: Date.now(),
+                senderId: 'gm',
+                senderName: 'GM',
+                senderColor: '#d4af37',
+                type: 'chat',
+                content
+            };
+        }
+
+        setChatMessages(prev => [...prev, chatMessage]);
+        
+        window.ipcRenderer.sendChatMessage(chatMessage);
+    };
+
     const handleItemSelectorClose = () => {
         setShowItemSelector(null);
     };
@@ -1156,6 +1216,7 @@ function App() {
                 onShowFactionManager={() => setShowFactionManager(true)}
                 onShowReputationPanel={() => setShowReputationPanel(true)}
                 onShowTemplateManager={() => setShowTemplateManager(true)}
+                onShowChat={() => setShowChat(!showChat)}
             />
 
             <GameLog entries={logEntries} />
@@ -1307,6 +1368,28 @@ function App() {
 
 
             {showDiceTray && <DiceTray onClose={() => setShowDiceTray(false)} onLogEntry={addLogEntry} />}
+
+            {showChat && (
+                <div style={{
+                    position: 'fixed',
+                    right: '20px',
+                    bottom: '80px',
+                    width: '380px',
+                    height: '500px',
+                    zIndex: 1010,
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
+                    borderRadius: '8px',
+                    overflow: 'hidden'
+                }}>
+                    <ChatBox
+                        messages={chatMessages}
+                        onSendMessage={handleSendChatMessage}
+                        senderName="GM"
+                        onClose={() => setShowChat(false)}
+                        showHeader={true}
+                    />
+                </div>
+            )}
 
             {showFactionManager && (
                 <FactionManager

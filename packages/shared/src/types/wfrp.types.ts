@@ -412,6 +412,7 @@ export interface QuestObjective {
 export interface Quest {
     id: string;
     title: string;
+    characterId: string; // Creator (character ID)
     description: string; // Rich text or multiline string
     status: QuestStatus;
     objectives: QuestObjective[];

@@ -85,6 +85,37 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         }
     },
 
+    // ==================== Chat API ====================
+    
+    /**
+     * Send a chat message from the GM
+     * @param message The chat message to send
+     */
+    sendChatMessage(message: any) {
+        return ipcRenderer.send('send-chat-message', message)
+    },
+
+    /**
+     * Listen for chat messages from players
+     * @param callback Function to call when a chat message is received
+     * @returns Cleanup function to remove the listener
+     */
+    onChatMessage(callback: (value: any) => void) {
+        const listener = (_event: any, value: any) => callback(value);
+        ipcRenderer.on('chat-message', listener)
+        return () => {
+            ipcRenderer.removeListener('chat-message', listener)
+        }
+    },
+
+    /**
+     * Get chat history
+     * @returns Promise resolving to the chat history array
+     */
+    getChatHistory() {
+        return ipcRenderer.invoke('get-chat-history')
+    },
+
     /**
      * Trigger a manual backup of the campaign data
      * @returns Promise resolving to the result { success: boolean, path?: string, error?: string }

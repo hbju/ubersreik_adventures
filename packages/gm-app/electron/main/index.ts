@@ -6,9 +6,9 @@ import { Server } from 'socket.io'
 import path from 'node:path'
 import os from 'node:os'
 import { update } from './update'
-import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates } from './server'
+import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates, broadcastChatMessage, getChatHistory } from './server'
 import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
-import { CampaignState } from '@wfrp/shared'
+import { CampaignState, ChatMessage } from '@wfrp/shared'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -185,6 +185,31 @@ ipcMain.handle('backup-campaign', async () => {
   } catch (error) {
     console.error('Error backing up campaign:', error);
     return { success: false, error: (error as Error).message };
+  }
+});
+
+/**
+ * Handle chat message from GM
+ * Broadcasts the message to all connected players
+ */
+ipcMain.on('send-chat-message', (_event, message: ChatMessage) => {
+  try {
+    broadcastChatMessage(message);
+    console.log('Chat message broadcast successfully');
+  } catch (error) {
+    console.error('Error broadcasting chat message:', error);
+  }
+});
+
+/**
+ * Handle get chat history request from renderer
+ */
+ipcMain.handle('get-chat-history', async () => {
+  try {
+    return getChatHistory();
+  } catch (error) {
+    console.error('Error getting chat history:', error);
+    return [];
   }
 });
 

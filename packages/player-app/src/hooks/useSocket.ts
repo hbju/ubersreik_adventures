@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin, ChatMessage } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 
 interface OpposedTestRequest {
@@ -45,6 +45,7 @@ export const useSocket = () => {
     const [quests, setQuests] = useState<Quest[]>([]);
     const [tokens, setTokens] = useState<MapToken[]>([]);
     const [userPins, setUserPins] = useState<UserMapPin[]>([]);
+    const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
 
     const connect = useCallback((ipAddress: string, username: string, password: string) => {
@@ -58,7 +59,6 @@ export const useSocket = () => {
             console.log(`[CLIENT] Connected successfully with ID: ${newSocket.id}`);
             setIsConnected(true);
 
-            // Send login request immediately after connection
             const loginMessage: LoginRequestMessage = {
                 type: 'LOGIN_REQUEST',
                 payload: { username, password }
@@ -78,7 +78,6 @@ export const useSocket = () => {
         newSocket.on('gm-message', (message: ServerToClientMessage) => {
             console.log('[CLIENT] Received message from GM:', message);
 
-            // Handle authentication responses
             if (message.type === 'LOGIN_SUCCESS') {
                 console.log('[CLIENT] Login successful!');
                 setIsAuthenticated(true);
@@ -87,7 +86,6 @@ export const useSocket = () => {
                 setPlayerColor(message.payload.playerColor);
                 setAuthError(null);
 
-                // Auto-assign character if available
                 if (message.payload.character) {
                     console.log('[CLIENT] Character assigned:', message.payload.character.name);
                     setCharacter(message.payload.character);
@@ -101,12 +99,10 @@ export const useSocket = () => {
                 console.log('[CLIENT] Login failed:', message.payload.reason);
                 setIsAuthenticated(false);
                 setAuthError(message.payload.reason);
-                // Disconnect socket on failed login
                 newSocket.disconnect();
                 return;
             }
 
-            // Handle character assignment (legacy support)
             if (message.type === 'ASSIGN_CHARACTER') {
                 setCharacter(message.payload.character);
             }
@@ -174,7 +170,6 @@ export const useSocket = () => {
                 setTimeout(() => setMapPing(null), 100);
             }
 
-            // Task 3.4: Handle career change response
             if (message.type === 'CAREER_CHANGE_RESPONSE') {
                 console.log('[CLIENT] Career change response received:', message.payload);
                 if (message.payload.success && message.payload.character) {
@@ -185,19 +180,16 @@ export const useSocket = () => {
                 }
             }
 
-            // Handle faction updates
             if (message.type === 'FACTION_UPDATE') {
                 console.log('[CLIENT] Faction update received:', message.payload);
                 setFactions(message.payload.factions);
             }
 
-            // Handle shop state updates
             if (message.type === 'SHOP_STATE_UPDATE') {
                 console.log('[CLIENT] Shop state update received:', message.payload);
                 setShops(message.payload.shops);
             }
 
-            // Handle individual item reveal
             if (message.type === 'SHOP_ITEM_REVEALED') {
                 console.log('[CLIENT] Shop item revealed:', message.payload);
                 const { shopId, item } = message.payload;
@@ -206,7 +198,7 @@ export const useSocket = () => {
                         if (shop.shopId === shopId) {
                             const updatedInventory = shop.inventory.map(i => {
                                 if (i.instanceId === item.instanceId) {
-                                    return item; // Replace with fully revealed item
+                                    return item;
                                 }
                                 return i;
                             });
@@ -217,10 +209,8 @@ export const useSocket = () => {
                 });
             }
 
-            // Handle character updates (from Edit Mode or GM updates)
             if (message.type === 'CHARACTER_UPDATE') {
                 console.log('[CLIENT] Character update received:', message.payload);
-                // Only update if this is our character
                 const updatedChar = message.payload.character;
                 setCharacter(prevChar => {
                     if (prevChar && prevChar.id === updatedChar.id) {
@@ -230,22 +220,29 @@ export const useSocket = () => {
                 });
             }
 
-            // Handle quest sync updates
             if (message.type === 'QUEST_SYNC') {
                 console.log('[CLIENT] Quest sync received:', message.payload);
                 setQuests(message.payload.quests);
             }
 
-            // Handle map tokens update
             if (message.type === 'MAP_TOKENS_UPDATE') {
                 console.log('[CLIENT] Map tokens update received:', message.payload);
                 setTokens(message.payload.tokens);
             }
 
-            // Handle user pins update
             if (message.type === 'USER_PINS_UPDATE') {
                 console.log('[CLIENT] User pins update received:', message.payload);
                 setUserPins(message.payload.pins);
+            }
+
+            if (message.type === 'CHAT_MESSAGE') {
+                console.log('[CLIENT] Chat message received:', message.payload);
+                setChatMessages(prev => [...prev, message.payload.message]);
+            }
+
+            if (message.type === 'CHAT_HISTORY') {
+                console.log('[CLIENT] Chat history received:', message.payload);
+                setChatMessages(message.payload.messages);
             }
         });
 
@@ -293,6 +290,8 @@ export const useSocket = () => {
         quests,
         tokens,
         userPins,
+        chatMessages,
+        setChatMessages,
         connect,
         disconnect,
         sendMessage

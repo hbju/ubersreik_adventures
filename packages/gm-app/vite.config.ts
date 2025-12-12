@@ -34,12 +34,18 @@ export default defineConfig(({ command }) => {
             }
           },
           vite: {
+            resolve: {
+              alias: {
+                '@wfrp/shared': path.join(__dirname, '../shared/src/index.ts'),
+              },
+            },
             build: {
               sourcemap,
               minify: isBuild,
               outDir: 'dist-electron/main',
               rollupOptions: {
-                external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
+                // Bundle @wfrp/shared into the electron main process (don't externalize it)
+                external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}).filter(dep => dep !== '@wfrp/shared'),
               },
             },
           },
@@ -49,12 +55,18 @@ export default defineConfig(({ command }) => {
           // Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
           input: 'electron/preload/index.ts',
           vite: {
+            resolve: {
+              alias: {
+                '@wfrp/shared': path.join(__dirname, '../shared/src/index.ts'),
+              },
+            },
             build: {
               sourcemap: sourcemap ? 'inline' : undefined, // #332
               minify: isBuild,
               outDir: 'dist-electron/preload',
               rollupOptions: {
-                external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
+                // Bundle @wfrp/shared into the preload process (don't externalize it)
+                external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}).filter(dep => dep !== '@wfrp/shared'),
               },
             },
           },

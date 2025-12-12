@@ -33,6 +33,9 @@ import {
     MapRemovePinMessage,
     MapPingRequestMessage,
     UserMapPin,
+    ChatBox,
+    ChatMessage,
+    ChatSendMessage,
 } from '@wfrp/shared';
 
 import { TalentModal } from './components/TalentModal';
@@ -49,7 +52,7 @@ import { Quest, QuestUpdateMessage, QuestDeleteMessage } from '@wfrp/shared';
 const PlayerApp: React.FC = () => {
     const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, gameData } = useGameData();
 
-    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, quests, tokens, userPins, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, quests, tokens, userPins, chatMessages, setChatMessages, connect, disconnect, sendMessage } = useSocket();
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number } | null>(null);
@@ -63,6 +66,9 @@ const PlayerApp: React.FC = () => {
     const [locationTags, setLocationTags] = useState<string[]>([]);
     const [isEditMode, setIsEditMode] = useState(false);
     const [useNewSheet, setUseNewSheet] = useState(true); // Toggle between old and new sheet
+    const [showChat, setShowChat] = useState(false);
+
+    const chatSenderName = character?.name || username || 'Player';
 
     const handleSkillClick = (skillId: string, skillName: string, skillValue: number) => {
         setTestModalInfo({ id: skillId, name: skillName, value: skillValue });
@@ -72,7 +78,6 @@ const PlayerApp: React.FC = () => {
         setTestModalInfo({ id: charId, name: charName, value: charValue });
     }
 
-    // Check if the current level is completed (Task 3.2)
     useEffect(() => {
         if (character && character.currentCareerId && character.currentCareerLevelId) {
             const completed = hasCompletedCurrentLevel(character, careers);
@@ -84,6 +89,17 @@ const PlayerApp: React.FC = () => {
 
     const handleRoll = (result: TestResultMessage['payload']) => {
         sendMessage({ type: 'TEST_RESULT', payload: result });
+    };
+
+    const handleSendChatMessage = (content: string) => {
+        const message: ChatSendMessage = {
+            type: 'CHAT_SEND',
+            payload: {
+                content,
+                senderName: chatSenderName
+            }
+        };
+        sendMessage(message);
     };
 
     const handleEnterAdvancement = () => {
@@ -296,7 +312,6 @@ const PlayerApp: React.FC = () => {
     ) => {
         if (!character || !opposedTestRequest) return;
 
-        // Send the opposed test result
         const message: OpposedTestResultMessage = {
             type: 'OPPOSED_TEST_RESULT',
             payload: {
@@ -353,7 +368,6 @@ const PlayerApp: React.FC = () => {
         alert('Career change request sent to GM. Awaiting approval...');
     };
 
-    // Edit Mode: Handle character updates from the new PlayerCharacterSheet
     const handleEditModeCharacterUpdate = (updates: Partial<Character>) => {
         if (!character) return;
 
@@ -383,7 +397,6 @@ const PlayerApp: React.FC = () => {
         });
     };
 
-    // Quest Journal handlers
     const handleQuestUpdate = (quest: Quest) => {
         const message: QuestUpdateMessage = {
             type: 'QUEST_UPDATE',
@@ -408,7 +421,6 @@ const PlayerApp: React.FC = () => {
         }
     };
 
-    // Map token movement handler
     const handleTokenMove = useCallback((tokenId: string, x: number, y: number) => {
         const message: TokenMoveMessage = {
             type: 'TOKEN_MOVE',
@@ -417,7 +429,6 @@ const PlayerApp: React.FC = () => {
         sendMessage(message);
     }, [sendMessage]);
 
-    // Map pin handlers
     const handleAddPin = useCallback((x: number, y: number, label: string) => {
         if (!userId || !character) return;
 
@@ -445,7 +456,6 @@ const PlayerApp: React.FC = () => {
         sendMessage(message);
     }, [sendMessage]);
 
-    // Map ping handler
     const handleMapPing = useCallback((x: number, y: number) => {
         const message: MapPingRequestMessage = {
             type: 'MAP_PING_REQUEST',
@@ -456,7 +466,6 @@ const PlayerApp: React.FC = () => {
 
     const activeCharacter = isAdvancementMode ? draftCharacter : character;
 
-    // Show connection screen if not authenticated
     if (!isAuthenticated) {
         return (
             <ConnectionScreen
@@ -593,6 +602,35 @@ const PlayerApp: React.FC = () => {
                     >
                         ⚖️ Reputation
                     </button>
+                    <button
+                        onClick={() => setShowChat(!showChat)}
+                        style={{
+                            padding: '10px 20px',
+                            background: showChat ? '#1a3a5c' : '#2c1810',
+                            color: '#d4af37',
+                            border: showChat ? '2px solid #4a7ba7' : '2px solid #8b6914',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: '0.75rem',
+                            minWidth: '10%',
+                            position: 'relative'
+                        }}
+                    >
+                        💬 Chat
+                        {chatMessages.length > 0 && (
+                            <span style={{
+                                position: 'absolute',
+                                top: '-5px',
+                                right: '-5px',
+                                background: '#4a7ba7',
+                                color: '#fff',
+                                borderRadius: '50%',
+                                width: '8px',
+                                height: '8px',
+                            }} />
+                        )}
+                    </button>
                 </div>
             )}
 
@@ -727,7 +765,7 @@ const PlayerApp: React.FC = () => {
                     quests={quests}
                     locations={gameData.locations}
                     mapPinStates={mapPinStates}
-                    characterId={character?.id}
+                    characterId={character?.id || ''}
                     onQuestUpdate={handleQuestUpdate}
                     onQuestDelete={handleQuestDelete}
                     onGoToMap={handleGoToMapFromQuest}
@@ -786,6 +824,29 @@ const PlayerApp: React.FC = () => {
                     onClose={() => setCreateCharacterWizardOpen(false)}
                     onComplete={handleCreateCharacterComplete}
                 />
+            )}
+
+            {/* Chat Panel */}
+            {showChat && (
+                <div style={{
+                    position: 'fixed',
+                    right: '20px',
+                    bottom: '20px',
+                    width: '360px',
+                    height: '450px',
+                    zIndex: 1020,
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
+                    borderRadius: '8px',
+                    overflow: 'hidden'
+                }}>
+                    <ChatBox
+                        messages={chatMessages}
+                        onSendMessage={handleSendChatMessage}
+                        senderName={chatSenderName}
+                        onClose={() => setShowChat(false)}
+                        showHeader={true}
+                    />
+                </div>
             )}
         </div>
     );

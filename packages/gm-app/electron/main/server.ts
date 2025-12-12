@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage, ChatMessage, ChatMessageBroadcast, ChatHistoryMessage, parseChatCommand, executeDiceRoll } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 import { getCampaignData, saveCampaignData } from './dataManager';
 
@@ -9,14 +9,15 @@ const PORT = 3003;
 const connectedClients = new Map<string, Socket>();
 let io: Server | null = null;
 
-// Track authenticated users and prevent duplicate logins
+const MAX_CHAT_HISTORY = 100;
+const chatHistory: ChatMessage[] = [];
+
 interface UserSession {
     userId: string;
     username: string;
     socketId: string;
 }
 
-// Color palette for player identification
 const PLAYER_COLORS = [
     '#4a9c4a', // Green
     '#4a7ba7', // Blue
@@ -104,17 +105,14 @@ function getPlayerColor(userId: string): string {
     const campaignData = getCampaignData();
     if (!campaignData) return PLAYER_COLORS[0];
 
-    // Initialize playerColors if not exists
     if (!campaignData.playerColors) {
         campaignData.playerColors = {};
     }
 
-    // Return existing color if assigned
     if (campaignData.playerColors[userId]) {
         return campaignData.playerColors[userId];
     }
 
-    // Assign a new color from the palette
     const usedColors = Object.values(campaignData.playerColors);
     const availableColor = PLAYER_COLORS.find(c => !usedColors.includes(c)) || PLAYER_COLORS[0];
     
@@ -154,12 +152,10 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
         socket.on('player-message', (message: ClientToServerMessage) => {
             console.log(`[SERVER] Received message from ${socket.id}:`, message);
 
-            // Handle authentication
             if (message.type === 'LOGIN_REQUEST') {
                 const { username, password } = message.payload;
                 console.log(`[AUTH] Login attempt from ${socket.id}: ${username}`);
 
-                // Validate credentials
                 const user = authenticateUser(username, password);
                 if (!user) {
                     const failureMessage: LoginFailureMessage = {
@@ -171,7 +167,6 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     return;
                 }
 
-                // Check if user is already logged in
                 const existingSession = activeSessions.get(user.id);
                 if (existingSession) {
                     const failureMessage: LoginFailureMessage = {
@@ -183,7 +178,6 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     return;
                 }
 
-                // Create session
                 const session: UserSession = {
                     userId: user.id,
                     username: user.username,
@@ -192,13 +186,9 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 activeSessions.set(user.id, session);
                 socketToUserId.set(socket.id, user.id);
 
-                // Get character if assigned
                 const character = getUserCharacter(user.id);
-                
-                // Get or assign player color
                 const playerColor = getPlayerColor(user.id);
 
-                // Send success message
                 const successMessage: LoginSuccessMessage = {
                     type: 'LOGIN_SUCCESS',
                     payload: {
@@ -212,10 +202,34 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
 
                 sendInitialStateToPlayer(socket, user.id, character?.id);
 
+                const displayName = character?.name || user.username;
+                const systemMessage: ChatMessage = {
+                    id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    timestamp: Date.now(),
+                    senderId: 'system',
+                    senderName: 'System',
+                    type: 'system',
+                    content: `${displayName} connected.`
+                };
+                
+                chatHistory.push(systemMessage);
+                if (chatHistory.length > MAX_CHAT_HISTORY) {
+                    chatHistory.shift();
+                }
+                
+                const broadcastMsg: ChatMessageBroadcast = {
+                    type: 'CHAT_MESSAGE',
+                    payload: { message: systemMessage }
+                };
+                connectedClients.forEach((clientSocket) => {
+                    clientSocket.emit('gm-message', broadcastMsg);
+                });
+                
+                mainWindow.webContents.send('chat-message', systemMessage);
+
                 return;
             }
 
-            // Handle logout
             if (message.type === 'LOGOUT') {
                 const userId = socketToUserId.get(socket.id);
                 if (userId) {
@@ -226,14 +240,12 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 return;
             }
 
-            // For all other messages, verify the user is authenticated
             const userId = socketToUserId.get(socket.id);
             if (!userId) {
                 console.log(`[SERVER] Unauthenticated message ignored from ${socket.id}`);
                 return;
             }
 
-            // Handle player character updates (Edit Mode)
             if (message.type === 'PLAYER_UPDATE_CHARACTER') {
                 const { characterId, updates } = message.payload;
                 const campaignData = getCampaignData();
@@ -242,7 +254,6 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     return;
                 }
 
-                // Find the character and validate ownership
                 const characterIndex = campaignData.characters.findIndex(c => c.id === characterId);
                 if (characterIndex === -1) {
                     console.log(`[SERVER] Character ${characterId} not found`);
@@ -251,27 +262,22 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
 
                 const character = campaignData.characters[characterIndex];
                 
-                // Validate that this player owns this character
                 const userCharacter = getUserCharacter(userId);
                 if (!userCharacter || userCharacter.id !== characterId) {
                     console.log(`[SERVER] Player ${userId} does not own character ${characterId}`);
                     return;
                 }
 
-                // Merge the updates into the character
                 const updatedCharacter: Character = {
                     ...character,
                     ...updates,
-                    // Ensure ID cannot be changed
                     id: character.id,
                     userId: character.userId,
                 };
 
-                // Update the campaign data
                 campaignData.characters[characterIndex] = updatedCharacter;
                 saveCampaignData(campaignData);
 
-                // Broadcast the character update to all connected clients
                 const updateMessage: CharacterUpdateMessage = {
                     type: 'CHARACTER_UPDATE',
                     payload: { character: updatedCharacter }
@@ -281,28 +287,24 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     clientSocket.emit('gm-message', updateMessage);
                 });
 
-                // Also notify the GM app
                 mainWindow.webContents.send('data-updated', { characters: campaignData.characters });
 
                 console.log(`[SERVER] Player ${userId} updated character ${characterId}`);
                 return;
             }
 
-            // Handle shop evaluate request - forward to GM
             if (message.type === 'SHOP_EVALUATE_REQUEST') {
                 console.log(`[SERVER] Shop evaluate request from ${userId}:`, message.payload);
                 mainWindow.webContents.send('player-message-received', message);
                 return;
             }
 
-            // Handle shop purchase request - forward to GM
             if (message.type === 'SHOP_PURCHASE_REQUEST') {
                 console.log(`[SERVER] Shop purchase request from ${userId}:`, message.payload);
                 mainWindow.webContents.send('player-message-received', message);
                 return;
             }
 
-            // Handle quest update from player
             if (message.type === 'QUEST_UPDATE') {
                 const { quest } = message.payload;
                 const campaignData = getCampaignData();
@@ -311,12 +313,10 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     return;
                 }
 
-                // Initialize quests array if not exists
                 if (!campaignData.quests) {
                     campaignData.quests = [];
                 }
 
-                // Find existing quest or add new one
                 const existingIndex = campaignData.quests.findIndex(q => q.id === quest.id);
                 if (existingIndex >= 0) {
                     campaignData.quests[existingIndex] = quest;
@@ -326,17 +326,14 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
 
                 saveCampaignData(campaignData);
 
-                // Broadcast quest sync to all connected players
                 broadcastQuests(campaignData.quests);
 
-                // Notify GM app
                 mainWindow.webContents.send('data-updated', { quests: campaignData.quests });
 
-                console.log(`[SERVER] Quest updated: ${quest.title} by user ${userId}`);
+                console.log(`[SERVER] Quest updated: ${quest.title} by user ${userId} for character ${quest.characterId}`);
                 return;
             }
 
-            // Handle quest delete from player
             if (message.type === 'QUEST_DELETE') {
                 const { questId } = message.payload;
                 const campaignData = getCampaignData();
@@ -352,10 +349,8 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 campaignData.quests = campaignData.quests.filter(q => q.id !== questId);
                 saveCampaignData(campaignData);
 
-                // Broadcast quest sync to all connected players
                 broadcastQuests(campaignData.quests);
 
-                // Notify GM app
                 mainWindow.webContents.send('data-updated', { quests: campaignData.quests });
 
                 console.log(`[SERVER] Quest deleted: ${questId} by user ${userId}`);
@@ -446,7 +441,6 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     return;
                 }
 
-                // Find the pin and validate ownership
                 const pinIndex = campaignData.userPins.findIndex(p => p.id === pinId);
                 if (pinIndex >= 0) {
                     const pin = campaignData.userPins[pinIndex];
@@ -458,7 +452,6 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     campaignData.userPins.splice(pinIndex, 1);
                     saveCampaignData(campaignData);
 
-                    // Send updated pins to this player only
                     const playerPins = campaignData.userPins.filter(p => p.playerId === userId);
                     const pinsMessage: UserPinsUpdateMessage = {
                         type: 'USER_PINS_UPDATE',
@@ -471,12 +464,10 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 return;
             }
 
-            // Handle ping from player
             if (message.type === 'MAP_PING_REQUEST') {
                 const { x, y } = message.payload;
                 const playerColor = getPlayerColor(userId);
 
-                // Broadcast ping to all connected players (including sender for feedback)
                 const pingMessage: MapPingMessage = {
                     type: 'MAP_PING',
                     payload: { x, y, color: playerColor, userId }
@@ -491,26 +482,121 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     clientSocket.emit('gm-message', pingMessage);
                 });
 
-                // Also notify GM app
                 mainWindow.webContents.send('map-ping', { x, y, color: playerColor, userId });
 
                 console.log(`[SERVER] Ping at (${x}, ${y}) from user ${userId}`);
                 return;
             }
 
-            // Forward authenticated messages to GM
+            if (message.type === 'CHAT_SEND') {
+                const { content, senderName } = message.payload;
+                const playerColor = getPlayerColor(userId);
+
+                const parsed = parseChatCommand(content);
+                
+                let chatMessage: ChatMessage;
+
+                if (parsed.isRollCommand) {
+                    if (parsed.diceRequest) {
+                        const rollResult = executeDiceRoll(parsed.diceRequest);
+                        chatMessage = {
+                            id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                            timestamp: Date.now(),
+                            senderId: userId,
+                            senderName,
+                            senderColor: playerColor,
+                            type: 'roll',
+                            content: `Rolling ${rollResult.formula}`,
+                            data: rollResult
+                        };
+                    } else {
+                        const errorMessage: ChatMessage = {
+                            id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                            timestamp: Date.now(),
+                            senderId: 'system',
+                            senderName: 'System',
+                            type: 'error',
+                            content: parsed.errorMessage || 'Invalid dice syntax'
+                        };
+                        const errorBroadcast: ChatMessageBroadcast = {
+                            type: 'CHAT_MESSAGE',
+                            payload: { message: errorMessage }
+                        };
+                        socket.emit('gm-message', errorBroadcast);
+                        return;
+                    }
+                } else {
+                    chatMessage = {
+                        id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                        timestamp: Date.now(),
+                        senderId: userId,
+                        senderName,
+                        senderColor: playerColor,
+                        type: 'chat',
+                        content
+                    };
+                }
+
+                chatHistory.push(chatMessage);
+                if (chatHistory.length > MAX_CHAT_HISTORY) {
+                    chatHistory.shift();
+                }
+
+                const broadcastMessage: ChatMessageBroadcast = {
+                    type: 'CHAT_MESSAGE',
+                    payload: { message: chatMessage }
+                };
+                connectedClients.forEach((clientSocket) => {
+                    clientSocket.emit('gm-message', broadcastMessage);
+                });
+
+                mainWindow.webContents.send('chat-message', chatMessage);
+
+                console.log(`[CHAT] Message from ${senderName}: ${content}`);
+                return;
+            }
+
             mainWindow.webContents.send('player-message-received', message);
         });
 
         socket.on('disconnect', () => {
             console.log(`[SERVER] Player disconnected: ${socket.id}`);
 
-            // Clean up session
             const userId = socketToUserId.get(socket.id);
             if (userId) {
+                const session = activeSessions.get(userId);
+                const character = getUserCharacter(userId);
+                const displayName = character?.name || session?.username || 'A player';
+                
                 activeSessions.delete(userId);
                 socketToUserId.delete(socket.id);
                 console.log(`[AUTH] Session ended for user: ${userId}`);
+
+                const systemMessage: ChatMessage = {
+                    id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    timestamp: Date.now(),
+                    senderId: 'system',
+                    senderName: 'System',
+                    type: 'system',
+                    content: `${displayName} disconnected.`
+                };
+                
+                chatHistory.push(systemMessage);
+                if (chatHistory.length > MAX_CHAT_HISTORY) {
+                    chatHistory.shift();
+                }
+                
+                const broadcastMsg: ChatMessageBroadcast = {
+                    type: 'CHAT_MESSAGE',
+                    payload: { message: systemMessage }
+                };
+                connectedClients.forEach((clientSocket, clientSocketId) => {
+                    if (clientSocketId !== socket.id) {
+                        clientSocket.emit('gm-message', broadcastMsg);
+                    }
+                });
+                
+                mainWindow.webContents.send('chat-message', systemMessage);
             }
 
             connectedClients.delete(socket.id);
@@ -658,17 +744,15 @@ function sendInitialStateToPlayer(socket: Socket, userId: string, characterId: s
         }
     }
 
-    // Send quests - party-wide, so all authenticated players get all quests
     if (campaignData.quests && campaignData.quests.length > 0) {
         const questMessage: QuestSyncMessage = {
             type: 'QUEST_SYNC',
-            payload: { quests: campaignData.quests },
+            payload: { quests: campaignData.quests.filter(q => q.characterId === characterId)},
         };
         socket.emit('gm-message', questMessage);
         console.log(`[SERVER] Sent ${campaignData.quests.length} quests to player ${socket.id}`);
     }
 
-    // Send map tokens - all players see all tokens
     if (campaignData.tokens && campaignData.tokens.length > 0) {
         const tokensMessage: MapTokensUpdateMessage = {
             type: 'MAP_TOKENS_UPDATE',
@@ -689,6 +773,16 @@ function sendInitialStateToPlayer(socket: Socket, userId: string, characterId: s
             socket.emit('gm-message', pinsMessage);
             console.log(`[SERVER] Sent ${playerPins.length} personal pins to player ${socket.id}`);
         }
+    }
+
+    // Send chat history
+    if (chatHistory.length > 0) {
+        const historyMessage: ChatHistoryMessage = {
+            type: 'CHAT_HISTORY',
+            payload: { messages: [...chatHistory] },
+        };
+        socket.emit('gm-message', historyMessage);
+        console.log(`[SERVER] Sent ${chatHistory.length} chat messages to player ${socket.id}`);
     }
 }
 
@@ -829,21 +923,17 @@ export function broadcastShopInventory(shopInventory: ShopInventoryState) {
             return;
         }
 
-        // Filter shops to only include those the player has access to
         const filteredShops: Record<string, ShopState> = {};
 
         for (const [shopId, shopState] of Object.entries(shopInventory.shops)) {
             if (shopState.playerAccess.includes(assignedCharacterId)) {
-                // Filter inventory items to hide quality/flaw for unidentified items
                 const filteredInventory: ShopInventoryItem[] = shopState.inventory.map(item => {
                     if (!item.isIdentified) {
-                        // Hide modification details for unidentified items
                         return {
                             ...item,
                             modification: 'standard' as const,
                             quality: undefined,
                             flaw: undefined,
-                            // Show base price instead of modified price
                             modifiedPrice: item.basePrice
                         };
                     }
@@ -853,13 +943,12 @@ export function broadcastShopInventory(shopInventory: ShopInventoryState) {
                 filteredShops[shopId] = {
                     ...shopState,
                     inventory: filteredInventory,
-                    playerAccess: [assignedCharacterId] // Only include this character's access
+                    playerAccess: [assignedCharacterId]
                 };
             }
         }
 
         if (Object.keys(filteredShops).length > 0) {
-            // Convert to array format expected by ShopStateUpdateMessage
             const shopsArray: ShopState[] = Object.values(filteredShops);
             
             const message: ShopStateUpdateMessage = {
@@ -907,7 +996,6 @@ export function broadcastShopItemReveal(shopId: string, itemInstanceId: string, 
 
         if (!assignedCharacterId) return;
 
-        // Only broadcast to players with access to this shop
         if (shopState.playerAccess.includes(assignedCharacterId)) {
             const message: ShopItemRevealedMessage = {
                 type: 'SHOP_ITEM_REVEALED',
@@ -934,15 +1022,20 @@ export function broadcastQuests(quests: Quest[]) {
         return;
     }
 
-    console.log(`[SERVER] Broadcasting ${quests.length} quests to ${connectedClients.size} players`);
+    connectedClients.forEach((socket, socketId) => {
+        const userId = socketToUserId.get(socketId);
+        const assignedCharacterId = userId ? getUserCharacter(userId)?.id : undefined;
 
-    const message: QuestSyncMessage = {
-        type: 'QUEST_SYNC',
-        payload: { quests },
-    };
-
-    connectedClients.forEach((socket) => {
+        if (!assignedCharacterId) {
+            return;
+        }
+        const characterQuests = quests.filter(q => q.characterId === assignedCharacterId);
+        const message: QuestSyncMessage = {
+            type: 'QUEST_SYNC',
+            payload: { quests: characterQuests },
+        };
         socket.emit('gm-message', message);
+        console.log(`[SERVER] Sent ${characterQuests.length} quests to player ${socketId} (character ${assignedCharacterId})`);
     });
 }
 
@@ -992,4 +1085,40 @@ export function broadcastPing(x: number, y: number, color: string, userId: strin
     connectedClients.forEach((socket) => {
         socket.emit('gm-message', message);
     });
+}
+
+/**
+ * Broadcast a chat message to all connected players
+ * Called from GM app via IPC
+ * @param chatMessage The chat message to broadcast
+ */
+export function broadcastChatMessage(chatMessage: ChatMessage) {
+    chatHistory.push(chatMessage);
+    if (chatHistory.length > MAX_CHAT_HISTORY) {
+        chatHistory.shift();
+    }
+
+    if (!io || connectedClients.size === 0) {
+        console.log('[SERVER] No clients connected, skipping chat broadcast');
+        return;
+    }
+
+    console.log(`[SERVER] Broadcasting chat from ${chatMessage.senderName} to ${connectedClients.size} players`);
+
+    const message: ChatMessageBroadcast = {
+        type: 'CHAT_MESSAGE',
+        payload: { message: chatMessage },
+    };
+
+    connectedClients.forEach((socket) => {
+        socket.emit('gm-message', message);
+    });
+}
+
+/**
+ * Get current chat history
+ * @returns Array of chat messages
+ */
+export function getChatHistory(): ChatMessage[] {
+    return [...chatHistory];
 }

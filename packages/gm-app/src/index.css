@@ -233,10 +233,7 @@ code {
 }
 
 /* Input fields */
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
+input,
 textarea,
 select {
   font-family: var(--font-body);

@@ -14,6 +14,9 @@ interface Window {
         saveData: (data: any) => void;
         onDataUpdated: (callback: (value: any) => void) => () => void;
         onMapPingReceived: (callback: (value: any) => void) => () => void;
+        sendChatMessage: (message: any) => void;
+        onChatMessage: (callback: (value: any) => void) => () => void;
+        getChatHistory: () => Promise<any[]>;
         backupCampaign: () => Promise<{ success: boolean; path?: string; error?: string }>;
     };
 }

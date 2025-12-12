@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { QuestObjective, Location, MapPinState } from '@wfrp/shared';
 import styles from './ObjectiveItem.module.css';
+import { useDebouncedCallback } from '@wfrp/shared';
 
 interface ObjectiveItemProps {
     objective: QuestObjective;
     locations: Location[];
     mapPinStates: Record<string, MapPinState>;
-    characterId?: string;
+    characterId: string;
     onUpdate: (updated: QuestObjective) => void;
     onDelete: () => void;
     onGoToMap: (locationId: string) => void;
@@ -21,13 +22,15 @@ export const ObjectiveItem: React.FC<ObjectiveItemProps> = ({
     onDelete,
     onGoToMap,
 }) => {
-    // Filter locations to only show discovered ones
+    const [localDescription, setLocalDescription] = React.useState(objective.text);
+
     const discoveredLocations = locations.filter(location => {
         const pinState = mapPinStates[location.id];
         if (!pinState) return false;
-        if (!characterId) return pinState.playerDiscovered.length > 0;
         return pinState.playerDiscovered.includes(characterId);
     });
+    
+    const debouncedUpdate = useDebouncedCallback(onUpdate, 300);
 
     const handleToggleComplete = () => {
         onUpdate({
@@ -36,12 +39,14 @@ export const ObjectiveItem: React.FC<ObjectiveItemProps> = ({
         });
     };
 
-    const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onUpdate({
+    const handleTextChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        const newText = e.target.value;
+        setLocalDescription(newText);
+        debouncedUpdate({
             ...objective,
-            text: e.target.value,
+            text: newText,
         });
-    };
+    }, [objective, debouncedUpdate]);
 
     const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const locationId = e.target.value || undefined;
@@ -74,7 +79,7 @@ export const ObjectiveItem: React.FC<ObjectiveItemProps> = ({
                 <input
                     type="text"
                     className={styles.objectiveText}
-                    value={objective.text}
+                    value={localDescription}
                     onChange={handleTextChange}
                     placeholder="Describe this objective..."
                 />

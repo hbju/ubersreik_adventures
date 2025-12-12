@@ -20,6 +20,7 @@ interface FooterProps {
     onShowFactionManager: () => void,
     onShowReputationPanel: () => void,
     onShowTemplateManager: () => void,
+    onShowChat: () => void,
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -38,6 +39,7 @@ export const Footer: React.FC<FooterProps> = ({
     onShowFactionManager,
     onShowReputationPanel,
     onShowTemplateManager,
+    onShowChat,
 }) => {
     const { t } = useTranslation();
     const connectionCount = clients.length;
@@ -232,6 +234,21 @@ export const Footer: React.FC<FooterProps> = ({
                 }}
             >
                 👥 {t('menu.templates', 'NPC Templates')}
+            </button>
+            <button
+                onClick={onShowChat}
+                style={{
+                    padding: '10px 20px',
+                    background: '#1a3a5c',
+                    color: '#d4af37',
+                    border: '2px solid #4a7ba7',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '14px'
+                }}
+            >
+                💬 {t('menu.chat', 'Chat')}
             </button>
 
             <LanguageSwitcher />

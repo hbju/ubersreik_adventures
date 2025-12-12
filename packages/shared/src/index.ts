@@ -1,5 +1,7 @@
 export { default as CharacterCreationWizard } from './components/CharacterCreationWizard';
 export { default as CharacterSheet } from './components/CharacterSheet';
+export { ChatBox, default as ChatBoxDefault } from './components/chat/ChatBox';
+export { default as MessageItem } from './components/chat/MessageItem';
 export { default as PlayerCharacterSheet } from './components/PlayerCharacterSheet/PlayerCharacterSheet';
 export { default as EditableField } from './components/EditableField';
 export { default as InventoryView } from './components/InventoryView';
@@ -25,6 +27,7 @@ export * from './hooks/useDebounce';
 export * from './i18n';
 export * from './types/wfrp.types';
 export * from './types/messaging.types';
+export * from './types/chat.types';
 export * from './utils/advancement';
 export * from './utils/generator';
 export * from './utils/inventory';
@@ -37,6 +40,7 @@ export * from './utils/career';
 export * from './utils/reputation';
 export * from './utils/qualities';
 export * from './utils/shopGenerator';
+export * from './utils/diceParser';
 
 export { default as criticalHitsData } from './data/critical_hits.json';
 export { default as fumblesData } from './data/fumbles.json';

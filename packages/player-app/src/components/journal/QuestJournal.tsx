@@ -7,7 +7,7 @@ interface QuestJournalProps {
     quests: Quest[];
     locations: Location[];
     mapPinStates: Record<string, MapPinState>;
-    characterId?: string;
+    characterId: string;
     onQuestUpdate: (quest: Quest) => void;
     onQuestDelete: (questId: string) => void;
     onGoToMap: (locationId: string) => void;
@@ -26,30 +26,26 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
     const [activeTab, setActiveTab] = useState<QuestStatus>('active');
     const [searchQuery, setSearchQuery] = useState('');
     
-    // Local state for text fields to make typing responsive
     const [localTitle, setLocalTitle] = useState('');
     const [localDescription, setLocalDescription] = useState('');
 
-    // Debounced update function - only syncs to parent after 300ms of no typing
+    console.log('Rendering QuestJournal with characterId:', characterId);
+
     const debouncedQuestUpdate = useDebouncedCallback((quest: Quest) => {
         onQuestUpdate(quest);
     }, 300);
 
-    // Sync local state when selected quest changes (from props)
     useEffect(() => {
         if (selectedQuest) {
             setLocalTitle(selectedQuest.title);
             setLocalDescription(selectedQuest.description);
         }
-    }, [selectedQuestId]); // Only when selection changes, not on every selectedQuest update
+    }, [selectedQuestId]); 
 
-    // Filter quests based on tab and search
     const filteredQuests = useMemo(() => {
         return quests.filter(quest => {
-            // Filter by status
             if (quest.status !== activeTab) return false;
             
-            // Filter by search query
             if (searchQuery.trim()) {
                 const query = searchQuery.toLowerCase();
                 return (
@@ -68,6 +64,7 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
     const handleCreateQuest = useCallback(() => {
         const newQuest: Quest = {
             id: crypto.randomUUID(),
+            characterId: characterId || 'unknown',
             title: 'New Quest',
             description: '',
             status: 'active',
@@ -78,7 +75,6 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
         onQuestUpdate(newQuest);
         setSelectedQuestId(newQuest.id);
         setActiveTab('active');
-        // Set local state immediately for the new quest
         setLocalTitle('New Quest');
         setLocalDescription('');
     }, [onQuestUpdate]);
@@ -86,9 +82,7 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
     const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         if (!selectedQuest) return;
         const newTitle = e.target.value;
-        // Update local state immediately for responsive typing
         setLocalTitle(newTitle);
-        // Debounce the sync to parent
         debouncedQuestUpdate({
             ...selectedQuest,
             title: newTitle,
@@ -99,9 +93,7 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
     const handleDescriptionChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (!selectedQuest) return;
         const newDescription = e.target.value;
-        // Update local state immediately for responsive typing
         setLocalDescription(newDescription);
-        // Debounce the sync to parent
         debouncedQuestUpdate({
             ...selectedQuest,
             description: newDescription,
@@ -255,6 +247,7 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
                             value={localTitle}
                             onChange={handleTitleChange}
                             placeholder="Quest Title"
+                            spellCheck={false}
                         />
 
                         <div className={styles.questDescriptionLabel}>Description</div>
@@ -263,6 +256,7 @@ export const QuestJournal: React.FC<QuestJournalProps> = ({
                             value={localDescription}
                             onChange={handleDescriptionChange}
                             placeholder="Describe your quest objectives and notes..."
+                            spellCheck={false}
                         />
 
                         <div className={styles.objectivesSection}>

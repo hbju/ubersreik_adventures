@@ -250,7 +250,16 @@
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid #5c4a1f;
     border-radius: 6px;
+    color: #d4d4d4;
 }
+
+.objectiveItem:hover {
+    border-color: #8b6914;
+    cursor: pointer;
+    color: #d4d4d4;
+
+}
+
 
 .objectiveItem.completed {
     opacity: 0.7;

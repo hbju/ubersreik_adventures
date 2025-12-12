@@ -206,12 +206,11 @@
 
 .questTitleInput {
     width: 95%;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 2px solid #8b6914;
-    border-radius: 8px;
+    height: auto;
+    background: none;
+    border: none;
     color: #d4af37;
-    font-size: 28px;
+    font-size: 2rem;
     font-family: 'Cinzel', serif;
     font-weight: bold;
     margin-bottom: 20px;
@@ -219,11 +218,13 @@
 
 .questTitleInput:focus {
     outline: none;
-    border-color: #d4af37;
+    border: 1px solid var(--color-gold-dark);
+    border-radius: 4px;
+    background: var(--color-leather-dark);
 }
 
 .questDescriptionLabel {
-    font-size: 14px;
+    font-size: 1.3rem;
     color: #888;
     margin-bottom: 8px;
     text-transform: uppercase;
@@ -231,22 +232,25 @@
 
 .questDescriptionInput {
     width: 95%;
-    min-height: 120px;
+    min-height: 1lh;
     padding: 15px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 2px solid #8b6914;
+    background: none;
+    border: none;
     border-radius: 8px;
-    color: #d4d4d4;
+    color: #ddd;
     font-size: 16px;
     font-family: 'Georgia', serif;
     line-height: 1.6;
     resize: vertical;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
+    field-sizing: content;
+    resize: none;
 }
 
 .questDescriptionInput:focus {
     outline: none;
-    border-color: #d4af37;
+    border: 1px solid var(--color-gold-dark);
+    background: var(--color-leather-dark);
 }
 
 /* Objectives Section */
