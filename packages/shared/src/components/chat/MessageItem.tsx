@@ -17,16 +17,20 @@ function formatTime(timestamp: number): string {
 /**
  * Render a dice roll result card
  */
-const RollCard: React.FC<{ data: DiceRollData; senderName: string; senderColor?: string }> = ({ 
-    data, 
+const RollCard: React.FC<{ data: DiceRollData; senderName: string; isPrivate: boolean; senderColor?: string }> = ({
+    data,
     senderName,
-    senderColor 
+    isPrivate,
+    senderColor
 }) => {
     return (
         <div className={styles.rollCard}>
+            {
+                isPrivate && <span className={styles.privateLabel}>Private Roll</span>
+            }
             <div className={styles.rollHeader}>
                 <span className={styles.diceIcon}>🎲</span>
-                <span 
+                <span
                     className={styles.senderName}
                     style={senderColor ? { color: senderColor } : undefined}
                 >
@@ -34,7 +38,7 @@ const RollCard: React.FC<{ data: DiceRollData; senderName: string; senderColor?:
                 </span>
                 <span className={styles.rollFormula}>rolled {data.formula}</span>
             </div>
-            
+
             <div className={styles.rollDetails}>
                 <div className={styles.diceResults}>
                     {data.rolls.map((roll, index) => (
@@ -43,11 +47,10 @@ const RollCard: React.FC<{ data: DiceRollData; senderName: string; senderColor?:
                         </span>
                     ))}
                 </div>
-                
+
                 {data.modifier !== 0 && (
-                    <span className={`${styles.modifier} ${
-                        data.modifier > 0 ? styles.modifierPositive : styles.modifierNegative
-                    }`}>
+                    <span className={`${styles.modifier} ${data.modifier > 0 ? styles.modifierPositive : styles.modifierNegative
+                        }`}>
                         {data.modifier > 0 ? '+' : ''}{data.modifier}
                     </span>
                 )}
@@ -67,7 +70,6 @@ const RollCard: React.FC<{ data: DiceRollData; senderName: string; senderColor?:
 export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
     const { type, content, senderName, senderColor, timestamp, data } = message;
 
-    // System messages
     if (type === 'system') {
         return (
             <div className={`${styles.messageItem} ${styles.systemMessage}`}>
@@ -76,33 +78,31 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
         );
     }
 
-    // Error messages
     if (type === 'error') {
         return (
-            <div className={`${styles.messageItem} ${styles.errorMessage}`}>
+            <div className={'styles.messageItem ${styles.errorMessage}'}>
                 <span className={styles.messageContent}>⚠️ {content}</span>
             </div>
         );
     }
 
-    // Roll messages
     if (type === 'roll' && data) {
         return (
-            <div className={`${styles.messageItem} ${styles.rollMessage}`}>
-                <RollCard 
-                    data={data} 
-                    senderName={senderName} 
+            <div className={styles.messageItem + (message.isPrivate ? ` ${styles.privateRoll}` : ` ${styles.rollMessage}`)}>
+                <RollCard
+                    data={data}
+                    senderName={senderName}
                     senderColor={senderColor}
+                    isPrivate={message.isPrivate}
                 />
             </div>
         );
     }
 
-    // Regular chat messages
     return (
         <div className={`${styles.messageItem} ${styles.chatMessage}`}>
             <div className={styles.messageHeader}>
-                <span 
+                <span
                     className={styles.senderName}
                     style={senderColor ? { color: senderColor } : undefined}
                 >

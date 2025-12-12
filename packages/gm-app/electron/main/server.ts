@@ -209,7 +209,8 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     senderId: 'system',
                     senderName: 'System',
                     type: 'system',
-                    content: `${displayName} connected.`
+                    content: `${displayName} connected.`,
+                    isPrivate: false,
                 };
                 
                 chatHistory.push(systemMessage);
@@ -507,6 +508,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                             senderColor: playerColor,
                             type: 'roll',
                             content: `Rolling ${rollResult.formula}`,
+                            isPrivate: parsed.isPrivate,
                             data: rollResult
                         };
                     } else {
@@ -516,7 +518,8 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                             senderId: 'system',
                             senderName: 'System',
                             type: 'error',
-                            content: parsed.errorMessage || 'Invalid dice syntax'
+                            content: parsed.errorMessage || 'Invalid dice syntax',
+                            isPrivate: parsed.isPrivate
                         };
                         const errorBroadcast: ChatMessageBroadcast = {
                             type: 'CHAT_MESSAGE',
@@ -533,7 +536,8 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                         senderName,
                         senderColor: playerColor,
                         type: 'chat',
-                        content
+                        content,
+                        isPrivate: false,
                     };
                 }
 
@@ -546,8 +550,15 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     type: 'CHAT_MESSAGE',
                     payload: { message: chatMessage }
                 };
-                connectedClients.forEach((clientSocket) => {
-                    clientSocket.emit('gm-message', broadcastMessage);
+                connectedClients.forEach((clientSocket, socketId) => {
+                    if (chatMessage.isPrivate) {
+                        const sid = socketToUserId.get(socketId);
+                        if (sid === userId) {
+                            clientSocket.emit('gm-message', broadcastMessage);
+                        }
+                    } else {
+                        clientSocket.emit('gm-message', broadcastMessage);
+                    }
                 });
 
                 mainWindow.webContents.send('chat-message', chatMessage);
@@ -578,7 +589,8 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     senderId: 'system',
                     senderName: 'System',
                     type: 'system',
-                    content: `${displayName} disconnected.`
+                    content: `${displayName} disconnected.`,
+                    isPrivate: false,
                 };
                 
                 chatHistory.push(systemMessage);

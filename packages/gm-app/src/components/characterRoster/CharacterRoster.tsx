@@ -41,14 +41,12 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
 }) => {
     const { gameData } = useGameData();
 
-    // Filter state
     const [searchTerm, setSearchTerm] = useState('');
     const [typeFilter, setTypeFilter] = useState<CharacterTypeFilter>('all');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [viewMode, setViewMode] = useState<ViewMode>('list');
     const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
-    // Get all unique tags from characters
     const availableTags = useMemo(() => {
         const tagSet = new Set<string>();
         characters.forEach(char => {
@@ -57,15 +55,12 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
         return Array.from(tagSet).sort();
     }, [characters]);
 
-    // Filter characters based on current filters
     const filteredCharacters = useMemo(() => {
         return characters.filter(char => {
-            // Search filter
             if (searchTerm && !char.name.toLowerCase().includes(searchTerm.toLowerCase())) {
                 return false;
             }
 
-            // Type filter (PC = has userId, NPC = no userId)
             if (typeFilter === 'pcs' && !char.userId) {
                 return false;
             }
@@ -73,7 +68,6 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
                 return false;
             }
 
-            // Tag filter (character must have at least one of the selected tags)
             if (selectedTags.length > 0) {
                 const charTags = char.tags || [];
                 if (!selectedTags.some(tag => charTags.includes(tag))) {
@@ -85,7 +79,6 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
         });
     }, [characters, searchTerm, typeFilter, selectedTags]);
 
-    // Group characters based on view mode
     const groupedCharacters = useMemo((): GroupedCharacters => {
         if (viewMode === 'list') {
             return { 'All Characters': filteredCharacters };
@@ -95,7 +88,6 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
             const groups: GroupedCharacters = { 'No Location': [] };
             const locations = gameData?.locations || [];
 
-            // Initialize groups for each location
             locations.forEach((loc: Location) => {
                 groups[loc.name] = [];
             });
@@ -113,7 +105,6 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
                 }
             });
 
-            // Remove empty groups (except 'No Location' if it has chars)
             Object.keys(groups).forEach(key => {
                 if (groups[key].length === 0 && key !== 'No Location') {
                     delete groups[key];
@@ -130,13 +121,11 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
             const groups: GroupedCharacters = { 'No Faction': [] };
             const factions = gameData?.factions || [];
 
-            // Initialize groups for each faction
             factions.forEach((faction: Faction) => {
                 groups[faction.name] = [];
             });
 
             filteredCharacters.forEach(char => {
-                // Find primary faction (highest reputation value)
                 const reputations = char.reputations || [];
                 if (reputations.length > 0) {
                     const primaryRep = reputations.reduce((max, rep) =>
@@ -153,7 +142,6 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
                 }
             });
 
-            // Remove empty groups
             Object.keys(groups).forEach(key => {
                 if (groups[key].length === 0 && key !== 'No Faction') {
                     delete groups[key];
@@ -172,10 +160,8 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
     const handleAssignChange = (character: Character, event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = event.target.value;
         if (selectedValue === '') {
-            // Unassign character
             onAssignCharacter(character.userId!, null);
         } else {
-            // Assign to selected user
             onAssignCharacter(selectedValue, character.id);
         }
     };
@@ -226,6 +212,18 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
                     )}
                 </span>
                 <div className={styles.itemActions}>
+                    {(character.tags && character.tags.length > 0) && (
+                        <span className={styles.tagBadges}>
+                            {character.tags.slice(0, 2).map(tag => (
+                                <span key={tag} className={styles.tagBadge}>{tag}</span>
+                            ))}
+                            {character.tags.length > 2 && (
+                                <span className={styles.tagBadge}>+{character.tags.length - 2}</span>
+                            )}
+                        </span>
+                    )}
+                </div>
+                <div className={styles.itemActions}>
                     {onPlaceToken && !hasToken && (
                         <button 
                             onClick={() => onPlaceToken(character.id)} 
@@ -244,18 +242,6 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
                             ❌
                         </button>
                     )}
-                    {(character.tags && character.tags.length > 0) && (
-                        <span className={styles.tagBadges}>
-                            {character.tags.slice(0, 2).map(tag => (
-                                <span key={tag} className={styles.tagBadge}>{tag}</span>
-                            ))}
-                            {character.tags.length > 2 && (
-                                <span className={styles.tagBadge}>+{character.tags.length - 2}</span>
-                            )}
-                        </span>
-                    )}
-                </div>
-                <div className={styles.itemActions}>
                     <button onClick={() => onAddCombatant(character)} className={styles.combatBtn}>
                         ⚔️
                     </button>

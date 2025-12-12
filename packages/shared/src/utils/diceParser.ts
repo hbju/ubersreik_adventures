@@ -82,16 +82,18 @@ export function executeDiceRoll(request: DiceRequest): DiceRollData {
  */
 export function parseChatCommand(input: string): {
     isRollCommand: boolean;
+    isPrivate: boolean;
     diceRequest: DiceRequest | null;
     errorMessage?: string;
 } {
     const trimmed = input.trim();
     
     // Check for /roll or /r prefix
-    const rollMatch = trimmed.match(/^\/(?:roll|r)\s+(.+)$/i);
+    const rollMatch = trimmed.match(/^\/(?:roll|r|groll|gr)\s+(.+)$/i);
+    const isPrivate = /^\/groll|^\/gr/i.test(trimmed);
     
     if (!rollMatch) {
-        return { isRollCommand: false, diceRequest: null };
+        return { isRollCommand: false, isPrivate: false, diceRequest: null };
     }
 
     const diceString = rollMatch[1].trim();
@@ -100,12 +102,13 @@ export function parseChatCommand(input: string): {
     if (!diceRequest) {
         return {
             isRollCommand: true,
+            isPrivate,
             diceRequest: null,
             errorMessage: `Invalid dice syntax: "${diceString}". Use format like 1d100, 2d10+5, or d20-2.`
         };
     }
 
-    return { isRollCommand: true, diceRequest };
+    return { isRollCommand: true, isPrivate, diceRequest };
 }
 
 /**

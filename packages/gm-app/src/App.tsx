@@ -107,6 +107,7 @@ function App() {
     const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
     const [currentAdvantage, setCurrentAdvantage] = useState<Advantages>({ playerAdvantage: 0, enemyAdvantage: 0 });
 
+    const [showGameLog, setShowGameLog] = useState(false);
     const [showShopManager, setShowShopManager] = useState(false);
     const [showShopConfigurator, setShowShopConfigurator] = useState(false);
     const [showDiceTray, setShowDiceTray] = useState(false);
@@ -1056,6 +1057,7 @@ function App() {
                     senderColor: '#d4af37', 
                     type: 'roll',
                     content: `Rolling ${rollResult.formula}`,
+                    isPrivate: parsed.isPrivate,
                     data: rollResult
                 };
             } else {
@@ -1065,7 +1067,8 @@ function App() {
                     senderId: 'system',
                     senderName: 'System',
                     type: 'error',
-                    content: parsed.errorMessage || 'Invalid dice syntax'
+                    content: parsed.errorMessage || 'Invalid dice syntax',
+                    isPrivate: parsed.isPrivate,
                 };
                 setChatMessages(prev => [...prev, errorMessage]);
                 return;
@@ -1078,7 +1081,8 @@ function App() {
                 senderName: 'GM',
                 senderColor: '#d4af37',
                 type: 'chat',
-                content
+                content,
+                isPrivate: parsed.isPrivate,
             };
         }
 
@@ -1217,9 +1221,12 @@ function App() {
                 onShowReputationPanel={() => setShowReputationPanel(true)}
                 onShowTemplateManager={() => setShowTemplateManager(true)}
                 onShowChat={() => setShowChat(!showChat)}
+                onShowGameLog={() => setShowGameLog(true)}
             />
 
-            <GameLog entries={logEntries} />
+            { showGameLog && (
+                <GameLog entries={logEntries} onClose={() => setShowGameLog(false)} />
+            )}
 
             <CharacterRoster
                 characters={characters}
@@ -1397,7 +1404,6 @@ function App() {
                     locations={gameData.locations}
                     onUpdateFactions={(updatedFactions) => {
                         setFactions(updatedFactions);
-                        // Broadcast faction update to all players
                         const message: FactionUpdateMessage = {
                             type: 'FACTION_UPDATE',
                             payload: { factions: updatedFactions }
@@ -1504,32 +1510,26 @@ function App() {
                     userId={characters.find(c => c.id === purchaseRequest.charId)?.userId || ''}
                     onClose={() => setPurchaseRequest(null)}
                     onApprove={(item) => {
-                        // Find the character and update their inventory and currency
                         const character = characters.find(c => c.id === purchaseRequest.charId);
                         if (character) {
-                            // Parse the item price
                             const priceParts = item.price.split(' ');
                             const amount = parseInt(priceParts[0]);
                             const currencyType = priceParts[1];
 
-                            // Calculate the currency to subtract
                             const currencyChange = {
                                 gc: currencyType === 'GC' ? -amount : 0,
                                 ss: currencyType === 'S' ? -amount : 0,
                                 bp: currencyType === 'P' ? -amount : 0,
                             };
 
-                            // Update character currency
                             const newCurrency = equilibrateCurrency({ ...character.currency });
                             newCurrency.gc += currencyChange.gc;
                             newCurrency.ss += currencyChange.ss;
                             newCurrency.bp += currencyChange.bp;
                             const equilibratedCurrency = equilibrateCurrency(newCurrency);
 
-                            // Determine which inventory array to add to
                             const updatedInventory = { ...character.inventory };
                             if ('damage' in item) {
-                                // It's a weapon
                                 updatedInventory.weapons = { ...character.inventory.weapons };
                                 if (updatedInventory.weapons[item.id]) {
                                     updatedInventory.weapons[item.id] += 1;
@@ -1537,7 +1537,6 @@ function App() {
                                     updatedInventory.weapons[item.id] = 1;
                                 }
                             } else if ('ap' in item) {
-                                // It's armor
                                 updatedInventory.armor = { ...character.inventory.armor };
                                 if (updatedInventory.armor[item.id]) {
                                     updatedInventory.armor[item.id] += 1;
@@ -1545,7 +1544,6 @@ function App() {
                                     updatedInventory.armor[item.id] = 1;
                                 }
                             } else {
-                                // It's a regular item
                                 updatedInventory.items = { ...character.inventory.items };
                                 if (updatedInventory.items[item.id]) {
                                     updatedInventory.items[item.id] += 1;
@@ -1553,7 +1551,6 @@ function App() {
                                     updatedInventory.items[item.id] = 1;
                                 }
                             }
-                            // Update character
                             const updatedCharacter: Character = {
                                 ...character,
                                 currency: equilibratedCurrency,
@@ -1574,7 +1571,6 @@ function App() {
                     onApprove={() => {
                         const character = characters.find(c => c.id === careerChangeRequest.characterId);
                         if (character && careerChangeRequest) {
-                            // Check if character has enough XP
                             if (character.xp.current < careerChangeRequest.xpCost) {
                                 const responseMessage: CareerChangeResponseMessage = {
                                     type: 'CAREER_CHANGE_RESPONSE',
@@ -1619,7 +1615,6 @@ function App() {
                             }
 
                             const availableAdvancements = getAvailableAdvancements(newCareer, newCareerLevel.lvl);
-                            // Update character's career, level, and XP
                             const updatedCharacter: Character = {
                                 ...character,
                                 currentCareerId: careerChangeRequest.newCareerId,
@@ -1709,7 +1704,6 @@ function App() {
 
                 if (!character) return null;
 
-                // Use MinionSheet for minions, PlayerCharacterSheet for full characters
                 if (character.isMinion) {
                     return (
                         <MinionSheet
@@ -1719,7 +1713,6 @@ function App() {
                             onCharacteristicClick={(charId, charName, charValue) => setTestModalInfo({ id: charId, name: charName, value: charValue, charId: character.id })}
                             onSkillClick={(skillId, skillName, skillValue) => setTestModalInfo({ id: skillId, name: skillName, value: skillValue, charId: character.id })}
                             onFullViewClick={() => {
-                                // Toggle isMinion to switch to full view
                                 handleCharacterUpdate({ ...character, isMinion: false });
                             }}
                             onClose={() => handleToggleCharacterSheet(character.id)}

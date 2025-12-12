@@ -34,5 +34,6 @@ export interface ChatMessage {
     senderColor?: string;
     type: MessageType;
     content: string;        // "Hello" or "Rolled 45"
+    isPrivate: boolean;   // True if message is private
     data?: DiceRollData;    // Optional payload for rolls
 }

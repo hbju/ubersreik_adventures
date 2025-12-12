@@ -65,10 +65,29 @@
     padding: 12px;
 }
 
+.privateRoll {
+    background: linear-gradient(135deg, 
+        rgba(139, 69, 19, 0.15) 0%, 
+        rgba(165, 42, 42, 0.15) 100%);
+    border: 1px solid rgba(139, 69, 19, 0.3);
+    padding: 12px;
+}
+
 .rollCard {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.privateLabel {
+    background-color: var(--color-leather-dark);
+    color: var(--color-parchment);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+    width: fit-content;
 }
 
 .rollHeader {

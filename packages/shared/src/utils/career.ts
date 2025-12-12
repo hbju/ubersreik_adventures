@@ -4,51 +4,52 @@ import { Character, Career, CareerLevel } from '../types/wfrp.types';
  * Get all career levels available to a character (current + all previous in their career path)
  */
 export function getCareerLevelsForCharacter(
-  character: Character,
-  allCareers: Career[]
+    character: Character,
+    allCareers: Career[]
 ): CareerLevel[] {
-  const career = allCareers.find(c => c.id === character.currentCareerId);
-  if (!career) return [];
+    const career = allCareers.find(c => c.id === character.currentCareerId);
+    if (!career) return [];
 
-  const currentLevelIndex = career.career_level.findIndex(
-    lvl => lvl.id === character.currentCareerLevelId
-  );
-  
-  if (currentLevelIndex === -1) return [];
+    const currentLevelIndex = career.career_level.findIndex(
+        lvl => lvl.id === character.currentCareerLevelId
+    );
 
-  // Return current level and all previous levels in this career
-  return career.career_level.slice(0, currentLevelIndex + 1);
+    if (currentLevelIndex === -1) return [];
+
+    // Return current level and all previous levels in this career
+    return career.career_level.slice(0, currentLevelIndex + 1);
 }
 
 /**
  * Get all advancements available to the character based on their career path and GM unlocks
  */
 export function getAvailableAdvancements(
-  career: Career,
-  careerLevel: number
+    career: Career,
+    careerLevel: number
 ): {
-  characteristics: string[];
-  skills: string[];
-  talents: string[];
+    characteristics: string[];
+    skills: string[];
+    talents: string[];
 } {
-  const careerLevels = career.career_level.slice(0, careerLevel);
-  
-  // Collect all characteristics, skills, and talents from career levels
-  const careerCharacteristics = new Set<string>();
-  const careerSkills = new Set<string>();
-  const careerTalents = new Set<string>();
+    const careerLevels = career.career_level.slice(0, careerLevel);
 
-  careerLevels.forEach(level => {
-    level.characteristic_advances.forEach(char => careerCharacteristics.add(char.toLowerCase()));
-    level.skills_ids.forEach(skill => careerSkills.add(skill));
-    level.talent_ids.forEach(talent => careerTalents.add(talent));
-  });
+    // Collect all characteristics, skills, and talents from career levels
+    const careerCharacteristics = new Set<string>();
+    const careerSkills = new Set<string>();
+    const careerTalents = new Set<string>();
 
-  return {
-    characteristics: Array.from(careerCharacteristics),
-    skills: Array.from(careerSkills),
-    talents: Array.from(careerTalents)
-  };
+    careerLevels.forEach(level => {
+        level.characteristic_advances.forEach(char => careerCharacteristics.add(char.toLowerCase()));
+        level.skills_ids.forEach(skill => careerSkills.add(skill));
+    });
+
+    careerLevels[careerLevels.length - 1].talent_ids.forEach(talent => careerTalents.add(talent));
+
+    return {
+        characteristics: Array.from(careerCharacteristics),
+        skills: Array.from(careerSkills),
+        talents: Array.from(careerTalents)
+    };
 }
 
 /**
@@ -59,164 +60,164 @@ export function getAvailableAdvancements(
  * - At least 1 talent from the current level
  */
 export function hasCompletedCurrentLevel(
-  character: Character,
-  allCareers: Career[]
+    character: Character,
+    allCareers: Career[]
 ): boolean {
-  const career = allCareers.find(c => c.id === character.currentCareerId);
-  if (!career) return false;
+    const career = allCareers.find(c => c.id === character.currentCareerId);
+    if (!career) return false;
 
-  const currentLevel = career.career_level.find(
-    lvl => lvl.id === character.currentCareerLevelId
-  );
-  if (!currentLevel) return false;
+    const currentLevel = career.career_level.find(
+        lvl => lvl.id === character.currentCareerLevelId
+    );
+    if (!currentLevel) return false;
 
-  // Determine required advances based on level (5, 10, 15, 20)
-  const requiredAdvances = currentLevel.lvl * 5;
-  const allAdvancements = getAvailableAdvancements(career, currentLevel.lvl);
+    // Determine required advances based on level (5, 10, 15, 20)
+    const requiredAdvances = currentLevel.lvl * 5;
+    const allAdvancements = getAvailableAdvancements(career, currentLevel.lvl);
 
-  // Check characteristics - all must be at required level
-  const characteristicsComplete = allAdvancements.characteristics.every(charId => {
-    const charKey = charId.toLowerCase() as keyof Character['characteristics'];
-    const characteristic = character.characteristics[charKey];
-    return characteristic && characteristic.advances >= requiredAdvances;
-  });
+    // Check characteristics - all must be at required level
+    const characteristicsComplete = allAdvancements.characteristics.every(charId => {
+        const charKey = charId.toLowerCase() as keyof Character['characteristics'];
+        const characteristic = character.characteristics[charKey];
+        return characteristic && characteristic.advances >= requiredAdvances;
+    });
 
-  if (!characteristicsComplete) return false;
+    if (!characteristicsComplete) return false;
 
-  // Check skills - at least 8 must be at required level
-  let completedSkills = 0;
-  allAdvancements.skills.forEach(skillId => {
-    const skill = character.skills.find(s => s.id === skillId);
-    if (skill && skill.advances >= requiredAdvances) {
-      completedSkills++;
-    }
-  });
+    // Check skills - at least 8 must be at required level
+    let completedSkills = 0;
+    allAdvancements.skills.forEach(skillId => {
+        const skill = character.skills.find(s => s.id === skillId);
+        if (skill && skill.advances >= requiredAdvances) {
+            completedSkills++;
+        }
+    });
 
-  if (completedSkills < 8) return false;
+    if (completedSkills < 8) return false;
 
-  // Check talents - at least 1 from current level must be taken
-  const hasTalent = currentLevel.talent_ids.some(talentId => {
-    return character.talents[talentId] && character.talents[talentId] > 0;
-  });
+    // Check talents - at least 1 from current level must be taken
+    const hasTalent = currentLevel.talent_ids.some(talentId => {
+        return character.talents[talentId] && character.talents[talentId] > 0;
+    });
 
-  return hasTalent;
+    return hasTalent;
 }
 
 /**
  * Calculate XP cost for advancing to a new career level
  */
 export function getCareerChangeCost(
-  character: Character,
-  targetCareerId: string,
-  targetCareerLevelId: string,
-  allCareers: Career[]
+    character: Character,
+    targetCareerId: string,
+    targetCareerLevelId: string,
+    allCareers: Career[]
 ): number {
-  const currentCareer = allCareers.find(c => c.id === character.currentCareerId);
-  const targetCareer = allCareers.find(c => c.id === targetCareerId);
-  
-  if (!currentCareer || !targetCareer) return 0;
+    const currentCareer = allCareers.find(c => c.id === character.currentCareerId);
+    const targetCareer = allCareers.find(c => c.id === targetCareerId);
 
-  const targetLevel = targetCareer.career_level.find(lvl => lvl.id === targetCareerLevelId);
-  if (!targetLevel) return 0;
+    if (!currentCareer || !targetCareer) return 0;
 
-  // Advancing within same career
-  if (currentCareer.id === targetCareerId) {
-    return 100;
-  }
+    const targetLevel = targetCareer.career_level.find(lvl => lvl.id === targetCareerLevelId);
+    if (!targetLevel) return 0;
 
-  // Advancing to same level of a career in the same class
-  if (currentCareer.class === targetCareer.class) {
-    return 100;
-  }
+    // Advancing within same career
+    if (currentCareer.id === targetCareerId) {
+        return 100;
+    }
 
-  // Advancing to first level of a career in a different class
-  if (targetLevel.lvl === 1) {
-    return 200;
-  }
+    // Advancing to same level of a career in the same class
+    if (currentCareer.class === targetCareer.class) {
+        return 100;
+    }
 
-  // Not allowed
-  return 0;
+    // Advancing to first level of a career in a different class
+    if (targetLevel.lvl === 1) {
+        return 200;
+    }
+
+    // Not allowed
+    return 0;
 }
 
 /**
  * Get all careers available for a character to change to
  */
 export function getAvailableCareerChanges(
-  character: Character,
-  allCareers: Career[]
+    character: Character,
+    allCareers: Career[]
 ): Array<{ career: Career; level: CareerLevel; cost: number }> {
-  const currentCareer = allCareers.find(c => c.id === character.currentCareerId);
-  if (!currentCareer) return [];
+    const currentCareer = allCareers.find(c => c.id === character.currentCareerId);
+    if (!currentCareer) return [];
 
-  const currentLevel = currentCareer.career_level.find(
-    lvl => lvl.id === character.currentCareerLevelId
-  );
-  if (!currentLevel) return [];
+    const currentLevel = currentCareer.career_level.find(
+        lvl => lvl.id === character.currentCareerLevelId
+    );
+    if (!currentLevel) return [];
 
-  const available: Array<{ career: Career; level: CareerLevel; cost: number }> = [];
+    const available: Array<{ career: Career; level: CareerLevel; cost: number }> = [];
 
-  allCareers.forEach(career => {
-    career.career_level.forEach(level => {
-      // Same career - can advance to any higher level for 100 XP
-      if (career.id === currentCareer.id && level.lvl > currentLevel.lvl) {
-        available.push({ career, level, cost: 100 });
-      }
-      // Same class - can advance to same or lower level for 100 XP
-      else if (
-        career.class === currentCareer.class &&
-        career.id !== currentCareer.id &&
-        level.lvl <= currentLevel.lvl
-      ) {
-        available.push({ career, level, cost: 100 });
-      }
-      // Different class - can only take level 1 for 200 XP
-      else if (career.class !== currentCareer.class && level.lvl === 1) {
-        available.push({ career, level, cost: 200 });
-      }
+    allCareers.forEach(career => {
+        career.career_level.forEach(level => {
+            // Same career - can advance to any higher level for 100 XP
+            if (career.id === currentCareer.id && level.lvl > currentLevel.lvl) {
+                available.push({ career, level, cost: 100 });
+            }
+            // Same class - can advance to same or lower level for 100 XP
+            else if (
+                career.class === currentCareer.class &&
+                career.id !== currentCareer.id &&
+                level.lvl <= currentLevel.lvl
+            ) {
+                available.push({ career, level, cost: 100 });
+            }
+            // Different class - can only take level 1 for 200 XP
+            else if (career.class !== currentCareer.class && level.lvl === 1) {
+                available.push({ career, level, cost: 200 });
+            }
+        });
     });
-  });
 
-  return available;
+    return available;
 }
 
 /**
  * Count how many times a characteristic has been advanced in career history
  */
 export function getCharacteristicAdvancesFromHistory(
-  character: Character,
-  characteristicId: string
+    character: Character,
+    characteristicId: string
 ): number {
-  return character.careerHistory?.filter(
-    entry =>
-      entry.advancementType === 'characteristic' &&
-      entry.advancementId === characteristicId
-  ).length || 0;
+    return character.careerHistory?.filter(
+        entry =>
+            entry.advancementType === 'characteristic' &&
+            entry.advancementId === characteristicId
+    ).length || 0;
 }
 
 /**
  * Count how many times a skill has been advanced in career history
  */
 export function getSkillAdvancesFromHistory(
-  character: Character,
-  skillId: string
+    character: Character,
+    skillId: string
 ): number {
-  return character.careerHistory?.filter(
-    entry =>
-      entry.advancementType === 'skill' &&
-      entry.advancementId === skillId
-  ).length || 0;
+    return character.careerHistory?.filter(
+        entry =>
+            entry.advancementType === 'skill' &&
+            entry.advancementId === skillId
+    ).length || 0;
 }
 
 /**
  * Count how many times a talent has been purchased in career history
  */
 export function getTalentRankFromHistory(
-  character: Character,
-  talentId: string
+    character: Character,
+    talentId: string
 ): number {
-  return character.careerHistory?.filter(
-    entry =>
-      entry.advancementType === 'talent' &&
-      entry.advancementId === talentId
-  ).length || 0;
+    return character.careerHistory?.filter(
+        entry =>
+            entry.advancementType === 'talent' &&
+            entry.advancementId === talentId
+    ).length || 0;
 }

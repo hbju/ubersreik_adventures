@@ -94,7 +94,16 @@
         "generateNPC": "Generate NPC",
         "atmosphere": "Atmosphere",
         "factions": "Factions",
-        "reputation": "Reputation"
+        "reputation": "Reputation",
+        "gameLog": "Game Log",
+        "chat": "Chat",
+        "templates": "NPC Templates",
+        "settings": "Settings",
+        "session": "Session",
+        "journals": "Journals",
+        "commerce": "Commerce",
+        "tools": "Tools",
+        "world": "World"
     },
     "quests": {
         "title": "Quest Journal",

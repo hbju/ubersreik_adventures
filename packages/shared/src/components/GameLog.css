@@ -19,6 +19,18 @@
   z-index: 1003; 
 }
 
+.closeButton {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: var(--color-leather-dark);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
 .logList {
   list-style-type: none;
   padding: 0;

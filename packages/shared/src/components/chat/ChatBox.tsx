@@ -63,8 +63,8 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
                 <div className={styles.chatHeader}>
                     <span className={styles.chatTitle}>Chat</span>
                     {onClose && (
-                        <button 
-                            className={styles.closeButton} 
+                        <button
+                            className={styles.closeButton}
                             onClick={onClose}
                             aria-label="Close chat"
                         >
@@ -99,8 +99,8 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
                         placeholder={placeholder}
                         aria-label="Chat message"
                     />
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         className={styles.sendButton}
                         disabled={!inputValue.trim()}
                     >
