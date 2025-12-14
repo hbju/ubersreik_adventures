@@ -29,7 +29,7 @@ export const ShopConfigurator: React.FC<ShopConfiguratorProps> = ({
 }) => {
     const { t } = useTranslation();
     const gameData = useGameData();
-    const locations = gameData.gameData?.locations || [];
+    const locations = gameData.mapData?.locations || [];
 
     const [selectedShopId, setSelectedShopId] = useState<string | null>(null);
     const [isCreatingNew, setIsCreatingNew] = useState(false);

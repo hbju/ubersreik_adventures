@@ -1,0 +1,80 @@
+{
+    "id": "red_moon_inn",
+    "name": "Red Moon Inn",
+    "imagePath": "assets/maps/red-moon-inn.jpg",
+    "mapImage": "assets/maps/red-moon-inn.jpg",
+    "gridSize": 1.0,
+    "spawnPoint": { "x": 400, "y": 500 },
+    "locations": [
+        {
+            "id": "rmi_entrance",
+            "name": "Main Entrance",
+            "coords": { "x": 400, "y": 500 },
+            "playerDescription": "The heavy oak doors of the Red Moon Inn swing open to reveal a warm, inviting common room. The smell of roasting meat and spilled ale fills your nostrils.",
+            "gmNotes": "The door has a simple lock (Average +20 to pick). At night, a bouncer named Bruno stands guard.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "entrance"
+        },
+        {
+            "id": "rmi_bar",
+            "name": "The Bar",
+            "coords": { "x": 300, "y": 300 },
+            "playerDescription": "A long wooden bar runs along the wall, behind which a portly innkeeper polishes tankards with a dirty rag. Rows of bottles and kegs line the shelves.",
+            "gmNotes": "The innkeeper, Otto Huber, knows all the local gossip. He's willing to share for the price of a few drinks.",
+            "hooks": [
+                "Otto has been receiving threatening letters demanding protection money. He's looking for someone to deal with the problem quietly."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "service"
+        },
+        {
+            "id": "rmi_fireplace",
+            "name": "Fireplace Corner",
+            "coords": { "x": 150, "y": 350 },
+            "playerDescription": "A roaring fire crackles in a large stone hearth. Comfortable chairs are arranged around it, occupied by regulars sharing stories.",
+            "gmNotes": "This is where the local old-timers gather. Perfect for gathering rumors about the city.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "seating"
+        },
+        {
+            "id": "rmi_private_room",
+            "name": "Private Dining Room",
+            "coords": { "x": 500, "y": 200 },
+            "playerDescription": "A curtained alcove leads to a private dining room with a single large table. The thick curtains muffle sound from the main room.",
+            "gmNotes": "This room is often used for clandestine meetings. The walls are thin enough to eavesdrop with a successful Perception test.",
+            "hooks": [
+                "A group of hooded figures meets here every Festag. They speak in hushed tones about 'the ritual.'"
+            ],
+            "image": "",
+            "music": "",
+            "tag": "private"
+        },
+        {
+            "id": "rmi_stairs",
+            "name": "Staircase",
+            "coords": { "x": 550, "y": 400 },
+            "playerDescription": "A creaky wooden staircase leads up to the guest rooms on the second floor.",
+            "gmNotes": "The third step from the top squeaks loudly - a natural alarm for anyone trying to sneak upstairs.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "passage"
+        },
+        {
+            "id": "rmi_kitchen",
+            "name": "Kitchen",
+            "coords": { "x": 100, "y": 150 },
+            "playerDescription": "Through a swinging door, you can glimpse a busy kitchen where cooks prepare meals and scullions wash dishes.",
+            "gmNotes": "The back door to the kitchen leads to an alley - a useful escape route.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "service"
+        }
+    ]
+}

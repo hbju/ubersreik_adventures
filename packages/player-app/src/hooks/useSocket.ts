@@ -46,6 +46,8 @@ export const useSocket = () => {
     const [tokens, setTokens] = useState<MapToken[]>([]);
     const [userPins, setUserPins] = useState<UserMapPin[]>([]);
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+    const [activeMapId, setActiveMapId] = useState<string>('ubersreik_city');
+    const [isMapTransitioning, setIsMapTransitioning] = useState(false);
 
 
     const connect = useCallback((ipAddress: string, username: string, password: string) => {
@@ -244,6 +246,19 @@ export const useSocket = () => {
                 console.log('[CLIENT] Chat history received:', message.payload);
                 setChatMessages(message.payload.messages);
             }
+
+            if (message.type === 'ACTIVE_MAP_UPDATE') {
+                console.log('[CLIENT] Active map update received:', message.payload);
+                setIsMapTransitioning(true);
+                setActiveMapId(message.payload.activeMapId);
+                // The transition state will be cleared by the component once the map image loads
+            }
+
+            if (message.type === 'MAP_SWITCH') {
+                console.log('[CLIENT] Map switch received:', message.payload);
+                setIsMapTransitioning(true);
+                setActiveMapId(message.payload.mapId);
+            }
         });
 
         setSocket(newSocket);
@@ -292,6 +307,9 @@ export const useSocket = () => {
         userPins,
         chatMessages,
         setChatMessages,
+        activeMapId,
+        isMapTransitioning,
+        setIsMapTransitioning,
         connect,
         disconnect,
         sendMessage

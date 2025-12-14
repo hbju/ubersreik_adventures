@@ -123,7 +123,7 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
     onClose
 }) => {
     const { t } = useTranslation();
-    const { skills: allSkills, talents, careers: careersData, conditions: conditionsData, gameData } = useGameData();
+    const { skills: allSkills, talents, careers: careersData, conditions: conditionsData, mapData: gameData } = useGameData();
     const [activeTab, setActiveTab] = useState<'stats' | 'talents' | 'inventory'>('stats');
 
     if (!character) {

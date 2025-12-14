@@ -11,7 +11,8 @@ interface MapTokenProps {
     isDraggable: boolean;
     isCurrentUser?: boolean;
     onMove?: (tokenId: string, x: number, y: number) => void;
-    scale?: number; 
+    scale?: number; // View scale for coordinate transformations
+    tokenScale?: number; // Visual scale for token size (from map's gridSize)
 }
 
 const MapToken: React.FC<MapTokenProps> = ({
@@ -25,6 +26,7 @@ const MapToken: React.FC<MapTokenProps> = ({
     isCurrentUser = false,
     onMove,
     scale = 1,
+    tokenScale = 1,
 }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -107,6 +109,7 @@ const MapToken: React.FC<MapTokenProps> = ({
                 top: `${localPosition.y}px`,
                 borderColor: color,
                 cursor: isDraggable ? (isDragging ? 'grabbing' : 'grab') : 'default',
+                transform: `translate(-50%, -50%) scale(${tokenScale})`,
             }}
             onMouseDown={handleMouseDown}
             title={characterName}

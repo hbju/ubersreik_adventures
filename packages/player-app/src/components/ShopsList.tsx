@@ -8,7 +8,7 @@ interface ShopsListProps {
 }
 
 export const ShopsList: React.FC<ShopsListProps> = ({ shops, onSelectShop }) => {
-    const { gameData, shops: shopDefinitions } = useGameData();
+    const { mapData, shops: shopDefinitions } = useGameData();
 
     // Get shop definition for a shop state
     const getShopDefinition = (shopId: string): ShopDefinition | undefined => {
@@ -17,7 +17,7 @@ export const ShopsList: React.FC<ShopsListProps> = ({ shops, onSelectShop }) => 
 
     // Get location name for a shop
     const getLocationName = (locationId: string): string => {
-        const location = gameData.locations.find((l: Location) => l.id === locationId);
+        const location = mapData.locations.find((l: Location) => l.id === locationId);
         return location?.name || locationId;
     };
 

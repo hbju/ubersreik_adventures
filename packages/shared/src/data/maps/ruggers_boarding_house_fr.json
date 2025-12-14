@@ -1,0 +1,32 @@
+{
+    "id": "ruggers_boarding_house",
+    "name": "Pension de Rugger",
+    "imagePath": "assets/maps/ruggers-boarding-house_map.png",
+    "mapImage": "assets/maps/ruggers-boarding-house_map.png",
+    "gridSize": 0.4,
+    "spawnPoint": { "x": 200, "y": 325 },
+    "locations": [
+        {
+            "id": "room_window",
+            "name": "Fenêtre de la Chambre",
+            "coords": { "x": 285, "y": 170 },
+            "playerDescription": "La fenêtre de la chambre où vous avez trouvé Cordelia et son ami, et attaqué Hannah.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "window"
+        },
+        {
+            "id": "houses_kitchen",
+            "name": "Cuisine de la Pension",
+            "coords": { "x": 260, "y": 170 },
+            "playerDescription": "La cuisine de la pension de Rugger, où travaille le cuisinier.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "room"
+        }
+    ]
+}

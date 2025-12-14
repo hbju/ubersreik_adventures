@@ -1,0 +1,32 @@
+{
+    "id": "ruggers_boarding_house",
+    "name": "Rugger's Boarding House",
+    "imagePath": "assets/maps/ruggers-boarding-house_map.png",
+    "mapImage": "assets/maps/ruggers-boarding-house_map.png",
+    "gridSize": 0.4,
+    "spawnPoint": { "x": 200, "y": 325 },
+    "locations": [
+        {
+            "id": "room_window",
+            "name": "Room's Window",
+            "coords": { "x": 285, "y": 170 },
+            "playerDescription": "The window of the room where you found Cordelia and his friend, and attacked Hannah.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "window"
+        },
+        {
+            "id": "houses_kitchen",
+            "name": "Boarding House's Kitchen",
+            "coords": { "x": 260, "y": 170 },
+            "playerDescription": "The kitchen of Rugger's Boarding House, where the cook works.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "room"
+        }
+    ]
+}

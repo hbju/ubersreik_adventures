@@ -39,7 +39,7 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
     onPlaceToken,
     onRemoveToken,
 }) => {
-    const { gameData } = useGameData();
+    const { mapData: gameData } = useGameData();
 
     const [searchTerm, setSearchTerm] = useState('');
     const [typeFilter, setTypeFilter] = useState<CharacterTypeFilter>('all');

@@ -1,0 +1,82 @@
+{
+    "id": "ubersreik_sewers",
+    "name": "Égouts d'Ubersreik",
+    "imagePath": "assets/maps/sewers.jpg",
+    "mapImage": "assets/maps/sewers.jpg",
+    "gridSize": 1.2,
+    "spawnPoint": { "x": 100, "y": 300 },
+    "locations": [
+        {
+            "id": "sewers_entrance",
+            "name": "Entrée des Égouts",
+            "coords": { "x": 100, "y": 300 },
+            "playerDescription": "Une grille en fer rouillé recouvre un passage sombre menant aux égouts. La puanteur est presque insupportable.",
+            "gmNotes": "Cette entrée est près du Quartier des Artisans. La grille peut être soulevée avec un test de Force Difficile (-10).",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "entrance"
+        },
+        {
+            "id": "sewers_main_junction",
+            "name": "Carrefour Principal",
+            "coords": { "x": 300, "y": 300 },
+            "playerDescription": "Plusieurs tunnels d'égout convergent à ce carrefour. Le bruit de l'eau courante résonne dans toutes les directions. D'étranges marques sont gravées sur les murs.",
+            "gmNotes": "Les marques sont des signes de piste Skaven. Un test de Connaissance (Skaven) Très Difficile (-30) réussi révèle qu'ils marquent des passages sûrs.",
+            "hooks": [
+                "Un homme désespéré nommé Matthias attend ici, affirmant que les Skaven ont enlevé sa fille. Il offre toutes ses économies pour sa libération."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "junction"
+        },
+        {
+            "id": "sewers_rat_nest",
+            "name": "Nid de Rats",
+            "coords": { "x": 450, "y": 200 },
+            "playerDescription": "Une chambre fétide remplie de débris et d'ordures. D'innombrables rats courent à travers les déchets, leurs yeux brillant à la lumière des torches.",
+            "gmNotes": "C'est le foyer d'un Rat Géant et de sa progéniture. Le combat ici risque d'attirer plus de vermine.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "danger"
+        },
+        {
+            "id": "sewers_hidden_shrine",
+            "name": "Sanctuaire Caché",
+            "coords": { "x": 500, "y": 400 },
+            "playerDescription": "Derrière un faux mur se trouve une petite chambre avec des idoles grossières et des offrandes de nourriture pourrie. L'air ici semble... mauvais.",
+            "gmNotes": "Un sanctuaire secret du Rat Cornu. Les offrandes suggèrent une activité Skaven récente. Il peut y avoir des indices précieux ici.",
+            "hooks": [
+                "Un journal en lambeaux laissé ici révèle l'emplacement d'une cache d'armes Skaven dans le Quartier des Artisans."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "secret"
+        },
+        {
+            "id": "sewers_collapsed_tunnel",
+            "name": "Tunnel Effondré",
+            "coords": { "x": 200, "y": 450 },
+            "playerDescription": "Le tunnel ici s'est partiellement effondré. Les décombres bloquent la majeure partie du passage, mais une petite ouverture pourrait permettre à une personne agile de se faufiler.",
+            "gmNotes": "Se faufiler nécessite un test d'Athlétisme ou de Contorsion Moyen (+20). En cas d'échec, subir 1d10+2 dégâts des pierres qui tombent.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "obstacle"
+        },
+        {
+            "id": "sewers_underground_river",
+            "name": "Rivière Souterraine",
+            "coords": { "x": 350, "y": 500 },
+            "playerDescription": "L'égout s'ouvre sur une caverne naturelle où coule une rivière souterraine. L'eau est sombre et rapide.",
+            "gmNotes": "Nager dans la rivière nécessite un test de Natation Difficile (-10). L'échec signifie être emporté en aval et subir 1d10 dégâts des impacts.",
+            "hooks": [
+                "D'étranges champignons lumineux poussent sur la rive opposée - des ingrédients alchimiques précieux valant 50 CO pour un apothicaire."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "natural"
+        }
+    ]
+}

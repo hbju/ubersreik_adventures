@@ -86,7 +86,7 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
     currentUserId,
     renderSecretsManager,
 }) => {
-    const { skills, careers, talents, gameData } = useGameData();
+    const { skills, careers, talents, mapData: gameData } = useGameData();
     const [activeTab, setActiveTab] = useState<TabType>('main');
 
     const career = careers.find((c: Career) => c.id === character.currentCareerId);

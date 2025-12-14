@@ -1,0 +1,82 @@
+{
+    "id": "ubersreik_sewers",
+    "name": "Ubersreik Sewers",
+    "imagePath": "assets/maps/sewers.jpg",
+    "mapImage": "assets/maps/sewers.jpg",
+    "gridSize": 1.2,
+    "spawnPoint": { "x": 100, "y": 300 },
+    "locations": [
+        {
+            "id": "sewers_entrance",
+            "name": "Sewer Entrance",
+            "coords": { "x": 100, "y": 300 },
+            "playerDescription": "A rusted iron grate covers a dark passage leading down into the sewers. The stench is almost unbearable.",
+            "gmNotes": "This entrance is near the Artisans' Quarter. The grate can be lifted with a Challenging (-10) Strength test.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "entrance"
+        },
+        {
+            "id": "sewers_main_junction",
+            "name": "Main Junction",
+            "coords": { "x": 300, "y": 300 },
+            "playerDescription": "Several sewer tunnels converge at this junction. The sound of running water echoes from all directions. Strange markings are scratched into the walls.",
+            "gmNotes": "The markings are Skaven trail signs. A successful Very Hard (-30) Lore (Skaven) test reveals they mark safe passages.",
+            "hooks": [
+                "A desperate man named Matthias waits here, claiming the Skaven took his daughter. He offers all his savings for her rescue."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "junction"
+        },
+        {
+            "id": "sewers_rat_nest",
+            "name": "Rat Nest",
+            "coords": { "x": 450, "y": 200 },
+            "playerDescription": "A foul chamber filled with debris and refuse. Countless rats scurry through the garbage, their eyes gleaming in the torchlight.",
+            "gmNotes": "This is home to a Giant Rat and its brood. Combat here risks attracting more vermin.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "danger"
+        },
+        {
+            "id": "sewers_hidden_shrine",
+            "name": "Hidden Shrine",
+            "coords": { "x": 500, "y": 400 },
+            "playerDescription": "Behind a false wall lies a small chamber with crude idols and offerings of rotting food. The air here feels... wrong.",
+            "gmNotes": "A secret shrine to the Horned Rat. The offerings suggest recent Skaven activity. There may be valuable clues here.",
+            "hooks": [
+                "A tattered journal left here reveals the location of a Skaven arms cache in the Artisans' Quarter."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "secret"
+        },
+        {
+            "id": "sewers_collapsed_tunnel",
+            "name": "Collapsed Tunnel",
+            "coords": { "x": 200, "y": 450 },
+            "playerDescription": "The tunnel here has partially collapsed. Rubble blocks most of the passage, but a small opening might allow a nimble person to squeeze through.",
+            "gmNotes": "Squeezing through requires an Average (+20) Athletics or Contortionist test. On failure, take 1d10+2 damage from falling stones.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "obstacle"
+        },
+        {
+            "id": "sewers_underground_river",
+            "name": "Underground River",
+            "coords": { "x": 350, "y": 500 },
+            "playerDescription": "The sewer opens into a natural cavern where an underground river flows. The water is dark and swift.",
+            "gmNotes": "Swimming the river is a Challenging (-10) Swim test. Failure means being swept downstream and taking 1d10 damage from impacts.",
+            "hooks": [
+                "Strange glowing fungi grow on the far bank - valuable alchemical ingredients worth 50 GC to an apothecary."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "natural"
+        }
+    ]
+}

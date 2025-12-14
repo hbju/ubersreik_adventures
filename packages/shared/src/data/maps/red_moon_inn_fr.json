@@ -1,0 +1,80 @@
+{
+    "id": "red_moon_inn",
+    "name": "Auberge de la Lune Rouge",
+    "imagePath": "assets/maps/red-moon-inn.jpg",
+    "mapImage": "assets/maps/red-moon-inn.jpg",
+    "gridSize": 1.0,
+    "spawnPoint": { "x": 400, "y": 500 },
+    "locations": [
+        {
+            "id": "rmi_entrance",
+            "name": "Entrée Principale",
+            "coords": { "x": 400, "y": 500 },
+            "playerDescription": "Les lourdes portes en chêne de l'Auberge de la Lune Rouge s'ouvrent pour révéler une salle commune chaleureuse et accueillante. L'odeur de viande rôtie et de bière renversée emplit vos narines.",
+            "gmNotes": "La porte a une serrure simple (Moyenne +20 pour crocheter). La nuit, un videur nommé Bruno monte la garde.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "entrance"
+        },
+        {
+            "id": "rmi_bar",
+            "name": "Le Bar",
+            "coords": { "x": 300, "y": 300 },
+            "playerDescription": "Un long bar en bois court le long du mur, derrière lequel un aubergiste corpulent polit des chopes avec un chiffon sale. Des rangées de bouteilles et de fûts garnissent les étagères.",
+            "gmNotes": "L'aubergiste, Otto Huber, connaît tous les potins locaux. Il est prêt à les partager pour le prix de quelques verres.",
+            "hooks": [
+                "Otto reçoit des lettres de menace exigeant de l'argent de protection. Il cherche quelqu'un pour régler le problème discrètement."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "service"
+        },
+        {
+            "id": "rmi_fireplace",
+            "name": "Coin Cheminée",
+            "coords": { "x": 150, "y": 350 },
+            "playerDescription": "Un feu rugissant crépite dans une grande cheminée en pierre. Des fauteuils confortables sont disposés autour, occupés par des habitués partageant des histoires.",
+            "gmNotes": "C'est là que se rassemblent les vieux habitants. Parfait pour recueillir des rumeurs sur la ville.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "seating"
+        },
+        {
+            "id": "rmi_private_room",
+            "name": "Salle à Manger Privée",
+            "coords": { "x": 500, "y": 200 },
+            "playerDescription": "Une alcôve à rideaux mène à une salle à manger privée avec une seule grande table. Les épais rideaux étouffent le bruit de la salle principale.",
+            "gmNotes": "Cette salle est souvent utilisée pour des réunions clandestines. Les murs sont assez fins pour écouter aux portes avec un test de Perception réussi.",
+            "hooks": [
+                "Un groupe de silhouettes encapuchonnées se réunit ici chaque Festag. Ils parlent à voix basse de 'le rituel'."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "private"
+        },
+        {
+            "id": "rmi_stairs",
+            "name": "Escalier",
+            "coords": { "x": 550, "y": 400 },
+            "playerDescription": "Un escalier en bois grinçant mène aux chambres d'hôtes au deuxième étage.",
+            "gmNotes": "La troisième marche à partir du haut grince bruyamment - une alarme naturelle pour quiconque essaie de se faufiler à l'étage.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "passage"
+        },
+        {
+            "id": "rmi_kitchen",
+            "name": "Cuisine",
+            "coords": { "x": 100, "y": 150 },
+            "playerDescription": "À travers une porte battante, vous pouvez apercevoir une cuisine animée où les cuisiniers préparent les repas et les marmitons lavent la vaisselle.",
+            "gmNotes": "La porte arrière de la cuisine donne sur une ruelle - une route d'évasion utile.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "service"
+        }
+    ]
+}

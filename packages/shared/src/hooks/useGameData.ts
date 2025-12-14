@@ -13,18 +13,47 @@ import armorEn from '../data/armor_en.json';
 import armorFr from '../data/armor_fr.json';
 import conditionsEn from '../data/conditions_en.json';
 import conditionsFr from '../data/conditions_fr.json';
-import gameDataEn from '../data/ubersreik_en.json';
-import gameDataFr from '../data/ubersreik_fr.json';
+// Map data imports
+import ubersreikMapEn from '../data/maps/ubersreik_en.json';
+import ubersreikMapFr from '../data/maps/ubersreik_fr.json';
+import redMoonInnEn from '../data/maps/red_moon_inn_en.json';
+import redMoonInnFr from '../data/maps/red_moon_inn_fr.json';
+import sewersEn from '../data/maps/sewers_en.json';
+import sewersFr from '../data/maps/sewers_fr.json';
+import ruggersBoardingHouseEn from '../data/maps/ruggers_boarding_house_en.json';
+import ruggersBoardingHouseFr from '../data/maps/ruggers_boarding_house_fr.json';
 import qualitiesEn from '../data/flaws_qualities_en.json';
 import qualitiesFr from '../data/flaws_qualities_fr.json';
 import shopsEn from '../data/shops_en.json';
 import shopsFr from '../data/shops_fr.json';
 import templatesEn from '../data/templates_en.json';
-import { SkillCharDefinition, Talent, Career, Item, Weapon, Armor, Condition, GameData, ItemQualityDefinition, ShopDefinition, CharacterTemplate } from '../types/wfrp.types';
+import { SkillCharDefinition, Talent, Career, Item, Weapon, Armor, Condition, MapData, ItemQualityDefinition, ShopDefinition, CharacterTemplate } from '../types/wfrp.types';
+
+const normalizeMapData = (data: MapData): MapData => ({
+    ...data,
+    imagePath: data.imagePath || data.mapImage || '',
+});
+
+const buildMapsRegistry = (maps: MapData[]): Record<string, MapData> => {
+    return maps.reduce((acc, map) => {
+        acc[map.id] = normalizeMapData(map);
+        return acc;
+    }, {} as Record<string, MapData>);
+};
 
 export const useGameData = () => {
     const { i18n } = useTranslation();
     const lang = i18n.language?.startsWith('fr') ? 'fr' : 'en';
+
+    const mapsEn: MapData[] = [
+        ubersreikMapEn as MapData,
+        ruggersBoardingHouseEn as MapData,
+    ];
+
+    const mapsFr: MapData[] = [
+        ubersreikMapFr as MapData,
+        ruggersBoardingHouseFr as MapData,
+    ];
 
     const data = {
         en: {
@@ -35,7 +64,9 @@ export const useGameData = () => {
             weapons: weaponsEn as Weapon[],
             armor: armorEn as Armor[],
             conditions: conditionsEn as Condition[],
-            gameData: gameDataEn as GameData,
+            mapData: normalizeMapData(ubersreikMapEn as MapData), // Default map for backward compatibility
+            maps: buildMapsRegistry(mapsEn), // All maps indexed by id
+            mapsList: mapsEn.map(normalizeMapData), // All maps as array
             qualities: qualitiesEn as ItemQualityDefinition[],
             shops: shopsEn as ShopDefinition[],
             defaultTemplates: templatesEn as CharacterTemplate[],
@@ -48,7 +79,9 @@ export const useGameData = () => {
             weapons: weaponsFr as Weapon[],
             armor: armorFr as Armor[],
             conditions: conditionsFr as Condition[],
-            gameData: gameDataFr as GameData,
+            mapData: normalizeMapData(ubersreikMapFr as MapData), // Default map for backward compatibility
+            maps: buildMapsRegistry(mapsFr), // All maps indexed by id
+            mapsList: mapsFr.map(normalizeMapData), // All maps as array
             qualities: qualitiesFr as ItemQualityDefinition[],
             shops: shopsFr as ShopDefinition[],
             defaultTemplates: templatesEn as CharacterTemplate[], // Use English templates for now

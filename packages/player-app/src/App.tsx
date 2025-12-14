@@ -46,13 +46,19 @@ import { JournalView } from './components/JournalView';
 import { CareerChangeModal } from './components/CareerChangeModal';
 import { ReputationDisplay } from './components/ReputationDisplay';
 import { QuestJournal } from './components/journal/QuestJournal';
+import { MapTransitionOverlay } from './components/MapTransitionOverlay';
 import { Quest, QuestUpdateMessage, QuestDeleteMessage } from '@wfrp/shared';
 
 
 const PlayerApp: React.FC = () => {
-    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, gameData } = useGameData();
+    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, mapData, maps, mapsList } = useGameData();
 
-    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, quests, tokens, userPins, chatMessages, setChatMessages, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, connect, disconnect, sendMessage } = useSocket();
+
+    const currentMapData = React.useMemo(() => {
+        return maps[activeMapId] || mapData;
+    }, [maps, activeMapId, mapData]);
+
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number } | null>(null);
@@ -414,7 +420,7 @@ const PlayerApp: React.FC = () => {
     };
 
     const handleGoToMapFromQuest = (locationId: string) => {
-        const location = gameData.locations.find(l => l.id === locationId);
+        const location = mapData.locations.find(l => l.id === locationId);
         if (location) {
             setCurrentView('map');
             handleLocationSelect(location);
@@ -436,6 +442,7 @@ const PlayerApp: React.FC = () => {
             id: `pin-${userId}-${Date.now()}`,
             playerId: userId,
             characterId: character.id,
+            mapId: activeMapId, // Associate pin with current map
             x,
             y,
             label,
@@ -446,7 +453,7 @@ const PlayerApp: React.FC = () => {
             payload: { pin }
         };
         sendMessage(message);
-    }, [userId, character, playerColor, sendMessage]);
+    }, [userId, character, playerColor, sendMessage, activeMapId]);
 
     const handleRemovePin = useCallback((pinId: string) => {
         const message: MapRemovePinMessage = {
@@ -763,7 +770,7 @@ const PlayerApp: React.FC = () => {
             {currentView === 'quests' && (
                 <QuestJournal
                     quests={quests}
-                    locations={gameData.locations}
+                    locations={mapData.locations}
                     mapPinStates={mapPinStates}
                     characterId={character?.id || ''}
                     onQuestUpdate={handleQuestUpdate}
@@ -783,29 +790,46 @@ const PlayerApp: React.FC = () => {
                     left: 0,
                     zIndex: 1000
                 }}>
-                    <div style={{ flex: 1 }}>
+                    <div style={{ flex: 1, position: 'relative' }}>
                         <MapView
-                            gameData={gameData}
+                            mapData={currentMapData}
                             mapPinStates={mapPinStates}
                             characters={[character]}
                             isGM={false}
                             viewState={mapViewState}
                             onViewStateChange={setMapViewState}
                             incomingPing={mapPing}
-                            tokens={tokens}
+                            tokens={tokens.filter(t => t.mapId === activeMapId)}
                             locationTags={locationTags}
-                            userPins={userPins.filter(p => p.playerId === userId)}
+                            userPins={userPins.filter(p => p.playerId === userId && p.mapId === activeMapId)}
                             onTokenMove={handleTokenMove}
                             onAddPin={handleAddPin}
                             onRemovePin={handleRemovePin}
                             onMapPing={handleMapPing}
                             playerColor={playerColor || undefined}
                             currentUserId={userId || undefined}
+                            gridScale={currentMapData.gridSize}
                         />
+                        {/* Current Map Indicator */}
+                        <div style={{
+                            position: 'absolute',
+                            top: '10px',
+                            left: '10px',
+                            padding: '8px 16px',
+                            background: 'rgba(26, 15, 10, 0.9)',
+                            border: '2px solid #8b4513',
+                            borderRadius: '6px',
+                            color: '#d4af37',
+                            fontWeight: 'bold',
+                            fontSize: '0.9rem',
+                            zIndex: 10,
+                        }}>
+                            🗺️ {currentMapData.name}
+                        </div>
                     </div>
                     <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
                         <DiscoveredLocationsList
-                            locations={gameData.locations}
+                            locations={currentMapData.locations}
                             mapPinStates={mapPinStates}
                             onLocationSelect={handleLocationSelect}
                             onFilterTagsChange={setLocationTags}
@@ -813,6 +837,13 @@ const PlayerApp: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            {/* Map Transition Overlay */}
+            <MapTransitionOverlay
+                isVisible={isMapTransitioning}
+                destinationName={currentMapData.name}
+                onTransitionComplete={() => setIsMapTransitioning(false)}
+            />
 
             {/* Reputation View */}
             {currentView === 'reputation' && character && (

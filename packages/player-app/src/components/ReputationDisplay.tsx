@@ -22,7 +22,7 @@ export const ReputationDisplay: React.FC<ReputationDisplayProps> = ({
   factions,
 }) => {
   const { t } = useTranslation();
-  const { gameData } = useGameData();
+  const { mapData } = useGameData();
 
   const getCharacterReputation = (factionId: string): ReputationEntry | null => {
     return character.reputations?.find(r => r.factionId === factionId) || null;
@@ -101,7 +101,7 @@ export const ReputationDisplay: React.FC<ReputationDisplayProps> = ({
           <div className={styles.factionNotes}>
             <b style={{color: "#d4af37"}}>Faction Leader :</b> {faction.head || t('reputations.unknown')}
             <br />
-            <b style={{color: "#d4af37"}}>Faction HQ :</b> {gameData.locations.find(loc => loc.id === faction.hq)?.name || t('reputations.unknown')}
+            <b style={{color: "#d4af37"}}>Faction HQ :</b> {mapData.locations.find(loc => loc.id === faction.hq)?.name || t('reputations.unknown')}
           </div>
         </div>
       </div>

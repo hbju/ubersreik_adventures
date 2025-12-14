@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './MapView.module.css';
-import { GameData, MapPinState, Character, Location, ShopState, MapToken as MapTokenType, UserMapPin } from '../types/wfrp.types';
+import { MapData, MapPinState, Character, Location, ShopState, MapToken as MapTokenType, UserMapPin } from '../types/wfrp.types';
 import MapDisplay from './MapDisplay';
 import LocationInfoPanel from './LocationInfoPanel';
 import MapToken from './MapToken';
@@ -21,7 +21,7 @@ interface MapPing {
 }
 
 interface MapViewProps {
-    gameData: GameData;
+    mapData: MapData;
     mapPinStates?: Record<string, MapPinState>;
     characters?: Character[];
     onTogglePinDiscovery?: (locationId: string, characterIds: string[]) => void;
@@ -40,6 +40,7 @@ interface MapViewProps {
     onTokenMove?: (tokenId: string, x: number, y: number) => void;
     onAddPin?: (x: number, y: number, label: string) => void;
     onRemovePin?: (pinId: string) => void;
+    gridScale?: number; // Scale factor for token sizes based on map's gridSize
 }
 
 interface ContextMenu {
@@ -49,14 +50,14 @@ interface ContextMenu {
 }
 
 interface MapContextMenu {
-    x: number; 
+    x: number;
     y: number;
-    mapX: number; 
+    mapX: number;
     mapY: number;
 }
 
 const MapView: React.FC<MapViewProps> = ({
-    gameData,
+    mapData,
     mapPinStates = {},
     characters = [],
     onTogglePinDiscovery,
@@ -75,6 +76,7 @@ const MapView: React.FC<MapViewProps> = ({
     onTokenMove,
     onAddPin,
     onRemovePin,
+    gridScale = 1,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -244,298 +246,300 @@ const MapView: React.FC<MapViewProps> = ({
         setPendingPinCoords(null);
     };
 
-const handlePinClick = (locationId: string) => {
-    selectedLocationId === locationId ? setSelectedLocationId(null) : setSelectedLocationId(locationId);
-};
-
-const handleClosePanel = () => {
-    setSelectedLocationId(null);
-};
-
-const selectedLocation = selectedLocationId ? gameData.locations.find(loc => loc.id === selectedLocationId) : null;
-
-const handlePinContextMenu = (event: React.MouseEvent, locationId: string) => {
-    if (!isGM) return; // Context menu only for GM
-    event.preventDefault();
-    setContextMenu({
-        locationId,
-        x: event.clientX,
-        y: event.clientY,
-    });
-};
-
-const handleToggleDiscoveryForAll = () => {
-    if (!contextMenu || !onTogglePinDiscovery) return;
-
-    const pinState = mapPinStates[contextMenu.locationId];
-    const allDiscovered = characters.every(char =>
-        pinState?.playerDiscovered.includes(char.id)
-    );
-
-    const characterIds: string[] = [];
-    characters.forEach(char => {
-        console.log('Toggling discovery for character:', char.name);
-        if (allDiscovered) {
-            // Remove all
-            if (pinState?.playerDiscovered.includes(char.id)) {
-                characterIds.push(char.id);
-            }
-        } else {
-            // Add all
-            if (!pinState?.playerDiscovered.includes(char.id)) {
-                characterIds.push(char.id);
-            }
-        }
-    });
-    onTogglePinDiscovery(contextMenu.locationId, characterIds);
-    setContextMenu(null);
-};
-
-const handleToggleDiscoveryForPlayer = (characterId: string) => {
-    if (!contextMenu || !onTogglePinDiscovery) return;
-    onTogglePinDiscovery(contextMenu.locationId, [characterId]);
-};
-
-// Close context menus when clicking elsewhere
-useEffect(() => {
-    const handleClick = () => {
-        if (contextMenu) {
-            setContextMenu(null);
-        }
-        if (mapContextMenu) {
-            setMapContextMenu(null);
-        }
+    const handlePinClick = (locationId: string) => {
+        selectedLocationId === locationId ? setSelectedLocationId(null) : setSelectedLocationId(locationId);
     };
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
-}, [contextMenu, mapContextMenu]);
 
-// Handle incoming pings from other players/GM
-useEffect(() => {
-    if (incomingPing) {
-        const newPingId = ++pingIdRef.current;
-        setActivePings(prev => [...prev, {
-            x: incomingPing.x,
-            y: incomingPing.y,
-            id: newPingId,
-            color: incomingPing.color || '#ffa200'
-        }]);
+    const handleClosePanel = () => {
+        setSelectedLocationId(null);
+    };
 
-        // Remove ping after animation (3 seconds)
-        setTimeout(() => {
-            setActivePings(prev => prev.filter(p => p.id !== newPingId));
-        }, 3000);
-    }
-}, [incomingPing]);
+    const selectedLocation = selectedLocationId ? mapData.locations.find(loc => loc.id === selectedLocationId) : null;
 
+    const handlePinContextMenu = (event: React.MouseEvent, locationId: string) => {
+        if (!isGM) return; // Context menu only for GM
+        event.preventDefault();
+        setContextMenu({
+            locationId,
+            x: event.clientX,
+            y: event.clientY,
+        });
+    };
 
+    const handleToggleDiscoveryForAll = () => {
+        if (!contextMenu || !onTogglePinDiscovery) return;
 
-useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-        container.addEventListener('wheel', handleWheel, { passive: false });
-        return () => container.removeEventListener('wheel', handleWheel);
-    }
-}, [handleWheel]);
+        const pinState = mapPinStates[contextMenu.locationId];
+        const allDiscovered = characters.every(char =>
+            pinState?.playerDiscovered.includes(char.id)
+        );
 
-useEffect(() => {
-    if (isPanning) {
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
-        return () => {
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
+        const characterIds: string[] = [];
+        characters.forEach(char => {
+            console.log('Toggling discovery for character:', char.name);
+            if (allDiscovered) {
+                // Remove all
+                if (pinState?.playerDiscovered.includes(char.id)) {
+                    characterIds.push(char.id);
+                }
+            } else {
+                // Add all
+                if (!pinState?.playerDiscovered.includes(char.id)) {
+                    characterIds.push(char.id);
+                }
+            }
+        });
+        onTogglePinDiscovery(contextMenu.locationId, characterIds);
+        setContextMenu(null);
+    };
+
+    const handleToggleDiscoveryForPlayer = (characterId: string) => {
+        if (!contextMenu || !onTogglePinDiscovery) return;
+        onTogglePinDiscovery(contextMenu.locationId, [characterId]);
+    };
+
+    // Close context menus when clicking elsewhere
+    useEffect(() => {
+        const handleClick = () => {
+            if (contextMenu) {
+                setContextMenu(null);
+            }
+            if (mapContextMenu) {
+                setMapContextMenu(null);
+            }
         };
-    }
-}, [isPanning, handleMouseMove, handleMouseUp]);
+        document.addEventListener('click', handleClick);
+        return () => document.removeEventListener('click', handleClick);
+    }, [contextMenu, mapContextMenu]);
 
-return (
-    <div>
-        <div
-            ref={containerRef}
-            className={styles.mapViewContainer}
-            onMouseDown={handleMouseDown}
-            onContextMenu={handleMapContextMenu}
-            style={{ cursor: isPanning ? 'grabbing' : 'grab' }}
-        >
+    // Handle incoming pings from other players/GM
+    useEffect(() => {
+        if (incomingPing) {
+            const newPingId = ++pingIdRef.current;
+            setActivePings(prev => [...prev, {
+                x: incomingPing.x,
+                y: incomingPing.y,
+                id: newPingId,
+                color: incomingPing.color || '#ffa200'
+            }]);
 
+            // Remove ping after animation (3 seconds)
+            setTimeout(() => {
+                setActivePings(prev => prev.filter(p => p.id !== newPingId));
+            }, 3000);
+        }
+    }, [incomingPing]);
+
+
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener('wheel', handleWheel, { passive: false });
+            return () => container.removeEventListener('wheel', handleWheel);
+        }
+    }, [handleWheel]);
+
+    useEffect(() => {
+        if (isPanning) {
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            return () => {
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+            };
+        }
+    }, [isPanning, handleMouseMove, handleMouseUp]);
+
+    return (
+        <div>
             <div
-                className={styles.mapContent}
-                style={{
-                    transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
-                    transformOrigin: '0 0',
-                }}
+                ref={containerRef}
+                className={styles.mapViewContainer}
+                onMouseDown={handleMouseDown}
+                onContextMenu={handleMapContextMenu}
+                style={{ cursor: isPanning ? 'grabbing' : 'grab' }}
             >
-                {/* Map Display with optional location pins */}
-                <MapDisplay
-                    gameData={gameData}
-                    locationTags={externalLocationTags}
-                    mapPinStates={mapPinStates}
-                    onPinContextMenu={handlePinContextMenu}
-                    isGM={isGM}
-                    onClickPin={handlePinClick}
-                />
 
-                {/* Render player tokens */}
-                {tokens.map(token => {
-                    const character = characters.find(c => c.id === token.characterId);
-                    if (!character) return null;
-
-                    const isOwnToken = character.userId === currentUserId;
-                    const isDraggable = isGM || isOwnToken;
-
-                    const tokenColor = playerColor;
-
-                    return (
-                        <MapToken
-                            key={token.id}
-                            id={token.id}
-                            x={token.x}
-                            y={token.y}
-                            characterName={character.name}
-                            color={tokenColor}
-                            isDraggable={isDraggable}
-                            isCurrentUser={isOwnToken}
-                            onMove={onTokenMove}
-                            scale={viewState.scale}
-                        />
-                    );
-                })}
-
-                {/* Render user's personal pins */}
-                {userPins
-                    .filter(pin => pin.playerId === currentUserId || isGM)
-                    .map(pin => (
-                        <UserPin
-                            key={pin.id}
-                            x={pin.x}
-                            y={pin.y}
-                            label={pin.label}
-                            color={pin.color || '#4a90d9'}
-                            onDelete={onRemovePin ? () => onRemovePin(pin.id) : undefined}
-                        />
-                    ))}
-
-                {/* Render active pings */}
-                {activePings.map(ping => (
-                    <div
-                        key={ping.id}
-                        className={styles.mapPing}
-                        style={{
-                            left: `${ping.x}px`,
-                            top: `${ping.y}px`,
-                            '--ping-color': ping.color || '#ffa200',
-                        } as React.CSSProperties}
-                    >
-                        <div className={styles.pingRing} style={{ borderColor: ping.color || '#ffa200' }} />
-                        <div className={styles.pingRing} style={{ animationDelay: '0.3s', borderColor: ping.color || '#ffa200' }} />
-                        <div className={styles.pingCenter} style={{ background: `radial-gradient(circle, ${ping.color || '#ffd700'} 0%, ${ping.color || '#ff8c00'} 100%)` }} />
-                    </div>
-                ))}
-            </div>
-        </div>
-
-
-        {selectedLocation && (
-            <LocationInfoPanel
-                location={selectedLocation}
-                onClose={handleClosePanel}
-                isGM={isGM}
-                shops={shops}
-                onViewWares={onViewWares}
-            />
-        )}
-
-        {/* GM Context Menu for Location Pins */}
-        {isGM && contextMenu && (
-            <div
-                className={styles.contextMenu}
-                style={{
-                    left: `${contextMenu.x}px`,
-                    top: `${contextMenu.y}px`,
-                }}
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className={styles.contextMenuHeader}>
-                    {gameData.locations.find(l => l.id === contextMenu.locationId)?.name}
-                </div>
-                <button
-                    className={styles.contextMenuItem}
-                    onClick={handleToggleDiscoveryForAll}
+                <div
+                    className={styles.mapContent}
+                    style={{
+                        transform: `translate(${viewState.offsetX}px, ${viewState.offsetY}px) scale(${viewState.scale})`,
+                        transformOrigin: '0 0',
+                    }}
                 >
-                    {mapPinStates[contextMenu.locationId]?.playerDiscovered.length === characters.length
-                        ? '🔒 Hide from All'
-                        : '🌟 Reveal to All'}
-                </button>
-                <div className={styles.contextMenuDivider} />
-                {characters.filter(character => character.userId != null).map((character) => {
-                    const isDiscovered = mapPinStates[contextMenu.locationId]?.playerDiscovered.includes(character.id);
-                    return (
-                        <button
-                            key={character.id}
-                            className={styles.contextMenuItem}
-                            onClick={() => handleToggleDiscoveryForPlayer(character.id)}
-                        >
-                            {isDiscovered ? '✓' : '○'} {character.name}
-                        </button>
-                    );
-                })}
-            </div>
-        )}
-
-        {/* Map Context Menu for Adding Pins */}
-        {mapContextMenu && (
-            <div
-                className={styles.contextMenu}
-                style={{
-                    left: `${mapContextMenu.x}px`,
-                    top: `${mapContextMenu.y}px`,
-                }}
-                onClick={(e) => e.stopPropagation()}
-            >
-                <button
-                    className={styles.contextMenuItem}
-                    onClick={handleAddPinClick}
-                >
-                    📌 Add Note
-                </button>
-            </div>
-        )}
-
-        {/* Add Pin Modal */}
-        {showPinModal && (
-            <div className={styles.modalOverlay} onClick={handleCancelAddPin}>
-                <div className={styles.pinModal} onClick={(e) => e.stopPropagation()}>
-                    <div className={styles.modalHeader}>Add Personal Note</div>
-                    <input
-                        type="text"
-                        className={styles.pinInput}
-                        placeholder="Enter note label..."
-                        value={pinLabelInput}
-                        onChange={(e) => setPinLabelInput(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (e.key === 'Enter') handleConfirmAddPin();
-                            if (e.key === 'Escape') handleCancelAddPin();
-                        }}
-                        autoFocus
+                    {/* Map Display with optional location pins */}
+                    <MapDisplay
+                        mapData={mapData}
+                        locationTags={externalLocationTags}
+                        mapPinStates={mapPinStates}
+                        onPinContextMenu={handlePinContextMenu}
+                        isGM={isGM}
+                        onClickPin={handlePinClick}
+                        scale={gridScale}
                     />
-                    <div className={styles.modalButtons}>
-                        <button className={styles.cancelButton} onClick={handleCancelAddPin}>
-                            Cancel
-                        </button>
-                        <button
-                            className={styles.confirmButton}
-                            onClick={handleConfirmAddPin}
-                            disabled={!pinLabelInput.trim()}
+
+                    {/* Render player tokens */}
+                    {tokens.map(token => {
+                        const character = characters.find(c => c.id === token.characterId);
+                        if (!character) return null;
+
+                        const isOwnToken = character.userId === currentUserId;
+                        const isDraggable = isGM || isOwnToken;
+
+                        const tokenColor = playerColor;
+
+                        return (
+                            <MapToken
+                                key={token.id}
+                                id={token.id}
+                                x={token.x}
+                                y={token.y}
+                                characterName={character.name}
+                                color={tokenColor}
+                                isDraggable={isDraggable}
+                                isCurrentUser={isOwnToken}
+                                onMove={onTokenMove}
+                                scale={viewState.scale}
+                                tokenScale={gridScale}
+                            />
+                        );
+                    })}
+
+                    {/* Render user's personal pins */}
+                    {userPins
+                        .filter(pin => pin.playerId === currentUserId || isGM)
+                        .map(pin => (
+                            <UserPin
+                                key={pin.id}
+                                x={pin.x}
+                                y={pin.y}
+                                label={pin.label}
+                                color={pin.color || '#4a90d9'}
+                                onDelete={onRemovePin ? () => onRemovePin(pin.id) : undefined}
+                            />
+                        ))}
+
+                    {/* Render active pings */}
+                    {activePings.map(ping => (
+                        <div
+                            key={ping.id}
+                            className={styles.mapPing}
+                            style={{
+                                left: `${ping.x}px`,
+                                top: `${ping.y}px`,
+                                '--ping-color': ping.color || '#ffa200',
+                            } as React.CSSProperties}
                         >
-                            Add Note
-                        </button>
-                    </div>
+                            <div className={styles.pingRing} style={{ borderColor: ping.color || '#ffa200' }} />
+                            <div className={styles.pingRing} style={{ animationDelay: '0.3s', borderColor: ping.color || '#ffa200' }} />
+                            <div className={styles.pingCenter} style={{ background: `radial-gradient(circle, ${ping.color || '#ffd700'} 0%, ${ping.color || '#ff8c00'} 100%)` }} />
+                        </div>
+                    ))}
                 </div>
             </div>
-        )}
-    </div>
-);
+
+
+            {selectedLocation && (
+                <LocationInfoPanel
+                    location={selectedLocation}
+                    onClose={handleClosePanel}
+                    isGM={isGM}
+                    shops={shops}
+                    onViewWares={onViewWares}
+                />
+            )}
+
+            {/* GM Context Menu for Location Pins */}
+            {isGM && contextMenu && (
+                <div
+                    className={styles.contextMenu}
+                    style={{
+                        left: `${contextMenu.x}px`,
+                        top: `${contextMenu.y}px`,
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className={styles.contextMenuHeader}>
+                        {mapData.locations.find(l => l.id === contextMenu.locationId)?.name}
+                    </div>
+                    <button
+                        className={styles.contextMenuItem}
+                        onClick={handleToggleDiscoveryForAll}
+                    >
+                        {mapPinStates[contextMenu.locationId]?.playerDiscovered.length === characters.length
+                            ? '🔒 Hide from All'
+                            : '🌟 Reveal to All'}
+                    </button>
+                    <div className={styles.contextMenuDivider} />
+                    {characters.filter(character => character.userId != null).map((character) => {
+                        const isDiscovered = mapPinStates[contextMenu.locationId]?.playerDiscovered.includes(character.id);
+                        return (
+                            <button
+                                key={character.id}
+                                className={styles.contextMenuItem}
+                                onClick={() => handleToggleDiscoveryForPlayer(character.id)}
+                            >
+                                {isDiscovered ? '✓' : '○'} {character.name}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+
+            {/* Map Context Menu for Adding Pins */}
+            {mapContextMenu && (
+                <div
+                    className={styles.contextMenu}
+                    style={{
+                        left: `${mapContextMenu.x}px`,
+                        top: `${mapContextMenu.y}px`,
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button
+                        className={styles.contextMenuItem}
+                        onClick={handleAddPinClick}
+                    >
+                        📌 Add Note
+                    </button>
+                </div>
+            )}
+
+            {/* Add Pin Modal */}
+            {showPinModal && (
+                <div className={styles.modalOverlay} onClick={handleCancelAddPin}>
+                    <div className={styles.pinModal} onClick={(e) => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>Add Personal Note</div>
+                        <input
+                            type="text"
+                            className={styles.pinInput}
+                            placeholder="Enter note label..."
+                            value={pinLabelInput}
+                            onChange={(e) => setPinLabelInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleConfirmAddPin();
+                                if (e.key === 'Escape') handleCancelAddPin();
+                            }}
+                            autoFocus
+                        />
+                        <div className={styles.modalButtons}>
+                            <button className={styles.cancelButton} onClick={handleCancelAddPin}>
+                                Cancel
+                            </button>
+                            <button
+                                className={styles.confirmButton}
+                                onClick={handleConfirmAddPin}
+                                disabled={!pinLabelInput.trim()}
+                            >
+                                Add Note
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default MapView;

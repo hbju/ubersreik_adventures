@@ -1,11 +1,11 @@
 import React, {useState, useRef, useEffect} from 'react';
 import styles from './MapDisplay.module.css';
-import { GameData, MapPinState, Character } from '@wfrp/shared';
+import { MapData, MapPinState, Character } from '@wfrp/shared';
 import LocationPin from './LocationPin';
 import LocationInfoPanel from './LocationInfoPanel';
 
 interface MapDisplayProps {
-  gameData: GameData;
+  mapData: MapData;
   mapPinStates?: Record<string, MapPinState>;
   characters?: Character[];
   onTogglePinDiscovery?: (locationId: string, characterId: string) => void;
@@ -19,7 +19,7 @@ interface ContextMenu {
 }
 
 const MapDisplay: React.FC<MapDisplayProps> = ({ 
-  gameData, 
+  mapData, 
   mapPinStates = {}, 
   characters = [],
   onTogglePinDiscovery,
@@ -101,7 +101,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
     return () => document.removeEventListener('click', handleClick);
   }, [contextMenu]);
 
-  const selectedLocation = selectedLocationId ? gameData.locations.find(loc => loc.id === selectedLocationId) : null;
+  const selectedLocation = selectedLocationId ? mapData.locations.find(loc => loc.id === selectedLocationId) : null;
 
   useEffect(() => {
     const calculateDimensions = () => {
@@ -150,13 +150,13 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
   return (
     <div className={styles.mapContainer} ref={containerRef}>
       <img
-        src={gameData.mapImage}
+        src={mapData.mapImage}
         alt="Map of Ubersreik"
         className={styles.mapImage}
         ref={imageRef}
       />
 
-      {gameData.locations.map((location) => {
+      {mapData.locations.map((location) => {
         const scaledX = location.coords.x * dimensions.scale + dimensions.offsetX;
         const scaledY = location.coords.y * dimensions.scale + dimensions.offsetY;
         const pinState = mapPinStates[location.id];
@@ -185,7 +185,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           <div className={styles.contextMenuHeader}>
-            {gameData.locations.find(l => l.id === contextMenu.locationId)?.name}
+            {mapData.locations.find(l => l.id === contextMenu.locationId)?.name}
           </div>
           <button
             className={styles.contextMenuItem}

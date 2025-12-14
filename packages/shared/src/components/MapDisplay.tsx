@@ -1,28 +1,30 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './MapDisplay.module.css';
-import { GameData, MapPinState, Character } from '../types/wfrp.types';
+import { MapData, MapPinState, Character } from '../types/wfrp.types';
 import LocationPin from './LocationPin';
 import LocationInfoPanel from './LocationInfoPanel';
 
 interface MapDisplayProps {
-    gameData: GameData;
+    mapData: MapData;
     mapPinStates?: Record<string, MapPinState>;
     locationTags?: string[];
     onPinContextMenu?: (event: React.MouseEvent, locationId: string) => void;
     isGM?: boolean;
     onClickPin?: (locationId: string) => void;
+    scale: number;
 }
 
 const MapDisplay: React.FC<MapDisplayProps> = ({
-    gameData,
+    mapData,
     mapPinStates = {},
     locationTags = [],
     onPinContextMenu,
     isGM = false,
     onClickPin,
+    scale=1,
 }) => {
     const [dimensions, setDimensions] = useState({
-        scale: 1,
+        scale: scale,
         offsetX: 0,
         offsetY: 0,
     });
@@ -78,13 +80,13 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
     return (
         <div className={styles.mapContainer} ref={containerRef}>
             <img
-                src={gameData.mapImage}
+                src={mapData.mapImage}
                 alt="Map of Ubersreik"
                 className={styles.mapImage}
                 ref={imageRef}
             />
 
-            {gameData.locations
+            {mapData.locations
                 .map((location) => {
                     // Use raw coordinates when internal scaling is disabled (MapView handles it)
                     const scaledX = location.coords.x 
@@ -104,6 +106,7 @@ const MapDisplay: React.FC<MapDisplayProps> = ({
                             locationName={location.name}
                             tag={location.tag}
                             isGm={isGM}
+                            scale={scale}
                         />
                     );
                 })}

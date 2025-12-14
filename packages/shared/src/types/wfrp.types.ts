@@ -336,10 +336,15 @@ export interface CharacterTemplate {
     tags?: string[]; // Default tags for generated characters
 }
 
-export interface GameData {
-    mapImage: string;
+export interface MapData {
+    id: string;
+    name: string;
+    imagePath: string; 
+    gridSize: number;  
+    spawnPoint?: { x: number; y: number };
     locations: Location[];
-    factions: Faction[]; // Global list of factions for the game
+    // Legacy support - mapImage is an alias for imagePath
+    mapImage?: string;
 }
 
 // ========================================
@@ -352,7 +357,8 @@ export interface GameData {
 export interface MapToken {
     id: string;
     characterId: string;
-    x: number; // % coordinates (0-100) of map image natural size
+    mapId: string;
+    x: number; 
     y: number;
 }
 
@@ -364,7 +370,8 @@ export interface UserMapPin {
     id: string;
     playerId: string; // Owner (user ID)
     characterId: string; // Character who created the pin
-    x: number; // Map coordinates
+    mapId: string;
+    x: number; 
     y: number;
     label: string;
     color?: string; // Optional custom color
@@ -468,6 +475,8 @@ export interface CampaignState {
     userPins: UserMapPin[]; // Personal pins created by players
     playerColors: Record<string, string>; // userId -> assigned color hex
     characterTemplates: CharacterTemplate[]; // NPC character templates
+    maps: Record<string, MapData>; // All available maps indexed by id
+    activeMapId: string; // Currently active map
     version: string;
     lastModified: string;
 }

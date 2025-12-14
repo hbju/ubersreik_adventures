@@ -1,4 +1,4 @@
-import { calculateEffectiveMaxWounds, DiscoveredLocationsList, getAvailableAdvancements, getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll } from '@wfrp/shared';
+import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -19,14 +19,17 @@ import { TemplateManager } from './components/TemplateManager';
 import MinionSheet from './components/MinionSheet';
 import { SecretsManager } from './components/SecretsManager';
 import { QuestJournalViewer } from './components/quests/QuestJournalViewer';
+import { MapSelector } from './components/map/MapSelector';
 
 import {
+    DiscoveredLocationsList, 
+    getAvailableAdvancements,
+    calculateEffectiveMaxWounds,
     Character,
     User,
     Combatant,
     Currency,
     generateRandomNpc,
-    createBlankCharacter,
     calculateCharacteristicBonus,
     PlayerCharacterSheet,
     AssignCharacterMessage,
@@ -43,9 +46,7 @@ import {
     Advantages,
     JournalEntry,
     MapPinState,
-    CareerChangeRequestMessage,
     CareerChangeResponseMessage,
-    Career,
     Location,
     Talent,
     TalentSelectionModal,
@@ -54,7 +55,6 @@ import {
     ShopInventoryState,
     ShopDefinition,
     Quest,
-    QuestSyncMessage
 } from '@wfrp/shared';
 import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp.types';
 
@@ -75,7 +75,17 @@ interface ServerStatusData {
 function App() {
     const { t } = useTranslation();
 
-    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, gameData } = useGameData();
+    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, mapData, maps, mapsList } = useGameData();
+
+    // Active map management
+    const [activeMapId, setActiveMapId] = useState<string>('ubersreik_city');
+    const activeMapIdRef = useRef(activeMapId);
+    const [showMapSelector, setShowMapSelector] = useState(false);
+
+    // Get the current active map data
+    const currentMapData = useMemo(() => {
+        return maps[activeMapId] || mapData;
+    }, [maps, activeMapId, mapData]);
 
     const calculateMaxWounds = (character: Character) => {
         return calculateEffectiveMaxWounds(character, talents);
@@ -213,6 +223,8 @@ function App() {
             tokens: tokens,
             userPins: userPins,
             playerColors: {},
+            maps: maps, // Include all maps
+            activeMapId: activeMapId, // Current active map
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
@@ -229,8 +241,9 @@ function App() {
         characterTemplatesRef.current = characterTemplates;
         tokensRef.current = tokens;
         userPinsRef.current = userPins;
+        activeMapIdRef.current = activeMapId;
 
-    }, [characters, users, journal, quests, mapPinStates, factions, shopInventory, customShopDefinitions, characterTemplates]);
+    }, [characters, users, journal, quests, mapPinStates, factions, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -330,14 +343,65 @@ function App() {
     const handlePlaceToken = (characterId: string) => {
         const character = charactersRef.current.find(c => c.id === characterId);
         if (!character) return;
+        
+        // Use spawn point if available, otherwise default position
+        const spawnPoint = currentMapData.spawnPoint || { x: 1000, y: 1000 };
+        
         const newToken: MapToken = {
             id: crypto.randomUUID(),
             characterId: character.id,
-            x: 1000,
-            y: 1000,
+            mapId: activeMapIdRef.current,
+            x: spawnPoint.x,
+            y: spawnPoint.y,
         };
         setTokens(prev => [...prev, newToken]);
     }
+
+    // Handle switching maps
+    const handleSwitchMap = (mapId: string, moveTokens: boolean) => {
+        const newMap = maps[mapId];
+        if (!newMap) return;
+
+        setActiveMapId(mapId);
+        activeMapIdRef.current = mapId;
+
+        // If moveTokens is true, update all player tokens to new map with spawn point
+        if (moveTokens && newMap.spawnPoint) {
+            const updatedTokens = tokensRef.current.map(token => ({
+                ...token,
+                mapId: mapId,
+                x: newMap.spawnPoint!.x,
+                y: newMap.spawnPoint!.y,
+            }));
+            setTokens(updatedTokens);
+
+            // Broadcast updated tokens
+            const tokenMessage: MapTokensUpdateMessage = {
+                type: 'MAP_TOKENS_UPDATE',
+                payload: { tokens: updatedTokens }
+            };
+            window.ipcRenderer.sendToAllPlayers(tokenMessage);
+        }
+
+        // Broadcast the map switch to all players
+        const mapSwitchMessage: ActiveMapUpdateMessage = {
+            type: 'ACTIVE_MAP_UPDATE',
+            payload: { 
+                activeMapId: mapId,
+                spawnPoint: newMap.spawnPoint
+            }
+        };
+        window.ipcRenderer.sendToAllPlayers(mapSwitchMessage);
+
+        addLogEntry('system', `Switched to map: ${newMap.name}`, 'logs.map_switched', { mapName: newMap.name });
+    };
+
+    // Handle setting spawn point via right-click
+    const handleSetSpawnPoint = (x: number, y: number) => {
+        // This would require updating the map data in the campaign state
+        // For now, we'll just log it - full implementation would need backend support
+        addLogEntry('system', `Spawn point set at (${Math.round(x)}, ${Math.round(y)}) for ${currentMapData.name}`, 'logs.spawn_point_set', { x: Math.round(x), y: Math.round(y), mapName: currentMapData.name });
+    };
 
     const handleTokenMove = (tokenId: string, x: number, y: number) => {
         setTokens(prev =>
@@ -702,7 +766,7 @@ function App() {
             } else {
                 // Create initial map pin states for all locations
                 const initialMapPinStates: Record<string, MapPinState> = {};
-                gameData.locations.forEach((location) => {
+                mapData.locations.forEach((location) => {
                     initialMapPinStates[location.id] = {
                         playerDiscovered: [],
                     };
@@ -1273,7 +1337,7 @@ function App() {
             }}>
                 <div style={{ flex: 1 }}>
                     <MapView
-                        gameData={gameData}
+                        mapData={currentMapData}
                         mapPinStates={mapPinStates}
                         characters={characters}
                         isGM={true}
@@ -1289,20 +1353,54 @@ function App() {
                         incomingPing={mapPing}
                         shops={shopInventory ? Object.values(shopInventory.shops) : []}
                         onViewWares={handleViewWares}
-                        tokens={tokens}
+                        tokens={tokens.filter(t => t.mapId === activeMapId)}
                         onTokenMove={handleTokenMove}
-                        userPins={userPins}
+                        userPins={userPins.filter(p => p.mapId === activeMapId)}
+                        gridScale={currentMapData.gridSize}
                     />
+                    {/* Map Selector Button */}
+                    <button
+                        onClick={() => setShowMapSelector(true)}
+                        style={{
+                            position: 'absolute',
+                            top: '10px',
+                            left: '25%',
+                            zIndex: 1020,
+                            padding: '8px 16px',
+                            background: 'linear-gradient(135deg, #4a3020 0%, #2a1810 100%)',
+                            border: '2px solid #8b4513',
+                            borderRadius: '6px',
+                            color: '#d4af37',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                        }}
+                        title={t('map.selector.openSelector', 'Open Map Selector')}
+                    >
+                        🗺️ {currentMapData.name}
+                    </button>
                 </div>
                 <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
                     <DiscoveredLocationsList
-                        locations={gameData.locations}
+                        locations={currentMapData.locations}
                         mapPinStates={mapPinStates}
                         onLocationSelect={handleLocationSelect}
                         isGm={true}
                     />
                 </div>
             </div>
+
+            {/* Map Selector Modal */}
+            {showMapSelector && (
+                <MapSelector
+                    maps={mapsList}
+                    activeMapId={activeMapId}
+                    onSwitchMap={handleSwitchMap}
+                    onClose={() => setShowMapSelector(false)}
+                />
+            )}
 
             {showCombatResolver && (<CombatResolver
                 characters={characters}
@@ -1401,7 +1499,7 @@ function App() {
             {showFactionManager && (
                 <FactionManager
                     factions={factions}
-                    locations={gameData.locations}
+                    locations={mapData.locations}
                     onUpdateFactions={(updatedFactions) => {
                         setFactions(updatedFactions);
                         const message: FactionUpdateMessage = {
@@ -1497,7 +1595,7 @@ function App() {
             {showQuestJournal && (
                 <QuestJournalViewer
                     quests={quests}
-                    locations={gameData.locations}
+                    locations={mapData.locations}
                     onClose={() => setShowQuestJournal(false)}
                 />
             )}
