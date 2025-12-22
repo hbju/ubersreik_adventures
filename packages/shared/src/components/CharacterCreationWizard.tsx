@@ -301,6 +301,11 @@ const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClo
         addXp(25, 'Random Attributes (Assigned)');
     };
 
+    const resetRollToAttributes = () => {
+        setAssignedAttributes({});
+        setUsedRollIndices(new Set());
+    };
+
     const assignRollToAttribute = (attr: string, rollIndex: number) => {
         const species = (speciesData as SpeciesDataItem[]).find(s => s.id === selectedSpeciesId);
         if (!species) return;
@@ -811,6 +816,7 @@ const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClo
                                     {draggedAttribute !== null && (
                                         <p>Click an attribute to assign value: <strong>{rolledAttributes[draggedAttribute]}</strong></p>
                                     )}
+                                    <button onClick={resetRollToAttributes} className={styles.button}>Reset Assignments</button>
                                     <div className={styles.attributeGrid}>
                                         <span>Char</span><span>Base</span><span>Roll</span><span>Total</span>
                                         {CHARACTERISTIC_KEYS.map((attr) => {
@@ -820,9 +826,11 @@ const CharacterCreationWizard: React.FC<CharacterCreationWizardProps> = ({ onClo
                                             return (
                                                 <React.Fragment key={attr}>
                                                     <label
-                                                        style={{ cursor: draggedAttribute !== null ? 'pointer' : 'default' }}
+                                                        style={{ cursor: draggedAttribute !== null && !usedRollIndices.has(draggedAttribute) && !assignedAttributes[attr] ? 'pointer' : 'default' }}
                                                         onClick={() => {
-                                                            if (draggedAttribute !== null) {
+                                                            if (draggedAttribute !== null && !usedRollIndices.has(draggedAttribute) && !assignedAttributes[attr]) {
+                                                                console.log('Assigning', rolledAttributes[draggedAttribute], 'to', attr);
+                                                                console.log("Dragged Attribute Index:", draggedAttribute, ", Used Indices:", Array.from(usedRollIndices));
                                                                 assignRollToAttribute(attr, draggedAttribute);
                                                                 setDraggedAttribute(null);
                                                             }

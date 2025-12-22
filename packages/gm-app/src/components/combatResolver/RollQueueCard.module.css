@@ -1,0 +1,150 @@
+.rollCard {
+    background: linear-gradient(to bottom, rgba(44, 24, 16, 0.95), rgba(30, 16, 10, 0.95));
+    border: 2px solid var(--color-gold-dark);
+    border-radius: 6px;
+    padding: 0.75rem;
+    min-width: 180px;
+    max-width: 200px;
+    position: relative;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.intent {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dismissBtn {
+    background: none;
+    border: none;
+    color: var(--color-gold-dark);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    opacity: 0.6;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+.dismissBtn:hover {
+    opacity: 1;
+    color: var(--color-seal-red);
+}
+
+.characterName {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--color-parchment);
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.skillInfo {
+    font-size: 0.85rem;
+    color: var(--color-gold);
+    margin-bottom: 0.5rem;
+}
+
+.skillName {
+    font-weight: 500;
+}
+
+.weaponName {
+    font-size: 0.75rem;
+    color: var(--color-gold-dark);
+    margin-left: 0.25rem;
+}
+
+.rollDetails {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--color-parchment-dark);
+    margin-bottom: 0.25rem;
+}
+
+.roll {
+    font-weight: 500;
+}
+
+.target {
+    opacity: 0.8;
+}
+
+.successLevel {
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 0.25rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.successLevel.success {
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.15);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.successLevel.failure {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.15);
+    border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.timestamp {
+    font-size: 0.7rem;
+    color: var(--color-ink-light);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.assignBtn {
+    flex: 1;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+}
+
+.attackerBtn {
+    background: linear-gradient(to bottom, #8c2727, #5a1a1a);
+    border-color: #b33333;
+    color: #f0c8c8;
+}
+
+.attackerBtn:hover {
+    background: linear-gradient(to bottom, #a82d2d, #6e2020);
+    box-shadow: 0 0 8px rgba(179, 51, 51, 0.5);
+}
+
+.defenderBtn {
+    background: linear-gradient(to bottom, #2d5a27, #1e3d1a);
+    border-color: #4a8c42;
+    color: #c8e6c5;
+}
+
+.defenderBtn:hover {
+    background: linear-gradient(to bottom, #3a7332, #2a5224);
+    box-shadow: 0 0 8px rgba(74, 140, 66, 0.5);
+}

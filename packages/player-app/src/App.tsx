@@ -36,6 +36,8 @@ import {
     ChatBox,
     ChatMessage,
     ChatSendMessage,
+    Weapon,
+    RollWithIntentMessage,
 } from '@wfrp/shared';
 
 import { TalentModal } from './components/TalentModal';
@@ -62,6 +64,18 @@ const PlayerApp: React.FC = () => {
     const [isAdvancementMode, setIsAdvancementMode] = useState(false);
     const [draftCharacter, setDraftCharacter] = useState<Character | null>(null);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number } | null>(null);
+    const [weaponRollInfo, setWeaponRollInfo] = useState<{
+        weapon: Weapon;
+        skillId: string;
+        skillName: string;
+        skillValue: number;
+        weaponDamage: number;
+    } | null>(null);
+    const [defenseRollInfo, setDefenseRollInfo] = useState<{
+        skillId: string;
+        skillName: string;
+        skillValue: number;
+    } | null>(null);
     const [createCharacterWizardOpen, setCreateCharacterWizardOpen] = useState(false);
     const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
@@ -95,6 +109,65 @@ const PlayerApp: React.FC = () => {
 
     const handleRoll = (result: TestResultMessage['payload']) => {
         sendMessage({ type: 'TEST_RESULT', payload: result });
+    };
+
+    // Handle weapon attack/defense roll click - opens the talent selection modal for the roll
+    const handleWeaponRoll = (weapon: Weapon, skillId: string, skillName: string, skillValue: number, weaponDamage: number) => {
+        setWeaponRollInfo({ weapon, skillId, skillName, skillValue, weaponDamage });
+    };
+
+    // Handle defense roll (Dodge) click
+    const handleDefendRoll = (skillId: string, skillName: string, skillValue: number) => {
+        setDefenseRollInfo({ skillId, skillName, skillValue });
+    };
+
+    // Handle the actual weapon roll after talent selection
+    const handleWeaponRollComplete = (result: TestResultMessage['payload']) => {
+        if (!character || !weaponRollInfo) return;
+        
+        const message: RollWithIntentMessage = {
+            type: 'ROLL_WITH_INTENT',
+            payload: {
+                characterId: character.id,
+                characterName: character.name,
+                skillId: weaponRollInfo.skillId,
+                skillName: result.testName,
+                targetNumber: result.targetNumber,
+                rollResult: result.rollResult,
+                successLevel: result.successLevel,
+                weaponId: weaponRollInfo.weapon.id,
+                weaponName: weaponRollInfo.weapon.name,
+                weaponDamage: weaponRollInfo.weaponDamage,
+                usedTalents: result.usedTalents,
+                fortuneSpent: result.fortuneSpent,
+                corruptionGained: result.corruptionGained,
+            }
+        };
+        sendMessage(message);
+        setWeaponRollInfo(null);
+    };
+
+    // Handle the actual defense roll after talent selection
+    const handleDefenseRollComplete = (result: TestResultMessage['payload']) => {
+        if (!character || !defenseRollInfo) return;
+        
+        const message: RollWithIntentMessage = {
+            type: 'ROLL_WITH_INTENT',
+            payload: {
+                characterId: character.id,
+                characterName: character.name,
+                skillId: defenseRollInfo.skillId,
+                skillName: result.testName,
+                targetNumber: result.targetNumber,
+                rollResult: result.rollResult,
+                successLevel: result.successLevel,
+                usedTalents: result.usedTalents,
+                fortuneSpent: result.fortuneSpent,
+                corruptionGained: result.corruptionGained,
+            }
+        };
+        sendMessage(message);
+        setDefenseRollInfo(null);
     };
 
     const handleSendChatMessage = (content: string) => {
@@ -716,6 +789,8 @@ const PlayerApp: React.FC = () => {
                                 onCharacterUpdate={handleEditModeCharacterUpdate}
                                 onSkillClick={handleSkillClick}
                                 onCharacteristicClick={handleCharacteristicClick}
+                                onWeaponRoll={handleWeaponRoll}
+                                onDefendRoll={handleDefendRoll}
                                 advancementMode={isAdvancementMode}
                                 onCharacteristicAdvance={handleAdvanceCharacteristic}
                                 onSkillAdvance={handleAdvanceSkill}
@@ -756,6 +831,34 @@ const PlayerApp: React.FC = () => {
                             corruptionMax={character.status.corruption.max}
                             onClose={() => setTestModalInfo(null)}
                             onRoll={handleRoll}
+                        />
+                    )}
+                    {/* Weapon Attack/Defense Roll Modal */}
+                    {weaponRollInfo && character && (
+                        <TalentSelectionModal
+                            character={character}
+                            testName={`${weaponRollInfo.weapon.name}`}
+                            testId={weaponRollInfo.skillId}
+                            baseTarget={weaponRollInfo.skillValue}
+                            fortunePoints={character.status.fortune.current}
+                            corruptionCurrent={character.status.corruption.current}
+                            corruptionMax={character.status.corruption.max}
+                            onClose={() => setWeaponRollInfo(null)}
+                            onRoll={handleWeaponRollComplete}
+                        />
+                    )}
+                    {/* Defense Roll Modal (Dodge) */}
+                    {defenseRollInfo && character && (
+                        <TalentSelectionModal
+                            character={character}
+                            testName={`Dodge (${defenseRollInfo.skillName})`}
+                            testId={defenseRollInfo.skillId}
+                            baseTarget={defenseRollInfo.skillValue}
+                            fortunePoints={character.status.fortune.current}
+                            corruptionCurrent={character.status.corruption.current}
+                            corruptionMax={character.status.corruption.max}
+                            onClose={() => setDefenseRollInfo(null)}
+                            onRoll={handleDefenseRollComplete}
                         />
                     )}
                 </>

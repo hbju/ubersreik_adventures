@@ -6,7 +6,10 @@ import {
     useGameData,
     EditableField,
     calculateCharacteristicValue,
-    QualityTooltip
+    calculateSkillValue,
+    QualityTooltip,
+    calculateCharacteristicBonus,
+    getTalentDamageBonus
 } from '@wfrp/shared';
 import './CombatTab.css';
 
@@ -14,6 +17,8 @@ interface CombatTabProps {
     character: Character;
     isEditMode: boolean;
     onCharacterUpdate: (updates: Partial<Character>) => void;
+    onWeaponRoll?: (weapon: Weapon, skillId: string, skillName: string, skillValue: number, weaponDamage: number) => void;
+    onDefendRoll?: (skillId: string, skillName: string, skillValue: number) => void;
 }
 
 interface ArmourPoints {
@@ -28,9 +33,11 @@ interface ArmourPoints {
 export const CombatTab: React.FC<CombatTabProps> = ({
     character,
     isEditMode,
-    onCharacterUpdate
+    onCharacterUpdate,
+    onWeaponRoll,
+    onDefendRoll
 }) => {
-    const { weapons: weaponsData, armor: armorData, conditions: conditionsData } = useGameData();
+    const { weapons: weaponsData, armor: armorData, conditions: conditionsData, skills: skillsData } = useGameData();
 
     // Calculate armour points per location from equipped armor
     const calculateArmourPoints = (): ArmourPoints => {
@@ -120,8 +127,178 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         return damage;
     };
 
+    // Get weapon damage as a number for combat calculations
+    const getWeaponDamageValue = (weapon: Weapon): number => {
+        const damage = weapon.damage;
+        if (!damage) return 0;
+        
+        if (damage.includes('SB')) {
+            const sb = calculateCharacteristicBonus(character.characteristics.s);
+            const match = damage.match(/SB([+-]?\d+)?/);
+            if (match) {
+                const modifier = match[1] ? parseInt(match[1]) : 0;
+                return sb + modifier;
+            }
+        }
+
+        return parseInt(damage) || 0;
+    };
+
+    // Determine if a weapon is ranged based on its group
+    const isRangedWeapon = (weapon: Weapon): boolean => {
+        const group = weapon.group?.toLowerCase() || '';
+        return group.includes('bow') ||
+            group.includes('crossbow') ||
+            group.includes('blackpowder') ||
+            group.includes('engineering') ||
+            group.includes('sling') ||
+            group.includes('thrown');
+    };
+
+    // Get the skill ID for a weapon
+    const getWeaponSkillId = (weapon: Weapon): string => {
+        const isRanged = isRangedWeapon(weapon);
+        if (isRanged) {
+            return 'ranged_' + (weapon.group?.toLowerCase() || 'basic');
+        }
+        const group = weapon.group?.toLowerCase() || 'basic';
+        return group === 'basic' ? 'melee' : 'melee_' + group;
+    };
+
+    // Get the skill value for a weapon (WS for melee, BS for ranged)
+    const getWeaponSkillValue = (weapon: Weapon): { skillId: string; skillName: string; value: number } => {
+        const isRanged = isRangedWeapon(weapon);
+        const skillId = getWeaponSkillId(weapon);
+        
+        // Try to find the specific skill
+        const skill = character.skills.find(s => s.id === skillId);
+        
+        if (skill) {
+            return { 
+                skillId: skill.id, 
+                skillName: skill.name, 
+                value: calculateSkillValue(skill, character) 
+            };
+        }
+
+        // Fall back to base characteristic
+        if (isRanged) {
+            return { 
+                skillId: 'bs', 
+                skillName: 'Ballistic Skill', 
+                value: calculateCharacteristicValue(character.characteristics.bs) 
+            };
+        }
+        return { 
+            skillId: 'ws', 
+            skillName: 'Weapon Skill', 
+            value: calculateCharacteristicValue(character.characteristics.ws) 
+        };
+    };
+
+    // Get Dodge skill value
+    const getDodgeSkill = (): { skillId: string; skillName: string; value: number } => {
+        const dodgeSkill = character.skills.find(s => s.id === 'dodge' || s.name?.toLowerCase() === 'dodge');
+        if (dodgeSkill) {
+            return {
+                skillId: dodgeSkill.id,
+                skillName: dodgeSkill.name,
+                value: calculateSkillValue(dodgeSkill, character)
+            };
+        }
+        // Return Ag if no dodge skill
+        return {
+            skillId: 'ag',
+            skillName: 'Agility',
+            value: calculateCharacteristicValue(character.characteristics.ag)
+        };
+    };
+
+    // Get best melee skill for parrying
+    const getBestMeleeSkill = (): { skillId: string; skillName: string; value: number, weapon: Weapon | null } => {
+        const equipedMeleeWeapons = equippedWeapons.filter(w => !isRangedWeapon(w));
+        if (equipedMeleeWeapons.length === 0) {
+            return {
+                skillId: 'ws',
+                skillName: 'Weapon Skill',
+                value: calculateCharacteristicValue(character.characteristics.ws),
+                weapon: null
+            };
+        }
+        const meleeSkills = equipedMeleeWeapons.map(weapon => {
+            const { skillId, skillName, value } = getWeaponSkillValue(weapon);
+            return { skillId, skillName, value };
+        });
+
+        let bestSkill = meleeSkills[0];
+        let bestValue = meleeSkills[0].value;
+        let bestWeapon = equipedMeleeWeapons[0];
+
+        meleeSkills.forEach((skill, index) => {
+            if (skill.value > bestValue) {
+                bestValue = skill.value;
+                bestSkill = skill;
+                bestWeapon = equipedMeleeWeapons[index];
+            }
+        });
+
+        return {
+            skillId: bestSkill.skillId,
+            skillName: bestSkill.skillName,
+            value: bestValue,
+            weapon: bestWeapon
+        };
+    };
+
+    // Handle weapon attack click
+    const handleWeaponAttack = (weapon: Weapon) => {
+        if (!onWeaponRoll) return;
+        const { skillId, skillName, value } = getWeaponSkillValue(weapon);
+        const damage = getWeaponDamageValue(weapon);
+        onWeaponRoll(weapon, skillId, skillName, value, damage);
+    };
+
+    // Handle dodge defense
+    const handleDodge = () => {
+        if (!onDefendRoll) return;
+        const { skillId, skillName, value } = getDodgeSkill();
+        onDefendRoll(skillId, skillName, value);
+    };
+
+    // Handle parry defense (using a weapon)
+    const handleParry = (weapon: Weapon) => {
+        if (!onWeaponRoll) return;
+        const { skillId, skillName, value } = getWeaponSkillValue(weapon);
+        onWeaponRoll(weapon, skillId, skillName, value, 0);
+    };
+
     return (
         <div className="combat-tab">
+            {/* Quick Defense Actions */}
+            {(onDefendRoll || onWeaponRoll) && (
+                <div className="combat-panel defense-actions-panel">
+                    <h3 className="panel-title">Quick Defense</h3>
+                    <div className="defense-actions">
+                        <button 
+                            className="defense-button dodge-button"
+                            onClick={handleDodge}
+                            title={`Dodge (${getDodgeSkill().value})`}
+                        >
+                            🏃 Dodge ({getDodgeSkill().value})
+                        </button>
+                        {equippedWeapons.filter(w => !isRangedWeapon(w)).length > 0 && (
+                            <button 
+                                className="defense-button parry-button"
+                                onClick={() => handleParry(getBestMeleeSkill().weapon!)}
+                                title={`Parry with ${getBestMeleeSkill().weapon?.name}`}
+                            >
+                                🛡️ Parry ({getBestMeleeSkill().value})
+                            </button>
+                        )}
+                    </div>
+                </div>
+            )}
+
             {/* Weapons Panel */}
             <div className="combat-panel weapons-panel">
                 <h3 className="panel-title">Weapons</h3>
@@ -129,13 +306,20 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                     {equippedWeapons.length === 0 ? (
                         <p className="empty-message">No weapons equipped</p>
                     ) : (
-                        equippedWeapons.map(weapon => (
+                        equippedWeapons.map(weapon => {
+                            const { skillName, value } = getWeaponSkillValue(weapon);
+                            const isRanged = isRangedWeapon(weapon);
+                            return (
                             <div key={weapon.id} className="weapon-card">
                                 <div className="weapon-header">
                                     <span className="weapon-name">{weapon.name}</span>
                                     <span className="weapon-group">{weapon.group}</span>
                                 </div>
                                 <div className="weapon-stats">
+                                    <div className="weapon-stat">
+                                        <span className="stat-label">Skill:</span>
+                                        <span className="stat-value">{skillName} ({value})</span>
+                                    </div>
                                     <div className="weapon-stat">
                                         <span className="stat-label">Damage:</span>
                                         <span className="stat-value">{getWeaponDamage(weapon)}</span>
@@ -158,8 +342,28 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                                         </span>
                                     </div>
                                 )}
+                                {onWeaponRoll && (
+                                    <div className="weapon-actions">
+                                        <button 
+                                            className="weapon-action-button attack-button"
+                                            onClick={() => handleWeaponAttack(weapon)}
+                                            title="Roll to Attack"
+                                        >
+                                            ⚔️ Attack
+                                        </button>
+                                        {!isRanged && (
+                                            <button 
+                                                className="weapon-action-button parry-button"
+                                                onClick={() => handleParry(weapon)}
+                                                title="Roll to Parry"
+                                            >
+                                                🛡️ Parry
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                        ))
+                        );})
                     )}
                 </div>
             </div>

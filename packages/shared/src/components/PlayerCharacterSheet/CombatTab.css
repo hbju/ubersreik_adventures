@@ -292,3 +292,100 @@
     text-align: center;
     padding: 1rem;
 }
+
+/* ========== DEFENSE ACTIONS PANEL ========== */
+.defense-actions-panel {
+    grid-column: 1 / -1;
+}
+
+.defense-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.defense-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid;
+}
+
+.defense-button.dodge-button {
+    background: linear-gradient(to bottom, #2d5a27, #1e3d1a);
+    border-color: #4a8c42;
+    color: #c8e6c5;
+}
+
+.defense-button.dodge-button:hover {
+    background: linear-gradient(to bottom, #3a7332, #2a5224);
+    box-shadow: 0 0 12px rgba(74, 140, 66, 0.5);
+    transform: translateY(-2px);
+}
+
+.defense-button.parry-button {
+    background: linear-gradient(to bottom, #4a3d8c, #362e66);
+    border-color: #6b5cb8;
+    color: #d4cef0;
+}
+
+.defense-button.parry-button:hover {
+    background: linear-gradient(to bottom, #5c4da8, #443980);
+    box-shadow: 0 0 12px rgba(107, 92, 184, 0.5);
+    transform: translateY(-2px);
+}
+
+/* ========== WEAPON ACTIONS ========== */
+.weapon-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(90, 61, 31, 0.5);
+}
+
+.weapon-action-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+}
+
+.weapon-action-button.attack-button {
+    background: linear-gradient(to bottom, #8c2727, #5a1a1a);
+    border-color: #b33333;
+    color: #f0c8c8;
+}
+
+.weapon-action-button.attack-button:hover {
+    background: linear-gradient(to bottom, #a82d2d, #6e2020);
+    box-shadow: 0 0 10px rgba(179, 51, 51, 0.5);
+    transform: translateY(-1px);
+}
+
+.weapon-action-button.parry-button {
+    background: linear-gradient(to bottom, #4a3d8c, #362e66);
+    border-color: #6b5cb8;
+    color: #d4cef0;
+}
+
+.weapon-action-button.parry-button:hover {
+    background: linear-gradient(to bottom, #5c4da8, #443980);
+    box-shadow: 0 0 10px rgba(107, 92, 184, 0.5);
+    transform: translateY(-1px);
+}

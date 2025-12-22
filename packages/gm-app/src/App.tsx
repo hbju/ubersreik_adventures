@@ -55,6 +55,7 @@ import {
     ShopInventoryState,
     ShopDefinition,
     Quest,
+    QueuedRoll,
 } from '@wfrp/shared';
 import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp.types';
 
@@ -177,6 +178,10 @@ function App() {
         quantity: number;
     } | null>(null);
     const [opposedTestResults, setOpposedTestResults] = useState<Map<string, OpposedTestResultMessage['payload']>>(new Map());
+    
+    // Roll Queue for async opposed tests
+    const [rollQueue, setRollQueue] = useState<QueuedRoll[]>([]);
+    const MAX_ROLL_QUEUE_SIZE = 10;
 
     const [showItemSelector, setShowItemSelector] = useState<string | null>(null);
     const [showTalentSelector, setShowTalentSelector] = useState<string | null>(null);
@@ -892,7 +897,7 @@ function App() {
                         },
                         corruption: {
                             ...character.status.corruption,
-                            current: Math.min(character.status.corruption.current + corruptionGained, character.status.corruption.max)
+                            current: character.status.corruption.current + corruptionGained
                         }
                     }
                 };
@@ -1039,6 +1044,63 @@ function App() {
                         }
                     }
                 }
+            }
+
+            // Handle Roll With Intent (async opposed tests / roll queue)
+            if (message.type === 'ROLL_WITH_INTENT') {
+                const { characterId, characterName, skillId, skillName, targetNumber, rollResult, successLevel, weaponId, weaponName, weaponDamage, usedTalents, fortuneSpent, corruptionGained } = message.payload;
+                
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (character) {
+                    // Update fortune/corruption on character
+                    const updatedCharacter: Character = {
+                        ...character,
+                        status: {
+                            ...character.status,
+                            fortune: {
+                                ...character.status.fortune,
+                                current: character.status.fortune.current - fortuneSpent
+                            },
+                            corruption: {
+                                ...character.status.corruption,
+                                current: character.status.corruption.current + corruptionGained
+                            }
+                        }
+                    };
+                    handleCharacterUpdate(updatedCharacter);
+                }
+
+                // Create queued roll
+                const queuedRoll: QueuedRoll = {
+                    id: crypto.randomUUID(),
+                    characterId,
+                    characterName,
+                    skillId,
+                    skillName,
+                    rollResult,
+                    targetNumber,
+                    successLevel,
+                    weaponId,
+                    weaponName,
+                    weaponDamage,
+                    timestamp: Date.now(),
+                    usedTalents,
+                    fortuneSpent,
+                    corruptionGained,
+                };
+
+                // Add to roll queue (limit size)
+                setRollQueue(prev => {
+                    const newQueue = [queuedRoll, ...prev];
+                    return newQueue.slice(0, MAX_ROLL_QUEUE_SIZE);
+                });
+
+                // Log the roll
+                const slSign = successLevel >= 0 ? '+' : '';
+                addLogEntry(
+                    'roll',
+                    `${characterName} Skill: ${skillName} - Rolled ${rollResult} vs ${targetNumber}. SL: ${slSign}${Math.round(successLevel)}${weaponName ? ` (${weaponName})` : ''}`
+                );
             }
 
             // Handle shop evaluate request
@@ -1406,6 +1468,10 @@ function App() {
                 characters={characters}
                 combatants={combatants}
                 opposedTestResults={opposedTestResults}
+                rollQueue={rollQueue}
+                onRemoveFromQueue={(rollId: string) => {
+                    setRollQueue(prev => prev.filter(r => r.id !== rollId));
+                }}
                 onClearOpposedTestResult={(testId: string, role: 'attacker' | 'defender') => {
                     setOpposedTestResults(prev => {
                         const newMap = new Map(prev);

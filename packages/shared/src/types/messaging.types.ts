@@ -99,6 +99,26 @@ export type ActiveMapUpdateMessage = BaseMessage<'ACTIVE_MAP_UPDATE', {
 
 export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage | ChatMessageBroadcast | ChatHistoryMessage | MapSwitchMessage | ActiveMapUpdateMessage;
 
+// == Roll Queue Types ==
+
+export interface QueuedRoll {
+    id: string;
+    characterId: string;
+    characterName: string;
+    skillId: string;
+    skillName: string;
+    rollResult: number;
+    targetNumber: number;
+    successLevel: number;
+    weaponId?: string;
+    weaponName?: string;
+    weaponDamage?: number;
+    timestamp: number;
+    usedTalents?: { name: string; rank: number; }[];
+    fortuneSpent: number;
+    corruptionGained: number;
+}
+
 // == Player to GM Messages ==
 
 export type LoginRequestMessage = BaseMessage<'LOGIN_REQUEST', { username: string; password: string }>;
@@ -116,6 +136,24 @@ export type TestResultMessage = BaseMessage<'TEST_RESULT', {
 export type CharacterCreateMessage = BaseMessage<'CHARACTER_CREATE', { character: Character, userId?: string }>;
 export type CharacterUpdateMessage = BaseMessage<'CHARACTER_UPDATE', { character: Character }>;
 export type RequestPurchaseMessage = BaseMessage<'REQUEST_PURCHASE', { item: Armor | Weapon | Item, characterId: string }>;
+
+// Roll with Intent - for the async roll queue system
+export type RollWithIntentMessage = BaseMessage<'ROLL_WITH_INTENT', {
+    characterId: string;
+    characterName: string;
+    skillId: string;
+    skillName: string;
+    targetNumber: number;
+    rollResult: number;
+    successLevel: number;
+    weaponId?: string;
+    weaponName?: string;
+    weaponDamage?: number;
+    usedTalents?: { name: string; rank: number; }[];
+    fortuneSpent: number;
+    corruptionGained: number;
+}>;
+
 export type OpposedTestResultMessage = BaseMessage<'OPPOSED_TEST_RESULT', {
     testId: string;
     role: 'attacker' | 'defender';
@@ -215,4 +253,4 @@ export type SetSpawnPointMessage = BaseMessage<'SET_SPAWN_POINT', {
     y: number;
 }>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage | TokenMoveMessage | MapAddPinMessage | MapRemovePinMessage | MapPingRequestMessage | ChatSendMessage | MapSwitchRequestMessage | SetSpawnPointMessage;
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage | TokenMoveMessage | MapAddPinMessage | MapRemovePinMessage | MapPingRequestMessage | ChatSendMessage | MapSwitchRequestMessage | SetSpawnPointMessage | RollWithIntentMessage;

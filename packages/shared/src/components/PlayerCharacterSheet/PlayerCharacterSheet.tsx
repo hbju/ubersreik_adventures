@@ -7,6 +7,7 @@ import {
     Location,
     Currency,
     User,
+    Weapon,
     useGameData,
     EditableField,
     calculateCharacteristicValue,
@@ -30,6 +31,9 @@ interface PlayerCharacterSheetProps {
     onCharacterUpdate: (updates: Partial<Character>) => void;
     onSkillClick?: (skillId: string, skillName: string, skillValue: number) => void;
     onCharacteristicClick?: (charId: string, charName: string, charValue: number) => void;
+    // Combat roll handlers for the Roll Queue system
+    onWeaponRoll?: (weapon: Weapon, skillId: string, skillName: string, skillValue: number, weaponDamage: number) => void;
+    onDefendRoll?: (skillId: string, skillName: string, skillValue: number) => void;
     advancementMode?: boolean;
     onCharacteristicAdvance?: (charKey: keyof Character['characteristics']) => void;
     onSkillAdvance?: (skillId: string) => void;
@@ -64,6 +68,8 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
     onCharacterUpdate,
     onSkillClick,
     onCharacteristicClick,
+    onWeaponRoll,
+    onDefendRoll,
     advancementMode = false,
     onCharacteristicAdvance,
     onSkillAdvance,
@@ -619,6 +625,8 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                         character={character}
                         isEditMode={isEditMode}
                         onCharacterUpdate={onCharacterUpdate}
+                        onWeaponRoll={onWeaponRoll}
+                        onDefendRoll={onDefendRoll}
                     />
                 )}
 

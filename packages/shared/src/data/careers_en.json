@@ -1150,7 +1150,7 @@
                 "skills_ids": [
                     "athletics",
                     "intimidate",
-                    "melee_fist",
+                    "melee_brawling",
                     "perception"
                 ],
                 "trappings": [
@@ -5262,7 +5262,7 @@
                     "intimidate",
                     "intuition",
                     "lore_torture",
-                    "melee_fist",
+                    "melee_brawling",
                     "perception"
                 ],
                 "trappings": [
