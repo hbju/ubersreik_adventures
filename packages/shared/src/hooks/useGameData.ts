@@ -16,12 +16,9 @@ import conditionsFr from '../data/conditions_fr.json';
 // Map data imports
 import ubersreikMapEn from '../data/maps/ubersreik_en.json';
 import ubersreikMapFr from '../data/maps/ubersreik_fr.json';
-import redMoonInnEn from '../data/maps/red_moon_inn_en.json';
-import redMoonInnFr from '../data/maps/red_moon_inn_fr.json';
-import sewersEn from '../data/maps/sewers_en.json';
-import sewersFr from '../data/maps/sewers_fr.json';
 import ruggersBoardingHouseEn from '../data/maps/ruggers_boarding_house_en.json';
 import ruggersBoardingHouseFr from '../data/maps/ruggers_boarding_house_fr.json';
+import hoodedManInnFr from '../data/maps/hooded-man-inn_fr.json';
 import qualitiesEn from '../data/flaws_qualities_en.json';
 import qualitiesFr from '../data/flaws_qualities_fr.json';
 import shopsEn from '../data/shops_en.json';
@@ -48,11 +45,13 @@ export const useGameData = () => {
     const mapsEn: MapData[] = [
         ubersreikMapEn as MapData,
         ruggersBoardingHouseEn as MapData,
+        hoodedManInnFr as MapData,
     ];
 
     const mapsFr: MapData[] = [
         ubersreikMapFr as MapData,
         ruggersBoardingHouseFr as MapData,
+        hoodedManInnFr as MapData,
     ];
 
     const data = {

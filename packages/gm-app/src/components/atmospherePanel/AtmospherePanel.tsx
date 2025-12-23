@@ -10,6 +10,7 @@ const musicTracks = [
             "assets/music/Geheimnisnacht.mp3",
             "assets/music/General Tavern B.wav",
             "assets/music/Outskirts of Novigrad.mp3",
+            "assets/music/Westworld.mp3",
         ]
     },
     {
@@ -18,6 +19,7 @@ const musicTracks = [
             "assets/music/Shady Rest.mp3",
             "assets/music/Around the Fire.mp3",
             "assets/music/Out of the Cold.mp3",
+            "assets/music/The Banquet.mp3",
         ]
     },
     {
@@ -34,6 +36,7 @@ const musicTracks = [
             'assets/music/Cello Atmos.wav',
             'assets/music/WHG_Chaos(ambient-01).ogg',
             "assets/music/WHG_Chaos(aux-01).wav",
+            "assets/music/Whispering Vaults.mp3",
         ]
     },
     {
@@ -41,6 +44,7 @@ const musicTracks = [
             "assets/music/Conspiracy Theme.wav",
             "assets/music/Silent Footsteps.mp3",
             "assets/music/Starting Zone.wav",
+            "assets/music/Chaos Is a Ladder.mp3",
         ]
     },
     {
@@ -49,6 +53,8 @@ const musicTracks = [
             "assets/music/Khadgar's Plan.mp3",
             "assets/music/Unbroken Road.mp3",
             "assets/music/Sigmar's Glorious Empire.mp3",
+            "assets/music/The Heart.mp3",
+            "assets/music/DARK SOULS.mp3",
         ]
     },
     {
@@ -60,6 +66,7 @@ const musicTracks = [
             "assets/music/Daring Strings.wav",
             "assets/music/Death or Sovngarde.mp3",
             "assets/music/Tooth and Claw.mp3",
+            "assets/music/Trobbio.mp3",
         ]
     },
     {

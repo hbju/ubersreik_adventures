@@ -53,9 +53,14 @@ export const useSocket = () => {
     const connect = useCallback((ipAddress: string, username: string, password: string) => {
         if (socket?.connected) return;
 
-        console.log(`[CLIENT] Attempting to connect to ws://${ipAddress}:3003`);
+        console.log(`[CLIENT] Attempting to connect to http://${ipAddress}:3003`);
         setAuthError(null);
-        const newSocket = io(`ws://${ipAddress}:3003`);
+        const newSocket = io(`http://${ipAddress}:3003`, {
+            timeout: 10000, // 10 second connection timeout
+            reconnectionAttempts: 3, // Try to reconnect 3 times
+            reconnectionDelay: 1000, // Wait 1 second between reconnection attempts
+            transports: ['websocket', 'polling'], // Allow fallback to polling
+        });
 
         newSocket.on('connect', () => {
             console.log(`[CLIENT] Connected successfully with ID: ${newSocket.id}`);
@@ -69,12 +74,32 @@ export const useSocket = () => {
             newSocket.emit('player-message', loginMessage);
         });
 
-        newSocket.on('disconnect', () => {
-            console.log('[CLIENT] Disconnected from server.');
+        newSocket.on('connect_error', (error) => {
+            console.log('[CLIENT] Connection error:', error.message);
+            setAuthError(`Connection failed: ${error.message}. Check if the GM server is running and the IP is correct.`);
+            setIsConnected(false);
+            setIsAuthenticated(false);
+            newSocket.disconnect();
+        });
+
+        newSocket.on('reconnect_failed', () => {
+            console.log('[CLIENT] Failed to reconnect after multiple attempts');
+            setAuthError('Unable to connect to server after multiple attempts. Please check your network connection.');
+            setIsConnected(false);
+        });
+
+        newSocket.on('disconnect', (reason) => {
+            console.log('[CLIENT] Disconnected from server. Reason:', reason);
             setIsConnected(false);
             setIsAuthenticated(false);
             setUsername(null);
             setCharacter(null);
+
+            if (reason === 'io server disconnect') {
+                setAuthError('Disconnected by server.');
+            } else if (reason === 'transport close') {
+                setAuthError('Lost connection to server.');
+            }
         });
 
         newSocket.on('gm-message', (message: ServerToClientMessage) => {

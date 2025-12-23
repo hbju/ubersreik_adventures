@@ -1,0 +1,186 @@
+{
+    "id": "hooded-man_inn",
+    "name": "L'Auberge de l'Homme Capuchonné",
+    "imagePath": "assets/maps/hooded-man-inn_map.png",
+    "mapImage": "assets/maps/hooded-man-inn_map.png",
+    "gridSize": 0.6,
+    "spawnPoint": { "x": 430, "y": 360 },
+    "locations": [
+        {
+            "id": "raft",
+            "name": "Radeau",
+            "coords": { "x": 555, "y": 685 },
+            "playerDescription": "Le bac est un vieux radeau en bois, attaché à la rive par une corde. Celle-ci a été coupée, rendant le bac inutilisable pour le moment.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "wharf",
+            "name": "Quai",
+            "coords": { "x": 483, "y": 650 },
+            "playerDescription": "Le quai en bois est usé par le temps et l'eau, mais il semble encore solide. Des cordes et des filets de pêche sont éparpillés autour.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "ferry_house",
+            "name": "Maison du Passeur",
+            "coords": { "x": 495, "y": 595 },
+            "playerDescription": "La maison du passeur est sans dessus dessous. Des meubles renversés et des objets éparpillés témoignent d'une lutte récente. Des traces de sang sont visibles sur le sol.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "bar_room",
+            "name": "Salle du Bar",
+            "coords": { "x": 587, "y": 255 },
+            "playerDescription": "Une grande salle avec des tables en bois robustes, un comptoir bien approvisionné et une cheminée crépitante.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "bar_area",
+            "name": "Zone du Bar",
+            "coords": { "x": 636, "y": 236 },
+            "playerDescription": "Derrière le comptoir, des étagères chargées de bouteilles de diverses boissons alcoolisées et non alcoolisées. De nombreux verres, sales et pas essuyés depuis un moment, traînent ici. Dans le coin, une trappe est visible au sol.",
+            "gmNotes": "La trappe mène aux caves de l'auberge.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "kitchen",
+            "name": "Cuisine",
+            "coords": { "x": 690, "y": 235 },
+            "playerDescription": "La cuisine a des surfaces de travail très basses, adaptées pour des êtres plus petits que des hommes. Des ustensiles de cuisine, des casseroles et des ingrédients sont éparpillés partout, témoignant d'une activité récente. Dans un coin, un seau d'eau sale repose près d'un évier.",
+            "gmNotes": "Le seau d'eau contient également du sang, que Fangor vient de nettoyer au sol.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "store",
+            "name": "Arrière-boutique",
+            "coords": { "x": 745, "y": 200 },
+            "playerDescription": "Une petite pièce remplie d'étagères chargées de provisions, de tonneaux et de caisses. Des sacs de farine, des herbes séchées et des conserves sont empilés ici. Une odeur de vieux bois et de nourriture stockée emplit l'air.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "stables",
+            "name": "Écuries",
+            "coords": { "x": 820, "y": 210 },
+            "playerDescription": "Une grande écurie en bois capable d'abriter plusieurs chevaux. Des selles et des harnais sont accrochés aux murs. Au fond, une échelle mène à une mezzanine où du foin est stocké.",
+            "gmNotes": "A l'ouverture, Animal Training +20 pour calmer les chevaux ou Charm Animal +0. Sinon, les chevaux s'emballent, Dodge +20 pour éviter d'être heurté ou d10 + 4 dommages.",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "coach_house",
+            "name":  "Remise des Diligences",
+            "coords": { "x": 803, "y": 345 },
+            "playerDescription": "Une grande remise en bois abritant une diligence, marquée du blason des Lignes Cartak d'Altdorf.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "bedroom_1",
+            "name": "Chambre 1",
+            "coords": { "x": 95, "y": 215 },
+            "playerDescription": "Une petite chambre avec un lit simple, une armoire et une table de chevet. Rien d'extraordinaire ici.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "bedroom_2",
+            "name": "Chambre 2",
+            "coords": { "x": 85, "y": 260 },
+            "playerDescription": "Une chambre modeste avec deux lits simples et une commode. Les draps sont tâchés de sang, et la literie est en désordre, éparpillée sur le sol. Des traces de sang mènent vers la porte, mais s'arrêtent brusquement à l'extérieur.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "bedroom_3",
+            "name": "Chambre 3",
+            "coords": { "x": 125, "y": 260 },
+            "playerDescription": "Une chambre avec un lit double, une armoire et une table de chevet. Rien d'inhabituel ici.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "landlords_room",
+            "name": "Chambre du Propriétaire",
+            "coords": { "x": 153, "y": 207 },
+            "playerDescription": "Une chambre spacieuse avec un grand lit, un bureau et une armoire. Sur le bureau, des papiers éparpillés. Rien d'autre d'inhabituel.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "common_room",
+            "name": "Salle Commune",
+            "coords": { "x": 207, "y": 220 },
+            "playerDescription": "La salle commune est clairement sale, la literie sur les lits a déjà été utilisée.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "hayloft",
+            "name": "Grenier à Foin",
+            "coords": { "x": 342, "y": 195 },
+            "playerDescription": "Un grenier rempli de foin, avec une odeur forte et sucrée. Le cadavre d'un jeune homme est présent ici, à peine dissimulé. Une trappe mène vers le toit, et l'échelle y menant est mouillée de sang.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "cellar",
+            "name": "Cave",
+            "coords": { "x": 1135, "y": 260 },
+            "playerDescription": "Une cave sombre et humide, avec des étagères en bois contenant des tonneaux de vin et des provisions. L'air est frais et sent la terre.",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        }
+    ]
+}

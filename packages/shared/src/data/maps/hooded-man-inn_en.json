@@ -1,0 +1,186 @@
+{
+    "id": "hooded-man_inn",
+    "name": "L'Auberge de l'Homme Capuchonné",
+    "imagePath": "assets/maps/hooded-man-inn_map.png",
+    "mapImage": "assets/maps/hooded-man-inn_map.png",
+    "gridSize": 0.6,
+    "spawnPoint": { "x": 430, "y": 360 },
+    "locations": [
+        {
+            "id": "raft",
+            "name": "Raft",
+            "coords": { "x": 555, "y": 685 },
+            "playerDescription": "A ",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 483, "y": 650 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 495, "y": 595 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 587, "y": 255 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 636, "y": 236 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 690, "y": 235 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 745, "y": 200 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 820, "y": 210 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 803, "y": 345 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 95, "y": 215 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 85, "y": 260 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 125, "y": 260 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 153, "y": 207 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 207, "y": 220 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 342, "y": 195 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        },
+        {
+            "id": "",
+            "name": "",
+            "coords": { "x": 1135, "y": 260 },
+            "playerDescription": "",
+            "gmNotes": "",
+            "hooks": [],
+            "image": "",
+            "music": "",
+            "tag": "misc"
+        }
+    ]
+}

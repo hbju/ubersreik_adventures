@@ -115,10 +115,10 @@ function getPlayerColor(userId: string): string {
 
     const usedColors = Object.values(campaignData.playerColors);
     const availableColor = PLAYER_COLORS.find(c => !usedColors.includes(c)) || PLAYER_COLORS[0];
-    
+
     campaignData.playerColors[userId] = availableColor;
     saveCampaignData(campaignData);
-    
+
     return availableColor;
 }
 
@@ -135,6 +135,16 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
     });
 
     console.log(`[SERVER] WebSocket server listening on ${localIp}:${PORT}`);
+
+    const nets = networkInterfaces();
+    console.log('[SERVER] Available network interfaces:');
+    for (const name of Object.keys(nets)) {
+        for (const net of nets[name]!) {
+            if (net.family === 'IPv4' && !net.internal) {
+                console.log(`[SERVER]   - ${name}: ${net.address}`);
+            }
+        }
+    }
 
     const updateStatus = () => {
         mainWindow.webContents.send('server-status-update', {
@@ -212,12 +222,12 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     content: `${displayName} connected.`,
                     isPrivate: false,
                 };
-                
+
                 chatHistory.push(systemMessage);
                 if (chatHistory.length > MAX_CHAT_HISTORY) {
                     chatHistory.shift();
                 }
-                
+
                 const broadcastMsg: ChatMessageBroadcast = {
                     type: 'CHAT_MESSAGE',
                     payload: { message: systemMessage }
@@ -225,7 +235,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 connectedClients.forEach((clientSocket) => {
                     clientSocket.emit('gm-message', broadcastMsg);
                 });
-                
+
                 mainWindow.webContents.send('chat-message', systemMessage);
 
                 return;
@@ -262,7 +272,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 }
 
                 const character = campaignData.characters[characterIndex];
-                
+
                 const userCharacter = getUserCharacter(userId);
                 if (!userCharacter || userCharacter.id !== characterId) {
                     console.log(`[SERVER] Player ${userId} does not own character ${characterId}`);
@@ -376,23 +386,23 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 const tokenIndex = campaignData.tokens.findIndex(t => t.id === tokenId);
                 if (tokenIndex >= 0) {
                     const token = campaignData.tokens[tokenIndex];
-                    
+
                     // Validate permission: player can only move their own token
                     const userCharacter = getUserCharacter(userId);
                     if (!userCharacter || token.characterId !== userCharacter.id) {
                         console.log(`[SERVER] Player ${userId} not authorized to move token ${tokenId}`);
                         return;
                     }
-                    
+
                     campaignData.tokens[tokenIndex] = { ...token, x, y };
                     saveCampaignData(campaignData);
-                    
+
                     // Broadcast token update to all players
                     broadcastTokens(campaignData.tokens);
-                    
+
                     // Notify GM app
                     mainWindow.webContents.send('data-updated', { tokens: campaignData.tokens });
-                    
+
                     console.log(`[SERVER] Token ${tokenId} moved to (${x}, ${y}) by user ${userId}`);
                 }
                 return;
@@ -494,7 +504,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 const playerColor = getPlayerColor(userId);
 
                 const parsed = parseChatCommand(content);
-                
+
                 let chatMessage: ChatMessage;
 
                 if (parsed.isRollCommand) {
@@ -578,7 +588,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 const session = activeSessions.get(userId);
                 const character = getUserCharacter(userId);
                 const displayName = character?.name || session?.username || 'A player';
-                
+
                 activeSessions.delete(userId);
                 socketToUserId.delete(socket.id);
                 console.log(`[AUTH] Session ended for user: ${userId}`);
@@ -592,12 +602,12 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     content: `${displayName} disconnected.`,
                     isPrivate: false,
                 };
-                
+
                 chatHistory.push(systemMessage);
                 if (chatHistory.length > MAX_CHAT_HISTORY) {
                     chatHistory.shift();
                 }
-                
+
                 const broadcastMsg: ChatMessageBroadcast = {
                     type: 'CHAT_MESSAGE',
                     payload: { message: systemMessage }
@@ -607,7 +617,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                         clientSocket.emit('gm-message', broadcastMsg);
                     }
                 });
-                
+
                 mainWindow.webContents.send('chat-message', systemMessage);
             }
 
@@ -759,7 +769,7 @@ function sendInitialStateToPlayer(socket: Socket, userId: string, characterId: s
     if (campaignData.quests && campaignData.quests.length > 0) {
         const questMessage: QuestSyncMessage = {
             type: 'QUEST_SYNC',
-            payload: { quests: campaignData.quests.filter(q => q.characterId === characterId)},
+            payload: { quests: campaignData.quests.filter(q => q.characterId === characterId) },
         };
         socket.emit('gm-message', questMessage);
         console.log(`[SERVER] Sent ${campaignData.quests.length} quests to player ${socket.id}`);
@@ -962,7 +972,7 @@ export function broadcastShopInventory(shopInventory: ShopInventoryState) {
 
         if (Object.keys(filteredShops).length > 0) {
             const shopsArray: ShopState[] = Object.values(filteredShops);
-            
+
             const message: ShopStateUpdateMessage = {
                 type: 'SHOP_STATE_UPDATE',
                 payload: {
