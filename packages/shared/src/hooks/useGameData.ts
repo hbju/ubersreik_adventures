@@ -19,6 +19,7 @@ import ubersreikMapFr from '../data/maps/ubersreik_fr.json';
 import ruggersBoardingHouseEn from '../data/maps/ruggers_boarding_house_en.json';
 import ruggersBoardingHouseFr from '../data/maps/ruggers_boarding_house_fr.json';
 import hoodedManInnFr from '../data/maps/hooded-man-inn_fr.json';
+import niederstadtHausFr from '../data/maps/niederstadt-haus_fr.json';
 import qualitiesEn from '../data/flaws_qualities_en.json';
 import qualitiesFr from '../data/flaws_qualities_fr.json';
 import shopsEn from '../data/shops_en.json';
@@ -46,12 +47,14 @@ export const useGameData = () => {
         ubersreikMapEn as MapData,
         ruggersBoardingHouseEn as MapData,
         hoodedManInnFr as MapData,
+        niederstadtHausFr as MapData,
     ];
 
     const mapsFr: MapData[] = [
         ubersreikMapFr as MapData,
         ruggersBoardingHouseFr as MapData,
         hoodedManInnFr as MapData,
+        niederstadtHausFr as MapData,
     ];
 
     const data = {

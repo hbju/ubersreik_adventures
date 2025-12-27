@@ -1067,6 +1067,23 @@
             "tag": "misc"
         },
         {
+            "id": "niederstadt_haus",
+            "name": "Niederstadt Haus",
+            "coords": {
+                "x": 2875,
+                "y": 2080
+            },
+            "playerDescription": "Un manoir à trois étages dans le Morgenseite, le Niederstadt Haus est l'ancienne résidence de la famille Niederstadt, une maison marchande prospère spécialisée dans le commerce de textiles et de vêtements. Ses propriétaires se sont enfuis avec une certaine précipitation lorsque Ubersreik a été envahie par les forces de l'Empereur, et le manoir est donc maintenant loué comme hôtel particulier. Le bâtiment est grand mais modeste pour la Colline, avec des quartiers spacieux pour les domestiques et des écuries séparées pouvant accueillir plusieurs chevaux et carrosses.",
+            "gmNotes": "Le Niederstadt Haus est actuellement loué par le seigneur Erich von Holzenauer, un noble mineur de la région de Tilée. Von Holzenauer est un homme d'une quarantaine d'années, mince et élégant, avec une moustache soigneusement taillée. Il est en ville pour superviser les affaires de sa famille, qui possèdent plusieurs boutiques et entreprises à Ubersreik. Il est accompagné de sa sœur cadette, Livia, une jeune femme vive et curieuse.",
+            "hooks": [
+                "",
+                ""
+            ],
+            "image": "assets/images/niederstadt_haus.png",
+            "music": "",
+            "tag": "misc"
+        },
+        {
             "id": "the_precinct",
             "name": "L'Enceinte",
             "coords": {

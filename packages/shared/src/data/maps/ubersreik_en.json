@@ -1066,6 +1066,23 @@
             "tag": "misc"
         },
         {
+            "id": "niederstadt_haus",
+            "name": "Niederstadt Haus",
+            "coords": {
+                "x": 2875,
+                "y": 2080
+            },
+            "playerDescription": "A three-story manor in the Morgenseite, the Niederstadt Haus is the former residence of the Niederstadt family, a prosperous merchant house specializing in textiles and clothing. Its owners fled in some haste when Ubersreik was invaded by the Emperor's forces, and the manor is now rented as a private residence. The building is large but modest for the Hill, with spacious quarters for servants and separate stables that can accommodate several horses and carriages.",
+            "gmNotes": "The Niederstadt Haus is currently rented by Lord Erich von Holzenauer, a minor noble from the Tilée region. Von Holzenauer is a man in his forties, slender and elegant, with a carefully trimmed mustache. He is in town to oversee his family's affairs, which own several shops and businesses in Ubersreik. He is accompanied by his younger sister, Livia, a lively and curious young woman.",
+            "hooks": [
+                "",
+                ""
+            ],
+            "image": "assets/images/niederstadt_haus.png",
+            "music": "",
+            "tag": "misc"
+        },
+        {
             "id": "the_precinct",
             "name": "The Precinct",
             "coords": {

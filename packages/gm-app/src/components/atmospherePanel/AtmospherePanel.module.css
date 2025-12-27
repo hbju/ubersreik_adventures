@@ -1,7 +1,7 @@
 .panel {
   position: fixed;
   bottom: 11vh;
-  right: 20px;
+  right: 24vw;
   background: var(--color-parchment);
   border: 3px solid var(--color-leather-dark);
   box-shadow: 
@@ -34,7 +34,7 @@
   color: var(--color-leather-dark);
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   cursor: pointer;
