@@ -7,7 +7,8 @@ import {
     useGameData,
     EditableField,
     calculateTotalEncumbrance,
-    calculateEffectiveMaxEncumbrance
+    calculateEffectiveMaxEncumbrance,
+    QualityTooltip
 } from '@wfrp/shared';
 import './InventoryTab.css';
 
@@ -276,6 +277,15 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                                         <div className="item-main">
                                             <span className="item-name">{weapon.name}</span>
                                             <span className="item-group">{weapon.group}</span>
+                                            <span className="item-qualities">
+                                                {weapon.qualities.map((quality, index) => (
+                                                    <QualityTooltip
+                                                        key={index}
+                                                        qualityString={quality}
+                                                        className="item-quality"
+                                                    />
+                                                ))}
+                                            </span>
                                         </div>
                                         <div className="item-details">
                                             <span className="item-enc">Enc: {weapon.enc}</span>
@@ -336,6 +346,15 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                                         <div className="item-main">
                                             <span className="item-name">{armor.name}</span>
                                             <span className="item-type">{armor.type}</span>
+                                            <span className="item-qualities">
+                                                {armor.qualities.map((quality, index) => (
+                                                    <QualityTooltip
+                                                        key={index}
+                                                        qualityString={quality}
+                                                        className="item-quality"
+                                                    />
+                                                ))}
+                                            </span>
                                         </div>
                                         <div className="item-details">
                                             <span className="item-ap">AP: {armor.ap}</span>

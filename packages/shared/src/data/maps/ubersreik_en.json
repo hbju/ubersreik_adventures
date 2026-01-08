@@ -140,6 +140,23 @@
             "tag": "district"
         },
         {
+            "id": "the_good_wife",
+            "name": "The Good Wife",
+            "coords": {
+                "x": 1107,
+                "y": 2106
+            },
+            "playerDescription": "The Good Wife is a well-known inn located in the heart of Wandiene Rookery. Despite its alluring name, the establishment is infamous for its rowdy clientele and dubious activities. The tavern's interior is dimly lit, with wooden beams and a large hearth that provides warmth on cold nights. The walls are bare, save for a few faded paintings and a mounted boar's head. The tavern serves as a gathering place for locals, mercenaries, and those seeking less lawful pleasures.",
+            "gmNotes": "The Good Wife is owned and operated by Helga 'The Axe' Krieger, a formidable woman known for her sharp wit and the hammer which never leaves her side, despite her nickname. She maintains order in her establishment through a combination of intimidation and respect, ensuring that the tavern remains a safe haven for her patrons despite its rough reputation. The tavern is also a regular meeting place for Guido Falck and his resistance fighters, who use it as a base of operations.",
+            "hooks": [
+                "Helga is looking for capable individuals to help her deal with a rival tavern owner who is encroaching on her territory. She offers a generous reward for anyone who can help her eliminate the competition, whether through negotiation or more direct means.",
+                "A mysterious stranger has been frequenting The Good Wife, asking questions about the resistance and its activities. Helga is concerned that this individual may be a spy for the Altdorf garrison and is willing to pay handsomely for anyone who can uncover the stranger's true intentions and deal with them accordingly."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "inn"
+        },
+        {
             "id": "the_worshipful_guild_of_cutlers",
             "name": "The Worshipful Guild of Cutlers",
             "coords": {
@@ -531,7 +548,7 @@
             "tag": "district"
         },
         {
-            "id": "Dunkelfeucht",
+            "id": "dunkelfeucht",
             "name": "Dunkelfeucht",
             "coords": {
                 "x": 1800,
@@ -961,7 +978,7 @@
             ],
             "image": "",
             "music": "",
-            "tag": "misc"
+            "tag": "inn"
         },
         {
             "id": "bruner_palace",

@@ -244,7 +244,7 @@
     color: #e8dcc4;
 }
 
-.movement-row {
+.movement-row, .corruption-row {
     grid-column: 1 / -1;
     display: flex;
     justify-content: center;

@@ -139,6 +139,24 @@
             "music": "",
             "tag": "district"
         },
+        
+        {
+            "id": "the_good_wife",
+            "name": "La Bonne Femme",
+            "coords": {
+                "x": 1107,
+                "y": 2106
+            },
+            "playerDescription": "La Bonne Femme est une auberge bien connue située au cœur de la Roukerie de Wandiene. Malgré son nom séduisant, l'établissement est célèbre pour sa clientèle turbulente et ses activités douteuses. L'intérieur de la taverne est faiblement éclairé, avec des poutres en bois et un grand foyer qui apporte de la chaleur lors des nuits froides. Les murs sont nus, à l'exception de quelques peintures fanées et d'une tête de sanglier montée. La taverne sert de lieu de rassemblement pour les locaux, les mercenaires et ceux en quête de plaisirs moins légaux.",
+            "gmNotes": "La Bonne Femme est détenue et exploitée par Helga 'La Hache' Krieger, une femme redoutable connue pour son esprit vif et le marteau qui ne la quitte jamais, malgré son surnom. Elle maintient l'ordre dans son établissement par une combinaison d'intimidation et de respect, assurant que la taverne reste un refuge sûr pour ses clients malgré sa réputation rugueuse. La taverne est également un lieu de rencontre régulier pour Guido Falck et ses combattants de la résistance, qui l'utilisent comme base d'opérations.",
+            "hooks": [
+                "Helga cherche des individus capables de l'aider à gérer un propriétaire de taverne rival qui empiète sur son territoire. Elle offre une généreuse récompense à quiconque peut l'aider à éliminer la concurrence, que ce soit par la négociation ou par des moyens plus directs.",
+                "Un étranger mystérieux fréquente La Bonne Femme, posant des questions sur la résistance et ses activités. Helga craint que cet individu ne soit un espion pour la garnison d'Altdorf et est prête à payer cher à quiconque peut découvrir les véritables intentions de l'étranger et s'en occuper en conséquence."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "inn"
+        },
         {
             "id": "the_worshipful_guild_of_cutlers",
             "name": "La Vénérable Guilde des Couteliers",
@@ -962,7 +980,7 @@
             ],
             "image": "",
             "music": "",
-            "tag": "misc"
+            "tag": "inn"
         },
         {
             "id": "bruner_palace",

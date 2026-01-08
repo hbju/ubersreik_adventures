@@ -492,6 +492,20 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                                         </div>
                                     </div>
                                 </div>
+                                <div className="status-row corruption-row">
+                                    <span className="status-label">Corruption</span>
+                                    <div className="status-values">
+                                        <EditableField
+                                            value={character.status.corruption.current}
+                                            onChange={(val) => handleStatusUpdate('corruption', val as number)}
+                                            isEditing={isEditMode}
+                                            type="number"
+                                            min={0}
+                                        />
+                                        <span>/</span>
+                                        <span>{character.status.corruption.max}</span>
+                                    </div>
+                                </div>
                                 <div className="status-row movement-row">
                                     <span className="status-label">Movement</span>
                                     <EditableField
