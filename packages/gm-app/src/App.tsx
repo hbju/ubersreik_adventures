@@ -20,6 +20,8 @@ import MinionSheet from './components/MinionSheet';
 import { SecretsManager } from './components/SecretsManager';
 import { QuestJournalViewer } from './components/quests/QuestJournalViewer';
 import { MapSelector } from './components/map/MapSelector';
+import { AudioProvider } from './context/AudioContext';
+import { AudioSidebar, LibraryManager } from './components/audio';
 
 import {
     DiscoveredLocationsList, 
@@ -62,6 +64,7 @@ import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
 import './App.css';
+import sidebarStyles from './components/SidebarToggle.module.css';
 import CareerManager from './components/CareerManager';
 import { useTranslation } from 'react-i18next';
 import i18n from './i18n';
@@ -133,6 +136,8 @@ function App() {
     const [showTemplateManager, setShowTemplateManager] = useState(false);
     const [showQuestJournal, setShowQuestJournal] = useState(false);
     const [showChat, setShowChat] = useState(false);
+    const [showLibraryManager, setShowLibraryManager] = useState(false);
+    const [leftSidebarMode, setLeftSidebarMode] = useState<'roster' | 'audio'>('roster');
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
     const [factions, setFactions] = useState<Faction[]>([]);
     const factionsRef = useRef(factions);
@@ -1329,6 +1334,7 @@ function App() {
     }
 
     return (
+        <AudioProvider>
         <div>
             <Footer
                 ip={serverInfo.ip}
@@ -1354,21 +1360,65 @@ function App() {
                 <GameLog entries={logEntries} onClose={() => setShowGameLog(false)} />
             )}
 
-            <CharacterRoster
-                characters={characters}
-                users={users}
-                openSheetIds={openSheetIds}
-                onToggleCharacterSheet={handleToggleCharacterSheet}
-                onAssignCharacter={handleAssignCharacterToUser}
-                onCreateCharacter={handleCreateCharacter}
-                onGenerateNpc={handleGenerateNPC}
-                onDeleteCharacter={handleDeleteCharacter}
-                onAddCombatant={handleAddCombatant}
-                onFightButtonClick={() => setShowCombatResolver(true)}
-                tokens={tokens}
-                onPlaceToken={handlePlaceToken}
-                onRemoveToken={(tokenId) => setTokens(prev => prev.filter(t => t.id !== tokenId))}
-            />
+            {/* Left Sidebar with Tab Toggle */}
+            <div className={sidebarStyles.sidebarContainer}>
+                {/* Tab Strip */}
+                <div className={sidebarStyles.sidebarTabs}>
+                    <button
+                        className={`${sidebarStyles.sidebarTab} ${leftSidebarMode === 'roster' ? sidebarStyles.active : ''}`}
+                        onClick={() => setLeftSidebarMode('roster')}
+                        title={t('sidebar.characterRoster', 'Character Roster')}
+                    >
+                        👥
+                        <span className={sidebarStyles.sidebarTabTooltip}>
+                            {t('sidebar.characterRoster', 'Character Roster')}
+                        </span>
+                    </button>
+                    <button
+                        className={`${sidebarStyles.sidebarTab} ${leftSidebarMode === 'audio' ? sidebarStyles.active : ''}`}
+                        onClick={() => setLeftSidebarMode('audio')}
+                        title={t('sidebar.audioControls', 'Audio Controls')}
+                    >
+                        🎵
+                        <span className={sidebarStyles.sidebarTabTooltip}>
+                            {t('sidebar.audioControls', 'Audio Controls')}
+                        </span>
+                    </button>
+                    <div className={sidebarStyles.sidebarDivider} />
+                    <button
+                        className={sidebarStyles.manageLibraryBtn}
+                        onClick={() => setShowLibraryManager(true)}
+                        title={t('audio.libraryManager', 'Music Library')}
+                    >
+                        ⚙️
+                    </button>
+                </div>
+
+                {/* Sidebar Content */}
+                <div className={sidebarStyles.sidebarContent}>
+                    {leftSidebarMode === 'roster' ? (
+                        <CharacterRoster
+                            characters={characters}
+                            users={users}
+                            openSheetIds={openSheetIds}
+                            onToggleCharacterSheet={handleToggleCharacterSheet}
+                            onAssignCharacter={handleAssignCharacterToUser}
+                            onCreateCharacter={handleCreateCharacter}
+                            onGenerateNpc={handleGenerateNPC}
+                            onDeleteCharacter={handleDeleteCharacter}
+                            onAddCombatant={handleAddCombatant}
+                            onFightButtonClick={() => setShowCombatResolver(true)}
+                            tokens={tokens}
+                            onPlaceToken={handlePlaceToken}
+                            onRemoveToken={(tokenId) => setTokens(prev => prev.filter(t => t.id !== tokenId))}
+                        />
+                    ) : (
+                        <AudioSidebar
+                            onOpenLibraryManager={() => setShowLibraryManager(true)}
+                        />
+                    )}
+                </div>
+            </div>
 
             {Object.keys(combatants).length > 0 && (
                 <InitiativeTracker
@@ -1961,7 +2011,13 @@ function App() {
                     onRoll={handleRoll}
                 />
             )}
+
+            {/* Music Library Manager */}
+            {showLibraryManager && (
+                <LibraryManager onClose={() => setShowLibraryManager(false)} />
+            )}
         </div>
+        </AudioProvider>
     );
 }
 

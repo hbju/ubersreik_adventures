@@ -124,6 +124,110 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         return ipcRenderer.invoke('backup-campaign')
     },
 
+    // ==================== Audio Manager API ====================
+
+    /**
+     * Get the audio library data
+     * @returns Promise resolving to the AudioLibrary
+     */
+    getAudioLibrary() {
+        return ipcRenderer.invoke('get-audio-library')
+    },
+
+    /**
+     * Save the audio library data
+     * @param data The audio library data to save
+     */
+    saveAudioLibrary(data: any) {
+        return ipcRenderer.send('save-audio-library', data)
+    },
+
+    /**
+     * Scan a directory for audio files
+     * @param dirPath The path to scan
+     * @returns Promise resolving to the scan result
+     */
+    scanAudioDirectory(dirPath: string) {
+        return ipcRenderer.invoke('scan-audio-directory', dirPath)
+    },
+
+    /**
+     * Open dialog to select audio directory
+     * @returns Promise resolving to the selected path or null
+     */
+    selectAudioDirectory() {
+        return ipcRenderer.invoke('select-audio-directory')
+    },
+
+    /**
+     * Update tags for a single track
+     * @param trackId The track ID
+     * @param tags The new tags array
+     * @returns Promise resolving to the updated track
+     */
+    updateTrackTags(trackId: string, tags: string[]) {
+        return ipcRenderer.invoke('update-track-tags', trackId, tags)
+    },
+
+    /**
+     * Bulk update tags for multiple tracks
+     * @param trackIds Array of track IDs to update
+     * @param tagsToAdd Tags to add to all tracks
+     * @param tagsToRemove Tags to remove from all tracks
+     * @returns Promise resolving to the updated tracks
+     */
+    bulkUpdateTrackTags(trackIds: string[], tagsToAdd: string[], tagsToRemove: string[] = []) {
+        return ipcRenderer.invoke('bulk-update-track-tags', trackIds, tagsToAdd, tagsToRemove)
+    },
+
+    /**
+     * Create a new playlist
+     * @param name Playlist name
+     * @param trackIds Initial track IDs
+     * @param description Optional description
+     * @returns Promise resolving to the created playlist
+     */
+    createPlaylist(name: string, trackIds: string[] = [], description?: string) {
+        return ipcRenderer.invoke('create-playlist', name, trackIds, description)
+    },
+
+    /**
+     * Update an existing playlist
+     * @param playlist The playlist to update
+     * @returns Promise resolving to the updated playlist
+     */
+    updatePlaylist(playlist: any) {
+        return ipcRenderer.invoke('update-playlist', playlist)
+    },
+
+    /**
+     * Delete a playlist
+     * @param playlistId The playlist ID to delete
+     * @returns Promise resolving to boolean success
+     */
+    deletePlaylist(playlistId: string) {
+        return ipcRenderer.invoke('delete-playlist', playlistId)
+    },
+
+    /**
+     * Delete a track from the library
+     * @param trackId The track ID to delete
+     * @returns Promise resolving to boolean success
+     */
+    deleteTrack(trackId: string) {
+        return ipcRenderer.invoke('delete-track', trackId)
+    },
+
+    /**
+     * Update track display name
+     * @param trackId The track ID
+     * @param displayName The new display name
+     * @returns Promise resolving to the updated track
+     */
+    updateTrackDisplayName(trackId: string, displayName: string) {
+        return ipcRenderer.invoke('update-track-display-name', trackId, displayName)
+    },
+
 
     // You can expose other APTs you need here.
     // ...

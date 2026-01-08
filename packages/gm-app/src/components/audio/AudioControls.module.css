@@ -1,0 +1,205 @@
+.audioControls {
+    padding: 12px;
+    background: linear-gradient(135deg, #2a1f15 0%, #1a1410 100%);
+    border-top: 2px solid #8b4513;
+}
+
+.nowPlaying {
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.nowPlayingLabel {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.trackInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.musicIcon {
+    font-size: 16px;
+}
+
+.trackName {
+    font-size: 14px;
+    font-weight: 600;
+    color: #d4af37;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+}
+
+.sourceInfo {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.noTrack {
+    font-size: 13px;
+    color: #666;
+    font-style: italic;
+}
+
+.progressSection {
+    margin-bottom: 12px;
+}
+
+.progressBar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.time {
+    font-size: 11px;
+    color: #888;
+    min-width: 40px;
+    text-align: center;
+    font-family: monospace;
+}
+
+.progressSlider {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    background: #3a3a3a;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.progressSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #d4af37;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.progressSlider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.progressSlider:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.transportControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.transportButton {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #3a3020;
+    color: #d4af37;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.transportButton:hover:not(:disabled) {
+    background: #4a4030;
+    transform: scale(1.05);
+}
+
+.transportButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.playButton {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #d4af37 0%, #b8942c 100%);
+    color: #1a1410;
+}
+
+.playButton:hover:not(:disabled) {
+    background: linear-gradient(135deg, #e4bf47 0%, #c8a43c 100%);
+}
+
+.stopButton {
+    background: #4a2020;
+}
+
+.stopButton:hover:not(:disabled) {
+    background: #5a3030;
+}
+
+.toggleButton.active {
+    background: #4a5030;
+    color: #9d9;
+}
+
+.volumeSection {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.volumeIcon {
+    font-size: 16px;
+    color: #888;
+    cursor: pointer;
+    min-width: 20px;
+    text-align: center;
+}
+
+.volumeIcon:hover {
+    color: #d4af37;
+}
+
+.volumeSlider {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    background: #3a3a3a;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    background: #888;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+.volumeSlider::-webkit-slider-thumb:hover {
+    background: #d4af37;
+    transform: scale(1.2);
+}
+
+.volumeValue {
+    font-size: 11px;
+    color: #666;
+    min-width: 32px;
+    text-align: right;
+    font-family: monospace;
+}

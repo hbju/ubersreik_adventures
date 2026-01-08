@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, protocol } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'node:http'
@@ -8,7 +8,20 @@ import os from 'node:os'
 import { update } from './update'
 import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates, broadcastChatMessage, getChatHistory } from './server'
 import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
-import { CampaignState, ChatMessage } from '@wfrp/shared'
+import { 
+    loadAudioLibrary, 
+    saveAudioLibrary, 
+    scanAudioDirectory, 
+    updateTrackTags, 
+    bulkUpdateTrackTags,
+    createPlaylist, 
+    updatePlaylist, 
+    deletePlaylist,
+    selectAudioDirectory,
+    deleteTrack,
+    updateTrackDisplayName
+} from './audioManager'
+import { CampaignState, ChatMessage, AudioLibrary, Playlist } from '@wfrp/shared'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -89,6 +102,12 @@ async function createWindow() {
 }
 
 app.whenReady().then(() => {
+  // Register protocol for serving local audio files
+  protocol.registerFileProtocol('audio', (request, callback) => {
+    const filePath = decodeURIComponent(request.url.replace('audio://', ''));
+    callback({ path: filePath });
+  });
+  
   // Load campaign data on startup
   clearCampaignCache();
   loadCampaignData();
@@ -213,3 +232,137 @@ ipcMain.handle('get-chat-history', async () => {
   }
 });
 
+// ==================== Audio Manager IPC Handlers ====================
+
+/**
+ * Get the audio library data
+ */
+ipcMain.handle('get-audio-library', async () => {
+  try {
+    return loadAudioLibrary();
+  } catch (error) {
+    console.error('Error loading audio library:', error);
+    throw error;
+  }
+});
+
+/**
+ * Save the audio library data
+ */
+ipcMain.on('save-audio-library', (_event, data: AudioLibrary) => {
+  try {
+    saveAudioLibrary(data);
+    console.log('Audio library saved successfully');
+  } catch (error) {
+    console.error('Error saving audio library:', error);
+  }
+});
+
+/**
+ * Scan a directory for audio files
+ */
+ipcMain.handle('scan-audio-directory', async (_event, dirPath: string) => {
+  try {
+    const result = scanAudioDirectory(dirPath);
+    return result;
+  } catch (error) {
+    console.error('Error scanning audio directory:', error);
+    throw error;
+  }
+});
+
+/**
+ * Open dialog to select audio directory
+ */
+ipcMain.handle('select-audio-directory', async () => {
+  try {
+    return await selectAudioDirectory();
+  } catch (error) {
+    console.error('Error selecting audio directory:', error);
+    throw error;
+  }
+});
+
+/**
+ * Update tags for a single track
+ */
+ipcMain.handle('update-track-tags', async (_event, trackId: string, tags: string[]) => {
+  try {
+    return updateTrackTags(trackId, tags);
+  } catch (error) {
+    console.error('Error updating track tags:', error);
+    throw error;
+  }
+});
+
+/**
+ * Bulk update tags for multiple tracks
+ */
+ipcMain.handle('bulk-update-track-tags', async (_event, trackIds: string[], tagsToAdd: string[], tagsToRemove: string[]) => {
+  try {
+    return bulkUpdateTrackTags(trackIds, tagsToAdd, tagsToRemove);
+  } catch (error) {
+    console.error('Error bulk updating track tags:', error);
+    throw error;
+  }
+});
+
+/**
+ * Create a new playlist
+ */
+ipcMain.handle('create-playlist', async (_event, name: string, trackIds: string[], description?: string) => {
+  try {
+    return createPlaylist(name, trackIds, description);
+  } catch (error) {
+    console.error('Error creating playlist:', error);
+    throw error;
+  }
+});
+
+/**
+ * Update an existing playlist
+ */
+ipcMain.handle('update-playlist', async (_event, playlist: Playlist) => {
+  try {
+    return updatePlaylist(playlist);
+  } catch (error) {
+    console.error('Error updating playlist:', error);
+    throw error;
+  }
+});
+
+/**
+ * Delete a playlist
+ */
+ipcMain.handle('delete-playlist', async (_event, playlistId: string) => {
+  try {
+    return deletePlaylist(playlistId);
+  } catch (error) {
+    console.error('Error deleting playlist:', error);
+    throw error;
+  }
+});
+
+/**
+ * Delete a track from the library
+ */
+ipcMain.handle('delete-track', async (_event, trackId: string) => {
+  try {
+    return deleteTrack(trackId);
+  } catch (error) {
+    console.error('Error deleting track:', error);
+    throw error;
+  }
+});
+
+/**
+ * Update track display name
+ */
+ipcMain.handle('update-track-display-name', async (_event, trackId: string, displayName: string) => {
+  try {
+    return updateTrackDisplayName(trackId, displayName);
+  } catch (error) {
+    console.error('Error updating track display name:', error);
+    throw error;
+  }
+});

@@ -28,6 +28,7 @@ export * from './i18n';
 export * from './types/wfrp.types';
 export * from './types/messaging.types';
 export * from './types/chat.types';
+export * from './types/audio.types';
 export * from './utils/advancement';
 export * from './utils/generator';
 export * from './utils/inventory';
