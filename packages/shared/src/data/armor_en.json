@@ -1,304 +1,170 @@
 [
-    {
-        "id": "armour_soft_kit",
-        "name": "Soft Kit",
-        "type": "Soft Kits",
-        "price": "18 S",
-        "enc": 1,
-        "penalty": "",
-        "locations": [
-            "Arms",
-            "Body",
-            "Legs"
-        ],
-        "ap": 0,
-        "qualities": [],
-        "availability": "Scarce"
-    },
-    {
-        "id": "armour_reinforced_soft_kit",
-        "name": "Reinforced Soft Kit",
-        "type": "Soft Kits",
-        "price": "2 GC",
-        "enc": 1,
-        "penalty": "",
-        "locations": [
-            "Arms",
-            "Body",
-            "Legs"
-        ],
-        "ap": 1,
-        "qualities": [
-            "reinforced",
-            "partial"
-        ],
-        "availability": "Scarce"
-    },
-    {
-        "id": "armour_padding",
-        "name": "Padding",
-        "type": "Soft Kits",
-        "price": "12 S",
-        "enc": 0,
-        "penalty": "",
-        "locations": [
-            "Head"
-        ],
-        "ap": 0,
-        "qualities": [],
-        "availability": "scarce"
-    },
-    {
-        "id": "armour_aventail",
-        "name": "Aventail",
-        "type": "Soft Kits",
-        "price": "12 S",
-        "enc": 1,
-        "penalty": "",
-        "locations": [
-            "Head"
-        ],
-        "ap": 1,
-        "qualities": [
-            "partial",
-            "reinforced"
-        ],
-        "availability": "Scarce"
-    },
-    {
-        "id": "armour_leather_jack",
-        "name": "Leather Jack",
-        "type": "Boiled Leather",
-        "price": "12 S",
-        "enc": 1,
-        "penalty": "",
-        "locations": [
-            "Arms",
-            "Body"
-        ],
-        "ap": 1,
-        "qualities": [],
-        "availability": "Common"
-    },
-    {
-        "id": "armour_leather_jerkin",
-        "name": "Leather Jerkin",
-        "type": "Boiled Leather",
-        "price": "10 S",
-        "enc": 1,
-        "penalty": "",
-        "locations": [
-            "Body"
-        ],
-        "ap": 1,
-        "qualities": [],
-        "availability": "Common"
-    },
-    {
-        "id": "armour_leather_leggings",
-        "name": "Leather Leggings",
-        "type": "Boiled Leather",
-        "price": "14 S",
-        "enc": 1,
-        "penalty": "",
-        "locations": [
-            "Legs"
-        ],
-        "ap": 1,
-        "qualities": [],
-        "availability": "Common"
-    },
-    {
-        "id": "armour_leather_skullcap",
-        "name": "Leather Skullcap",
-        "type": "Boiled Leather",
-        "price": "8 S",
-        "enc": 0,
-        "penalty": "",
-        "locations": [
-            "Head"
-        ],
-        "ap": 1,
-        "qualities": [],
-        "availability": "Common"
-    },
-    {
-        "id": "armour_brigandine_jack",
-        "name": "Brigandine Jack",
-        "type": "Brigandine",
-        "price": "3 GC",
-        "enc": 3,
-        "penalty": "",
-        "locations": [
-            "Body"
-        ],
-        "ap": 2,
-        "qualities": [
-            "overcoat"
-        ],
-        "availability": "Scarce"
-    },
-    {
-        "id": "armour_brigandine_jerkin",
-        "name": "Brigandine Jerkin",
-        "type": "Brigandine",
-        "price": "2 GC",
-        "enc": 2,
-        "penalty": "",
-        "locations": [
-            "Body"
-        ],
-        "ap": 2,
-        "qualities": [
-            "overcoat"
-        ],
-        "availability": "Scarce"
-    },
-    {
-        "id": "armour_mail_chausses",
-        "name": "Mail Chausses",
-        "type": "Mail",
-        "price": "2 GC",
-        "enc": 3,
-        "penalty": "-10 stealth",
-        "locations": [
-            "Legs"
-        ],
-        "ap": 2,
-        "qualities": [],
-        "availability": "Scarce"
-    },
-    {
-        "id": "armour_mail_coat",
-        "name": "Mail Coat",
-        "type": "Mail",
-        "price": "3 GC",
-        "enc": 4,
-        "penalty": "-10 stealth",
-        "locations": [
-            "Arms",
-            "Body"
-        ],
-        "ap": 2,
-        "qualities": [],
-        "availability": "Common"
-    },
-    {
-        "id": "armour_mail_coif",
-        "name": "Mail Coif",
-        "type": "Mail",
-        "price": "1 GC",
-        "enc": 2,
-        "penalty": "-10 perception, -10 stealth",
-        "locations": [
-            "Head"
-        ],
-        "ap": 2,
-        "qualities": [
-            "partial"
-        ],
-        "availability": "Scarce"
-    },
-    {
-        "id": "armour_mail_shirt",
-        "name": "Mail Shirt",
-        "type": "Mail",
-        "price": "2 GC",
-        "enc": 3,
-        "penalty": "-10 stealth",
-        "locations": [
-            "Body"
-        ],
-        "ap": 2,
-        "qualities": [
-        ],
-        "availability": "Scarce"
-    },
-    {
-        "id": "armour_breastplate",
-        "name": "Breastplate",
-        "type": "Plate",
-        "price": "10 GC",
-        "enc": 3,
-        "penalty": "-10 stealth",
-        "locations": [
-            "Body"
-        ],
-        "ap": 3,
-        "qualities": [
-            "impenetrable",
-            "weakpoints",
-            "overcoat"
-        ],
-        "availability": "Scarce"
-    },
-    {
-        "id": "armour_open_helm",
-        "name": "Open Helm",
-        "type": "Plate",
-        "price": "2 GC",
-        "enc": 1,
-        "penalty": "-10 perception",
-        "locations": [
-            "Head"
-        ],
-        "ap": 3,
-        "qualities": [
-            "partial"
-        ],
-        "availability": "Common"
-    },
-    {
-        "id": "armour_bracers",
-        "name": "Bracers",
-        "type": "Plate",
-        "price": "8 GC",
-        "enc": 3,
-        "penalty": "",
-        "locations": [
-            "Arms"
-        ],
-        "ap": 3,
-        "qualities": [
-            "impenetrable",
-            "weakpoints",
-            "requires_kit"
-        ],
-        "availability": "Rare"
-    },
-    {
-        "id": "armour_plate_leggings",
-        "name": "Plate Leggings",
-        "type": "Plate",
-        "price": "10 GC",
-        "enc": 3,
-        "penalty": "-10 stealth",
-        "locations": [
-            "Legs"
-        ],
-        "ap": 3,
-        "qualities": [
-            "impenetrable",
-            "weakpoints",
-            "requires_kit"
-        ],
-        "availability": "Rare"
-    },
-    {
-        "id": "armour_great_helm",
-        "name": "Great Helm",
-        "type": "Plate",
-        "price": "2 GC",
-        "enc": 2,
-        "penalty": "-20 perception",
-        "locations": [
-            "Head"
-        ],
-        "ap": 3,
-        "qualities": [
-            "impenetrable",
-            "weakpoints"
-        ],
-        "availability": "Rare"
-    }
+  {
+    "id": "armour_leather_jack",
+    "name": "Leather Jack",
+    "type": "Soft Leather",
+    "price": "12 S",
+    "enc": 1,
+    "penalty": "",
+    "locations": ["Arms", "Body"],
+    "ap": 1,
+    "qualities": [],
+    "availability": "Common"
+  },
+  {
+    "id": "armour_leather_jerkin",
+    "name": "Leather Jerkin",
+    "type": "Soft Leather",
+    "price": "10 S",
+    "enc": 1,
+    "penalty": "",
+    "locations": ["Body"],
+    "ap": 1,
+    "qualities": [],
+    "availability": "Common"
+  },
+  {
+    "id": "armour_leather_leggings",
+    "name": "Leather Leggings",
+    "type": "Soft Leather",
+    "price": "14 S",
+    "enc": 1,
+    "penalty": "",
+    "locations": ["Legs"],
+    "ap": 1,
+    "qualities": [],
+    "availability": "Common"
+  },
+  {
+    "id": "armour_leather_skullcap",
+    "name": "Leather Skullcap",
+    "type": "Soft Leather",
+    "price": "8 S",
+    "enc": 0,
+    "penalty": "",
+    "locations": ["Head"],
+    "ap": 1,
+    "qualities": [],
+    "availability": "Common"
+  },
+  {
+    "id": "armour_breastplate_boiled_leather",
+    "name": "Breastplate",
+    "type": "Boiled Leather",
+    "price": "18 S",
+    "enc": 2,
+    "penalty": "",
+    "locations": ["Body"],
+    "ap": 2,
+    "qualities": ["Weakpoints"],
+    "availability": "Scarce"
+  },
+  {
+    "id": "armour_mail_chausses",
+    "name": "Mail Chausses",
+    "type": "Mail",
+    "price": "2 GC",
+    "enc": 3,
+    "penalty": "",
+    "locations": ["Legs"],
+    "ap": 2,
+    "qualities": ["Flexible"],
+    "availability": "Scarce"
+  },
+  {
+    "id": "armour_mail_coat",
+    "name": "Mail Coat",
+    "type": "Mail",
+    "price": "3 GC",
+    "enc": 3,
+    "penalty": "",
+    "locations": ["Arms", "Body"],
+    "ap": 2,
+    "qualities": ["Flexible"],
+    "availability": "Common"
+  },
+  {
+    "id": "armour_mail_coif",
+    "name": "Mail Coif",
+    "type": "Mail",
+    "price": "1 GC",
+    "enc": 2,
+    "penalty": "-10 Perception",
+    "locations": ["Head"],
+    "ap": 2,
+    "qualities": ["Flexible", "Partial"],
+    "availability": "Scarce"
+  },
+  {
+    "id": "armour_mail_shirt",
+    "name": "Mail Shirt",
+    "type": "Mail",
+    "price": "2 GC",
+    "enc": 2,
+    "penalty": "",
+    "locations": ["Body"],
+    "ap": 2,
+    "qualities": ["Flexible"],
+    "availability": "Scarce"
+  },
+  {
+    "id": "armour_breastplate_plate",
+    "name": "Breastplate",
+    "type": "Plate",
+    "price": "10 GC",
+    "enc": 3,
+    "penalty": "",
+    "locations": ["Body"],
+    "ap": 2,
+    "qualities": ["Impenetrable", "Weakpoints"],
+    "availability": "Scarce"
+  },
+  {
+    "id": "armour_open_helm",
+    "name": "Open Helm",
+    "type": "Plate",
+    "price": "2 GC",
+    "enc": 1,
+    "penalty": "-10 Perception",
+    "locations": ["Head"],
+    "ap": 2,
+    "qualities": ["Partial"],
+    "availability": "Common"
+  },
+  {
+    "id": "armour_bracers",
+    "name": "Bracers",
+    "type": "Plate",
+    "price": "8 GC",
+    "enc": 3,
+    "penalty": "",
+    "locations": ["Arms"],
+    "ap": 2,
+    "qualities": ["Impenetrable", "Weakpoints"],
+    "availability": "Rare"
+  },
+  {
+    "id": "armour_plate_leggings",
+    "name": "Plate Leggings",
+    "type": "Plate",
+    "price": "10 GC",
+    "enc": 3,
+    "penalty": "-10 Stealth",
+    "locations": ["Legs"],
+    "ap": 2,
+    "qualities": ["Impenetrable", "Weakpoints"],
+    "availability": "Rare"
+  },
+  {
+    "id": "armour_helm",
+    "name": "Helm",
+    "type": "Plate",
+    "price": "3 GC",
+    "enc": 2,
+    "penalty": "-20 Perception",
+    "locations": ["Head"],
+    "ap": 2,
+    "qualities": ["Impenetrable", "Weakpoints"],
+    "availability": "Rare"
+  }
 ]

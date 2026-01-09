@@ -7,6 +7,13 @@
         "description": "The armour is especially resilient, most attacks simply cannot penetrate it. All Critical Wounds caused by attacks scoring an odd number to hit you, such as an 11 or 33, are ignored."
     },
     {
+        "id": "flexible",
+        "name": "Flexible",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "Flexible armour can be worn under a layer of non-Flexible armour if you wish. If you do so, you gain the benefit of both."
+    },
+    {
         "id": "overcoat",
         "name": "Overcoat",
         "type": "quality",
@@ -42,8 +49,8 @@
         "description": "Armour with this flaw can only be worn if a Soft Kit is worn underneath it."
     },
     {
-        "id": "weakpoint",
-        "name": "Weakpoint",
+        "id": "weakpoints",
+        "name": "Weakpoints",
         "type": "flaw",
         "equipment": "armor",
         "description": "The armour has small weakpoints where a blade can slip through. If your opponent has a weapon with the Impale Quality and scores a Critical, any APs of your armour are ignored."

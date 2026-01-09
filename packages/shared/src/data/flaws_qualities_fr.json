@@ -7,6 +7,13 @@
         "description": "L'armure est particulièrement résistante, la plupart des attaques ne peuvent tout simplement pas la pénétrer. Toutes les Blessures Critiques causées par des attaques obtenant un chiffre impair pour vous toucher, comme 11 ou 33, sont ignorées."
     },
     {
+        "id": "flexible",
+        "name": "Flexible",
+        "type": "quality",
+        "equipment": "armor",
+        "description": "Une armure flexible peut être portée sous une couche d'armure non flexible si vous le souhaitez. Si vous le faites, vous bénéficiez des avantages des deux."
+    },
+    {
         "id": "overcoat",
         "name": "Surcouche",
         "type": "quality",

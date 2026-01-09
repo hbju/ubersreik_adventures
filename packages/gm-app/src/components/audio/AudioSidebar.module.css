@@ -245,6 +245,7 @@
 
 .setupButton:hover {
     background: linear-gradient(135deg, #5a4030 0%, #3a2820 100%);
+    color: #d4af37;    
 }
 
 .controlsContainer {
