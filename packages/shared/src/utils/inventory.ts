@@ -34,12 +34,10 @@ export function calculateTotalEncumbrance(character: Character): number {
         return sum + (effectiveEnc * count);
     }, 0);
     
-    // Weapons: no encumbrance bonus for equipped state (per WFRP rules)
     const weaponEnc = Object.entries(character.inventory.weapons).reduce((sum, [itemId, count]) => {
         return sum + ((weapons[itemId]?.[0]?.enc || 0) * count);
     }, 0);
     
-    // Items: no encumbrance bonus for equipped state
     const itemEnc = Object.entries(character.inventory.items).reduce((sum, [itemId, count]) => {
         return sum + ((items[itemId]?.[0]?.enc || 0) * count);
     }, 0);
@@ -49,21 +47,22 @@ export function calculateTotalEncumbrance(character: Character): number {
 
 /**
  * Check if an armor piece is flexible (can be layered with rigid armor).
- * An armor is flexible if it has the 'Flexible' quality OR is of type 'Soft Leather'.
+ * An armor is flexible if it has the 'Flexible' quality.
  */
 export function isArmorFlexible(armor: Armor): boolean {
-    // Check for 'Soft Leather' type
-    if (armor.type === 'Soft Leather') {
-        return true;
-    }
-    // Check for 'Flexible' quality
     return armor.qualities.some(q => q.toLowerCase().includes('flexible'));
 }
+
+export function isArmorSoftLeather(armor: Armor): boolean {
+    return armor.type === 'Soft Leather';
+}
+
+
 
 /**
  * Get the armor locations as a normalized array of lowercase strings.
  */
-function normalizeArmorLocations(locations: string[]): string[] {
+export function normalizeArmorLocations(locations: string[]): string[] {
     const normalized: string[] = [];
     for (const loc of locations) {
         const lower = loc.toLowerCase();
@@ -129,6 +128,7 @@ export function validateArmorEquip(
     }
     
     const newArmorIsFlexible = isArmorFlexible(newArmor);
+    const newArmorIsSoftLeather = isArmorSoftLeather(newArmor);
     const equippedArmor = character.inventory.equippedArmor || {};
     const updatedEquippedArmor = { ...equippedArmor };
     
@@ -142,12 +142,15 @@ export function validateArmorEquip(
         if (!hasOverlappingLocations(newArmor.locations, existingArmor.locations)) {
             continue;
         }
-        
+
         const existingIsFlexible = isArmorFlexible(existingArmor);
-        
-        if (!newArmorIsFlexible && !existingIsFlexible) {
-            updatedEquippedArmor[existingArmorId] = false;
+        const existingIsSoftLeather = isArmorSoftLeather(existingArmor);
+                
+        // flexible can be worn if existing is not; soft leather can be worn if existing is not.
+        if (newArmorIsFlexible != existingIsFlexible || newArmorIsSoftLeather != existingIsSoftLeather) {
+            continue;
         }
+        updatedEquippedArmor[existingArmorId] = false;
     }
     
     updatedEquippedArmor[newArmorId] = true;

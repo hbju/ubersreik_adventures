@@ -24,6 +24,7 @@ import {
     useGameData,
     Weapon,
     QueuedRoll,
+    normalizeArmorLocations,
 } from '@wfrp/shared';
 
 import CharacterSelector from './CharacterSelector';
@@ -65,6 +66,7 @@ interface CombatResult {
     attackSuccessLevel: string;
     defenseSuccessLevel: string;
     outcomeMessage: string;
+    rawDamage?: number;
     damageDealt?: number;
     hitLocation?: string;
     attackerCritical?: boolean;
@@ -110,15 +112,14 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     // Calculate armour points for a character at a specific location
     const getArmourPoints = (character: Character, location: string): number => {
         let totalAP = 0;
-        const armorById = Object.fromEntries((armorData as any[]).map(a => [a.id, a]));
-
-        Object.entries(character.inventory?.armor || {}).forEach(([armorId, count]) => {
-            if (count <= 0) return;
+        const armorById: Record<string, typeof armorData[0]> = Object.fromEntries((armorData as any[]).map(a => [a.id, a]));
+        Object.entries(character.inventory?.equippedArmor || {}).forEach(([armorId, equipped]) => {
+            if (!equipped) return;
             const armor = armorById[armorId];
             if (!armor) return;
 
-            const loc = location.toLowerCase();
-            const armorLocs = armor.locations.map((l: string) => l.toLowerCase());
+            const loc = normalizeArmorLocations([location])[0];
+            const armorLocs = normalizeArmorLocations(armor.locations);
 
             if (armorLocs.some((l: string) => l.includes(loc) || loc.includes(l))) {
                 totalAP += armor.ap;
@@ -261,6 +262,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
 
         let outcomeMessage = '';
         let damageDealt: number | undefined;
+        let rawDamage: number = 0;
         let hitLocation: string | undefined;
 
         if (attackerSL > defenderSL || (attackerSL === defenderSL && attackerRoll.targetNumber > defenderRoll.targetNumber)) {
@@ -281,6 +283,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
 
                 const damage = (attackerRoll.weaponDamage || 0) + slDiff + talentDamageBonus - toughnessBonus - armourPoints;
                 damageDealt = Math.max(damage, 0);
+                rawDamage = (attackerRoll.weaponDamage || 0) + slDiff + talentDamageBonus;
                 outcomeMessage = `${attackerRoll.characterName} wins by ${slDiff} SL! Damage: ${damageDealt} to ${hitLocation}.`;
             } else {
                 outcomeMessage = `${attackerRoll.characterName} wins by ${slDiff} SL!`;
@@ -301,6 +304,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             attackSuccessLevel: roundedAttackSL,
             defenseSuccessLevel: roundedDefenseSL,
             outcomeMessage,
+            rawDamage: rawDamage,
             damageDealt,
             hitLocation,
             attackerCritical: attackerCriticalCheck.isCritical,
@@ -431,8 +435,9 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                             <span className={styles.defName}>{result.defenderName}</span>
                         </div>
                         <p className={styles.outcomeMessage}>{result.outcomeMessage}</p>
-                        {result.hitLocation && (
-                            <p className={styles.hitLocation}>Hit Location: {result.hitLocation}</p>
+                        {result.hitLocation && result.defenderName && (
+                            <p className={styles.hitLocation}>Hit Location: {result.hitLocation}. Raw Damage: {result.rawDamage}. <br />
+                            Armour Points at Location: {getArmourPoints(characters.find(c => c.name === result.defenderName)!, result.hitLocation)}. Toughness Bonus : {calculateCharacteristicBonus(characters.find(c => c.name === result.defenderName)!.characteristics.t)} </p>
                         )}
                     </div>
                     {(result.attackerCritical || result.attackerFumble || result.defenderCritical || result.defenderFumble) && (
