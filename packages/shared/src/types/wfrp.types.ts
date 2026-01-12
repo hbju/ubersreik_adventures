@@ -267,6 +267,9 @@ export interface Character {
         weapons: Record<string, number>;
         armor: Record<string, number>;
         items: Record<string, number>;
+        equippedWeapons?: Record<string, boolean>;
+        equippedArmor?: Record<string, boolean>;
+        equippedItems?: Record<string, boolean>;
     };
     currency: Currency;
     reputations: ReputationEntry[]; // Character's standing with various factions

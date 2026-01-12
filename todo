@@ -2,7 +2,7 @@ v1.1 TODO:
 - Fix issue with pins and journal not sent to players when they connect ✅
 - equipment stats et vf ✅
 - randomly generated shops ✅
-- better music management
+- better music management ✅
 - npcs templates ✅
 - Details panel for player (background and notes) ✅
 - pursuits implementation
@@ -17,4 +17,4 @@ v1.1 TODO:
 - gang territories and turf wars
 - in game chat + rolls ✅
 - full doc for gm and players ✅
-- Add equipment management (equip/unequip, encumbrance)
+- Add equipment management (equip/unequip, encumbrance) ✅

@@ -39,7 +39,7 @@ export const CombatTab: React.FC<CombatTabProps> = ({
 }) => {
     const { weapons: weaponsData, armor: armorData, conditions: conditionsData, skills: skillsData } = useGameData();
 
-    // Calculate armour points per location from equipped armor
+    // Calculate armour points per location from equipped armor only
     const calculateArmourPoints = (): ArmourPoints => {
         const ap: ArmourPoints = {
             head: 0,
@@ -51,9 +51,12 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         };
 
         const armorById = Object.fromEntries((armorData as Armor[]).map(a => [a.id, a]));
+        const equippedArmor = character.inventory.equippedArmor || {};
 
         Object.entries(character.inventory.armor).forEach(([armorId, count]) => {
             if (count <= 0) return;
+            if (equippedArmor[armorId] !== true) return;
+            
             const armor = armorById[armorId];
             if (!armor) return;
 
@@ -81,10 +84,11 @@ export const CombatTab: React.FC<CombatTabProps> = ({
 
     const armourPoints = calculateArmourPoints();
 
-    // Get equipped weapons
+    // Get equipped weapons only (weapons where equippedWeapons[id] === true)
     const weaponById = Object.fromEntries((weaponsData as Weapon[]).map(w => [w.id, w]));
+    const equippedWeaponsState = character.inventory.equippedWeapons || {};
     const equippedWeapons = Object.entries(character.inventory.weapons)
-        .filter(([_, count]) => count > 0)
+        .filter(([weaponId, count]) => count > 0 && equippedWeaponsState[weaponId] === true)
         .map(([weaponId]) => weaponById[weaponId])
         .filter(Boolean) as Weapon[];
 

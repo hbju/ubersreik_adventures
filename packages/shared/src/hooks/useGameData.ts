@@ -27,7 +27,7 @@ import shopsFr from '../data/shops_fr.json';
 import templatesEn from '../data/templates_en.json';
 import { SkillCharDefinition, Talent, Career, Item, Weapon, Armor, Condition, MapData, ItemQualityDefinition, ShopDefinition, CharacterTemplate } from '../types/wfrp.types';
 
-const normalizeMapData = (data: MapData): MapData => ({
+const normalizeMapData: (data: MapData) => MapData = (data: MapData): MapData => ({
     ...data,
     imagePath: data.imagePath || data.mapImage || '',
 });

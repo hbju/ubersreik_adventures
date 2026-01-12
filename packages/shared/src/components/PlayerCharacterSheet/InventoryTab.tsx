@@ -8,7 +8,10 @@ import {
     EditableField,
     calculateTotalEncumbrance,
     calculateEffectiveMaxEncumbrance,
-    QualityTooltip
+    QualityTooltip,
+    toggleWeaponEquipped,
+    toggleArmorEquipped,
+    toggleItemEquipped
 } from '@wfrp/shared';
 import './InventoryTab.css';
 
@@ -47,6 +50,35 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
     // Calculate encumbrance
     const currentEncumbrance = calculateTotalEncumbrance(character);
     const maxEncumbrance = calculateEffectiveMaxEncumbrance(character, talents);
+
+    // Equipped state helpers
+    const isWeaponEquipped = (weaponId: string): boolean => {
+        return character.inventory.equippedWeapons?.[weaponId] === true;
+    };
+
+    const isArmorEquipped = (armorId: string): boolean => {
+        return character.inventory.equippedArmor?.[armorId] === true;
+    };
+
+    const isItemEquipped = (itemId: string): boolean => {
+        return character.inventory.equippedItems?.[itemId] === true;
+    };
+
+    // Equipped toggle handlers
+    const handleWeaponEquipToggle = (weaponId: string) => {
+        const updatedCharacter = toggleWeaponEquipped(character, weaponId);
+        onCharacterUpdate({ inventory: updatedCharacter.inventory });
+    };
+
+    const handleArmorEquipToggle = (armorId: string) => {
+        const updatedCharacter = toggleArmorEquipped(character, armorId, armorData as Armor[]);
+        onCharacterUpdate({ inventory: updatedCharacter.inventory });
+    };
+
+    const handleItemEquipToggle = (itemId: string) => {
+        const updatedCharacter = toggleItemEquipped(character, itemId);
+        onCharacterUpdate({ inventory: updatedCharacter.inventory });
+    };
 
     // Currency handlers
     const handleCurrencyChange = (field: keyof Character['currency'], value: number) => {
@@ -273,7 +305,16 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                         ) : (
                             <div className="items-list">
                                 {weaponItems.map(weapon => (
-                                    <div key={weapon.id} className="inventory-item">
+                                    <div key={weapon.id} className={`inventory-item ${isWeaponEquipped(weapon.id) ? 'equipped' : ''}`}>
+                                        <div className="item-equipped-toggle">
+                                            <button
+                                                className={`equip-btn ${isWeaponEquipped(weapon.id) ? 'equipped' : ''}`}
+                                                onClick={() => handleWeaponEquipToggle(weapon.id)}
+                                                title={isWeaponEquipped(weapon.id) ? 'Unequip' : 'Equip'}
+                                            >
+                                                {isWeaponEquipped(weapon.id) ? '⚔️' : '✖️'}
+                                            </button>
+                                        </div>
                                         <div className="item-main">
                                             <span className="item-name">{weapon.name}</span>
                                             <span className="item-group">{weapon.group}</span>
@@ -342,7 +383,16 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                         ) : (
                             <div className="items-list">
                                 {armorItems.map(armor => (
-                                    <div key={armor.id} className="inventory-item">
+                                    <div key={armor.id} className={`inventory-item ${isArmorEquipped(armor.id) ? 'equipped' : ''}`}>
+                                        <div className="item-equipped-toggle">
+                                            <button
+                                                className={`equip-btn ${isArmorEquipped(armor.id) ? 'equipped' : ''}`}
+                                                onClick={() => handleArmorEquipToggle(armor.id)}
+                                                title={isArmorEquipped(armor.id) ? 'Unequip' : 'Equip'}
+                                            >
+                                                {isArmorEquipped(armor.id) ? '🛡️' : '✖️'}
+                                            </button>
+                                        </div>
                                         <div className="item-main">
                                             <span className="item-name">{armor.name}</span>
                                             <span className="item-type">{armor.type}</span>
@@ -359,7 +409,7 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                                         <div className="item-details">
                                             <span className="item-ap">AP: {armor.ap}</span>
                                             <span className="item-locations">{armor.locations.join(', ')}</span>
-                                            <span className="item-enc">Enc: {armor.enc}</span>
+                                            <span className="item-enc">Enc: {armor.enc}{isArmorEquipped(armor.id) && armor.enc > 0 ? ` (${Math.max(0, armor.enc - 1)} worn)` : ''}</span>
                                         </div>
                                         <div className="item-quantity">
                                             {isEditMode && (
@@ -413,7 +463,16 @@ export const InventoryTab: React.FC<InventoryTabProps> = ({
                         ) : (
                             <div className="items-list">
                                 {generalItems.map(item => (
-                                    <div key={item.id} className="inventory-item">
+                                    <div key={item.id} className={`inventory-item ${isItemEquipped(item.id) ? 'equipped' : ''}`}>
+                                        <div className="item-equipped-toggle">
+                                            <button
+                                                className={`equip-btn ${isItemEquipped(item.id) ? 'equipped' : ''}`}
+                                                onClick={() => handleItemEquipToggle(item.id)}
+                                                title={isItemEquipped(item.id) ? 'Unequip' : 'Equip'}
+                                            >
+                                                {isItemEquipped(item.id) ? '✓' : '✖️'}
+                                            </button>
+                                        </div>
                                         <div className="item-main">
                                             <span className="item-name">{item.name}</span>
                                         </div>

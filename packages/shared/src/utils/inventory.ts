@@ -16,12 +16,216 @@ function getItemsData(): { armors: Partial<Record<string, Armor[]>>, weapons: Pa
     };
 }
 
+/**
+ * Calculate total encumbrance for a character.
+ * Equipped armor counts as max(0, enc - 1) towards the total.
+ */
 export function calculateTotalEncumbrance(character: Character): number {
     const { armors, weapons, items } = getItemsData();
-    const armorEnc = Object.entries(character.inventory.armor).reduce((sum, [item, count]) => sum + ((armors[item]?.[0]?.enc || 0) * count), 0);
-    const weaponEnc = Object.entries(character.inventory.weapons).reduce((sum, [item, count]) => sum + ((weapons[item]?.[0]?.enc || 0) * count), 0);
-    const itemEnc = Object.entries(character.inventory.items).reduce((sum, [item, count]) => sum + ((items[item]?.[0]?.enc || 0) * count), 0);
+    const equippedArmor = character.inventory.equippedArmor || {};
+    const equippedWeapons = character.inventory.equippedWeapons || {};
+    const equippedItems = character.inventory.equippedItems || {};
+    
+    // Armor: equipped armor has enc reduced by 1 (minimum 0)
+    const armorEnc = Object.entries(character.inventory.armor).reduce((sum, [itemId, count]) => {
+        const baseEnc = armors[itemId]?.[0]?.enc || 0;
+        const isEquipped = equippedArmor[itemId] === true;
+        const effectiveEnc = isEquipped ? Math.max(0, baseEnc - 1) : baseEnc;
+        return sum + (effectiveEnc * count);
+    }, 0);
+    
+    // Weapons: no encumbrance bonus for equipped state (per WFRP rules)
+    const weaponEnc = Object.entries(character.inventory.weapons).reduce((sum, [itemId, count]) => {
+        return sum + ((weapons[itemId]?.[0]?.enc || 0) * count);
+    }, 0);
+    
+    // Items: no encumbrance bonus for equipped state
+    const itemEnc = Object.entries(character.inventory.items).reduce((sum, [itemId, count]) => {
+        return sum + ((items[itemId]?.[0]?.enc || 0) * count);
+    }, 0);
+    
     return armorEnc + weaponEnc + itemEnc;
+}
+
+/**
+ * Check if an armor piece is flexible (can be layered with rigid armor).
+ * An armor is flexible if it has the 'Flexible' quality OR is of type 'Soft Leather'.
+ */
+export function isArmorFlexible(armor: Armor): boolean {
+    // Check for 'Soft Leather' type
+    if (armor.type === 'Soft Leather') {
+        return true;
+    }
+    // Check for 'Flexible' quality
+    return armor.qualities.some(q => q.toLowerCase().includes('flexible'));
+}
+
+/**
+ * Get the armor locations as a normalized array of lowercase strings.
+ */
+function normalizeArmorLocations(locations: string[]): string[] {
+    const normalized: string[] = [];
+    for (const loc of locations) {
+        const lower = loc.toLowerCase();
+        if (lower.includes('head')) normalized.push('head');
+        if (lower.includes('body') || lower.includes('torso')) normalized.push('body');
+        if (lower.includes('arm')) {
+            // Check for specific arm or both
+            if (lower.includes('left')) normalized.push('left arm');
+            else if (lower.includes('right')) normalized.push('right arm');
+            else {
+                normalized.push('left arm');
+                normalized.push('right arm');
+            }
+        }
+        if (lower.includes('leg')) {
+            if (lower.includes('left')) normalized.push('left leg');
+            else if (lower.includes('right')) normalized.push('right leg');
+            else {
+                normalized.push('left leg');
+                normalized.push('right leg');
+            }
+        }
+    }
+    return [...new Set(normalized)]; // Remove duplicates
+}
+
+/**
+ * Check if two armor pieces have overlapping locations.
+ */
+function hasOverlappingLocations(locations1: string[], locations2: string[]): boolean {
+    const norm1 = normalizeArmorLocations(locations1);
+    const norm2 = normalizeArmorLocations(locations2);
+    return norm1.some(loc => norm2.includes(loc));
+}
+
+/**
+ * Validate and apply armor equip, handling layering rules.
+ * When equipping armor, if there's a conflict with existing rigid armor,
+ * the existing armor will be unequipped.
+ * 
+ * Returns an updated character with the armor equipped and any conflicts resolved.
+ */
+export function validateArmorEquip(
+    character: Character,
+    newArmorId: string,
+    armorData: Armor[]
+): Character {
+    const armorById = Object.fromEntries(armorData.map(a => [a.id, a]));
+    const newArmor = armorById[newArmorId];
+    
+    if (!newArmor) {
+        // Armor not found in data, just mark as equipped without validation
+        return {
+            ...character,
+            inventory: {
+                ...character.inventory,
+                equippedArmor: {
+                    ...character.inventory.equippedArmor,
+                    [newArmorId]: true
+                }
+            }
+        };
+    }
+    
+    const newArmorIsFlexible = isArmorFlexible(newArmor);
+    const equippedArmor = character.inventory.equippedArmor || {};
+    const updatedEquippedArmor = { ...equippedArmor };
+    
+    for (const [existingArmorId, isEquipped] of Object.entries(equippedArmor)) {
+        if (!isEquipped) continue;
+        if (existingArmorId === newArmorId) continue;
+        
+        const existingArmor = armorById[existingArmorId];
+        if (!existingArmor) continue;
+        
+        if (!hasOverlappingLocations(newArmor.locations, existingArmor.locations)) {
+            continue;
+        }
+        
+        const existingIsFlexible = isArmorFlexible(existingArmor);
+        
+        if (!newArmorIsFlexible && !existingIsFlexible) {
+            updatedEquippedArmor[existingArmorId] = false;
+        }
+    }
+    
+    updatedEquippedArmor[newArmorId] = true;
+    
+    return {
+        ...character,
+        inventory: {
+            ...character.inventory,
+            equippedArmor: updatedEquippedArmor
+        }
+    };
+}
+
+/**
+ * Toggle weapon equipped state.
+ */
+export function toggleWeaponEquipped(character: Character, weaponId: string): Character {
+    const equippedWeapons = character.inventory.equippedWeapons || {};
+    const isCurrentlyEquipped = equippedWeapons[weaponId] === true;
+    
+    return {
+        ...character,
+        inventory: {
+            ...character.inventory,
+            equippedWeapons: {
+                ...equippedWeapons,
+                [weaponId]: !isCurrentlyEquipped
+            }
+        }
+    };
+}
+
+/**
+ * Toggle item equipped state.
+ */
+export function toggleItemEquipped(character: Character, itemId: string): Character {
+    const equippedItems = character.inventory.equippedItems || {};
+    const isCurrentlyEquipped = equippedItems[itemId] === true;
+    
+    return {
+        ...character,
+        inventory: {
+            ...character.inventory,
+            equippedItems: {
+                ...equippedItems,
+                [itemId]: !isCurrentlyEquipped
+            }
+        }
+    };
+}
+
+/**
+ * Toggle armor equipped state with layering validation.
+ * If equipping, validates against layering rules.
+ * If unequipping, simply marks as unequipped.
+ */
+export function toggleArmorEquipped(
+    character: Character,
+    armorId: string,
+    armorData: Armor[]
+): Character {
+    const equippedArmor = character.inventory.equippedArmor || {};
+    const isCurrentlyEquipped = equippedArmor[armorId] === true;
+    
+    if (isCurrentlyEquipped) {
+        return {
+            ...character,
+            inventory: {
+                ...character.inventory,
+                equippedArmor: {
+                    ...equippedArmor,
+                    [armorId]: false
+                }
+            }
+        };
+    } else {
+        return validateArmorEquip(character, armorId, armorData);
+    }
 }
 
 export function toPennies(currency: Currency): number {
