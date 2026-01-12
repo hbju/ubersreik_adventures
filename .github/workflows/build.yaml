@@ -1,13 +1,16 @@
 name: Build/Release
 
-on: push
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0, v1.2.3
 
 permissions:
   contents: write
 
 jobs:
   build:
-    runs-on: "${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
@@ -29,12 +32,24 @@ jobs:
       - name: Build Shared
         run: npm run build:shared
 
-      # Build the Player App
-      - name: Build Player App
-        run: npm run build:player
+      # Build the Player App (renderer only, without electron-builder)
+      - name: Build Player App Renderer
+        run: npm run build:renderer -w @wfrp/player-app
+
+      # Build Electron app with electron-builder
+      - name: Build Electron App (Windows)
+        if: matrix.os == 'windows-latest'
+        run: npx electron-builder --win --publish never
+        working-directory: packages/player-app
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_ENV: production
+
+      - name: Build Electron App (macOS)
+        if: matrix.os == 'macos-latest'
+        run: npx electron-builder --mac --publish never
+        working-directory: packages/player-app
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Upload the result so you can download it
       - name: Upload Artifacts
@@ -42,3 +57,36 @@ jobs:
         with:
           name: player-app-${{ matrix.os }}
           path: packages/player-app/release/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Windows Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: player-app-windows-latest
+          path: release/windows
+
+      - name: Download macOS Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: player-app-macos-latest
+          path: release/macos
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/windows/**/*.exe
+            release/windows/**/*.exe.blockmap
+            release/windows/**/latest.yml
+            release/macos/**/*.dmg
+            release/macos/**/*.zip
+            release/macos/**/*.zip.blockmap
+            release/macos/**/latest-mac.yml
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

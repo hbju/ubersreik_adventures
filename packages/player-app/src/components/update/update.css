@@ -21,4 +21,19 @@
     padding: 20px;
     text-align: center;
   }
+
+  .mac-update-notice {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: rgba(255, 193, 7, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+  }
+
+  .mac-update-hint {
+    font-size: 0.85em;
+    color: #888;
+    margin-top: 8px;
+    font-style: italic;
+  }
 }

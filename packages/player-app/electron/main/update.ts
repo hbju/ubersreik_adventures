@@ -1,4 +1,4 @@
-import { app, ipcMain } from 'electron'
+import { app, ipcMain, shell } from 'electron'
 import { createRequire } from 'node:module'
 import type {
   ProgressInfo,
@@ -8,12 +8,22 @@ import type {
 
 const { autoUpdater } = createRequire(import.meta.url)('electron-updater');
 
+// GitHub releases URL for manual download (used on macOS)
+const GITHUB_RELEASES_URL = 'https://github.com/hbju/ubersreik_adventures/releases/latest'
+
 export function update(win: Electron.BrowserWindow) {
+  const isMac = process.platform === 'darwin'
+  const isWindows = process.platform === 'win32'
 
   // When set to false, the update download will be triggered through the API
   autoUpdater.autoDownload = false
   autoUpdater.disableWebInstaller = false
   autoUpdater.allowDowngrade = false
+
+
+  if (isMac) {
+    autoUpdater.autoInstallOnAppQuit = false
+  }
 
   // start check
   autoUpdater.on('checking-for-update', function () { })
@@ -40,8 +50,20 @@ export function update(win: Electron.BrowserWindow) {
     }
   })
 
-  // Start downloading and feedback on progress
+  ipcMain.handle('get-platform', () => {
+    return process.platform
+  })
+
+  ipcMain.handle('open-releases-page', () => {
+    shell.openExternal(GITHUB_RELEASES_URL)
+  })
+
   ipcMain.handle('start-download', (event: Electron.IpcMainInvokeEvent) => {
+    if (isMac) {
+      shell.openExternal(GITHUB_RELEASES_URL)
+      return
+    }
+
     startDownload(
       (error, progressInfo) => {
         if (error) {
@@ -59,7 +81,7 @@ export function update(win: Electron.BrowserWindow) {
     )
   })
 
-  // Install now
+  // Install now (Windows only)
   ipcMain.handle('quit-and-install', () => {
     autoUpdater.quitAndInstall(false, true)
   })

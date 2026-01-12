@@ -14,11 +14,13 @@
     "dist"
   ],
   "mac": {
-    "artifactName": "WFRPPlayerClient.${ext}",
+    "artifactName": "WFRPPlayerClient-${version}-mac.${ext}",
     "target": [
       "dmg",
       "zip"
-    ]
+    ],
+    "identity": null,
+    "notarize": false
   },
   "win": {
     "target": [
@@ -38,8 +40,9 @@
     "deleteAppDataOnUninstall": false
   },
   "publish": {
-    "provider": "generic",
-    "channel": "latest",
-    "url": "https://github.com/electron-vite/electron-vite-react/releases/download/v0.9.9/"
+    "provider": "github",
+    "owner": "hbju",
+    "repo": "ubersreik_adventures",
+    "releaseType": "release"
   }
 }
