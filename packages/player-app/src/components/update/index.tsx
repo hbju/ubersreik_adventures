@@ -24,7 +24,7 @@ const Update = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [isDownloading, setIsDownloading] = useState(false)
   const [isDownloaded, setIsDownloaded] = useState(false)
-  
+
   const platform = getPlatform()
   const isMac = platform === 'mac'
   const isWindows = platform === 'win'
@@ -95,6 +95,7 @@ const Update = () => {
   }, [isMac, isWindows])
 
   const onUpdateError = useCallback((_event: Electron.IpcRendererEvent, arg1: ErrorType) => {
+    console.error('Update error:', arg1)
     setUpdateAvailable(false)
     setUpdateError(arg1)
     setIsDownloading(false)
@@ -155,7 +156,7 @@ const Update = () => {
         <div>
           <div>A new version is available: v{versionInfo?.newVersion}</div>
           <div className='new-version__target'>v{versionInfo?.version} → v{versionInfo?.newVersion}</div>
-          
+
           {isMac ? (
             <div className='mac-update-notice'>
               <p>Click the button below to download the latest version from GitHub.</p>
@@ -204,7 +205,7 @@ const Update = () => {
           {renderUpdateContent()}
         </div>
       </Modal>
-      <button disabled={checking} onClick={checkUpdate}>
+      <button disabled={checking} onClick={checkUpdate} className='check-update-btn'>
         {checking ? 'Checking...' : 'Check update'}
       </button>
     </>

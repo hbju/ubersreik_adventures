@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSocket } from './hooks/useSocket';
 import './App.css';
 
+import Update from './components/update';
 import { ConnectionScreen } from './components/ConnectionScreen';
 import {
     CharacterSheet,
@@ -124,7 +125,7 @@ const PlayerApp: React.FC = () => {
     // Handle the actual weapon roll after talent selection
     const handleWeaponRollComplete = (result: TestResultMessage['payload']) => {
         if (!character || !weaponRollInfo) return;
-        
+
         const message: RollWithIntentMessage = {
             type: 'ROLL_WITH_INTENT',
             payload: {
@@ -150,7 +151,7 @@ const PlayerApp: React.FC = () => {
     // Handle the actual defense roll after talent selection
     const handleDefenseRollComplete = (result: TestResultMessage['payload']) => {
         if (!character || !defenseRollInfo) return;
-        
+
         const message: RollWithIntentMessage = {
             type: 'ROLL_WITH_INTENT',
             payload: {
@@ -548,11 +549,14 @@ const PlayerApp: React.FC = () => {
 
     if (!isAuthenticated) {
         return (
-            <ConnectionScreen
-                onConnect={connect}
-                error={authError || undefined}
-                isConnecting={isConnected && !isAuthenticated}
-            />
+            <div>
+                <ConnectionScreen
+                    onConnect={connect}
+                    error={authError || undefined}
+                    isConnecting={isConnected && !isAuthenticated}
+                />
+                <Update />
+            </div>
         );
     }
 
@@ -982,6 +986,8 @@ const PlayerApp: React.FC = () => {
                     />
                 </div>
             )}
+
+            <Update />
         </div>
     );
 };
