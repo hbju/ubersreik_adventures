@@ -3,7 +3,7 @@
   "appId": "com.hbju.ubersreikadventures.player",
   "productName": "WFRP Player Client",
   "executableName": "WFRPPlayerClient",    
-  "artifactName": "WFRPPlayerClient-${version}-${os}.${ext}",
+  "artifactName": "${executableName}-${version}.${ext}",
 
   "asar": true,
   "directories": {
@@ -14,7 +14,7 @@
     "dist"
   ],
   "mac": {
-    "artifactName": "WFRPPlayerClient-${version}-mac.${ext}",
+    "artifactName": "${executableName}-${version}.${ext}",
     "target": [
       "dmg",
       "zip"
@@ -31,7 +31,7 @@
         ]
       }
     ],
-    "artifactName": "${productName}_${version}.${ext}"
+    "artifactName": "${executableName}_${version}.${ext}"
   },
   "nsis": {
     "oneClick": false,
