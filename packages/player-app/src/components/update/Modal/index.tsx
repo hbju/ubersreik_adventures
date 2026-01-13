@@ -22,6 +22,8 @@ const ModalTemplate: React.FC<React.PropsWithChildren<{
     width = 530,
   } = props
 
+  console.log('Footer:', footer, " of type ", typeof footer)
+
   return (
     <div className='update-modal'>
       <div className='update-modal__mask' />

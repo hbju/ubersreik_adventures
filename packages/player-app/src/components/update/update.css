@@ -1,4 +1,6 @@
 .modal-slot {
+  padding: 20px;
+
   .update-progress {
     display: flex;
   }
@@ -22,32 +24,42 @@
     text-align: center;
   }
 
-  .check-update-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 10px 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
+  .update-error {
+    padding: 20px;
+    color: red;
+    text-align: center;
   }
 
-  .mac-update-notice {
-    margin-top: 16px;
-    padding: 12px;
-    background-color: rgba(255, 193, 7, 0.1);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 193, 7, 0.3);
+  .can-available {
+    padding: 20px;
+    text-align: center;
   }
 
-  .mac-update-hint {
-    font-size: 0.85em;
-    color: #888;
-    margin-top: 8px;
-    font-style: italic;
+  .last-version {
+    margin-bottom: 10px;
   }
+}
+
+.check-update-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 16px;
+  margin-left: 10px;
+  background: none;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background-color 0.3s ease;
+}
+
+.check-update-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.check-update-btn:hover {
+  background-color: var(--color-gold);
 }
