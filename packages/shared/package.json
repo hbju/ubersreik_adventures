@@ -1,6 +1,6 @@
 {
   "name": "@wfrp/shared",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Shared types, utilities, and data for the WFRP suite.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

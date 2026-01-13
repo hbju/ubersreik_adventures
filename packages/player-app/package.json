@@ -1,6 +1,6 @@
 {
   "name": "@wfrp/player-app",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "main": "dist-electron/main/index.js",
   "description": "WFRP4e Player Application",
   "author": "milouordo <milou@ordonneau.com>",

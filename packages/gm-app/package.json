@@ -1,6 +1,6 @@
 {
   "name": "@wfrp/gm-app",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "main": "dist-electron/main/index.js",
   "description": "WFRP4e Game Master Application",
   "author": "milouordo <milou@ordonneau.com>",

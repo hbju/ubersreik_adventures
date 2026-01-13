@@ -116,44 +116,7 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
 
             return groups;
         }
-
-        if (viewMode === 'faction') {
-            const groups: GroupedCharacters = { 'No Faction': [] };
-            const factions = gameData?.factions || [];
-
-            factions.forEach((faction: Faction) => {
-                groups[faction.name] = [];
-            });
-
-            filteredCharacters.forEach(char => {
-                const reputations = char.reputations || [];
-                if (reputations.length > 0) {
-                    const primaryRep = reputations.reduce((max, rep) =>
-                        Math.abs(rep.value) > Math.abs(max.value) ? rep : max
-                    );
-                    const faction = factions.find((f: Faction) => f.id === primaryRep.factionId);
-                    if (faction) {
-                        groups[faction.name].push(char);
-                    } else {
-                        groups['No Faction'].push(char);
-                    }
-                } else {
-                    groups['No Faction'].push(char);
-                }
-            });
-
-            Object.keys(groups).forEach(key => {
-                if (groups[key].length === 0 && key !== 'No Faction') {
-                    delete groups[key];
-                }
-            });
-            if (groups['No Faction'].length === 0) {
-                delete groups['No Faction'];
-            }
-
-            return groups;
-        }
-
+        
         return { 'All Characters': filteredCharacters };
     }, [filteredCharacters, viewMode, gameData]);
 

@@ -1,6 +1,6 @@
 {
   "name": "ubersreik_adventures",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "Monorepo for the WFRP4e GM and Player application suite.",
   "workspaces": {

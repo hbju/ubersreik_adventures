@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './RosterFilterBar.module.css';
 
 export type CharacterTypeFilter = 'all' | 'pcs' | 'npcs';
-export type ViewMode = 'list' | 'location' | 'faction';
+export type ViewMode = 'list' | 'location';
 
 interface RosterFilterBarProps {
     searchTerm: string;
@@ -136,13 +136,6 @@ const RosterFilterBar: React.FC<RosterFilterBarProps> = ({
                     title="Group by Location"
                 >
                     📍
-                </button>
-                <button
-                    className={`${styles.viewBtn} ${viewMode === 'faction' ? styles.active : ''}`}
-                    onClick={() => onViewModeChange('faction')}
-                    title="Group by Faction"
-                >
-                    🏛️
                 </button>
             </div>
         </div>
