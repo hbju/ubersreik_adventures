@@ -1,6 +1,6 @@
 {
   "name": "@wfrp/player-app",
-  "version": "1.0.3",
+  "version": "1.0.1",
   "main": "dist-electron/main/index.js",
   "description": "WFRP4e Player Application",
   "author": "milouordo <milou@ordonneau.com>",
@@ -30,7 +30,7 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
-    "@wfrp/shared": "1.0.0",
+    "@wfrp/shared": "^1.0.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-updater": "^6.3.9",
     "i18next": "^25.6.3",
