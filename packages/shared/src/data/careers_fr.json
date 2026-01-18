@@ -927,6 +927,140 @@
         ]
     },
     {
+        "id": "shadowmancer",
+        "name": "Shadowmancer",
+        "description": "Secretive and deceitful, you combine the abilities of wizard and spy. \nThe only thing a Grey Wizard is certain of is that nothing is certain in this world, and that things are rarely as they seem. They know that lies often cover up other lies and become so used to falsehood and deception that they have trouble recognizing the truth as it is. \nShadowmancers are distrustful people, who rarely believe what they see at face value and always look for false bottoms, hidden meanings, and concealed motives. In return, they are careful to withold their own beliefs and intentions. Truth has value, they’ve learned, and items of value shouldn’t be just given away.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "tricksters-apprentice",
+                "name": "Trickster's Apprentice",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "talent_ids": [
+                    "aethyric-attunement",
+                    "petty-magic",
+                    "read-write",
+                    "second-sight"
+                ],
+                "skills_ids": [
+                    "channelling_ulgu",
+                    "dodge",
+                    "intuition",
+                    "language_battle",
+                    "language_magick",
+                    "lore_magic",
+                    "melee",
+                    "melee_polearm",
+                    "perception",
+                    "secret-signs_greyorder"
+                ],
+                "trappings": [
+                    "Grimoire",
+                    "Hooded Cloak",
+                    "Staff"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "shadowmancer",
+                "name": "Shadowmancer",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "talent_ids": [
+                    "arcane-magic_shadows",
+                    "detect-artefact",
+                    "fast-hands",
+                    "sixth-sense"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "cool",
+                    "gossip",
+                    "intimidate",
+                    "language_any",
+                    "leadership"
+                ],
+                "trappings": [
+                    "Magical License"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "grey_guardian",
+                "name": "Grey Guardian",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "I"
+                ],
+                "talent_ids": [
+                    "blather",
+                    "instinctive-diction",
+                    "magical-sense",
+                    "mimic"
+                ],
+                "skills_ids": [
+                    "evaluate",
+                    "lore_politics",
+                    "research",
+                    "ride_horse"
+                ],
+                "trappings": [
+                    "Apprentice",
+                    "Light Warhorse",
+                    "Magical Item"
+                ],
+                "status": "Gold 1"
+            },
+            {
+                "id": "grey-lord",
+                "name": "Grey Lord",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Int",
+                    "WP",
+                    "Ag",
+                    "Dex"
+                ],
+                "talent_ids": [
+                    "secret-identity",
+                    "shadow",
+                    "tower-of-memories",
+                    "war-wizard"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_any"
+                ],
+                "trappings": [
+                    "Apprentice",
+                    "Library (Magic)",
+                    "Ring of Informers",
+                    "Workshop (Magic)"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
         "id": "wizard",
         "name": "Wizard",
         "description": "Feared and distrusted by the citizens of the Empire, you legally wield powerful and dangerous magic. Wizards channel one of the eight 'Winds of Magic' only spellcasters perceive, to cast potent spells. To legally cast magic in the Empire, a Human must follow the Articles of Imperial Magic and belong to one of the Eight Colleges of Magic in Altdorf — each dedicated to a specific wind, as Magisters can only safely channel one. After graduation, Apprentices become Magisters and serve the Empire. Magisters carefully study and practice their art, which, according to the Articles, they can only use outside their colleges in defence of their own life, or against the enemies of the Empire. Many Magisters are attached to the Empire State Army, and although they are treated with cautious suspicion, none can deny their effectiveness on the battlefield. Many Magisters leave the Colleges of Magic in debt for the cost of their tuition. These Wizards may be keen to find immediate employment, or seek out their fortune on land, at sea, or anywhere else they might be able to find relics, artefacts or lost tomes of magical lore. Journeying Magisters, eager to prove themselves, are actively encouraged to test their skills across the Empire by hunting down whatever dangers threaten the local populace. Wizards are excellent characters to add some firepower to a group, but it can be intimidating for new players to have to learn a whole additional set of rules for spells. Because of this the GM should be aware that they might initially need some extra support to ensure that they are using these rules effectively and to the group's best advantage. You'll choose the colour of magic you study when you take the Arcane Magic Talent. For more on magic see Chapter 8: Magic.",

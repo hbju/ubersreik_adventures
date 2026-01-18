@@ -1,3 +1,5 @@
+import type { CalendarState } from '../data/calendar';
+
 export interface Coordinates {
     x: number;
     y: number;
@@ -480,6 +482,7 @@ export interface CampaignState {
     characterTemplates: CharacterTemplate[]; // NPC character templates
     maps: Record<string, MapData>; // All available maps indexed by id
     activeMapId: string; // Currently active map
+    calendar?: CalendarState; // Imperial Calendar state
     version: string;
     lastModified: string;
 }

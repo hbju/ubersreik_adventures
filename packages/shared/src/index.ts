@@ -47,3 +47,6 @@ export { default as criticalHitsData } from './data/critical_hits.json';
 export { default as fumblesData } from './data/fumbles.json';
 export { default as speciesData } from './data/species.json';
 
+// Calendar System
+export * from './data/calendar';
+

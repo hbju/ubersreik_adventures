@@ -163,6 +163,7 @@
         "startSession": "Débuter",
         "journal": "Journal",
         "quests": "Quêtes",
+        "calendar": "Calendrier",
         "shop": "Boutique",
         "shopConfig": "Config. Boutiques",
         "dice": "Dés",
@@ -338,6 +339,81 @@
             "apothecary": "Apothicaire",
             "tavern": "Taverne",
             "specialty": "Spécialité"
+        }
+    },
+    "calendar": {
+        "title": "Calendrier Impérial",
+        "currentDate": "Date Actuelle",
+        "advanceDay": "+1 Jour",
+        "advanceWeek": "+1 Semaine",
+        "setDate": "Définir la Date",
+        "weather": "Météo",
+        "noWeather": "Aucune météo définie",
+        "rollWeather": "Lancer la Météo",
+        "moonPhases": "Phases Lunaires",
+        "mannslieb": "Mannslieb",
+        "morrslieb": "Morrslieb",
+        "danger": "Danger !",
+        "eventFilters": "Filtres d'Événements",
+        "upcomingEvents": "Événements à Venir",
+        "goToToday": "Aller à Aujourd'hui",
+        "noEvents": "Aucun événement à venir",
+        "today": "Aujourd'hui",
+        "tomorrow": "Demain",
+        "daysAway": "{{count}} jours",
+        "createEvent": "Créer un Événement",
+        "editEvent": "Modifier l'Événement",
+        "eventTitle": "Titre",
+        "eventDescription": "Description",
+        "eventTags": "Étiquettes",
+        "eventColor": "Couleur",
+        "hiddenFromPlayers": "Caché aux Joueurs",
+        "deleteEvent": "Supprimer l'Événement",
+        "saveChanges": "Enregistrer",
+        "months": {
+            "nachexen": "Nachexen",
+            "jahrdrung": "Jahrdrung",
+            "pflugzeit": "Pflugzeit",
+            "sigmarzeit": "Sigmarzeit",
+            "sommerzeit": "Sommerzeit",
+            "vorgeheim": "Vorgeheim",
+            "nachgeheim": "Nachgeheim",
+            "erntezeit": "Erntezeit",
+            "brauzeit": "Brauzeit",
+            "kaldezeit": "Kaldezeit",
+            "ulriczeit": "Ulriczeit",
+            "vorhexen": "Vorhexen"
+        },
+        "weekdays": {
+            "wellentag": "Wellentag",
+            "aubentag": "Aubentag",
+            "marktag": "Marktag",
+            "backertag": "Backertag",
+            "bezahltag": "Bezahltag",
+            "konistag": "Konistag",
+            "angestag": "Angestag",
+            "festag": "Festag"
+        },
+        "seasons": {
+            "winter": "Hiver",
+            "spring": "Printemps",
+            "summer": "Été",
+            "autumn": "Automne"
+        },
+        "moonPhaseNames": {
+            "full": "Pleine",
+            "waxingGibbous": "Gibbeuse Croissante",
+            "half": "Demi",
+            "waxingCrescent": "Premier Croissant",
+            "crescent": "Croissant",
+            "new": "Nouvelle"
+        },
+        "tags": {
+            "plot": "Intrigue",
+            "world": "Monde",
+            "hidden": "Caché",
+            "festival": "Festival",
+            "personal": "Personnel"
         }
     }
 }
