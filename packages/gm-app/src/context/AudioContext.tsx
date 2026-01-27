@@ -26,10 +26,10 @@ interface AudioContextValue {
     // Library state
     library: AudioLibrary;
     isLoading: boolean;
-    
+
     // Playback state
     playbackState: AudioPlaybackState;
-    
+
     // Library management
     loadLibrary: () => Promise<void>;
     scanDirectory: (path?: string) => Promise<AudioScanResult | null>;
@@ -37,12 +37,12 @@ interface AudioContextValue {
     updateTrackTags: (trackId: string, tags: string[]) => Promise<void>;
     bulkUpdateTrackTags: (trackIds: string[], tagsToAdd: string[], tagsToRemove?: string[]) => Promise<void>;
     deleteTrack: (trackId: string) => Promise<void>;
-    
+
     // Playlist management
     createPlaylist: (name: string, trackIds?: string[], description?: string) => Promise<Playlist | null>;
     updatePlaylist: (playlist: Playlist) => Promise<void>;
     deletePlaylist: (playlistId: string) => Promise<void>;
-    
+
     // Playback controls
     playTrack: (track: AudioTrack) => void;
     playTag: (tag: string) => void;
@@ -58,7 +58,7 @@ interface AudioContextValue {
     fadeIn: (duration?: number) => Promise<void>;
     toggleShuffle: () => void;
     toggleRepeat: () => void;
-    
+
     // Utility
     getTracksByTag: (tag: string) => AudioTrack[];
     getTracksByPlaylist: (playlistId: string) => AudioTrack[];
@@ -100,31 +100,34 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
     const [library, setLibrary] = useState<AudioLibrary>(defaultLibrary);
     const [isLoading, setIsLoading] = useState(false);
     const [playbackState, setPlaybackState] = useState<AudioPlaybackState>(defaultPlaybackState);
-    
+
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
-    
+
     // Initialize audio element
     useEffect(() => {
         audioRef.current = new Audio();
         audioRef.current.volume = playbackState.volume;
-        
+        audioRef.current.preload = 'auto';
+
         const audio = audioRef.current;
-        
+
         const handleTimeUpdate = () => {
             setPlaybackState(prev => ({
                 ...prev,
                 currentTime: audio.currentTime,
             }));
         };
-        
+
         const handleLoadedMetadata = () => {
+            console.log('Metadata loaded, duration:', audio.duration);
+            console.log("Current seekable:", audio.seekable.length);
             setPlaybackState(prev => ({
                 ...prev,
                 duration: audio.duration,
             }));
         };
-        
+
         const handleEnded = () => {
             // Play next track or stop
             if (playbackState.queue.length > 0) {
@@ -144,7 +147,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
                 }));
             }
         };
-        
+
         const handleError = (e: ErrorEvent) => {
             console.error('Audio playback error:', e);
             setPlaybackState(prev => ({
@@ -152,12 +155,12 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
                 isPlaying: false,
             }));
         };
-        
+
         audio.addEventListener('timeupdate', handleTimeUpdate);
         audio.addEventListener('loadedmetadata', handleLoadedMetadata);
         audio.addEventListener('ended', handleEnded);
         audio.addEventListener('error', handleError as any);
-        
+
         return () => {
             audio.removeEventListener('timeupdate', handleTimeUpdate);
             audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
@@ -167,12 +170,12 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             audio.src = '';
         };
     }, []);
-    
+
     // Load library on mount
     useEffect(() => {
         loadLibrary();
     }, []);
-    
+
     const loadLibrary = useCallback(async () => {
         setIsLoading(true);
         try {
@@ -184,7 +187,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             setIsLoading(false);
         }
     }, []);
-    
+
     const scanDirectory = useCallback(async (path?: string): Promise<AudioScanResult | null> => {
         setIsLoading(true);
         try {
@@ -195,7 +198,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
                     return null;
                 }
             }
-            
+
             const result = await window.ipcRenderer.scanAudioDirectory(dirPath);
             await loadLibrary(); // Reload library after scan
             return result;
@@ -206,7 +209,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             setIsLoading(false);
         }
     }, [loadLibrary]);
-    
+
     const selectDirectory = useCallback(async (): Promise<string | null> => {
         try {
             return await window.ipcRenderer.selectAudioDirectory();
@@ -215,13 +218,13 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             return null;
         }
     }, []);
-    
+
     const updateTrackTags = useCallback(async (trackId: string, tags: string[]) => {
         try {
             await window.ipcRenderer.updateTrackTags(trackId, tags);
             setLibrary(prev => ({
                 ...prev,
-                tracks: prev.tracks.map(t => 
+                tracks: prev.tracks.map(t =>
                     t.id === trackId ? { ...t, tags } : t
                 ),
             }));
@@ -229,7 +232,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             console.error('Error updating track tags:', error);
         }
     }, []);
-    
+
     const bulkUpdateTrackTags = useCallback(async (trackIds: string[], tagsToAdd: string[], tagsToRemove: string[] = []) => {
         try {
             await window.ipcRenderer.bulkUpdateTrackTags(trackIds, tagsToAdd, tagsToRemove);
@@ -250,7 +253,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             console.error('Error bulk updating track tags:', error);
         }
     }, []);
-    
+
     const deleteTrack = useCallback(async (trackId: string) => {
         try {
             await window.ipcRenderer.deleteTrack(trackId);
@@ -266,7 +269,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             console.error('Error deleting track:', error);
         }
     }, []);
-    
+
     const createPlaylist = useCallback(async (name: string, trackIds: string[] = [], description?: string): Promise<Playlist | null> => {
         try {
             const playlist = await window.ipcRenderer.createPlaylist(name, trackIds, description);
@@ -280,13 +283,13 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             return null;
         }
     }, []);
-    
+
     const updatePlaylist = useCallback(async (playlist: Playlist) => {
         try {
             await window.ipcRenderer.updatePlaylist(playlist);
             setLibrary(prev => ({
                 ...prev,
-                playlists: prev.playlists.map(p => 
+                playlists: prev.playlists.map(p =>
                     p.id === playlist.id ? playlist : p
                 ),
             }));
@@ -294,7 +297,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             console.error('Error updating playlist:', error);
         }
     }, []);
-    
+
     const deletePlaylist = useCallback(async (playlistId: string) => {
         try {
             await window.ipcRenderer.deletePlaylist(playlistId);
@@ -306,15 +309,17 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             console.error('Error deleting playlist:', error);
         }
     }, []);
-    
+
     // Internal function to play a track
     const playTrackInternal = useCallback((track: AudioTrack, queue: AudioTrack[] = [], source?: AudioPlaybackState['playbackSource']) => {
         if (!audioRef.current) return;
-        
+
         const audio = audioRef.current;
         audio.src = getAudioUrl(track.path);
+        console.log('Playing track:', track.displayName || track.filename);
+        console.log("Current seekable before play:", audio.seekable.length);
         audio.play().catch(console.error);
-        
+
         setPlaybackState(prev => ({
             ...prev,
             currentTrack: track,
@@ -325,49 +330,57 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             playbackSource: source,
         }));
     }, []);
-    
+
     const playTrack = useCallback((track: AudioTrack) => {
         playTrackInternal(track, [], { type: 'single', id: track.id, name: track.displayName || track.filename });
     }, [playTrackInternal]);
-    
+
     const playTag = useCallback((tag: string) => {
         const tracks = library.tracks.filter(t => t.tags.includes(tag) && !t.isMissing);
         if (tracks.length === 0) return;
-        
+
         const shuffled = shuffleArray(tracks);
         const [first, ...rest] = shuffled;
         playTrackInternal(first, rest, { type: 'tag', id: tag, name: tag });
     }, [library.tracks, playTrackInternal]);
-    
+
     const playPlaylist = useCallback((playlistId: string) => {
         const playlist = library.playlists.find(p => p.id === playlistId);
         if (!playlist) return;
-        
+
         const trackMap = new Map(library.tracks.map(t => [t.id, t]));
         const tracks = playlist.trackIds
             .map(id => trackMap.get(id))
             .filter((t): t is AudioTrack => t !== undefined && !t.isMissing);
-        
+
         if (tracks.length === 0) return;
-        
+
         const [first, ...rest] = tracks;
         playTrackInternal(first, rest, { type: 'playlist', id: playlistId, name: playlist.name });
     }, [library.playlists, library.tracks, playTrackInternal]);
-    
+
     const pause = useCallback(() => {
         if (audioRef.current) {
             audioRef.current.pause();
             setPlaybackState(prev => ({ ...prev, isPlaying: false }));
         }
     }, []);
-    
+
     const resume = useCallback(() => {
         if (audioRef.current && playbackState.currentTrack) {
-            audioRef.current.play().catch(console.error);
-            setPlaybackState(prev => ({ ...prev, isPlaying: true }));
+            var playPromise = audioRef.current.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    setPlaybackState(prev => ({ ...prev, isPlaying: true }));
+                })
+                    .catch(error => {
+                        console.error(error)
+                        setPlaybackState(prev => ({ ...prev, isPlaying: false }));
+                    });
+            }
         }
     }, [playbackState.currentTrack]);
-    
+
     const stop = useCallback(() => {
         if (audioRef.current) {
             audioRef.current.pause();
@@ -384,7 +397,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             }));
         }
     }, []);
-    
+
     const next = useCallback(() => {
         if (playbackState.queue.length > 0) {
             const [nextTrack, ...remainingQueue] = playbackState.queue;
@@ -400,7 +413,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             stop();
         }
     }, [playbackState, playTrackInternal, playTag, playPlaylist, stop]);
-    
+
     const previous = useCallback(() => {
         if (audioRef.current) {
             // If more than 3 seconds in, restart current track
@@ -412,13 +425,56 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             }
         }
     }, []);
-    
+
     const seek = useCallback((time: number) => {
-        if (audioRef.current) {
-            audioRef.current.currentTime = time;
+        if (!audioRef.current) return;
+
+        const audio = audioRef.current;
+        const clampedTime = Math.max(0, Math.min(time, audio.duration || 0));
+
+        console.log('Attempting to seek to:', clampedTime);
+        console.log('Audio duration:', audio.duration);
+        console.log('Audio readyState:', audio.readyState);
+
+        if (audio.seekable.length > 0) {
+            for (let i = 0; i < audio.seekable.length; i++) {
+                console.log(`Seekable range ${i}: ${audio.seekable.start(i)} - ${audio.seekable.end(i)}`);
+            }
+        } else {
+            console.log('No seekable ranges available');
+        }
+
+        if (audio.buffered.length > 0) {
+            for (let i = 0; i < audio.buffered.length; i++) {
+                console.log(`Buffered range ${i}: ${audio.buffered.start(i)} - ${audio.buffered.end(i)}`);
+            }
+        } else {
+            console.log('No buffered ranges available');
+        }
+
+        if (audio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) {
+            const onCanPlay = () => {
+                audio.removeEventListener('canplay', onCanPlay);
+                try {
+                    audio.currentTime = clampedTime;
+                    setPlaybackState(prev => ({ ...prev, currentTime: clampedTime }));
+                } catch (e) {
+                    console.error('Seek failed after canplay:', e);
+                }
+            };
+            audio.addEventListener('canplay', onCanPlay);
+            return;
+        }
+
+        try {
+            audio.currentTime = clampedTime;
+            setPlaybackState(prev => ({ ...prev, currentTime: clampedTime }));
+        } catch (error) {
+            console.error('Error seeking:', error);
         }
     }, []);
-    
+
+
     const setVolume = useCallback((volume: number) => {
         const clampedVolume = Math.max(0, Math.min(1, volume));
         if (audioRef.current) {
@@ -426,30 +482,30 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
         }
         setPlaybackState(prev => ({ ...prev, volume: clampedVolume }));
     }, []);
-    
+
     const fadeOut = useCallback((duration: number = 2000): Promise<void> => {
         return new Promise((resolve) => {
             if (!audioRef.current) {
                 resolve();
                 return;
             }
-            
+
             const audio = audioRef.current;
             const startVolume = audio.volume;
             const steps = 20;
             const stepDuration = duration / steps;
             const volumeStep = startVolume / steps;
             let currentStep = 0;
-            
+
             if (fadeIntervalRef.current) {
                 clearInterval(fadeIntervalRef.current);
             }
-            
+
             fadeIntervalRef.current = setInterval(() => {
                 currentStep++;
                 const newVolume = Math.max(0, startVolume - (volumeStep * currentStep));
                 audio.volume = newVolume;
-                
+
                 if (currentStep >= steps) {
                     clearInterval(fadeIntervalRef.current!);
                     fadeIntervalRef.current = null;
@@ -461,74 +517,83 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             }, stepDuration);
         });
     }, []);
-    
+
     const fadeIn = useCallback((duration: number = 2000): Promise<void> => {
         return new Promise((resolve) => {
             if (!audioRef.current || !playbackState.currentTrack) {
                 resolve();
                 return;
             }
-            
+
             const audio = audioRef.current;
             const targetVolume = playbackState.volume;
             const steps = 20;
             const stepDuration = duration / steps;
             const volumeStep = targetVolume / steps;
             let currentStep = 0;
-            
+
             audio.volume = 0;
-            audio.play().catch(console.error);
-            setPlaybackState(prev => ({ ...prev, isPlaying: true }));
-            
-            if (fadeIntervalRef.current) {
-                clearInterval(fadeIntervalRef.current);
+            var playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    setPlaybackState(prev => ({ ...prev, isPlaying: true }));
+
+                    if (fadeIntervalRef.current) {
+                        clearInterval(fadeIntervalRef.current);
+                    }
+
+                    fadeIntervalRef.current = setInterval(() => {
+                        currentStep++;
+                        const newVolume = Math.min(targetVolume, volumeStep * currentStep);
+                        audio.volume = newVolume;
+
+                        if (currentStep >= steps) {
+                            clearInterval(fadeIntervalRef.current!);
+                            fadeIntervalRef.current = null;
+                            resolve();
+                        }
+                    }, stepDuration);
+                })
+                    .catch(error => {
+                        console.error(error)
+                        resolve();
+                    });
             }
-            
-            fadeIntervalRef.current = setInterval(() => {
-                currentStep++;
-                const newVolume = Math.min(targetVolume, volumeStep * currentStep);
-                audio.volume = newVolume;
-                
-                if (currentStep >= steps) {
-                    clearInterval(fadeIntervalRef.current!);
-                    fadeIntervalRef.current = null;
-                    resolve();
-                }
-            }, stepDuration);
+
         });
     }, [playbackState.currentTrack, playbackState.volume]);
-    
+
     const toggleShuffle = useCallback(() => {
         setPlaybackState(prev => {
             const newIsShuffled = !prev.isShuffled;
             let newQueue = prev.queue;
-            
+
             if (newIsShuffled) {
                 newQueue = shuffleArray(prev.queue);
             }
-            
+
             return { ...prev, isShuffled: newIsShuffled, queue: newQueue };
         });
     }, []);
-    
+
     const toggleRepeat = useCallback(() => {
         setPlaybackState(prev => ({ ...prev, isRepeating: !prev.isRepeating }));
     }, []);
-    
+
     const getTracksByTag = useCallback((tag: string): AudioTrack[] => {
         return library.tracks.filter(t => t.tags.includes(tag) && !t.isMissing);
     }, [library.tracks]);
-    
+
     const getTracksByPlaylist = useCallback((playlistId: string): AudioTrack[] => {
         const playlist = library.playlists.find(p => p.id === playlistId);
         if (!playlist) return [];
-        
+
         const trackMap = new Map(library.tracks.map(t => [t.id, t]));
         return playlist.trackIds
             .map(id => trackMap.get(id))
             .filter((t): t is AudioTrack => t !== undefined && !t.isMissing);
     }, [library.playlists, library.tracks]);
-    
+
     const getAllTags = useCallback((): string[] => {
         const tagSet = new Set<string>();
         for (const track of library.tracks) {
@@ -538,7 +603,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
         }
         return Array.from(tagSet).sort();
     }, [library.tracks]);
-    
+
     const value: AudioContextValue = useMemo(() => ({
         library,
         isLoading,
@@ -600,7 +665,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
         getTracksByPlaylist,
         getAllTags,
     ]);
-    
+
     return (
         <AudioContext.Provider value={value}>
             {children}

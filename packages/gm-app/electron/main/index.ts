@@ -1,4 +1,5 @@
 import { app, BrowserWindow, shell, ipcMain, protocol } from 'electron'
+import * as fs from 'fs'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'node:http'
@@ -8,18 +9,18 @@ import os from 'node:os'
 import { update } from './update'
 import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates, broadcastChatMessage, getChatHistory } from './server'
 import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
-import { 
-    loadAudioLibrary, 
-    saveAudioLibrary, 
-    scanAudioDirectory, 
-    updateTrackTags, 
-    bulkUpdateTrackTags,
-    createPlaylist, 
-    updatePlaylist, 
-    deletePlaylist,
-    selectAudioDirectory,
-    deleteTrack,
-    updateTrackDisplayName
+import {
+  loadAudioLibrary,
+  saveAudioLibrary,
+  scanAudioDirectory,
+  updateTrackTags,
+  bulkUpdateTrackTags,
+  createPlaylist,
+  updatePlaylist,
+  deletePlaylist,
+  selectAudioDirectory,
+  deleteTrack,
+  updateTrackDisplayName
 } from './audioManager'
 import { CampaignState, ChatMessage, AudioLibrary, Playlist } from '@wfrp/shared'
 
@@ -45,6 +46,18 @@ export const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : RENDERER_DIST
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'audio',
+    privileges: {
+      secure: true,
+      supportFetchAPI: true,
+      stream: true,
+      bypassCSP: true,
+    },
+  },
+]);
 
 // Disable GPU Acceleration for Windows 7
 if (os.release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -102,17 +115,90 @@ async function createWindow() {
 }
 
 app.whenReady().then(() => {
-  // Register protocol for serving local audio files
-  protocol.registerFileProtocol('audio', (request, callback) => {
+  protocol.handle('audio', async (request) => {
+    console.log('Audio protocol request URL:', request);
     const filePath = decodeURIComponent(request.url.replace('audio://', ''));
-    callback({ path: filePath });
+
+    try {
+      const stat = await fs.promises.stat(filePath);
+      const fileSize = stat.size;
+      const rangeHeader = request.headers.get('range');
+
+      if (rangeHeader) {
+        const match = rangeHeader.match(/bytes=(\d+)-(\d*)/);
+        if (match) {
+          const start = parseInt(match[1], 10);
+          const end = match[2] ? parseInt(match[2], 10) : fileSize - 1;
+
+          if (start >= fileSize) {
+            return new Response('Range Not Satisfiable', {
+              status: 416,
+              headers: {
+                'Content-Range': `bytes */${fileSize}`,
+              },
+            });
+          }
+
+          const validEnd = Math.min(end, fileSize - 1);
+          const chunkSize = validEnd - start + 1;
+
+          const buffer = Buffer.alloc(chunkSize);
+          const fd = await fs.promises.open(filePath, 'r');
+          try {
+            await fd.read(buffer, 0, chunkSize, start);
+          } finally {
+            await fd.close();
+          }
+
+          console.log(`Serving audio range: ${start}-${validEnd} of ${fileSize}`);
+
+          return new Response(buffer, {
+            status: 206,
+            headers: {
+              'Content-Range': `bytes ${start}-${validEnd}/${fileSize}`,
+              'Accept-Ranges': 'bytes',
+              'Content-Length': String(chunkSize),
+              'Content-Type': getMimeType(filePath),
+            },
+          });
+        }
+      }
+
+      // No range header - return full file
+      const fileBuffer = await fs.promises.readFile(filePath);
+      return new Response(fileBuffer, {
+        status: 200,
+        headers: {
+          'Accept-Ranges': 'bytes',
+          'Content-Length': String(fileSize),
+          'Content-Type': getMimeType(filePath),
+        },
+      });
+    } catch (error) {
+      console.error('Audio protocol error:', error);
+      return new Response('File not found', { status: 404 });
+    }
   });
-  
+
   // Load campaign data on startup
   clearCampaignCache();
   loadCampaignData();
   createWindow();
 })
+
+function getMimeType(filePath: string): string {
+  const ext = path.extname(filePath).toLowerCase();
+  const mimeTypes: Record<string, string> = {
+    '.mp3': 'audio/mpeg',
+    '.wav': 'audio/wav',
+    '.ogg': 'audio/ogg',
+    '.flac': 'audio/flac',
+    '.m4a': 'audio/mp4',
+    '.aac': 'audio/aac',
+    '.webm': 'audio/webm',
+  };
+  return mimeTypes[ext] || 'audio/mpeg';
+}
 
 app.on('window-all-closed', () => {
   win = null
@@ -179,12 +265,12 @@ ipcMain.on('save-data', (event, data: CampaignState) => {
   try {
     saveCampaignData(data);
     console.log('Data saved successfully');
-    
+
     // Broadcast journal entries to all connected players
     if (data.journal && data.journal.length > 0) {
       broadcastJournalEntries(data.journal);
     }
-    
+
     // Broadcast map pin states to all connected players
     if (data.mapPinStates) {
       broadcastMapPinStates(data.mapPinStates);

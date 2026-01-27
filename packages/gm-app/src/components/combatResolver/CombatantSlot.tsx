@@ -155,6 +155,7 @@ const NpcQuickActions: React.FC<NpcQuickActionsProps> = ({ character, role, onRo
 
     // Get combat skills
     const meleeSkills = character.skills?.filter(s => s.id?.startsWith('melee')) || [];
+    const rangedSkills = character.skills?.filter(s => s.id !== 'ranged' && s.id?.startsWith('ranged')) || [];
     const dodgeSkill = character.skills?.find(s => s.id === 'dodge');
     const otherSkills = character.skills?.filter(s => s.id !== 'melee' && s.id !== 'dodge') || [];
 
@@ -181,6 +182,17 @@ const NpcQuickActions: React.FC<NpcQuickActionsProps> = ({ character, role, onRo
                             >
                                 ⚔️ WS
                             </button>
+                        )}
+                        {rangedSkills.length > 0 && (
+                            rangedSkills.map(skill => (
+                                <button
+                                    key={skill.id}
+                                    className={styles.actionBtn}
+                                    onClick={() => onRoll(character.id, skill.id)}
+                                >
+                                    🏹 {skill.name}
+                                </button>
+                            ))
                         )}
                     </div>
                 </>
