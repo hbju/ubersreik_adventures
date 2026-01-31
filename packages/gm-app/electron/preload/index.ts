@@ -127,6 +127,14 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     // ==================== Audio Manager API ====================
 
     /**
+     * Get the audio server port for streaming
+     * @returns Promise resolving to the port number
+     */
+    getAudioServerPort() {
+        return ipcRenderer.invoke('get-audio-server-port')
+    },
+
+    /**
      * Get the audio library data
      * @returns Promise resolving to the AudioLibrary
      */

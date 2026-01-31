@@ -1,12 +1,17 @@
 import React, { createContext, useContext, useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { AudioTrack, AudioLibrary, Playlist, AudioPlaybackState, AudioScanResult } from '@wfrp/shared';
 
+let audioServerPort: number | null = null;
+
 /**
  * Utility function to get audio file URL from path
- * Uses the custom audio:// protocol registered in Electron
+ * Uses HTTP server for reliable seeking support
  */
 export function getAudioUrl(filePath: string): string {
-    // Use the custom protocol for local files
+    if (audioServerPort) {
+        return `http://127.0.0.1:${audioServerPort}/${encodeURIComponent(filePath)}`;
+    }
+    // Fallback to custom protocol (less reliable for seeking)
     return `audio://${encodeURIComponent(filePath)}`;
 }
 
@@ -100,9 +105,25 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
     const [library, setLibrary] = useState<AudioLibrary>(defaultLibrary);
     const [isLoading, setIsLoading] = useState(false);
     const [playbackState, setPlaybackState] = useState<AudioPlaybackState>(defaultPlaybackState);
+    const [isInitialized, setIsInitialized] = useState(false);
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        const initAudioServer = async () => {
+            try {
+                const port = await window.ipcRenderer.getAudioServerPort();
+                audioServerPort = port;
+                console.log('Audio server port:', port);
+                setIsInitialized(true);
+            } catch (error) {
+                console.error('Failed to get audio server port:', error);
+                setIsInitialized(true);
+            }
+        };
+        initAudioServer();
+    }, []);
 
     // Initialize audio element
     useEffect(() => {
@@ -134,7 +155,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
                 const [nextTrack, ...remainingQueue] = playbackState.queue;
                 playTrackInternal(nextTrack, remainingQueue);
             } else if (playbackState.isRepeating && playbackState.currentTrack) {
-                // Repeat current track
+                console.log('Repeating track:', playbackState.currentTrack.displayName || playbackState.currentTrack.filename);
                 audio.currentTime = 0;
                 audio.play();
             } else {
@@ -409,6 +430,10 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             } else if (playbackState.playbackSource.type === 'playlist') {
                 playPlaylist(playbackState.playbackSource.id);
             }
+            else if (playbackState.playbackSource.type === 'single' && playbackState.currentTrack) {
+                console.log('Repeating single track');
+                playTrackInternal(playbackState.currentTrack, [], playbackState.playbackSource);
+            }
         } else {
             stop();
         }
@@ -577,6 +602,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
     }, []);
 
     const toggleRepeat = useCallback(() => {
+        console.log('Toggling repeat from', playbackState.isRepeating);
         setPlaybackState(prev => ({ ...prev, isRepeating: !prev.isRepeating }));
     }, []);
 

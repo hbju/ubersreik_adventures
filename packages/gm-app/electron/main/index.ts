@@ -9,6 +9,7 @@ import os from 'node:os'
 import { update } from './update'
 import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates, broadcastChatMessage, getChatHistory } from './server'
 import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
+import { startAudioServer, getAudioServerPort, stopAudioServer } from './audioServer'
 import {
   loadAudioLibrary,
   saveAudioLibrary,
@@ -114,71 +115,8 @@ async function createWindow() {
   startWebSocketServer(win);
 }
 
-app.whenReady().then(() => {
-  protocol.handle('audio', async (request) => {
-    console.log('Audio protocol request URL:', request);
-    const filePath = decodeURIComponent(request.url.replace('audio://', ''));
-
-    try {
-      const stat = await fs.promises.stat(filePath);
-      const fileSize = stat.size;
-      const rangeHeader = request.headers.get('range');
-
-      if (rangeHeader) {
-        const match = rangeHeader.match(/bytes=(\d+)-(\d*)/);
-        if (match) {
-          const start = parseInt(match[1], 10);
-          const end = match[2] ? parseInt(match[2], 10) : fileSize - 1;
-
-          if (start >= fileSize) {
-            return new Response('Range Not Satisfiable', {
-              status: 416,
-              headers: {
-                'Content-Range': `bytes */${fileSize}`,
-              },
-            });
-          }
-
-          const validEnd = Math.min(end, fileSize - 1);
-          const chunkSize = validEnd - start + 1;
-
-          const buffer = Buffer.alloc(chunkSize);
-          const fd = await fs.promises.open(filePath, 'r');
-          try {
-            await fd.read(buffer, 0, chunkSize, start);
-          } finally {
-            await fd.close();
-          }
-
-          console.log(`Serving audio range: ${start}-${validEnd} of ${fileSize}`);
-
-          return new Response(buffer, {
-            status: 206,
-            headers: {
-              'Content-Range': `bytes ${start}-${validEnd}/${fileSize}`,
-              'Accept-Ranges': 'bytes',
-              'Content-Length': String(chunkSize),
-              'Content-Type': getMimeType(filePath),
-            },
-          });
-        }
-      }
-
-      // No range header - return full file
-      const fileBuffer = await fs.promises.readFile(filePath);
-      return new Response(fileBuffer, {
-        status: 200,
-        headers: {
-          'Accept-Ranges': 'bytes',
-          'Content-Length': String(fileSize),
-          'Content-Type': getMimeType(filePath),
-        },
-      });
-    } catch (error) {
-      console.error('Audio protocol error:', error);
-      return new Response('File not found', { status: 404 });
-    }
-  });
+app.whenReady().then(async () => {
+  await startAudioServer();
 
   // Load campaign data on startup
   clearCampaignCache();
@@ -201,6 +139,7 @@ function getMimeType(filePath: string): string {
 }
 
 app.on('window-all-closed', () => {
+  stopAudioServer();
   win = null
   if (process.platform !== 'darwin') app.quit()
 })
@@ -319,6 +258,13 @@ ipcMain.handle('get-chat-history', async () => {
 });
 
 // ==================== Audio Manager IPC Handlers ====================
+
+/**
+ * Return the audio server port
+ * */
+ipcMain.handle('get-audio-server-port', () => {
+    return getAudioServerPort();
+});
 
 /**
  * Get the audio library data
