@@ -276,6 +276,21 @@ export interface Character {
     lore?: CharacterLore; // Knowledge, secrets, and notes about the character
     isMinion?: boolean; // If true, opens in condensed Minion View instead of full sheet
     templateId?: string; // Reference to the CharacterTemplate this character was generated from
+    actionBar?: ActionBarEntry[]; // Quick action slots (1-9, 0)
+}
+
+// ========================================
+// Action Bar System Types
+// ========================================
+
+/**
+ * An entry in the player's action bar for quick access to skills/weapons
+ */
+export interface ActionBarEntry {
+    slotIndex: number;
+    type: 'skill' | 'weapon' | 'characteristic';
+    id: string;
+    label: string;
 }
 
 // ========================================

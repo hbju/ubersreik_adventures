@@ -50,6 +50,7 @@ import { CareerChangeModal } from './components/CareerChangeModal';
 import { ReputationDisplay } from './components/ReputationDisplay';
 import { QuestJournal } from './components/journal/QuestJournal';
 import { MapTransitionOverlay } from './components/MapTransitionOverlay';
+import { ActionBar } from './components/actionbar';
 import { Quest, QuestUpdateMessage, QuestDeleteMessage } from '@wfrp/shared';
 
 
@@ -985,6 +986,16 @@ const PlayerApp: React.FC = () => {
                         showHeader={true}
                     />
                 </div>
+            )}
+
+            {character && (
+                <ActionBar
+                    character={character}
+                    onCharacterUpdate={handleEditModeCharacterUpdate}
+                    onSkillExecute={handleSkillClick}
+                    onWeaponExecute={handleWeaponRoll}
+                    onCharacteristicExecute={handleCharacteristicClick}
+                />
             )}
 
             <Update />

@@ -68,6 +68,13 @@ export const CharacteristicsTable: React.FC<CharacteristicsTableProps> = ({
         onCharacterUpdate({ characteristics: updatedCharacteristics });
     };
 
+    const handleDragStart = (e: React.DragEvent, charKey: string, charName: string) => {
+        e.dataTransfer.setData('application/action-type', 'characteristic');
+        e.dataTransfer.setData('application/action-id', charKey);
+        e.dataTransfer.setData('application/action-label', charName);
+        e.dataTransfer.effectAllowed = 'copy';
+    };
+
     const charKeys = Object.keys(character.characteristics) as Array<keyof Character['characteristics']>;
 
     return (
@@ -174,7 +181,9 @@ export const CharacteristicsTable: React.FC<CharacteristicsTableProps> = ({
                                 <button
                                     className="roll-button"
                                     onClick={() => onCharacteristicClick?.(key, CHAR_FULL_NAMES[key], total)}
-                                    title={`Roll ${CHAR_FULL_NAMES[key]}`}
+                                    title={`Roll ${CHAR_FULL_NAMES[key]} - Drag to Action Bar`}
+                                    draggable
+                                    onDragStart={(e) => handleDragStart(e, key, CHAR_NAMES[key])}
                                 >
                                     {total}
                                 </button>

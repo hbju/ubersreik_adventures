@@ -106,6 +106,14 @@
     box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
 }
 
+.roll-button[draggable="true"] {
+    cursor: grab;
+}
+
+.roll-button[draggable="true"]:active {
+    cursor: grabbing;
+}
+
 .advance-button {
     position: absolute;
     right: 50%;

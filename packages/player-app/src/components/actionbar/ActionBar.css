@@ -1,0 +1,180 @@
+/* ========== ACTION BAR CONTAINER ========== */
+.action-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1100;
+    background: linear-gradient(to bottom, rgba(44, 24, 16, 0.95), rgba(26, 20, 16, 0.95));
+    border: 3px solid #8b6914;
+    border-radius: 8px;
+    padding: 8px 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.action-bar-slots {
+    display: flex;
+    gap: 6px;
+}
+
+/* ========== ACTION SLOT ========== */
+.action-slot {
+    width: 56px;
+    height: 64px;
+    background: rgba(30, 20, 10, 0.8);
+    border: 2px solid #5a3d1f;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+}
+
+.action-slot:hover {
+    border-color: #8b6914;
+    background: rgba(60, 40, 20, 0.9);
+}
+
+.action-slot.empty {
+    background: rgba(20, 15, 10, 0.5);
+    border-color: #3d2817;
+    border-style: dashed;
+    cursor: default;
+}
+
+.action-slot.empty:hover {
+    border-color: #5a3d1f;
+    background: rgba(40, 30, 15, 0.6);
+}
+
+/* Weapon slot styling */
+.action-slot.weapon {
+    border-color: #8b4513;
+}
+
+.action-slot.weapon:hover {
+    border-color: #cd853f;
+    box-shadow: 0 0 8px rgba(139, 69, 19, 0.5);
+}
+
+/* Skill slot styling */
+.action-slot.skill {
+    border-color: #4a6f4a;
+}
+
+.action-slot.skill:hover {
+    border-color: #6a9f6a;
+    box-shadow: 0 0 8px rgba(74, 111, 74, 0.5);
+}
+
+/* Characteristic slot styling */
+.action-slot.characteristic {
+    border-color: #4a4a8b;
+}
+
+.action-slot.characteristic:hover {
+    border-color: #6a6aab;
+    box-shadow: 0 0 8px rgba(74, 74, 139, 0.5);
+}
+
+/* Disabled/Unequipped state */
+.action-slot.disabled {
+    border-color: #8b1a1a !important;
+    background: rgba(80, 20, 20, 0.6);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.action-slot.disabled:hover {
+    box-shadow: none;
+    background: rgba(80, 20, 20, 0.6);
+}
+
+.action-slot.disabled .slot-icon,
+.action-slot.disabled .slot-label {
+    opacity: 0.5;
+    filter: grayscale(50%);
+}
+
+/* Slot content */
+.slot-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+    justify-content: center;
+}
+
+.slot-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.slot-label {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 0.65rem;
+    color: #d4af37;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.slot-key {
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 0.6rem;
+    color: #8b6914;
+    opacity: 0.8;
+}
+
+/* Drag over effect */
+.action-slot.drag-over {
+    border-color: #d4af37;
+    background: rgba(100, 80, 40, 0.8);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+/* Active/pressed state */
+.action-slot:active:not(.empty):not(.disabled) {
+    transform: scale(0.95);
+    background: rgba(80, 60, 30, 0.9);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .action-bar {
+        bottom: 10px;
+        padding: 6px 8px;
+    }
+
+    .action-bar-slots {
+        gap: 4px;
+    }
+
+    .action-slot {
+        width: 44px;
+        height: 52px;
+        padding: 3px;
+    }
+
+    .slot-icon {
+        font-size: 1.1rem;
+    }
+
+    .slot-label {
+        font-size: 0.55rem;
+    }
+
+    .slot-key {
+        font-size: 0.5rem;
+    }
+}

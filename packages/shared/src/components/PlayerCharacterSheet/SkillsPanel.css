@@ -138,6 +138,14 @@
     opacity: 1;
 }
 
+.skill-row[draggable="true"] {
+    cursor: grab;
+}
+
+.skill-row[draggable="true"]:active {
+    cursor: grabbing;
+}
+
 .col-name { text-align: left; }
 .col-char { text-align: center; }
 .col-adv { text-align: center; }

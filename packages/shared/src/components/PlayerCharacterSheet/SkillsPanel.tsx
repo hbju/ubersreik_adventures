@@ -88,6 +88,13 @@ export const SkillsPanel: React.FC<SkillsPanelProps> = ({
         }
     };
 
+    const handleDragStart = (e: React.DragEvent, skill: Skill) => {
+        e.dataTransfer.setData('application/action-type', 'skill');
+        e.dataTransfer.setData('application/action-id', skill.id);
+        e.dataTransfer.setData('application/action-label', skill.name);
+        e.dataTransfer.effectAllowed = 'copy';
+    };
+
     const renderSkillRow = (skill: Skill, isBasic: boolean) => {
         const charKey = skill.characteristic.toLowerCase() as keyof Character['characteristics'];
         const characteristicValue = character.characteristics[charKey];
@@ -101,6 +108,9 @@ export const SkillsPanel: React.FC<SkillsPanelProps> = ({
             <div 
                 key={skill.id} 
                 className={`skill-row ${isUnlocked ? 'unlocked' : ''}`}
+                draggable
+                onDragStart={(e) => handleDragStart(e, skill)}
+                title="Drag to Action Bar to create quick slot"
             >
                 <span className={`skill-name ${isUnlocked ? 'skill-unlocked' : ''}`}>
                     {skill.name}

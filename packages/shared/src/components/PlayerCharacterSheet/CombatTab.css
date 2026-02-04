@@ -39,6 +39,16 @@
     border: 1px solid #5a3d1f;
     border-radius: 4px;
     padding: 0.75rem;
+    cursor: grab;
+}
+
+.weapon-card:active {
+    cursor: grabbing;
+}
+
+.weapon-card[draggable="true"]:hover {
+    border-color: #8b6914;
+    background: rgba(30, 20, 10, 0.4);
 }
 
 .weapon-header {

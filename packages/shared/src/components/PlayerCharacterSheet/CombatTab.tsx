@@ -84,7 +84,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
 
     const armourPoints = calculateArmourPoints();
 
-    // Get equipped weapons only (weapons where equippedWeapons[id] === true)
     const weaponById = Object.fromEntries((weaponsData as Weapon[]).map(w => [w.id, w]));
     const equippedWeaponsState = character.inventory.equippedWeapons || {};
     const equippedWeapons = Object.entries(character.inventory.weapons)
@@ -94,7 +93,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
 
     console.log(equippedWeapons)
 
-    // Get condition names
     const getConditionName = (conditionId: string): string => {
         const condition = conditionsData.find((c: any) => c.id === conditionId);
         return condition ? condition.name : conditionId;
@@ -112,16 +110,12 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         });
     };
 
-    // Calculate damage for weapons
     const getWeaponDamage = (weapon: Weapon): string => {
-        // Parse the damage string (e.g., "+SB+4" means Strength Bonus + 4)
         const damage = weapon.damage;
         if (!damage) return '—';
         
-        // If it contains SB, calculate it
         if (damage.includes('SB')) {
             const sb = Math.floor(calculateCharacteristicValue(character.characteristics.s) / 10);
-            // Parse the modifier if any
             const match = damage.match(/SB([+-]?\d+)?/);
             if (match) {
                 const modifier = match[1] ? parseInt(match[1]) : 0;
@@ -131,7 +125,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         return damage;
     };
 
-    // Get weapon damage as a number for combat calculations
     const getWeaponDamageValue = (weapon: Weapon): number => {
         const damage = weapon.damage;
         if (!damage) return 0;
@@ -148,7 +141,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         return parseInt(damage) || 0;
     };
 
-    // Determine if a weapon is ranged based on its group
     const isRangedWeapon = (weapon: Weapon): boolean => {
         const group = weapon.group?.toLowerCase() || '';
         return group.includes('bow') ||
@@ -159,7 +151,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
             group.includes('thrown');
     };
 
-    // Get the skill ID for a weapon
     const getWeaponSkillId = (weapon: Weapon): string => {
         const isRanged = isRangedWeapon(weapon);
         if (isRanged) {
@@ -169,12 +160,10 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         return group === 'basic' ? 'melee' : 'melee_' + group;
     };
 
-    // Get the skill value for a weapon (WS for melee, BS for ranged)
     const getWeaponSkillValue = (weapon: Weapon): { skillId: string; skillName: string; value: number } => {
         const isRanged = isRangedWeapon(weapon);
         const skillId = getWeaponSkillId(weapon);
         
-        // Try to find the specific skill
         const skill = character.skills.find(s => s.id === skillId);
         
         if (skill) {
@@ -185,7 +174,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
             };
         }
 
-        // Fall back to base characteristic
         if (isRanged) {
             return { 
                 skillId: 'bs', 
@@ -200,7 +188,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         };
     };
 
-    // Get Dodge skill value
     const getDodgeSkill = (): { skillId: string; skillName: string; value: number } => {
         const dodgeSkill = character.skills.find(s => s.id === 'dodge' || s.name?.toLowerCase() === 'dodge');
         if (dodgeSkill) {
@@ -210,7 +197,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                 value: calculateSkillValue(dodgeSkill, character)
             };
         }
-        // Return Ag if no dodge skill
         return {
             skillId: 'ag',
             skillName: 'Agility',
@@ -218,7 +204,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         };
     };
 
-    // Get best melee skill for parrying
     const getBestMeleeSkill = (): { skillId: string; skillName: string; value: number, weapon: Weapon | null } => {
         const equipedMeleeWeapons = equippedWeapons.filter(w => !isRangedWeapon(w));
         if (equipedMeleeWeapons.length === 0) {
@@ -254,7 +239,6 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         };
     };
 
-    // Handle weapon attack click
     const handleWeaponAttack = (weapon: Weapon) => {
         if (!onWeaponRoll) return;
         const { skillId, skillName, value } = getWeaponSkillValue(weapon);
@@ -262,18 +246,23 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         onWeaponRoll(weapon, skillId, skillName, value, damage);
     };
 
-    // Handle dodge defense
     const handleDodge = () => {
         if (!onDefendRoll) return;
         const { skillId, skillName, value } = getDodgeSkill();
         onDefendRoll(skillId, skillName, value);
     };
 
-    // Handle parry defense (using a weapon)
     const handleParry = (weapon: Weapon) => {
         if (!onWeaponRoll) return;
         const { skillId, skillName, value } = getWeaponSkillValue(weapon);
         onWeaponRoll(weapon, skillId, skillName, value, 0);
+    };
+
+    const handleWeaponDragStart = (e: React.DragEvent, weapon: Weapon) => {
+        e.dataTransfer.setData('application/action-type', 'weapon');
+        e.dataTransfer.setData('application/action-id', weapon.id);
+        e.dataTransfer.setData('application/action-label', weapon.name);
+        e.dataTransfer.effectAllowed = 'copy';
     };
 
     return (
@@ -314,7 +303,13 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                             const { skillName, value } = getWeaponSkillValue(weapon);
                             const isRanged = isRangedWeapon(weapon);
                             return (
-                            <div key={weapon.id} className="weapon-card">
+                            <div 
+                                key={weapon.id} 
+                                className="weapon-card"
+                                draggable
+                                onDragStart={(e) => handleWeaponDragStart(e, weapon)}
+                                title="Drag to Action Bar to create quick slot"
+                            >
                                 <div className="weapon-header">
                                     <span className="weapon-name">{weapon.name}</span>
                                     <span className="weapon-group">{weapon.group}</span>
