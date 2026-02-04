@@ -10,7 +10,7 @@
         0 0 0 1px var(--color-gold),
         0 8px 32px rgba(0, 0, 0, 0.7),
         inset 0 0 40px rgba(139, 26, 26, 0.05);
-    z-index: 1001;
+    z-index: 1012;
     display: flex;
     flex-direction: column;
 }
@@ -94,7 +94,7 @@
 
 .combatantRow {
     display: grid;
-    grid-template-columns: 45px 1fr 105px 32px;
+    grid-template-columns: 45px 1fr auto;
     align-items: center;
     gap: 12px;
 }
@@ -146,6 +146,19 @@ li.activeTurn {
     outline: none;
     border-color: var(--color-gold);
     box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+.woundHealthy {
+    color: rgb(34, 139, 34);
+}
+.woundInjured {
+    color: var(--color-gold-dark);
+}
+.woundWounded {
+    color: var(--color-blood-red);
+}
+.woundCritical {
+    color: var(--color-seal-red);
 }
 
 .expandBtn {

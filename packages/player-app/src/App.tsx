@@ -571,7 +571,7 @@ const PlayerApp: React.FC = () => {
                     left: '10px',
                     display: 'grid',
                     gap: '10px',
-                    zIndex: 1100
+                    zIndex: 1011
                 }}>
                     <button
                         onClick={() => setCurrentView('character')}
@@ -825,47 +825,6 @@ const PlayerApp: React.FC = () => {
                             <button onClick={disconnect}>Disconnect</button>
                         </div>
                     )}
-                    {testModalInfo && character && (
-                        <TalentSelectionModal
-                            character={character}
-                            testName={testModalInfo.name}
-                            testId={testModalInfo.id}
-                            baseTarget={testModalInfo.value}
-                            fortunePoints={character.status.fortune.current}
-                            corruptionCurrent={character.status.corruption.current}
-                            corruptionMax={character.status.corruption.max}
-                            onClose={() => setTestModalInfo(null)}
-                            onRoll={handleRoll}
-                        />
-                    )}
-                    {/* Weapon Attack/Defense Roll Modal */}
-                    {weaponRollInfo && character && (
-                        <TalentSelectionModal
-                            character={character}
-                            testName={`${weaponRollInfo.weapon.name}`}
-                            testId={weaponRollInfo.skillId}
-                            baseTarget={weaponRollInfo.skillValue}
-                            fortunePoints={character.status.fortune.current}
-                            corruptionCurrent={character.status.corruption.current}
-                            corruptionMax={character.status.corruption.max}
-                            onClose={() => setWeaponRollInfo(null)}
-                            onRoll={handleWeaponRollComplete}
-                        />
-                    )}
-                    {/* Defense Roll Modal (Dodge) */}
-                    {defenseRollInfo && character && (
-                        <TalentSelectionModal
-                            character={character}
-                            testName={`Dodge (${defenseRollInfo.skillName})`}
-                            testId={defenseRollInfo.skillId}
-                            baseTarget={defenseRollInfo.skillValue}
-                            fortunePoints={character.status.fortune.current}
-                            corruptionCurrent={character.status.corruption.current}
-                            corruptionMax={character.status.corruption.max}
-                            onClose={() => setDefenseRollInfo(null)}
-                            onRoll={handleDefenseRollComplete}
-                        />
-                    )}
                 </>
             )}
 
@@ -986,6 +945,47 @@ const PlayerApp: React.FC = () => {
                         showHeader={true}
                     />
                 </div>
+            )}
+
+
+            {testModalInfo && character && (
+                <TalentSelectionModal
+                    character={character}
+                    testName={testModalInfo.name}
+                    testId={testModalInfo.id}
+                    baseTarget={testModalInfo.value}
+                    fortunePoints={character.status.fortune.current}
+                    corruptionCurrent={character.status.corruption.current}
+                    corruptionMax={character.status.corruption.max}
+                    onClose={() => setTestModalInfo(null)}
+                    onRoll={handleRoll}
+                />
+            )}
+            {weaponRollInfo && character && (
+                <TalentSelectionModal
+                    character={character}
+                    testName={`${weaponRollInfo.weapon.name}`}
+                    testId={weaponRollInfo.skillId}
+                    baseTarget={weaponRollInfo.skillValue}
+                    fortunePoints={character.status.fortune.current}
+                    corruptionCurrent={character.status.corruption.current}
+                    corruptionMax={character.status.corruption.max}
+                    onClose={() => setWeaponRollInfo(null)}
+                    onRoll={handleWeaponRollComplete}
+                />
+            )}
+            {defenseRollInfo && character && (
+                <TalentSelectionModal
+                    character={character}
+                    testName={`Dodge (${defenseRollInfo.skillName})`}
+                    testId={defenseRollInfo.skillId}
+                    baseTarget={defenseRollInfo.skillValue}
+                    fortunePoints={character.status.fortune.current}
+                    corruptionCurrent={character.status.corruption.current}
+                    corruptionMax={character.status.corruption.max}
+                    onClose={() => setDefenseRollInfo(null)}
+                    onRoll={handleDefenseRollComplete}
+                />
             )}
 
             {character && (

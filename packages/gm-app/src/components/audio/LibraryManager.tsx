@@ -133,7 +133,15 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
 
     const handleApplyTags = useCallback(async () => {
         if (selectedTrackIds.size === 0 || newTags.length === 0) return;
-        await bulkUpdateTrackTags(Array.from(selectedTrackIds), newTags, []);
+        let tagsToRemove: string[] = [];
+        if (selectedTrackIds.size === 1) {
+            const trackId = Array.from(selectedTrackIds)[0];
+            const track = library.tracks.find(t => t.id === trackId);
+            if (track) {
+                tagsToRemove = track.tags.filter(tag => !newTags.includes(tag));
+            }
+        }
+        await bulkUpdateTrackTags(Array.from(selectedTrackIds), newTags, tagsToRemove);
         setShowTagModal(false);
         setNewTags([]);
         setSelectedTrackIds(new Set());
@@ -217,14 +225,14 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                             onClick={handleRescan}
                             disabled={isLoading}
                         >
-                            🔄 {t('audio.rescanLibrary', 'Rescan Library')}
+                            🔄
                         </button>
                         <button
                             className={`${styles.actionButton} ${styles.primary}`}
                             onClick={() => scanDirectory()}
                             disabled={isLoading}
                         >
-                            📁 {t('audio.selectFolder', 'Select Folder')}
+                            📁
                         </button>
                         <button
                             className={styles.closeButton}
@@ -254,7 +262,7 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                                             type="checkbox"
                                             className={styles.filterCheckbox}
                                             checked={selectedTags.includes(tag)}
-                                            onChange={() => {}}
+                                            onChange={() => { }}
                                         />
                                         <span className={styles.filterLabel}>{tag}</span>
                                         <span className={styles.filterCount}>
@@ -268,65 +276,6 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                                     </div>
                                 )}
                             </div>
-                        </div>
-
-                        {/* Playlists */}
-                        <div className={styles.playlistSection}>
-                            <div className={styles.sidebarSection}>
-                                <div className={styles.sidebarHeader}>
-                                    {t('audio.playlists', 'Playlists')}
-                                </div>
-                            </div>
-                            <div
-                                className={`${styles.playlistItem} ${!selectedPlaylistId ? styles.selected : ''}`}
-                                onClick={() => setSelectedPlaylistId(null)}
-                            >
-                                <span className={styles.playlistIcon}>📚</span>
-                                <span className={styles.playlistName}>
-                                    {t('audio.allTracks', 'All Tracks')}
-                                </span>
-                            </div>
-                            {library.playlists.map(playlist => (
-                                <div
-                                    key={playlist.id}
-                                    className={`${styles.playlistItem} ${selectedPlaylistId === playlist.id ? styles.selected : ''}`}
-                                    onClick={() => setSelectedPlaylistId(playlist.id)}
-                                >
-                                    <span className={styles.playlistIcon}>📋</span>
-                                    <span className={styles.playlistName}>{playlist.name}</span>
-                                    <div className={styles.playlistActions}>
-                                        <button
-                                            className={styles.playlistActionBtn}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                openEditPlaylist(playlist);
-                                            }}
-                                            title={t('audio.editPlaylist', 'Edit')}
-                                        >
-                                            ✏️
-                                        </button>
-                                        <button
-                                            className={styles.playlistActionBtn}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleDeletePlaylist(playlist.id);
-                                            }}
-                                            title={t('audio.deletePlaylist', 'Delete')}
-                                        >
-                                            🗑️
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                            <button
-                                className={styles.newPlaylistBtn}
-                                onClick={() => {
-                                    setPlaylistName('');
-                                    setShowPlaylistModal('create');
-                                }}
-                            >
-                                + {t('audio.newPlaylist', 'New Playlist')}
-                            </button>
                         </div>
                     </div>
 
@@ -347,6 +296,13 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                                     disabled={selectedTrackIds.size === 0}
                                     onClick={() => {
                                         setNewTags([]);
+                                        if (selectedTrackIds.size === 1) {
+                                            const trackId = Array.from(selectedTrackIds)[0];
+                                            const track = library.tracks.find(t => t.id === trackId);
+                                            if (track) {
+                                                setNewTags(track.tags);
+                                            }
+                                        }
                                         setTagInput('');
                                         setShowTagModal(true);
                                     }}
@@ -470,6 +426,8 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                             )}
                         </div>
 
+                        
+
                         {/* Footer */}
                         <div className={styles.footer}>
                             <div className={styles.stats}>
@@ -483,6 +441,68 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                                     </span>
                                 )}
                             </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.sidebar}>
+
+                        {/* Playlists */}
+                        <div className={styles.playlistSection}>
+                            <div className={styles.sidebarSection}>
+                                <div className={styles.sidebarHeader}>
+                                    {t('audio.playlists', 'Playlists')}
+                                </div>
+                            </div>
+                            <div
+                                className={`${styles.playlistItem} ${!selectedPlaylistId ? styles.selected : ''}`}
+                                onClick={() => setSelectedPlaylistId(null)}
+                            >
+                                <span className={styles.playlistIcon}>📚</span>
+                                <span className={styles.playlistName}>
+                                    {t('audio.allTracks', 'All Tracks')}
+                                </span>
+                            </div>
+                            {library.playlists.map(playlist => (
+                                <div
+                                    key={playlist.id}
+                                    className={`${styles.playlistItem} ${selectedPlaylistId === playlist.id ? styles.selected : ''}`}
+                                    onClick={() => setSelectedPlaylistId(playlist.id)}
+                                >
+                                    <span className={styles.playlistIcon}>📋</span>
+                                    <span className={styles.playlistName}>{playlist.name}</span>
+                                    <div className={styles.playlistActions}>
+                                        <button
+                                            className={styles.playlistActionBtn}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                openEditPlaylist(playlist);
+                                            }}
+                                            title={t('audio.editPlaylist', 'Edit')}
+                                        >
+                                            ✏️
+                                        </button>
+                                        <button
+                                            className={styles.playlistActionBtn}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeletePlaylist(playlist.id);
+                                            }}
+                                            title={t('audio.deletePlaylist', 'Delete')}
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                            <button
+                                className={styles.newPlaylistBtn}
+                                onClick={() => {
+                                    setPlaylistName('');
+                                    setShowPlaylistModal('create');
+                                }}
+                            >
+                                + {t('audio.newPlaylist', 'New Playlist')}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -534,7 +554,7 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                             </div>
                             {allTags.length > 0 && (
                                 <div className={styles.tagSuggestions}>
-                                    {allTags.filter(t => !newTags.includes(t)).slice(0, 10).map(tag => (
+                                    {allTags.filter(t => !newTags.includes(t)).map(tag => (
                                         <button
                                             key={tag}
                                             className={styles.tagSuggestion}
