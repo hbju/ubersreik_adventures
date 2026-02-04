@@ -13,6 +13,7 @@ interface FooterProps {
     onStartSession: () => void,
     onShowJournal: () => void,
     onShowQuestJournal: () => void,
+    onShowCalendar: () => void,
     onShowShop: () => void,
     onShowShopConfigurator: () => void,
     onShowDiceTray: () => void,
@@ -124,6 +125,7 @@ export const Footer: React.FC<FooterProps> = ({
     onStartSession,
     onShowJournal,
     onShowQuestJournal,
+    onShowCalendar,
     onShowShop,
     onShowShopConfigurator,
     onShowDiceTray,
@@ -147,6 +149,7 @@ export const Footer: React.FC<FooterProps> = ({
     const journalItems = [
         { icon: '📜', label: t('menu.journal'), onClick: onShowJournal },
         { icon: '📋', label: t('menu.quests', 'Quests'), onClick: onShowQuestJournal },
+        { icon: '📅', label: t('menu.calendar', 'Calendar'), onClick: onShowCalendar },
     ];
 
     const commerceItems = [

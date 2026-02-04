@@ -58,6 +58,7 @@ export const AudioControls: React.FC<AudioControlsProps> = ({ compact = false })
     }, [fadeOut, stop]);
 
     const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log('Seek event value:', e.target.value);
         seek(parseFloat(e.target.value));
     }, [seek]);
 

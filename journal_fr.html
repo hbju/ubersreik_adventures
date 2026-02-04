@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ubersreik Herald - Issue I</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=UnifrakturMaguntia&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #2a1810;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .newspaper {
+            background: linear-gradient(135deg, #f4e4bc 0%, #e8d4a8 50%, #f0debb 100%);
+            max-width: 1000px;
+            padding: 30px 40px;
+            font-family: 'IM Fell English', serif;
+            color: #1a1a1a;
+            box-shadow:
+                0 0 20px rgba(0, 0, 0, 0.5),
+                inset 0 0 50px rgba(139, 90, 43, 0.1);
+            position: relative;
+        }
+
+        .newspaper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                repeating-linear-gradient(90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(139, 90, 43, 0.03) 2px,
+                    rgba(139, 90, 43, 0.03) 4px);
+            pointer-events: none;
+        }
+
+        .masthead {
+            text-align: center;
+            border-bottom: 3px double #1a1a1a;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .masthead h1 {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 3.5em;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 0 rgba(139, 90, 43, 0.3);
+        }
+
+        .masthead .subtitle {
+            font-style: italic;
+            font-size: 1.1em;
+            color: #4a3520;
+        }
+
+        .issue-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #8b5a2b;
+        }
+
+        .motto {
+            font-style: italic;
+            text-align: center;
+            margin: 5px 0;
+            color: #5a4030;
+        }
+
+        .columns {
+            column-count: 2;
+            column-gap: 30px;
+            column-rule: 1px solid #8b5a2b;
+        }
+
+        .article {
+            break-inside: avoid;
+            margin-bottom: 20px;
+        }
+
+        .article h2 {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #8b5a2b;
+            padding-bottom: 5px;
+        }
+
+        .article p {
+            text-align: justify;
+            line-height: 1.2;
+            font-size: 0.75em;
+            margin-bottom: 8px;
+            text-indent: 1.2em;
+        }
+
+        .article p:first-of-type {
+            text-indent: 0;
+        }
+
+        .article p:first-of-type::first-letter {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 2.5em;
+            float: left;
+            line-height: 0.8;
+            padding-right: 8px;
+            color: #8b0000;
+        }
+
+        .highlight {
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .advertisement {
+            break-inside: avoid;
+            border: 2px solid #1a1a1a;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .advertisement h3 {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+        }
+
+        .advertisement p {
+            font-size: 0.9em;
+            margin: 5px 0;
+            text-indent: 0 !important;
+            line-height: 1;
+        }
+
+        .advertisement .disclaimer {
+            font-size: 0.7em;
+            font-style: italic;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .reward-box {
+            background: #1a1a1a;
+            color: #f4e4bc;
+            padding: 8px 15px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .coming-soon {
+            break-inside: avoid;
+            border: 3px double #8b0000;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .coming-soon h3 {
+            color: #8b0000;
+        }
+
+        .coming-soon p {
+            text-indent: 0 !important;
+            margin: 5px 0;
+        }
+
+        .full-width {
+            column-span: all;
+            text-align: center;
+            padding: 10px 0;
+            border-top: 2px solid #8b5a2b;
+            border-bottom: 2px solid #8b5a2b;
+            margin: 15px 0;
+        }
+
+        .theatre-ad {
+            font-style: italic;
+            font-size: 0.85em;
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #8b5a2b;
+            column-span: all;
+        }
+
+        .price {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 0.9em;
+            font-weight: bold;
+            background: #1a1a1a;
+            color: #f4e4bc;
+            padding: 5px 10px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .newspaper {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="newspaper">
+        <div class="price">5 Pennings</div>
+
+        <header class="masthead">
+            <h1>Le Héraut d'Ubersreik</h1>
+            <p class="motto">"La Vérité Mise en Lumière"</p>
+            <div class="issue-info">
+                <span>Édition I, Volume I</span>
+                <span>Wellentag, 5 Sigmarzeit, 2512</span>
+                <span>Imprimé mais non cautionné par les Presses Engbart d'Ubersreik</span>
+            </div>
+        </header>
+
+        <div class="columns">
+            <article class="article">
+                <h2>Le Magnustag Approche !</h2>
+                <p>Dans cinq jours à peine, les citoyens de notre noble cité se rassembleront pour honorer Magnus le Pieux avec la traditionnelle construction des 'Maggies'.</p>
+                <p>Après deux semaines d'agitation et d'émeutes, est-ce vraiment là tout ce que les nobles cupides ont trouvé pour apaiser la cause du peuple ? Le <span class="highlight">Héraut</span> surveillera la situation. Et VOUS ?</p>
+            </article>
+
+            <article class="article">
+                <h2>L'Enfer de l'Allée du Sorcier évité de justesse !</h2>
+                <p>La nuit dernière, une bande d'<span class="highlight">incendiaires</span> a tenté de brûler l'établissement d'une certaine ELARA, une couturière elfe à la réputation douteuse. Le brasier a été empêché non pas par notre Guet vigilant — oh que non ! — mais par une bande de <span class="highlight">simples criminels</span> qui rôdaient par là.</p>
+                <p>Votre rédacteur a appris qu'il y a quelques semaines à peine, une autre Elfe a été vue <span class="highlight">agressant</span> un Chasseur de Sorcières respecté à la pension de Rugger. Ces incidents sont-ils liés ? Y a-t-il un <span class="highlight">complot elfique</span> à l'œuvre à Ubersreik ? Les "longues-oreilles" gardent bien leurs secrets, mais le Héraut veille de plus près encore !</p>
+                <p>Les citoyens sont priés de signaler toute <span class="highlight">activité elfique suspecte</span> au Guet. Ou à cette publication, si le Guet s'avérait... indisposé.</p>
+            </article>
+
+            <article class="article">
+                <h2>Le Fantôme des Docks !</h2>
+                <p>Un <span class="highlight">spectre</span> hante les honnêtes travailleurs de nos quais ! Des dizaines de débardeurs ont été retrouvés <span class="highlight">absolument tabassés</span> au cours de la quinzaine passée, sans le moindre témoin des attaques. Les victimes parlent d'ombres, de silence, et disent s'être réveillées dans le caniveau, les os brisés et la fierté en lambeaux.</p>
+                <p>La Guilde des Débardeurs offre <span class="highlight">cinq couronnes d'or</span> pour toute information menant à la capture de cette menace spectrale. La Guilde des Bateliers a doublé cette prime. Est-ce un démon ? Un esprit vengeur ? Un homme très en colère doté d'un jeu de jambes exceptionnel ?</p>
+                <div class="reward-box">RÉCOMPENSE : 10 CO pour toute information !<br>Contactez la Guilde des Débardeurs !</div>
+            </article>
+
+            <article class="article">
+                <h2>Les émeutes endommagent une boutique de renom</h2>
+                <p>Les récents troubles civils — que cette publication attribue à des <span class="highlight">agitateurs étrangers</span> et des <span class="highlight">sympathisants Jungfreud</span> — ont atteint leur paroxysme honteux lorsque des émeutiers ont brisé la vitrine de <span class="highlight">Madame Beaumarteau</span>, le premier établissement de costumes servant les plus grandes familles de Morgenseite.</p>
+                <p>Grâce à l'intervention rapide du Guet et à la résolution inébranlable des chefs de nos Guildes, l'ordre a été rétabli avant que d'autres dommages ne surviennent. Le Héraut félicite le Bourgmestre Maler et le Conseil municipal pour leur réponse mesurée.</p>
+                <p><em>La boutique de Madame Beaumarteau reste OUVERTE. Soutenez le commerce local !</em></p>
+            </article>
+
+            <article class="article">
+                <h2>EXCLUSIF : Une guerre des gangs se prépare ?</h2>
+                <p>Votre intrépide rédacteur a passé des <span class="highlight">semaines</span> à enquêter sur les bas-fonds criminels de notre chère Ubersreik, et les conclusions sont <span class="highlight">alarmantes</span>. DEUX organisations criminelles se disputent désormais le contrôle du Dunkelfeucht et des Docks : le mystérieux 'Baron' et la Halfling 'Mercy' du clan Basse-Fosse.</p>
+                <p>Les commerçants parlent à voix basse de <span class="highlight">paiements de protection</span> et de <span class="highlight">conflits territoriaux</span>. Le Guet, accaparé par... qui sait ce qu'ils font ?, semble impuissant à intervenir.</p>
+                <p>Combien de temps avant que ce conflit latent n'éclate en <span class="highlight">guerre ouverte</span> dans nos rues ? Le Héraut exige des réponses ! De prochaines éditions vous en révèleront DAVANTAGE !</p>
+            </article>
+
+            <div class="advertisement">
+                <h3>&#9876; L'ÉPERON D'ÉTAIN présente &#9876;</h3>
+                <h3>LA FUREUR DE MAGNUS !</h3>
+                <p>À la veille du Magnustag, venez voir <strong>Reikhardt Gestaltenstark</strong>, le Champion Invaincu, défendre son titre contre <strong>TROIS CHALLENGERS</strong> en une seule soirée !</p>
+                <p><em>Du sang ! De la gloire ! Des os brisés !</em></p>
+                <p><strong>Bezahltag 9 — Ouverture des portes au coucher du soleil</strong></p>
+                <p>Entrée : 5 pennings (debout) &#8226; 2 shillings (assis)</p>
+            </div>
+
+            <div class="advertisement">
+                <h3>ÉLIXIR AMÉLIORATIF</h3>
+                <p><em>Le Tonique Miracle de Von Holzenauer !</em></p>
+                <p>Vous vous sentez MOROSE ? Votre moral est en BERNE ?</p>
+                <p>Laissez la formule brevetée de Von Holzenauer restaurer votre <strong>VIGUEUR</strong> et votre <strong>VITALITÉ !</strong></p>
+                <p>Disponible au LOUP ET HOBGOBELIN et dans tous les établissements réputés.</p>
+                <p class="disclaimer">(Non responsable de : dépendance, hallucinations ou saignements de nez spontanés)</p>
+            </div>
+
+            <div class="coming-soon">
+                <h3>DES AGENTS KISLEVITES À UBERSREIK ?</h3>
+                <p>Des <span class="highlight">doigts glacés</span> s'étendent-ils sur notre belle ville ?</p>
+                <p>Qu'est-il <span class="highlight">réellement</span> arrivé aux Jungfreud ?</p>
+                <p>Découvrez-le dans le prochain pamphlet d'Ottokar Stiegler :</p>
+                <p><strong>"LA FILIÈRE KISLEVITE"</strong></p>
+                <p><em>— À PARAÎTRE BIENTÔT —</em></p>
+            </div>
+        </div>
+
+        <div class="theatre-ad">
+            <p> Vous ! Oui, <strong> VOUS !</strong> Vous <strong>DEVEZ</strong> en savoir plus, trouvez <strong>OTTOKAR</strong> travaillant dur chaque jour au sommet du célèbre <strong>SPRICHSTUMPF</strong> de la <strong>GLORIEUSE UBERSREIK</strong>. (en cas d'absence, vérifiez au Loup et Hobgobelin.)</p>
+            <p> Ottokar utilise et recommande les Presses Engbart, situées dans l'allée derrière l'Auberge du Pont.</p>
+        </div>
+
+        <div class="theatre-ad">
+            <p>Le <strong>HÉRAUT D'UBERSREIK</strong> est fier de soutenir le <strong>THÉÂTRE DES VARIÉTÉS !</strong></p>
+            <p>Accueille actuellement la MAGNIFIQUE TROUPE DES MARIENBOURGEOIS dans</p>
+            <p><em>"La Tragédie de la Maudite Mordheim"</em></p>
+            <p>Présentez ce Héraut pour une chope de petite bière offerte au bar du Théâtre !</p>
+        </div>
+    </div>
+</body>
+
+</html>

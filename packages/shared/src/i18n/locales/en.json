@@ -162,6 +162,7 @@
         "startSession": "Start Session",
         "journal": "Journal",
         "quests": "Quests",
+        "calendar": "Calendar",
         "shop": "Shop",
         "dice": "Dice",
         "createCharacter": "Create Character",
@@ -293,5 +294,80 @@
         "undiscovered": "Undiscovered Faction",
         "rumored_faction": "Rumored Organization",
         "your_standing": "Your Relations with Factions"
+    },
+    "calendar": {
+        "title": "Imperial Calendar",
+        "currentDate": "Current Date",
+        "advanceDay": "+1 Day",
+        "advanceWeek": "+1 Week",
+        "setDate": "Set Date",
+        "weather": "Weather",
+        "noWeather": "No weather set",
+        "rollWeather": "Roll Weather",
+        "moonPhases": "Moon Phases",
+        "mannslieb": "Mannslieb",
+        "morrslieb": "Morrslieb",
+        "danger": "Danger!",
+        "eventFilters": "Event Filters",
+        "upcomingEvents": "Upcoming Events",
+        "goToToday": "Go to Today",
+        "noEvents": "No upcoming events",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "daysAway": "{{count}} days",
+        "createEvent": "Create Event",
+        "editEvent": "Edit Event",
+        "eventTitle": "Title",
+        "eventDescription": "Description",
+        "eventTags": "Tags",
+        "eventColor": "Color",
+        "hiddenFromPlayers": "Hidden from Players",
+        "deleteEvent": "Delete Event",
+        "saveChanges": "Save Changes",
+        "months": {
+            "nachexen": "Nachexen",
+            "jahrdrung": "Jahrdrung",
+            "pflugzeit": "Pflugzeit",
+            "sigmarzeit": "Sigmarzeit",
+            "sommerzeit": "Sommerzeit",
+            "vorgeheim": "Vorgeheim",
+            "nachgeheim": "Nachgeheim",
+            "erntezeit": "Erntezeit",
+            "brauzeit": "Brauzeit",
+            "kaldezeit": "Kaldezeit",
+            "ulriczeit": "Ulriczeit",
+            "vorhexen": "Vorhexen"
+        },
+        "weekdays": {
+            "wellentag": "Wellentag",
+            "aubentag": "Aubentag",
+            "marktag": "Marktag",
+            "backertag": "Backertag",
+            "bezahltag": "Bezahltag",
+            "konistag": "Konistag",
+            "angestag": "Angestag",
+            "festag": "Festag"
+        },
+        "seasons": {
+            "winter": "Winter",
+            "spring": "Spring",
+            "summer": "Summer",
+            "autumn": "Autumn"
+        },
+        "moonPhaseNames": {
+            "full": "Full",
+            "waxingGibbous": "Waxing Gibbous",
+            "half": "Half",
+            "waxingCrescent": "Waxing Crescent",
+            "crescent": "Crescent",
+            "new": "New"
+        },
+        "tags": {
+            "plot": "Plot",
+            "world": "World",
+            "hidden": "Hidden",
+            "festival": "Festival",
+            "personal": "Personal"
+        }
     }
 }

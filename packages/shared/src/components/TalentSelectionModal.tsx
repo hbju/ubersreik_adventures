@@ -200,21 +200,24 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
         talent.effects.forEach(effect => {
             switch (effect.type) {
                 case 'SL_BONUS_ON_SUCCESS':
-                    descriptions.push(`+${(effect.value as number) * rank} SL on success`);
+                    descriptions.push(`+${(effect.value as number) * rank} SL on success\n`);
                     break;
                 case 'TEST_BONUS':
-                    descriptions.push(`+${(effect.value as number) * rank} to test`);
+                    descriptions.push(`+${(effect.value as number) * rank} to test\n`);
                     break;
                 case 'DAMAGE_BONUS':
-                    descriptions.push(`+${(effect.value as number) * rank} damage`);
+                    descriptions.push(`+${(effect.value as number) * rank} damage\n`);
                     break;
                 case 'PASSIVE':
-                    descriptions.push(effect.value as string);
+                    descriptions.push(effect.value as string || 'Passive effect\n');
                     break;
                 default:
-                    descriptions.push('Special effect');
+                    descriptions.push('Special effect\n');
             }
         });
+        if (talent.tests && talent.tests.length > 0) {
+            descriptions.push(`Applies to tests: ${talent.tests.join(', ')}\n`);
+        }
         return descriptions.join(', ');
     };
 

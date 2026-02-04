@@ -30,6 +30,7 @@ interface IpcRendererApi {
     backupCampaign: () => Promise<{ success: boolean; path?: string; error?: string }>;
     
     // Audio Manager API
+    getAudioServerPort: () => Promise<number>;
     getAudioLibrary: () => Promise<import('@wfrp/shared').AudioLibrary>;
     saveAudioLibrary: (data: import('@wfrp/shared').AudioLibrary) => void;
     scanAudioDirectory: (dirPath: string) => Promise<import('@wfrp/shared').AudioScanResult>;

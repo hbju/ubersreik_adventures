@@ -95,8 +95,8 @@
         "classification": "basic"
     },
     {
-        "id": "channeling",
-        "name": "Channeling",
+        "id": "channelling",
+        "name": "Channelling",
         "characteristic": "wp",
         "type" : "skill",
         "classification": "advanced"

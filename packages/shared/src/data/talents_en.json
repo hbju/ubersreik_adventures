@@ -4768,7 +4768,8 @@
                 "type": "SL_BONUS_ON_SUCCESS",
                 "value": 1,
                 "appliesTo": [
-                    "stealth"
+                    "stealth",
+                    "perception"
                 ]
             }
         ]

@@ -22,6 +22,7 @@ import { QuestJournalViewer } from './components/quests/QuestJournalViewer';
 import { MapSelector } from './components/map/MapSelector';
 import { AudioProvider } from './context/AudioContext';
 import { AudioSidebar, LibraryManager } from './components/audio';
+import { TimelineManager } from './components/timeline';
 
 import {
     DiscoveredLocationsList, 
@@ -58,6 +59,8 @@ import {
     ShopDefinition,
     Quest,
     QueuedRoll,
+    CalendarState,
+    createDefaultCalendarState,
 } from '@wfrp/shared';
 import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp.types';
 
@@ -135,6 +138,7 @@ function App() {
     const [showReputationPanel, setShowReputationPanel] = useState(false);
     const [showTemplateManager, setShowTemplateManager] = useState(false);
     const [showQuestJournal, setShowQuestJournal] = useState(false);
+    const [showTimelineManager, setShowTimelineManager] = useState(false);
     const [showChat, setShowChat] = useState(false);
     const [showLibraryManager, setShowLibraryManager] = useState(false);
     const [leftSidebarMode, setLeftSidebarMode] = useState<'roster' | 'audio'>('roster');
@@ -143,6 +147,8 @@ function App() {
     const factionsRef = useRef(factions);
     const [quests, setQuests] = useState<Quest[]>([]);
     const questsRef = useRef(quests);
+    const [calendarState, setCalendarState] = useState<CalendarState>(() => createDefaultCalendarState());
+    const calendarStateRef = useRef(calendarState);
     const [characterTemplates, setCharacterTemplates] = useState<CharacterTemplate[]>([]);
     const characterTemplatesRef = useRef(characterTemplates);
     const [customShopDefinitions, setCustomShopDefinitions] = useState<ShopDefinition[]>([]);
@@ -235,6 +241,7 @@ function App() {
             playerColors: {},
             maps: maps, // Include all maps
             activeMapId: activeMapId, // Current active map
+            calendar: calendarState, // Imperial Calendar state
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
@@ -244,6 +251,7 @@ function App() {
         usersRef.current = users;
         journalRef.current = journal;
         questsRef.current = quests;
+        calendarStateRef.current = calendarState;
         mapPinStatesRef.current = mapPinStates;
         factionsRef.current = factions;
         shopInventoryRef.current = shopInventory;
@@ -253,7 +261,7 @@ function App() {
         userPinsRef.current = userPins;
         activeMapIdRef.current = activeMapId;
 
-    }, [characters, users, journal, quests, mapPinStates, factions, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
+    }, [characters, users, journal, quests, calendarState, mapPinStates, factions, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -809,6 +817,11 @@ function App() {
                 setQuests(data.quests);
             }
 
+            // Load calendar state if present
+            if (data.calendar) {
+                setCalendarState(data.calendar);
+            }
+
             if (data.tokens) {
                 setTokens(data.tokens);
             }
@@ -1345,6 +1358,7 @@ function App() {
                 onStartSession={handleStartSession}
                 onShowJournal={() => setShowJournalManager(true)}
                 onShowQuestJournal={() => setShowQuestJournal(true)}
+                onShowCalendar={() => setShowTimelineManager(true)}
                 onShowShop={() => setShowShopManager(!showShopManager)}
                 onShowShopConfigurator={() => setShowShopConfigurator(true)}
                 onShowDiceTray={() => setShowDiceTray(!showDiceTray)}
@@ -1713,6 +1727,14 @@ function App() {
                     quests={quests}
                     locations={mapData.locations}
                     onClose={() => setShowQuestJournal(false)}
+                />
+            )}
+
+            {showTimelineManager && (
+                <TimelineManager
+                    calendarState={calendarState}
+                    onUpdateCalendarState={setCalendarState}
+                    onClose={() => setShowTimelineManager(false)}
                 />
             )}
 

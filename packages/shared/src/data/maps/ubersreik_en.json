@@ -619,7 +619,7 @@
                 "x": 1885,
                 "y": 2460
             },
-            "playerDescription": "The Temple of Verena, Goddess of Wisdom, stands at the south-east corner of Handel Square. A modest building, its services are attended regularly by scholars, including members of Ubersreik's judiciary. Behind the single-storey temple lies the 'Annexe', a large library open to all. The Annexe contains a broad, well-lit reading room and many cases of books and scrolls, including the town's charter and bylaws.",
+            "playerDescription": "The Temple of Verena, Goddess of Wisdom, stands at the south-west corner of Handel Square. A modest building, its services are attended regularly by scholars, including members of Ubersreik's judiciary. Behind the single-storey temple lies the 'Annexe', a large library open to all. The Annexe contains a broad, well-lit reading room and many cases of books and scrolls, including the town's charter and bylaws.",
             "gmNotes": "The more valuable, or dangerous, books are located in a locked room, only accessible with the high priest's blessing. Heinrich Gutenberg is the high priest. A kindly man, with a long, flowing beard, Gutenberg believes knowledge is Verena's gift, and sees it as his sacred duty to share it. He is assisted by Dagmar Schirma, a shortsighted librarian who is clearly besotted with the high priest, a fact of which Gutenberg remains sadly ignorant.",
             "hooks": [
                 "After a theft from the Annexe, librarian Schirma asks the party to hunt down and bring back the books from various dealers and private collectors around town. She doesn't want Gutenberg to know, so won't involve the authorities. She will reimburse the party the cost of repurchasing the books plus a small amount. If the party can secure the books without paying, they could turn a profit.",
@@ -696,6 +696,39 @@
             "image": "",
             "music": "",
             "tag": "misc"
+        },
+        {
+            "id": "the_wolf_and_the_hobgoblin",
+            "name": "The Wolf and the Hobgoblin",
+            "coords": {
+                "x": 1787,
+                "y": 2180
+            },
+            "playerDescription": "The Wolf and the Hobgoblin is a soulless neat tavern, tucked into the western side of the Marktplatz. The interior is bedecked in orderly rows of military crests and portraits.",
+            "gmNotes": "Ottokar Stiegler, the \"journalist\" behind \"The Ubersreik Herault\", spends most of his time in the tavern, lecturing mixed crowds of sycophants when he is not writing his next article. He is secretly bankrolled by the proprietor, who is happy to host his rowdy gathering, provided participants continue to purchase ale and doses of the Ameliorative Elixir they purchase at von Holzenauer's Shop.",
+            "hooks": [
+                "Stiegler is looking for stories to write about, and is willing to pay for any scandalous or sensational information. If the party can provide him with such material, they will be rewarded.",
+                "A group of mercenaries frequent the tavern, boasting loudly about their exploits and taunting the Watch. They are in fact frauds, having never seen combat. If the party can expose them, they will earn the gratitude of the local Watch."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "tavern"
+        },
+        {
+            "id": "dragonglass",
+            "name": "Heske's Dragonglass",
+            "coords": {
+                "x": 1722,
+                "y": 2250
+            },
+            "playerDescription": "Heske's Dragonglass is a glassware and stained glass shop located in Ubersreik's merchant quarter. The colorful glass storefront catches the eye of passersby, while the interior is filled with beautiful glass artworks. Goblets adorned with twin-tailed comets, delicate glass sculptures of monsters, fairies, dragons, and knights, and much more decorate the shop. The owner, Heske Glazer, is a master glassmaker known for her skill and attention to detail.",
+            "gmNotes": "Heske Glazer is a woman in her forties, with silver-streaked blonde hair. Her eyes are not the same color: the left is a bright blue; the other - clearly made of glass - is amber tinted with emerald reflections. She was raised by the Karstadt family, after the patriarch of the illustrious family accidentally shot the young Heske in the eye during a deer hunt. She is now an agent of the family, keeping an eye on Ubersreik's affairs on behalf of the Karstadts.",
+            "hooks": [
+
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
         },
         {
             "id": "merchant_quarter",

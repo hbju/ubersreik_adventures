@@ -1,4 +1,5 @@
 import { app, BrowserWindow, shell, ipcMain, protocol } from 'electron'
+import * as fs from 'fs'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { createServer } from 'node:http'
@@ -8,18 +9,19 @@ import os from 'node:os'
 import { update } from './update'
 import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates, broadcastChatMessage, getChatHistory } from './server'
 import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
-import { 
-    loadAudioLibrary, 
-    saveAudioLibrary, 
-    scanAudioDirectory, 
-    updateTrackTags, 
-    bulkUpdateTrackTags,
-    createPlaylist, 
-    updatePlaylist, 
-    deletePlaylist,
-    selectAudioDirectory,
-    deleteTrack,
-    updateTrackDisplayName
+import { startAudioServer, getAudioServerPort, stopAudioServer } from './audioServer'
+import {
+  loadAudioLibrary,
+  saveAudioLibrary,
+  scanAudioDirectory,
+  updateTrackTags,
+  bulkUpdateTrackTags,
+  createPlaylist,
+  updatePlaylist,
+  deletePlaylist,
+  selectAudioDirectory,
+  deleteTrack,
+  updateTrackDisplayName
 } from './audioManager'
 import { CampaignState, ChatMessage, AudioLibrary, Playlist } from '@wfrp/shared'
 
@@ -45,6 +47,18 @@ export const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : RENDERER_DIST
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'audio',
+    privileges: {
+      secure: true,
+      supportFetchAPI: true,
+      stream: true,
+      bypassCSP: true,
+    },
+  },
+]);
 
 // Disable GPU Acceleration for Windows 7
 if (os.release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -101,20 +115,31 @@ async function createWindow() {
   startWebSocketServer(win);
 }
 
-app.whenReady().then(() => {
-  // Register protocol for serving local audio files
-  protocol.registerFileProtocol('audio', (request, callback) => {
-    const filePath = decodeURIComponent(request.url.replace('audio://', ''));
-    callback({ path: filePath });
-  });
-  
+app.whenReady().then(async () => {
+  await startAudioServer();
+
   // Load campaign data on startup
   clearCampaignCache();
   loadCampaignData();
   createWindow();
 })
 
+function getMimeType(filePath: string): string {
+  const ext = path.extname(filePath).toLowerCase();
+  const mimeTypes: Record<string, string> = {
+    '.mp3': 'audio/mpeg',
+    '.wav': 'audio/wav',
+    '.ogg': 'audio/ogg',
+    '.flac': 'audio/flac',
+    '.m4a': 'audio/mp4',
+    '.aac': 'audio/aac',
+    '.webm': 'audio/webm',
+  };
+  return mimeTypes[ext] || 'audio/mpeg';
+}
+
 app.on('window-all-closed', () => {
+  stopAudioServer();
   win = null
   if (process.platform !== 'darwin') app.quit()
 })
@@ -179,12 +204,12 @@ ipcMain.on('save-data', (event, data: CampaignState) => {
   try {
     saveCampaignData(data);
     console.log('Data saved successfully');
-    
+
     // Broadcast journal entries to all connected players
     if (data.journal && data.journal.length > 0) {
       broadcastJournalEntries(data.journal);
     }
-    
+
     // Broadcast map pin states to all connected players
     if (data.mapPinStates) {
       broadcastMapPinStates(data.mapPinStates);
@@ -233,6 +258,13 @@ ipcMain.handle('get-chat-history', async () => {
 });
 
 // ==================== Audio Manager IPC Handlers ====================
+
+/**
+ * Return the audio server port
+ * */
+ipcMain.handle('get-audio-server-port', () => {
+    return getAudioServerPort();
+});
 
 /**
  * Get the audio library data

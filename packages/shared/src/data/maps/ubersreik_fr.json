@@ -621,7 +621,7 @@
                 "x": 1885,
                 "y": 2460
             },
-            "playerDescription": "Le Temple de Verena, Déesse de la Sagesse, se dresse au coin sud-est de la place Handel. Bâtiment modeste, ses services sont fréquentés régulièrement par des érudits, y compris des membres du système judiciaire d'Ubersreik. Derrière le temple d'un étage se trouve l'« Annexe », une grande bibliothèque ouverte à tous. L'Annexe contient une salle de lecture large et bien éclairée et de nombreuses étagères de livres et de parchemins, y compris la charte et les statuts de la ville.",
+            "playerDescription": "Le Temple de Verena, Déesse de la Sagesse, se dresse au coin sud-ouest de la place Handel. Bâtiment modeste, ses services sont fréquentés régulièrement par des érudits, y compris des membres du système judiciaire d'Ubersreik. Derrière le temple d'un étage se trouve l'« Annexe », une grande bibliothèque ouverte à tous. L'Annexe contient une salle de lecture large et bien éclairée et de nombreuses étagères de livres et de parchemins, y compris la charte et les statuts de la ville.",
             "gmNotes": "Les livres les plus précieux, ou dangereux, sont situés dans une pièce verrouillée, accessible uniquement avec la bénédiction du grand prêtre. Heinrich Gutenberg est le grand prêtre. Homme bienveillant, avec une longue barbe flottante, Gutenberg croit que la connaissance est le don de Verena, et considère comme son devoir sacré de la partager. Il est assisté par Dagmar Schirma, une bibliothécaire myope qui est clairement éprise du grand prêtre, un fait dont Gutenberg reste tristement ignorant.",
             "hooks": [
                 "Après un vol à l'Annexe, la bibliothécaire Schirma demande au groupe de traquer et de rapporter les livres de divers marchands et collectionneurs privés de la ville. Elle ne veut pas que Gutenberg le sache, donc elle n'impliquera pas les autorités. Elle remboursera au groupe le coût du rachat des livres plus un petit montant. Si le groupe peut récupérer les livres sans payer, ils pourraient faire un bénéfice.",
@@ -698,6 +698,38 @@
             "image": "",
             "music": "",
             "tag": "misc"
+        },
+        {
+            "id": "the_wolf_and_the_hobgoblin",
+            "name": "Le Loup et le Hobgobelin",
+            "coords": {
+                "x": 1787,
+                "y": 2180
+            },
+            "playerDescription": "Le Loup et le Gobelin est une taverne propre et sans âme, nichée du côté ouest de la Marktplatz. L'intérieur est orné de rangées ordonnées d'écussons militaires et de portraits.",
+            "gmNotes": "Ottokar Stiegler, le « journaliste » derrière « Le Hérault d'Ubersreik », passe le plus clair de son temps à la taverne, à sermonner des foules hétéroclites de flagorneurs lorsqu'il n'est pas en train d'écrire son prochain article. Il est secrètement financé par le propriétaire, qui se fait un plaisir d'accueillir cette réunion bruyante, à condition que les participants continuent d'acheter de la bière et des doses de l'Élixir Amélioratif qu'ils se procurent chez von Holzenauer.",
+            "hooks": [
+                "Stiegler a besoin d'inspiration pour son prochain article. Il paiera grassement quiconque peut lui fournir un scandale juteux impliquant un membre du Conseil Municipal ou un Maître de Guilde.",
+                "Un groupe de soldats d'Altdorf fréquente régulièrement la taverne, et ils sont notoirement brutaux envers les autres clients. Si le groupe défend un autre client contre eux, ils gagneront l'amitié du Guet local, mais attireront l'attention indésirable des soldats."
+            ],
+            "image": "",
+            "music": "",
+            "tag": "tavern"
+        },
+        {
+            "id": "dragonglass",
+            "name": "Verredragon d'Heske",
+            "coords": {
+                "x": 1722,
+                "y": 2250
+            },
+            "playerDescription": "Le Verredragon d'Heske est une boutique de verrerie et de vitraux située dans le quartier commerçant d'Ubersreik. La devanture en verre coloré attire l'attention des passants, tandis que l'intérieur est rempli de magnifiques œuvres d'art en verre. Des goblets ornés de la Comète à deux Queues, des sculptures en verre délicates de monstres, de fées, de dragons et de chevaliers, et bien plus encore ornent la boutique. La propriétaire, Heske Glazer, est une maîtresse verrière réputée pour son habileté et son attention aux détails.",
+            "gmNotes": "Heske Glazer est une femme dans la quarantaine, aux cheveux blonds clairsemés de mèches d'argent. Ses yeux de sont pas de la même couleur : le gauche est d'un bleu éclatant; l'autre - clairement fait de verre - est d'ambre teinté de reflets émeraudes. Elle a été élevée par les Karstadt, après que le patriarche de l'illustre famille ait malencontreusement tiré un coup de feu dans l'œil de la jeune Heske lors d'une chasse au cerf. Elle est maintenant un agent de la famille, gardant un oeil sur les affaires d'Ubersreik pour le compte des Karstadt.",
+            "hooks": [
+            ],
+            "image": "",
+            "music": "",
+            "tag": "shop"
         },
         {
             "id": "merchant_quarter",
