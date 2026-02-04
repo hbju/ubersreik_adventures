@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@wfrp/shared';
 import styles from './ConnectionScreen.module.css';
+
+const STORAGE_KEY = 'wfrp_saved_credentials';
+
+interface SavedCredentials {
+  ip: string;
+  username: string;
+  password: string;
+}
 
 interface ConnectionScreenProps {
   onConnect: (ip: string, username: string, password: string) => void;
@@ -15,9 +23,36 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  // Load saved credentials on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const credentials: SavedCredentials = JSON.parse(saved);
+        setIp(credentials.ip || '');
+        setUsername(credentials.username || '');
+        setPassword(credentials.password || '');
+        setRememberMe(true);
+      }
+    } catch (e) {
+      console.error('Failed to load saved credentials:', e);
+    }
+  }, []);
 
   const handleConnect = () => {
     if (ip.trim() && username.trim() && password.trim()) {
+      if (rememberMe) {
+        const credentials: SavedCredentials = {
+          ip: ip.trim(),
+          username: username.trim(),
+          password: password.trim()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(credentials));
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+      }
       onConnect(ip.trim(), username.trim(), password.trim());
     }
   };
@@ -82,6 +117,19 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
               {showPassword ? '👁️' : '🔒'}
             </button>
           </div>
+        </div>
+
+        <div className={styles.rememberMeContainer}>
+          <label className={styles.rememberMeLabel}>
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className={styles.rememberMeCheckbox}
+              disabled={isConnecting}
+            />
+            <span className={styles.rememberMeText}>{t('connection.rememberMe')}</span>
+          </label>
         </div>
 
         {error && (

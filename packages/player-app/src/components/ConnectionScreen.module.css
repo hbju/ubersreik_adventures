@@ -127,6 +127,36 @@
   cursor: not-allowed;
 }
 
+.rememberMeContainer {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.rememberMeLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.rememberMeCheckbox {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  accent-color: var(--color-gold);
+  cursor: pointer;
+}
+
+.rememberMeCheckbox:disabled {
+  cursor: not-allowed;
+}
+
+.rememberMeText {
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
 .errorMessage {
   background: linear-gradient(135deg, #8b0000 0%, #a00000 100%);
   color: #fff;
