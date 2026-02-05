@@ -1508,14 +1508,6 @@ function App() {
                         🗺️ {currentMapData.name}
                     </button>
                 </div>
-                <div style={{ width: '25vw', height: '100vh', overflowY: 'auto', backgroundColor: '#1c1c1c', borderLeft: '2px solid #444', position: 'absolute', right: 0, top: 0 }}>
-                    <DiscoveredLocationsList
-                        locations={currentMapData.locations}
-                        mapPinStates={mapPinStates}
-                        onLocationSelect={handleLocationSelect}
-                        isGm={true}
-                    />
-                </div>
             </div>
 
             {/* Map Selector Modal */}

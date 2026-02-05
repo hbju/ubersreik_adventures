@@ -56,7 +56,8 @@
         "helpText": "Contactez votre Maître de Jeu si vous avez besoin d'identifiants.",
         "placeholderIp": "ex: 192.168.1.100",
         "placeholderUsername": "Entrez votre nom d'utilisateur",
-        "placeholderPassword": "Entrez votre mot de passe"
+        "placeholderPassword": "Entrez votre mot de passe",
+        "rememberMe": "Se souvenir de moi"
     },
     "logs": {
         "session_started": "Session démarrée. Points de Fortune réinitialisés.",

@@ -171,6 +171,28 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             } else if (e.key === '0') {
                 slotIndex = 9;
             }
+            // if french keyboard AZERTY layout
+            else if (e.key === '&') {
+                slotIndex = 0;
+            } else if (e.key === 'é') {
+                slotIndex = 1;
+            } else if (e.key === '"') {
+                slotIndex = 2;
+            } else if (e.key === "'") {
+                slotIndex = 3;
+            } else if (e.key === '(') {
+                slotIndex = 4;
+            } else if (e.key === '-') {
+                slotIndex = 5;
+            } else if (e.key === 'è') {
+                slotIndex = 6;
+            } else if (e.key === '_') {
+                slotIndex = 7;
+            } else if (e.key === 'ç') {
+                slotIndex = 8;
+            } else if (e.key === 'à') {
+                slotIndex = 9;
+            }
 
             if (slotIndex !== null) {
                 const entry = getSlotEntry(slotIndex);

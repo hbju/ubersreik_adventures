@@ -4,8 +4,17 @@
   "private": true,
   "description": "Monorepo for the WFRP4e GM and Player application suite.",
   "workspaces": {
-    "packages" : ["packages/*"],
-    "nohoist": ["**/electron", "**/electron/**", "**/electron-*", "**/electron-*/**", "**/@electron-toolkit/**", "**/@electron-toolkit/preload/**" ]
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/electron",
+      "**/electron/**",
+      "**/electron-*",
+      "**/electron-*/**",
+      "**/@electron-toolkit/**",
+      "**/@electron-toolkit/preload/**"
+    ]
   },
   "repository": {
     "type": "git",
@@ -22,7 +31,8 @@
   "author": "milouordo",
   "license": "ISC",
   "dependencies": {
-    "@wfrp/shared": "^1.0.0"
+    "@wfrp/shared": "^1.0.0",
+    "react-draggable": "^4.5.0"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.18"

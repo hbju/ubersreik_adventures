@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Draggable from 'react-draggable';
 import {
     Combatant,
     rollDice,
@@ -30,10 +31,12 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
     combatants, onSetCombatants, onUpdateCombatant, onClearCombatants, currentTurnId, onSetCurrentTurnId, advantages, onUpdateAdvantages, characters, onSendToPlayer
 }) => {
     const conditions = useGameData().conditions;
-    
+
     const [expandedCombatantId, setExpandedCombatantId] = useState<string | null>(null);
     const [conditionPromptCombatant, setConditionPromptCombatant] = useState<Combatant | null>(null);
     const [roundNumber, setRoundNumber] = useState<number>(0);
+
+    const nodeRef = React.useRef(null);
 
     const handleRollInitiative = () => {
         const rolledCombatants = combatants.map(c => ({
@@ -228,168 +231,170 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
     };
 
     return (
-        <div className={styles.trackerContainer}>
-            <header className={styles.header}>
-                <h3>Encounter {roundNumber > 0 && `- Round ${roundNumber}`}</h3>
-                <div className={styles.actions}>
-                    <button onClick={handleRollInitiative}>Roll Init</button>
-                    <button onClick={handleNextTurn}>Next Turn</button>
-                    <button onClick={() => { /**handleEndOfRound(); */ setRoundNumber(prev => prev + 1); }}>End Round</button>
-                    <button onClick={onClearCombatants} className={styles.clearBtn}>Clear</button>
-                </div>
-            </header>
-            <div className={styles.advantageDisplay}>
-                {advantages && (
-                    <div className={styles.advantageControls}>
-                        <span> Player Adv. : {advantages.playerAdvantage} </span>
-                        <span> Enemy Adv. : {advantages.enemyAdvantage} </span>
-                        <span>
-                            <button onClick={() => handleAdvantageChange(-1, advantages, 'player')} className={styles.advantageBtn}>-</button>
-                            <button onClick={() => handleAdvantageChange(1, advantages, 'player')} className={styles.advantageBtn}>+</button>
-                        </span>
-                        <span>
-                            <button onClick={() => handleAdvantageChange(-1, advantages, 'enemy')} className={styles.advantageBtn}>-</button>
-                            <button onClick={() => handleAdvantageChange(1, advantages, 'enemy')} className={styles.advantageBtn}>+</button>
-                        </span>
+        <Draggable nodeRef={nodeRef}>
+            <div className={styles.trackerContainer} ref={nodeRef}>
+                <header className={styles.header}>
+                    <h3>Encounter {roundNumber > 0 && `- Round ${roundNumber}`}</h3>
+                    <div className={styles.actions}>
+                        <button onClick={handleRollInitiative}>Roll Init</button>
+                        <button onClick={handleNextTurn}>Next Turn</button>
+                        <button onClick={() => { /**handleEndOfRound(); */ setRoundNumber(prev => prev + 1); }}>End Round</button>
+                        <button onClick={onClearCombatants} className={styles.clearBtn}>Clear</button>
                     </div>
-                )}
-            </div>
-            <ol className={styles.combatantList}>
-                {combatants.map(c => {
-                    const conditionCounts = getConditionCounts(c.conditions || []);
-                    const isExpanded = expandedCombatantId === c.id;
+                </header>
+                <div className={styles.advantageDisplay}>
+                    {advantages && (
+                        <div className={styles.advantageControls}>
+                            <span> Player Adv. : {advantages.playerAdvantage} </span>
+                            <span> Enemy Adv. : {advantages.enemyAdvantage} </span>
+                            <span>
+                                <button onClick={() => handleAdvantageChange(-1, advantages, 'player')} className={styles.advantageBtn}>-</button>
+                                <button onClick={() => handleAdvantageChange(1, advantages, 'player')} className={styles.advantageBtn}>+</button>
+                            </span>
+                            <span>
+                                <button onClick={() => handleAdvantageChange(-1, advantages, 'enemy')} className={styles.advantageBtn}>-</button>
+                                <button onClick={() => handleAdvantageChange(1, advantages, 'enemy')} className={styles.advantageBtn}>+</button>
+                            </span>
+                        </div>
+                    )}
+                </div>
+                <ol className={styles.combatantList}>
+                    {combatants.map(c => {
+                        const conditionCounts = getConditionCounts(c.conditions || []);
+                        const isExpanded = expandedCombatantId === c.id;
 
-                    return (
-                        <li key={c.id} className={c.id === currentTurnId ? styles.activeTurn : ''}>
-                            <div className={styles.combatantRow}>
-                                <span className={styles.initiative}>{c.initiative ?? '-'}</span>
-                                <span className={styles.name}>{c.name}</span>
-                                <div className={styles.wounds}>
-                                    <input
-                                        type="number"
-                                        value={c.currentWounds}
-                                        onChange={(e) => handleWoundsChange(c.id, Math.min(Math.max(parseInt(e.target.value), 0), c.maxWounds) || 0)}
-                                    /> / {c.maxWounds}
-                                </div>
-                                <button
-                                    className={styles.expandBtn}
-                                    onClick={() => toggleExpanded(c.id)}
-                                    title="Manage conditions and advantage"
-                                >
-                                    {isExpanded ? '▲' : '▼'}
-                                </button>
-                            </div>
-
-                            {/* Display active conditions */}
-                            {conditionCounts.size > 0 && (
-                                <div className={styles.conditionBadges}>
-                                    {Array.from(conditionCounts.entries()).map(([condId, count]) => (
-                                        <span
-                                            key={condId}
-                                            className={styles.conditionBadge}
-                                            title={getConditionDescription(condId)}
-                                        >
-                                            {getConditionName(condId)}{count > 1 ? ` (${count})` : ''}
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
-
-                            {/* Condition management panel */}
-                            {isExpanded && (
-                                <div className={styles.conditionPanel}>
-                                    <div className={styles.panelSection}>
-                                        <label>Add Condition:</label>
-                                        <select
-                                            onChange={(e) => {
-                                                if (e.target.value) {
-                                                    handleAddCondition(c.id, e.target.value);
-                                                    e.target.value = '';
-                                                }
-                                            }}
-                                            className={styles.conditionSelect}
-                                        >
-                                            <option value="">Select...</option>
-                                            {conditions.map(condition => (
-                                                <option key={condition.id} value={condition.id}>
-                                                    {condition.name}
-                                                </option>
-                                            ))}
-                                        </select>
+                        return (
+                            <li key={c.id} className={c.id === currentTurnId ? styles.activeTurn : ''}>
+                                <div className={styles.combatantRow}>
+                                    <span className={styles.initiative}>{c.initiative ?? '-'}</span>
+                                    <span className={styles.name}>{c.name}</span>
+                                    <div className={styles.wounds}>
+                                        <input
+                                            type="number"
+                                            value={c.currentWounds}
+                                            onChange={(e) => handleWoundsChange(c.id, Math.min(Math.max(parseInt(e.target.value), 0), c.maxWounds) || 0)}
+                                        /> / {c.maxWounds}
                                     </div>
-
-                                    {(c.conditions || []).length > 0 && (
-                                        <div className={styles.panelSection}>
-                                            <label>Active Conditions:</label>
-                                            <div className={styles.activeConditionsList}>
-                                                {(c.conditions || []).map((condId, index) => (
-                                                    <div key={`${condId}-${index}`} className={styles.activeConditionItem}>
-                                                        <span
-                                                            className={styles.conditionText}
-                                                            title={getConditionDescription(condId)}
-                                                        >
-                                                            {getConditionName(condId)}
-                                                        </span>
-                                                        <button
-                                                            onClick={() => handleRemoveCondition(c.id, condId, index)}
-                                                            className={styles.removeConditionBtn}
-                                                            title="Remove condition"
-                                                        >
-                                                            ✕
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
+                                    <button
+                                        className={styles.expandBtn}
+                                        onClick={() => toggleExpanded(c.id)}
+                                        title="Manage conditions and advantage"
+                                    >
+                                        {isExpanded ? '▲' : '▼'}
+                                    </button>
                                 </div>
-                            )}
-                        </li>
-                    );
-                })}
-            </ol>
 
-            {/* Condition Prompt Modal */}
-            {conditionPromptCombatant && (
-                <ConditionPromptModal
-                    combatant={conditionPromptCombatant}
-                    conditions={conditionPromptCombatant.conditions || []}
-                    onClose={() => setConditionPromptCombatant(null)}
-                    onApplyEffects={(conditionsRemoved, conditionsToAdd, log) => {
-                        // Update combatant with condition changes
-                        let updatedConditions = [...(conditionPromptCombatant.conditions || [])];
+                                {/* Display active conditions */}
+                                {conditionCounts.size > 0 && (
+                                    <div className={styles.conditionBadges}>
+                                        {Array.from(conditionCounts.entries()).map(([condId, count]) => (
+                                            <span
+                                                key={condId}
+                                                className={styles.conditionBadge}
+                                                title={getConditionDescription(condId)}
+                                            >
+                                                {getConditionName(condId)}{count > 1 ? ` (${count})` : ''}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
 
-                        // Remove conditions
-                        for (let i = 0; i < conditionsRemoved; i++) {
-                            const uniqueConditions = Array.from(new Set(updatedConditions));
-                            if (uniqueConditions.length > 0) {
-                                const condToRemove = uniqueConditions[0];
-                                const index = updatedConditions.indexOf(condToRemove);
-                                if (index !== -1) {
-                                    updatedConditions.splice(index, 1);
+                                {/* Condition management panel */}
+                                {isExpanded && (
+                                    <div className={styles.conditionPanel}>
+                                        <div className={styles.panelSection}>
+                                            <label>Add Condition:</label>
+                                            <select
+                                                onChange={(e) => {
+                                                    if (e.target.value) {
+                                                        handleAddCondition(c.id, e.target.value);
+                                                        e.target.value = '';
+                                                    }
+                                                }}
+                                                className={styles.conditionSelect}
+                                            >
+                                                <option value="">Select...</option>
+                                                {conditions.map(condition => (
+                                                    <option key={condition.id} value={condition.id}>
+                                                        {condition.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        {(c.conditions || []).length > 0 && (
+                                            <div className={styles.panelSection}>
+                                                <label>Active Conditions:</label>
+                                                <div className={styles.activeConditionsList}>
+                                                    {(c.conditions || []).map((condId, index) => (
+                                                        <div key={`${condId}-${index}`} className={styles.activeConditionItem}>
+                                                            <span
+                                                                className={styles.conditionText}
+                                                                title={getConditionDescription(condId)}
+                                                            >
+                                                                {getConditionName(condId)}
+                                                            </span>
+                                                            <button
+                                                                onClick={() => handleRemoveCondition(c.id, condId, index)}
+                                                                className={styles.removeConditionBtn}
+                                                                title="Remove condition"
+                                                            >
+                                                                ✕
+                                                            </button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </li>
+                        );
+                    })}
+                </ol>
+
+                {/* Condition Prompt Modal */}
+                {conditionPromptCombatant && (
+                    <ConditionPromptModal
+                        combatant={conditionPromptCombatant}
+                        conditions={conditionPromptCombatant.conditions || []}
+                        onClose={() => setConditionPromptCombatant(null)}
+                        onApplyEffects={(conditionsRemoved, conditionsToAdd, log) => {
+                            // Update combatant with condition changes
+                            let updatedConditions = [...(conditionPromptCombatant.conditions || [])];
+
+                            // Remove conditions
+                            for (let i = 0; i < conditionsRemoved; i++) {
+                                const uniqueConditions = Array.from(new Set(updatedConditions));
+                                if (uniqueConditions.length > 0) {
+                                    const condToRemove = uniqueConditions[0];
+                                    const index = updatedConditions.indexOf(condToRemove);
+                                    if (index !== -1) {
+                                        updatedConditions.splice(index, 1);
+                                    }
                                 }
                             }
-                        }
 
-                        // Add new conditions
-                        updatedConditions = [...updatedConditions, ...conditionsToAdd];
+                            // Add new conditions
+                            updatedConditions = [...updatedConditions, ...conditionsToAdd];
 
-                        // Update combatant
-                        onUpdateCombatant({
-                            ...conditionPromptCombatant,
-                            conditions: updatedConditions
-                        });
+                            // Update combatant
+                            onUpdateCombatant({
+                                ...conditionPromptCombatant,
+                                conditions: updatedConditions
+                            });
 
-                        // Log effects
-                        if (log.length > 0) {
-                            console.log('Condition Effects:', log.join('\n'));
-                        }
+                            // Log effects
+                            if (log.length > 0) {
+                                console.log('Condition Effects:', log.join('\n'));
+                            }
 
-                        setConditionPromptCombatant(null);
-                    }}
-                />
-            )}
-        </div>
+                            setConditionPromptCombatant(null);
+                        }}
+                    />
+                )}
+            </div>
+        </Draggable>
     );
 }
 

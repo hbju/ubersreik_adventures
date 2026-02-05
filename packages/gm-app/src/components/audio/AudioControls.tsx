@@ -28,6 +28,7 @@ export const AudioControls: React.FC<AudioControlsProps> = ({ compact = false })
         previous,
         seek,
         setVolume,
+        fadeIn,
         fadeOut,
         toggleShuffle,
         toggleRepeat,
@@ -51,6 +52,12 @@ export const AudioControls: React.FC<AudioControlsProps> = ({ compact = false })
             resume();
         }
     }, [isPlaying, pause, resume]);
+
+    const handleNext = useCallback(async () => {
+        await fadeOut(500);
+        next();
+
+    }, [fadeOut, fadeIn, next]);
 
     const handleStop = useCallback(async () => {
         await fadeOut(1500);
@@ -158,7 +165,7 @@ export const AudioControls: React.FC<AudioControlsProps> = ({ compact = false })
                 </button>
                 <button
                     className={styles.transportButton}
-                    onClick={next}
+                    onClick={handleNext}
                     disabled={!currentTrack}
                     title={t('audio.next', 'Next')}
                 >

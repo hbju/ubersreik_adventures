@@ -115,11 +115,13 @@
     display: flex;
     flex-direction: column;
     background: #1a1410;
+    overflow-y: auto;
 }
 
 .sidebarSection {
     padding: 16px;
     border-bottom: 1px solid #333;
+    overflow-y: auto;
 }
 
 .sidebarHeader {
@@ -221,8 +223,10 @@
 .playlistActionBtn {
     width: 24px;
     height: 24px;
+    padding: 1px;
     border: none;
     background: transparent;
+    box-shadow: none;
     color: #888;
     font-size: 12px;
     cursor: pointer;
@@ -250,7 +254,7 @@
 
 .newPlaylistBtn:hover {
     border-color: #d4af37;
-    color: #d4af37;
+    color: #ffff00;
 }
 
 .mainContent {

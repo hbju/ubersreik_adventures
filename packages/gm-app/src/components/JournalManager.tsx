@@ -249,7 +249,7 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
 
                   {!isSharedWithAll && (
                     <div className={styles.characterCheckboxes}>
-                      {characters.map((character) => (
+                      {characters.filter(c => c.userId != null).map((character) => (
                         <label key={character.id} className={styles.checkboxLabel}>
                           <input
                             type="checkbox"

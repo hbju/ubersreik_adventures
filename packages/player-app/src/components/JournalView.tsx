@@ -8,8 +8,10 @@ interface JournalViewProps {
 
 export const JournalView: React.FC<JournalViewProps> = ({ journal }) => {
   const [expandedEntryId, setExpandedEntryId] = useState<string | null>(null);
+  const [fullscreenImage, setFullscreenImage] = useState<{ src: string; alt: string } | null>(null);
 
   const toggleEntry = (entryId: string) => {
+    console.log(`Toggling entry ${entryId}, currently expanded: ${expandedEntryId}`);
     setExpandedEntryId((current) => (current === entryId ? null : entryId));
   };
 
@@ -27,53 +29,72 @@ export const JournalView: React.FC<JournalViewProps> = ({ journal }) => {
   }
 
   return (
-    <div className={styles.journalView}>
-      <div className={styles.header}>
-        <h1>📜 Your Journal</h1>
-        <p style={{ margin: '10px 0 0 0', color: '#aaa', fontSize: '14px' }}>
-          {journal.length} {journal.length === 1 ? 'entry' : 'entries'}
-        </p>
-      </div>
+    <>
+      <div className={styles.journalView}>
+        <div className={styles.header}>
+          <h1>📜 Your Journal</h1>
+          <p style={{ margin: '10px 0 0 0', color: '#aaa', fontSize: '14px' }}>
+            {journal.length} {journal.length === 1 ? 'entry' : 'entries'}
+          </p>
+        </div>
 
-      <div className={styles.entriesGrid}>
-        {journal.map((entry) => {
-          const isExpanded = expandedEntryId === entry.id;
+        <div className={styles.entriesGrid}>
+          {journal.map((entry) => {
+            const isExpanded = expandedEntryId === entry.id;
 
-          return (
-            <div
-              key={entry.id}
-              className={`${styles.entryCard} ${isExpanded ? styles.expanded : ''}`}
-              onClick={() => toggleEntry(entry.id)}
-            >
-              <div className={styles.entryHeader}>
-                <h2 className={styles.entryTitle}>{entry.title}</h2>
-                <span className={`${styles.expandIcon} ${isExpanded ? styles.expanded : ''}`}>
-                  {isExpanded ? '▲' : '▼'}
-                </span>
+            return (
+              <div
+                key={entry.id}
+                className={`${styles.entryCard} ${isExpanded ? styles.expanded : ''}`}
+                onClick={() => toggleEntry(entry.id)}
+              >
+                <div className={styles.entryHeader}>
+                  <h2 className={styles.entryTitle}>{entry.title}</h2>
+                  <span className={`${styles.expandIcon} ${isExpanded ? styles.expanded : ''}`}>
+                    {isExpanded ? '▲' : '▼'}
+                  </span>
+                </div>
+
+                {!isExpanded && (
+                  <div className={styles.entryPreview}>{entry.content}</div>
+                )}
+
+                {isExpanded && (
+                  <>
+                    {entry.content !== '' && <div className={styles.entryContent}>{entry.content}</div>}
+                    {entry.imageData && (
+                      <img
+                        src={entry.imageData}
+                        alt={entry.title}
+                        className={styles.entryImage}
+                        onClick={(e) => {
+                          console.log('Image clicked, opening fullscreen');
+                          e.stopPropagation();
+                          setFullscreenImage({ src: entry.imageData!, alt: entry.title });
+                        }}
+                      />
+                    )}
+                  </>
+                )}
               </div>
-
-              {!isExpanded && (
-                <div className={styles.entryPreview}>{entry.content}</div>
-              )}
-
-              {isExpanded && (
-                <>
-                  {entry.content !== '' && <div className={styles.entryContent}>{entry.content}</div> }
-                  {entry.imageData && (
-                    <img
-                      src={entry.imageData}
-                      alt={entry.title}
-                      className={styles.entryImage}
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  )}
-                </>
-              )}
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
+
+      {fullscreenImage && (
+        <div
+          className={styles.fullscreenOverlay}
+          onClick={() => setFullscreenImage(null)}
+        >
+          <img
+            src={fullscreenImage.src}
+            alt={fullscreenImage.alt}
+            className={styles.fullscreenImage}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

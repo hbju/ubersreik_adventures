@@ -571,7 +571,7 @@ const PlayerApp: React.FC = () => {
                     left: '10px',
                     display: 'grid',
                     gap: '10px',
-                    zIndex: 1100
+                    zIndex: 1011
                 }}>
                     <button
                         onClick={() => setCurrentView('character')}
@@ -946,6 +946,7 @@ const PlayerApp: React.FC = () => {
                     />
                 </div>
             )}
+
 
             {testModalInfo && character && (
                 <TalentSelectionModal

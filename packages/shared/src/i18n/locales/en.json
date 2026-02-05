@@ -129,7 +129,8 @@
         "helpText": "Contact your Game Master if you need login credentials.",
         "placeholderIp": "e.g., 192.168.1.100",
         "placeholderUsername": "Enter your username",
-        "placeholderPassword": "Enter your password"
+        "placeholderPassword": "Enter your password",
+        "rememberMe": "Remember me"
     },
     "logs": {
         "session_started": "Session started. Fortune points reset.",

@@ -109,6 +109,13 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const fadeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const playbackStateRef = useRef<AudioPlaybackState>(playbackState);
+    const playTrackInternalRef = useRef<(track: AudioTrack, queue?: AudioTrack[], source?: AudioPlaybackState['playbackSource']) => void>(() => { });
+
+    useEffect(() => {
+        playbackStateRef.current = playbackState;
+    }, [playbackState]);
+
 
     useEffect(() => {
         const initAudioServer = async () => {
@@ -151,13 +158,13 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
 
         const handleEnded = () => {
             // Play next track or stop
-            if (playbackState.queue.length > 0) {
-                const [nextTrack, ...remainingQueue] = playbackState.queue;
-                playTrackInternal(nextTrack, remainingQueue);
-            } else if (playbackState.isRepeating && playbackState.currentTrack) {
-                console.log('Repeating track:', playbackState.currentTrack.displayName || playbackState.currentTrack.filename);
+            const currentState = playbackStateRef.current;
+            if (currentState.isRepeating && currentState.currentTrack) {
                 audio.currentTime = 0;
                 audio.play();
+            } else if (currentState.queue.length > 0) {
+                const [nextTrack, ...remainingQueue] = currentState.queue;
+                playTrackInternalRef.current(nextTrack, remainingQueue);
             } else {
                 setPlaybackState(prev => ({
                     ...prev,
@@ -337,8 +344,6 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
 
         const audio = audioRef.current;
         audio.src = getAudioUrl(track.path);
-        console.log('Playing track:', track.displayName || track.filename);
-        console.log("Current seekable before play:", audio.seekable.length);
         audio.play().catch(console.error);
 
         setPlaybackState(prev => ({
@@ -351,6 +356,10 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             playbackSource: source,
         }));
     }, []);
+
+    useEffect(() => {
+        playTrackInternalRef.current = playTrackInternal;
+    }, [playTrackInternal]);
 
     const playTrack = useCallback((track: AudioTrack) => {
         playTrackInternal(track, [], { type: 'single', id: track.id, name: track.displayName || track.filename });
@@ -420,6 +429,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
     }, []);
 
     const next = useCallback(() => {
+        console.log("Next track requested");
         if (playbackState.queue.length > 0) {
             const [nextTrack, ...remainingQueue] = playbackState.queue;
             playTrackInternal(nextTrack, remainingQueue, playbackState.playbackSource);
@@ -439,6 +449,9 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
         }
     }, [playbackState, playTrackInternal, playTag, playPlaylist, stop]);
 
+
+
+
     const previous = useCallback(() => {
         if (audioRef.current) {
             // If more than 3 seconds in, restart current track
@@ -456,26 +469,6 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
 
         const audio = audioRef.current;
         const clampedTime = Math.max(0, Math.min(time, audio.duration || 0));
-
-        console.log('Attempting to seek to:', clampedTime);
-        console.log('Audio duration:', audio.duration);
-        console.log('Audio readyState:', audio.readyState);
-
-        if (audio.seekable.length > 0) {
-            for (let i = 0; i < audio.seekable.length; i++) {
-                console.log(`Seekable range ${i}: ${audio.seekable.start(i)} - ${audio.seekable.end(i)}`);
-            }
-        } else {
-            console.log('No seekable ranges available');
-        }
-
-        if (audio.buffered.length > 0) {
-            for (let i = 0; i < audio.buffered.length; i++) {
-                console.log(`Buffered range ${i}: ${audio.buffered.start(i)} - ${audio.buffered.end(i)}`);
-            }
-        } else {
-            console.log('No buffered ranges available');
-        }
 
         if (audio.readyState < HTMLMediaElement.HAVE_FUTURE_DATA) {
             const onCanPlay = () => {
@@ -596,6 +589,8 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             if (newIsShuffled) {
                 newQueue = shuffleArray(prev.queue);
             }
+            console.log('Toggling shuffle to', newIsShuffled);
+            console.log('New queue:', newQueue.map(t => t.displayName || t.filename));
 
             return { ...prev, isShuffled: newIsShuffled, queue: newQueue };
         });
