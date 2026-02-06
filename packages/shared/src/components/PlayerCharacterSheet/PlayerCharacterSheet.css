@@ -7,15 +7,15 @@
     background-image: 
         linear-gradient(rgba(30, 20, 10, 0.9), rgba(30, 20, 10, 0.9));
     background-size: cover;
-    min-height: 95vh;
-    max-height: 95vh;
+    min-height: 90vh;
+    max-height: 90vh;
     min-width: 60vw;
     overflow-y: auto;
     color: #e8dcc4;
     padding-bottom: 2rem;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    top: 49%;
+    transform: translate(-50%, -51%);
     position: fixed;
     z-index: 1010;
 }

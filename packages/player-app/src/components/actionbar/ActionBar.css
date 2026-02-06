@@ -19,8 +19,8 @@
 
 /* ========== ACTION SLOT ========== */
 .action-slot {
-    width: 56px;
-    height: 64px;
+    width: 4vw;
+    height: 6vh;
     background: rgba(30, 20, 10, 0.8);
     border: 2px solid #5a3d1f;
     border-radius: 6px;
