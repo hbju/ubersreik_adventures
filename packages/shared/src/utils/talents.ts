@@ -372,6 +372,10 @@ export function recalculateCharacterTalentBonuses(character: Character, talents:
  * @returns The maximum ranks for the talent
  */
 export function getMaxRanks(talent: Talent, character: Character): number {
+    if (typeof talent.max_ranks === 'string' && talent.max_ranks.toLowerCase() === 'none') {
+        return Infinity; // No maximum ranks
+    }
+
     if (typeof talent.max_ranks === 'number') {
         return talent.max_ranks;
     }

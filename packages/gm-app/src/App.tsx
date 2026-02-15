@@ -23,6 +23,9 @@ import { MapSelector } from './components/map/MapSelector';
 import { AudioProvider } from './context/AudioContext';
 import { AudioSidebar, LibraryManager } from './components/audio';
 import { TimelineManager } from './components/timeline';
+import { DramatisPersonae } from './components/lore/DramatisPersonae';
+import { LoreEditor } from './components/lore/LoreEditor';
+import NPCGeneratorWizard from './components/generator/NPCGeneratorWizard';
 
 import {
     DiscoveredLocationsList, 
@@ -82,7 +85,7 @@ interface ServerStatusData {
 function App() {
     const { t } = useTranslation();
 
-    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, mapData, maps, mapsList } = useGameData();
+    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, mapData, maps, mapsList, motivations } = useGameData();
 
     // Active map management
     const [activeMapId, setActiveMapId] = useState<string>('ubersreik_city');
@@ -129,6 +132,7 @@ function App() {
     const [showShopConfigurator, setShowShopConfigurator] = useState(false);
     const [showDiceTray, setShowDiceTray] = useState(false);
     const [showCharacterWizard, setShowCharacterWizard] = useState(false);
+    const [showNPCGenerator, setShowNPCGenerator] = useState(false);
     const [showCombatResolver, setShowCombatResolver] = useState(false);
     const [showJournalManager, setShowJournalManager] = useState(false);
     const [showUserManager, setShowUserManager] = useState(false);
@@ -141,6 +145,8 @@ function App() {
     const [showTimelineManager, setShowTimelineManager] = useState(false);
     const [showChat, setShowChat] = useState(false);
     const [showLibraryManager, setShowLibraryManager] = useState(false);
+    const [showDramatisPersonae, setShowDramatisPersonae] = useState(false);
+    const [loreEditorCharacter, setLoreEditorCharacter] = useState<Character | null>(null);
     const [leftSidebarMode, setLeftSidebarMode] = useState<'roster' | 'audio'>('roster');
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
     const [factions, setFactions] = useState<Faction[]>([]);
@@ -345,6 +351,17 @@ function App() {
         setCharacters(updatedCharacters);
     }
 
+    const handleGenerateNPCDetailed = () => {
+        setShowNPCGenerator(true);
+    }
+
+    const handleNPCGeneratorComplete = (newCharacter: Character) => {
+        const updatedCharacters = [...charactersRef.current, newCharacter];
+        setCharacters(updatedCharacters);
+        setShowNPCGenerator(false);
+        addLogEntry('system', `Generated NPC: ${newCharacter.name}`, 'logs.npc_generated', { name: newCharacter.name });
+    }
+
     const handleDeleteCharacter = (characterId: string) => {
         console.log("trying to delete " + characterId);
         const characterToDelete = charactersRef.current.find(c => c.id === characterId);
@@ -368,6 +385,7 @@ function App() {
         const newToken: MapToken = {
             id: crypto.randomUUID(),
             characterId: character.id,
+            characterName: character.name,
             mapId: activeMapIdRef.current,
             x: spawnPoint.x,
             y: spawnPoint.y,
@@ -1366,6 +1384,7 @@ function App() {
                 onShowFactionManager={() => setShowFactionManager(true)}
                 onShowReputationPanel={() => setShowReputationPanel(true)}
                 onShowTemplateManager={() => setShowTemplateManager(true)}
+                onShowDramatisPersonae={() => setShowDramatisPersonae(true)}
                 onShowChat={() => setShowChat(!showChat)}
                 onShowGameLog={() => setShowGameLog(true)}
             />
@@ -1419,6 +1438,7 @@ function App() {
                             onAssignCharacter={handleAssignCharacterToUser}
                             onCreateCharacter={handleCreateCharacter}
                             onGenerateNpc={handleGenerateNPC}
+                            onGenerateNpcDetailed={handleGenerateNPCDetailed}
                             onDeleteCharacter={handleDeleteCharacter}
                             onAddCombatant={handleAddCombatant}
                             onFightButtonClick={() => setShowCombatResolver(true)}
@@ -1584,6 +1604,35 @@ function App() {
                 />
             )}
 
+            {/* Dramatis Personae View */}
+            {showDramatisPersonae && (
+                <DramatisPersonae
+                    characters={characters}
+                    motivations={motivations}
+                    onClose={() => setShowDramatisPersonae(false)}
+                    onOpenLoreEditor={(character) => {
+                        setLoreEditorCharacter(character);
+                    }}
+                />
+            )}
+
+            {/* Lore Editor Modal */}
+            {loreEditorCharacter && (
+                <LoreEditor
+                    character={loreEditorCharacter}
+                    characters={characters}
+                    motivations={motivations}
+                    onCharacterUpdate={(updatedCharacter) => {
+                        handleCharacterUpdate(updatedCharacter);
+                        setLoreEditorCharacter(updatedCharacter);
+                    }}
+                    onOtherCharacterUpdate={(updatedCharacter) => {
+                        handleCharacterUpdate(updatedCharacter);
+                    }}
+                    onClose={() => setLoreEditorCharacter(null)}
+                />
+            )}
+
             {currentBrowsingShop && (
                 <ShopBrowser
                     shop={currentBrowsingShop}
@@ -1657,6 +1706,13 @@ function App() {
                 <CharacterCreationWizard
                     onClose={() => setShowCharacterWizard(false)}
                     onComplete={handleWizardComplete}
+                />
+            )}
+
+            {showNPCGenerator && (
+                <NPCGeneratorWizard
+                    onClose={() => setShowNPCGenerator(false)}
+                    onComplete={handleNPCGeneratorComplete}
                 />
             )}
 

@@ -10,6 +10,7 @@ import { update } from './update'
 import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates, broadcastChatMessage, getChatHistory } from './server'
 import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
 import { startAudioServer, getAudioServerPort, stopAudioServer } from './audioServer'
+import { selectAndCopyCharacterImage, readCharacterImageAsDataUrl, deleteCharacterImage } from './imageHandler'
 import {
   loadAudioLibrary,
   saveAudioLibrary,
@@ -396,5 +397,50 @@ ipcMain.handle('update-track-display-name', async (_event, trackId: string, disp
   } catch (error) {
     console.error('Error updating track display name:', error);
     throw error;
+  }
+});
+
+// ==================== Image Handler IPC Handlers ====================
+
+/**
+ * Open file dialog to select and copy a character image
+ */
+ipcMain.handle('select-character-image', async (_event, characterId: string) => {
+  try {
+    const imagePath = await selectAndCopyCharacterImage(characterId);
+    if (imagePath) {
+      const dataUrl = readCharacterImageAsDataUrl(imagePath);
+      return { success: true, path: imagePath, dataUrl };
+    }
+    return { success: false, cancelled: true };
+  } catch (error) {
+    console.error('Error selecting character image:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+/**
+ * Load a character image as a data URL
+ */
+ipcMain.handle('load-character-image', async (_event, imagePath: string) => {
+  try {
+    const dataUrl = readCharacterImageAsDataUrl(imagePath);
+    return dataUrl;
+  } catch (error) {
+    console.error('Error loading character image:', error);
+    return null;
+  }
+});
+
+/**
+ * Delete a character's image
+ */
+ipcMain.handle('delete-character-image', async (_event, characterId: string) => {
+  try {
+    deleteCharacterImage(characterId);
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting character image:', error);
+    return { success: false, error: (error as Error).message };
   }
 });

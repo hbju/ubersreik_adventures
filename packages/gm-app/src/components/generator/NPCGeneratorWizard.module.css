@@ -1,0 +1,596 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: #1c1c1c;
+    border: 2px solid #d4af37;
+    border-radius: 8px;
+    width: 95%;
+    max-width: 1200px;
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    color: #eee;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+/* ── Header ── */
+.header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2c1810;
+    border-radius: 6px 6px 0 0;
+    flex-shrink: 0;
+}
+
+.header h2 {
+    margin: 0;
+    color: #d4af37;
+    font-size: 1.3rem;
+}
+
+.headerRight {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.closeBtn {
+    background: #444;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.closeBtn:hover {
+    background: #555;
+}
+
+/* ── Step indicator ── */
+.stepIndicator {
+    display: flex;
+    gap: 6px;
+    padding: 10px 20px;
+    background: #222;
+    border-bottom: 1px solid #333;
+    flex-shrink: 0;
+}
+
+.stepBadge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: #888;
+    background: #333;
+}
+
+.stepBadge.active {
+    background: #d4af37;
+    color: #1c1c1c;
+    font-weight: bold;
+}
+
+.stepBadge.completed {
+    background: #2d5016;
+    color: #fff;
+}
+
+/* ── Main content area ── */
+.content {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+}
+
+/* ── Origin step ── */
+.originStep {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.formRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.formRow label {
+    font-weight: bold;
+    color: #d4af37;
+    min-width: 80px;
+}
+
+.formRow input,
+.formRow select {
+    background: #2a2a2a;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    min-width: 200px;
+}
+
+.formRow input:focus,
+.formRow select:focus {
+    border-color: #d4af37;
+    outline: none;
+}
+
+.randomizeBtn {
+    background: #444;
+    color: #d4af37;
+    border: 1px solid #d4af37;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.randomizeBtn:hover {
+    background: #555;
+}
+
+.baseStatsGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    max-width: 600px;
+}
+
+.statBox {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+}
+
+.statBox .statLabel {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.statBox .statValue {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #d4af37;
+}
+
+/* ── Career Loop step (two-column layout) ── */
+.careerLoopStep {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+}
+
+.leftPanel {
+    width: 38%;
+    border-right: 1px solid #444;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.rightPanel {
+    width: 62%;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.panelTitle {
+    color: #d4af37;
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 6px;
+}
+
+/* ── Character stats display (left panel) ── */
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 12px;
+}
+
+.statLine {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    font-size: 0.85rem;
+}
+
+.statLine .statKey {
+    color: #aaa;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.statLine .statVal {
+    color: #eee;
+    font-weight: bold;
+}
+
+.statLine .statAdv {
+    color: #5cb85c;
+    font-size: 0.8rem;
+    margin-left: 4px;
+}
+
+/* ── Career history log (left panel) ── */
+.historyList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.historyItem {
+    padding: 6px 10px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.historyIndex {
+    color: #d4af37;
+    font-weight: bold;
+    min-width: 18px;
+}
+
+.historyText {
+    color: #ccc;
+}
+
+/* ── Career selector (right panel) ── */
+.careerSelector {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.careerSelector select {
+    background: #2a2a2a;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+}
+
+.careerSelector select:focus {
+    border-color: #d4af37;
+    outline: none;
+}
+
+.talentCountRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.talentCountRow label {
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+.talentCountRow input {
+    background: #2a2a2a;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 6px 10px;
+    width: 60px;
+    text-align: center;
+}
+
+.simulateBtn {
+    background: #d4af37;
+    color: #1c1c1c;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.simulateBtn:hover {
+    background: #e6c04a;
+}
+
+.simulateBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ── Simulation results box ── */
+.resultsBox {
+    background: #1a2a15;
+    border: 1px solid #3a6b25;
+    border-radius: 6px;
+    padding: 14px;
+}
+
+.resultsBox h4 {
+    margin: 0 0 10px 0;
+    color: #8bc34a;
+    font-size: 0.95rem;
+}
+
+.resultSection {
+    margin-bottom: 10px;
+}
+
+.resultSection h5 {
+    margin: 0 0 4px 0;
+    color: #aaa;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.resultList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.resultChip {
+    background: #2d5016;
+    color: #cfc;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.resultChipTalent {
+    background: #4a3000;
+    color: #ffd54f;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+/* ── Decision buttons ── */
+.decisionBox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.decisionBox h4 {
+    margin: 0;
+    color: #d4af37;
+    font-size: 0.95rem;
+}
+
+.decisionBtn {
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.advanceBtn {
+    background: #2d5016;
+    color: #cfc;
+}
+
+.advanceBtn:hover {
+    background: #3a6b25;
+}
+
+.advanceBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.switchBtn {
+    background: #1a3a5c;
+    color: #8ecfff;
+}
+
+.switchBtn:hover {
+    background: #245080;
+}
+
+.finishBtn {
+    background: #d4af37;
+    color: #1c1c1c;
+}
+
+.finishBtn:hover {
+    background: #e6c04a;
+}
+
+/* ── Skills list (left panel compact view) ── */
+.skillsList {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.skillItem {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    padding: 2px 4px;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.skillItem .skillName {
+    color: #ccc;
+}
+
+.skillItem .skillValue {
+    color: #d4af37;
+    font-weight: 600;
+}
+
+/* ── Talents list (left panel) ── */
+.talentsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.talentChip {
+    background: #3a2800;
+    color: #ffd54f;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+}
+
+/* ── Footer ── */
+.footer {
+    padding: 14px 20px;
+    border-top: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #2c1810;
+    border-radius: 0 0 6px 6px;
+    flex-shrink: 0;
+}
+
+.footerInfo {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.button {
+    padding: 8px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    font-size: 0.9rem;
+}
+
+.button.primary {
+    background: #d4af37;
+    color: #1c1c1c;
+}
+
+.button.primary:hover {
+    background: #e6c04a;
+}
+
+.button.secondary {
+    background: #444;
+    color: #fff;
+}
+
+.button.secondary:hover {
+    background: #555;
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ── Wounds / status display ── */
+.woundsDisplay {
+    display: flex;
+    gap: 12px;
+    font-size: 0.85rem;
+}
+
+.woundStat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.woundStat .woundLabel {
+    color: #888;
+}
+
+.woundStat .woundValue {
+    color: #d4af37;
+    font-weight: bold;
+}
+
+/* ── Career level preview ── */
+.levelPreview {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 0.82rem;
+}
+
+.levelPreview h5 {
+    margin: 0 0 8px 0;
+    color: #d4af37;
+    font-size: 0.85rem;
+}
+
+.previewRow {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.previewChip {
+    background: #333;
+    color: #ccc;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.sectionLabel {
+    color: #888;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    margin-top: 8px;
+}

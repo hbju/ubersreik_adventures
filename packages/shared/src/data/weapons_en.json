@@ -51,7 +51,7 @@
     "enc": "Varies",
     "reach": "Varies",
     "damage": "+SB+1",
-    "qualities": ["Undamaging", "Unbalanced"],
+    "qualities": ["undamaging", "unbalanced"],
     "availability": null
   },
   {
@@ -62,7 +62,7 @@
     "enc": 0,
     "reach": "Very Short",
     "damage": "+SB+1",
-    "qualities": ["Undamaging"],
+    "qualities": ["undamaging"],
     "availability": "common"
   },
   {

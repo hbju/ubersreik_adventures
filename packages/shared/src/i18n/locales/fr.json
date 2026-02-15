@@ -176,12 +176,76 @@
         "gameLog": "Journal de Jeu",
         "chat": "Chat",
         "templates": "Modèles de PNJ",
+        "dramatisPersonae": "Dramatis Personae",
         "settings": "Paramètres",
         "session": "Session",
         "journals": "Journaux",
         "commerce": "Commerce",
         "tools": "Outils",
         "world": "Monde"
+    },
+    "lore": {
+        "dramatisPersonae": "Dramatis Personae",
+        "searchCharacters": "Rechercher des personnages...",
+        "noCharactersFound": "Aucun personnage trouvé.",
+        "filter": {
+            "all": "Tous",
+            "npc": "PNJ",
+            "pc": "PJ",
+            "minion": "Sbires"
+        },
+        "editLore": "Éditer le Lore",
+        "uploadImage": "Charger une Image",
+        "changeImage": "Changer",
+        "removeImage": "Supprimer",
+        "voice": "Voix",
+        "voicePlaceholder": "ex. Rauque, Douce...",
+        "mannerisms": "Manies",
+        "mannerismsPlaceholder": "ex. S'agite, Crache...",
+        "species": "Espèce",
+        "tags": "Tags",
+        "tabs": {
+            "identity": "Identité",
+            "psychology": "Psychologie",
+            "relationships": "Relations"
+        },
+        "appearance": "Apparence",
+        "appearancePlaceholder": "Décrivez l'apparence physique du personnage...",
+        "biography": "Biographie",
+        "biographyPlaceholder": "Écrivez l'histoire et le passé du personnage...",
+        "gmNotes": "Notes du MJ (Privé)",
+        "gmNotesPlaceholder": "Notes privées visibles uniquement par le MJ...",
+        "motivation": "Motivation",
+        "selectMotivation": "— Choisir une Motivation —",
+        "ambitions": "Ambitions",
+        "shortTermAmbition": "Court Terme",
+        "longTermAmbition": "Long Terme",
+        "shortAmbitionPlaceholder": "ex. Rembourser les racketteurs",
+        "longAmbitionPlaceholder": "ex. Acheter un titre de noblesse",
+        "currentTies": "Liens Actuels",
+        "noRelationships": "Aucune relation définie.",
+        "addRelationship": "+ Ajouter une Relation",
+        "target": "Cible",
+        "type": "Type",
+        "selectCharacter": "— Choisir un Personnage —",
+        "description": "Description",
+        "relDescPlaceholder": "ex. Lui doit 50 CO",
+        "addInverse": "Ajouter la relation inverse",
+        "inverseDescription": "Description inverse (optionnel)",
+        "inverseDescPlaceholder": "Laisser vide pour utiliser la même description",
+        "addRelButton": "Ajouter la Relation",
+        "removeRelationship": "Supprimer",
+        "unknownCharacter": "Inconnu",
+        "relType": {
+            "kin": "Famille",
+            "friend": "Ami",
+            "ally": "Allié",
+            "rival": "Rival",
+            "enemy": "Ennemi",
+            "servant": "Serviteur",
+            "master": "Maître",
+            "other": "Autre"
+        }
     },
     "quests": {
         "title": "Journal des Quêtes",
@@ -415,6 +479,11 @@
             "hidden": "Caché",
             "festival": "Festival",
             "personal": "Personnel"
+        }
+    },
+    "map": {
+        "selector": {
+            "openSelector": "Sélectionner une Carte"
         }
     }
 }

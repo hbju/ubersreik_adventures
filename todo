@@ -4,6 +4,7 @@ v1.1 TODO:
 - randomly generated shops ✅
 - better music management ✅
 - npcs templates ✅
+- better NPC generation (auto career and talents based on their lifepath)
 - Details panel for player (background and notes) ✅
 - pursuits implementation
 - quests implementation ✅
@@ -12,7 +13,7 @@ v1.1 TODO:
 - reputation and npc relationship system ✅
 - improve character roster UI ✅
 - add corruptions and spells/miracles system
-- NPCs dedicated view with easy notes for GM
+- NPCs dedicated view with easy notes for GM ✅
 - improve combat resolver logic ✅
 - gang territories and turf wars
 - in game chat + rolls ✅
@@ -20,4 +21,5 @@ v1.1 TODO:
 - Add equipment management (equip/unequip, encumbrance) ✅
 - add tooltip for stats and characteristics
 - autoupdate management for all ✅
-- mdp automatiques
+- mdp automatiques ✅
+- fight simulator (to test builds)

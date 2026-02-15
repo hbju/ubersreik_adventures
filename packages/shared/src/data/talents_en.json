@@ -3281,7 +3281,7 @@
         "tests": [
             "Intimidate"
         ],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Bailiff": "3",
             "Beadle": "3",

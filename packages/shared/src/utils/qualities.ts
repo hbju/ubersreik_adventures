@@ -27,16 +27,17 @@ export const parseQualityString = (qualityString: string): { name: string; ratin
  */
 export const getQualityDefinition = (qualityString: string, qualitiesData: ItemQualityDefinition[]): ItemQualityDefinition | undefined => {
   const { name, rating } = parseQualityString(qualityString);
+  console.log(name, " ", rating)
   
   // Try exact match first (case-insensitive)
   let definition = qualitiesData.find(
-    q => name.toLowerCase().includes(q.id.toLowerCase())
+    q => name.toLowerCase() === (q.id.toLowerCase())
   );
   
   // If not found, try matching without "(Rating)" suffix in the definition name
   if (!definition) {
     definition = qualitiesData.find(
-      q => name.toLowerCase().includes(q.name.replace('(Rating)', '').toLowerCase())
+      q => name.toLowerCase() === (q.name.replace('(Rating)', '').toLowerCase())
     );
   }
   

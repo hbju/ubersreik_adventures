@@ -875,6 +875,7 @@ const PlayerApp: React.FC = () => {
                             onMapPing={handleMapPing}
                             playerColor={playerColor || undefined}
                             currentUserId={userId || undefined}
+                            currentCharacterId={character.id || undefined}
                             gridScale={currentMapData.gridSize}
                         />
                         {/* Current Map Indicator */}

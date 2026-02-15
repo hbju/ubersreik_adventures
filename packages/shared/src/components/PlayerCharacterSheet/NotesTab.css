@@ -17,10 +17,27 @@
     padding: 1rem;
 }
 
-/* ========== AMBITIONS ========== */
-.ambitions-panel {
-    grid-column: 1 / -1;
+/* ========== MOTIVATION ========== */
+
+.motivation-select {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5a3d1f;
+    border-radius: 4px;
+    color: #e8dcc4;
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 0.95rem;
 }
+
+.motivation-description {
+    color: rgba(232, 220, 196, 0.7);
+    font-size: 0.85rem;
+    margin: 0.5rem 0 0 0;
+    font-style: italic;
+}
+
+/* ========== AMBITIONS ========== */
 
 .ambition-section {
     display: grid;

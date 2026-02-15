@@ -236,6 +236,35 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         return ipcRenderer.invoke('update-track-display-name', trackId, displayName)
     },
 
+    // ==================== Image Handler API ====================
+
+    /**
+     * Open file dialog to select and copy a character image
+     * @param characterId The character ID to associate the image with
+     * @returns Promise resolving to { success, path?, dataUrl?, cancelled?, error? }
+     */
+    selectCharacterImage(characterId: string) {
+        return ipcRenderer.invoke('select-character-image', characterId)
+    },
+
+    /**
+     * Load a character image as a data URL
+     * @param imagePath The absolute path to the image
+     * @returns Promise resolving to the base64 data URL string or null
+     */
+    loadCharacterImage(imagePath: string) {
+        return ipcRenderer.invoke('load-character-image', imagePath)
+    },
+
+    /**
+     * Delete a character's image
+     * @param characterId The character ID
+     * @returns Promise resolving to { success, error? }
+     */
+    deleteCharacterImage(characterId: string) {
+        return ipcRenderer.invoke('delete-character-image', characterId)
+    },
+
 
     // You can expose other APTs you need here.
     // ...

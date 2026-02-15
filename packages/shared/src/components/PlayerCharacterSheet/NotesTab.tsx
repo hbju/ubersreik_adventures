@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Character, EditableField, User, CharacterLore, KnowledgeEntry, useDebouncedCallback } from '@wfrp/shared';
+import { Character, EditableField, User, CharacterLore, KnowledgeEntry, useDebouncedCallback, useGameData } from '@wfrp/shared';
 import './NotesTab.css';
 
 interface NotesTabProps {
@@ -40,6 +40,8 @@ export const NotesTab: React.FC<NotesTabProps> = ({
     renderSecretsManager
 }) => {
     const characterDetails = character.details || defaultDetails;
+    const lore = character.lore || { gmNotes: '', background: [], playerNotes: '' };
+    const motivations = useGameData().motivations;
 
     const handleDetailsUpdate = (field: keyof Character['details'], value: string) => {
         onCharacterUpdate({
@@ -81,6 +83,26 @@ export const NotesTab: React.FC<NotesTabProps> = ({
                         />
                     </div>
                 </div>
+            </div>
+
+                        {/* Personal Motivations */}
+            <div className="notes-panel motivations-panel">
+                <div className="panel-title">Motivation</div>
+                <select
+                    className="motivation-select"
+                    value={lore.motivationKey || ''}
+                    onChange={e => onCharacterUpdate({ lore: { ...lore, motivationKey: e.target.value || undefined } })}
+                >
+                    <option value="">— Select Motivation —</option>
+                    {motivations.sort((a, b) => a.name.localeCompare(b.name)).map(m => (
+                        <option key={m.id} value={m.id}>{m.name}</option>
+                    ))}
+                </select>
+                {lore.motivationKey && (
+                    <div className="motivation-description">
+                        "{motivations.find(m => m.id === lore.motivationKey)?.description}"
+                    </div>
+                )}
             </div>
 
             {/* Party Information */}

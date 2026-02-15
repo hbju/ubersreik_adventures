@@ -42,10 +42,13 @@ export * from './utils/reputation';
 export * from './utils/qualities';
 export * from './utils/shopGenerator';
 export * from './utils/diceParser';
+export * from './utils/graph';
 
 export { default as criticalHitsData } from './data/critical_hits.json';
 export { default as fumblesData } from './data/fumbles.json';
 export { default as speciesData } from './data/species.json';
+export { default as motivationsEnData } from './data/motivations_en.json';
+export { default as motivationsFrData } from './data/motivations_fr.json';
 
 // Calendar System
 export * from './data/calendar';

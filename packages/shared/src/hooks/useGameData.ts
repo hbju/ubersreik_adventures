@@ -25,7 +25,9 @@ import qualitiesFr from '../data/flaws_qualities_fr.json';
 import shopsEn from '../data/shops_en.json';
 import shopsFr from '../data/shops_fr.json';
 import templatesEn from '../data/templates_en.json';
-import { SkillCharDefinition, Talent, Career, Item, Weapon, Armor, Condition, MapData, ItemQualityDefinition, ShopDefinition, CharacterTemplate } from '../types/wfrp.types';
+import motivationsEn from '../data/motivations_en.json';
+import motivationsFr from '../data/motivations_fr.json';
+import { SkillCharDefinition, Talent, Career, Item, Weapon, Armor, Condition, MapData, ItemQualityDefinition, ShopDefinition, CharacterTemplate, Motivation } from '../types/wfrp.types';
 
 const normalizeMapData: (data: MapData) => MapData = (data: MapData): MapData => ({
     ...data,
@@ -72,6 +74,7 @@ export const useGameData = () => {
             qualities: qualitiesEn as ItemQualityDefinition[],
             shops: shopsEn as ShopDefinition[],
             defaultTemplates: templatesEn as CharacterTemplate[],
+            motivations: motivationsEn as Motivation[],
         },
         fr: {
             skills: skillsFr as SkillCharDefinition[],
@@ -87,6 +90,7 @@ export const useGameData = () => {
             qualities: qualitiesFr as ItemQualityDefinition[],
             shops: shopsFr as ShopDefinition[],
             defaultTemplates: templatesEn as CharacterTemplate[], // Use English templates for now
+            motivations: motivationsFr as Motivation[],
         },
     };
 

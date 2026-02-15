@@ -174,12 +174,76 @@
         "gameLog": "Game Log",
         "chat": "Chat",
         "templates": "NPC Templates",
+        "dramatisPersonae": "Dramatis Personae",
         "settings": "Settings",
         "session": "Session",
         "journals": "Journals",
         "commerce": "Commerce",
         "tools": "Tools",
         "world": "World"
+    },
+    "lore": {
+        "dramatisPersonae": "Dramatis Personae",
+        "searchCharacters": "Search characters...",
+        "noCharactersFound": "No characters found.",
+        "filter": {
+            "all": "All",
+            "npc": "NPCs",
+            "pc": "PCs",
+            "minion": "Minions"
+        },
+        "editLore": "Edit Lore",
+        "uploadImage": "Upload Image",
+        "changeImage": "Change",
+        "removeImage": "Remove",
+        "voice": "Voice",
+        "voicePlaceholder": "e.g. Gravelly, Soft...",
+        "mannerisms": "Mannerisms",
+        "mannerismsPlaceholder": "e.g. Fidgets, Spits...",
+        "species": "Species",
+        "tags": "Tags",
+        "tabs": {
+            "identity": "Identity",
+            "psychology": "Psychology",
+            "relationships": "Relationships"
+        },
+        "appearance": "Appearance",
+        "appearancePlaceholder": "Describe the character's physical appearance...",
+        "biography": "Biography",
+        "biographyPlaceholder": "Write the character's backstory and history...",
+        "gmNotes": "GM Notes (Private)",
+        "gmNotesPlaceholder": "Private notes only visible to the GM...",
+        "motivation": "Motivation",
+        "selectMotivation": "— Select Motivation —",
+        "ambitions": "Ambitions",
+        "shortTermAmbition": "Short-Term",
+        "longTermAmbition": "Long-Term",
+        "shortAmbitionPlaceholder": "e.g. Pay off the racketeers",
+        "longAmbitionPlaceholder": "e.g. Buy a noble title",
+        "currentTies": "Current Ties",
+        "noRelationships": "No relationships defined yet.",
+        "addRelationship": "+ Add Relationship",
+        "target": "Target",
+        "type": "Type",
+        "selectCharacter": "— Select Character —",
+        "description": "Description",
+        "relDescPlaceholder": "e.g. Owes him 50 GC",
+        "addInverse": "Add inverse relationship",
+        "inverseDescription": "Inverse Description (optional)",
+        "inverseDescPlaceholder": "Leave blank to use the same description",
+        "addRelButton": "Add Relationship",
+        "removeRelationship": "Remove",
+        "unknownCharacter": "Unknown",
+        "relType": {
+            "kin": "Kin",
+            "friend": "Friend",
+            "ally": "Ally",
+            "rival": "Rival",
+            "enemy": "Enemy",
+            "servant": "Servant",
+            "master": "Master",
+            "other": "Other"
+        }
     },
     "quests": {
         "title": "Quest Journal",
@@ -369,6 +433,11 @@
             "hidden": "Hidden",
             "festival": "Festival",
             "personal": "Personal"
+        }
+    },
+    "map": {
+        "selector": {
+            "openSelector": "Select Map"
         }
     }
 }

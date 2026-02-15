@@ -1,0 +1,372 @@
+/* ========================================
+   RelationshipGraph.module.css
+   Interactive relationship web visualization
+   ======================================== */
+
+.graphContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+}
+
+/* ---------- Header / Toolbar ---------- */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #2c1810 0%, #3e2723 100%);
+    border-bottom: 2px solid #8b6914;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.header h2 {
+    margin: 0;
+    color: #d4af37;
+    font-size: 22px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toolbarButton {
+    background: rgba(44, 24, 16, 0.9);
+    border: 1px solid #5c4a2a;
+    color: #c4a040;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+    font-family: 'Cinzel', serif;
+    white-space: nowrap;
+}
+
+.toolbarButton:hover {
+    background: #3e2723;
+    border-color: #d4af37;
+    color: #d4af37;
+}
+
+.toolbarButtonActive {
+    background: #5c3d10;
+    border-color: #d4af37;
+    color: #d4af37;
+    font-weight: bold;
+}
+
+.closeButton {
+    background: #8b0000;
+    color: #fff;
+    border: 2px solid #660000;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+    font-family: 'Cinzel', serif;
+}
+
+.closeButton:hover {
+    background: #a00000;
+    transform: scale(1.05);
+}
+
+/* ---------- Filters Bar ---------- */
+
+.filtersBar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 24px;
+    background: rgba(30, 18, 10, 0.8);
+    border-bottom: 1px solid #3e2723;
+    flex-shrink: 0;
+    z-index: 10;
+    flex-wrap: wrap;
+}
+
+.filterLabel {
+    font-size: 12px;
+    color: #8b734a;
+    margin-right: 4px;
+}
+
+.filterSelect {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #5c4a2a;
+    color: #c4a040;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: 'Cinzel', serif;
+    cursor: pointer;
+}
+
+.filterSelect:focus {
+    outline: none;
+    border-color: #d4af37;
+}
+
+.filterChip {
+    background: rgba(44, 24, 16, 0.8);
+    border: 1px solid #5c4a2a;
+    color: #c4a040;
+    padding: 3px 10px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s;
+    font-family: 'Cinzel', serif;
+}
+
+.filterChip:hover {
+    background: #3e2723;
+    border-color: #8b6914;
+}
+
+.filterChipActive {
+    background: #5c3d10;
+    border-color: #d4af37;
+    color: #d4af37;
+    font-weight: bold;
+}
+
+.separator {
+    width: 1px;
+    height: 20px;
+    background: #5c4a2a;
+}
+
+.focusIndicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid #d4af37;
+    border-radius: 14px;
+    padding: 3px 12px;
+    font-size: 11px;
+    color: #d4af37;
+}
+
+.clearFocusButton {
+    background: none;
+    border: none;
+    color: #d4af37;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 2px;
+    line-height: 1;
+}
+
+.clearFocusButton:hover {
+    color: #fff;
+}
+
+/* ---------- ReactFlow Canvas ---------- */
+
+.canvasWrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Override ReactFlow defaults for dark theme */
+.canvasWrapper :global(.react-flow__background) {
+    background: #1a0f08;
+}
+
+.canvasWrapper :global(.react-flow__minimap) {
+    background: rgba(30, 18, 10, 0.9);
+    border: 1px solid #5c4a2a;
+    border-radius: 4px;
+}
+
+.canvasWrapper :global(.react-flow__controls) {
+    border: 1px solid #5c4a2a;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.canvasWrapper :global(.react-flow__controls-button) {
+    background: rgba(44, 24, 16, 0.95);
+    border-bottom: 1px solid #3e2723;
+    fill: #c4a040;
+    color: #c4a040;
+}
+
+.canvasWrapper :global(.react-flow__controls-button:hover) {
+    background: #3e2723;
+}
+
+.canvasWrapper :global(.react-flow__attribution) {
+    display: none;
+}
+
+/* ---------- Legend ---------- */
+
+.legend {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: rgba(30, 18, 10, 0.92);
+    border: 1px solid #5c4a2a;
+    border-radius: 8px;
+    padding: 10px 14px;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.legendTitle {
+    font-size: 11px;
+    color: #8b734a;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #c4a040;
+}
+
+.legendLine {
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+}
+
+/* ---------- Custom Node ---------- */
+
+.characterNode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+}
+
+.characterNode:hover {
+    transform: scale(1.08);
+}
+
+.nodeAvatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(30, 18, 10, 0.95);
+    border: 3px solid #5c4a2a;
+    transition: border-color 0.2s;
+}
+
+.nodeAvatarPC {
+    border-color: #d4af37;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+.nodeAvatarNPC {
+    border-color: #5c4a2a;
+}
+
+.nodeAvatarMinion {
+    border-color: #8b0000;
+}
+
+.nodeAvatarSelected {
+    border-color: #fff;
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+}
+
+.nodeImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.nodePlaceholder {
+    font-size: 24px;
+    opacity: 0.5;
+    user-select: none;
+}
+
+.nodeLabel {
+    margin-top: 4px;
+    padding: 2px 8px;
+    background: rgba(30, 18, 10, 0.9);
+    border-radius: 6px;
+    font-size: 10px;
+    color: #d4af37;
+    white-space: nowrap;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    border: 1px solid rgba(92, 74, 42, 0.5);
+}
+
+.nodeLabelPC {
+    color: #d4af37;
+    font-weight: bold;
+}
+
+.nodeLabelNPC {
+    color: #8b734a;
+}
+
+/* ---------- Custom Edge Label ---------- */
+
+.edgeLabel {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: rgba(30, 18, 10, 0.9);
+    border: 1px solid rgba(92, 74, 42, 0.5);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* ---------- Empty state ---------- */
+
+.emptyState {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #8b734a;
+    font-size: 16px;
+    gap: 12px;
+}
+
+.emptyState p {
+    margin: 0;
+}
+
+.emptyIcon {
+    font-size: 48px;
+    opacity: 0.4;
+}

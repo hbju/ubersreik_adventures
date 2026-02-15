@@ -36,6 +36,7 @@ interface MapViewProps {
     userPins?: UserMapPin[];
     locationTags?: string[];
     currentUserId?: string;
+    currentCharacterId?: string;
     playerColor?: string;
     onTokenMove?: (tokenId: string, x: number, y: number) => void;
     onAddPin?: (x: number, y: number, label: string) => void;
@@ -72,6 +73,7 @@ const MapView: React.FC<MapViewProps> = ({
     userPins = [],
     locationTags: externalLocationTags = [],
     currentUserId,
+    currentCharacterId,
     playerColor = '#d4af37',
     onTokenMove,
     onAddPin,
@@ -381,10 +383,7 @@ const MapView: React.FC<MapViewProps> = ({
 
                     {/* Render player tokens */}
                     {tokens.map(token => {
-                        const character = characters.find(c => c.id === token.characterId);
-                        if (!character) return null;
-
-                        const isOwnToken = character.userId === currentUserId;
+                        const isOwnToken = token.characterId === currentCharacterId;
                         const isDraggable = isGM || isOwnToken;
 
                         const tokenColor = playerColor;
@@ -395,8 +394,8 @@ const MapView: React.FC<MapViewProps> = ({
                                 id={token.id}
                                 x={token.x}
                                 y={token.y}
-                                characterName={character.name}
-                                color={tokenColor}
+                                characterName={token.characterName || 'Unknown'}
+                                color={isOwnToken ? tokenColor : '#d4af37'}
                                 isDraggable={isDraggable}
                                 isCurrentUser={isOwnToken}
                                 onMove={onTokenMove}

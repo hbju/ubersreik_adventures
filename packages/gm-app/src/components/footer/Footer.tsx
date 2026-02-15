@@ -21,6 +21,7 @@ interface FooterProps {
     onShowFactionManager: () => void,
     onShowReputationPanel: () => void,
     onShowTemplateManager: () => void,
+    onShowDramatisPersonae: () => void,
     onShowChat: () => void,
     onShowGameLog: () => void,
 }
@@ -133,6 +134,7 @@ export const Footer: React.FC<FooterProps> = ({
     onShowFactionManager,
     onShowReputationPanel,
     onShowTemplateManager,
+    onShowDramatisPersonae,
     onShowChat,
     onShowGameLog,
 }) => {
@@ -168,6 +170,7 @@ export const Footer: React.FC<FooterProps> = ({
         { icon: '🏰', label: t('menu.factions'), onClick: onShowFactionManager },
         { icon: '⚖️', label: t('menu.reputation'), onClick: onShowReputationPanel },
         { icon: '👥', label: t('menu.templates', 'NPC Templates'), onClick: onShowTemplateManager },
+        { icon: '🎭', label: t('menu.dramatisPersonae', 'Dramatis Personae'), onClick: onShowDramatisPersonae },
     ];
 
     return (

@@ -1,0 +1,437 @@
+.loreEditor {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 92%;
+    max-width: 1100px;
+    height: 85vh;
+    background: linear-gradient(135deg, #2c1810 0%, #3e2723 100%);
+    border: 3px solid #8b6914;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    z-index: 1060;
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid #8b6914;
+    flex-shrink: 0;
+}
+
+.header h2 {
+    margin: 0;
+    color: #d4af37;
+    font-size: 22px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.closeButton {
+    background: #8b0000;
+    color: #fff;
+    border: 2px solid #660000;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.closeButton:hover {
+    background: #a00000;
+    transform: scale(1.05);
+}
+
+.body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* === Left Column: Image + Quick Info === */
+
+.leftColumn {
+    width: 240px;
+    flex-shrink: 0;
+    padding: 20px;
+    border-right: 2px solid #5c4a2a;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    overflow-y: auto;
+}
+
+.imageZone {
+    width: 200px;
+    height: 260px;
+    border: 2px dashed #5c4a2a;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    position: relative;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.imageZone:hover {
+    border-color: #d4af37;
+}
+
+.imagePreview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.imagePlaceholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #5c4a2a;
+    font-size: 12px;
+}
+
+.imagePlaceholder span:first-child {
+    font-size: 40px;
+}
+
+.imageActions {
+    display: flex;
+    gap: 6px;
+}
+
+.smallButton {
+    background: rgba(44, 24, 16, 0.8);
+    border: 1px solid #5c4a2a;
+    color: #c4a040;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s;
+}
+
+.smallButton:hover {
+    background: #3e2723;
+    border-color: #d4af37;
+}
+
+.dangerButton {
+    border-color: #660000;
+    color: #cc6666;
+}
+
+.dangerButton:hover {
+    background: #3e1010;
+    border-color: #8b0000;
+}
+
+.fieldLabel {
+    font-size: 11px;
+    color: #8b734a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.smallInput {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5c4a2a;
+    color: #d4af37;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.smallInput:focus {
+    outline: none;
+    border-color: #d4af37;
+}
+
+/* === Right Column: Tabbed Content === */
+
+.rightColumn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #5c4a2a;
+    flex-shrink: 0;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: #8b734a;
+    font-size: 14px;
+    font-family: 'Cinzel', serif;
+    transition: all 0.2s;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+}
+
+.tab:hover {
+    color: #d4af37;
+}
+
+.tabActive {
+    color: #d4af37;
+    border-bottom-color: #d4af37;
+    font-weight: bold;
+}
+
+.tabContent {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+}
+
+/* === Identity Tab === */
+
+.bioArea {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5c4a2a;
+    color: #d4c9a8;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Georgia', serif;
+    min-height: 160px;
+    width: 100%;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.bioArea:focus {
+    outline: none;
+    border-color: #d4af37;
+}
+
+.appearanceArea {
+    composes: bioArea;
+    min-height: 80px;
+}
+
+.fieldGroup {
+    margin-bottom: 16px;
+}
+
+/* === Psychology Tab === */
+
+.motivationSelect {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #5c4a2a;
+    color: #d4af37;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Cinzel', serif;
+}
+
+.motivationSelect:focus {
+    outline: none;
+    border-color: #d4af37;
+}
+
+.motivationDescription {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #3e2723;
+    border-radius: 6px;
+    padding: 14px;
+    margin-top: 10px;
+    color: #d4c9a8;
+    font-family: 'Georgia', serif;
+    font-size: 13px;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+.ambitionRow {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.ambitionField {
+    flex: 1;
+}
+
+/* === Relationships Tab === */
+
+.relationshipList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.relationshipCard {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #5c4a2a;
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+.relationshipTarget {
+    font-weight: bold;
+    color: #d4af37;
+    font-size: 14px;
+    min-width: 120px;
+}
+
+.relationshipType {
+    background: rgba(139, 105, 20, 0.2);
+    border: 1px solid #5c4a2a;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 11px;
+    color: #c4a040;
+    text-transform: capitalize;
+}
+
+.relationshipDesc {
+    flex: 1;
+    color: #d4c9a8;
+    font-style: italic;
+    font-size: 12px;
+}
+
+.deleteRelButton {
+    background: none;
+    border: none;
+    color: #8b0000;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.deleteRelButton:hover {
+    color: #ff4444;
+}
+
+.addRelationshipForm {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #5c4a2a;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.addRelRow {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: end;
+}
+
+.addRelField {
+    flex: 1;
+}
+
+.selectInput {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5c4a2a;
+    color: #d4af37;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.selectInput:focus {
+    outline: none;
+    border-color: #d4af37;
+}
+
+.reciprocalRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 10px;
+}
+
+.reciprocalRow label {
+    font-size: 12px;
+    color: #c4a040;
+    cursor: pointer;
+}
+
+.reciprocalRow input[type="checkbox"] {
+    accent-color: #d4af37;
+    cursor: pointer;
+}
+
+.addRelActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.actionButton {
+    background: #2d5016;
+    border: 2px solid #3d6f1f;
+    color: #d4af37;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.actionButton:hover {
+    background: #3d6f1f;
+    transform: scale(1.02);
+}
+
+.actionButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.noRelationships {
+    text-align: center;
+    padding: 20px;
+    color: #5c4a2a;
+    font-style: italic;
+    font-size: 13px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1055;
+}

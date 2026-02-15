@@ -1,0 +1,147 @@
+[
+    {
+        "name": "Change",
+        "id": "change",
+        "description": "You are motivated by a need for change, for a better or brighter future. You are discontent with the status quo, and any action you take that shifts this — whether positively or negatively — is better than what we have now, at least. Anything you do that is counter to the norm feeds into this Motivation."
+    },
+    {
+        "name": "Charity",
+        "id": "charity",
+        "description": "You are motivated by a need to help people. Whilst many give to charity in pursuit of power, status, or out of boredom, you do it for its own sake. Charity, in your eyes, is its own reward. Helping the less fortunate, and giving what you can, regenerates your Resolve."
+    },
+    {
+        "name": "Control",
+        "id": "control",
+        "description": "You are motivated by a desire to control the world around you. Perhaps you suffer from anxiety, or were raised in a situation where you were the centre of attention — whatever the reason, you thrive when there are no surprises. You regain Resolve when you seek to bend the world around you to your will."
+    },
+    {
+        "name": "Debauchery",
+        "id": "debauchery",
+        "description": "You are motivated by forbidden delights. Either the fact that they are forbidden is tantilising to you, or you've lost sight of healthy appetites long ago, you regain Resolve when you give into your obscene desires."
+    },
+    {
+        "name": "Envy",
+        "id": "envy",
+        "description": "You are motivated by a need to possess that which others have. It could be anything — wealth, romance, land, power — but you desire these things because someone else has them, not for their own merit. When you covet and take from others, you are sure to regenerate Resolve."
+    },
+    {
+        "name": "Faith",
+        "id": "faith",
+        "description": "You are motivated by a deep faith in your patron God of choice, and allow the strictures of such to dictate your life. Choose a God to go along with this Motivation, and regain Resolve whenever you go out of your way to follow that God's strictures, or protect the honour and sanctity of their worship."
+    },
+    {
+        "name": "Fame",
+        "id": "fame",
+        "description": "You are motivated by being known. You want your name to be on everyone's lips, to be well regarded, and to be remembered. When you perform actions in public, or work to spread word of your deeds (real or imaginary), you recover Resolve."
+    },
+    {
+        "name": "Freedom",
+        "id": "freedom",
+        "description": "You are motivated by being untethered and allowed to go where you please. Often freed bondsmen, enslaved individuals, or the children of overly oppressive parents burn with this Motivation. You recover Resolve when you choose your own path in the face of authority."
+    },
+    {
+        "name": "Glory",
+        "id": "glory",
+        "description": "You are motivated by a need to achieve great things. You likely have one burning desire — perhaps your Long Term Ambition — which, whenever you work towards it, you recover Resolve."
+    },
+    {
+        "name": "Gluttony",
+        "id": "gluttony",
+        "description": "You are motivated by an unnatural appetite for something specific, and wish to indulge that vice at all times. When you pursue or partake of your vice, you feed your Motivation and regain Resolve."
+    },
+    {
+        "name": "Hope",
+        "id": "hope",
+        "description": "You are motivated by a hope that things can get better. In the Old World, this is a futile Motivation, but it doesn't stop thousands of souls trudging towards it every day. When you perform actions that seem doomed to fail, but you do them anyway because you believe it might work out, you regain Resolve."
+    },
+    {
+        "name": "Infamy",
+        "id": "infamy",
+        "description": "You are motivated by a desire to be remembered and feared. Like fame, infamy is about developing a personal story that will always be bigger than the person you were, but it differs in that you don't want to be remembered kindly. You want to forever serve as a lesson to someone or against something, and whenever you strike fear, or encourage rumours about yourself, you regain Resolve."
+    },
+    {
+        "name": "Justice",
+        "id": "justice",
+        "description": "You are motivated by a need to see justice done. Whether it's a belief that justice holds together society, or a perverse fascination with punishment, you see enacting the law of the Gods — though not necessarily the law of the land — as paramount. Whenever you aid or enact your own justice, regenerate Resolve."
+    },
+    {
+        "name": "Knowledge",
+        "id": "knowledge",
+        "description": "You are motivated by the search for knowledge itself. You don't necessarily want to do anything with that knowledge, but the pursuit is what's important to you. When you learn something new, or encourage the spread of knowledge, you regain Resolve."
+    },
+    {
+        "name": "Love",
+        "id": "love",
+        "description": "You are motivated by a strong bond of love with someone. Love is often irrational, and causes people to act in ways which deprioritise their own safety or happiness, and doing so is a sure way of earning Resolve."
+    },
+    {
+        "name": "Obligation",
+        "id": "obligation",
+        "description": "You are motivated by an obligation you hold — to family, friends, an organisation, and so on. You likely have a role to play in relation to this obligation, and fulfilling that role is of paramount importance to you. Whenever you perform actions that fulfill that role, you regain Resolve."
+    },
+    {
+        "name": "Order",
+        "id": "order",
+        "description": "You are motivated by structure and order. You thrive when there is a set framework to operate inside of, and rules to follow. You regain Resolve when you follow the rules — especially to your detriment — and help enforce them."
+    },
+    {
+        "name": "Patriotism",
+        "id": "patriotism",
+        "description": "You are motivated by love of country. This pride can become toxic — used as a pathetic crutch to cover for your own failings — or could stem from true pride in the history of your people — whether deserved or doctored. You recover Resolve by putting your nation first, and by following the dictates of your rulers — rational or otherwise."
+    },
+    {
+        "name": "Perfection",
+        "id": "perfection",
+        "description": "You are motivated by a need to be perfect. Regardless of what the focus is, you need to be the perfect example of it, a painter, a poet, a cook, whatever. This Motivation exists beyond any tangible benefits of that perfection or profession, and often strays into a truly unhealthy mindset, for perfection is ultimately impossible. Whenever you work towards that perfection, regain Resolve."
+    },
+    {
+        "name": "Pleasure",
+        "îd": "pleasure",
+        "description": "You are motivated by the pursuit of pleasure, fine food, fine wine, fine friends, and so forth. You seek to get the most out of life, and feel fulfilled when in good, comfortable, pleasurable company. You regain Resolve whenever you take a little extra effort to bring a little extra pleasure into your life."
+    },
+    {
+        "name": "Revenge",
+        "id": "revenge",
+        "description": "You are motivated by a need for revenge. Perhaps someone killed your father and they must prepare to die, or someone ruined your family's business and now you seek to destroy theirs. Whatever the source of your ire, you seek to reenact it on those who hurt you. Whenever you work towards or fulfill your revenge, recover Resolve."
+    },
+    {
+        "name": "Ruin",
+        "id": "ruin",
+        "description": "You are motivated by the ruination of the world around you. You may have a target in mind, a specific nation, family, or organisation, or merely existence itself. Whenever you work to bring your foes to their knees and have them crushed under your boot, you regenerate Resolve."
+    },
+    {
+        "name": "Servitude",
+        "id": "servitude",
+        "description": "You are motivated by your service to another. Servitude is a rare Motivation, because it relies on the mind placing the needs of another above one's own, and trusting in the benevolence of that master. When you act at the behest of those you serve, you recover Resolve."
+    },
+    {
+        "name": "Survival",
+        "id": "survival",
+        "description": "You are motivated first and foremost by your own survival, and will do what you can to protect yourself. This Motivation extends to protecting your livelihood, if it comes under existential threat — a hunter defending their hunting grounds from poachers, or an urchin protecting their streets from invading troops. In any situation where you take an active hand to maintain your survival, you regain Resolve."
+    },
+    {
+        "name": "Unity",
+        "id": "unity",
+        "description": "You are motivated by uniting others towards a common goal. Whether this stems from dreams of Empire, Shallyan pacifism, or a desire to mend an old feud, you regain Resolve when you act to bring others together."
+    },
+    {
+        "name": "Power",
+        "id": "power",
+        "description": "You are motivated by a quest for power. It doesn't matter what power, and over whom, but you feel safer and more whole when the power of any situation is in your hands. This may translate into literal power — the search for arcane potency or martial excellence — but not necessarily. You just have to exert and extend your reach to recover Resolve."
+    },
+    {
+        "name": "Respect",
+        "id": "respect",
+        "description": "You are motivated by the respect of your peers. It's not necessarily about being the best — the best swordsman, the best incantor, the best alchemist — but you need your peers to heed what you say, and admire your works. You may see yourself as first among equals, or merely rising to the level of your heroes, but either way, when you increase or maintain your standing, you regain Resolve."
+    },
+    {
+        "name": "Wealth",
+        "id": "wealth",
+        "description": "You are motivated by the clink of coins. Whilst almost everyone is motivated in some way by money in the Old World, you desire money for its own sake. You may even be loath to spend it once it is yours. Wealth, for you, doesn't necessarily mean power or privilege, but it represents a dependable source of strength for yourself. Whenever you seek out wealth and hoard it, regain Resolve."
+    },
+    {
+        "name": "Violence",
+        "id": "violence",
+        "description": "You are motivated by violence, and love the thrill of battle. You might be addicted to the adrenaline, or you're fascinated by the craft of battle. Whatever the case, whenever you engage in violent acts for their own purpose, regenerate Resolve."
+    }
+]

@@ -42,6 +42,11 @@ interface IpcRendererApi {
     deletePlaylist: (playlistId: string) => Promise<boolean>;
     deleteTrack: (trackId: string) => Promise<boolean>;
     updateTrackDisplayName: (trackId: string, displayName: string) => Promise<import('@wfrp/shared').AudioTrack | null>;
+    
+    // Image Handler API
+    selectCharacterImage: (characterId: string) => Promise<{ success: boolean; path?: string; dataUrl?: string; cancelled?: boolean; error?: string }>;
+    loadCharacterImage: (imagePath: string) => Promise<string | null>;
+    deleteCharacterImage: (characterId: string) => Promise<{ success: boolean; error?: string }>;
 }
 
 interface Window {

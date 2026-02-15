@@ -36,7 +36,6 @@ const MapToken: React.FC<MapTokenProps> = ({
     // Update local position when props change (e.g., from server updates)
     useEffect(() => {
         if (!isDragging) {
-            console.log('Updating local position to:', { x, y });
             setLocalPosition({ x, y });
         }
     }, [x, y]);

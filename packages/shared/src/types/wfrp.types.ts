@@ -217,12 +217,40 @@ export interface KnowledgeEntry {
 }
 
 /**
+ * A relationship between two characters
+ */
+export interface Relationship {
+    id: string;
+    targetCharacterId: string;
+    type: 'kin' | 'friend' | 'love' | 'ally' | 'rival' | 'enemy' | 'servant' | 'master' | 'other';
+    description: string;
+}
+
+/**
+ * A single motivation entry from the motivations data
+ */
+export interface Motivation {
+    name: string;
+    id: string;
+    description: string;
+}
+
+/**
  * Character's lore container
  */
 export interface CharacterLore {
     gmNotes: string; // Plain text, always private to GM
     background: KnowledgeEntry[]; // Structured knowledge entries
     playerNotes?: string; // Player's own notes about themselves (only for player-owned characters)
+    // Dramatis Personae fields
+    appearance?: string; // Text description of appearance
+    voice?: string; // e.g. "Gravelly", "Soft-spoken"
+    mannerisms?: string; // e.g. "Fidgets", "Spits"
+    biography?: string; // Rich text / multiline biography
+    ambitions?: { short: string; long: string };
+    motivationKey?: string; // Matches motivation.id from motivations data
+    imageUrl?: string; // Path to character portrait image
+    relationships?: Relationship[];
 }
 
 export interface Character {
@@ -377,6 +405,7 @@ export interface MapData {
 export interface MapToken {
     id: string;
     characterId: string;
+    characterName?: string; 
     mapId: string;
     x: number; 
     y: number;

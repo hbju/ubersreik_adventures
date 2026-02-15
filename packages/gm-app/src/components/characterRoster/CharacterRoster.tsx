@@ -12,6 +12,7 @@ interface CharacterRosterProps {
     onAssignCharacter: (userId: string, characterId: string | null) => void;
     onCreateCharacter: () => void;
     onGenerateNpc: () => void;
+    onGenerateNpcDetailed?: () => void;
     onDeleteCharacter: (characterId: string) => void;
     onAddCombatant: (character: Character) => void;
     onFightButtonClick: () => void;
@@ -32,6 +33,7 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
     onAssignCharacter,
     onCreateCharacter,
     onGenerateNpc,
+    onGenerateNpcDetailed,
     onDeleteCharacter,
     onAddCombatant,
     onFightButtonClick,
@@ -276,7 +278,10 @@ return (
             <h2>Character Roster</h2>
             <div className={styles.actions}>
                 <button onClick={onCreateCharacter}>New</button>
-                <button onClick={onGenerateNpc}>Generate NPC</button>
+                <button onClick={onGenerateNpc}>Quick NPC</button>
+                {onGenerateNpcDetailed && (
+                    <button onClick={onGenerateNpcDetailed}>Detailed NPC</button>
+                )}
                 <button onClick={onFightButtonClick}>Fight</button>
             </div>
         </header>

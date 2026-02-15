@@ -1,0 +1,147 @@
+[
+    {
+        "name": "Changement",
+        "id": "change",
+        "description": "Vous êtes motivé par un besoin de changement, pour un avenir meilleur ou plus brillant. Vous êtes mécontent du statu quo, et toute action qui le modifie — positivement ou négativement — est mieux que ce que nous avons maintenant. Tout ce que vous faites qui va à l'encontre de la norme nourrit cette Motivation."
+    },
+    {
+        "name": "Charité",
+        "id": "charity",
+        "description": "Vous êtes motivé par un besoin d'aider les gens. Alors que beaucoup donnent à la charité en quête de pouvoir, de statut ou par ennui, vous le faites pour le geste lui-même. La charité, à vos yeux, est sa propre récompense. Aider les moins fortunés et donner ce que vous pouvez régénère votre Détermination."
+    },
+    {
+        "name": "Contrôle",
+        "id": "control",
+        "description": "Vous êtes motivé par un désir de contrôler le monde qui vous entoure. Peut-être souffrez-vous d'anxiété, ou avez-vous été élevé dans une situation où vous étiez le centre de l'attention — quelle que soit la raison, vous vous épanouissez quand il n'y a pas de surprises. Vous regagnez de la Détermination quand vous cherchez à plier le monde à votre volonté."
+    },
+    {
+        "name": "Débauche",
+        "id": "debauchery",
+        "description": "Vous êtes motivé par les plaisirs interdits. Soit le fait qu'ils soient interdits vous titille, soit vous avez perdu de vue les appétits sains depuis longtemps — vous regagnez de la Détermination quand vous cédez à vos désirs obscènes."
+    },
+    {
+        "name": "Envie",
+        "id": "envy",
+        "description": "Vous êtes motivé par un besoin de posséder ce que les autres ont. Cela peut être n'importe quoi — richesse, romance, terre, pouvoir — mais vous désirez ces choses parce que quelqu'un d'autre les possède, pas pour leur mérite propre. Quand vous convoitez et prenez aux autres, vous regénérez assurément votre Détermination."
+    },
+    {
+        "name": "Foi",
+        "id": "faith",
+        "description": "Vous êtes motivé par une foi profonde en votre Dieu patron de choix, et permettez à ses préceptes de dicter votre vie. Choisissez un Dieu pour accompagner cette Motivation, et regagnez de la Détermination chaque fois que vous vous donnez du mal pour suivre les préceptes de ce Dieu, ou protéger l'honneur et la sainteté de son culte."
+    },
+    {
+        "name": "Célébrité",
+        "id": "fame",
+        "description": "Vous êtes motivé par le fait d'être connu. Vous voulez que votre nom soit sur toutes les lèvres, être bien considéré et qu'on se souvienne de vous. Quand vous accomplissez des actions en public, ou travaillez à répandre le récit de vos exploits (réels ou imaginaires), vous récupérez de la Détermination."
+    },
+    {
+        "name": "Liberté",
+        "id": "freedom",
+        "description": "Vous êtes motivé par le fait d'être libre et autorisé à aller où bon vous semble. Souvent les anciens serfs, les individus asservis ou les enfants de parents trop oppressifs brûlent de cette Motivation. Vous récupérez de la Détermination quand vous choisissez votre propre chemin face à l'autorité."
+    },
+    {
+        "name": "Gloire",
+        "id": "glory",
+        "description": "Vous êtes motivé par un besoin d'accomplir de grandes choses. Vous avez probablement un désir ardent — peut-être votre Ambition à Long Terme — qui, chaque fois que vous y travaillez, vous fait récupérer de la Détermination."
+    },
+    {
+        "name": "Gourmandise",
+        "id": "gluttony",
+        "description": "Vous êtes motivé par un appétit contre-nature pour quelque chose de spécifique, et souhaitez satisfaire ce vice en permanence. Quand vous poursuivez ou vous adonnez à votre vice, vous nourrissez votre Motivation et regagnez de la Détermination."
+    },
+    {
+        "name": "Espoir",
+        "id": "hope",
+        "description": "Vous êtes motivé par l'espoir que les choses peuvent s'améliorer. Dans le Vieux Monde, c'est une Motivation futile, mais cela n'empêche pas des milliers d'âmes de s'y accrocher chaque jour. Quand vous accomplissez des actions qui semblent vouées à l'échec, mais que vous les faites quand même parce que vous croyez que ça pourrait marcher, vous regagnez de la Détermination."
+    },
+    {
+        "name": "Infamie",
+        "id": "infamy",
+        "description": "Vous êtes motivé par un désir d'être craint et mémorable. Comme la célébrité, l'infamie consiste à développer une histoire personnelle qui sera toujours plus grande que la personne que vous étiez, mais elle diffère en ce que vous ne voulez pas qu'on se souvienne de vous avec bonté. Vous voulez servir éternellement de leçon, et chaque fois que vous frappez de terreur ou encouragez les rumeurs sur vous-même, vous regagnez de la Détermination."
+    },
+    {
+        "name": "Justice",
+        "id": "justice",
+        "description": "Vous êtes motivé par un besoin de voir la justice rendue. Que ce soit la croyance que la justice maintient la société, ou une fascination perverse pour le châtiment, vous considérez l'application de la loi des Dieux — bien que pas nécessairement la loi du pays — comme primordiale. Chaque fois que vous aidez ou rendez votre propre justice, regénérez votre Détermination."
+    },
+    {
+        "name": "Connaissance",
+        "id": "knowledge",
+        "description": "Vous êtes motivé par la recherche du savoir en soi. Vous ne voulez pas nécessairement faire quoi que ce soit de ce savoir, mais la quête est ce qui compte pour vous. Quand vous apprenez quelque chose de nouveau, ou encouragez la diffusion du savoir, vous regagnez de la Détermination."
+    },
+    {
+        "name": "Amour",
+        "id": "love",
+        "description": "Vous êtes motivé par un lien d'amour fort avec quelqu'un. L'amour est souvent irrationnel, et pousse les gens à agir de manières qui dépiorisent leur propre sécurité ou bonheur, et ce faire est un moyen sûr de gagner de la Détermination."
+    },
+    {
+        "name": "Obligation",
+        "id": "obligation",
+        "description": "Vous êtes motivé par une obligation que vous avez — envers la famille, les amis, une organisation, etc. Vous avez probablement un rôle à jouer en relation avec cette obligation, et remplir ce rôle est d'une importance capitale pour vous. Chaque fois que vous accomplissez des actions qui remplissent ce rôle, vous regagnez de la Détermination."
+    },
+    {
+        "name": "Ordre",
+        "id": "order",
+        "description": "Vous êtes motivé par la structure et l'ordre. Vous vous épanouissez quand il y a un cadre défini dans lequel opérer, et des règles à suivre. Vous regagnez de la Détermination quand vous suivez les règles — surtout à votre détriment — et aidez à les faire respecter."
+    },
+    {
+        "name": "Patriotisme",
+        "id": "patriotism",
+        "description": "Vous êtes motivé par l'amour de la patrie. Cette fierté peut devenir toxique — utilisée comme une béquille pathétique pour couvrir vos propres faiblesses — ou pourrait provenir d'une vraie fierté dans l'histoire de votre peuple. Vous récupérez de la Détermination en mettant votre nation en premier, et en suivant les diktats de vos dirigeants — rationnels ou non."
+    },
+    {
+        "name": "Perfection",
+        "id": "perfection",
+        "description": "Vous êtes motivé par un besoin d'être parfait. Quel que soit le domaine, vous devez en être l'exemple parfait — peintre, poète, cuisinier, peu importe. Cette Motivation existe au-delà de tout bénéfice tangible, et dérive souvent vers un état d'esprit malsain, car la perfection est ultimement impossible. Chaque fois que vous travaillez vers cette perfection, regagnez de la Détermination."
+    },
+    {
+        "name": "Plaisir",
+        "id": "pleasure",
+        "description": "Vous êtes motivé par la poursuite du plaisir, bonne nourriture, bon vin, bons amis, etc. Vous cherchez à tirer le meilleur de la vie, et vous vous sentez comblé en bonne, confortable et agréable compagnie. Vous regagnez de la Détermination chaque fois que vous faites un petit effort supplémentaire pour apporter un peu plus de plaisir dans votre vie."
+    },
+    {
+        "name": "Vengeance",
+        "id": "vengeance",
+        "description": "Vous êtes motivé par un besoin de vengeance. Peut-être quelqu'un a tué votre père et il doit se préparer à mourir, ou quelqu'un a ruiné l'entreprise de votre famille et maintenant vous cherchez à détruire la leur. Quelle que soit la source de votre colère, vous cherchez à la reproduire sur ceux qui vous ont blessé. Chaque fois que vous travaillez vers ou accomplissez votre vengeance, récupérez de la Détermination."
+    },
+    {
+        "name": "Ruine",
+        "id": "ruin",
+        "description": "Vous êtes motivé par la ruine du monde qui vous entoure. Vous avez peut-être une cible en tête, une nation, famille ou organisation spécifique, ou simplement l'existence elle-même. Chaque fois que vous œuvrez à mettre vos ennemis à genoux et à les écraser sous votre botte, vous regénérez de la Détermination."
+    },
+    {
+        "name": "Servitude",
+        "id": "servitude",
+        "description": "Vous êtes motivé par votre service envers un autre. La Servitude est une Motivation rare, car elle repose sur l'esprit plaçant les besoins d'un autre au-dessus des siens, et faisant confiance à la bienveillance de ce maître. Quand vous agissez sur l'ordre de ceux que vous servez, vous récupérez de la Détermination."
+    },
+    {
+        "name": "Survie",
+        "id": "survival",
+        "description": "Vous êtes motivé avant tout par votre propre survie, et ferez ce que vous pouvez pour vous protéger. Cette Motivation s'étend à la protection de votre gagne-pain, s'il est menacé existentiellement — un chasseur défendant ses terrains de chasse contre les braconniers, ou un gamin des rues protégeant son quartier contre des troupes d'invasion. Dans toute situation où vous prenez activement part au maintien de votre survie, vous regagnez de la Détermination."
+    },
+    {
+        "name": "Unité",
+        "id": "unity",
+        "description": "Vous êtes motivé par l'union des autres vers un objectif commun. Que cela provienne de rêves d'Empire, de pacifisme shalléen, ou d'un désir de réparer une vieille querelle, vous regagnez de la Détermination quand vous agissez pour rassembler les autres."
+    },
+    {
+        "name": "Pouvoir",
+        "id": "power",
+        "description": "Vous êtes motivé par une quête de pouvoir. Peu importe quel pouvoir, et sur qui, mais vous vous sentez plus en sécurité et plus entier quand le pouvoir de toute situation est entre vos mains. Cela peut se traduire en pouvoir littéral — la recherche de puissance arcanique ou d'excellence martiale — mais pas nécessairement. Vous devez juste exercer et étendre votre influence pour récupérer de la Détermination."
+    },
+    {
+        "name": "Respect",
+        "id": "respect",
+        "description": "Vous êtes motivé par le respect de vos pairs. Il ne s'agit pas nécessairement d'être le meilleur — le meilleur épéiste, le meilleur incantateur, le meilleur alchimiste — mais vous avez besoin que vos pairs tiennent compte de ce que vous dites, et admirent vos œuvres. Vous vous voyez peut-être comme le premier parmi vos égaux, ou simplement en train de vous élever au niveau de vos héros, mais dans tous les cas, quand vous augmentez ou maintenez votre standing, vous regagnez de la Détermination."
+    },
+    {
+        "name": "Richesse",
+        "id": "wealth",
+        "description": "Vous êtes motivé par le tintement des pièces. Alors que presque tout le monde est motivé d'une certaine manière par l'argent dans le Vieux Monde, vous désirez l'argent pour lui-même. Vous pouvez même répugner à le dépenser une fois qu'il est vôtre. La richesse, pour vous, ne signifie pas nécessairement pouvoir ou privilège, mais représente une source fiable de force. Chaque fois que vous cherchez la richesse et l'amassez, regagnez de la Détermination."
+    },
+    {
+        "name": "Violence",
+        "id": "violence",
+        "description": "Vous êtes motivé par la violence, et aimez le frisson du combat. Vous êtes peut-être accro à l'adrénaline, ou fasciné par l'art du combat. Quoi qu'il en soit, chaque fois que vous vous engagez dans des actes violents pour eux-mêmes, regénérez de la Détermination."
+    }
+]
