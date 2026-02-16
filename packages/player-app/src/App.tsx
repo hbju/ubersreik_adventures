@@ -39,6 +39,7 @@ import {
     ChatSendMessage,
     Weapon,
     RollWithIntentMessage,
+    DateWeatherWidget,
 } from '@wfrp/shared';
 
 import { TalentModal } from './components/TalentModal';
@@ -52,12 +53,13 @@ import { QuestJournal } from './components/journal/QuestJournal';
 import { MapTransitionOverlay } from './components/MapTransitionOverlay';
 import { ActionBar } from './components/actionbar';
 import { Quest, QuestUpdateMessage, QuestDeleteMessage } from '@wfrp/shared';
+import { PlayerTimeline } from './components/timeline/PlayerTimeline';
 
 
 const PlayerApp: React.FC = () => {
     const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, mapData, maps, mapsList } = useGameData();
 
-    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, connect, disconnect, sendMessage } = useSocket();
 
     const currentMapData = React.useMemo(() => {
         return maps[activeMapId] || mapData;
@@ -81,7 +83,7 @@ const PlayerApp: React.FC = () => {
     const [createCharacterWizardOpen, setCreateCharacterWizardOpen] = useState(false);
     const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
-    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'quests' | 'map' | 'reputation'>('character');
+    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'quests' | 'map' | 'reputation' | 'calendar'>('character');
     const [isCareerChangeModalOpen, setIsCareerChangeModalOpen] = useState(false);
     const [canChangeCareer, setCanChangeCareer] = useState(false);
     const [mapViewState, setMapViewState] = useState({ scale: 0.3, offsetX: 126, offsetY: -26 });
@@ -687,6 +689,24 @@ const PlayerApp: React.FC = () => {
                     >
                         ⚖️ Reputation
                     </button>
+                    {calendarDate && (
+                        <button
+                            onClick={() => setCurrentView('calendar')}
+                            style={{
+                                padding: '10px 20px',
+                                background: currentView === 'calendar' ? '#2d5016' : '#2c1810',
+                                color: '#d4af37',
+                                border: currentView === 'calendar' ? '2px solid #3d6f1f' : '2px solid #8b6914',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                fontSize: '0.75rem',
+                                minWidth: '10%'
+                            }}
+                        >
+                            📅 Calendar
+                        </button>
+                    )}
                     <button
                         onClick={() => setShowChat(!showChat)}
                         style={{
@@ -919,6 +939,32 @@ const PlayerApp: React.FC = () => {
             {/* Reputation View */}
             {currentView === 'reputation' && character && (
                 <ReputationDisplay character={character} factions={factions} />
+            )}
+
+            {/* Calendar View */}
+            {currentView === 'calendar' && calendarDate && (
+                <PlayerTimeline
+                    currentDate={calendarDate}
+                    events={calendarEvents}
+                    weather={calendarWeather}
+                    onClose={() => setCurrentView('character')}
+                />
+            )}
+
+            {/* Date/Weather Widget (shown in non-calendar views when calendar data is available) */}
+            {calendarDate && currentView !== 'calendar' && currentView !== 'map' && (
+                <div style={{
+                    position: 'fixed',
+                    top: '10px',
+                    right: '20px',
+                    zIndex: 1015
+                }}>
+                    <DateWeatherWidget
+                        currentDate={calendarDate}
+                        weather={calendarWeather}
+                        onClick={() => setCurrentView('calendar')}
+                    />
+                </div>
             )}
 
             {createCharacterWizardOpen && (

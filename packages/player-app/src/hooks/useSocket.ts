@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin, ChatMessage, LocationTerritory } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin, ChatMessage, LocationTerritory, GameDate, TimelineEvent } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 
 interface OpposedTestRequest {
@@ -49,6 +49,9 @@ export const useSocket = () => {
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
     const [activeMapId, setActiveMapId] = useState<string>('ubersreik_city');
     const [isMapTransitioning, setIsMapTransitioning] = useState(false);
+    const [calendarDate, setCalendarDate] = useState<GameDate | null>(null);
+    const [calendarEvents, setCalendarEvents] = useState<TimelineEvent[]>([]);
+    const [calendarWeather, setCalendarWeather] = useState<string | undefined>(undefined);
 
 
     const connect = useCallback((ipAddress: string, username: string, password: string) => {
@@ -256,6 +259,13 @@ export const useSocket = () => {
                 setQuests(message.payload.quests);
             }
 
+            if (message.type === 'CALENDAR_SYNC') {
+                console.log('[CLIENT] Calendar sync received:', message.payload);
+                setCalendarDate(message.payload.currentDate);
+                setCalendarEvents(message.payload.events);
+                setCalendarWeather(message.payload.currentWeather);
+            }
+
             if (message.type === 'MAP_TOKENS_UPDATE') {
                 console.log('[CLIENT] Map tokens update received:', message.payload);
                 setTokens(message.payload.tokens);
@@ -340,6 +350,9 @@ export const useSocket = () => {
         activeMapId,
         isMapTransitioning,
         setIsMapTransitioning,
+        calendarDate,
+        calendarEvents,
+        calendarWeather,
         connect,
         disconnect,
         sendMessage

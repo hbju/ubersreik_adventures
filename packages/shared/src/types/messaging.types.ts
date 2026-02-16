@@ -1,5 +1,6 @@
 import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction, ShopState, ShopInventoryItem, Quest, MapToken, UserMapPin, LocationTerritory } from './wfrp.types';
 import { ChatMessage } from './chat.types';
+import { GameDate, TimelineEvent } from '../data/calendar';
 
 interface BaseMessage<T extends string, P> {
     type: T;
@@ -98,7 +99,14 @@ export type ActiveMapUpdateMessage = BaseMessage<'ACTIVE_MAP_UPDATE', {
     spawnPoint?: { x: number; y: number };
 }>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage | ChatMessageBroadcast | ChatHistoryMessage | MapSwitchMessage | ActiveMapUpdateMessage;
+// Calendar sync messages
+export type CalendarSyncMessage = BaseMessage<'CALENDAR_SYNC', {
+    currentDate: GameDate;
+    events: TimelineEvent[]; // Pre-filtered: only isVisibleToPlayers events
+    currentWeather?: string;
+}>;
+
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage | ChatMessageBroadcast | ChatHistoryMessage | MapSwitchMessage | ActiveMapUpdateMessage | CalendarSyncMessage;
 
 // == Roll Queue Types ==
 

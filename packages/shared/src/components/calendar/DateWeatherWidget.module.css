@@ -1,0 +1,42 @@
+.widget {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: rgba(26, 15, 10, 0.9);
+  border: 2px solid #8b6914;
+  border-radius: 6px;
+  color: #d4af37;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.widget:hover {
+  background: rgba(44, 24, 16, 0.95);
+  border-color: #d4af37;
+}
+
+.dateText {
+  font-weight: bold;
+}
+
+.separator {
+  color: #8b6914;
+  font-size: 0.7rem;
+}
+
+.weatherText {
+  color: #c0a060;
+}
+
+.moonText {
+  color: #a0a0a0;
+  font-size: 0.75rem;
+}
+
+.dangerMoon {
+  color: #ff4444;
+}

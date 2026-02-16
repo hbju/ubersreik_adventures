@@ -4794,6 +4794,15 @@
         },
         "racial": [
             "Random Racial Talent"
+        ],
+        "effects": [
+            {
+                "type": "CHARACTERISTIC_BONUS",
+                "value": 5,
+                "appliesTo": [
+                    "i"
+                ]
+            }
         ]
     },
     {

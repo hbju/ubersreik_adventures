@@ -102,13 +102,13 @@ export const TimelineManager: React.FC<TimelineManagerProps> = ({
   const handleMonthChange = useCallback((direction: 'prev' | 'next') => {
     if (direction === 'prev') {
       if (viewMonth === 0) {
-        setViewMonth(11);
+        setViewMonth(17);
         setViewYear(prev => prev - 1);
       } else {
         setViewMonth(prev => prev - 1);
       }
     } else {
-      if (viewMonth === 11) {
+      if (viewMonth === 17) {
         setViewMonth(0);
         setViewYear(prev => prev + 1);
       } else {

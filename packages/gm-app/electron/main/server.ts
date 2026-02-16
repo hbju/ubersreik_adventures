@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage, ChatMessage, ChatMessageBroadcast, ChatHistoryMessage, parseChatCommand, executeDiceRoll, LocationTerritory } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage, ChatMessage, ChatMessageBroadcast, ChatHistoryMessage, parseChatCommand, executeDiceRoll, LocationTerritory, CalendarSyncMessage, CalendarState, TimelineEvent, GameDate } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 import { getCampaignData, saveCampaignData } from './dataManager';
 
@@ -809,6 +809,22 @@ function sendInitialStateToPlayer(socket: Socket, userId: string, characterId: s
         socket.emit('gm-message', historyMessage);
         console.log(`[SERVER] Sent ${chatHistory.length} chat messages to player ${socket.id}`);
     }
+
+    if (campaignData.calendar) {
+        const visibleEvents = (campaignData.calendar.events || []).filter(
+            (e: TimelineEvent) => e.isVisibleToPlayers && !e.isHidden
+        );
+        const calendarMessage: CalendarSyncMessage = {
+            type: 'CALENDAR_SYNC',
+            payload: {
+                currentDate: campaignData.calendar.currentDate,
+                events: visibleEvents,
+                currentWeather: campaignData.calendar.currentWeather,
+            },
+        };
+        socket.emit('gm-message', calendarMessage);
+        console.log(`[SERVER] Sent calendar (${visibleEvents.length} visible events) to player ${socket.id}`);
+    }
 }
 
 /**
@@ -1147,4 +1163,35 @@ export function broadcastChatMessage(chatMessage: ChatMessage) {
  */
 export function getChatHistory(): ChatMessage[] {
     return [...chatHistory];
+}
+
+/**
+ * Broadcast calendar state to all connected players
+ * Only events marked as isVisibleToPlayers (and not hidden) are sent
+ * @param calendarState The complete calendar state from GM
+ */
+export function broadcastCalendar(calendarState: CalendarState) {
+    if (!io || connectedClients.size === 0) {
+        console.log('[SERVER] No clients connected, skipping calendar broadcast');
+        return;
+    }
+
+    const visibleEvents = (calendarState.events || []).filter(
+        (e: TimelineEvent) => e.isVisibleToPlayers && !e.isHidden
+    );
+
+    console.log(`[SERVER] Broadcasting calendar (${visibleEvents.length} visible events) to ${connectedClients.size} players`);
+
+    const message: CalendarSyncMessage = {
+        type: 'CALENDAR_SYNC',
+        payload: {
+            currentDate: calendarState.currentDate,
+            events: visibleEvents,
+            currentWeather: calendarState.currentWeather,
+        },
+    };
+
+    connectedClients.forEach((socket) => {
+        socket.emit('gm-message', message);
+    });
 }

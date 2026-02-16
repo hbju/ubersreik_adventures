@@ -286,6 +286,11 @@
     border-radius: 4px;
 }
 
+.condition-item:hover {
+    background: rgba(139, 0, 0, 0.5);
+    border-color: #a00000;
+}
+
 .condition-name {
     color: #ff6b6b;
     font-size: 0.85rem;

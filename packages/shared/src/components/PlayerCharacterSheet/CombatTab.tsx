@@ -56,7 +56,7 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         Object.entries(character.inventory.armor).forEach(([armorId, count]) => {
             if (count <= 0) return;
             if (equippedArmor[armorId] !== true) return;
-            
+
             const armor = armorById[armorId];
             if (!armor) return;
 
@@ -98,6 +98,11 @@ export const CombatTab: React.FC<CombatTabProps> = ({
         return condition ? condition.name : conditionId;
     };
 
+    const getConditionDescription = (conditionId: string): string => {
+        const condition = conditionsData.find(c => c.id === conditionId);
+        return condition ? condition.description : '';
+    };
+
     const handleWoundsChange = (value: number) => {
         onCharacterUpdate({
             status: {
@@ -113,7 +118,7 @@ export const CombatTab: React.FC<CombatTabProps> = ({
     const getWeaponDamage = (weapon: Weapon): string => {
         const damage = weapon.damage;
         if (!damage) return '—';
-        
+
         if (damage.includes('SB')) {
             const sb = Math.floor(calculateCharacteristicValue(character.characteristics.s) / 10);
             const match = damage.match(/SB([+-]?\d+)?/);
@@ -128,7 +133,7 @@ export const CombatTab: React.FC<CombatTabProps> = ({
     const getWeaponDamageValue = (weapon: Weapon): number => {
         const damage = weapon.damage;
         if (!damage) return 0;
-        
+
         if (damage.includes('SB')) {
             const sb = calculateCharacteristicBonus(character.characteristics.s);
             const match = damage.match(/SB([+-]?\d+)?/);
@@ -163,28 +168,28 @@ export const CombatTab: React.FC<CombatTabProps> = ({
     const getWeaponSkillValue = (weapon: Weapon): { skillId: string; skillName: string; value: number } => {
         const isRanged = isRangedWeapon(weapon);
         const skillId = getWeaponSkillId(weapon);
-        
+
         const skill = character.skills.find(s => s.id === skillId);
-        
+
         if (skill) {
-            return { 
-                skillId: skill.id, 
-                skillName: skill.name, 
-                value: calculateSkillValue(skill, character) 
+            return {
+                skillId: skill.id,
+                skillName: skill.name,
+                value: calculateSkillValue(skill, character)
             };
         }
 
         if (isRanged) {
-            return { 
-                skillId: 'bs', 
-                skillName: 'Ballistic Skill', 
-                value: calculateCharacteristicValue(character.characteristics.bs) 
+            return {
+                skillId: 'bs',
+                skillName: 'Ballistic Skill',
+                value: calculateCharacteristicValue(character.characteristics.bs)
             };
         }
-        return { 
-            skillId: 'ws', 
-            skillName: 'Weapon Skill', 
-            value: calculateCharacteristicValue(character.characteristics.ws) 
+        return {
+            skillId: 'ws',
+            skillName: 'Weapon Skill',
+            value: calculateCharacteristicValue(character.characteristics.ws)
         };
     };
 
@@ -272,7 +277,7 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                 <div className="combat-panel defense-actions-panel">
                     <h3 className="panel-title">Quick Defense</h3>
                     <div className="defense-actions">
-                        <button 
+                        <button
                             className="defense-button dodge-button"
                             onClick={handleDodge}
                             title={`Dodge (${getDodgeSkill().value})`}
@@ -280,7 +285,7 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                             🏃 Dodge ({getDodgeSkill().value})
                         </button>
                         {equippedWeapons.filter(w => !isRangedWeapon(w)).length > 0 && (
-                            <button 
+                            <button
                                 className="defense-button parry-button"
                                 onClick={() => handleParry(getBestMeleeSkill().weapon!)}
                                 title={`Parry with ${getBestMeleeSkill().weapon?.name}`}
@@ -303,66 +308,67 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                             const { skillName, value } = getWeaponSkillValue(weapon);
                             const isRanged = isRangedWeapon(weapon);
                             return (
-                            <div 
-                                key={weapon.id} 
-                                className="weapon-card"
-                                draggable
-                                onDragStart={(e) => handleWeaponDragStart(e, weapon)}
-                                title="Drag to Action Bar to create quick slot"
-                            >
-                                <div className="weapon-header">
-                                    <span className="weapon-name">{weapon.name}</span>
-                                    <span className="weapon-group">{weapon.group}</span>
-                                </div>
-                                <div className="weapon-stats">
-                                    <div className="weapon-stat">
-                                        <span className="stat-label">Skill:</span>
-                                        <span className="stat-value">{skillName} ({value})</span>
+                                <div
+                                    key={weapon.id}
+                                    className="weapon-card"
+                                    draggable
+                                    onDragStart={(e) => handleWeaponDragStart(e, weapon)}
+                                    title="Drag to Action Bar to create quick slot"
+                                >
+                                    <div className="weapon-header">
+                                        <span className="weapon-name">{weapon.name}</span>
+                                        <span className="weapon-group">{weapon.group}</span>
                                     </div>
-                                    <div className="weapon-stat">
-                                        <span className="stat-label">Damage:</span>
-                                        <span className="stat-value">{getWeaponDamage(weapon)}</span>
+                                    <div className="weapon-stats">
+                                        <div className="weapon-stat">
+                                            <span className="stat-label">Skill:</span>
+                                            <span className="stat-value">{skillName} ({value})</span>
+                                        </div>
+                                        <div className="weapon-stat">
+                                            <span className="stat-label">Damage:</span>
+                                            <span className="stat-value">{getWeaponDamage(weapon)}</span>
+                                        </div>
+                                        <div className="weapon-stat">
+                                            <span className="stat-label">Reach:</span>
+                                            <span className="stat-value">{weapon.reach || '—'}</span>
+                                        </div>
                                     </div>
-                                    <div className="weapon-stat">
-                                        <span className="stat-label">Reach:</span>
-                                        <span className="stat-value">{weapon.reach || '—'}</span>
-                                    </div>
-                                </div>
-                                {weapon.qualities && weapon.qualities.length > 0 && (
-                                    <div className="weapon-qualities">
-                                        <span className="qualities-label">Qualities:</span>
-                                        <span className="qualities-list">
-                                            {weapon.qualities.map((quality, index) => (
-                                                <React.Fragment key={quality}>
-                                                    <QualityTooltip qualityString={quality} className="quality-tag" />
-                                                    {index < weapon.qualities.length - 1 && ', '}
-                                                </React.Fragment>
-                                            ))}
-                                        </span>
-                                    </div>
-                                )}
-                                {onWeaponRoll && (
-                                    <div className="weapon-actions">
-                                        <button 
-                                            className="weapon-action-button attack-button"
-                                            onClick={() => handleWeaponAttack(weapon)}
-                                            title="Roll to Attack"
-                                        >
-                                            ⚔️ Attack
-                                        </button>
-                                        {!isRanged && (
-                                            <button 
-                                                className="weapon-action-button parry-button"
-                                                onClick={() => handleParry(weapon)}
-                                                title="Roll to Parry"
+                                    {weapon.qualities && weapon.qualities.length > 0 && (
+                                        <div className="weapon-qualities">
+                                            <span className="qualities-label">Qualities:</span>
+                                            <span className="qualities-list">
+                                                {weapon.qualities.map((quality, index) => (
+                                                    <React.Fragment key={quality}>
+                                                        <QualityTooltip qualityString={quality} className="quality-tag" />
+                                                        {index < weapon.qualities.length - 1 && ', '}
+                                                    </React.Fragment>
+                                                ))}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {onWeaponRoll && (
+                                        <div className="weapon-actions">
+                                            <button
+                                                className="weapon-action-button attack-button"
+                                                onClick={() => handleWeaponAttack(weapon)}
+                                                title="Roll to Attack"
                                             >
-                                                🛡️ Parry
+                                                ⚔️ Attack
                                             </button>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        );})
+                                            {!isRanged && (
+                                                <button
+                                                    className="weapon-action-button parry-button"
+                                                    onClick={() => handleParry(weapon)}
+                                                    title="Roll to Parry"
+                                                >
+                                                    🛡️ Parry
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })
                     )}
                 </div>
             </div>
@@ -375,28 +381,28 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                         {/* Head */}
                         <circle cx="100" cy="35" r="30" className="body-part head" />
                         <text x="100" y="42" className="ap-text">{armourPoints.head}</text>
-                        
+
                         {/* Body/Torso */}
                         <rect x="60" y="70" width="80" height="100" rx="10" className="body-part body" />
                         <text x="100" y="125" className="ap-text">{armourPoints.body}</text>
-                        
+
                         {/* Left Arm */}
                         <rect x="20" y="70" width="35" height="90" rx="8" className="body-part left-arm" />
                         <text x="37" y="120" className="ap-text ap-text-small">{armourPoints.leftArm}</text>
-                        
+
                         {/* Right Arm */}
                         <rect x="145" y="70" width="35" height="90" rx="8" className="body-part right-arm" />
                         <text x="162" y="120" className="ap-text ap-text-small">{armourPoints.rightArm}</text>
-                        
+
                         {/* Left Leg */}
                         <rect x="60" y="180" width="35" height="120" rx="8" className="body-part left-leg" />
                         <text x="77" y="245" className="ap-text ap-text-small">{armourPoints.leftLeg}</text>
-                        
+
                         {/* Right Leg */}
                         <rect x="105" y="180" width="35" height="120" rx="8" className="body-part right-leg" />
                         <text x="122" y="245" className="ap-text ap-text-small">{armourPoints.rightLeg}</text>
                     </svg>
-                    
+
                     <div className="silhouette-legend">
                         <div className="legend-item">
                             <span className="legend-label">Head:</span>
@@ -421,7 +427,7 @@ export const CombatTab: React.FC<CombatTabProps> = ({
             {/* Status Panel */}
             <div className="combat-panel status-panel">
                 <h3 className="panel-title">Combat Status</h3>
-                
+
                 <div className="wounds-section">
                     <span className="wounds-label">Wounds:</span>
                     <div className="wounds-control">
@@ -441,14 +447,14 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                         <span className="wounds-max">{character.status.wounds.max}</span>
                     </div>
                     <div className="wounds-bar">
-                        <div 
+                        <div
                             className="wounds-fill"
-                            style={{ 
+                            style={{
                                 width: `${(character.status.wounds.current / character.status.wounds.max) * 100}%`,
-                                backgroundColor: character.status.wounds.current <= character.status.wounds.max * 0.25 
-                                    ? '#dc2626' 
-                                    : character.status.wounds.current <= character.status.wounds.max * 0.5 
-                                        ? '#f59e0b' 
+                                backgroundColor: character.status.wounds.current <= character.status.wounds.max * 0.25
+                                    ? '#dc2626'
+                                    : character.status.wounds.current <= character.status.wounds.max * 0.5
+                                        ? '#f59e0b'
                                         : '#22c55e'
                             }}
                         />
@@ -468,7 +474,7 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                     ) : (
                         <div className="conditions-list">
                             {character.conditions.map((condition, index) => (
-                                <div key={`${condition.id}-${index}`} className="condition-item">
+                                <div key={`${condition.id}-${index}`} className="condition-item" title={getConditionDescription(condition.id)}>
                                     <span className="condition-name">{getConditionName(condition.id)}</span>
                                     {condition.stack > 1 && (
                                         <span className="condition-stack">×{condition.stack}</span>

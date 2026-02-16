@@ -135,7 +135,7 @@ export const TimelineSidebar: React.FC<TimelineSidebarProps> = ({
             <span className={styles.moonIcon}>{getMoonEmoji(morrsliebPhase)}</span>
             <span className={styles.moonName}>Morrslieb:</span>
             <span className={styles.moonDesc}>
-              {morrsliebDesc} ({morrsliebPhase}%)
+              {morrsliebDesc}
               {morrsliebDanger && <span className={styles.dangerBadge}>⚠️ Danger!</span>}
             </span>
           </div>
@@ -198,7 +198,10 @@ export const TimelineSidebar: React.FC<TimelineSidebarProps> = ({
                     </span>
                     <span className={styles.eventDaysAway}>({daysLabel})</span>
                   </div>
-                  <div className={styles.eventTitle}>{event.title}</div>
+                  <div className={styles.eventTitle}>
+                    {event.isVisibleToPlayers && <span title="Visible to players">👁️ </span>}
+                    {event.title}
+                  </div>
                   <div className={styles.eventTags}>
                     {event.tags.map(tag => (
                       <span 

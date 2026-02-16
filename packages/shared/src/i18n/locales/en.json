@@ -433,6 +433,22 @@
             "hidden": "Hidden",
             "festival": "Festival",
             "personal": "Personal"
+        },
+        "revealToPlayers": "Reveal to Players",
+        "player": {
+            "title": "Imperial Calendar",
+            "personalNotes": "Personal Notes",
+            "addNote": "Add a personal note for this day...",
+            "saveNote": "Save Note",
+            "removeNote": "Remove note",
+            "noNotesYet": "No notes for this date",
+            "goToToday": "Go to Today",
+            "noUpcomingEvents": "No upcoming events",
+            "currentDate": "Current Date",
+            "weather": "Weather",
+            "noWeatherReported": "No weather reported",
+            "moonPhases": "Moon Phases",
+            "upcomingEvents": "Upcoming Events"
         }
     },
     "map": {

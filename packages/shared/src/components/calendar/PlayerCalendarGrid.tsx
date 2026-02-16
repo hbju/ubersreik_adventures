@@ -7,41 +7,48 @@ import {
   getMonthWeeks,
   datesEqual,
   getEventsForDate
-} from '@wfrp/shared';
-import styles from './TimelineManager.module.css';
+} from '../../data/calendar';
+import styles from './PlayerCalendarGrid.module.css';
 
-interface CalendarGridProps {
+export interface PlayerNote {
+  id: string;
+  date: GameDate;
+  text: string;
+  createdAt: number;
+}
+
+interface PlayerCalendarGridProps {
   viewMonth: number;
   viewYear: number;
   currentDate: GameDate;
   events: TimelineEvent[];
+  personalNotes?: PlayerNote[];
   selectedDate: GameDate | null;
-  enabledTags: string[];
   onDateClick: (date: GameDate) => void;
   onMonthChange: (direction: 'prev' | 'next') => void;
 }
 
-export const CalendarGrid: React.FC<CalendarGridProps> = ({
+export const PlayerCalendarGrid: React.FC<PlayerCalendarGridProps> = ({
   viewMonth,
   viewYear,
   currentDate,
   events,
+  personalNotes = [],
   selectedDate,
-  enabledTags,
   onDateClick,
   onMonthChange
 }) => {
   const weeks = getMonthWeeks(viewYear, viewMonth);
   const monthName = MONTHS[viewMonth].name;
 
-  // Filter events by enabled tags
-  const filteredEvents = events.filter(event =>
-    enabledTags.length === 0 || event.tags.some(tag => enabledTags.includes(tag))
-  );
-
   const getEventsForCell = (date: GameDate | null): TimelineEvent[] => {
     if (!date) return [];
-    return getEventsForDate(filteredEvents, date);
+    return getEventsForDate(events, date);
+  };
+
+  const getNotesForCell = (date: GameDate | null): PlayerNote[] => {
+    if (!date) return [];
+    return personalNotes.filter(n => datesEqual(n.date, date));
   };
 
   const isCurrentDay = (date: GameDate | null): boolean => {
@@ -77,7 +84,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
       </div>
 
       <div className={styles.calendarWeekdays}>
-        {WEEKDAYS.map((day, index) => (
+        {WEEKDAYS.map((day) => (
           <div key={day} className={styles.weekdayCell}>
             {day.substring(0, 3)}
           </div>
@@ -89,8 +96,10 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
           <div key={weekIndex} className={styles.calendarWeek}>
             {week.map((date, dayIndex) => {
               const cellEvents = getEventsForCell(date);
+              const cellNotes = getNotesForCell(date);
               const isCurrent = isCurrentDay(date);
               const isSelected = isSelectedDay(date);
+              const hasNotes = cellNotes.length > 0;
 
               return (
                 <div
@@ -100,26 +109,32 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
                     ${date ? styles.activeCell : styles.emptyCell}
                     ${isCurrent ? styles.currentDay : ''}
                     ${isSelected ? styles.selectedDay : ''}
+                    ${hasNotes ? styles.hasNote : ''}
                   `}
                   onClick={() => date && onDateClick(date)}
+                  style={{ cursor: date ? 'pointer' : 'default' }}
                 >
                   {date && (
                     <>
                       <span className={styles.dayNumber}>{date.day}</span>
-                      {cellEvents.length > 0 && (
+                      {(cellEvents.length > 0 || cellNotes.length > 0) && (
                         <div className={styles.eventIndicators}>
-                          {cellEvents.slice(0, 3).map((event, idx) => (
+                          {cellEvents.slice(0, 2).map((event) => (
                             <span
                               key={event.id}
                               className={styles.eventDot}
                               style={{ backgroundColor: event.color || '#d4af37' }}
-                              title={`${event.title}${event.isVisibleToPlayers ? ' 👁️' : ''}`}
-                            >
-                              {event.isVisibleToPlayers && <span className={styles.visibleIcon}>👁</span>}
-                            </span>
+                              title={event.title}
+                            />
                           ))}
-                          {cellEvents.length > 3 && (
-                            <span className={styles.moreEvents}>+{cellEvents.length - 3}</span>
+                          {cellNotes.length > 0 && (
+                            <span
+                              className={styles.noteDot}
+                              title={cellNotes.map(n => n.text).join(', ')}
+                            />
+                          )}
+                          {cellEvents.length > 2 && (
+                            <span className={styles.moreEvents}>+{cellEvents.length - 2}</span>
                           )}
                         </div>
                       )}
@@ -134,16 +149,20 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
 
       <div className={styles.calendarLegend}>
         <div className={styles.legendItem}>
-          <span className={`${styles.legendMarker} ${styles.currentDayMarker}`}>📍</span>
+          <span className={styles.legendMarker}>📍</span>
           <span>Current Day</span>
         </div>
         <div className={styles.legendItem}>
-          <span className={`${styles.legendMarker} ${styles.eventMarker}`}>🔹</span>
-          <span>Event</span>
+          <span className={styles.legendMarker}>🔹</span>
+          <span>Public Event</span>
+        </div>
+        <div className={styles.legendItem}>
+          <span className={styles.legendMarker}>📝</span>
+          <span>Personal Note</span>
         </div>
       </div>
     </div>
   );
 };
 
-export default CalendarGrid;
+export default PlayerCalendarGrid;

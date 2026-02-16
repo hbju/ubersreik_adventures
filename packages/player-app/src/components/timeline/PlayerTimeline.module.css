@@ -1,0 +1,457 @@
+/* ========================================
+   Player Timeline - Main Container
+   ======================================== */
+
+.playerTimeline {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -57%);
+  width: 95%;
+  max-width: 1200px;
+  height: 85vh;
+  background: linear-gradient(135deg, #2c1810 0%, #3e2723 100%);
+  border: 3px solid #8b6914;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  z-index: 1050;
+  color: #d4af37;
+  font-family: 'Cinzel', serif;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1049;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid #8b6914;
+}
+
+.header h2 {
+  margin: 0;
+  color: #d4af37;
+  font-size: 22px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.closeButton {
+  background: #8b0000;
+  color: #fff;
+  border: 2px solid #660000;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.closeButton:hover {
+  background: #a00000;
+  transform: scale(1.1);
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ========================================
+   Sidebar
+   ======================================== */
+
+.sidebar {
+  width: 300px;
+  min-width: 300px;
+  background: rgba(0, 0, 0, 0.2);
+  border-right: 2px solid #8b6914;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebarSection {
+  padding: 15px;
+  border-bottom: 1px solid rgba(139, 105, 20, 0.5);
+}
+
+.sectionTitle {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #b8860b;
+}
+
+/* Current Date Display */
+.currentDateDisplay {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 105, 20, 0.5);
+  margin-bottom: 8px;
+}
+
+.dateWeekday {
+  font-size: 12px;
+  color: #a0a0a0;
+  margin-bottom: 4px;
+}
+
+.dateMain {
+  font-size: 18px;
+  font-weight: bold;
+  color: #d4af37;
+}
+
+.dateSeason {
+  font-size: 12px;
+  color: #8b8b8b;
+  margin-top: 4px;
+}
+
+/* Weather Display */
+.weatherDisplay {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.weatherText {
+  font-size: 14px;
+  color: #d4af37;
+}
+
+.noWeather {
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+}
+
+/* Moon Display */
+.moonDisplay {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moonPhase {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.moonIcon {
+  font-size: 18px;
+}
+
+.moonName {
+  font-size: 13px;
+  color: #a0a0a0;
+  min-width: 70px;
+}
+
+.moonDesc {
+  font-size: 13px;
+  color: #d4af37;
+}
+
+.moonDanger {
+  background: rgba(139, 0, 0, 0.3);
+  border: 1px solid #8b0000;
+}
+
+.dangerBadge {
+  margin-left: 8px;
+  color: #ff4444;
+  font-weight: bold;
+}
+
+/* Upcoming Events Section */
+.eventsSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.eventsList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.noEvents {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+.eventItem {
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border-left: 3px solid #d4af37;
+  cursor: default;
+}
+
+.eventHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.eventDate {
+  font-size: 11px;
+  color: #a0a0a0;
+}
+
+.eventDaysAway {
+  font-size: 11px;
+  color: #888;
+}
+
+.eventTitle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #d4af37;
+}
+
+.eventTags {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.eventTag {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.goToTodayButton {
+  width: 100%;
+  padding: 8px;
+  background: rgba(139, 105, 20, 0.3);
+  color: #d4af37;
+  border: 1px solid #8b6914;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+}
+
+.goToTodayButton:hover {
+  background: rgba(139, 105, 20, 0.5);
+}
+
+/* ========================================
+   Personal Notes
+   ======================================== */
+
+.noteSection {
+  padding: 15px;
+  border-top: 2px solid #8b6914;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.noteHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.noteHeader h4 {
+  margin: 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #b8860b;
+}
+
+.noteDate {
+  font-size: 12px;
+  color: #a0a0a0;
+  margin-bottom: 8px;
+}
+
+.noteInput {
+  width: 100%;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #8b6914;
+  border-radius: 6px;
+  color: #d4af37;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.noteInput:focus {
+  outline: none;
+  border-color: #d4af37;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}
+
+.noteInput::placeholder {
+  color: #666;
+}
+
+.noteActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.saveNoteButton {
+  flex: 1;
+  padding: 6px 12px;
+  background: #2d5016;
+  color: #d4af37;
+  border: 1px solid #3d6f1f;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.saveNoteButton:hover {
+  background: #3d6f1f;
+}
+
+.deleteNoteButton {
+  padding: 6px 12px;
+  background: #8b0000;
+  color: #fff;
+  border: 1px solid #660000;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.deleteNoteButton:hover {
+  background: #a00000;
+}
+
+.existingNotes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.existingNote {
+  padding: 8px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 4px;
+  font-size: 13px;
+  color: #d4af37;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.existingNote .noteText {
+  flex: 1;
+  word-break: break-word;
+}
+
+.removeNoteBtn {
+  background: none;
+  border: none;
+  color: #8b0000;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.removeNoteBtn:hover {
+  color: #ff4444;
+}
+
+/* ========================================
+   Scrollbar
+   ======================================== */
+
+.sidebar::-webkit-scrollbar,
+.eventsList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track,
+.eventsList::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.eventsList::-webkit-scrollbar-thumb {
+  background: #8b6914;
+  border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover,
+.eventsList::-webkit-scrollbar-thumb:hover {
+  background: #d4af37;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 800px) {
+  .playerTimeline {
+    width: 98%;
+    height: 90vh;
+  }
+
+  .content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 2px solid #8b6914;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+}

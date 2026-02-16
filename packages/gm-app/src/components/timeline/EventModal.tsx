@@ -31,6 +31,7 @@ export const EventModal: React.FC<EventModalProps> = ({
   const [selectedTags, setSelectedTags] = useState<string[]>(event?.tags || []);
   const [color, setColor] = useState(event?.color || DEFAULT_EVENT_TAGS['Plot']);
   const [isHidden, setIsHidden] = useState(event?.isHidden || false);
+  const [isVisibleToPlayers, setIsVisibleToPlayers] = useState(event?.isVisibleToPlayers ?? false);
 
   // Update color when tags change
   useEffect(() => {
@@ -64,7 +65,8 @@ export const EventModal: React.FC<EventModalProps> = ({
       description: description.trim(),
       tags: selectedTags,
       color,
-      isHidden
+      isHidden,
+      isVisibleToPlayers
     };
 
     onSave(savedEvent);
@@ -152,6 +154,17 @@ export const EventModal: React.FC<EventModalProps> = ({
                   onChange={e => setIsHidden(e.target.checked)}
                 />
                 Hidden from Players
+              </label>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>
+                <input
+                  type="checkbox"
+                  checked={isVisibleToPlayers}
+                  onChange={e => setIsVisibleToPlayers(e.target.checked)}
+                />
+                👁️ Reveal to Players
               </label>
             </div>
           </div>

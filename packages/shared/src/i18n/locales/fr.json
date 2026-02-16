@@ -479,6 +479,22 @@
             "hidden": "Caché",
             "festival": "Festival",
             "personal": "Personnel"
+        },
+        "revealToPlayers": "Révéler aux Joueurs",
+        "player": {
+            "title": "Calendrier Impérial",
+            "personalNotes": "Notes Personnelles",
+            "addNote": "Ajoutez une note personnelle pour ce jour...",
+            "saveNote": "Sauvegarder la Note",
+            "removeNote": "Supprimer la note",
+            "noNotesYet": "Aucune note pour cette date",
+            "goToToday": "Aller à Aujourd'hui",
+            "noUpcomingEvents": "Aucun événement à venir",
+            "currentDate": "Date Actuelle",
+            "weather": "Météo",
+            "noWeatherReported": "Aucune météo signalée",
+            "moonPhases": "Phases Lunaires",
+            "upcomingEvents": "Événements à Venir"
         }
     },
     "map": {

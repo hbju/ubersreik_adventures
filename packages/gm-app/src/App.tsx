@@ -273,6 +273,23 @@ function App() {
 
     }, [characters, users, journal, quests, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
 
+    // Broadcast calendar state to all players whenever it changes
+    useEffect(() => {
+        if (!calendarState) return;
+        const visibleEvents = (calendarState.events || []).filter(
+            e => e.isVisibleToPlayers && !e.isHidden
+        );
+        const calendarMessage = {
+            type: 'CALENDAR_SYNC' as const,
+            payload: {
+                currentDate: calendarState.currentDate,
+                events: visibleEvents,
+                currentWeather: calendarState.currentWeather,
+            },
+        };
+        window.ipcRenderer.sendToAllPlayers(calendarMessage);
+    }, [calendarState]);
+
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
 

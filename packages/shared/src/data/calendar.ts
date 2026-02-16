@@ -71,7 +71,8 @@ export interface TimelineEvent {
     description: string;
     tags: string[];
     color?: string;       // Hex color for display
-    isHidden?: boolean;   // Hidden from players
+    isHidden?: boolean;   // Hidden from players (legacy field)
+    isVisibleToPlayers: boolean; // Whether visible in player calendar
 }
 
 export interface CalendarState {
@@ -129,7 +130,7 @@ export function addDays(date: GameDate, amount: number): GameDate {
         day -= MONTHS[monthIndex].days;
         monthIndex++;
 
-        if (monthIndex >= 12) {
+        if (monthIndex >= 18) {
             monthIndex = 0;
             year++;
         }
@@ -151,7 +152,7 @@ export function subtractDays(date: GameDate, amount: number): GameDate {
         monthIndex--;
 
         if (monthIndex < 0) {
-            monthIndex = 11;
+            monthIndex = 17;
             year--;
         }
 
@@ -372,9 +373,8 @@ export function getMorrsliebPhase(date: GameDate): number {
  */
 export function getMoonPhaseDescription(percentage: number): string {
     if (percentage >= 95) return 'Full';
-    if (percentage >= 75) return 'Waxing Gibbous';
-    if (percentage >= 50) return 'Half';
-    if (percentage >= 25) return 'Waxing Crescent';
+    if (percentage >= 65) return 'Gibbous';
+    if (percentage >= 40) return 'Half';
     if (percentage >= 5) return 'Crescent';
     return 'New';
 }
@@ -542,7 +542,8 @@ export const IMPERIAL_HOLIDAYS: TimelineEvent[] = [
         title: 'Hexentag',
         description: 'Day of the Witch - A day of ill omen marking the start of the new year.',
         tags: ['Festival'],
-        color: DEFAULT_EVENT_TAGS['Festival']
+        color: DEFAULT_EVENT_TAGS['Festival'],
+        isVisibleToPlayers: true
     },
     {
         id: 'mitterfruhl',
@@ -550,7 +551,8 @@ export const IMPERIAL_HOLIDAYS: TimelineEvent[] = [
         title: 'Mitterfruhl',
         description: 'Spring Equinox celebration.',
         tags: ['Festival'],
-        color: DEFAULT_EVENT_TAGS['Festival']
+        color: DEFAULT_EVENT_TAGS['Festival'],
+        isVisibleToPlayers: true
     },
     {
         id: 'sigmarsfest',
@@ -558,7 +560,8 @@ export const IMPERIAL_HOLIDAYS: TimelineEvent[] = [
         title: 'Sigmarsfest',
         description: 'The most important festival in Sigmar\'s worship.',
         tags: ['Festival'],
-        color: DEFAULT_EVENT_TAGS['Festival']
+        color: DEFAULT_EVENT_TAGS['Festival'],
+        isVisibleToPlayers: true
     },
     {
         id: 'sonnstill',
@@ -566,7 +569,8 @@ export const IMPERIAL_HOLIDAYS: TimelineEvent[] = [
         title: 'Sonnstill',
         description: 'Summer Solstice - The longest day of the year.',
         tags: ['Festival'],
-        color: DEFAULT_EVENT_TAGS['Festival']
+        color: DEFAULT_EVENT_TAGS['Festival'],
+        isVisibleToPlayers: true
     },
     {
         id: 'geheimnistag',
@@ -574,7 +578,8 @@ export const IMPERIAL_HOLIDAYS: TimelineEvent[] = [
         title: 'Geheimnistag',
         description: 'Day of Mystery - A time when the veil between worlds is thin.',
         tags: ['Festival'],
-        color: DEFAULT_EVENT_TAGS['Festival']
+        color: DEFAULT_EVENT_TAGS['Festival'],
+        isVisibleToPlayers: true
     },
     {
         id: 'mittherbst',
@@ -582,7 +587,8 @@ export const IMPERIAL_HOLIDAYS: TimelineEvent[] = [
         title: 'Mittherbst',
         description: 'Autumn Equinox celebration.',
         tags: ['Festival'],
-        color: DEFAULT_EVENT_TAGS['Festival']
+        color: DEFAULT_EVENT_TAGS['Festival'],
+        isVisibleToPlayers: true
     },
     {
         id: 'mondstille',
@@ -590,7 +596,8 @@ export const IMPERIAL_HOLIDAYS: TimelineEvent[] = [
         title: 'Mondstille',
         description: 'Winter Solstice - The longest night of the year.',
         tags: ['Festival'],
-        color: DEFAULT_EVENT_TAGS['Festival']
+        color: DEFAULT_EVENT_TAGS['Festival'],
+        isVisibleToPlayers: true
     },
     {
         id: 'monstille',
@@ -598,6 +605,7 @@ export const IMPERIAL_HOLIDAYS: TimelineEvent[] = [
         title: 'Monstille',
         description: 'Year\'s end - The last day of the year, a time for reflection.',
         tags: ['Festival'],
-        color: DEFAULT_EVENT_TAGS['Festival']
+        color: DEFAULT_EVENT_TAGS['Festival'],
+        isVisibleToPlayers: true
     }
 ];

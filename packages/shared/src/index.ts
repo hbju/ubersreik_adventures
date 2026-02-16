@@ -53,4 +53,7 @@ export { default as motivationsFrData } from './data/motivations_fr.json';
 
 // Calendar System
 export * from './data/calendar';
+export { PlayerCalendarGrid } from './components/calendar/PlayerCalendarGrid';
+export type { PlayerNote } from './components/calendar/PlayerCalendarGrid';
+export { DateWeatherWidget } from './components/calendar/DateWeatherWidget';
 
