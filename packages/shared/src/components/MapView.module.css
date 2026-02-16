@@ -221,3 +221,34 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Territory Toggle Button */
+.territoryToggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1020;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #4a3020 0%, #2a1810 100%);
+  border: 2px solid #8b4513;
+  border-radius: 6px;
+  color: #d4af37;
+  font-weight: bold;
+  font-size: 0.85rem;
+  font-family: 'Cinzel', serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.territoryToggle:hover {
+  border-color: #d4af37;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+  transform: translateY(-1px);
+}
+
+.territoryToggleActive {
+  background: linear-gradient(135deg, #5a4020 0%, #3a2818 100%);
+  border-color: #d4af37;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}

@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage, ChatMessage, ChatMessageBroadcast, ChatHistoryMessage, parseChatCommand, executeDiceRoll } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage, ChatMessage, ChatMessageBroadcast, ChatHistoryMessage, parseChatCommand, executeDiceRoll, LocationTerritory } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 import { getCampaignData, saveCampaignData } from './dataManager';
 
@@ -719,7 +719,10 @@ function sendInitialStateToPlayer(socket: Socket, userId: string, characterId: s
     if (campaignData.factions && campaignData.factions.length > 0) {
         const factionMessage: FactionUpdateMessage = {
             type: 'FACTION_UPDATE',
-            payload: { factions: campaignData.factions },
+            payload: {
+                factions: campaignData.factions,
+                locationTerritories: campaignData.locationTerritories || {},
+            },
         };
         socket.emit('gm-message', factionMessage);
         console.log(`[SERVER] Sent ${campaignData.factions.length} factions to player ${socket.id}`);
@@ -903,8 +906,9 @@ export function broadcastJournalEntries(journal: JournalEntry[]) {
  * Broadcast factions to all connected players
  * All players receive the full faction list (filtering is done client-side based on knowledge level)
  * @param factions The complete factions array
+ * @param locationTerritories Optional territory assignments
  */
-export function broadcastFactions(factions: Faction[]) {
+export function broadcastFactions(factions: Faction[], locationTerritories?: Record<string, LocationTerritory>) {
     if (!io || connectedClients.size === 0) {
         console.log('[SERVER] No clients connected, skipping faction broadcast');
         return;
@@ -914,7 +918,7 @@ export function broadcastFactions(factions: Faction[]) {
 
     const message: FactionUpdateMessage = {
         type: 'FACTION_UPDATE',
-        payload: { factions },
+        payload: { factions, locationTerritories: locationTerritories || {} },
     };
 
     connectedClients.forEach((socket) => {

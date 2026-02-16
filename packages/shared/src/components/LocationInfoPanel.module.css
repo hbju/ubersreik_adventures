@@ -159,3 +159,52 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
+
+/* Territory Controls */
+.territoryControls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.territoryLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+.territorySelect {
+  padding: 6px 10px;
+  background: var(--color-parchment);
+  border: 2px solid var(--color-leather-dark);
+  border-radius: 4px;
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.territorySelect:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.territorySlider {
+  width: 100%;
+  cursor: pointer;
+  accent-color: var(--color-gold, #d4af37);
+}
+
+.territoryScale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  opacity: 0.7;
+  font-style: italic;
+}

@@ -21,6 +21,17 @@ const FACTION_CATEGORIES: FactionCategory[] = [
     'other'
 ];
 
+const DEFAULT_CATEGORY_COLORS: Record<FactionCategory, string> = {
+    government: '#4169e1',
+    noble_house: '#9b59b6',
+    guild: '#d4af37',
+    criminal: '#8b0000',
+    religious: '#f5f5dc',
+    military: '#2f4f4f',
+    cult: '#4b0082',
+    other: '#808080'
+};
+
 const DEFAULT_FACTION: Omit<Faction, 'id'> = {
     name: 'New Faction',
     description: '',
@@ -28,7 +39,8 @@ const DEFAULT_FACTION: Omit<Faction, 'id'> = {
     icon: '',
     hq: '',
     head: '',
-    defaultReputation: 0
+    defaultReputation: 0,
+    color: DEFAULT_CATEGORY_COLORS['other']
 };
 
 export const FactionManager: React.FC<FactionManagerProps> = ({
@@ -287,6 +299,21 @@ export const FactionManager: React.FC<FactionManagerProps> = ({
                                             onChange={(e) => handleFieldChange('head', e.target.value)}
                                             placeholder={t('factions.headPlaceholder')}
                                         />
+                                    </div>
+                                </div>
+
+                                <div className={styles.formGroup}>
+                                    <label>🎨 Territory Color</label>
+                                    <div className={styles.formRow}>
+                                        <input
+                                            type="color"
+                                            value={editingFaction.color || DEFAULT_CATEGORY_COLORS[editingFaction.category] || '#808080'}
+                                            onChange={(e) => handleFieldChange('color', e.target.value)}
+                                            style={{ width: '48px', height: '32px', padding: '2px', cursor: 'pointer', border: '1px solid #5c4a2a', borderRadius: '4px', background: 'transparent' }}
+                                        />
+                                        <span style={{ marginLeft: '8px', color: '#b8a88a', fontSize: '0.85rem' }}>
+                                            {editingFaction.color || DEFAULT_CATEGORY_COLORS[editingFaction.category] || '#808080'}
+                                        </span>
                                     </div>
                                 </div>
 

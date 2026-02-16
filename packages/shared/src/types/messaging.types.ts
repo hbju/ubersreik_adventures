@@ -1,4 +1,4 @@
-import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction, ShopState, ShopInventoryItem, Quest, MapToken, UserMapPin } from './wfrp.types';
+import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction, ShopState, ShopInventoryItem, Quest, MapToken, UserMapPin, LocationTerritory } from './wfrp.types';
 import { ChatMessage } from './chat.types';
 
 interface BaseMessage<T extends string, P> {
@@ -43,6 +43,7 @@ export type CareerChangeResponseMessage = BaseMessage<'CAREER_CHANGE_RESPONSE', 
 
 export type FactionUpdateMessage = BaseMessage<'FACTION_UPDATE', {
     factions: Faction[];
+    locationTerritories?: Record<string, LocationTerritory>;
 }>;
 
 // Shop system messages

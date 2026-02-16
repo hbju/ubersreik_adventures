@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin, ChatMessage } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin, ChatMessage, LocationTerritory } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 
 interface OpposedTestRequest {
@@ -42,6 +42,7 @@ export const useSocket = () => {
     const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
     const [mapPing, setMapPing] = useState<{ x: number; y: number; color?: string } | null>(null);
     const [factions, setFactions] = useState<Faction[]>([]);
+    const [locationTerritories, setLocationTerritories] = useState<Record<string, LocationTerritory>>({});
     const [quests, setQuests] = useState<Quest[]>([]);
     const [tokens, setTokens] = useState<MapToken[]>([]);
     const [userPins, setUserPins] = useState<UserMapPin[]>([]);
@@ -210,6 +211,9 @@ export const useSocket = () => {
             if (message.type === 'FACTION_UPDATE') {
                 console.log('[CLIENT] Faction update received:', message.payload);
                 setFactions(message.payload.factions);
+                if (message.payload.locationTerritories) {
+                    setLocationTerritories(message.payload.locationTerritories);
+                }
             }
 
             if (message.type === 'SHOP_STATE_UPDATE') {
@@ -327,6 +331,7 @@ export const useSocket = () => {
         mapPinStates,
         mapPing,
         factions,
+        locationTerritories,
         quests,
         tokens,
         userPins,

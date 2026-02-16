@@ -5,6 +5,7 @@ export interface MapFilters {
     showLocations: boolean;
     showTokens: boolean;
     showMyPins: boolean;
+    showTerritories: boolean;
 }
 
 interface MapControlsProps {
@@ -65,6 +66,17 @@ const MapControls: React.FC<MapControlsProps> = ({
                     />
                     <span className={styles.filterIcon}>📌</span>
                     <span className={styles.filterLabel}>My Notes</span>
+                </label>
+
+                <label className={styles.filterItem}>
+                    <input
+                        type="checkbox"
+                        checked={filters.showTerritories}
+                        onChange={() => handleToggle('showTerritories')}
+                        className={styles.checkbox}
+                    />
+                    <span className={styles.filterIcon}>🏰</span>
+                    <span className={styles.filterLabel}>Faction Territories</span>
                 </label>
             </div>
         </div>

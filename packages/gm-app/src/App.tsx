@@ -1,4 +1,4 @@
-import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage } from '@wfrp/shared';
+import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -151,6 +151,8 @@ function App() {
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
     const [factions, setFactions] = useState<Faction[]>([]);
     const factionsRef = useRef(factions);
+    const [locationTerritories, setLocationTerritories] = useState<Record<string, LocationTerritory>>({});
+    const locationTerritoriesRef = useRef(locationTerritories);
     const [quests, setQuests] = useState<Quest[]>([]);
     const questsRef = useRef(quests);
     const [calendarState, setCalendarState] = useState<CalendarState>(() => createDefaultCalendarState());
@@ -248,6 +250,7 @@ function App() {
             maps: maps, // Include all maps
             activeMapId: activeMapId, // Current active map
             calendar: calendarState, // Imperial Calendar state
+            locationTerritories: locationTerritories, // Faction territory assignments
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
@@ -260,6 +263,7 @@ function App() {
         calendarStateRef.current = calendarState;
         mapPinStatesRef.current = mapPinStates;
         factionsRef.current = factions;
+        locationTerritoriesRef.current = locationTerritories;
         shopInventoryRef.current = shopInventory;
         customShopDefinitionsRef.current = customShopDefinitions;
         characterTemplatesRef.current = characterTemplates;
@@ -267,7 +271,7 @@ function App() {
         userPinsRef.current = userPins;
         activeMapIdRef.current = activeMapId;
 
-    }, [characters, users, journal, quests, calendarState, mapPinStates, factions, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
+    }, [characters, users, journal, quests, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -630,6 +634,27 @@ function App() {
         setMapPinStates(updatedMapPinStates);
     };
 
+    const handleUpdateTerritory = (locationId: string, territory: LocationTerritory | null) => {
+        const updated = { ...locationTerritoriesRef.current };
+        if (territory) {
+            updated[locationId] = territory;
+        } else {
+            delete updated[locationId];
+        }
+        setLocationTerritories(updated);
+        locationTerritoriesRef.current = updated;
+
+        // Broadcast territory update to all players
+        const message: FactionUpdateMessage = {
+            type: 'FACTION_UPDATE',
+            payload: {
+                factions: factionsRef.current,
+                locationTerritories: updated,
+            }
+        };
+        window.ipcRenderer.sendToAllPlayers(message);
+    };
+
     const handleBackupCampaign = async () => {
         try {
             const result = await window.ipcRenderer.backupCampaign();
@@ -813,6 +838,11 @@ function App() {
             // Load factions if present
             if (data.factions) {
                 setFactions(data.factions);
+            }
+
+            // Load location territories if present
+            if (data.locationTerritories) {
+                setLocationTerritories(data.locationTerritories);
             }
 
             // Load shop inventory if present
@@ -1503,8 +1533,10 @@ function App() {
                         onTokenMove={handleTokenMove}
                         userPins={userPins.filter(p => p.mapId === activeMapId)}
                         gridScale={currentMapData.gridSize}
+                        factions={factions}
+                        locationTerritories={locationTerritories}
+                        onUpdateTerritory={handleUpdateTerritory}
                     />
-                    {/* Map Selector Button */}
                     <button
                         onClick={() => setShowMapSelector(true)}
                         style={{
@@ -1675,7 +1707,10 @@ function App() {
                         setFactions(updatedFactions);
                         const message: FactionUpdateMessage = {
                             type: 'FACTION_UPDATE',
-                            payload: { factions: updatedFactions }
+                            payload: {
+                                factions: updatedFactions,
+                                locationTerritories: locationTerritoriesRef.current,
+                            }
                         };
                         window.ipcRenderer.sendToAllPlayers(message);
                     }}

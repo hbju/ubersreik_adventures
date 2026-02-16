@@ -14,6 +14,7 @@ export type { MapFilters } from './components/MapControls';
 export { default as DiscoveredLocationsList } from './components/DiscoveredLocationsList';
 export { default as LocationPin } from './components/LocationPin';
 export { default as LocationInfoPanel } from './components/LocationInfoPanel';
+export { default as TerritoryLayer } from './components/TerritoryLayer';
 export { default as TalentSelectionModal } from './components/TalentSelectionModal';
 export { CriticalHitModal } from './components/CriticalHitModal';
 export { FumbleModal } from './components/FumbleModal';

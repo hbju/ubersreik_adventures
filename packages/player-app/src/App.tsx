@@ -57,7 +57,7 @@ import { Quest, QuestUpdateMessage, QuestDeleteMessage } from '@wfrp/shared';
 const PlayerApp: React.FC = () => {
     const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, mapData, maps, mapsList } = useGameData();
 
-    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, connect, disconnect, sendMessage } = useSocket();
 
     const currentMapData = React.useMemo(() => {
         return maps[activeMapId] || mapData;
@@ -877,6 +877,9 @@ const PlayerApp: React.FC = () => {
                             currentUserId={userId || undefined}
                             currentCharacterId={character.id || undefined}
                             gridScale={currentMapData.gridSize}
+                            factions={factions}
+                            locationTerritories={locationTerritories}
+                            characterReputations={character.reputations || []}
                         />
                         {/* Current Map Indicator */}
                         <div style={{

@@ -15,6 +15,8 @@ export interface Location {
     music: string;
     hooks: string[];
     tag: string;
+    controllingFactionId?: string; 
+    influenceWeight?: number;     
 }
 
 export interface ConditionInstance {
@@ -499,7 +501,8 @@ export interface Faction {
     icon?: string;
     hq: string;
     head: string;
-    defaultReputation: number; // Default starting reputation for new characters (-100 to 100)
+    defaultReputation: number; 
+    color?: string;
 }
 
 export type KnowledgeLevel = 'unknown' | 'rumored' | 'known';
@@ -509,6 +512,15 @@ export interface ReputationEntry {
     value: number; // -100 to 100
     knowledgeLevel: KnowledgeLevel;
     notes?: string; // Optional GM notes about this relationship
+}
+
+/**
+ * GM-assigned faction territory data for a location.
+ * Stored separately from static map data so it persists independently.
+ */
+export interface LocationTerritory {
+    controllingFactionId: string;
+    influenceWeight: number; // 1-5
 }
 
 export interface CampaignState {
@@ -527,6 +539,7 @@ export interface CampaignState {
     maps: Record<string, MapData>; // All available maps indexed by id
     activeMapId: string; // Currently active map
     calendar?: CalendarState; // Imperial Calendar state
+    locationTerritories?: Record<string, LocationTerritory>; // locationId -> territory data
     version: string;
     lastModified: string;
 }

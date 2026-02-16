@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './MapView.module.css';
-import { MapData, MapPinState, Character, Location, ShopState, MapToken as MapTokenType, UserMapPin } from '../types/wfrp.types';
+import { MapData, MapPinState, Character, Location, ShopState, MapToken as MapTokenType, UserMapPin, Faction, ReputationEntry, LocationTerritory } from '../types/wfrp.types';
 import MapDisplay from './MapDisplay';
 import LocationInfoPanel from './LocationInfoPanel';
 import MapToken from './MapToken';
 import MapControls, { MapFilters } from './MapControls';
 import UserPin from './UserPin';
+import TerritoryLayer from './TerritoryLayer';
+import FactionTerritoryLegend from './FactionTerritoryLegend';
 
 interface ViewState {
     scale: number;
@@ -42,6 +44,11 @@ interface MapViewProps {
     onAddPin?: (x: number, y: number, label: string) => void;
     onRemovePin?: (pinId: string) => void;
     gridScale?: number; // Scale factor for token sizes based on map's gridSize
+    factions?: Faction[];                 // All factions in the campaign
+    characterReputations?: ReputationEntry[]; // Current player's reputation entries (player app only)
+    onUpdateLocation?: (location: Location) => void; // GM callback to update a location's data
+    locationTerritories?: Record<string, LocationTerritory>; // GM-assigned territory data
+    onUpdateTerritory?: (locationId: string, territory: LocationTerritory | null) => void;
 }
 
 interface ContextMenu {
@@ -79,6 +86,11 @@ const MapView: React.FC<MapViewProps> = ({
     onAddPin,
     onRemovePin,
     gridScale = 1,
+    factions = [],
+    characterReputations = [],
+    onUpdateLocation,
+    locationTerritories = {},
+    onUpdateTerritory,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -103,6 +115,7 @@ const MapView: React.FC<MapViewProps> = ({
     const [pinLabelInput, setPinLabelInput] = useState('');
     const [showPinModal, setShowPinModal] = useState(false);
     const [pendingPinCoords, setPendingPinCoords] = useState<{ x: number; y: number } | null>(null);
+    const [showTerritories, setShowTerritories] = useState(false);
 
     const handleWheel = useCallback((e: WheelEvent) => {
         e.preventDefault();
@@ -381,6 +394,16 @@ const MapView: React.FC<MapViewProps> = ({
                         scale={gridScale}
                     />
 
+                    {/* Territory overlay (between map image and tokens) */}
+                    <TerritoryLayer
+                        locations={mapData.locations}
+                        factions={factions}
+                        locationTerritories={locationTerritories}
+                        isGM={isGM}
+                        characterReputations={characterReputations}
+                        visible={showTerritories}
+                    />
+
                     {/* Render player tokens */}
                     {tokens.map(token => {
                         const isOwnToken = token.characterId === currentCharacterId;
@@ -438,6 +461,27 @@ const MapView: React.FC<MapViewProps> = ({
                 </div>
             </div>
 
+            {/* Territory Overlay Toggle */}
+            {factions.length > 0 && (
+                <button
+                    className={`${styles.territoryToggle} ${showTerritories ? styles.territoryToggleActive : ''}`}
+                    onClick={() => setShowTerritories(prev => !prev)}
+                    title={showTerritories ? 'Hide Faction Territories' : 'Show Faction Territories'}
+                >
+                    🏰 {showTerritories ? 'Overlay ✓' : 'Overlay'}
+                </button>
+            )}
+
+            {showTerritories && (
+                <FactionTerritoryLegend
+                    locations={mapData. locations}
+                    factions={factions}
+                    locationTerritories={locationTerritories}
+                    isGM={isGM}
+                    characterReputations={characterReputations}
+                    visible={showTerritories}
+                />
+            )}
 
             {selectedLocation && (
                 <LocationInfoPanel
@@ -446,6 +490,10 @@ const MapView: React.FC<MapViewProps> = ({
                     isGM={isGM}
                     shops={shops}
                     onViewWares={onViewWares}
+                    factions={factions}
+                    onUpdateLocation={onUpdateLocation}
+                    locationTerritories={locationTerritories}
+                    onUpdateTerritory={onUpdateTerritory}
                 />
             )}
 
