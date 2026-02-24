@@ -7,6 +7,7 @@ import { useGameData } from '../hooks/useGameData';
 import InventoryView from './InventoryView';
 import './CharacterSheet.css';
 import { getTalentCharacteristicBonus } from '../utils/talents';
+import { CodexPopupTrigger } from './codex/CodexPopup';
 
 interface CharacterSheetProps {
     character: Character;
@@ -520,7 +521,9 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                                 className="conditionItem"
                                                 title={getConditionDescription(cond.id)}
                                             >
-                                                <span className="conditionName">{getConditionName(cond.id)}</span>
+                                                <CodexPopupTrigger lookupId={`condition:${cond.id}`}>
+                                                    <span className="conditionName">{getConditionName(cond.id)}</span>
+                                                </CodexPopupTrigger>
                                                 {cond.stack > 1 && <span className="conditionCount">×{cond.stack}</span>}
                                             </div>
                                         )
@@ -615,7 +618,9 @@ const CharacterSheet: React.FC<CharacterSheetProps> = ({
                                     return (
                                         <div key={talentId} className="talentCard">
                                             <div className="talentHeader">
-                                                <span className="talentName">{talentDef.name}</span>
+                                                <CodexPopupTrigger lookupId={`talent:${talentId}`}>
+                                                    <span className="talentName">{talentDef.name}</span>
+                                                </CodexPopupTrigger>
                                                 <div>
                                                     <span className="talentRank">Rank {rank}</span>
                                                     {!readonly && onRemoveTalent && (

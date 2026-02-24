@@ -52,12 +52,41 @@ import { ReputationDisplay } from './components/ReputationDisplay';
 import { QuestJournal } from './components/journal/QuestJournal';
 import { MapTransitionOverlay } from './components/MapTransitionOverlay';
 import { ActionBar } from './components/actionbar';
-import { Quest, QuestUpdateMessage, QuestDeleteMessage } from '@wfrp/shared';
+import { Quest, QuestUpdateMessage, QuestDeleteMessage, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal, useCodex } from '@wfrp/shared';
+import type { CodexDataSources } from '@wfrp/shared';
 import { PlayerTimeline } from './components/timeline/PlayerTimeline';
+
+/** Small wrapper so we can call useCodex inside CodexProvider */
+const CodexNavButton: React.FC = () => {
+    const { openViewer } = useCodex();
+    return (
+        <button
+            onClick={() => openViewer('md:general/welcome')}
+            style={{
+                padding: '10px 20px',
+                background: '#2c1810',
+                color: '#d4af37',
+                border: '2px solid #8b6914',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '0.75rem',
+                minWidth: '10%'
+            }}
+        >
+            📚 Codex
+        </button>
+    );
+};
 
 
 const PlayerApp: React.FC = () => {
-    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, mapData, maps, mapsList } = useGameData();
+    const { skills, talents, careers, items, weapons, armor, conditions, qualities, shops: shopDefinitions, mapData, maps, mapsList } = useGameData();
+
+    // Codex data sources
+    const codexDataSources: CodexDataSources = React.useMemo(() => ({
+        talents, skills, careers, conditions, qualities: qualities ?? [],
+    }), [talents, skills, careers, conditions, qualities]);
 
     const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, connect, disconnect, sendMessage } = useSocket();
 
@@ -564,6 +593,7 @@ const PlayerApp: React.FC = () => {
     }
 
     return (
+        <CodexProvider dataSources={codexDataSources}>
         <div className="player-app-container">
             {/* Navigation tabs */}
             {character && (
@@ -736,6 +766,7 @@ const PlayerApp: React.FC = () => {
                             }} />
                         )}
                     </button>
+                    <CodexNavButton />
                 </div>
             )}
 
@@ -762,9 +793,9 @@ const PlayerApp: React.FC = () => {
                             <h3>Advancement Mode</h3>
                             <p>XP Available: {draftCharacter.xp.current}</p>
                             {/* We'll calculate spent XP later */}
-                            <button onClick={() => setIsTalentModalOpen(true)} className='advanceControlButton'>Buy Talents</button>
-                            <button onClick={handleConfirmAdvancement} className='advanceControlButton'>Confirm Changes</button>
-                            <button onClick={handleCancelAdvancement} className="advanceControlButton">Cancel</button>
+                            <button onClick={() => setIsTalentModalOpen(true)}>Buy Talents</button>
+                            <button onClick={handleConfirmAdvancement}>Confirm Changes</button>
+                            <button onClick={handleCancelAdvancement}>Cancel</button>
                         </div>
                     )}
                     {isTalentModalOpen && draftCharacter && (
@@ -1051,7 +1082,13 @@ const PlayerApp: React.FC = () => {
             )}
 
             <Update />
+
+            {/* Codex System */}
+            <CommandPalette />
+            <CodexViewer />
+            <CodexPopupModal />
         </div>
+        </CodexProvider>
     );
 };
 

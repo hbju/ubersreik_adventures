@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './Footer.module.css';
-import { LanguageSwitcher } from '@wfrp/shared';
+import { LanguageSwitcher, useCodex } from '@wfrp/shared';
 import { useTranslation } from 'react-i18next';
 import { is } from '@electron-toolkit/utils';
 
@@ -139,6 +139,7 @@ export const Footer: React.FC<FooterProps> = ({
     onShowGameLog,
 }) => {
     const { t } = useTranslation();
+    const { openViewer } = useCodex();
     const connectionCount = clients.length;
     const connectionStatusClass = connectionCount > 0 ? 'connected' : 'disconnected';
 
@@ -164,6 +165,7 @@ export const Footer: React.FC<FooterProps> = ({
         { icon: '🌅', label: t('menu.atmosphere'), onClick: onShowAtmospherePanel },
         { icon: '💬', label: t('menu.chat', 'Chat'), onClick: onShowChat },
         { icon: '📜', label: t('menu.gameLog', 'Game Log'), onClick: onShowGameLog },
+        { icon: '📚', label: t('menu.codex', 'Rules Codex'), onClick: () => openViewer('md:general/welcome') },
     ];
 
     const worldItems = [

@@ -32,7 +32,8 @@
   "license": "ISC",
   "dependencies": {
     "@wfrp/shared": "^1.0.0",
-    "react-draggable": "^4.5.0"
+    "react-draggable": "^4.5.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.18"

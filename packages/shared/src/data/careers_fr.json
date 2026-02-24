@@ -6966,6 +6966,140 @@
         ]
     },
     {
+        "id": "gambler-priest",
+        "name": "Gambler-Priest",
+        "description": "A Gambler-Priest exalts Ranald the Gamester, the aspect which embodies the role of chance in every outcome. They revel in wagers and games of luck and skill, seeing every turning point in life as a moment where chance could take them in a different direction. A Gambler-Priest is more than just a player of games, they have devoted themselves to living by the luck granted to them by Ranald.",
+        "class": "Rogues",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "initiate",
+                "name": "Initiate",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "I",
+                    "Dex",
+                    "Fel"
+                ],
+                "talent_ids": [
+                    "bless_ranald",
+                    "luck",
+                    "holy-visions",
+                    "suave"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "consume-alcohol",
+                    "cool",
+                    "intuition",
+                    "gamble",
+                    "gossip",
+                    "intuition",
+                    "lore_ranald",
+                    "perception",
+                    "pray",
+                    "sleight-of-hand"
+                ],
+                "trappings": [
+                    "Discrete Symbol of Ranald",
+                    "Deck of Cards",
+                    "Dice"
+                ],
+                "status": "Brass 1"
+            },
+            {
+                "id": "gambler-priest",
+                "name": "Gambler-Priest",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "I",
+                    "WP",
+                    "Fel",
+                    "Dex"
+                ],
+                "talent_ids": [
+                    "cardsharp",
+                    "diceman",
+                    "etiquette_ranaldans",
+                    "invoke_the-gamester"
+                ],
+                "skills_ids": [
+                    "dodge",
+                    "entertain_storytelling",
+                    "evaluate",
+                    "haggle",
+                    "intimidate",
+                    "melee"
+                ],
+                "trappings": [
+                    "Hand Weapon",
+                    "Quality Clothes",
+                    "Lucky Charm"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "high-priest",
+                "name": "High Priest",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "I",
+                    "WP",
+                    "Fel",
+                    "Dex",
+                    "Int"
+                ],
+                "talent_ids": [
+                    "acute-sense_any",
+                    "read-write",
+                    "fast-hands",
+                    "super-numerate"
+                ],
+                "skills_ids": [
+                    "bribery",
+                    "language_any",
+                    "lore_any",
+                    "research"
+                ],
+                "trappings": [
+                    "Initiate Apprentice",
+                    "Shrine of Ranald (Fixed or Portable)"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "master-of-chance",
+                "name": "Master of Chance",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "Fel",
+                    "Dex",
+                    "Int",
+                    "WP"
+                ],
+                "talent_ids": [
+                    "nose-for-trouble",
+                    "savvy",
+                    "schemer",
+                    "secret-identity"
+                ],
+                "skills_ids": [
+                    "leadership",
+                    "perform_card-tricks"
+                ],
+                "trappings": [
+                    "Best Quality Clothes",
+                    "Subordinate Priests"
+                ],
+                "status": "Silver 5"
+            }
+        ]
+    },
+    {
         "id": "grave-robber",
         "name": "Grave Robber",
         "description": "You brave the threat of necromancy, stealing from the dead to line your own pockets. Trafficking in bodies and body parts is lucrative, with high demand from universities and physicians for fresh cadavers. As well as the scholarly market, corpses sometimes interred with all manner of valuables can be found beneath the ravenstones in the tombs of Morr's Gardens. Because their labours are obvious, illegal, and sacrilegious, Grave Robbers usually work under cover of darkness. Body Snatchers have been known to cut out the middle man and take beggars or other unfortunates straight off the streets. Tomb Robbers avoid the legal dangers of looting the recently dead, and instead journey to ancient ruins and barrows, risking the restless dead and brigands alike. Peculiarly, some successful Treasure Hunters find themselves celebrated as heroes, their treasures sold to, and displayed by, the aristocracy. It's even rumoured that the great wealth of one of the Knightly Orders came from a group of their members plundering a foreign tomb. Grave Robbers easily take to the adventuring life, especially if their nocturnal sojourns are discovered by unsympathetic authorities. They may also be sought out by antiquarians who wish to engage their expert services in the excavation of a tomb, or perhaps they will feel compelled to track down a suspected necromancer who is using corpses for nefarious purposes.",
@@ -7504,6 +7638,140 @@
                 "trappings": [
                     "Dark Clothing",
                     "Grappling Hook",
+                    "Mask or Scarves"
+                ],
+                "status": "Silver 3"
+            }
+        ]
+    },
+    {
+        "id": "thief-priest",
+        "name": "Thief-Priest",
+        "description": "Thievery is a crime, but it can also be an art form. With the right combination of skill and cunning, stealing from others is an act of devotion to Ranald the Night Prowler. Thief-Priests dedicate themselves to the fine art of appropriating others’ property. They pride themselves on committing crimes with flair and panache, involving intricate planning, daring escapes, and acts of legendary bravado. The more accomplished the crime, the more they venerate their god, emulating his boldest exploits and inspiring others to do the same.",
+        "class": "Rogues",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "initiate",
+                "name": "Initiate",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "talent_ids": [
+                    "bless_ranald",
+                    "holy-visions",
+                    "flee",
+                    "suave"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "climb",
+                    "lore_ranald",
+                    "dodge",
+                    "pick-lock",
+                    "intuition",
+                    "perception",
+                    "pray",
+                    "sleight-of-hand",
+                    "stealth_urban"
+                ],
+                "trappings": [
+                    "Discrete Symbol of Ranald",
+                    "Leather Jerkin",
+                    "Sack"
+                ],
+                "status": "Brass 1"
+            },
+            {
+                "id": "thief-priest",
+                "name": "Thief-Priest",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Fel"
+                ],
+                "talent_ids": [
+                    "secret-identity",
+                    "etiquette_ranaldans",
+                    "invoke_the-night-prowler",
+                    "luck"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "endurance",
+                    "entertain_storytelling",
+                    "lore_local",
+                    "secret-signs_thief",
+                    "language_thief"
+                ],
+                "trappings": [
+                    "Trade Tools (Thief)",
+                    "Rope",
+                    "book_ranald"
+                ],
+                "status": "Brass 4"
+            },
+            {
+                "id": "high-priest",
+                "name": "High Priest",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Dex",
+                    "Fel"
+                ],
+                "talent_ids": [
+                    "alley-cat",
+                    "nimble-fingered",
+                    "etiquette_criminals",
+                    "nose-for-trouble"
+                ],
+                "skills_ids": [
+                    "bribery",
+                    "cool",
+                    "evaluate",
+                    "gossip"
+                ],
+                "trappings": [
+                    "Initiate Apprentice/Lookout",
+                    "Quality Dark Clothing",
+                    "Shrine of the Night Prowler"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "shadow-prowler",
+                "name": "Shadow Prowler",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Dex",
+                    "Int",
+                    "Fel"
+                ],
+                "talent_ids": [
+                    "criminal",
+                    "night-vision",
+                    "pure-soul",
+                    "shadow"
+                ],
+                "skills_ids": [
+                    "intimidate",
+                    "leadership"
+                ],
+                "trappings": [
+                    "Subordinate Thief-Priests",
                     "Mask or Scarves"
                 ],
                 "status": "Silver 3"

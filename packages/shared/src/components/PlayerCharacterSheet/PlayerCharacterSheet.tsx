@@ -21,6 +21,7 @@ import { SkillsPanel } from './SkillsPanel';
 import { CombatTab } from './CombatTab';
 import { InventoryTab } from './InventoryTab';
 import { NotesTab } from './NotesTab';
+import { CodexPopupTrigger } from '../codex/CodexPopup';
 
 export type TabType = 'main' | 'combat' | 'inventory' | 'notes';
 
@@ -547,7 +548,9 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                                             return (
                                                 <div key={talentId} className="talent-item">
                                                     <div className="talent-header">
-                                                        <span className="talent-name">{talentDef.name}</span>
+                                                        <CodexPopupTrigger lookupId={`talent:${talentId}`}>
+                                                            <span className="talent-name">{talentDef.name}</span>
+                                                        </CodexPopupTrigger>
                                                         <span className="talent-rank">({rank})</span>
                                                         {isGM && onRemoveTalent && (
                                                             <button
@@ -557,7 +560,6 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                                                             >×</button>
                                                         )}
                                                     </div>
-                                                    <p className="talent-description">{talentDef.description}</p>
                                                 </div>
                                             );
                                         })

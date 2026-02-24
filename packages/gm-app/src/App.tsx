@@ -1,4 +1,5 @@
-import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory } from '@wfrp/shared';
+import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal } from '@wfrp/shared';
+import type { CodexDataSources } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -85,7 +86,12 @@ interface ServerStatusData {
 function App() {
     const { t } = useTranslation();
 
-    const { skills, talents, careers, items, weapons, armor, conditions, shops: shopDefinitions, mapData, maps, mapsList, motivations } = useGameData();
+    const { skills, talents, careers, items, weapons, armor, conditions, qualities, shops: shopDefinitions, mapData, maps, mapsList, motivations } = useGameData();
+
+    // Codex data sources (memoised to avoid rebuilding index on every render)
+    const codexDataSources: CodexDataSources = React.useMemo(() => ({
+        talents, skills, careers, conditions, qualities: qualities ?? [],
+    }), [talents, skills, careers, conditions, qualities]);
 
     // Active map management
     const [activeMapId, setActiveMapId] = useState<string>('ubersreik_city');
@@ -1412,6 +1418,7 @@ function App() {
     }
 
     return (
+        <CodexProvider dataSources={codexDataSources}>
         <AudioProvider>
         <div>
             <Footer
@@ -2138,8 +2145,14 @@ function App() {
             {showLibraryManager && (
                 <LibraryManager onClose={() => setShowLibraryManager(false)} />
             )}
+
+            {/* Codex System */}
+            <CommandPalette />
+            <CodexViewer />
+            <CodexPopupModal />
         </div>
         </AudioProvider>
+        </CodexProvider>
     );
 }
 

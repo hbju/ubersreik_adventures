@@ -57,3 +57,18 @@ export { PlayerCalendarGrid } from './components/calendar/PlayerCalendarGrid';
 export type { PlayerNote } from './components/calendar/PlayerCalendarGrid';
 export { DateWeatherWidget } from './components/calendar/DateWeatherWidget';
 
+// Codex System
+export * from './types/codex.types';
+export * from './utils/codexIndex';
+export * from './utils/codexSearch';
+export { CodexProvider, useCodex } from './hooks/useCodex';
+export { useCodexBookmarks } from './hooks/useCodexBookmarks';
+export { CommandPalette } from './components/codex/CommandPalette';
+export { CodexViewer } from './components/codex/CodexViewer';
+export { CodexPopupTrigger, CodexPopupModal } from './components/codex/CodexPopup';
+export { TalentCodexDisplay } from './components/codex/renderers/TalentCodexDisplay';
+export { SkillCodexDisplay } from './components/codex/renderers/SkillCodexDisplay';
+export { CareerCodexDisplay } from './components/codex/renderers/CareerCodexDisplay';
+export { ConditionCodexDisplay } from './components/codex/renderers/ConditionCodexDisplay';
+export { QualityCodexDisplay } from './components/codex/renderers/QualityCodexDisplay';
+

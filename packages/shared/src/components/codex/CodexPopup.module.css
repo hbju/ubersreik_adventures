@@ -1,0 +1,110 @@
+/* ─── Codex Popup (floating modal for contextual lookups) ─────────────────── */
+
+.trigger {
+  color: #7a9ff0;
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: 1px dotted #7a9ff0;
+  transition: color 0.12s;
+}
+
+.trigger:hover {
+  color: #a0c0ff;
+  border-bottom-color: #a0c0ff;
+}
+
+/* ─── Floating modal ──────────────────────────────────────────────────────── */
+
+.popupOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.popup {
+  position: fixed;
+  z-index: 10001;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 520px;
+  max-width: 90vw;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: #1a1a2e;
+  border: 1px solid #3a3a5c;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  animation: popIn 0.15s ease-out;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.97); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.popupHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #2a2a4a;
+}
+
+.popupTitle {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 700;
+  color: #e0e0e0;
+}
+
+.popupBadge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #2a2a4a;
+  color: #8a8aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.popupOpenFull {
+  background: none;
+  border: 1px solid #3a3a5c;
+  color: #8a8aaa;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+
+.popupOpenFull:hover {
+  background: #2a2a4a;
+  color: #e0e0e0;
+}
+
+.popupClose {
+  background: none;
+  border: none;
+  color: #8a8aaa;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.1s;
+}
+
+.popupClose:hover {
+  background: #2a2a4a;
+  color: #e0e0e0;
+}
+
+.popupContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 18px;
+}

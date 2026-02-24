@@ -12,6 +12,7 @@ import {
     getTalentDamageBonus
 } from '@wfrp/shared';
 import './CombatTab.css';
+import { CodexPopupTrigger } from '../codex/CodexPopup';
 
 interface CombatTabProps {
     character: Character;
@@ -475,7 +476,9 @@ export const CombatTab: React.FC<CombatTabProps> = ({
                         <div className="conditions-list">
                             {character.conditions.map((condition, index) => (
                                 <div key={`${condition.id}-${index}`} className="condition-item" title={getConditionDescription(condition.id)}>
-                                    <span className="condition-name">{getConditionName(condition.id)}</span>
+                                    <CodexPopupTrigger lookupId={`condition:${condition.id}`}>
+                                        <span className="condition-name">{getConditionName(condition.id)}</span>
+                                    </CodexPopupTrigger>
                                     {condition.stack > 1 && (
                                         <span className="condition-stack">×{condition.stack}</span>
                                     )}
