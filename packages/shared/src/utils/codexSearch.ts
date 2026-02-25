@@ -12,6 +12,7 @@ const FUSE_OPTIONS: IFuseOptions<CodexEntry> = {
     { name: 'tags', weight: 0.35 },
     { name: 'category', weight: 0.1 },
     { name: 'subcategory', weight: 0.05 },
+    { name: 'content', weight: 0.01 },
   ],
   threshold: 0.35,          // fuzzy tolerance (0 = exact, 1 = match everything)
   distance: 200,

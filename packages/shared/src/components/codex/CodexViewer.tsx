@@ -11,17 +11,21 @@ import { QualityCodexDisplay } from './renderers/QualityCodexDisplay';
 import styles from './CodexViewer.module.css';
 
 const CATEGORY_ORDER: CodexCategory[] = [
+    'general',
     'core-rules',
     'combat',
     'magic',
-    'skills',
+    'endeavours',
     'talents',
+    'skills',
     'careers',
     'conditions',
     'qualities',
 ];
 
 const CATEGORY_ICONS: Record<string, string> = {
+    general: '📚',
+    endeavours: '🎯',
     talents: '🎭',
     skills: '🎲',
     careers: '📜',
@@ -34,6 +38,8 @@ const CATEGORY_ICONS: Record<string, string> = {
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
+    general: 'General',
+    endeavours: 'Endeavours',
     talents: 'Talents',
     skills: 'Skills',
     careers: 'Careers',

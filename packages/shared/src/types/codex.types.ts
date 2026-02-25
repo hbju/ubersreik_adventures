@@ -1,5 +1,6 @@
 
 export type CodexCategory =
+  | 'general'
   | 'core-rules'
   | 'combat'
   | 'magic'
@@ -8,7 +9,10 @@ export type CodexCategory =
   | 'careers'
   | 'conditions'
   | 'equipment'
-  | 'qualities';
+  | 'qualities'
+  | 'endeavours'
+  | 'lore'
+  | 'other';
 
 export type CodexEntryType = 'json' | 'markdown';
 

@@ -24,7 +24,9 @@ function categoryFromPath(path: string): CodexCategory {
   if (path.includes('/combat/')) return 'combat';
   if (path.includes('/magic/')) return 'magic';
   if (path.includes('/mechanics/')) return 'core-rules';
-  if (path.includes('/general/')) return 'core-rules';
+  if (path.includes('/general/')) return 'general';
+  if (path.includes('/endeavours/')) return 'endeavours';
+  if (path.includes('/lore/')) return 'lore';
   return 'core-rules';
 }
 
