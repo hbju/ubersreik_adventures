@@ -64,6 +64,7 @@ function useCodexLinkHandler() {
             if (slug) {
                 const directId = `${typeOrCategory}:${slug}`;
                 const entry = entries.find((e) => e.id === directId);
+                console.log('Resolving codex link', { href, typeOrCategory, slug, directId, found: !!entry });
                 if (entry) {
                     openEntry(entry.id);
                     return;

@@ -1,32 +1,9 @@
-# Opposed Tests
+## Opposed Tests
 
-An Opposed Test occurs when two characters act against each other — for example, sneaking past a guard, arm-wrestling, or attacking in combat.
+An **Opposed Test** is a special Dramatic Test where two parties directly contest each other. Both parties roll and calculate their **SL**. The party with the **higher SL wins**. Ties are broken by the higher tested Skill or Characteristic; if still tied, the GM chooses a stalemate or both parties re-roll.
 
-## How It Works
+> **Example:** Salundra intimidates the guardsmen blocking her exit. The GM calls for an **Intimidate** vs **Leadership** Opposed Test. Salundra's **Intimidate** is 47; she rolls 04 for **+4 SL**. The officer's **Leadership** is 46; he rolls 16 for **+3 SL**. Salundra wins — the guards step aside.
 
-1. Both parties make the relevant Test (e.g., attacker rolls **Melee (Basic)**, defender rolls **Melee (Basic)** or **Dodge**).
-2. Both calculate their **Success Levels (SL)**.
-3. Compare results:
+When the margin of victory is important, the **difference in SL** between the two results serves as the final **SL**.
 
-| Attacker | Defender | Result |
-|---|---|---|
-| Success | Failure | Attacker wins (SL = attacker's SL + defender's negative SL) |
-| Failure | Success | Defender wins |
-| Both Succeed | — | Higher SL wins; ties go to the *active* character |
-| Both Fail | — | Higher SL wins (less negative); ties = stalemate |
-
-## Calculating SL
-
-**SL** = (Skill Value ÷ 10) − (Roll ÷ 10), rounded down for each.
-
-- A roll of **01–05** always succeeds (minimum +1 SL).
-- A roll of **96–100** always fails (minimum −1 SL).
-
-## Dramatic Tests
-
-If the GM wants prolonged contests (e.g., a chase, debate, or wrestling match), the opposed test can be extended over multiple Rounds. Each side accumulates SL until one side reaches a target, typically **+5 SL** ahead.
-
-## Related
-
-- [Advantage](/codex/mechanics/advantage) — gained after winning an opposed test in combat
-- [Conditions](/codex/conditions) — may impose penalties on tests
+> **Example:** In a pie-eating contest, Salundra (Endurance 45) faces Fat Tom (Endurance 63). Salundra rolls 51 for **–1 SL**; Fat Tom rolls 91 for **–3 SL**. Even though Salundra failed her own roll, she wins the Opposed Test by **2 SL** — though she'll likely be ill later.

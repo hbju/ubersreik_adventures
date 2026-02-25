@@ -1,33 +1,34 @@
-# Advantage
+## Advantage
 
-Advantage represents having the upper hand in combat. Whenever you win an Opposed Test in combat, you gain **+1 Advantage**. Some Talents and abilities also grant Advantage.
+[Advantage](/codex/mechanics/advantage) represents momentum in combat, tracked with tokens or tallies.
 
-## Gaining Advantage
+### Gaining Advantage
 
-- Win an Opposed Test in combat: **+1 Advantage**
-- Charge an enemy: **+1 Advantage**
-- Some Talents grant bonus Advantage
+- **Surprise:** +1 Advantage for attacking [Surprised](/codex/condition/condition_surprised) enemies.
+- **Charging:** +1 Advantage when Charging into combat.
+- **Assess:** +1 Advantage when using a Skill to gain a tactical edge.
+- **Victory:** +1 Advantage for defeating an important NPC (+2 for a party nemesis).
+- **Winning:** +1 Advantage for winning any Opposed Test in combat.
+- **Outmanoeuvre:** +1 Advantage for wounding an opponent without an Opposed Test.
 
-## Using Advantage
+### Benefits of Advantage
 
-Each point of Advantage adds **+10** to the next relevant Test you make. After the Test is made (whether you use the bonus or not), all Advantage is reset to **0** if you lose an Opposed Test.
+Each Advantage token adds **+10** to any relevant **combat** or **Psychology** Test.
 
-## Losing Advantage
+> **Example:** 5 Advantage = **+50** to hit, defend, and resist influence.
 
-You lose **all** your Advantage when:
+### Losing Advantage
 
-- You lose an Opposed Test in combat
-- You suffer any [Condition](/codex/conditions) (Bleeding, Stunned, etc.)
-- You take a non-combat action during a Round
-- The combat ends
+You lose **all Advantage** when you:
+- Lose an Opposed Test in combat.
+- Suffer any **[Condition](/codex/condition/condition_index)**.
+- Lose any **Wounds**.
+- Combat ends.
 
-## Group Advantage (Optional Rule)
+You lose **1 Advantage** if you:
+- Gained no Advantage that Round.
+- End the Round outnumbered.
 
-Some groups use **Group Advantage**, where all player characters share a single Advantage pool and all enemies share another. This simplifies tracking and encourages teamwork.
+[Advantage](/codex/mechanics/advantage) can also be spent to **Disengage** safely.
 
-| Event | Effect |
-|---|---|
-| Win Opposed Test | +1 to your side |
-| Lose Opposed Test | -1 from your side |
-| Charge | +1 to your side |
-| Gain a Condition | -1 from your side |
+> **Optional Rule — Limiting Advantage:** Cap Advantage at each character's **Initiative Bonus**, or at a fixed number (e.g., 2, 4, or 10).
