@@ -1,10 +1,13 @@
 ## Injury
 
-### Wounds
+> **Variant Rule — Up in Arms:** This campaign uses the alternative injury and Critical Wound rules from *Up in Arms*. These replace the Critical Wound tables and Bleeding Condition rules in the core rulebook (WFRP pp. 172–177).
 
-Each point of Damage removes 1 Wound. Toughness Bonus and Armour Points reduce Damage before it becomes Wounds:
+## Wounds and Damage
 
-**Wounds Suffered = Damage − (Toughness Bonus + Armour Points)**
+Standard damage is calculated as: **Weapon Damage + SL − Toughness Bonus − Armour Points = Wounds lost**.
+
+> **Example:** Hit on the arm for 10 Damage, with TB 3 and 1 AP from leather armour: 10 – 3 – 1 = **6 Wounds**.
+
 
 At **0 Wounds**, gain the [Prone](/codex/condition/condition_prone) Condition. If not healed within Toughness Bonus Rounds, also gain the [Unconscious](/codex/condition/condition_unconscious) Condition.
 
