@@ -71,10 +71,27 @@ function doesEffectApplyToTest(effect: TalentEffect, testId: string): boolean {
  * @returns The effective maximum wounds
  */
 export function calculateEffectiveMaxWounds(character: Character, talents: Talent[]): number {
-    return calculateCharacteristicBonus(character.characteristics.t) * 2
+    let maxWounds = calculateCharacteristicBonus(character.characteristics.t) * 2
         + calculateCharacteristicBonus(character.characteristics.s)
-        + calculateCharacteristicBonus(character.characteristics.wp)
-        + calculateTalentBonus(character, 'WOUNDS_BONUS', talents);
+        + calculateCharacteristicBonus(character.characteristics.wp);
+
+    if (character.talents['small']) {
+        maxWounds -= calculateCharacteristicBonus(character.characteristics.s);
+    }
+    if (character.talents['large']) {
+        maxWounds *= 2;
+    }
+    if (character.talents['enormous']) {
+        maxWounds *= 4;
+    }
+    if (character.talents['monstrous']) {
+        maxWounds *= 8;
+    }
+    if (character.talents['swarm']) {
+        maxWounds *= 5;
+    }
+
+    return maxWounds + calculateTalentBonus(character, 'WOUNDS_BONUS', talents);
 }
 
 /**

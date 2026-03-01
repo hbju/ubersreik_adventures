@@ -5791,6 +5791,28 @@
         ]
     },
     {
+        "id":"swarm",
+        "name": "Swarm",
+        "description": "Swarms are large numbers of the same creature acting as one. The swarm counts as a single Creature that ignores the Psychology rules (see page 190), and can ignore the Engaged rules when using its Move. If the Swarm successfully strikes an opponent it activates the Deathblow rule (even if it has not killed its opponent — see page 160). All opponents Engaged with a Swarm automatically lose 1 Wound at the end of every Round as the Swarm overwhelms anything close. The Swarm has five times the Wounds of a normal example of the creature and gains +10 Weapon Skill. Any attempts to shoot the Swarm gain a bonus of +40 to hit.",
+        "tests": [
+        ],
+        "max_ranks": "1",
+        "careers": {
+        },
+        "racial": [
+            "Swarm"
+        ],
+        "effects": [
+            {
+                "type": "PASSIVE",
+                "value": "Ignore Psychology and Engaged rules; gain 5x Wounds and +10 WS; opponents lose 1 Wound at end of Round",
+                "appliesTo": [
+                    "All Tests and Effects"
+                ]
+            }
+        ]
+    },
+    {
         "id": "tenacious",
         "name": "Tenacious",
         "description": "You never give up, no matter how impossible your travails appear. You can double the length of time successful Endurance Tests allow you to endure a hardship. This includes enduring prolonged riding, exposure, rituals, and similar adversities.",

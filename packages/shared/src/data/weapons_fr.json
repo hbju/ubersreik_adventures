@@ -975,6 +975,58 @@
         "availability": "scarce"
     },
     {
+        "id": "weapon_skaven-ranged_warplock_pistol",
+        "name": "Pistolet à Malepierre",
+        "group": "skaven-ranged",
+        "price": "0",
+        "enc": 1,
+        "reach": "30",
+        "damage": "+8",
+        "qualities": [
+            "Damaging",
+            "Dangerous",
+            "Penetrating",
+            "Pistol",
+            "Reload 1",
+            "Warpstone"
+        ],
+        "availability": "none"
+    },
+    {
+        "id": "weapon_skaven-ranged_warpmusket",
+        "name": "Malemousquet",
+        "group": "skaven-ranged",
+        "price": "0",
+        "enc": 1,
+        "reach": "40",
+        "damage": "+9",
+        "qualities": [
+            "Damaging",
+            "Dangerous",
+            "Penetrating",
+            "Reload 3",
+            "Warpstone"
+        ],
+        "availability": "common"
+    },
+    {
+        "id": "weapon_skaven-ranged_warplock_jezzail",
+        "name": "Jezzail à Malepierre",
+        "group": "skaven-ranged",
+        "price": "0",
+        "enc": 4,
+        "reach": "100",
+        "damage": "+12",
+        "qualities": [
+            "Damaging",
+            "Dangerous",
+            "Penetrating",
+            "Reload 3",
+            "Warpstone"
+        ],
+        "availability": "common"
+    },
+    {
         "id": "weapon_sling_sling",
         "name": "Fronde",
         "group": "sling",

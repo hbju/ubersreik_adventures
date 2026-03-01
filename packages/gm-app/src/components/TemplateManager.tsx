@@ -21,16 +21,16 @@ interface TemplateManagerProps {
 const CATEGORIES: CharacterTemplateCategory[] = ['Human', 'Dwarf', 'Elf', 'Halfling', 'Creature', 'Undead', 'Chaos', 'Other'];
 
 const DEFAULT_CHARACTERISTICS: CharacterTemplate['characteristics'] = {
-    ws: { base: 30, variance: 5 },
-    bs: { base: 30, variance: 5 },
-    s: { base: 30, variance: 5 },
-    t: { base: 30, variance: 5 },
-    i: { base: 30, variance: 5 },
-    ag: { base: 30, variance: 5 },
-    dex: { base: 30, variance: 5 },
-    int: { base: 30, variance: 5 },
-    wp: { base: 30, variance: 5 },
-    fel: { base: 30, variance: 5 },
+    ws: { base: 30, variance: 10 },
+    bs: { base: 30, variance: 10 },
+    s: { base: 30, variance: 10 },
+    t: { base: 30, variance: 10 },
+    i: { base: 30, variance: 10 },
+    ag: { base: 30, variance: 10 },
+    dex: { base: 30, variance: 10 },
+    int: { base: 30, variance: 10 },
+    wp: { base: 30, variance: 10 },
+    fel: { base: 30, variance: 10 },
 };
 
 const createEmptyTemplate = (): CharacterTemplate => ({

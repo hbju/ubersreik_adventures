@@ -7,7 +7,10 @@
     "enc": 1,
     "reach": "Average",
     "damage": "+SB+4",
-    "qualities": ["Hack", "Unbalanced"],
+    "qualities": [
+      "Hack",
+      "Unbalanced"
+    ],
     "availability": "common"
   },
   {
@@ -18,7 +21,11 @@
     "enc": 0,
     "reach": "Very Short",
     "damage": "+SB+1",
-    "qualities": ["Impale*", "Penetrating", "Precise*"],
+    "qualities": [
+      "Impale*",
+      "Penetrating",
+      "Precise*"
+    ],
     "availability": "scarce"
   },
   {
@@ -29,7 +36,10 @@
     "enc": 0,
     "reach": "Average",
     "damage": "+SB+4",
-    "qualities": ["Undamaging", "Unbalanced"],
+    "qualities": [
+      "Undamaging",
+      "Unbalanced"
+    ],
     "availability": "common"
   },
   {
@@ -51,7 +61,10 @@
     "enc": "Varies",
     "reach": "Varies",
     "damage": "+SB+1",
-    "qualities": ["undamaging", "unbalanced"],
+    "qualities": [
+      "undamaging",
+      "unbalanced"
+    ],
     "availability": null
   },
   {
@@ -62,7 +75,9 @@
     "enc": 0,
     "reach": "Very Short",
     "damage": "+SB+1",
-    "qualities": ["undamaging"],
+    "qualities": [
+      "undamaging"
+    ],
     "availability": "common"
   },
   {
@@ -73,7 +88,10 @@
     "enc": 1,
     "reach": "Average",
     "damage": "+SB+4",
-    "qualities": ["Pummel", "Unbalanced"],
+    "qualities": [
+      "Pummel",
+      "Unbalanced"
+    ],
     "availability": "common"
   },
   {
@@ -84,7 +102,10 @@
     "enc": 1,
     "reach": "Average",
     "damage": "+SB+4",
-    "qualities": ["Penetrating", "Unbalanced"],
+    "qualities": [
+      "Penetrating",
+      "Unbalanced"
+    ],
     "availability": "scarce"
   },
   {
@@ -95,7 +116,9 @@
     "enc": 1,
     "reach": "Short",
     "damage": "+SB+4",
-    "qualities": ["Slash 1"],
+    "qualities": [
+      "Slash 1"
+    ],
     "availability": "scarce"
   },
   {
@@ -117,7 +140,10 @@
     "enc": 1,
     "reach": "Average",
     "damage": "+SB+4",
-    "qualities": ["Unbalanced", "Pummel or Penetrating"],
+    "qualities": [
+      "Unbalanced",
+      "Pummel or Penetrating"
+    ],
     "availability": "scarce"
   },
   {
@@ -128,7 +154,11 @@
     "enc": 0,
     "reach": "Personal",
     "damage": "+SB+1",
-    "qualities": ["Shield 1", "Defensive", "Undamaging"],
+    "qualities": [
+      "Shield 1",
+      "Defensive",
+      "Undamaging"
+    ],
     "availability": "common"
   },
   {
@@ -139,7 +169,11 @@
     "enc": 1,
     "reach": "Very Short",
     "damage": "+SB+2",
-    "qualities": ["Shield 2", "Defensive", "Undamaging"],
+    "qualities": [
+      "Shield 2",
+      "Defensive",
+      "Undamaging"
+    ],
     "availability": "common"
   },
   {
@@ -150,7 +184,11 @@
     "enc": 3,
     "reach": "Very Short",
     "damage": "+SB+3",
-    "qualities": ["Shield 3", "Defensive", "Undamaging"],
+    "qualities": [
+      "Shield 3",
+      "Defensive",
+      "Undamaging"
+    ],
     "availability": "common"
   },
   {
@@ -161,7 +199,9 @@
     "enc": 4,
     "reach": "N/A",
     "damage": "+SB+2",
-    "qualities": ["Shield 5"],
+    "qualities": [
+      "Shield 5"
+    ],
     "availability": "rare"
   },
   {
@@ -172,7 +212,9 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+5",
-    "qualities": ["Pummel"],
+    "qualities": [
+      "Pummel"
+    ],
     "availability": "scarce"
   },
   {
@@ -183,7 +225,10 @@
     "enc": 2,
     "reach": "Long",
     "damage": "SB+5*",
-    "qualities": ["Impact", "Impale"],
+    "qualities": [
+      "Impact",
+      "Impale"
+    ],
     "availability": "scarce"
   },
   {
@@ -194,7 +239,10 @@
     "enc": 3,
     "reach": "Very Long",
     "damage": "+SB+6*",
-    "qualities": ["Impact", "Impale"],
+    "qualities": [
+      "Impact",
+      "Impale"
+    ],
     "availability": "scarce"
   },
   {
@@ -205,7 +253,9 @@
     "enc": 1,
     "reach": "Average",
     "damage": "SB+4",
-    "qualities": ["Slash 1"],
+    "qualities": [
+      "Slash 1"
+    ],
     "availability": "scarce"
   },
   {
@@ -216,7 +266,12 @@
     "enc": 1,
     "reach": "Average",
     "damage": "+SB+3",
-    "qualities": ["Fast", "Impale", "Precise", "Undamaging"],
+    "qualities": [
+      "Fast",
+      "Impale",
+      "Precise",
+      "Undamaging"
+    ],
     "availability": "scarce"
   },
   {
@@ -227,7 +282,10 @@
     "enc": 1,
     "reach": "Long",
     "damage": "+SB+4",
-    "qualities": ["Fast", "Impale"],
+    "qualities": [
+      "Fast",
+      "Impale"
+    ],
     "availability": "scarce"
   },
   {
@@ -238,7 +296,11 @@
     "enc": 1,
     "reach": "Average",
     "damage": "+SB+2",
-    "qualities": ["Fast", "Impale", "Precise"],
+    "qualities": [
+      "Fast",
+      "Impale",
+      "Precise"
+    ],
     "availability": "scarce"
   },
   {
@@ -249,7 +311,10 @@
     "enc": 1,
     "reach": "Personal",
     "damage": "+SB+3",
-    "qualities": ["Impale", "Unbalanced"],
+    "qualities": [
+      "Impale",
+      "Unbalanced"
+    ],
     "availability": "scarce"
   },
   {
@@ -260,7 +325,10 @@
     "enc": 0,
     "reach": "Short",
     "damage": "+SB+4",
-    "qualities": ["Trip", "Undamaging"],
+    "qualities": [
+      "Trip",
+      "Undamaging"
+    ],
     "availability": "common"
   },
   {
@@ -271,7 +339,12 @@
     "enc": 0,
     "reach": "Personal",
     "damage": "+SB+2",
-    "qualities": ["Entangle", "Slow", "Unbalanced", "Undamaging"],
+    "qualities": [
+      "Entangle",
+      "Slow",
+      "Unbalanced",
+      "Undamaging"
+    ],
     "availability": "rare"
   },
   {
@@ -293,7 +366,9 @@
     "enc": 1,
     "reach": "Personal",
     "damage": "+SB+2",
-    "qualities": ["Undamaging"],
+    "qualities": [
+      "Undamaging"
+    ],
     "availability": "scarce"
   },
   {
@@ -304,7 +379,9 @@
     "enc": 0,
     "reach": "Personal",
     "damage": "+SB+0",
-    "qualities": ["Undamaging"],
+    "qualities": [
+      "Undamaging"
+    ],
     "availability": null
   },
   {
@@ -315,7 +392,11 @@
     "enc": 0,
     "reach": "Personal",
     "damage": "+SB+1",
-    "qualities": ["Pummel", "Unbalanced", "Undamaging"],
+    "qualities": [
+      "Pummel",
+      "Unbalanced",
+      "Undamaging"
+    ],
     "availability": "rare"
   },
   {
@@ -326,7 +407,11 @@
     "enc": 1,
     "reach": "Average",
     "damage": "+SB+3",
-    "qualities": ["Distract", "Imprecise", "Wrap"],
+    "qualities": [
+      "Distract",
+      "Imprecise",
+      "Wrap"
+    ],
     "availability": "common"
   },
   {
@@ -337,7 +422,10 @@
     "enc": 1,
     "reach": "Average",
     "damage": "+SB+5",
-    "qualities": ["Distract", "Wrap"],
+    "qualities": [
+      "Distract",
+      "Wrap"
+    ],
     "availability": "scarce"
   },
   {
@@ -348,7 +436,12 @@
     "enc": 2,
     "reach": "Long",
     "damage": "+SB+6",
-    "qualities": ["Distract", "Impact", "Tiring", "Wrap"],
+    "qualities": [
+      "Distract",
+      "Impact",
+      "Tiring",
+      "Wrap"
+    ],
     "availability": "rare"
   },
   {
@@ -359,7 +452,11 @@
     "enc": 1,
     "reach": "Short",
     "damage": "+SB+0",
-    "qualities": ["Entangle", "Defensive", "Undamaging"],
+    "qualities": [
+      "Entangle",
+      "Defensive",
+      "Undamaging"
+    ],
     "availability": "common"
   },
   {
@@ -370,7 +467,9 @@
     "enc": 0,
     "reach": "Very Short",
     "damage": "+SB+2",
-    "qualities": ["Defensive"],
+    "qualities": [
+      "Defensive"
+    ],
     "availability": "rare"
   },
   {
@@ -381,7 +480,10 @@
     "enc": 1,
     "reach": "Short",
     "damage": "+SB+1",
-    "qualities": ["Defensive", "Trap Blade"],
+    "qualities": [
+      "Defensive",
+      "Trap Blade"
+    ],
     "availability": "scarce"
   },
   {
@@ -392,7 +494,14 @@
     "enc": 1,
     "reach": "Short",
     "damage": "+SB+0",
-    "qualities": ["Entangle", "Defensive", "Shield 1", "Slow", "Undamaging", "Wrap"],
+    "qualities": [
+      "Entangle",
+      "Defensive",
+      "Shield 1",
+      "Slow",
+      "Undamaging",
+      "Wrap"
+    ],
     "availability": "rare"
   },
   {
@@ -403,7 +512,10 @@
     "enc": 2,
     "reach": "Very Long",
     "damage": "+SB+3",
-    "qualities": ["Impale", "Penetrating"],
+    "qualities": [
+      "Impale",
+      "Penetrating"
+    ],
     "availability": "scarce"
   },
   {
@@ -414,7 +526,10 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+4",
-    "qualities": ["Defensive", "Hack or Trip"],
+    "qualities": [
+      "Defensive",
+      "Hack or Trip"
+    ],
     "availability": "scarce"
   },
   {
@@ -425,7 +540,10 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+4",
-    "qualities": ["Defensive", "Hack or Impale"],
+    "qualities": [
+      "Defensive",
+      "Hack or Impale"
+    ],
     "availability": "common"
   },
   {
@@ -436,7 +554,10 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+2",
-    "qualities": ["Defensive", "Entangle"],
+    "qualities": [
+      "Defensive",
+      "Entangle"
+    ],
     "availability": "rare"
   },
   {
@@ -447,7 +568,10 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+4",
-    "qualities": ["Defensive", "Impale or Slash 2"],
+    "qualities": [
+      "Defensive",
+      "Impale or Slash 2"
+    ],
     "availability": "scarce"
   },
   {
@@ -458,7 +582,10 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+4",
-    "qualities": ["Defensive", "Hack or Impale or Pummel"],
+    "qualities": [
+      "Defensive",
+      "Hack or Impale or Pummel"
+    ],
     "availability": "scarce"
   },
   {
@@ -469,7 +596,9 @@
     "enc": 2,
     "reach": "Very Long",
     "damage": "+SB+4",
-    "qualities": ["Impale"],
+    "qualities": [
+      "Impale"
+    ],
     "availability": "common"
   },
   {
@@ -480,7 +609,9 @@
     "enc": 4,
     "reach": "Massive",
     "damage": "+SB+4",
-    "qualities": ["Impale"],
+    "qualities": [
+      "Impale"
+    ],
     "availability": "rare"
   },
   {
@@ -491,7 +622,10 @@
     "enc": 2,
     "reach": "Long",
     "damage": "+SB+4",
-    "qualities": ["Defensive", "Pummel"],
+    "qualities": [
+      "Defensive",
+      "Pummel"
+    ],
     "availability": "common"
   },
   {
@@ -502,7 +636,10 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+5",
-    "qualities": ["Damaging", "Defensive"],
+    "qualities": [
+      "Damaging",
+      "Defensive"
+    ],
     "availability": "scarce"
   },
   {
@@ -513,7 +650,11 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+6",
-    "qualities": ["Hack", "Impact", "Tiring"],
+    "qualities": [
+      "Hack",
+      "Impact",
+      "Tiring"
+    ],
     "availability": "common"
   },
   {
@@ -524,7 +665,11 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+5",
-    "qualities": ["Damaging", "Hack", "Slash 2"],
+    "qualities": [
+      "Damaging",
+      "Hack",
+      "Slash 2"
+    ],
     "availability": "exotic"
   },
   {
@@ -535,7 +680,11 @@
     "enc": 3,
     "reach": "Average",
     "damage": "+SB+5",
-    "qualities": ["Damaging", "Impale", "Slow"],
+    "qualities": [
+      "Damaging",
+      "Impale",
+      "Slow"
+    ],
     "availability": "common"
   },
   {
@@ -546,7 +695,11 @@
     "enc": 3,
     "reach": "Average",
     "damage": "+SB+6",
-    "qualities": ["Damaging", "Pummel", "Slow"],
+    "qualities": [
+      "Damaging",
+      "Pummel",
+      "Slow"
+    ],
     "availability": "common"
   },
   {
@@ -557,7 +710,10 @@
     "enc": 3,
     "reach": "Long",
     "damage": "+SB+5",
-    "qualities": ["Damaging", "Hack"],
+    "qualities": [
+      "Damaging",
+      "Hack"
+    ],
     "availability": "scarce"
   },
   {
@@ -568,7 +724,13 @@
     "enc": 1,
     "reach": "20",
     "damage": "+8",
-    "qualities": ["Blast 3", "Dangerous", "Reload 2", "Damaging", "Blackpowder"],
+    "qualities": [
+      "Blast 3",
+      "Dangerous",
+      "Reload 2",
+      "Damaging",
+      "Blackpowder"
+    ],
     "availability": "scarce"
   },
   {
@@ -579,7 +741,13 @@
     "enc": 3,
     "reach": "100",
     "damage": "+9",
-    "qualities": ["Accurate", "Precise", "Reload 4", "Damaging", "Blackpowder"],
+    "qualities": [
+      "Accurate",
+      "Precise",
+      "Reload 4",
+      "Damaging",
+      "Blackpowder"
+    ],
     "availability": "exotic"
   },
   {
@@ -590,7 +758,12 @@
     "enc": 2,
     "reach": "50",
     "damage": "+9",
-    "qualities": ["Dangerous", "Reload 3", "Damaging", "Blackpowder"],
+    "qualities": [
+      "Dangerous",
+      "Reload 3",
+      "Damaging",
+      "Blackpowder"
+    ],
     "availability": "scarce"
   },
   {
@@ -601,7 +774,12 @@
     "enc": 0,
     "reach": "20",
     "damage": "+8",
-    "qualities": ["Pistol", "Reload 1", "Damaging", "Blackpowder"],
+    "qualities": [
+      "Pistol",
+      "Reload 1",
+      "Damaging",
+      "Blackpowder"
+    ],
     "availability": "rare"
   },
   {
@@ -612,7 +790,10 @@
     "enc": 2,
     "reach": "150",
     "damage": "+SB+4",
-    "qualities": ["Damaging", "Precise"],
+    "qualities": [
+      "Damaging",
+      "Precise"
+    ],
     "availability": "exotic"
   },
   {
@@ -623,7 +804,9 @@
     "enc": 3,
     "reach": "100",
     "damage": "+SB+4",
-    "qualities": ["Damaging"],
+    "qualities": [
+      "Damaging"
+    ],
     "availability": "scarce"
   },
   {
@@ -656,7 +839,9 @@
     "enc": 0,
     "reach": "10",
     "damage": "+7",
-    "qualities": ["Pistol"],
+    "qualities": [
+      "Pistol"
+    ],
     "availability": "scarce"
   },
   {
@@ -667,7 +852,10 @@
     "enc": 3,
     "reach": "100",
     "damage": "+9",
-    "qualities": ["Damaging", "Reload 2"],
+    "qualities": [
+      "Damaging",
+      "Reload 2"
+    ],
     "availability": "rare"
   },
   {
@@ -678,7 +866,9 @@
     "enc": 2,
     "reach": "60",
     "damage": "+9",
-    "qualities": ["Reload 1"],
+    "qualities": [
+      "Reload 1"
+    ],
     "availability": "common"
   },
   {
@@ -689,7 +879,13 @@
     "enc": 3,
     "reach": "30",
     "damage": "+9",
-    "qualities": ["Dangerous", "Reload 5", "Repeater 4", "Damaging", "Blackpowder"],
+    "qualities": [
+      "Dangerous",
+      "Reload 5",
+      "Repeater 4",
+      "Damaging",
+      "Blackpowder"
+    ],
     "availability": "rare"
   },
   {
@@ -700,7 +896,13 @@
     "enc": 1,
     "reach": "10",
     "damage": "+8",
-    "qualities": ["Dangerous", "Reload 4", "Repeater 4", "Damaging", "Blackpowder"],
+    "qualities": [
+      "Dangerous",
+      "Reload 4",
+      "Repeater 4",
+      "Damaging",
+      "Blackpowder"
+    ],
     "availability": "rare"
   },
   {
@@ -711,7 +913,9 @@
     "enc": 0,
     "reach": "SBx2",
     "damage": "—",
-    "qualities": ["Entangle"],
+    "qualities": [
+      "Entangle"
+    ],
     "availability": "common"
   },
   {
@@ -722,7 +926,9 @@
     "enc": 0,
     "reach": "6",
     "damage": "+SB+2",
-    "qualities": ["Entangle"],
+    "qualities": [
+      "Entangle"
+    ],
     "availability": "common"
   },
   {
@@ -733,7 +939,11 @@
     "enc": 0,
     "reach": "SB",
     "damage": "+12",
-    "qualities": ["Blast 5", "Dangerous", "Impact"],
+    "qualities": [
+      "Blast 5",
+      "Dangerous",
+      "Impact"
+    ],
     "availability": "rare"
   },
   {
@@ -744,8 +954,63 @@
     "enc": 0,
     "reach": "SB",
     "damage": "Special***",
-    "qualities": ["Blast 4", "Dangerous"],
+    "qualities": [
+      "Blast 4",
+      "Dangerous"
+    ],
     "availability": "scarce"
+  },
+  {
+    "id": "weapon_skaven-ranged_warplock_pistol",
+    "name": "Warplock Pistol",
+    "group": "skaven-ranged",
+    "price": "0",
+    "enc": 1,
+    "reach": "30",
+    "damage": "+8",
+    "qualities": [
+      "Damaging",
+      "Dangerous",
+      "Penetrating",
+      "Pistol",
+      "Reload 1",
+      "Warpstone"
+    ],
+    "availability": "none"
+  },
+  {
+    "id": "weapon_skaven-ranged_warpmusket",
+    "name": "Warpmusket",
+    "group": "skaven-ranged",
+    "price": "0",
+    "enc": 1,
+    "reach": "40",
+    "damage": "+9",
+    "qualities": [
+      "Damaging",
+      "Dangerous",
+      "Penetrating",
+      "Reload 3",
+      "Warpstone"
+    ],
+    "availability": "common"
+  },
+  {
+    "id": "weapon_skaven-ranged_warplock_jezzail",
+    "name": "Warplock Jezzail",
+    "group": "skaven-ranged",
+    "price": "0",
+    "enc": 4,
+    "reach": "100",
+    "damage": "+12",
+    "qualities": [
+      "Damaging",
+      "Dangerous",
+      "Penetrating",
+      "Reload 3",
+      "Warpstone"
+    ],
+    "availability": "common"
   },
   {
     "id": "weapon_sling_sling",
@@ -777,7 +1042,9 @@
     "enc": 0,
     "reach": "SBx3",
     "damage": "+SB",
-    "qualities": ["Entangle"],
+    "qualities": [
+      "Entangle"
+    ],
     "availability": "rare"
   },
   {
@@ -788,7 +1055,9 @@
     "enc": 0,
     "reach": "SBx2",
     "damage": "+SB+1",
-    "qualities": ["Impale"],
+    "qualities": [
+      "Impale"
+    ],
     "availability": "scarce"
   },
   {
@@ -799,7 +1068,9 @@
     "enc": 1,
     "reach": "SBx3",
     "damage": "+SB+3",
-    "qualities": ["Impale"],
+    "qualities": [
+      "Impale"
+    ],
     "availability": "scarce"
   },
   {
@@ -821,7 +1092,9 @@
     "enc": 1,
     "reach": "SBx2",
     "damage": "+SB+3",
-    "qualities": ["Hack"],
+    "qualities": [
+      "Hack"
+    ],
     "availability": "common"
   },
   {
