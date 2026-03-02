@@ -28,6 +28,7 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [selectedTrackIds, setSelectedTrackIds] = useState<Set<string>>(new Set());
+    const [playlistId, setPlaylistId] = useState<string | null>(null);
     const [selectedPlaylistId, setSelectedPlaylistId] = useState<string | null>(null);
     const [showTagModal, setShowTagModal] = useState(false);
     const [showPlaylistModal, setShowPlaylistModal] = useState<'create' | 'edit' | null>(null);
@@ -79,6 +80,12 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                 t.tags.some(tag => tag.toLowerCase().includes(term))
             );
         }
+        tracks = tracks.sort((a, b) => {
+            const nameA = a.displayName || a.filename;
+            const nameB = b.displayName || b.filename;
+            return nameA.localeCompare(nameB);
+        }
+        );
 
         return tracks;
     }, [library.tracks, library.playlists, selectedPlaylistId, selectedTags, searchTerm]);
@@ -309,11 +316,20 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                                 >
                                     🏷️ {t('audio.addTags', 'Add Tags')}
                                 </button>
+                                <select
+                                    className={styles.playlistSelect}
+                                    value={playlistId || ''}
+                                    onChange={(e) => setPlaylistId(e.target.value || null)}
+                                >
+                                    <option value="">{t('audio.selectPlaylist', 'Select Playlist')}</option>
+                                    {library.playlists.map(p => (
+                                        <option key={p.id} value={p.id}>{p.name}</option>
+                                    ))}
+                                </select>
                                 <button
                                     className={styles.bulkButton}
-                                    disabled={selectedTrackIds.size === 0 || library.playlists.length === 0}
+                                    disabled={selectedTrackIds.size === 0 || playlistId === null}
                                     onClick={() => {
-                                        const playlistId = library.playlists[0]?.id;
                                         if (playlistId) handleAddToPlaylist(playlistId);
                                     }}
                                 >
@@ -426,7 +442,7 @@ export const LibraryManager: React.FC<LibraryManagerProps> = ({ onClose }) => {
                             )}
                         </div>
 
-                        
+
 
                         {/* Footer */}
                         <div className={styles.footer}>

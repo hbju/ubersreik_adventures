@@ -98,6 +98,7 @@ export interface Talent {
 export interface TalentEffect {
     type:
     'SL_BONUS_ON_SUCCESS' |
+    'SL_BONUS' |
     'WOUNDS_BONUS' |
     'ENCUMBRANCE_BONUS' |
     'TEST_BONUS' |

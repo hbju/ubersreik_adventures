@@ -4153,7 +4153,7 @@
     {
         "id": "reversal",
         "name": "Reversal",
-        "description": "You are used to desperate combats, able to turn even the direst circumstances to your Advantage. If you win an Opposed Melee Test, instead of gaining +1 Advantage, you may take all your opponent’s Current Advantage. If you do this, you do not cause any Damage, even if it is your Turn in the Round.",
+        "description": "You are used to desperate combats, able to turn even the direst circumstances to your advantage. If you win an Opposed Melee Test, instead of gaining +1 Advantage, you may take 1 Advantage from the opposing Advantage Pool and add it to your own. If you do this, you do not cause any Damage, even if it is your Turn in the Round.",
         "tests": [
             "Melee when defending"
         ],
@@ -4833,7 +4833,7 @@
     {
         "id": "shieldsman",
         "name": "Shieldsman",
-        "description": "You are skilled at using your shield to maneuver others in combat so you can take advantage of a desperate situation. When using a Shield to defend, you gain Advantage equal to the number of levels you have in Shieldsman if you lose the Opposed Test.",
+        "description": "You are skilled at using your shield to manoeuvre others in combat so you can take advantage of a desperate situation. When using a Shield to defend, once per turn, you may spend 2 Advantage to either cause Damage when you are attacked as if it were your Action or to push your opponent 2 yards directly back from yourself and no longer count as engaged. ",
         "tests": [
             "Any Test to defend with a shield"
         ],
@@ -4860,10 +4860,11 @@
             },
             {
                 "type": "PASSIVE",
-                "value": "Gain Advantage equal to Shieldsman level on lost Opposed Test",
+                "value": "Spend 2 Advantage to cause Damage or push opponent when defending with a shield",
                 "appliesTo": [
-                    "defend_with_shield"
-                ]
+                    "melee"
+                ],
+                "condition": "defending with a shield"
             }
         ]
     },
@@ -5287,7 +5288,7 @@
     {
         "id": "strike-to-injure",
         "name": "Strike to Injure",
-        "description": "You are an expert at striking your enemies most vulnerable areas. You inflict your level of Strike to Injure in additional Wounds when you cause a Critical Wound.",
+        "description": "You are an expert in striking your enemies most vulnerable areas. When rolling on a Critical Damage table, make two rolls and choose which result you prefer.",
         "tests": [],
         "max_ranks": "i",
         "careers": {
@@ -5304,10 +5305,10 @@
         "racial": [],
         "effects": [
             {
-                "type": "WOUNDS_BONUS_ON_CRITICAL",
-                "value": 1,
+                "type": "CRITICAL_DAMAGE_TABLE_ROLL_MODIFIER",
+                "value": "Roll twice and choose the result",
                 "appliesTo": [
-                    "melee"
+                    "critical_damage"
                 ]
             }
         ]

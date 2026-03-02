@@ -42,7 +42,7 @@ export function SkillCodexDisplay({ data }: SkillCodexDisplayProps) {
       </p>
 
       <h3>Type</h3>
-      <p>{skill.classification === 'advanced' ? 'Advanced Skill — must be trained before use' : 'Basic Skill — can be attempted untrained at half characteristic value'}</p>
+      <p>{skill.classification === 'advanced' ? 'Advanced Skill — must be trained before use' : 'Basic Skill — can be attempted untrained at base characteristic value'}</p>
     </div>
   );
 }

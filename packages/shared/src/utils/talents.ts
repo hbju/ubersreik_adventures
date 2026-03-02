@@ -107,22 +107,40 @@ export function applyTalentSLBonuses(
     talents: Talent[],
     character?: Character
 ): number {
-    // Only apply bonuses to successful tests
-    if (baseSL < 0) {
-        return baseSL;
-    }
-
     let finalSL = baseSL;
 
     for (const { name, rank } of usedTalents) {
-        // Find the talent definition by name
+
         const talentDef = talents.find(t => t.name === name || t.id === name);
         if (!talentDef || !talentDef.effects) continue;
 
-        // Check for SL bonus effects
+
+        for (const effect of talentDef.effects) {
+            if (effect.type === 'SL_BONUS') {
+                if (effect.condition && character) {
+                    // Evaluate condition (placeholder for future complex conditions)
+                    // For now, do nothing
+                }
+
+                if (typeof effect.value === 'number') {
+                    finalSL += effect.value * rank;
+                }
+            }
+        }
+    }
+
+    if (finalSL < 0) {
+        return finalSL;
+    }
+
+
+    for (const { name, rank } of usedTalents) {
+        const talentDef = talents.find(t => t.name === name || t.id === name);
+        if (!talentDef || !talentDef.effects) continue;
+
         for (const effect of talentDef.effects) {
             if (effect.type === 'SL_BONUS_ON_SUCCESS') {
-                // Check conditions if any
+
                 if (effect.condition && character) {
                     // Evaluate condition (placeholder for future complex conditions)
                     // For now, do nothing
@@ -168,7 +186,7 @@ export function getTalentTestBonus(character: Character, testName: string, talen
  * @param attackType Either "ranged" or "melee"
  * @returns The total damage bonus from all applicable talents
  */
-export function getTalentDamageBonus(talents: { name: string; rank: number }[], skillId: string, talentsData : Talent[]): number {
+export function getTalentDamageBonus(talents: { name: string; rank: number }[], skillId: string, talentsData: Talent[]): number {
     let bonus = 0;
     for (const { name, rank } of talents) {
         const talentDef = talentsData.find(t => t.name === name);
@@ -199,7 +217,7 @@ export function calculateEffectiveMaxEncumbrance(character: Character, talents: 
         + calculateTalentBonus(character, 'ENCUMBRANCE_BONUS', talents);
 }
 
-function calculateTalentBonus(character: Character, talentType : string, talents: Talent[]): number {
+function calculateTalentBonus(character: Character, talentType: string, talents: Talent[]): number {
     let bonus = 0;
     const characterTalentIds = Object.keys(character.talents);
 

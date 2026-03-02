@@ -249,7 +249,7 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
                                 <strong>{formatSL(rollResult.baseSL)}</strong>
                             </div>
 
-                            {selectedTalents.length > 0 && rollResult.baseSL >= 0 && (
+                            {selectedTalents.length > 0 && rollResult.finalSL >= 0 && (
                                 <>
                                     <div className={styles.talentsUsed}>
                                         <span className={styles.talentsLabel}>Talents Used:</span>
@@ -266,9 +266,9 @@ export const TalentSelectionModal: React.FC<TalentSelectionModalProps> = ({
                                 </>
                             )}
 
-                            {rollResult.baseSL < 0 && (
+                            {rollResult.finalSL < 0 && (
                                 <div className={styles.failureNote}>
-                                    (Talents only apply on successful tests)
+                                    (Some Talents only apply on successful tests)
                                 </div>
                             )}
                         </div>

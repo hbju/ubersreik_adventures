@@ -236,7 +236,9 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                         <div>
                             <div className="header-field">
                                 <span className="header-label">Career:</span>
-                                <span className="header-value">{career?.name || '—'}</span>
+                                <CodexPopupTrigger lookupId={`career:${career?.id}`}>
+                                    <span className="header-value">{career?.name || '—'}</span>
+                                </CodexPopupTrigger>
                             </div>
                             <div className="header-field">
                                 <span className="header-label">Level:</span>
@@ -322,8 +324,8 @@ const PlayerCharacterSheet: React.FC<PlayerCharacterSheetProps> = ({
                         </div>
                     )}
                     {onMinionViewClick && (
-                        <button 
-                            className="minion-view-button" 
+                        <button
+                            className="minion-view-button"
                             onClick={onMinionViewClick}
                             title="Switch to Minion View"
                         >

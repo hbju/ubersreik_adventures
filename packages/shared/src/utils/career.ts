@@ -81,17 +81,19 @@ export function hasCompletedCurrentLevel(
         const characteristic = character.characteristics[charKey];
         return characteristic && characteristic.advances >= requiredAdvances;
     });
-
     if (!characteristicsComplete) return false;
 
     // Check skills - at least 8 must be at required level
     let completedSkills = 0;
     allAdvancements.skills.forEach(skillId => {
         const skill = character.skills.find(s => s.id === skillId);
+        console.log(`Checking skill ${skillId}: advances = ${skill?.advances}, required = ${requiredAdvances}`);
         if (skill && skill.advances >= requiredAdvances) {
             completedSkills++;
         }
     });
+
+    console.log(`Completed skills: ${completedSkills} / ${allAdvancements.skills.length}`);
 
     if (completedSkills < 8) return false;
 
@@ -99,6 +101,7 @@ export function hasCompletedCurrentLevel(
     const hasTalent = currentLevel.talent_ids.some(talentId => {
         return character.talents[talentId] && character.talents[talentId] > 0;
     });
+
 
     return hasTalent;
 }

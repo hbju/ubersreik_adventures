@@ -784,7 +784,7 @@ const PlayerApp: React.FC = () => {
                     )}
                     {canChangeCareer && (
                         <button
-                            onClick={() => setIsCareerChangeModalOpen(true)} className='advanceControlButton' style={{ background: '#2d5016', borderColor: '#3d6f1f' }}>
+                            onClick={() => setIsCareerChangeModalOpen(true)} className='advanceControlButton' style={{ background: '#2d5016', borderColor: '#3d6f1f', bottom: '17%' }}>
                             Change Career
                         </button>
                     )}
@@ -1039,7 +1039,7 @@ const PlayerApp: React.FC = () => {
                     corruptionCurrent={character.status.corruption.current}
                     corruptionMax={character.status.corruption.max}
                     onClose={() => setTestModalInfo(null)}
-                    onRoll={handleRoll}
+                    onRoll={handleDefenseRollComplete}
                 />
             )}
 
@@ -1075,7 +1075,7 @@ const PlayerApp: React.FC = () => {
                 <ActionBar
                     character={character}
                     onCharacterUpdate={handleEditModeCharacterUpdate}
-                    onSkillExecute={handleSkillClick}
+                    onSkillExecute={handleDefendRoll}
                     onWeaponExecute={handleWeaponRoll}
                     onCharacteristicExecute={handleCharacteristicClick}
                 />
