@@ -230,7 +230,7 @@ export const PlayerTimeline: React.FC<PlayerTimelineProps> = ({
                     const daysAway = daysBetween(currentDate, event.date);
                     const daysLabel = daysAway === 0 ? 'Today'
                       : daysAway === 1 ? 'Tomorrow'
-                      : `${daysAway} days`;
+                        : `${daysAway} days`;
 
                     return (
                       <div
@@ -282,11 +282,18 @@ export const PlayerTimeline: React.FC<PlayerTimelineProps> = ({
             {/* Personal Notes Panel (shown when a date is selected) */}
             {selectedDate && (
               <div className={styles.noteSection}>
+                {events.filter(e => datesEqual(e.date, selectedDate)).length === 0 ? (
+                  <div className={styles.noEvents}>No events for this day.</div>
+                ) : (
+                  events.filter(e => datesEqual(e.date, selectedDate)).map(event => (
+                    <div key={event.id} className={styles.eventDetail}>
+                      <h5>{event.title}</h5>
+                    </div>
+                  ))
+                )}
+
                 <div className={styles.noteHeader}>
                   <h4>📝 Personal Notes</h4>
-                </div>
-                <div className={styles.noteDate}>
-                  {formatDate(selectedDate, true)}
                 </div>
 
                 {/* Existing notes for this date */}
