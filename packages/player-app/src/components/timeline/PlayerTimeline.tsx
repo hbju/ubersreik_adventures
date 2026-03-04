@@ -282,15 +282,13 @@ export const PlayerTimeline: React.FC<PlayerTimelineProps> = ({
             {/* Personal Notes Panel (shown when a date is selected) */}
             {selectedDate && (
               <div className={styles.noteSection}>
-                {events.filter(e => datesEqual(e.date, selectedDate)).length === 0 ? (
-                  <div className={styles.noEvents}>No events for this day.</div>
-                ) : (
-                  events.filter(e => datesEqual(e.date, selectedDate)).map(event => (
-                    <div key={event.id} className={styles.eventDetail}>
-                      <h5>{event.title}</h5>
-                    </div>
-                  ))
-                )}
+                {events.filter(e => datesEqual(e.date, selectedDate)).length !== 0 
+                && events.filter(e => datesEqual(e.date, selectedDate)).map(event => (
+                  <div key={event.id} className={styles.eventDetail}>
+                    <h5>{event.title}</h5>
+                  </div>
+                ))
+                }
 
                 <div className={styles.noteHeader}>
                   <h4>📝 Personal Notes</h4>
