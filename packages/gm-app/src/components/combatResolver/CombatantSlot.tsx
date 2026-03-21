@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './CombatantSlot.module.css';
-import { QueuedRoll, Character, Combatant } from '@wfrp/shared';
+import { QueuedRoll, Character, Combatant, Talent } from '@wfrp/shared';
 
 interface AssignedRoll {
     characterId: string;
@@ -20,8 +20,13 @@ interface CombatantSlotProps {
     assignedRoll: AssignedRoll | null;
     characters: Character[];
     combatants: Combatant[];
+    fudge?: number;
+    applicableTalents?: Array<{ talent: Talent; rank: number }>;
     onClear: () => void;
     onNpcRoll: (characterId: string, skillId: string, weaponId?: string) => void;
+    onChangeSuccessLevel?: (newSL: number) => void;
+    onChangeFudge?: (newFudge: number) => void;
+    onToggleNpcTalent?: (talentName: string, rank: number) => void;
 }
 
 export const CombatantSlot: React.FC<CombatantSlotProps> = ({
@@ -29,8 +34,12 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
     assignedRoll,
     characters,
     combatants,
+    fudge = 0,
+    applicableTalents = [],
     onClear,
-    onNpcRoll
+    onNpcRoll,
+    onChangeFudge,
+    onToggleNpcTalent
 }) => {
     const [selectedNpcId, setSelectedNpcId] = React.useState<string>('');
 
@@ -66,7 +75,9 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
     const selectedNpc = npcs.find(n => n.id === selectedNpcId);
 
     if (assignedRoll) {
-        const slSign = assignedRoll.successLevel >= 0 ? '+' : '';
+        const rolledSL = assignedRoll.successLevel;
+        const totalSL = rolledSL + fudge;
+        const slSign = totalSL >= 0 ? '+' : '';
         return (
             <div className={`${styles.slot} ${roleClass} ${styles.filled}`}>
                 <div className={styles.header}>
@@ -100,9 +111,58 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
                             </div>
                         )
                     }
-                    <div className={`${styles.successLevel} ${assignedRoll.successLevel >= 0 ? styles.success : styles.failure}`}>
-                        SL: {slSign}{Math.round(assignedRoll.successLevel)}
+                    <div className={`${styles.successLevel} ${totalSL >= 0 ? styles.success : styles.failure}`}>
+                    SL {slSign}{totalSL}
                     </div>
+                    {onChangeFudge && (
+                        <div className={styles.fudgeControls}>
+                            <span className={styles.fudgeLabel}>GM Modifier:</span>
+                            <button
+                                className={styles.fudgeBtn}
+                                onClick={() => onChangeFudge(fudge - 1)}
+                            >−</button>
+                            <span className={`${styles.fudgeValue} ${fudge !== 0 ? styles.fudgeActive : ''}`}>
+                                {fudge >= 0 ? '+' : ''}{fudge}
+                            </span>
+                            <button
+                                className={styles.fudgeBtn}
+                                onClick={() => onChangeFudge(fudge + 1)}
+                            >+</button>
+                            <button
+                                className={styles.fudgeResetBtn}
+                                onClick={() => onChangeFudge(0)}
+                                title="Reset modifier"
+                            >↺</button>
+                        </div>
+                    )}
+                    {assignedRoll.isNpc && applicableTalents.length > 0 && onToggleNpcTalent && (
+                        <div className={styles.npcTalentSection}>
+                            <span className={styles.npcTalentLabel}>Applicable Talents:</span>
+                            {applicableTalents.map(({ talent, rank }) => {
+                                const isChecked = (assignedRoll.usedTalents || []).some(t => t.name === talent.name);
+                                const effectSummary = talent.effects
+                                    ?.map(e => {
+                                        const val = typeof e.value === 'number' ? e.value * rank : e.value;
+                                        return `${e.type.replace(/_/g, ' ')}: ${val}`;
+                                    })
+                                    .join(', ');
+                                return (
+                                    <label key={talent.id} className={styles.npcTalentCheckbox}>
+                                        <input
+                                            type="checkbox"
+                                            checked={isChecked}
+                                            onChange={() => onToggleNpcTalent(talent.name, rank)}
+                                        />
+                                        <span className={styles.npcTalentName}>{talent.name}</span>
+                                        <span className={styles.npcTalentRank}>×{rank}</span>
+                                        {effectSummary && (
+                                            <span className={styles.npcTalentEffect}>{effectSummary}</span>
+                                        )}
+                                    </label>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </div>
         );

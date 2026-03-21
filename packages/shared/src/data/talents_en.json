@@ -4130,7 +4130,7 @@
         "name": "Resolute",
         "description": "You launch into attacks with grim determination. Add your level of Resolute to your Strength Bonus when you Charge.",
         "tests": [],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Badger Rider": "3",
             "Rhinox Herder": "3",
@@ -4485,7 +4485,7 @@
         "tests": [
             "Climb"
         ],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Ghost Strider": "2",
             "Karak Ranger": "2",
@@ -4837,7 +4837,7 @@
         "tests": [
             "Any Test to defend with a shield"
         ],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Guard": "2",
             "Ironbreaker": "2",
@@ -5038,7 +5038,7 @@
         "tests": [
             "Athletics Tests concerning Running"
         ],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Bounty Hunter": "3",
             "Messenger": "1",
@@ -5427,7 +5427,7 @@
         "name": "Strong Legs",
         "description": "You have strong legs able to carry you great distances when you jump. Add your Strong Legs level to your SL in any Athletics Tests involving Leaping (see page 166).",
         "tests": [],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Karak Ranger": "3",
             "Owler": "3",
@@ -5497,7 +5497,7 @@
         "tests": [
             "Swim"
         ],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Beachcomber": "1",
             "Boatman": "1",
@@ -5536,7 +5536,7 @@
         "tests": [
             "Strength Tests when lifting"
         ],
-        "max_ranks": "sus",
+        "max_ranks": "s",
         "careers": {
             "Artisan": "2",
             "Camp Follower": "3",

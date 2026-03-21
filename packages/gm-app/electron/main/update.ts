@@ -42,7 +42,7 @@ export function update(win: Electron.BrowserWindow) {
 
   // Start downloading and feedback on progress
   ipcMain.handle('start-download', (event: Electron.IpcMainInvokeEvent) => {
-    startDownload(
+    const stopDownload = startDownload(
       (error, progressInfo) => {
         if (error) {
           // feedback download error message
@@ -57,12 +57,21 @@ export function update(win: Electron.BrowserWindow) {
         event.sender.send('update-downloaded')
       }
     )
+
+    // Return a function to stop listening to download events
+    return stopDownload
   })
 
   // Install now
   ipcMain.handle('quit-and-install', () => {
     autoUpdater.quitAndInstall(false, true)
   })
+
+  return () => {
+    autoUpdater.removeAllListeners('checking-for-update')
+    autoUpdater.removeAllListeners('update-available')
+    autoUpdater.removeAllListeners('update-not-available')
+  }
 }
 
 function startDownload(
@@ -73,4 +82,10 @@ function startDownload(
   autoUpdater.on('error', (error: Error) => callback(error, null))
   autoUpdater.on('update-downloaded', complete)
   autoUpdater.downloadUpdate()
+
+  return () => {
+    autoUpdater.removeAllListeners('download-progress')
+    autoUpdater.removeAllListeners('error')
+    autoUpdater.removeAllListeners('update-downloaded')
+  }
 }

@@ -226,3 +226,143 @@
     border-radius: 4px;
     color: var(--color-parchment);
 }
+
+/* Fudge Controls */
+.fudgeControls {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 4px;
+}
+
+.fudgeLabel {
+    font-size: 0.7rem;
+    color: var(--color-gold-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 0.2rem;
+}
+
+.fudgeBtn {
+    width: 1.6rem;
+    height: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    background: linear-gradient(to bottom, rgba(90, 61, 31, 0.8), rgba(60, 40, 20, 0.8));
+    border: 1px solid var(--color-gold-dark);
+    border-radius: 3px;
+    color: var(--color-parchment);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+.fudgeBtn:hover {
+    background: linear-gradient(to bottom, rgba(110, 80, 40, 0.9), rgba(80, 55, 30, 0.9));
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+}
+
+.fudgeValue {
+    min-width: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--color-parchment-dark);
+}
+
+.fudgeActive {
+    color: var(--color-gold);
+}
+
+.fudgeResetBtn {
+    width: 1.6rem;
+    height: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    background: none;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 3px;
+    color: var(--color-gold-dark);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: all 0.15s ease;
+}
+
+.fudgeResetBtn:hover {
+    color: var(--color-parchment);
+    border-color: var(--color-gold);
+}
+
+/* NPC Talent Selection */
+.npcTalentSection {
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.npcTalentLabel {
+    font-size: 0.7rem;
+    color: var(--color-gold-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+    margin-bottom: 0.15rem;
+}
+
+.npcTalentCheckbox {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.4rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.npcTalentCheckbox:hover {
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.npcTalentCheckbox input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    accent-color: var(--color-gold);
+    flex-shrink: 0;
+}
+
+.npcTalentName {
+    font-size: 0.8rem;
+    color: var(--color-parchment);
+    font-weight: 600;
+}
+
+.npcTalentRank {
+    font-size: 0.7rem;
+    color: var(--color-gold);
+    font-weight: bold;
+}
+
+.npcTalentEffect {
+    font-size: 0.65rem;
+    color: var(--color-parchment-dark);
+    font-style: italic;
+    margin-left: auto;
+}

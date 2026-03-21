@@ -111,9 +111,16 @@ async function createWindow() {
   })
 
   // Auto update
-  update(win)
+  const stopUpdate = update(win)
 
   startWebSocketServer(win);
+
+  // Clean up listeners when the window is closed
+  win.on('closed', () => {
+    stopUpdate();
+    stopAudioServer();
+    win = null
+  })
 }
 
 app.whenReady().then(async () => {
@@ -264,7 +271,7 @@ ipcMain.handle('get-chat-history', async () => {
  * Return the audio server port
  * */
 ipcMain.handle('get-audio-server-port', () => {
-    return getAudioServerPort();
+  return getAudioServerPort();
 });
 
 /**

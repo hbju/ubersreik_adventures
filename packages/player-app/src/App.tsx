@@ -182,14 +182,14 @@ const PlayerApp: React.FC = () => {
 
     // Handle the actual defense roll after talent selection
     const handleDefenseRollComplete = (result: TestResultMessage['payload']) => {
-        if (!character || !defenseRollInfo) return;
+        if (!character) return;
 
         const message: RollWithIntentMessage = {
             type: 'ROLL_WITH_INTENT',
             payload: {
                 characterId: character.id,
                 characterName: character.name,
-                skillId: defenseRollInfo.skillId,
+                skillId: defenseRollInfo?.skillId || '',
                 skillName: result.testName,
                 targetNumber: result.targetNumber,
                 rollResult: result.rollResult,
@@ -199,6 +199,7 @@ const PlayerApp: React.FC = () => {
                 corruptionGained: result.corruptionGained,
             }
         };
+
         sendMessage(message);
         setDefenseRollInfo(null);
     };

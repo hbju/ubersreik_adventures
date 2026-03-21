@@ -23,6 +23,7 @@ import {
     applyTalentSLBonuses,
     useGameData,
     Weapon,
+    Talent,
     QueuedRoll,
     normalizeArmorLocations,
 } from '@wfrp/shared';
@@ -98,6 +99,14 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     // State for assigned rolls (async mode)
     const [attackerRoll, setAttackerRoll] = useState<AssignedRoll | null>(null);
     const [defenderRoll, setDefenderRoll] = useState<AssignedRoll | null>(null);
+
+    // SL fudge adjustments
+    const [attackerFudge, setAttackerFudge] = useState<number>(0);
+    const [defenderFudge, setDefenderFudge] = useState<number>(0);
+
+    // Applicable talents for NPC rolls (computed after roll, togglable by GM)
+    const [attackerApplicableTalents, setAttackerApplicableTalents] = useState<Array<{ talent: Talent; rank: number }>>([]);
+    const [defenderApplicableTalents, setDefenderApplicableTalents] = useState<Array<{ talent: Talent; rank: number }>>([]);
 
     // Toggle between combat (with damage) and skill (SL comparison only)
     const [isCombatMode, setIsCombatMode] = useState(true);
@@ -239,10 +248,15 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             isNpc: true,
         };
 
+        // Compute applicable talents for NPC
+        const applicable = getApplicableTalents(character, skillId, talents);
+
         if (role === 'attacker') {
             setAttackerRoll(assignedRoll);
+            setAttackerApplicableTalents(applicable);
         } else {
             setDefenderRoll(assignedRoll);
+            setDefenderApplicableTalents(applicable);
         }
 
         const slSign = sl >= 0 ? '+' : '';
@@ -253,8 +267,10 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     useEffect(() => {
         if (!attackerRoll || !defenderRoll) return;
 
-        const attackerSL = Math.round(attackerRoll.successLevel);
-        const defenderSL = Math.round(defenderRoll.successLevel);
+        const baseAttackerSL = Math.round(attackerRoll.successLevel);
+        const baseDefenderSL = Math.round(defenderRoll.successLevel);
+        const attackerSL = baseAttackerSL + attackerFudge;
+        const defenderSL = baseDefenderSL + defenderFudge;
 
         // Check for criticals and fumbles
         const attackerCriticalCheck = checkCriticalResult(attackerRoll.rollResult, attackerRoll.targetNumber);
@@ -318,7 +334,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         });
 
         onLogEntry('info', outcomeMessage);
-    }, [attackerRoll, defenderRoll, isCombatMode]);
+    }, [attackerRoll, defenderRoll, isCombatMode, attackerFudge, defenderFudge]);
 
     const handleApplyDamage = () => {
         if (!result || !defenderRoll || result.damageDealt === undefined) {
@@ -362,7 +378,10 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 }
             }
 
-            onLogEntry('system', `${result.damageDealt} damage applied to ${defenderRoll.characterName} (${newWounds} wounds remaining)`);
+            const fudgeNote = (attackerFudge !== 0 || defenderFudge !== 0)
+                ? ` [GM adjusted: ATK SL ${attackerFudge >= 0 ? '+' : ''}${attackerFudge}, DEF SL ${defenderFudge >= 0 ? '+' : ''}${defenderFudge}]`
+                : '';
+            onLogEntry('system', `${result.damageDealt} damage applied to ${defenderRoll.characterName} (${newWounds} wounds remaining)${fudgeNote}`);
         }
 
         // Grant advantage to attacker if they won (dealt damage)
@@ -378,10 +397,47 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         handleDiscardResult();
     };
 
+    // Handle NPC talent toggle: recalculate SL with selected talents
+    const handleToggleNpcTalent = (role: 'attacker' | 'defender', talentName: string, rank: number) => {
+        const roll = role === 'attacker' ? attackerRoll : defenderRoll;
+        if (!roll || !roll.isNpc) return;
+
+        const currentTalents = roll.usedTalents || [];
+        const isAlreadyUsed = currentTalents.some(t => t.name === talentName);
+
+        let newUsedTalents: { name: string; rank: number }[];
+        if (isAlreadyUsed) {
+            newUsedTalents = currentTalents.filter(t => t.name !== talentName);
+        } else {
+            newUsedTalents = [...currentTalents, { name: talentName, rank }];
+        }
+
+        // Recalculate SL: start from the base roll SL (before any talent bonuses)
+        const character = characters.find(c => c.id === roll.characterId);
+        const baseSL = calculateSuccessLevel(roll.rollResult, roll.targetNumber);
+        const newSL = applyTalentSLBonuses(baseSL, newUsedTalents, talents, character);
+
+        const updatedRoll: AssignedRoll = {
+            ...roll,
+            successLevel: newSL,
+            usedTalents: newUsedTalents,
+        };
+
+        if (role === 'attacker') {
+            setAttackerRoll(updatedRoll);
+        } else {
+            setDefenderRoll(updatedRoll);
+        }
+    };
+
     const handleDiscardResult = () => {
         setResult(null);
         setAttackerRoll(null);
         setDefenderRoll(null);
+        setAttackerFudge(0);
+        setDefenderFudge(0);
+        setAttackerApplicableTalents([]);
+        setDefenderApplicableTalents([]);
     };
 
     return (
@@ -408,8 +464,12 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                     assignedRoll={attackerRoll}
                     characters={characters}
                     combatants={combatants}
-                    onClear={() => setAttackerRoll(null)}
+                    fudge={attackerFudge}
+                    applicableTalents={attackerApplicableTalents}
+                    onClear={() => { setAttackerRoll(null); setAttackerFudge(0); setAttackerApplicableTalents([]); }}
                     onNpcRoll={(charId, skillId, weaponId) => handleNpcRoll('attacker', charId, skillId, weaponId)}
+                    onChangeFudge={setAttackerFudge}
+                    onToggleNpcTalent={(talentName, rank) => handleToggleNpcTalent('attacker', talentName, rank)}
                 />
 
                 <div className={styles.vsLabel}>VS</div>
@@ -419,8 +479,12 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                     assignedRoll={defenderRoll}
                     characters={characters}
                     combatants={combatants}
-                    onClear={() => setDefenderRoll(null)}
+                    fudge={defenderFudge}
+                    applicableTalents={defenderApplicableTalents}
+                    onClear={() => { setDefenderRoll(null); setDefenderFudge(0); setDefenderApplicableTalents([]); }}
                     onNpcRoll={(charId, skillId, weaponId) => handleNpcRoll('defender', charId, skillId, weaponId)}
+                    onChangeFudge={setDefenderFudge}
+                    onToggleNpcTalent={(talentName, rank) => handleToggleNpcTalent('defender', talentName, rank)}
                 />
             </div>
 
