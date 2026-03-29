@@ -6,7 +6,7 @@ If not already Engaged and target is between your **Walk** and **Run** distance 
 
 ### Disengaging
 
-**Use Advantage:** If your Advantage exceeds all opponents', drop it to **0** to move freely.
+**Flee from Harm** | Move away from your opponents **without penalty**, using 2 Advantage (see [Advantage](/codex/combat/advantage) for details). 
 
 **Use [Dodge](/codex/skills/dodge):** Make an **[Opposed](/codex/mechanics/opposed-tests) [Dodge](/codex/skills/dodge)/Melee Test**. Success: gain **+1 Advantage** and move freely. Failure: each winning opponent gains **+1 Advantage** and you remain trapped.
 

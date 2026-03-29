@@ -1,5 +1,146 @@
 [
     {
+        "id": "alchemist",
+        "name": "Alchemist",
+        "description": "The magister-alchemists of the Gold Wind have a scientific, intellectual reputation, focusing on practical research with applications in the physical world. Members of the Gold Order, they are widely acknowledged as masters of the manipulation of matter.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "alchemist-apprentice",
+                "name": "Alchemist Apprentice",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "channelling_chamon",
+                    "evaluate",
+                    "haggle",
+                    "intuition",
+                    "language_magick",
+                    "lore_magic",
+                    "melee_basic",
+                    "melee_polearm",
+                    "perception",
+                    "trade_alchemist"
+                ],
+                "talent_ids": [
+                    "aethyric-attunement",
+                    "petty-magic",
+                    "read-write",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "Grimoire",
+                    "Staff"
+                ],
+                "status": "Brass 4"
+            },
+            {
+                "id": "alchemist",
+                "name": "Alchemist",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "cool",
+                    "intimidate",
+                    "lore_metallurgy",
+                    "research",
+                    "trade_any"
+                ],
+                "talent_ids": [
+                    "arcane-magic_metal",
+                    "argumentative",
+                    "detect-artefact",
+                    "sixth-sense"
+                ],
+                "trappings": [
+                    "Magical Licence",
+                    "Portable Alchemical Laboratory",
+                    "Practical Robes"
+                ],
+                "status": "Silver 4"
+            },
+            {
+                "id": "master-alchemist",
+                "name": "Master Alchemist",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "lore_engineering",
+                    "lore_science",
+                    "ride_horse",
+                    "trade_engineer"
+                ],
+                "talent_ids": [
+                    "bookish",
+                    "craftsman_any",
+                    "instinctive-diction",
+                    "magical-sense"
+                ],
+                "trappings": [
+                    "Alchemist Apprentice",
+                    "Light Warhorse",
+                    "Magical Item",
+                    "Standard Robes"
+                ],
+                "status": "Gold 3"
+            },
+            {
+                "id": "alchemist-lord",
+                "name": "Alchemist Lord",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "language_khazalid",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "frightening",
+                    "iron-will",
+                    "war-wizard",
+                    "wealthy"
+                ],
+                "trappings": [
+                    "Elaborate Robes",
+                    "Library (Engineering, Magic, or Science)",
+                    "Workshop (Engineering or Magic)"
+                ],
+                "status": "Gold 4"
+            }
+        ]
+    },
+    {
         "id": "apothecary",
         "name": "Apothecary",
         "description": "Skilled in chemistry and concoctions, you create and sell medicine of all kinds. Apothecaries specialise in preparing pharmaceutical medication — commonly pills, draughts, and ointments — for sale to patients and doktors alike. Their workshops are filled with a dazzling array of bubbling alembics, overflowing beakers, worn mortar and pestles, and other physic-making paraphernalia. Some Apothecaries supplement their income selling illicit substances - from stimulants for desperate students, to hallucinogenic weirdroot for bored nobles or shady commissions from even shadier groups. Supplying these is lucrative, but also dangerous. Rare ingredients are expensive, so Apothecaries frequently have cash flow problems, and journey the wilds to collect their own ingredients. Many take temporary employment with expeditions, mercenaries, or the military for extra coin. Due to Physician Guild pressure, most towns ban Apothecaries from formally practicing medicine, but during play Apothecaries can easily fill the role of a healer. Indeed, they are versatile in this role because they can also identify dangerous and unusual substances the party may encounter, and even turn some into useful medicine.",
@@ -135,6 +276,292 @@
         ]
     },
     {
+        "id": "astromancer",
+        "name": "Astromancer",
+        "description": "Magisters who channel Azyr are astromancers, also known as Celestial Wizards, or 'Blue Wizards' by the uneducated. They favour skullcaps, high-collared cloaks, and expensive robes in deep blues and blacks, emblazoned with silver and gold motifs to represent the night sky. They scrutinise the heavens and draw down the Wind of Azyr to bend the elements to their will and manipulate fate itself.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "celestial-acolyte",
+                "name": "Celestial Acolyte",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "augury",
+                    "channelling_azyr",
+                    "dodge",
+                    "entertain_fortune-telling",
+                    "intuition",
+                    "language_magick",
+                    "lore_magic",
+                    "melee_basic",
+                    "melee_polearm",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "aethyric-attunement",
+                    "petty-magic",
+                    "read-write",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "Grimoire",
+                    "Staff",
+                    "Starwatcher's Handbook"
+                ],
+                "status": "Brass 4"
+            },
+            {
+                "id": "astromancer",
+                "name": "Astromancer",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "gossip",
+                    "intimidate",
+                    "language_battle",
+                    "lore_astronomy",
+                    "research"
+                ],
+                "talent_ids": [
+                    "arcane-magic_heavens",
+                    "detect-artefact",
+                    "orientation",
+                    "sixth-sense"
+                ],
+                "trappings": [
+                    "Ceremonial Telescope",
+                    "Magical Licence",
+                    "Practical Robes",
+                    "Sextant"
+                ],
+                "status": "Silver 4"
+            },
+            {
+                "id": "grand-astromancer",
+                "name": "Grand Astromancer",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "evaluate",
+                    "navigation",
+                    "lore_prophecy",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "instinctive-diction",
+                    "magical-sense",
+                    "seasoned-traveller",
+                    "well-prepared"
+                ],
+                "trappings": [
+                    "Apprentice",
+                    "Expensive Orrery or Armillary Sphere",
+                    "Light Warhorse",
+                    "Magical Item",
+                    "Standard Robes"
+                ],
+                "status": "Gold 1"
+            },
+            {
+                "id": "lord-celestial",
+                "name": "Lord Celestial",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "frightening",
+                    "iron-will",
+                    "night-vision",
+                    "war-wizard"
+                ],
+                "trappings": [
+                    "Elaborate Robes",
+                    "Library (Magic)",
+                    "Tower or Mountaintop Observatory"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
+        "id": "druid",
+        "name": "Druid",
+        "description": "Jade Wizards are more welcome in villages across the Empire than any of the other Imperial Wizards. It is well known they can control plants, and that the land thrives in their presence. Any settlement that welcomes a druid should expect a bumper harvest in the coming year. They tap the vitality of the earth and the power of nature to manipulate the natural world through their magic.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "druids-apprentice",
+                "name": "Druid's Apprentice",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "channelling_ghyran",
+                    "charm-animal",
+                    "dodge",
+                    "intuition",
+                    "language_magick",
+                    "lore_magic",
+                    "melee_basic",
+                    "melee_polearm",
+                    "outdoor-survival",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "aethyric-attunement",
+                    "petty-magic",
+                    "read-write",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "Copper Sickle",
+                    "Grimoire",
+                    "Staff"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "druid",
+                "name": "Druid",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "gossip",
+                    "intimidate",
+                    "language_any",
+                    "language_battle",
+                    "navigation"
+                ],
+                "talent_ids": [
+                    "arcane-magic_life",
+                    "detect-artefact",
+                    "fast-hands",
+                    "sixth-sense"
+                ],
+                "trappings": [
+                    "Magical Licence",
+                    "Practical Robes",
+                    "Silver Sickle"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "master-druid",
+                "name": "Master Druid",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "animal-care",
+                    "evaluate",
+                    "lore_plants",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "instinctive-diction",
+                    "magical-sense",
+                    "menacing",
+                    "rover"
+                ],
+                "trappings": [
+                    "Apprentice",
+                    "Gold Sickle",
+                    "Magical Item",
+                    "Standard Robes"
+                ],
+                "status": "Gold 1"
+            },
+            {
+                "id": "druid-lord",
+                "name": "Druid Lord",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "frightening",
+                    "iron-will",
+                    "war-wizard"
+                ],
+                "trappings": [
+                    "Elaborate Robes",
+                    "Garden Retreat",
+                    "Library (Magic)"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
         "id": "engineer",
         "name": "Engineer",
         "description": "You create machines and constructions both useful and bizarre, and often downright deadly. Engineers design and build mechanical devices or structures such as bridges, canals, or fortifications. Most are educated, Dwarfs at the hide-bound Dwarf Engineers Guild, Humans at forward-thinking establishments such as the Imperial Engineers' School at Altdorf, though self-taught prodigies are not unknown. Human Engineers value innovation and discovery, whereas Dwarfs favour traditional, tried-and-tested designs passed down for generations. Mining company engineers are well-paid; less so the State Army Engineers who maintain the Imperial war machines and act as sappers and bridge-builders. Master Engineers often find themselves leading teams on ambitious construction projects. Chartered Engineers are the most trusted in the Empire, called upon to design, test, and build such prestigious Imperial Commissions like the complex Steam Wheel Locks, which have revolutionised the speed of travel in the canals of the Vorbergland. Some Engineers are drawn to investigate ancient Dwarf Holds, most now abandoned, for entombed within are the secrets of the master builders of old. Those who dare their depths may find millennia-old marvels, many of which are repurposed by Goblins and Skaven for their own nefarious purposes. Equally enticing are the stone sky bridges soaring above the Holds, some stretching for many miles, true wonders of bygone engineering that once connected thriving Dwarf settlements, forts, and farmlands.",
@@ -261,6 +688,147 @@
                     "Library (Engineer)",
                     "Quality Trade Tools (Engineer)",
                     "Large Workshop (Engineer)"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
+        "id": "hierophant",
+        "name": "Hierophant",
+        "description": "Light Wizards are also known as white wizards, hierophants or, sometimes, exorcists. These wizards usually dress in pristine white clothes, a colour that tends to attract the Light Wind. They are members of the Order of Light, respected for its difficult practise and regarded as exotic and austere.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "acolyte-of-the-light-order",
+                "name": "Acolyte of the Light Order",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "channelling_hysh",
+                    "dodge",
+                    "entertain_sing",
+                    "intuition",
+                    "language_magick",
+                    "lore_magic",
+                    "lore_nehekhara",
+                    "melee_basic",
+                    "melee_polearm",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "aethyric-attunement",
+                    "petty-magic",
+                    "read-write",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "Candle with Holder",
+                    "Grimoire",
+                    "Staff"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "hierophant",
+                "name": "Hierophant",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "cool",
+                    "gossip",
+                    "language_any",
+                    "leadership",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "arcane-magic_light",
+                    "detect-artefact",
+                    "savvy",
+                    "sixth-sense"
+                ],
+                "trappings": [
+                    "Magical Licence",
+                    "Practical Robes"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "master-hierophant",
+                "name": "Master Hierophant",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "evaluate",
+                    "lore_daemonology",
+                    "research",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "dual-wielder",
+                    "instinctive-diction",
+                    "magical-sense",
+                    "tower-of-memories"
+                ],
+                "trappings": [
+                    "Acolyte Apprentice",
+                    "Light Warhorse",
+                    "Magical Item",
+                    "Standard Robes"
+                ],
+                "status": "Gold 1"
+            },
+            {
+                "id": "guardian-of-the-light-order",
+                "name": "Guardian of the Light Order",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "iron-will",
+                    "menacing",
+                    "resistance_chaos"
+                ],
+                "trappings": [
+                    "Elaborate Robes",
+                    "Library (Magic)",
+                    "Study"
                 ],
                 "status": "Gold 2"
             }
@@ -400,6 +968,284 @@
         ]
     },
     {
+        "id": "magister-vigilant",
+        "name": "Magister Vigilant",
+        "description": "Even though the patriarchs of the Colleges refuse to confirm their existence, the lowliest of apprentice wizards have heard of Magisters Vigilant, mages who seek out and destroy those who have broken their oaths and betrayed their order. Each college sponsors a small cadre of Magisters Vigilant, though the Grey College is said to sponsor several of their members to take on the role during their careers.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "vigilants-apprentice",
+                "name": "Vigilant's Apprentice",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "channelling_any",
+                    "charm",
+                    "cool",
+                    "dodge",
+                    "intuition",
+                    "language_magick",
+                    "lore_magic",
+                    "melee_basic",
+                    "melee_polearm",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "magical-sense",
+                    "petty-magic",
+                    "read-write",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "Disguise",
+                    "Grimoire"
+                ],
+                "status": "Brass 4"
+            },
+            {
+                "id": "magister-vigilant",
+                "name": "Magister Vigilant",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "gossip",
+                    "intimidate",
+                    "language_battle",
+                    "pick-lock",
+                    "research"
+                ],
+                "talent_ids": [
+                    "arcane-magic_any",
+                    "blather",
+                    "fast-hands",
+                    "menacing"
+                ],
+                "trappings": [
+                    "Magical Licence"
+                ],
+                "status": "Silver 4"
+            },
+            {
+                "id": "magister-inquisitor",
+                "name": "Magister Inquisitor",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "navigation",
+                    "secret-signs_any",
+                    "sleight-of-hand",
+                    "stealth_urban"
+                ],
+                "talent_ids": [
+                    "break-and-enter",
+                    "savvy",
+                    "shadow",
+                    "sixth-sense"
+                ],
+                "trappings": [
+                    "Magical Item"
+                ],
+                "status": "Gold 1"
+            },
+            {
+                "id": "lord-vigilant",
+                "name": "Lord Vigilant",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "lore_any",
+                    "set-trap"
+                ],
+                "talent_ids": [
+                    "alley-cat",
+                    "frightening",
+                    "iron-will",
+                    "nose-for-trouble"
+                ],
+                "trappings": [
+                    "Standard Robes"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
+        "id": "mundane-alchemist",
+        "name": "Mundane Alchemist",
+        "description": "Alchemists, being schooled in the properties of matter, are experts at producing new materials and improving existing ones. They can prepare chemical concoctions and often work together with metalworkers. Theirs is a specialised kind of knowledge, and one that is in high demand — the Artillery School in Nuln, for example, keeps a whole department of alchemists tasked with the creation of blackpowder and improving its efficiency.",
+        "class": "Academics",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "tinkerer",
+                "name": "Tinkerer",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "consume-alcohol",
+                    "gossip",
+                    "haggle",
+                    "language_classical",
+                    "lore_chemistry",
+                    "lore_geology",
+                    "lore_science",
+                    "trade_alchemist",
+                    "trade_poisoner"
+                ],
+                "talent_ids": [
+                    "concoct",
+                    "craftsman_alchemist",
+                    "read-write",
+                    "savvy"
+                ],
+                "trappings": [
+                    "Book (Blank)",
+                    "Leather Jerkin",
+                    "Pestle and Mortar",
+                    "Test Tubes and Alembic",
+                    "Tripod",
+                    "Writing Kit"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "alchemist",
+                "name": "Alchemist",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "intuition",
+                    "lore_medicine",
+                    "language_guilder",
+                    "perception",
+                    "research",
+                    "secret-signs_guilder"
+                ],
+                "talent_ids": [
+                    "bookish",
+                    "criminal",
+                    "etiquette_guilder",
+                    "nimble-fingered"
+                ],
+                "trappings": [
+                    "Guild License",
+                    "Trade Tools"
+                ],
+                "status": "Silver 2"
+            },
+            {
+                "id": "master-alchemist",
+                "name": "Master Alchemist",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "drive",
+                    "language_any",
+                    "leadership",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "detect-artefact",
+                    "master-tradesman_alchemist",
+                    "petty-magic",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "Apprentice",
+                    "Book (Alchemy)",
+                    "Laboratory"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "transmutator",
+                "name": "Transmutator",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "channelling_chamon",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "arcane-magic_metal",
+                    "master-tradesman_poisoner",
+                    "resistance_poison",
+                    "savant_alchemy"
+                ],
+                "trappings": [
+                    "Fine Quality Laboratory",
+                    "Letter of Commission"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
         "id": "nun",
         "name": "Nun",
         "description": "You are devoted to the service of your deity, having sworn vows for a life of service. Nuns are members of religious orders, normally cloistered within an abbey, convent, or monastery. Most rise before the sun for morning prayer before toiling in fields, tending to the sick, or preserving important manuscripts. Vows of pilgrimage cause some to travel the Empire, while others take oaths to serve the community, moving amongst the people, tending to their spiritual needs. Devoted hermits and tenders to shrines are also thought of as ‘Nuns' or 'Monks' by the folk of the Empire. Many Nuns learn valuable trades such as vintners, brewers or calligraphers. Abbesses use these activities to attract donations and patronage from the local nobility. Leaders of particularly large or martial Orders can gather significant influence both within their own cult and with the ruling classes of a province. For more on religion and the different Orders, see Chapter 7: Religion and Belief. When a religious order discovers terrible secrets or fragments of prophecy, its leaders may feel they must act, sending brothers and sisters abroad. Abbeys along pilgrimage routes will often also send their members abroad to guard the many pilgrims traversing the lengthy holy roads across the Empire. And there are always itinerant Friars wandering the world, risking adventure with every new land they enter.",
@@ -525,6 +1371,143 @@
                     "Religious Order"
                 ],
                 "status": "Silver 5"
+            }
+        ]
+    },
+    {
+        "id": "ogre-butcher",
+        "name": "Ogre Butcher",
+        "description": "Among the Ogres of the Mountains of Mourne, the position of Butcher lies somewhere between that of Priest and Mystic. Their faith is practiced in the preparation of meat; the hanging of a carcass, the slicing of flesh and the spilling of blood are to them as prayer and incense are to the most devout Shallyan. Ogre Butchers are chosen from an early age for indoctrination into the mysteries of the Great Maw, and often earn the Big Name of Mawseeker later in life.",
+        "class": "Academics",
+        "races": [
+            "Ogre"
+        ],
+        "career_level": [
+            {
+                "id": "slopscooper",
+                "name": "Slopscooper",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "climb",
+                    "consume-alcohol",
+                    "endurance",
+                    "gossip",
+                    "intimidate",
+                    "language_magick",
+                    "melee_basic",
+                    "pray",
+                    "trade_butcher",
+                    "outdoor-survival"
+                ],
+                "talent_ids": [
+                    "implacable",
+                    "petty-magick",
+                    "sixth-sense",
+                    "strong-back"
+                ],
+                "trappings": [
+                    "Butcher's Apron",
+                    "Hand Weapon (Cleaver or Mallet)"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "butcher",
+                "name": "Butcher",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "art_butchery",
+                    "channelling_great-maw",
+                    "intimidate",
+                    "ranged_throwing",
+                    "lore_the-great-maw",
+                    "secret-signs_the-great-maw"
+                ],
+                "talent_ids": [
+                    "acute-sense_taste",
+                    "arcane-magick_great-maw",
+                    "aethyric-attunement",
+                    "holy-visions"
+                ],
+                "trappings": [
+                    "Carved Animal Bones (Grimoire)",
+                    "Trade Tools (Butcher)"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "mawsage",
+                "name": "Mawsage",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "entertain_speeches",
+                    "heal",
+                    "intuition",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "frightening",
+                    "second-sight",
+                    "strike-mighty-blow",
+                    "war-wizard"
+                ],
+                "trappings": [
+                    "Apprentice Butcher",
+                    "Bloody Sack of 10 Esoteric Ingredients",
+                    "Collection of Skulls"
+                ],
+                "status": "Silver 2"
+            },
+            {
+                "id": "slaughtermaster",
+                "name": "Slaughtermaster",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "lore_magick",
+                    "language_any"
+                ],
+                "talent_ids": [
+                    "detect-artefact",
+                    "impassioned-zeal"
+                ],
+                "trappings": [
+                    "Cave or Other Lair",
+                    "Loyal Cultists of the Maw",
+                    "Bottomless Hunger"
+                ],
+                "status": "Silver 4"
             }
         ]
     },
@@ -793,6 +1776,573 @@
         ]
     },
     {
+        "id": "priest-of-handrich",
+        "name": "Priest of Handrich",
+        "description": "Though not as common as other cults, Handrichan priests are sought after for their financial sense and discretion. Many do preach sermons, teaching Handrich's tenets of self-reliance and the glories of material wealth, but they more often serve in private capacities, overseeing transactions to ensure honesty or offering financial advice. Most tend to temples found in large trading centres, or join caravans and trade expeditions as part of their service to Handrich.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "clerk",
+                "name": "Clerk",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "bribery",
+                    "charm",
+                    "consume-alcohol",
+                    "evaluate",
+                    "gamble",
+                    "gossip",
+                    "haggle",
+                    "lore_theology",
+                    "pray",
+                    "research"
+                ],
+                "talent_ids": [
+                    "bless_handrich",
+                    "embezzle",
+                    "numismatics",
+                    "read-write"
+                ],
+                "trappings": [
+                    "Abacus and Slate",
+                    "Handrichan Icon",
+                    "Brown Robes"
+                ],
+                "status": "Brass 5"
+            },
+            {
+                "id": "circuit-trader",
+                "name": "Circuit Trader",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "animal-training",
+                    "cool",
+                    "intuition",
+                    "language_any",
+                    "lore_politics",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "briber",
+                    "carouser",
+                    "dealmaker",
+                    "invoke_handrich"
+                ],
+                "trappings": [
+                    "Gazetteer",
+                    "Lock Box",
+                    "Well-tailored Robes"
+                ],
+                "status": "Silver 4"
+            },
+            {
+                "id": "officiant",
+                "name": "Officiant",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "intimidate",
+                    "leadership",
+                    "lore_any",
+                    "secret-signs_guilder"
+                ],
+                "talent_ids": [
+                    "bookish",
+                    "cat-tongued",
+                    "robust",
+                    "super-numerate"
+                ],
+                "trappings": [
+                    "Handrich-touched Coin",
+                    "Subordinate Clerks",
+                    "Temple"
+                ],
+                "status": "Gold 2"
+            },
+            {
+                "id": "profit",
+                "name": "Profit",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "entertain_speeches",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "public-speaker",
+                    "schemer",
+                    "strong-minded",
+                    "wealthy"
+                ],
+                "trappings": [
+                    "Subordinate Officiants",
+                    "Warehouse"
+                ],
+                "status": "Gold 4"
+            }
+        ]
+    },
+    {
+        "id": "priest-of-solkan",
+        "name": "Priest of Solkan",
+        "description": "Priests of Solkan are austere, humourless individuals. During rituals, they wear white and gold robes in the style of ancient Tilea. Many don a golden mask in imitation of their god, with a stylised countenance of implacable fury. Certain priests revere the whole pantheon of Law, fighting a losing battle to reassert their influence in the Old World. Nevertheless, it is the Divine Avenger that dominates their thoughts and actions.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "acolyte",
+                "name": "Acolyte",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "cool",
+                    "endurance",
+                    "intimidate",
+                    "intuition",
+                    "lore_theology",
+                    "outdoor-survival",
+                    "perception",
+                    "pray",
+                    "research"
+                ],
+                "talent_ids": [
+                    "bless_solkan",
+                    "holy-visions",
+                    "read-write",
+                    "strong-minded"
+                ],
+                "trappings": [
+                    "Hand Weapon",
+                    "Symbol of Solkan",
+                    "Wooden Mask"
+                ],
+                "status": "Brass 2"
+            },
+            {
+                "id": "priest",
+                "name": "Priest",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "art_writing",
+                    "gossip",
+                    "language_classical",
+                    "leadership",
+                    "lore_politics",
+                    "melee_basic"
+                ],
+                "talent_ids": [
+                    "etiquette_cultists",
+                    "hatred_chaos",
+                    "impassioned-zeal",
+                    "invoke_solkan"
+                ],
+                "trappings": [
+                    "Ceremonial Robes",
+                    "Gold-plated Mask",
+                    "Staff of Law or Sundial"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "inquisitor",
+                "name": "Inquisitor",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_chaos",
+                    "lore_torture",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "acute-sense_any",
+                    "holy-hatred",
+                    "menacing",
+                    "strong-minded"
+                ],
+                "trappings": [
+                    "Black Inquisitor's Attire",
+                    "Entourage of Acolytes",
+                    "Instruments of Torture",
+                    "Riding Horse"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "grand-inquisitor",
+                "name": "Grand Inquisitor",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "entertain_speeches"
+                ],
+                "talent_ids": [
+                    "fearless_magic-users",
+                    "iron-will",
+                    "pure-soul",
+                    "resistance_any"
+                ],
+                "trappings": [
+                    "High Quality Robes",
+                    "Replica of Solkan's Amulet",
+                    "Temple"
+                ],
+                "status": "Silver 5"
+            }
+        ]
+    },
+    {
+        "id": "priestess-of-rhya",
+        "name": "Priestess of Rhya",
+        "description": "Priestesses of Rhya live amongst the common folk. They wander between farms, villages, and sacred sites, talking with people, offering blessings, and keeping a close eye on the land and the pastoral care of their flock. People depend on them to stave off famine, bring new life into the world, and give practical advice on love and matters of the family.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "initiate",
+                "name": "Initiate",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "animal-care",
+                    "charm-animal",
+                    "endurance",
+                    "gossip",
+                    "intuition",
+                    "lore_local",
+                    "lore_theology",
+                    "outdoor-survival",
+                    "perception",
+                    "pray"
+                ],
+                "talent_ids": [
+                    "bless_rhya",
+                    "holy-visions",
+                    "orientation",
+                    "suave"
+                ],
+                "trappings": [
+                    "Practical Tunic and Robes",
+                    "Symbol of Rhya (Wheatsheaf or Spiral)"
+                ],
+                "status": "Brass 2"
+            },
+            {
+                "id": "priestess",
+                "name": "Priestess",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "cool",
+                    "entertain_singing",
+                    "heal",
+                    "intimidate",
+                    "lore_herbs"
+                ],
+                "talent_ids": [
+                    "etiquette_cultists",
+                    "gregarious",
+                    "invoke_rhya",
+                    "read-write"
+                ],
+                "trappings": [
+                    "Carved Staff",
+                    "Healing Poultice",
+                    "Trade Tools (Herbalist)"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "high-priestess",
+                "name": "High Priestess",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "entertain_storytelling",
+                    "leadership",
+                    "lore_spirits",
+                    "stealth_rural"
+                ],
+                "talent_ids": [
+                    "coolheaded",
+                    "impassioned-zeal",
+                    "pure-soul",
+                    "strong-minded"
+                ],
+                "trappings": [
+                    "Entourage of Priestesses and/or Initiates",
+                    "Quality Robes",
+                    "Sacred Site"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "green-watcher",
+                "name": "Green Watcher",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "lore_medicine",
+                    "navigation"
+                ],
+                "talent_ids": [
+                    "commanding-presence",
+                    "field-dressing",
+                    "public-speaker",
+                    "tenacious"
+                ],
+                "trappings": [
+                    "Entourage of Nuns and Priestesses",
+                    "Riding Horse"
+                ],
+                "status": "Silver 5"
+            }
+        ]
+    },
+    {
+        "id": "pyromancer",
+        "name": "Pyromancer",
+        "description": "Bright Wizards are the most belligerent of all the wizards of the Empire. Though other colleges are known for their particular sort of aggression, and all serve the military in one capacity or another, the Bright College brings shock and awe to the battlefield like none other. The Bright Wizards often adopt a warlike and fearsome appearance, their staffs made of iron and topped with a brazier ready to wield all-consuming flame.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "apprentice-pyromancer",
+                "name": "Apprentice Pyromancer",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "channelling_aqshy",
+                    "dodge",
+                    "intimidate",
+                    "intuition",
+                    "language_battle",
+                    "language_magick",
+                    "lore_magic",
+                    "melee_basic",
+                    "melee_polearm",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "aethyric-attunement",
+                    "petty-magic",
+                    "read-write",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "First Key of Secrets",
+                    "Grimoire",
+                    "Staff"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "pyromancer",
+                "name": "Pyromancer",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "cool",
+                    "gossip",
+                    "language_any",
+                    "leadership",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "arcane-magic_fire",
+                    "detect-artefact",
+                    "fast-hands",
+                    "sixth-sense"
+                ],
+                "trappings": [
+                    "Magical Licence",
+                    "Practical Robes",
+                    "Second and Third Keys of Secrets",
+                    "Sword"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "master-pyromancer",
+                "name": "Master Pyromancer",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "animal-care",
+                    "evaluate",
+                    "research",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "dual-wielder",
+                    "instinctive-diction",
+                    "magical-sense",
+                    "menacing"
+                ],
+                "trappings": [
+                    "Apprentice",
+                    "Fourth and Fifth Keys of Secrets",
+                    "Light Warhorse",
+                    "Magical Item",
+                    "Standard Robes"
+                ],
+                "status": "Gold 1"
+            },
+            {
+                "id": "pyromancer-lord",
+                "name": "Pyromancer Lord",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "frightening",
+                    "iron-will",
+                    "war-wizard"
+                ],
+                "trappings": [
+                    "Apprentice",
+                    "Elaborate Robes",
+                    "Library (Magic)",
+                    "Sixth and Seventh Keys of Secrets",
+                    "Workshop (Magic)"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
         "id": "scholar",
         "name": "Scholar",
         "description": "You dedicate your life to the pursuit and study of knowledge, wherever that may take you. Scholars generally study at one of the Old World's learning institutions, foremost amongst them the university in Altdorf. Most specialise in one or two subjects, and many learn just enough to provide a useful career, or give them something to talk about at dinner parties. Poorer Scholars act as scribes, reading and writing notes for others as most of the Empire's citizens are illiterate. Others become tutors educating the wealthy. The most gifted Masters are invited to join a university, with renowned Professors delivering popular lectures to hundreds of Students. Dwarfs and High Elves are less likely to be employed in an Imperial institution, though they may tour the Empire in search of esoteric knowledge. Poor Scholars who cannot or will not tutor often need funds to continue their research. A few search the dark corners of the world for lost secrets and ancient tomes. Others are hired to accompany adventuring expeditions where their knowledge can be put to more practical use. Scholar is a useful Career, with access to rare Lore skills, a good way for the GM to share information with players. Played with common-sense they can counter-balance rash and martially-inclined characters' tendencies to solve every problem with a blade. Scholars can use their knowledge to solve puzzles or come up with unusual strategies and tactics.",
@@ -927,6 +2477,142 @@
         ]
     },
     {
+        "id": "scryer",
+        "name": "Scryer",
+        "description": "A scarce few Humans possess an ability to look back into the past, to see what happened in a specific location, with a certain object, or to a certain person they touch. Even fewer people can use that ability without being driven out of their wits. Those people who use this rare ability regularly are known as scryers. They possess the rare ability to infer facts about the past through contact with a person, item, or place.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "haunted",
+                "name": "Haunted",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "dodge",
+                    "intuition",
+                    "lore_local",
+                    "melee_basic",
+                    "outdoor-survival",
+                    "navigation",
+                    "perception",
+                    "psychometry",
+                    "sleight-of-hand",
+                    "stealth_rural"
+                ],
+                "talent_ids": [
+                    "beneath-notice",
+                    "luck",
+                    "orientation",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "Backpack with Tent",
+                    "Dagger",
+                    "Practical Outdoor Clothing"
+                ],
+                "status": "Brass 1"
+            },
+            {
+                "id": "scryer",
+                "name": "Scryer",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "bribery",
+                    "cool",
+                    "endurance",
+                    "gossip",
+                    "haggle",
+                    "intimidate"
+                ],
+                "talent_ids": [
+                    "coolheaded",
+                    "criminal",
+                    "savvy",
+                    "sixth-sense"
+                ],
+                "trappings": [
+                    "Permanent Abode"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "psychometrician",
+                "name": "Psychometrician",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "evaluate",
+                    "lore_history",
+                    "lore_politics"
+                ],
+                "talent_ids": [
+                    "etiquette_nobles",
+                    "menacing",
+                    "nose-for-trouble",
+                    "well-prepared"
+                ],
+                "trappings": [
+                    "Respectable Clothing"
+                ],
+                "status": "Silver 2"
+            },
+            {
+                "id": "reader-of-the-past",
+                "name": "Reader of the Past",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "entertain_storytelling",
+                    "leadership"
+                ],
+                "talent_ids": [
+                    "commanding-presence",
+                    "frightening",
+                    "magical-sense",
+                    "strong-minded"
+                ],
+                "trappings": [
+                    "Fine Clothing",
+                    "Town House"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
         "id": "shadowmancer",
         "name": "Shadowmancer",
         "description": "Secretive and deceitful, you combine the abilities of wizard and spy. \nThe only thing a Grey Wizard is certain of is that nothing is certain in this world, and that things are rarely as they seem. They know that lies often cover up other lies and become so used to falsehood and deception that they have trouble recognizing the truth as it is. \nShadowmancers are distrustful people, who rarely believe what they see at face value and always look for false bottoms, hidden meanings, and concealed motives. In return, they are careful to withold their own beliefs and intentions. Truth has value, they’ve learned, and items of value shouldn’t be just given away.",
@@ -1054,6 +2740,286 @@
                     "Apprentice",
                     "Library (Magic)",
                     "Ring of Informers",
+                    "Workshop (Magic)"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
+        "id": "shaman",
+        "name": "Shaman",
+        "description": "Amber Wizards are known for their feral appearance and lifestyle, more at home in the wilderness than the town, and with more affinity for animals than their fellow Humans. Many wander the Empire's vast untamed landscape, but just as many find a place they like and settle there. Every village in the Empire has a story of a local monster, giant, or witch who lives in the forest and is to be feared but is seldom encountered — more often than not, this is an Amber Wizard.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "shamans-apprentice",
+                "name": "Shaman's Apprentice",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "animal-care",
+                    "channelling_ghur",
+                    "cool",
+                    "dodge",
+                    "intuition",
+                    "language_magick",
+                    "lore_magic",
+                    "melee_polearm",
+                    "outdoor-survival",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "aethyric-attunement",
+                    "petty-magic",
+                    "read-write",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "Grimoire (often in the form of enscribed bones or teeth)",
+                    "Staff"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "shaman",
+                "name": "Shaman",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "animal-training",
+                    "charm-animal",
+                    "lore_beasts",
+                    "ranged_bow",
+                    "stealth_rural",
+                    "track"
+                ],
+                "talent_ids": [
+                    "arcane-magic_beasts",
+                    "coolheaded",
+                    "fast-hands",
+                    "sixth-sense"
+                ],
+                "trappings": [
+                    "Magical Licence",
+                    "Practical Robes"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "master-shaman",
+                "name": "Master Shaman",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "navigation",
+                    "research",
+                    "ride_horse",
+                    "secret-signs_amber-order"
+                ],
+                "talent_ids": [
+                    "animal-affinity",
+                    "instinctive-diction",
+                    "magical-sense",
+                    "menacing"
+                ],
+                "trappings": [
+                    "Apprentice",
+                    "Magical Item",
+                    "Standard Robes"
+                ],
+                "status": "Gold 1"
+            },
+            {
+                "id": "shaman-lord",
+                "name": "Shaman Lord",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "lore_any",
+                    "leadership"
+                ],
+                "talent_ids": [
+                    "frightening",
+                    "iron-will",
+                    "lightning-reflexes",
+                    "war-wizard"
+                ],
+                "trappings": [
+                    "Conclave of Shamans",
+                    "Elaborate Robes",
+                    "Shamanic Lair"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
+        "id": "spiriter",
+        "name": "Spiriter",
+        "description": "If the wizards of the Gold College are the most accepted by Imperial society, those of the Amethyst College are the least, shunned and avoided whenever possible. There is something about their steady gaze and quiet, grim demeanour that often makes outsiders feel like a corpse laid on a slab. Members of the Amethyst Order, they are feared and respected for their familiarity with death.",
+        "class": "Academics",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "apprentice-spiriter",
+                "name": "Apprentice Spiriter",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "channelling_shyish",
+                    "cool",
+                    "dodge",
+                    "intimidate",
+                    "intuition",
+                    "language_magick",
+                    "lore_magic",
+                    "melee_basic",
+                    "melee_polearm",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "aethyric-attunement",
+                    "petty-magic",
+                    "read-write",
+                    "second-sight"
+                ],
+                "trappings": [
+                    "Grimoire",
+                    "Staff of Petrified Wood"
+                ],
+                "status": "Brass 2"
+            },
+            {
+                "id": "spiriter",
+                "name": "Spiriter",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "art_engraving",
+                    "endurance",
+                    "evaluate",
+                    "language_battle",
+                    "lore_undead",
+                    "research"
+                ],
+                "talent_ids": [
+                    "arcane-magic_death",
+                    "detect-artefact",
+                    "fast-hands",
+                    "sixth-sense"
+                ],
+                "trappings": [
+                    "Magical Licence",
+                    "Practical Robes",
+                    "Scythe"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "master-spiriter",
+                "name": "Master Spiriter",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "animal-care",
+                    "leadership",
+                    "lore_warfare",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "instinctive-diction",
+                    "magical-sense",
+                    "menacing",
+                    "resistance_poison"
+                ],
+                "trappings": [
+                    "Apprentice",
+                    "Light Warhorse",
+                    "Magical Item",
+                    "Standard Robes"
+                ],
+                "status": "Gold 1"
+            },
+            {
+                "id": "spiriter-lord",
+                "name": "Spiriter Lord",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "frightening",
+                    "iron-will",
+                    "war-wizard"
+                ],
+                "trappings": [
+                    "Elaborate Robes",
+                    "Library (Magic)",
                     "Workshop (Magic)"
                 ],
                 "status": "Gold 2"
@@ -4559,6 +6525,284 @@
         ]
     },
     {
+        "id": "cartographer",
+        "name": "Cartographer",
+        "description": "As the world gets more sophisticated there is a need to map it in increasing detail. Whether this involves exploring largely unknown lands and making sweeping maps of the general area or going into exacting detail over small tracts in petty land disputes, cartographers are increasingly in demand.",
+        "class": "Rangers",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "High Elf",
+            "Human",
+            "Wood Elf"
+        ],
+        "career_level": [
+            {
+                "id": "surveyor",
+                "name": "Surveyor",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "art_cartography",
+                    "climb",
+                    "evaluate",
+                    "lore_geography",
+                    "melee_basic",
+                    "navigation",
+                    "outdoor-survival",
+                    "perception",
+                    "ride_horse",
+                    "stealth_rural"
+                ],
+                "talent_ids": [
+                    "artistic",
+                    "orientation",
+                    "read-write",
+                    "rover"
+                ],
+                "trappings": [
+                    "Vellum",
+                    "Writing Kit"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "cartographer",
+                "name": "Cartographer",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "endurance",
+                    "gossip",
+                    "haggle",
+                    "lore_heraldry",
+                    "trade_cartographer"
+                ],
+                "talent_ids": [
+                    "coolheaded",
+                    "flee",
+                    "seasoned-traveller",
+                    "strider_any"
+                ],
+                "trappings": [
+                    "Horse with Saddle and Tack",
+                    "Theodolite"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "chartered-cartographer",
+                "name": "Chartered Cartographer",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "intuition",
+                    "language_guilder",
+                    "research",
+                    "secret-signs_guilder"
+                ],
+                "talent_ids": [
+                    "bookish",
+                    "etiquette_guilders",
+                    "nimble-fingered",
+                    "unshakeable"
+                ],
+                "trappings": [
+                    "Letter of Charter",
+                    "Quality Travel Clothes"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "master-cartographer",
+                "name": "Master Cartographer",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "dealmaker",
+                    "stout-hearted",
+                    "master-tradesman_cartography",
+                    "magnum-opus"
+                ],
+                "trappings": [],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
+        "id": "chasseur-de-blaireaux",
+        "name": "Chasseur de Blaireaux",
+        "description": "Les Chevaucheurs de blaireau sont des figures solitaires qui arpentent le Moot tels des Chevaliers en quête, en plus petits et plus courtauds. L'efficacité constatée des Chevaucheurs de blaireau au combat est littéralement incroyable — les blaireaux, comme les halflings, deviennent étonnamment féroces en cas de menace, capables d'affronter des adversaires bien plus imposants qu'eux-mêmes.",
+        "class": "Rangers",
+        "races": [
+            "Halfling"
+        ],
+        "career_level": [
+            {
+                "id": "taquineur-de-blaireau",
+                "name": "Taquineur de Blaireau",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "ride_badger",
+                    "animal-training_badger",
+                    "charm-animal",
+                    "dodge",
+                    "trade_any",
+                    "perception",
+                    "ranged_sling",
+                    "gossip"
+                ],
+                "talent_ids": [
+                    "roughrider",
+                    "flee",
+                    "fast-shot",
+                    "marksman"
+                ],
+                "trappings": [
+                    "Backpack",
+                    "Leather Jack",
+                    "Sling",
+                    "Tamed Badger with Saddle and Harness"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "chevaucheur-de-blaireau",
+                "name": "Chevaucheur de Blaireau",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "melee_basic",
+                    "orientation",
+                    "ranged_entangling",
+                    "endurance",
+                    "animal-care"
+                ],
+                "talent_ids": [
+                    "stout-hearted",
+                    "rover",
+                    "sure-shot",
+                    "seasoned-traveller"
+                ],
+                "trappings": [
+                    "Saddlebags",
+                    "Leather Breastplate",
+                    "Throwing Weapon or Entangling Weapon"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "sergent-blaireau",
+                "name": "Sergent Blaireau",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "melee_cavalry",
+                    "intimidate",
+                    "track",
+                    "outdoor-survival"
+                ],
+                "talent_ids": [
+                    "trick-riding",
+                    "resolute",
+                    "distract",
+                    "sewer-rat"
+                ],
+                "trappings": [
+                    "Badger Barding (2 AP on Head and Torso)",
+                    "Melee Weapon (Basic or Cavalry)"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "maitre-blaireau",
+                "name": "Maître Blaireau",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "leadership",
+                    "consume-alcohol"
+                ],
+                "talent_ids": [
+                    "frightening",
+                    "inspiring",
+                    "strike-to-injure",
+                    "night-owl"
+                ],
+                "trappings": [
+                    "Large Trained Badger (Spotted Moot Badger-Pony)",
+                    "1 Squire (Taquineur de Blaireau)",
+                    "Plate Armour",
+                    "Sense of Humour"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
         "id": "coachman",
         "name": "Coachman",
         "description": "Determined and rugged, you deliver passengers safely by coach despite the daily dangers you face. For many, the coach is the only way to get from one town to the next. The wild places between teem with Beastmen, Bandits, and worse, but with just a team of fresh horses and a blunderbuss, brave and hardworking Coachmen make travel possible. To help evade danger, most coaching companies relentlessly pursue speed, and their employees have a reputation for ruthlessness towards other travellers on the roads, never trusting anyone. Coachmen often start as Postilions, riding the lead horse of the team through wind and rain. Instead of transporting passengers, some Coachmen deliver mail, work as chauffeurs for nobles, drive cabs or goods wagons, or the big omnibuses of the great cities, or even become a getaway driver. Good Coachmen are always in demand for unusual, dangerous or illegal jobs. A Coachman looking for a change may find winter is a good time to take a break, as cross-country services are greatly reduced. Coaching companies are always ready to snap up experienced coachmen, so returning to work is usually simple.",
@@ -4958,6 +7202,145 @@
         ]
     },
     {
+        "id": "gardechamps",
+        "name": "Gardechamps",
+        "description": "Ces halflings courageux patrouillent le long des frontières du Moot, et se servent de leur connaissance poussée du terrain et de leurs tactiques rusées de guérilla pour mettre en déroute les visiteurs clandestins. Les Gardechamps sont avant tout des halflings du peuple, des visages amicaux qui rassurent les citoyens. Les Gardechamps vétérans surprennent souvent les autres aventuriers par leur expérience face à la nécromancie.",
+        "class": "Rangers",
+        "races": [
+            "Halfling"
+        ],
+        "career_level": [
+            {
+                "id": "garde-novice",
+                "name": "Garde Novice",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Dex",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "stealth_rural",
+                    "intuition",
+                    "trade_any",
+                    "orientation",
+                    "perception",
+                    "ranged_sling",
+                    "gossip",
+                    "lore_moot"
+                ],
+                "talent_ids": [
+                    "stout-hearted",
+                    "distract",
+                    "accurate-shot",
+                    "fast-shot"
+                ],
+                "trappings": [
+                    "Backpack",
+                    "Tent",
+                    "Regional Map",
+                    "Sling with 10 Stones",
+                    "Trade Tools"
+                ],
+                "status": "Brass 4"
+            },
+            {
+                "id": "gardechamps",
+                "name": "Gardechamps",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Dex",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "melee_basic",
+                    "dodge",
+                    "consume-alcohol",
+                    "secret-signs_scout",
+                    "outdoor-survival"
+                ],
+                "talent_ids": [
+                    "side-by-side",
+                    "nose-for-trouble",
+                    "orientation",
+                    "sure-shot"
+                ],
+                "trappings": [
+                    "Leather Jack",
+                    "Simple Weapon",
+                    "Lantern and Oil"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "sergent-gardechamps",
+                "name": "Sergent Gardechamps",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Dex",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "set-trap",
+                    "endurance",
+                    "lore_necromancy"
+                ],
+                "talent_ids": [
+                    "hardy",
+                    "rover",
+                    "fleet-footed",
+                    "night-vision"
+                ],
+                "trappings": [
+                    "Quality Mail Shirt",
+                    "Squad of Novice Guards"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "capitaine-gardechamps",
+                "name": "Capitaine Gardechamps",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Dex",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "leadership",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "inspiring",
+                    "sturdy",
+                    "fearless_undead",
+                    "expert_moot-terrain"
+                ],
+                "trappings": [
+                    "Garrison of Field Guard Sergeants",
+                    "Community Respect"
+                ],
+                "status": "Silver 5"
+            }
+        ]
+    },
+    {
         "id": "messenger",
         "name": "Messenger",
         "description": "Swift and sure-footed, nothing stops you delivering your messages on time. When the postal service is unsecure or too slow, people send a Messenger. Several courier companies provide express services, competing to show they are the fastest and safest. Most Messengers take their duties very seriously, guarding their packages with their lives. Some courier companies have arrangements with coaching houses allowing their Messengers to swap tired horses for fresh ones, for top-speed delivery. Runners are employed to carry urgent messages in cities. Many larger settlements host competitions to celebrate the fastest, with the winners taking prizes and lucrative job contracts. Messengers can also be found working for the military, noble houses, large merchant houses, and for criminal gangs seeking to maintain their privacy. Messages can contain all sorts of information, and some lead to adventure should they be intercepted. The easiest way for any villain (or innocent party) to get hold of such information will be to waylay a Messenger. If this happens, it will be the Messenger's duty to follow things through until the message is recovered. As Messengers are usually freelance, paid per package delivered, it is simple enough to drop everything then pick-up work when they return.",
@@ -5089,6 +7472,143 @@
                     "Writing Kit"
                 ],
                 "status": "Silver 5"
+            }
+        ]
+    },
+    {
+        "id": "patrouilleur-des-karak",
+        "name": "Patrouilleur des Karak",
+        "description": "La sûreté des routes doit être préservée, et un nouveau chemin doit être tracé lorsque l'ancien devient trop dangereux : tel est le devoir des Patrouilleurs des karak. Ces nains endurcis ne doivent leur survie qu'à leur capacité à se préparer. Ils doivent savoir enchaîner chasse, reconnaissance et combat, voire même réparation d'un pont en plein milieu de leur expédition.",
+        "class": "Rangers",
+        "races": [
+            "Dwarf"
+        ],
+        "career_level": [
+            {
+                "id": "coureur-des-forts",
+                "name": "Coureur des Forts",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "T",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "melee_basic",
+                    "climb",
+                    "dodge",
+                    "trade_cartographer",
+                    "perception",
+                    "row",
+                    "endurance",
+                    "outdoor-survival"
+                ],
+                "talent_ids": [
+                    "strider_any",
+                    "hardy",
+                    "tireless",
+                    "orientation"
+                ],
+                "trappings": [
+                    "Backpack",
+                    "Simple Weapon",
+                    "Leather Jack",
+                    "Trade Tools (Cartographer)"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "patrouilleur-des-karak",
+                "name": "Patrouilleur des Karak",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "T",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "charm-animal",
+                    "intuition",
+                    "track",
+                    "ranged_blackpowder",
+                    "secret-signs_scout",
+                    "secret-signs_ranger"
+                ],
+                "talent_ids": [
+                    "strike-mighty-blow",
+                    "nose-for-trouble",
+                    "climber",
+                    "rover"
+                ],
+                "trappings": [
+                    "Blackpowder Weapon with Ammunition",
+                    "Grappling Hook and Rope"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "gardien-des-routes-des-karak",
+                "name": "Gardien des Routes des Karak",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "T",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "stealth_underground",
+                    "orientation",
+                    "set-trap",
+                    "lore_engineering"
+                ],
+                "talent_ids": [
+                    "gunner",
+                    "fleet-footed",
+                    "enclosed-fighter",
+                    "sure-shot"
+                ],
+                "trappings": [
+                    "Masonry Tools"
+                ],
+                "status": "Silver 2"
+            },
+            {
+                "id": "arpenteur-des-karak",
+                "name": "Arpenteur des Karak",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "T",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "language_any"
+                ],
+                "talent_ids": [
+                    "tinker",
+                    "resolute",
+                    "sturdy",
+                    "savant_karak-routes"
+                ],
+                "trappings": [
+                    "4 Apprentice Coureurs des Forts",
+                    "Maps",
+                    "Mementos of Many Journeys"
+                ],
+                "status": "Silver 4"
             }
         ]
     },
@@ -5230,6 +7750,145 @@
         ]
     },
     {
+        "id": "rhinox-herder",
+        "name": "Rhinox Herder",
+        "description": "Rhinox Herders are those rare Ogres who manage to keep an eye on tomorrow even as they fill their gut today. Their duties include both animal husbandry and care, as well as fighting off other Ogres who wander too close to the animal pens or grazing areas looking for a meal. They trade in fine Rhinox Bulls for breeding, and are always on the lookout for new stock to add to their herd.",
+        "class": "Rangers",
+        "races": [
+            "Ogre"
+        ],
+        "career_level": [
+            {
+                "id": "rhinox-rustler",
+                "name": "Rhinox Rustler",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "bribery",
+                    "consume-alcohol",
+                    "dodge",
+                    "endurance",
+                    "melee_basic",
+                    "perception",
+                    "ranged_entangling",
+                    "set-trap",
+                    "stealth_rural"
+                ],
+                "talent_ids": [
+                    "flee",
+                    "marksman",
+                    "rover",
+                    "strider_mountains"
+                ],
+                "trappings": [
+                    "Backpack",
+                    "Hand Weapon",
+                    "Leather Jack",
+                    "Lasso"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "rhinox-herder",
+                "name": "Rhinox Herder",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "animal-care",
+                    "animal-training_rhinox",
+                    "charm-animal",
+                    "lore_rhinox",
+                    "endurance",
+                    "ranged_throwing"
+                ],
+                "talent_ids": [
+                    "fearless_large-beasts",
+                    "stout-hearted",
+                    "sturdy",
+                    "roughrider"
+                ],
+                "trappings": [
+                    "Harpoon or Great Throwing Spear",
+                    "Rhinox Furs"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "rhinox-breaker",
+                "name": "Rhinox Breaker",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "intimidate",
+                    "outdoor-survival",
+                    "ride_rhinox"
+                ],
+                "talent_ids": [
+                    "distract",
+                    "resolute",
+                    "seasoned-traveller",
+                    "trick-riding"
+                ],
+                "trappings": [
+                    "Rhinox Skull Gutplate",
+                    "Saddlebags"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "rhinox-master",
+                "name": "Rhinox Master",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "intuition",
+                    "leadership"
+                ],
+                "talent_ids": [
+                    "carouser",
+                    "frightening",
+                    "inspiring",
+                    "strike-to-injure"
+                ],
+                "trappings": [
+                    "Herd of Rhinox or Other Large Beasts",
+                    "Farmstead or Grazing Rights on a Large Estate"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
         "id": "road-warden",
         "name": "Road Warden",
         "description": "With a wary eye and ready weapon, you tour the highways of the Empire enforcing the law. Road Wardens protect travellers from the bandits, Greenskins, Beastmen and other dangers that threaten the Empire's highways. The Wardens are supported by a system of tolls, taxes they often collect personally. Successful Road Wardens are well-received and respected, and often have bunks in each inn along their route. Most main-road Road Wardens are part of the State Army, patrolling primary thoroughfares during peace time, so are well-trained and resplendent in neat uniforms. Less-travelled roads make do with local equivalents, some of whom take advantage of their position and lack of supervision for their own gain. Some Wardens prefer sitting in their safe, fortified toll stations to clearing the roads, but travellers often balk at handing over coin when the roads are dangerous and in disrepair. Road Wardens frequently find adventure. Anything untoward happening in the countryside is often close to a well-patrolled roadside. When trouble occurs, Road Wardens are summoned to resolve any problems. If they follow up and become involved in an investigation, they are simply doing their job, and might even secure extra pay for their time, even if the resulting adventure takes them far from their regular beat.",
@@ -5362,6 +8021,145 @@
                     "Unit of Road Wardens"
                 ],
                 "status": "Gold 1"
+            }
+        ]
+    },
+    {
+        "id": "rodeur-fantome",
+        "name": "Rôdeur Fantôme",
+        "description": "Les Rôdeurs fantômes sont sans doute la plus mortelle de toutes les menaces que recèlent les forêts antiques du Vieux Monde. La détermination et le savoir-faire avec lesquels ces maîtres archers traquent tout ce qui menace la nature terrifieraient n'importe qui. L'harmonie des Rôdeurs fantômes avec la nature est telle que celle-ci semble presque cacher les traces de leur passage aux yeux indiscrets. Pour les Rôdeurs fantômes, la forêt est sacrée par-dessus tout — ils ne tolèrent aucune transgression.",
+        "class": "Rangers",
+        "races": [
+            "Wood Elf"
+        ],
+        "career_level": [
+            {
+                "id": "garde-forestier",
+                "name": "Garde Forestier",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Dex",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "stealth_any",
+                    "climb",
+                    "trade_bowyer",
+                    "orientation",
+                    "perception",
+                    "ranged_bow",
+                    "lore_beasts",
+                    "outdoor-survival"
+                ],
+                "talent_ids": [
+                    "strider_woodlands",
+                    "silent-move",
+                    "sure-shot",
+                    "fleet-footed"
+                ],
+                "trappings": [
+                    "Backpack",
+                    "Hooded Cape",
+                    "Longbow and 10 Arrows",
+                    "Trade Tools (Bowyer)"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "rodeur-fantome",
+                "name": "Rôdeur Fantôme",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Dex",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "melee_basic",
+                    "charm-animal",
+                    "set-trap",
+                    "track",
+                    "secret-signs_ranger"
+                ],
+                "talent_ids": [
+                    "animal-affinity",
+                    "climber",
+                    "orientation",
+                    "fast-shot"
+                ],
+                "trappings": [
+                    "Elven Bow and 10 Self-made Arrows",
+                    "Assortment of Traps",
+                    "Leather Jack"
+                ],
+                "status": "Brass 5"
+            },
+            {
+                "id": "esprit-du-vent",
+                "name": "Esprit du Vent",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Dex",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "dodge",
+                    "swim",
+                    "endurance"
+                ],
+                "talent_ids": [
+                    "strike-mighty-blow",
+                    "catfall",
+                    "sharpshooter",
+                    "combat-aware"
+                ],
+                "trappings": [
+                    "Quality Elven Bow and Quality Leather Armour (at least 1 Advantage each)",
+                    "10 Elven Arrows"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "courroux-de-la-foret",
+                "name": "Courroux de la Forêt",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Dex",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "intimidate",
+                    "language_any"
+                ],
+                "talent_ids": [
+                    "strike-to-injure",
+                    "hatred_any",
+                    "sniper",
+                    "hidden-sniper"
+                ],
+                "trappings": [
+                    "Trophy from a Legendary Enemy",
+                    "Ancient Elven Arrow (for Special Prey)",
+                    "Fearsome Reputation"
+                ],
+                "status": "Silver 3"
             }
         ]
     },
@@ -6698,6 +9496,281 @@
         ]
     },
     {
+        "id": "beadle",
+        "name": "Beadle",
+        "description": "Professors at the University of Altdorf and wizards at the Colleges of Magic tend to lose themselves in the study of their discipline. That is why these organisations require a staff of a more practical bent; beadles, who guard the college halls, libraries, and laboratories from burglars, spies, and — most of all — misbehaving students.",
+        "class": "Rogues",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "laboratory-assistant",
+                "name": "Laboratory Assistant",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "consume-alcohol",
+                    "dodge",
+                    "endurance",
+                    "gamble",
+                    "gossip",
+                    "intuition",
+                    "melee_basic",
+                    "perception",
+                    "stealth_urban",
+                    "trade_carpenter"
+                ],
+                "talent_ids": [
+                    "diceman",
+                    "read-write",
+                    "savvy",
+                    "warrior-born"
+                ],
+                "trappings": [
+                    "Uniform in the Colours of the Faculty"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "beadle",
+                "name": "Beadle",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "charm",
+                    "cool",
+                    "intimidate",
+                    "lore_any",
+                    "ranged_blackpowder"
+                ],
+                "talent_ids": [
+                    "carouser",
+                    "etiquette_scholars",
+                    "reversal",
+                    "strike-mighty-blow"
+                ],
+                "trappings": [
+                    "Pistol or Blunderbuss with 12 Shots",
+                    "Sleeved Mail Shirt"
+                ],
+                "status": "Silver 2"
+            },
+            {
+                "id": "groundskeeper",
+                "name": "Groundskeeper",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "entertain_storytelling",
+                    "heal",
+                    "melee_any",
+                    "track"
+                ],
+                "talent_ids": [
+                    "argumentative",
+                    "fearless_intruders",
+                    "menacing",
+                    "stout-hearted"
+                ],
+                "trappings": [
+                    "Helmet",
+                    "Master Key to the Faculty"
+                ],
+                "status": "Silver 4"
+            },
+            {
+                "id": "terror-of-the-faculty",
+                "name": "Terror of the Faculty",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "leadership",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "frightening",
+                    "public-speaker",
+                    "suave",
+                    "unshakeable"
+                ],
+                "trappings": [
+                    "Breastplate",
+                    "Crew of Beadles"
+                ],
+                "status": "Silver 5"
+            }
+        ]
+    },
+    {
+        "id": "camp-follower",
+        "name": "Camp Follower",
+        "description": "Like mobile cities, the armies of the Old World rely on complex supply chains and strict organisation to keep them fed and supplied. Private enterprise is always on the lookout for profit, so much of any army will be made up of an eclectic band of hangers on, pedlars, bawds, tradespeople, artisans, and charlatans. Those dedicated to following the troops without any specific trade or vocation come under the auspices of Camp Follower.",
+        "class": "Rogues",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "High Elf",
+            "Human",
+            "Wood Elf"
+        ],
+        "career_level": [
+            {
+                "id": "ribaud",
+                "name": "Ribaud",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "consume-alcohol",
+                    "dodge",
+                    "entertain_any",
+                    "gossip",
+                    "haggle",
+                    "melee_any",
+                    "outdoor-survival",
+                    "perception",
+                    "perform_dance"
+                ],
+                "talent_ids": [
+                    "attractive",
+                    "beneath-notice",
+                    "blather",
+                    "dirty-fighting"
+                ],
+                "trappings": [
+                    "Bed Roll",
+                    "Dagger",
+                    "Pack"
+                ],
+                "status": "Brass 1"
+            },
+            {
+                "id": "camp-follower",
+                "name": "Camp Follower",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "bribery",
+                    "endurance",
+                    "gamble",
+                    "ranged_any",
+                    "stealth_rural"
+                ],
+                "talent_ids": [
+                    "diceman",
+                    "etiquette_soldiers",
+                    "rover",
+                    "stone-soup"
+                ],
+                "trappings": [
+                    "Tent",
+                    "Quality Hat"
+                ],
+                "status": "Brass 4"
+            },
+            {
+                "id": "seasoned-scavenger",
+                "name": "Seasoned Scavenger",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "intimidate",
+                    "intuition",
+                    "language_any"
+                ],
+                "talent_ids": [
+                    "seasoned-traveller",
+                    "sturdy",
+                    "unshakeable",
+                    "very-resilient"
+                ],
+                "trappings": [
+                    "Quality Clothing"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "camp-chief",
+                "name": "Camp Chief",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "evaluate",
+                    "leadership"
+                ],
+                "talent_ids": [
+                    "inspiring",
+                    "public-speaking",
+                    "stout-hearted",
+                    "strong-minded"
+                ],
+                "trappings": [
+                    "Riding Horse with Saddle and Tack",
+                    "Ring of Camp Followers"
+                ],
+                "status": "Silver 4"
+            }
+        ]
+    },
+    {
         "id": "charlatan",
         "name": "Charlatan",
         "description": "Unscrupulous and charming, you separate fools from their money; thankfully, there is no shortage of fools... A Charlatan traffics in trust, yet profits from treachery. By preying on emotions and psychological weaknesses, Charlatans offer their 'mark' a prize that is too good to be true. Social privilege provides no protection, and even the loftiest citizens can fall victim to a skilled Charlatan. In addition to a knack for lying, a lack of conscience is also of benefit to Charlatans. Charlatans include Swindlers, Con Artists, Gamblers, and other Scoundrels seeking to prey on the gullible. Halflings often operate distraction cons in small family groups. Young High Elves, slumming it with Humans, treat their cons as one big game, not motivated by profit, but to prove their superiority. Some experienced Charlatans work with artists, who forge documentation for a cut of any profits. To avoid rousing suspicion, Charlatans rarely stay in one area for long. Few Swindlers openly admit to their calling, preferring instead to masquerade as anyone other than themselves. Because of this, there is little stopping Charlatans from pursuing side-matters of interests; equally, afterwards, they can return to grafting anywhere with rich fools willing to part with coin on naught but a promise.",
@@ -7913,6 +10986,295 @@
         ]
     },
     {
+        "id": "archer",
+        "name": "Archer",
+        "description": "Respected for their skill and command of the battlefield, archers pride themselves on being apart from (and even better than) the usual rabble that joins the army. Anyone can hold a halberd or fire a handgun, they say, but it takes years of training to be an archer.",
+        "class": "Warriors",
+        "races": [
+            "Halfling",
+            "High Elf",
+            "Human",
+            "Wood Elf"
+        ],
+        "career_level": [
+            {
+                "id": "bowman",
+                "name": "Bowman",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "BS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "climb",
+                    "consume-alcohol",
+                    "dodge",
+                    "endurance",
+                    "language_battle",
+                    "perception",
+                    "play_horn",
+                    "ranged_bow",
+                    "stealth_rural"
+                ],
+                "talent_ids": [
+                    "accurate-shot",
+                    "fast-shot",
+                    "strong-back",
+                    "warrior-born"
+                ],
+                "trappings": [
+                    "Quiver and 10 Arrows",
+                    "Bow",
+                    "Dagger",
+                    "Pack",
+                    "Uniform"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "archer",
+                "name": "Archer",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "BS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "gamble",
+                    "gossip",
+                    "melee_basic",
+                    "outdoor-survival",
+                    "track",
+                    "trade_fletcher"
+                ],
+                "talent_ids": [
+                    "drilled",
+                    "etiquette_soldiers",
+                    "marksman",
+                    "sure-shot"
+                ],
+                "trappings": [
+                    "Headgear",
+                    "Sword",
+                    "Quality Bow"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "archer-sergeant",
+                "name": "Archer Sergeant",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "BS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "leadership",
+                    "navigation",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "sharpshooter",
+                    "sniper",
+                    "unshakeable"
+                ],
+                "trappings": [
+                    "Symbol of Rank",
+                    "Quality Uniform"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "archer-captain",
+                "name": "Archer Captain",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "BS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "lore_warfare",
+                    "secret-signs_scout"
+                ],
+                "talent_ids": [
+                    "inspiring",
+                    "seasoned-traveller",
+                    "stout-hearted",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Letter of Commission",
+                    "Light Warhorse with Saddle and Tack",
+                    "Symbol of Rank"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
+        "id": "artillerist",
+        "name": "Artillerist",
+        "description": "The pride and joy of the Empire, its artillery is famed for an awe-inspiring spectacle that strikes fear into the heart of all her enemies. Artillery regiments do not possess the glamour of the knightly orders or the Greatswords — it is hard graft involving heavy lifting, fetching, carrying, and tedious excavation. Despite this, it is vital to the Empire's war effort and artillerists see themselves as the unsung heroes of the Empire's armies.",
+        "class": "Warriors",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "apprentice-artillerist",
+                "name": "Apprentice Artillerist",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "BS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "animal-care",
+                    "cool",
+                    "drive",
+                    "endurance",
+                    "evaluate",
+                    "language_battle",
+                    "melee_basic",
+                    "navigation",
+                    "perception",
+                    "ranged_blackpowder"
+                ],
+                "talent_ids": [
+                    "marksman",
+                    "rapid-reload",
+                    "strong-back",
+                    "warrior-born"
+                ],
+                "trappings": [
+                    "Dagger",
+                    "Leather Apron"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "artillerist",
+                "name": "Artillerist",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "BS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "consume-alcohol",
+                    "gamble",
+                    "gossip",
+                    "outdoor-survival",
+                    "ranged_blackpowder",
+                    "trade_any"
+                ],
+                "talent_ids": [
+                    "crew-commander",
+                    "etiquette_soldiers",
+                    "orientation",
+                    "sniper"
+                ],
+                "trappings": [
+                    "Weapon (Any)",
+                    "Telescope",
+                    "Tools",
+                    "Uniform"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "artillerist-captain",
+                "name": "Artillerist Captain",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "BS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "intuition",
+                    "leadership",
+                    "lore_artillery",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "read-write",
+                    "tinker",
+                    "unshakeable"
+                ],
+                "trappings": [
+                    "Symbol of Rank",
+                    "Quality Uniform"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "master-artillerist",
+                "name": "Master Artillerist",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "BS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "inspiring",
+                    "public-speaking",
+                    "seasoned-traveller",
+                    "stout-hearted"
+                ],
+                "trappings": [
+                    "Artillery Piece and Limber",
+                    "Letter of Commission",
+                    "Light Warhorse with Saddle and Tack",
+                    "Map",
+                    "Symbol of Rank"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
         "id": "cavalryman",
         "name": "Cavalryman",
         "description": "A dashing and fearless rider, you bring speed, versatility, and skill-at-arms to the battlefield. Whether it's units of Pistoliers, Outriders, Demilancers, Horse Archers, or similar, Cavalrymen are deployed for maximum strategic advantage. On campaign, that means scouting, raiding, harassing the enemy lines, or defending foragers. On the battlefield, they are also particularly versatile, able to strike quickly and melt away. For speed of movement, scouting, versatility, and sheer élan, Cavalrymen cannot be rivalled. Swift, lightly-armoured cavalry is employed by most armies, including forces of the cults and less formal armed bands including mercenaries or private armies. Bretonnian armies make use of mounted men at arms, while Wood Elf Gladeriders are some of the most feared light cavalry in the Old World. A cavalryman currently in the State Army is not just going to drop everything on a whim. Should they have something they wish to personally pursue, they will require permission from senior officers, perhaps buy out their commission if they have one, or go absent without leave. As an alternative, they could be ordered to investigate matters of importance by their superiors. Mercenary cavalrymen have more flexibility to strike out adventuring, being little more than hired swords.",
@@ -8043,6 +11405,148 @@
                     "Quality Clothing"
                 ],
                 "status": "Gold 2"
+            }
+        ]
+    },
+    {
+        "id": "greatsword",
+        "name": "Greatsword",
+        "description": "Greatswords are the signature elite infantry of the Imperial armies, the most prestigious and feared of all the Empire's foot soldiers. They forsake the shield to wield huge zweihänder swords, ensuring their combats are short and deadly whichever way they go. Their large, two-handed weapons are unwieldy, so Greatswords need to be swift and athletic to compensate.",
+        "class": "Warriors",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "greatsword-cadet",
+                "name": "Greatsword Cadet",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "consume-alcohol",
+                    "cool",
+                    "dodge",
+                    "endurance",
+                    "gossip",
+                    "language_battle",
+                    "melee_basic",
+                    "melee_two-handed",
+                    "play_drum"
+                ],
+                "talent_ids": [
+                    "coolheaded",
+                    "drilled",
+                    "strong-back",
+                    "warrior-born"
+                ],
+                "trappings": [
+                    "Dagger",
+                    "Metal Breastplate",
+                    "Uniform",
+                    "Zweihänder"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "greatsword",
+                "name": "Greatsword",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "gamble",
+                    "intimidate",
+                    "lore_heraldry",
+                    "melee_any",
+                    "outdoor-survival",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "combat-reflexes",
+                    "etiquette_soldiers",
+                    "fearless_any",
+                    "strike-mighty-blow"
+                ],
+                "trappings": [
+                    "Full Plate Armour",
+                    "Large Feathered Hat"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "greatsword-sergeant",
+                "name": "Greatsword Sergeant",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "intuition",
+                    "leadership",
+                    "navigation",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "enclosed-fighter",
+                    "unshakeable",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Manual on the Art of Zweihänder Fighting",
+                    "Quality Zweihänder",
+                    "Symbol of Rank"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "greatsword-captain",
+                "name": "Greatsword Captain",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "commanding-presence",
+                    "inspiring",
+                    "public-speaking",
+                    "stout-hearted"
+                ],
+                "trappings": [
+                    "Letter of Commission",
+                    "Light Warhorse with Saddle and Tack",
+                    "Quality Uniform",
+                    "Symbol of Rank"
+                ],
+                "status": "Gold 1"
             }
         ]
     },
@@ -8179,6 +11683,291 @@
                     "Breastplate"
                 ],
                 "status": "Silver 5"
+            }
+        ]
+    },
+    {
+        "id": "halberdier",
+        "name": "Halberdier",
+        "description": "The mainstay of all Imperial armies, Halberdiers are found in forces the length and breadth of the Empire, and beyond. They have a reputation for reliability and grit and make a formidable sight on the field of battle, massed closely together with their imposing weapons. The Halberdier takes heart from fighting in large groups of tightly formed units, where they benefit from the reach of the halberd while not suffering too much from a lack of manoeuvrability.",
+        "class": "Warriors",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "halberdier-recruit",
+                "name": "Halberdier Recruit",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "consume-alcohol",
+                    "cool",
+                    "dodge",
+                    "endurance",
+                    "language_battle",
+                    "melee_basic",
+                    "melee_polearm",
+                    "perform_parade",
+                    "play_drum"
+                ],
+                "talent_ids": [
+                    "diceman",
+                    "drilled",
+                    "strong-back",
+                    "warrior-born"
+                ],
+                "trappings": [
+                    "Dagger",
+                    "Halberd",
+                    "Leather Breastplate",
+                    "Uniform"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "halberdier",
+                "name": "Halberdier",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "climb",
+                    "gamble",
+                    "gossip",
+                    "intimidate",
+                    "outdoor-survival",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "enclosed-fighter",
+                    "etiquette_soldiers",
+                    "fearless_any",
+                    "strike-mighty-blow"
+                ],
+                "trappings": [
+                    "Metal Breastplate",
+                    "Helmet",
+                    "Quality Halberd"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "halberdier-sergeant",
+                "name": "Halberdier Sergeant",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "intuition",
+                    "leadership",
+                    "navigation",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "unshakeable",
+                    "stout-hearted",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Symbol of Rank",
+                    "Quality Uniform"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "halberdier-captain",
+                "name": "Halberdier Captain",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "inspiring",
+                    "public-speaking",
+                    "seasoned-traveller",
+                    "commanding-presence"
+                ],
+                "trappings": [
+                    "Letter of Commission",
+                    "Light Warhorse with Saddle and Tack",
+                    "Quality Sword",
+                    "Symbol of Rank"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
+        "id": "handgunner",
+        "name": "Handgunner",
+        "description": "The Handgunner is a comparative newcomer to the Imperial army. Though they have been around for hundreds of years, they are not yet entirely trusted by the rest of the military. Even so, as technology advances, they have become increasingly effective on the battlefield and are fielded in the Imperial armies in ever greater numbers.",
+        "class": "Warriors",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "handgunner-recruit",
+                "name": "Handgunner Recruit",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "BS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "consume-alcohol",
+                    "cool",
+                    "dodge",
+                    "endurance",
+                    "language_battle",
+                    "melee_basic",
+                    "perception",
+                    "play_flute",
+                    "ranged_blackpowder"
+                ],
+                "talent_ids": [
+                    "accurate-shot",
+                    "gunner",
+                    "marksman",
+                    "sniper"
+                ],
+                "trappings": [
+                    "Dagger",
+                    "Handgun",
+                    "Uniform"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "handgunner",
+                "name": "Handgunner",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "BS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "climb",
+                    "gamble",
+                    "gossip",
+                    "intuition",
+                    "outdoor-survival",
+                    "trade_gunsmith"
+                ],
+                "talent_ids": [
+                    "drilled",
+                    "etiquette_soldiers",
+                    "fast-shot",
+                    "rapid-reload"
+                ],
+                "trappings": [
+                    "Large Feathered Hat",
+                    "Quality Handgun"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "handgunner-sergeant",
+                "name": "Handgunner Sergeant",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "BS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "leadership",
+                    "navigation",
+                    "ranged_engineer",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "sharpshooter",
+                    "sure-shot",
+                    "unshakeable"
+                ],
+                "trappings": [
+                    "Symbol of Rank",
+                    "Quality Uniform"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "handgunner-captain",
+                "name": "Handgunner Captain",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "BS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "inspiring",
+                    "seasoned-traveller",
+                    "stout-hearted",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Letter of Commission",
+                    "Light Warhorse with Saddle and Tack",
+                    "Symbol of Rank"
+                ],
+                "status": "Gold 1"
             }
         ]
     },
@@ -8320,6 +12109,865 @@
         ]
     },
     {
+        "id": "knight-of-the-blazing-sun",
+        "name": "Knight of the Blazing Sun",
+        "description": "The Knights of the Blazing Sun are templars of Myrmidia and the goddess' largest Order in the Empire. The Blazing Suns are renowned for their study of strategy and tactics in both warfare and personal combat. Myrmidia prizes the enquiring mind, invention, and the cultivation of diverse knowledge, so knights hone their judgement, resourcefulness and skills in diplomacy.",
+        "class": "Warriors",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "novice",
+                "name": "Novice",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "animal-care",
+                    "charm-animal",
+                    "heal",
+                    "language_classical",
+                    "lore_heraldry",
+                    "lore_any",
+                    "melee_basic",
+                    "melee_cavalry",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "etiquette_any",
+                    "read-write",
+                    "roughrider",
+                    "warrior-born"
+                ],
+                "trappings": [
+                    "Leather Jack",
+                    "Mail Shirt",
+                    "Riding Horse with Saddle and Tack",
+                    "Shield",
+                    "Trade Tools (Farrier)",
+                    "Religious Symbol (Myrmidia)"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "knight",
+                "name": "Knight",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "dodge",
+                    "endurance",
+                    "intimidate",
+                    "language_battle",
+                    "melee_any",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "seasoned-traveller",
+                    "savvy",
+                    "shieldsman",
+                    "strike-to-injure"
+                ],
+                "trappings": [
+                    "Destrier with Saddle and Tack",
+                    "Melee Weapon (Any)",
+                    "Lance",
+                    "Plate Armour and Helm"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "hochmeister",
+                "name": "Hochmeister",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "ranged_any",
+                    "leadership",
+                    "research"
+                ],
+                "talent_ids": [
+                    "fearless_any",
+                    "warleader",
+                    "disarm",
+                    "unshakeable"
+                ],
+                "trappings": [
+                    "Barding",
+                    "Small Unit of Blazing Sun Knights"
+                ],
+                "status": "Gold 2"
+            },
+            {
+                "id": "knight-of-the-inner-circle",
+                "name": "Knight of the Inner Circle",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "secret-signs_blazing-sun",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "inspiring",
+                    "stout-hearted",
+                    "wealthy",
+                    "strike-mighty-blow"
+                ],
+                "trappings": [
+                    "Great Helm with Sun Emblem",
+                    "Squire",
+                    "Large Unit of Knights or Several Small Units of Knights"
+                ],
+                "status": "Gold 4"
+            }
+        ]
+    },
+    {
+        "id": "knight-of-the-white-wolf",
+        "name": "Knight of the White Wolf",
+        "description": "There are few sights more evocative of the Ulrican faith than that of a heavily armoured and heroically hirsute knight galloping into battle swinging a cavalry hammer. The Knights of the White Wolf are the largest templar order in the Empire, charged with protecting Ulric's holy sites wherever they are found. Ulric's faithful do not favour passive guard duty, so White Wolves are ever active in the field, hunting down all who threaten the god's worshippers.",
+        "class": "Warriors",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "novice",
+                "name": "Novice",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "animal-care",
+                    "charm-animal",
+                    "heal",
+                    "lore_heraldry",
+                    "melee_basic",
+                    "melee_cavalry",
+                    "outdoor-survival",
+                    "ride_horse",
+                    "trade_farrier"
+                ],
+                "talent_ids": [
+                    "roughrider",
+                    "sturdy",
+                    "warrior-born",
+                    "hardy"
+                ],
+                "trappings": [
+                    "Leather Jack",
+                    "Mail Shirt",
+                    "Riding Horse with Saddle and Tack",
+                    "Cavalry Hammer",
+                    "Trade Tools (Farrier)",
+                    "Religious Symbol (Ulric)"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "knight",
+                "name": "Knight",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "dodge",
+                    "endurance",
+                    "intimidate",
+                    "language_battle",
+                    "melee_any"
+                ],
+                "talent_ids": [
+                    "menacing",
+                    "seasoned-traveller",
+                    "strike-mighty-blow",
+                    "strike-to-injure"
+                ],
+                "trappings": [
+                    "Destrier with Saddle and Tack",
+                    "Plate Armour",
+                    "Wolfskin Cloak"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "templar-sergeant",
+                "name": "Templar Sergeant",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "consume-alcohol",
+                    "leadership",
+                    "lore_warfare",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "furious-assault",
+                    "unshakeable",
+                    "fearless_any",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Barding",
+                    "Small Unit of White Wolf Knights"
+                ],
+                "status": "Gold 2"
+            },
+            {
+                "id": "company-commander",
+                "name": "Company Commander (Inner Circle)",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "lore_any",
+                    "secret-signs_ulric"
+                ],
+                "talent_ids": [
+                    "iron-will",
+                    "inspiring",
+                    "coolheaded",
+                    "implacable"
+                ],
+                "trappings": [
+                    "Novice",
+                    "Company of White Wolf Knights"
+                ],
+                "status": "Gold 3"
+            }
+        ]
+    },
+    {
+        "id": "knight-panther",
+        "name": "Knight Panther",
+        "description": "The Knights Panther are the most widespread secular order in the Empire, second only to the Reiksguard in power. They are not aligned with any province and will lend military aid to any general or leaders deserving of their support. The Order is celebrated for prowess in battle, a fanatical hatred of mutants and a degree of political acumen which allows them to stay aloof from most petty disputes.",
+        "class": "Warriors",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "squire",
+                "name": "Squire",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "animal-care",
+                    "charm-animal",
+                    "heal",
+                    "lore_empire",
+                    "lore_heraldry",
+                    "melee_basic",
+                    "melee_cavalry",
+                    "ride_horse",
+                    "trade_farrier"
+                ],
+                "talent_ids": [
+                    "etiquette_any",
+                    "roughrider",
+                    "sturdy",
+                    "warrior-born"
+                ],
+                "trappings": [
+                    "Leather Jack",
+                    "Mail Shirt",
+                    "Riding Horse with Saddle and Tack",
+                    "Shield",
+                    "Trade Tools (Farrier)"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "knight",
+                "name": "Knight",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "dodge",
+                    "endurance",
+                    "intimidate",
+                    "language_battle",
+                    "melee_any"
+                ],
+                "talent_ids": [
+                    "menacing",
+                    "shieldsman",
+                    "strike-mighty-blow",
+                    "coolheaded"
+                ],
+                "trappings": [
+                    "Great Cat Pelt",
+                    "Destrier with Saddle and Tack",
+                    "Melee Weapon (Sword)",
+                    "Lance",
+                    "Plate Armour and Great Helm with Bestial Crest",
+                    "Ring or Medallion with Panther Emblem"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "first-knight",
+                "name": "First Knight",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "language_any",
+                    "leadership",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "fearless_chaos",
+                    "stout-hearted",
+                    "unshakeable",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Barding",
+                    "Small Unit of Knights Panther"
+                ],
+                "status": "Gold 2"
+            },
+            {
+                "id": "company-commander",
+                "name": "Company Commander (Inner Circle)",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "secret-signs_knights-panther",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "disarm",
+                    "inspiring",
+                    "iron-will",
+                    "strike-to-injure"
+                ],
+                "trappings": [
+                    "Squire",
+                    "Large Unit of Knights Panther or Several Small Units of Knights"
+                ],
+                "status": "Gold 4"
+            }
+        ]
+    },
+    {
+        "id": "light-cavalry",
+        "name": "Light Cavalry",
+        "description": "Tilean mercenary armies rely on fast, lightly armed horsemen to provide mobile striking power. Rather than charge headlong into the teeth of the foe, Tilean light cavalrymen, called Stradioti in their language, prefer to strike from the flanks or, best of all, the rear, where the enemy's baggage train presents a tempting target.",
+        "class": "Warriors",
+        "races": [
+            "Human",
+            "High Elf"
+        ],
+        "career_level": [
+            {
+                "id": "reiver",
+                "name": "Reiver",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "animal-care",
+                    "dodge",
+                    "endurance",
+                    "haggle",
+                    "heal",
+                    "language_battle",
+                    "melee_basic",
+                    "outdoor-survival",
+                    "ranged_throwing",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "etiquette_mercenaries",
+                    "field-dressing",
+                    "flee",
+                    "strong-back"
+                ],
+                "trappings": [
+                    "Shield or Buckler",
+                    "Leather Jack",
+                    "Riding Horse with Saddle and Tack",
+                    "Javelin"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "light-cavalry",
+                "name": "Light Cavalry",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "consume-alcohol",
+                    "gamble",
+                    "gossip",
+                    "melee_cavalry",
+                    "ranged_bow"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "orientation",
+                    "rover",
+                    "rough-rider"
+                ],
+                "trappings": [
+                    "Light Warhorse",
+                    "Mail Coat",
+                    "Open Helm"
+                ],
+                "status": "Silver 2"
+            },
+            {
+                "id": "lance",
+                "name": "Lance",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "drive",
+                    "intuition",
+                    "leadership",
+                    "lore_warfare"
+                ],
+                "talent_ids": [
+                    "combat-reflexes",
+                    "rapid-reload",
+                    "seasoned-traveller",
+                    "trick-riding"
+                ],
+                "trappings": [
+                    "Lance",
+                    "Mail Chausses",
+                    "Squire",
+                    "Page"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "captain",
+                "name": "Captain",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "lore_any",
+                    "ranged_blackpowder"
+                ],
+                "talent_ids": [
+                    "commanding-presence",
+                    "dealmaker",
+                    "inspiring",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Brace of Pistols with Gunpowder and Ammunition",
+                    "Warhorse",
+                    "Flamboyant Clothing",
+                    "Breastplate"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
+        "id": "maneater",
+        "name": "Maneater",
+        "description": "Maneaters are the Ogres most encountered by denizens of the Empire. These wandering warriors leave their tribes behind to travel across the Old World, in search of novel foes to fight and food to eat. They are popular among commanders who can afford to feed them, as Ogres make excellent shock troops. Maneaters often spend years away from their home in the Mountains of Mourne, enjoying the novel tastes and challenges such an existence brings.",
+        "class": "Warriors",
+        "races": [
+            "Ogre"
+        ],
+        "career_level": [
+            {
+                "id": "fresh-meat",
+                "name": "Fresh Meat",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "T",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "consume-alcohol",
+                    "cool",
+                    "dodge",
+                    "endurance",
+                    "gamble",
+                    "intimidate",
+                    "language_battle",
+                    "melee_basic",
+                    "outdoor-survival"
+                ],
+                "talent_ids": [
+                    "dirty-fighting",
+                    "menacing",
+                    "sturdy",
+                    "strong-back"
+                ],
+                "trappings": [
+                    "Hand Weapon",
+                    "Hunk of Meat",
+                    "Wanderlust"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "maneater",
+                "name": "Maneater",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "T",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "entertain_bellow",
+                    "gossip",
+                    "lore_local",
+                    "melee_two-handed",
+                    "ranged_blackpowder"
+                ],
+                "talent_ids": [
+                    "strike-mighty-blow",
+                    "etiquette_slims",
+                    "seasoned-traveller",
+                    "rapid-reload"
+                ],
+                "trappings": [
+                    "Local Clothing",
+                    "Gutplate",
+                    "Two-handed Weapon or Ogre Pistol"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "maneater-crusher",
+                "name": "Maneater Crusher",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "T",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "melee_any",
+                    "intuition",
+                    "leadership"
+                ],
+                "talent_ids": [
+                    "accurate-shot",
+                    "combat-reflexes",
+                    "hardy",
+                    "frightening"
+                ],
+                "trappings": [
+                    "Unit of Mercenaries",
+                    "Respect"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "maneater-captain",
+                "name": "Maneater Captain",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "T",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "ranged_any",
+                    "language_any"
+                ],
+                "talent_ids": [
+                    "combat-master",
+                    "furious-assault",
+                    "warleader",
+                    "reaction-strike"
+                ],
+                "trappings": [
+                    "Mercenary Contract",
+                    "Battle-Tested Gutplate"
+                ],
+                "status": "Silver 5"
+            }
+        ]
+    },
+    {
+        "id": "pikeman",
+        "name": "Pikeman",
+        "description": "All towns and villages in the Old World have their militias, masses of armed residents who can be turned out on short notice to defend homes and fields or fight for a few weeks in their lord's service. Their lack of discipline and desire to return home to families and trades, however, makes them of limited use on long campaigns or when facing heavily armed and armoured horsemen. Discipline and drill are the pikeman's greatest weapons — a phalanx of Pikemen can stop even the heaviest Imperial knights.",
+        "class": "Warriors",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "recruit",
+                "name": "Recruit",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "climb",
+                    "consume-alcohol",
+                    "dodge",
+                    "endurance",
+                    "gamble",
+                    "language_battle",
+                    "language_tilean",
+                    "melee_basic",
+                    "melee_polearm"
+                ],
+                "talent_ids": [
+                    "drilled",
+                    "reaction-strike",
+                    "very-strong",
+                    "warrior-born"
+                ],
+                "trappings": [
+                    "Hand Weapon",
+                    "Leather Breastplate",
+                    "Leather Skullcap",
+                    "Pike",
+                    "Uniform in Unit Colours"
+                ],
+                "status": "Brass 5"
+            },
+            {
+                "id": "pikeman",
+                "name": "Pikeman",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "gossip",
+                    "heal",
+                    "intimidate",
+                    "lore_warfare",
+                    "outdoor-survival"
+                ],
+                "talent_ids": [
+                    "diceman",
+                    "enclosed-fighter",
+                    "etiquette_mercenaries",
+                    "fearless_cavalry"
+                ],
+                "trappings": [
+                    "Dice",
+                    "Mail Coat",
+                    "Open Helm"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "file-leader",
+                "name": "File Leader",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "haggle",
+                    "intuition",
+                    "leadership",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "combat-reflexes",
+                    "field-dressing",
+                    "robust"
+                ],
+                "trappings": [
+                    "Plate Breastplate",
+                    "Sash of Rank"
+                ],
+                "status": "Silver 4"
+            },
+            {
+                "id": "banner-captain",
+                "name": "Banner Captain",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "T",
+                    "I",
+                    "Ag",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "lore_law",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "inspiring",
+                    "unshakeable",
+                    "very-resilient",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Baton of Rank",
+                    "Banner-Bearer",
+                    "Light Warhorse",
+                    "Quality Uniform",
+                    "Plate Bracers and Leggings",
+                    "Phalanx of Pikemen",
+                    "Unit Banner"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
         "id": "pit-fighter",
         "name": "Pit Fighter",
         "description": "You fight for money, for glory, and for the entertainment of the masses. Watching fights is a popular pastime. In the cities, organised fights take place every night. There is money to be made charging spectators, and even more in gambling on the result. Winners earn coin and are celebrated as local heroes. Losers are hurt or killed. Because pit fighting is officially frowned upon, the fights are often controlled by criminal gangs, but the rich love to slum it on occasion, especially if it involves a little bloodshed. The gladiators of Tilea are the most renowned pit fighters, though the chain-fighters of Marienburg and bear-wrestlers of Kislev draw a crowd. Pugilists and wrestlers might work a travelling fair, challenging the public to survive three minutes in the ring with them, or they might fight a celebrated opponent in front of cheering crowds. Knives, clubs, chains, boxing, wrestling, there is an almost endless variation of styles and codes a Pit Fighter might adopt. Many Pit Fighters fall into their sport because they have the talent and they simply need the money. Some would jump at the chance to leave their seedy world behind and put their talents to a slightly better use. Fortunately, Pit fighters are generally free to use their time as they will, provided they turn up on time for the next big fight, and even if they don't, there is always another pit...",
@@ -8455,6 +13103,144 @@
         ]
     },
     {
+        "id": "priest-of-myrmidia",
+        "name": "Priest of Myrmidia",
+        "description": "Myrmidian Priests from the Order of the Righteous Spear and Order of Fury help organise cult meetings, spread its teachings, and lead its ceremonies. They value honour, obedience and tactical martial prowess, in emulation of their patron goddess, Myrmidia. They are often sought as advisors by generals and mercenary commanders, particularly in Tilea and Estalia.",
+        "class": "Warriors",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "first-eagle",
+                "name": "First Eagle",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "dodge",
+                    "language_battle",
+                    "leadership",
+                    "lore_warfare",
+                    "lore_theology",
+                    "melee_basic",
+                    "melee_polearm",
+                    "perception",
+                    "pray"
+                ],
+                "talent_ids": [
+                    "bless_myrmidia",
+                    "combat-aware",
+                    "etiquette_cultists",
+                    "read-write"
+                ],
+                "trappings": [
+                    "Myrmidian Holy Book",
+                    "Leather Jerkin",
+                    "Myrmidian Icon",
+                    "White Robes",
+                    "Spear"
+                ],
+                "status": "Silver 2"
+            },
+            {
+                "id": "warrior-priest",
+                "name": "Warrior Priest",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "entertain_speeches",
+                    "heal",
+                    "intuition",
+                    "melee_any",
+                    "ranged_any"
+                ],
+                "talent_ids": [
+                    "drilled",
+                    "inspiring",
+                    "invoke_myrmidia",
+                    "shieldsman"
+                ],
+                "trappings": [
+                    "Breastplate & Helmet",
+                    "Shield"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "priest-sergeant",
+                "name": "Priest Sergeant",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "lore_any",
+                    "melee_any",
+                    "research",
+                    "trade_any"
+                ],
+                "talent_ids": [
+                    "bookish",
+                    "holy-visions",
+                    "pure-soul",
+                    "stout-hearted"
+                ],
+                "trappings": [
+                    "Full Plate Armour"
+                ],
+                "status": "Silver 4"
+            },
+            {
+                "id": "priest-captain",
+                "name": "Priest Captain",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "animal-care",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "combat-master",
+                    "combat-reflexes",
+                    "fearless_any",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Religious Relic (Myrmidian)"
+                ],
+                "status": "Silver 5"
+            }
+        ]
+    },
+    {
         "id": "protagonist",
         "name": "Protagonist",
         "description": "A strong-arm for hire, you bully, fight, and maybe even kill for coin. Protagonists live by their wits and their muscles and are not generally fussy about the sort of work they take on. A merchant might want to frighten their business rival. An employer might decide his workers need a bit of encouragement to get a job done quicker. A noble might want his daughter's no-good suitor to be frightened off. Protagonists are the ones they turn to, and those with the worst reputation get the best jobs. A Protagonist could be the brute in the local bar everyone knows will bully for coin, or with the reputation for unflinching violence. Some Protagonists have their own code of what they will or won't do; others care for nothing but the coin. Some are simple bullies who resort to picking arguments and fights with likely looking targets to see if they can score any money from the situation. On the face of it, Protagonists are always up for an adventure because they're always up for a fight. But they will usually expect to get paid for services rendered. Whether they will join others without a guarantee of payment is a question they will need to ask themselves. Could a hardened protagonist find a cause they will voluntarily pursue? Perhaps they could even turn over a new leaf?",
@@ -8585,6 +13371,153 @@
                 "trappings": [
                     "Crossbow with 10 shots",
                     "Disguise Kit"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
+        "id": "siege-specialist",
+        "name": "Siege Specialist",
+        "description": "Though besieging fortified places is common throughout the Old World — an art Humans learned from the Dwarfs — it has reached its highest refinement in Tilea, whose Siege Specialists even Dwarfs will grudgingly admit are 'passable'. It is the Siege Specialist's job to bring down castle walls and to keep others from doing so — letting other poor fools storm the walls while they provide cover, or find a more subtle way in.",
+        "class": "Warriors",
+        "races": [
+            "Dwarf",
+            "Human",
+            "High Elf"
+        ],
+        "career_level": [
+            {
+                "id": "crossbowman",
+                "name": "Crossbowman",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "climb",
+                    "consume-alcohol",
+                    "endurance",
+                    "gamble",
+                    "gossip",
+                    "language_battle",
+                    "melee_basic",
+                    "outdoor-survival",
+                    "ranged_crossbow"
+                ],
+                "talent_ids": [
+                    "etiquette_mercenaries",
+                    "marksman",
+                    "rapid-reload",
+                    "strong-back"
+                ],
+                "trappings": [
+                    "Crossbow and Ammunition",
+                    "Hand Weapon",
+                    "Pavise",
+                    "Leather Jack and Skullcap",
+                    "Feathered Hat"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "siege-specialist",
+                "name": "Siege Specialist",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "intuition",
+                    "lore_engineering",
+                    "melee_two-handed",
+                    "perception",
+                    "set-trap",
+                    "trade_miner"
+                ],
+                "talent_ids": [
+                    "enclosed-fighter",
+                    "hardy",
+                    "orientation",
+                    "tunnel-rat"
+                ],
+                "trappings": [
+                    "Two-handed Pick",
+                    "Shovel"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "sapper",
+                "name": "Sapper",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "leadership",
+                    "ranged_blackpowder",
+                    "ranged_engineering",
+                    "trade_explosives"
+                ],
+                "talent_ids": [
+                    "accurate-shot",
+                    "craftsman_explosives",
+                    "gunner",
+                    "unshakeable"
+                ],
+                "trappings": [
+                    "Book of Ballistics Tables",
+                    "Set of Six 60-second Fuses",
+                    "Plate Breastplate",
+                    "Pistol with Bullets and Ammunition",
+                    "Trade Tools (Engineer)"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "siege-master",
+                "name": "Siege Master",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Int"
+                ],
+                "skills_ids": [
+                    "haggle",
+                    "lore_law",
+                    "ride_horse"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "master-tradesman_engineering",
+                    "savvy",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Quality Clothes",
+                    "Light Warhorse",
+                    "Pavilion Tent with Body Servant"
                 ],
                 "status": "Gold 1"
             }

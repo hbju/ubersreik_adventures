@@ -1,74 +1,74 @@
 [
   {
     "id": "condition_ablaze",
-    "name": "Ablaze",
-    "description": "You are on fire! This Condition is normally only applied if you are flammable — for example: wearing clothes that can be set alight — but some magical and divine effects can set you alight even if you are not normally combustible!\n\nAt the end of every Round, you suffer 1d10 Wounds, modified by Toughness Bonus and Armour Points, with a minimum of 1 Wound suffered. Each extra Ablaze Condition you have adds +1 to the Damage suffered; so, three Ablaze Conditions result in 1d10+2 Damage suffered.\n\nOne Ablaze Condition can be removed with a successful Athletics Test, with each SL removing an extra Ablaze Condition. The Difficulty for this Test is modified by circumstances: it’s much easier to put out a fire rolling around on sand than it is in the middle of an oil-soaked kitchen.",
+    "name": "En Flammes",
+    "description": "Vous êtes en feu ! Cet État est normalement appliqué uniquement si vous êtes inflammable — par exemple : si vous portez des vêtements pouvant prendre feu — mais certains effets magiques et divins peuvent vous enflammer même si vous n’êtes pas normalement combustible !\n\nÀ la fin de chaque Round, vous subissez 1d10 Blessures, modifiées par le Bonus d’Endurance et les Points d’Armure, avec un minimum de 1 Blessure subie. Chaque État En Flammes supplémentaire que vous avez ajoute +1 aux Dégâts subis ; ainsi, trois États En Flammes infligent 1d10+2 Dégâts.\n\nUn État En Flammes peut être retiré avec un Test d’Athlétisme réussi, chaque DR retirant un État En Flammes supplémentaire. La Difficulté de ce Test est modifiée par les circonstances : il est bien plus facile d’éteindre un feu en se roulant dans le sable que dans une cuisine imbibée d’huile.",
     "stack": 0
   },
   {
     "id": "condition_bleeding",
-    "name": "Bleeding",
-    "description": "You are bleeding badly. Lose 1 Wound at the end of every Round, ignoring all modifiers. Additionally, suffer a penalty of –10 to any Tests to resist Festering Wounds, Minor Infection, or Blood Rot (WFRP, page 186). If you reach 0 Wounds, you no longer lose Wounds. At the end of each turn, make a Challenging (+0) Endurance Test or immediately gain the Unconscious Condition.\n\nIf unconscious and bleeding, at the end of Round you have a 10% chance of dying per Bleeding Condition you have. For example, if you had 3 Bleeding Conditions, you would die from blood loss on a roll of 0–30. If you roll a double, your wound clots a little and you lose 1 Bleeding Condition. You cannot regain consciousness until all Bleeding Conditions are removed (see Injury on WFRP, page 172).\n\nA Bleeding Condition can be removed with a successful Average (+20) Heal Test, with each SL removing an extra Bleeding Condition, or with any spell or prayer that heals Wounds, with 1 Bleeding Condition removed per Wound healed. Also see the rules for Bandages on WFRP, page 309. Once all Bleeding Conditions are removed, gain one Fatigued Condition.",
+    "name": "Hémorragie",
+    "description": "Vous saignez abondamment. Perdez 1 Blessure à la fin de chaque Round, en ignorant tous les modificateurs. De plus, subissez une pénalité de –10 à tous les Tests pour résister aux Blessures Infectées, aux Infections Mineures ou à la Pourriture du Sang (WFRP, page 186). Si vous atteignez 0 Blessure, vous ne perdez plus de Blessures. À la fin de chaque tour, effectuez un Test d’Endurance Intermédiaire (+0) ou gagnez immédiatement l’État Inconscient.\n\nSi vous êtes inconscient et en hémorragie, à la fin du Round vous avez 10% de chance de mourir par État Hémorragie que vous possédez. Par exemple, si vous aviez 3 États Hémorragie, vous mourriez d’une perte de sang sur un jet de 0–30. Si vous obtenez un double, votre blessure coagule un peu et vous perdez 1 État Hémorragie. Vous ne pouvez pas reprendre conscience tant que tous les États Hémorragie ne sont pas retirés (voir Blessures, WFRP page 172).\n\nUn État Hémorragie peut être retiré avec un Test de Soins Moyen (+20) réussi, chaque DR retirant un État Hémorragie supplémentaire, ou avec tout sort ou prière qui soigne des Blessures, 1 État Hémorragie retiré par Blessure soignée. Voir aussi les règles sur les Bandages, WFRP page 309. Une fois tous les États Hémorragie retirés, gagnez un État Exténué.",
     "stack": 0
   },
   {
     "id": "condition_blinded",
-    "name": "Blinded",
-    "description": "Perhaps because of a flash of light, or because of liquid sprayed in your face, you are unable to see properly. You suffer a –10 penalty to all Tests involving sight, and any opponent attacking you in close combat gains a bonus of +10 to hit you.\n\nOne Blinded Condition is removed at the end of every other Round.",
+    "name": "Aveuglé",
+    "description": "Peut-être à cause d’un flash de lumière, ou d’un liquide projeté au visage, vous êtes incapable de voir correctement. Vous subissez une pénalité de –10 à tous les Tests impliquant la vue, et tout adversaire vous attaquant au corps à corps gagne un bonus de +10 pour vous toucher.\n\nUn État Aveuglé est retiré à la fin de chaque deuxième Round.",
     "stack": 0
   },
   {
     "id": "condition_broken",
-    "name": "Broken",
-    "description": "You are terrified, defeated, panicked, or otherwise convinced you are going to die. On your turn, your Move and Action must be used to run away as fast as possible until you are in a good hiding place beyond the sight of any enemy; then you can use your Action on a Skill that allows you to hide more effectively. You also receive a penalty of –10 to all Tests not involving running and hiding.\n\nYou cannot Test to rally from being Broken if you are Engaged with an enemy. If you are unengaged, at the end of each Round, you may attempt a Cool Test to remove a Broken Condition, with each SL removing an extra Broken Condition, and the Difficulty determined by the circumstances you currently find yourself: it is much easier to rally when hiding behind a barrel down an alleyway far from danger (Average +20) than it is when three steps from a slavering Daemon screaming for your blood (Very Hard –30).\n\nIf you spend a full Round in hiding out of line-of-sight of any enemy, you remove 1 Broken Condition.\n\nOnce all Broken Conditions are removed, gain 1 Fatigued Condition.",
+    "name": "Brisé",
+    "description": "Vous êtes terrifié, vaincu, paniqué, ou autrement convaincu que vous allez mourir. À votre tour, votre Mouvement et votre Action doivent être utilisés pour fuir aussi vite que possible jusqu’à ce que vous trouviez une bonne cachette hors de la vue de tout ennemi ; vous pouvez alors utiliser votre Action pour une Compétence vous permettant de mieux vous cacher. Vous recevez aussi une pénalité de –10 à tous les Tests ne concernant pas la fuite et la dissimulation.\n\nVous ne pouvez pas tenter de vous rallier de l’État Brisé si vous êtes Engagé avec un ennemi. Si vous n’êtes pas engagé, à la fin de chaque Round, vous pouvez tenter un Test de Sang-Froid pour retirer un État Brisé, chaque DR retirant un État Brisé supplémentaire, la Difficulté étant déterminée par les circonstances : il est bien plus facile de se rallier en se cachant derrière un tonneau dans une ruelle loin du danger (Moyen +20) que lorsqu’on est à trois pas d’un Démon bavant qui hurle pour votre sang (Très Difficile –30).\n\nSi vous passez un Round complet caché hors de la ligne de vue de tout ennemi, vous retirez 1 État Brisé.\n\nUne fois tous les États Brisé retirés, gagnez 1 État Exténué.",
     "stack": 0
   },
   {
     "id": "condition_deafened",
-    "name": "Deafened",
-    "description": "Whether caused by a loud noise or a blow to the head, you are unable to hear properly. You suffer a –10 penalty to all Tests involving hearing, and any opponent attacking you in close combat from the flank or rear gains an extra bonus of +10 to hit you (this bonus does not increase with multiple Deafened Conditions). One Deafened condition is removed at the end of every other Round and is often replaced with tinnitus.",
+    "name": "Assourdi",
+    "description": "Que ce soit à cause d’un bruit fort ou d’un coup à la tête, vous êtes incapable d’entendre correctement. Vous subissez une pénalité de –10 à tous les Tests impliquant l’ouïe, et tout adversaire vous attaquant au corps à corps depuis le flanc ou l’arrière gagne un bonus supplémentaire de +10 pour vous toucher (ce bonus n’augmente pas avec plusieurs États Assourdi). Un État Assourdi est retiré à la fin de chaque deuxième Round et est souvent remplacé par des acouphènes.",
     "stack": 0
   },
   {
     "id": "condition_entangled",
-    "name": "Entangled",
-    "description": "You are wrapped in something restricting your movement; it could be ropes, spider’s webbing, or an opponent’s bulging biceps. On your turn, you may not Move, and all your actions involving movement of any kind suffer a penalty of –10 (including Grappling). For your Action, you can remove an Entangled Condition if you win an Opposed Strength Test against the source of the entanglement, with each SL removing an extra Entangled Condition.",
+    "name": "Empêtré",
+    "description": "Vous êtes enveloppé dans quelque chose qui restreint vos mouvements ; cela peut être des cordes, une toile d’araignée ou les biceps gonflés d’un adversaire. À votre tour, vous ne pouvez pas vous Déplacer, et toutes vos actions impliquant un mouvement subissent une pénalité de –10 (y compris l’Empoignade). Pour votre Action, vous pouvez retirer un État Empêtré si vous remportez un Test de Force Opposé contre la source de l’empêtrement, chaque DR retirant un État Empêtré supplémentaire.",
     "stack": 0
   },
   {
     "id": "condition_fatigued",
-    "name": "Fatigued",
-    "description": "You are exhausted or stressed, and certainly in need of rest. You suffer a –10 penalty to all Tests. Removing a Fatigued Condition normally requires rest, a spell, or a divine effect, though in some instances, such as when a Fatigued Condition is caused by carrying too much, simply changing your circumstances (carrying fewer trappings, for example) can remove a Condition.",
+    "name": "Exténué",
+    "description": "Vous êtes épuisé ou stressé, et avez certainement besoin de repos. Vous subissez une pénalité de –10 à tous les Tests. Retirer un État Exténué nécessite normalement du repos, un sort ou un effet divin, bien que dans certains cas, comme lorsqu’un État Exténué est causé par un excès de charge, simplement changer vos circonstances (porter moins d’équipement, par exemple) peut retirer un État.",
     "stack": 0
   },
   {
     "id": "condition_poisoned",
-    "name": "Poisoned",
-    "description": "You have been poisoned or injected with venom. All Tests to remove poison have their difficulty determined by the poison or venom suffered. At the end of each Round, lose 1 Wound, ignoring all modifiers. Also, suffer a penalty of –10 to all Tests. If you reach 0 Wounds when Poisoned, you cannot heal any Wounds until all Poisoned conditions are removed. If you fall Unconscious when Poisoned, make an Endurance Test after a number of Rounds equal to your Toughness Bonus or die horribly.\n\nAt the end of each Round, you may attempt an Endurance Test. If successful, remove a Poisoned Condition, with each SL removing an extra Poisoned Condition. A Heal Test provides the same results. Once all Poisoned Conditions are removed, gain 1 Fatigued Condition.",
+    "name": "Empoisonné",
+    "description": "Vous avez été empoisonné ou avez reçu du venin. Tous les Tests pour retirer le poison ont leur difficulté déterminée par le poison ou venin subi. À la fin de chaque Round, perdez 1 Blessure, en ignorant tous les modificateurs. De plus, subissez une pénalité de –10 à tous les Tests. Si vous atteignez 0 Blessure lorsque vous êtes Empoisonné, vous ne pouvez soigner aucune Blessure tant que tous les États Empoisonné ne sont pas retirés. Si vous tombez Inconscient lorsque vous êtes Empoisonné, effectuez un Test d’Endurance après un nombre de Rounds égal à votre Bonus d’Endurance ou mourez horriblement.\n\nÀ la fin de chaque Round, vous pouvez tenter un Test d’Endurance. En cas de succès, retirez un État Empoisonné, chaque DR retirant un État Empoisonné supplémentaire. Un Test de Soins produit les mêmes résultats. Une fois tous les États Empoisonné retirés, gagnez 1 État Exténué.",
     "stack": 0
   },
   {
     "id": "condition_prone",
-    "name": "Prone",
-    "description": "You have fallen to the ground, possibly because you have run out of Wounds, you’ve tripped, or because you’ve been hit by something rather large. On your turn, your Move can only be used to stand up or crawl at half your Movement in yards (note: if you have 0 Wounds remaining, you can only crawl). You suffer a –20 penalty to all Tests involving movement of any kind, and any opponent trying to strike you in Melee Combat gains +20 to hit you.\n\nUnlike most other conditions, Prone does not stack — you are either Prone, or you are not. You lose the Prone Condition when you stand up.",
+    "name": "À Terre",
+    "description": "Vous êtes tombé au sol, peut-être parce que vous n’avez plus de Blessures, que vous avez trébuché, ou parce que vous avez été frappé par quelque chose d’assez gros. À votre tour, votre Mouvement ne peut être utilisé que pour vous relever ou ramper à la moitié de votre Mouvement en mètres (note : si vous avez 0 Blessure restante, vous ne pouvez que ramper). Vous subissez une pénalité de –20 à tous les Tests impliquant un mouvement, et tout adversaire essayant de vous frapper au Corps à Corps gagne +20 pour vous toucher.\n\nContrairement à la plupart des autres états, À Terre ne se cumule pas — vous êtes soit À Terre, soit vous ne l’êtes pas. Vous perdez l’État À Terre lorsque vous vous relevez.",
     "stack": 0
   },
   {
     "id": "condition_stunned",
-    "name": "Stunned",
-    "description": "You have been struck about the head or otherwise disorientated or confused; your ears are likely ringing, and little makes sense. You are incapable of taking an Action on your turn but are capable of half your normal movement. You can defend yourself in opposed Tests — but not with Language (Magick). You also suffer a –10 penalty to all Tests. If you have any Stunned Conditions, any opponent trying to strike you in Melee Combat gains +1 Advantage before rolling the attack.\n\nAt the end of each Round, you may attempt a Challenging (+0) Endurance Test. If successful, remove a Stunned Condition, with each SL removing an extra Stunned Condition.\n\nOnce all Stunned Conditions are removed, gain 1 Fatigued Condition if you don’t already have one.",
+    "name": "Étourdi",
+    "description": "Vous avez reçu un coup à la tête ou êtes autrement désorienté ou confus ; vos oreilles bourdonnent probablement et plus rien n’a de sens. Vous êtes incapable d’effectuer une Action à votre tour mais pouvez effectuer la moitié de votre mouvement normal. Vous pouvez vous défendre lors de Tests Opposés — mais pas avec Langue (Magick). Vous subissez aussi une pénalité de –10 à tous les Tests. Si vous avez des États Étourdi, tout adversaire essayant de vous frapper au Corps à Corps gagne +1 Avantage avant de lancer l’attaque.\n\nÀ la fin de chaque Round, vous pouvez tenter un Test d’Endurance Intermédiaire (+0). En cas de succès, retirez un État Étourdi, chaque DR retirant un État Étourdi supplémentaire.\n\nUne fois tous les États Étourdi retirés, gagnez 1 État Exténué si vous n’en avez pas déjà un.",
     "stack": 0
   },
   {
     "id": "condition_surprised",
-    "name": "Surprised",
-    "description": "You have been caught unawares and you aren’t at all ready for what’s about to hit you. You can take no Action or Move on your turn and cannot defend yourself in opposed Tests. Any opponent trying to strike you in Melee Combat gains a bonus of +20 to hit.\n\nThe Surprised Condition does not stack, so you do not collect multiple Surprised Conditions, even should you be technically surprised multiple times in a Round.\n\nAt the end of each Round, or after the first attempt to attack you, you lose the Surprised Condition.",
+    "name": "Surpris",
+    "description": "Vous avez été pris au dépourvu et vous n’êtes pas du tout prêt pour ce qui va vous arriver. Vous ne pouvez effectuer aucune Action ni Mouvement à votre tour et ne pouvez pas vous défendre lors de Tests Opposés. Tout adversaire essayant de vous frapper au Corps à Corps gagne un bonus de +20 pour vous toucher.\n\nL’État Surpris ne se cumule pas, vous ne collectez donc pas plusieurs États Surpris, même si vous êtes techniquement surpris plusieurs fois dans un Round.\n\nÀ la fin de chaque Round, ou après la première tentative de vous attaquer, vous perdez l’État Surpris.",
     "stack": 0
   },
   {
     "id": "condition_unconscious",
-    "name": "Unconscious",
-    "description": "You are knocked out, asleep, or otherwise insensible. You can do nothing on your turn and are completely unaware of your surroundings. Any Melee attack targeting you automatically hits on the location of the attacker’s choice with the maximum possible SL it could score, and also inflicts a Critical Wound; or, if the GM prefers, any close combat hit simply kills you. Any ranged combat hit automatically does the same if the shooter is at Point Blank range.\n\nThe Unconscious Condition does not stack — you are either Unconscious, or you are not — so you do not collect multiple Unconscious Conditions.\n\nRecovering from unconsciousness requires different circumstances depending upon why you fell unconscious. If you spend a Resolve point to remove an Unconscious condition, but have not resolved the cause of the incapacitation, you gain another Unconscious Condition at the end of the round. When you lose the Unconscious Condition, you gain the Prone and Fatigued Conditions.",
+    "name": "Inconscient",
+    "description": "Vous êtes assommé, endormi ou autrement insensible. Vous ne pouvez rien faire à votre tour et êtes complètement inconscient de votre environnement. Toute attaque de Mêlée vous ciblant touche automatiquement à la localisation choisie par l’attaquant avec le maximum de DR possible, et inflige aussi une Blessure Critique ; ou, si le MJ le préfère, tout coup au corps à corps vous tue simplement. Tout tir à distance fait de même si le tireur est à Bout Portant.\n\nL’État Inconscient ne se cumule pas — vous êtes soit Inconscient, soit vous ne l’êtes pas — vous ne collectez donc pas plusieurs États Inconscient.\n\nSe remettre de l’inconscience nécessite des circonstances différentes selon la raison pour laquelle vous êtes tombé inconscient. Si vous dépensez un point de Résolution pour retirer un État Inconscient, mais n’avez pas résolu la cause de l’incapacitation, vous gagnez un autre État Inconscient à la fin du round. Lorsque vous perdez l’État Inconscient, vous gagnez les États À Terre et Exténué.",
     "stack": 0
   }
 ]

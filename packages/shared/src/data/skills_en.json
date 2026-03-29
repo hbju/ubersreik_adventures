@@ -88,6 +88,13 @@
         "classification": "basic"
     },
     {
+        "id": "augury",
+        "name": "Augury",
+        "characteristic": "int",
+        "type" : "skill",
+        "classification": "advanced"
+    },
+    {
         "id": "bribery",
         "name": "Bribery",
         "characteristic": "fel",
@@ -288,6 +295,13 @@
         "name": "Pray",
         "characteristic": "fel",
         "type": "skill",
+        "classification": "advanced"
+    },
+    {
+        "id": "psychometry",
+        "name": "Psychometry",
+        "characteristic": "int",
+        "type" : "skill",
         "classification": "advanced"
     },
     {

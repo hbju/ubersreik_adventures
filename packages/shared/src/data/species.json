@@ -33,6 +33,17 @@
     "talents": [["acute-sense_taste"], ["night-vision"], ["resistance_chaos"], ["small"], ["random"], ["random"]]
   },
   {
+    "id": "ogre",
+    "name": "Ogre",
+    "base_stats": { "ws": 20, "bs": 10, "s": 35, "t": 35, "i": 0, "ag": 15, "dex": 10, "int": 10, "wp": 20, "fel": 10 },
+    "fate": 0,
+    "resilience": 3,
+    "extra_points": 1,
+    "movement": 6,
+    "skills": ["athletics", "consume-alcohol", "endurance", "entertain_storytelling", "intimidate", "language_grumbarth", "lore_ogres", "melee", "melee_brawling", "navigation", "outdoor_survival", "track"],
+    "talents": [["dirty-fighting"], ["large"], ["night-vision"], ["resistance_poison"], ["very-resilient", "very-strong"], ["vice_food"]]
+  },
+  {
     "id": "elf",
     "name": "High Elf",
     "base_stats": { "ws": 30, "bs": 30, "s": 20, "t": 20, "i": 40, "ag": 30, "dex": 30, "int": 30, "wp": 30, "fel": 20 },

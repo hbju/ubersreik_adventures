@@ -1,0 +1,634 @@
+﻿'Fiefdom' of Outlaw Chiefs
+1 Forged Document
+1 Squire (Taquineur de Blaireau)
+10 Elven Arrows
+10 sheets of parchment
+100 GC
+1000 GC
+1d10 Lucky Charms
+2 Barrels
+2 Quality Weapons
+2 Riverboats or 4 Wagons
+2 Sets of Clothing
+2 Sets of Quality Clothing
+2 Warehouses
+2 Wooden Training Swords
+2 sets of Quality Courtly Garb
+20 GC
+200 GC
+3 Apprentices
+3 Healing Poultices
+3 Pamphleteers
+3 Tax Collectors
+3d10 Silver Shillings
+4 Apprentice Coureurs des Forts
+4 Household Servants
+4 Pairs of Manacles
+4 sets of Best Quality Courtly Garb
+50 Silver in Coin
+500 GC
+A Ring of Hustlers
+Abacus
+Abacus and Slate
+Abbey
+Access to a Library
+Acolyte Apprentice
+Aide
+Alchemist Apprentice
+Alcohol
+Ancient Elven Arrow (for Special Prey)
+Animal Traps
+Antitoxin Kit
+Apprentice
+Apprentice Butcher
+Artillery Piece and Limber
+Assistant
+Assistant (Student or Servant)
+Assortment of Animal Skulls
+Assortment of Traps
+Axe
+Backpack
+Backpack with Tent
+Badger Barding (2 AP on Head and Torso)
+Bailiff
+Band of Outlaws
+Bandages
+Banner-Bearer
+Barding
+Basic Weapon or Rapier
+Baton of Rank
+Battle-Tested Gutplate
+Bed Roll
+Bedroll
+Best Quality Clothes
+Best Quality Courtly Clothes
+Best Quality Courtly Garb
+Black Inquisitor's Attire
+Blackpowder Weapon with Ammunition
+Bloody Sack of 10 Esoteric Ingredients
+Blunderbuss with 10 Shots
+Boathand
+Book
+Book (Alchemy)
+Book (Apothecary)
+Book (Blank)
+Book (Cryptography)
+Book (Engineer)
+Book (Law)
+Book (Medicine)
+Book (Religion)
+Book of Ballistics Tables
+Boots
+Bottomless Hunger
+Bow
+Bow and 10 Arrows
+Bow with 10 Arrows
+Bow with 10 arrows
+Bowl
+Brace of Pistols with Gunpowder and Ammunition
+Breast Plate
+Breastplate
+Breastplate & Helmet
+Brown Robes
+Brush
+Brush or Chisel or Quill Pen
+Bucket
+Buckler
+Butcher's Apron
+Candle with Holder
+Candles
+Canvas Tarpaulin
+Cart
+Carved Animal Bones (Grimoire)
+Carved Staff
+Cavalry Hammer
+Cave or Other Lair
+Ceremonial Cloak and Garland
+Ceremonial Robes
+Ceremonial Staff of Office
+Ceremonial Telescope
+Chains of Office
+Chalk
+Charcoal Stick
+Charcoal stick
+Cheap Jewellery
+Cloak
+Cloak with Several Pockets
+Coach Horn
+Coach and Driver
+Coach and Footman
+Collection of Skulls
+Commission Papers
+Community Respect
+Company of White Wolf Knights
+Conclave of Shamans
+Copper Badge
+Copper Sickle
+Costume
+Couriers
+Court Robes
+Courtly Attire
+Courtly Garb
+Crew of Beadles
+Crew of Miners
+Crossbow Pistol or Pistol
+Crossbow Pistol with 10 Bolts
+Crossbow and 10 bolts
+Crossbow and Ammunition
+Crossbow with 10 Bolts
+Crossbow with 10 shots
+Crowbar
+Crude Map
+Crutch
+Cup
+Dagger
+Dark Clothing
+Davrich Lamp
+Davrich Lantern
+Deck of Cards
+Deck of Cards or Dice
+Degree
+Demilance
+Destrier with Saddle and Tack
+Dice
+Discrete Symbol of Ranald
+Disguise
+Disguise Kit
+Doll
+Dose of Weirdroot
+Dragon's Head
+Draught Horse and Cart
+Draught Horse and Wagon
+Draught Horses and Wagon (Stage)
+Eel Trap
+Elaborate Robes
+Elven Bow and 10 Self-made Arrows
+Entourage of Acolytes
+Entourage of Nuns and Priestesses
+Entourage of Priestesses and/or Initiates
+Expensive Orrery or Armillary Sphere
+Eye-glass
+Farmstead or Grazing Rights on a Large Estate
+Fearsome Reputation
+Feathered Hat
+Fiefdom
+Fine Clothes
+Fine Clothing
+Fine Quality Laboratory
+First Key of Secrets
+Fishing Rod and Bait
+Flail
+Flail or Great Weapon
+Flamboyant Clothing
+Flask of Spirits
+Fleet of Coaches and Horses
+Fleet of Riverboats and Wrecker Crew
+Floor Brush
+Foil or Hand Mirror
+Followers (including Penitents, Flagellants, and Zealots)
+Forged Seal
+Fourth and Fifth Keys of Secrets
+Full Plate Armour
+Gang of Stevedores
+Gang of Thugs and Racketeers
+Garden Retreat
+Garotte
+Garrison of Field Guard Sergeants
+Gavel
+Gazetteer
+Giant's Head
+Gold Sickle
+Gold-plated Mask
+Goods worth 2d10 Brass
+Goods worth 2d10 Silver
+Goods worth at least 2d10 Gold
+Goods worth at least 5d10 Gold
+Governor's Residence
+Grappling Hook
+Grappling Hook and Rope
+Great Axe
+Great Cat Pelt
+Great Helm with Sun Emblem
+Great Weapon (Two-handed Pick)
+Great Weapon or Halberd
+Grimoire
+Grimoire (often in the form of enscribed bones or teeth)
+Guild
+Guild Licence
+Guild License
+Gutplate
+Halberd
+Hammer and Nails
+Hammer and Spikes
+Hand Weapon
+Hand Weapon (Axe)
+Hand Weapon (Boat Hook)
+Hand Weapon (Cleaver or Mallet)
+Hand Weapon (Pick)
+Hand Weapon (Sickle)
+Hand Weapon (Sword)
+Hand Weapon or Bow with 10 arrows
+Hand weapon
+Handcart
+Handgun
+Handrich-touched Coin
+Handrichan Icon
+Harpoon or Great Throwing Spear
+Hat
+Hat (Henin)
+Headgear
+Healing Draught
+Healing Poultice
+Helm
+Helmet
+Herald
+Herb Gatherer
+Herd of Rhinox or Other Large Beasts
+Hiding Place
+High Quality Robes
+Hired Muscle
+Hood or Mask
+Hooded Cape
+Hooded Cloak
+Horse and Cart
+Horse with Saddle and Tack
+Hunk of Meat
+Hut or Riverboat
+Impressive Hat
+Informer
+Initiate Apprentice
+Initiate Apprentice/Lookout
+Instrument
+Instruments of Torture
+Isolated Hut
+Javelin
+Jewellery
+Jewellery worth 200 GC
+Jewellery worth 3d10 GC
+Jewellery worth 50 GC
+Jewellery worth 500 GC
+Journal
+Keg of Ale
+Kennel of Hunting Dogs
+Keys
+Knuckledusters
+Laboratory
+Lair
+Lamp Oil
+Lance
+Lantern
+Lantern and Oil
+Lantern and Pole
+Large Feathered Hat
+Large Group of Beggar Followers
+Large Sack
+Large Spy Ring of Agents, Spies, and Informers
+Large Town Estate
+Large Townhouse with Gardens and Servants
+Large Trained Badger (Spotted Moot Badger-Pony)
+Large Unit of Knights Panther or Several Small Units of Knights
+Large Unit of Knights or Several Small Units of Knights
+Large Workshop
+Large Workshop (Artist)
+Large Workshop (Engineer)
+Large and Vicious Dog
+Lasso
+Leather Apron
+Leather Breastplate
+Leather Gloves
+Leather Jack
+Leather Jack and Skullcap
+Leather Jerkin
+Leather Leggings
+Leather Skullcap
+Letter of Appointment
+Letter of Charter
+Letter of Commission
+Library (Art)
+Library (Engineer)
+Library (Engineering, Magic, or Science)
+Library (Law)
+Library (Magic)
+Library (Theology)
+Light Warhorse
+Light Warhorse with Saddle and Tack
+Livery
+Local Clothing
+Lock Box
+Lock Picks
+Lockpick
+Lodgings
+Loft of Homing Pigeons
+Longbow and 10 Arrows
+Loyal Cultists of the Maw
+Lucky Charm
+Magical Item
+Magical Licence
+Magical License
+Magnifying Glass
+Mail Chausses
+Mail Coat
+Mail Shirt
+Main Gauche or Quality Cloak
+Main Gauche or Sword-breaker
+Manacles
+Manual on the Art of Zweih├ñnder Fighting
+Map
+Maps
+Mask or Scarves
+Masonry Tools
+Master Key to the Faculty
+Melee Weapon (Any)
+Melee Weapon (Basic or Cavalry)
+Melee Weapon (Sword)
+Mementos of Many Journeys
+Mercenary Contract
+Metal Breastplate
+Modest Townhouse
+Mop
+Mortarboard
+Mule and Cart
+Mule and Saddlebags
+Multiple Forged Documents
+Myrmidian Holy Book
+Myrmidian Icon
+Net
+Net or Whip
+Network of Informants
+Network of Informers
+None
+Novice
+Office
+Office and Staff
+Open Helm
+Opinions
+Orders
+Ostentatious Wig
+Pack
+Page
+Pamphleteer
+Pan
+Patrol Boats and Crew
+Patron
+Pauper Follower
+Pavilion Tent with Body Servant
+Pavise
+Pawnbroker's Shop
+Permanent Abode
+Personal Servant
+Pestle and Mortar
+Phalanx of Pikemen
+Pike
+Pile of Leaflets
+Pins
+Pipe and Tobacco
+Pistol
+Pistol or Blunderbuss with 12 Shots
+Pistol with 10 Shots
+Pistol with 10 shot
+Pistol with Bullets and Ammunition
+Pistol with Gunpowder and Ammunition
+Placard
+Plate Armour
+Plate Armour and Great Helm with Bestial Crest
+Plate Armour and Helm
+Plate Bracers and Leggings
+Plate Breastplate
+Plumed Great Helm
+Poison
+Pole
+Pole for Dead Rats
+Pony and Cart
+Poor Quality Blanket
+Portable Alchemical Laboratory
+Porter Cap
+Practical Outdoor Clothing
+Practical Robes
+Practical Tunic and Robes
+Printing Press
+Province
+Quality Bow
+Quality Cloak
+Quality Clothes
+Quality Clothing
+Quality Clothing and Hat
+Quality Courtly Garb
+Quality Dark Clothing
+Quality Elven Bow and Quality Leather Armour (at least 1 Advantage each)
+Quality Foil or Hand Mirror
+Quality Halberd
+Quality Hand weapon
+Quality Handgun
+Quality Hat
+Quality Hat and Cloak
+Quality Helmet
+Quality Livery
+Quality Mail Shirt
+Quality Rapier
+Quality Robes
+Quality Sword
+Quality Symbol of Rank
+Quality Trade Tools (Engineer)
+Quality Travel Clothes
+Quality Uniform
+Quality Zweih├ñnder
+Quarterstaff
+Quill and Ink
+Quiver and 10 Arrows
+Regional Map
+Religious Order
+Religious Relic
+Religious Relic (Myrmidian)
+Religious Symbol
+Religious Symbol (Myrmidia)
+Religious Symbol (Ulric)
+Replica of Solkan's Amulet
+Respect
+Respectable Clothing
+Rhinox Furs
+Rhinox Skull Gutplate
+Riding Horse
+Riding Horse and Saddle
+Riding Horse with Saddle and Harness
+Riding Horse with Saddle and Harness or Coach
+Riding Horse with Saddle and Tack
+Ring of Camp Followers
+Ring of Informers
+Ring of Spies and Informers
+Ring or Medallion with Panther Emblem
+River Runner
+Riverboat
+Riverboat and Crew
+Riverboat or 2 Wagons
+Robes
+Rope
+Row Boat
+Rowboat
+Sack
+Sack of Poisoned Bait (10 doses of Heartkill)
+Sacred Site
+Saddlebags
+Saddlebags with 2 weeks' Rations
+Sailing Ship and Crew
+Sash
+Sash of Rank
+Scroll Case
+Scythe
+Seal of Office
+Second and Third Keys of Secrets
+Selection of Amulets
+Selection of Animal Traps
+Selection of Coloured Powders and Water
+Selection of Herbs
+Selection of Maps
+Selection of Pots and Pans
+Selection of Scripts (that you can't yet read)
+Selection of Trinkets and Charms
+Sense of Humour
+Servant
+Set of Six 60-second Fuses
+Sextant
+Shamanic Lair
+Shame
+Shield
+Shield or Buckler
+Shipping Charts
+Shovel
+Shrine of Ranald (Fixed or Portable)
+Shrine of the Night Prowler
+Signet Ring
+Silver Sickle
+Silvered Sword
+Simple Weapon
+Sixth and Seventh Keys of Secrets
+Skull
+Sleeved Mail Shirt
+Sling
+Sling Bag containing 2 different sets of clothing and Hooded Cloak
+Sling Bag containing Assortment of Herbs
+Sling Bag containing Clothing and 1d10 Bandages
+Sling Bag containing Trade Tools (Artist)
+Sling with 10 Stones
+Sling with Ammunition
+Small Fleet of Riverboats
+Small Riverboat
+Small Unit of Blazing Sun Knights
+Small Unit of Knights
+Small Unit of Knights Panther
+Small Unit of White Wolf Knights
+Small but Vicious Dog
+Spade
+Spear
+Speedy Riverboat
+Spyglass
+Squad of Novice Guards
+Squad of Road Wardens
+Squire
+Staff
+Staff of Advisors and Aides
+Staff of Diplomats
+Staff of Law or Sundial
+Staff of Petrified Wood
+Staff of Wardens and Custodians
+Standard Robes
+Starwatcher's Handbook
+Stolen Goods worth 3d10 Shillings
+Storm Lantern
+Storm Lantern and Oil
+Storm Lantern with Oil
+Study
+Sturdy Boots
+Sturdy Boots and Cloak
+Subordinate Clerks
+Subordinate Gang Bosses
+Subordinate High Priests
+Subordinate Interrogators
+Subordinate Officiants
+Subordinate Priests
+Subordinate Thief-Priests
+Subordinate Witch Hunters
+Sword
+Symbol of Rank
+Symbol of Rhya (Wheatsheaf or Spiral)
+Symbol of Solkan
+Tamed Badger with Saddle and Harness
+Tarpaulin
+Tattered Robes
+Tattoos
+Telescope
+Temple
+Tent
+Test Tubes and Alembic
+The Respect of the Village
+Theodolite
+Throwing Axes
+Throwing Knives
+Throwing Weapon or Entangling Weapon
+Throwing Weapons
+Tinderbox
+Tools
+Tower or Mountaintop Observatory
+Town House
+Town House with Servants
+Townhouse
+Townhouse with Discreet Back Entrance
+Trade Tools
+Trade Tools (Any)
+Trade Tools (Astrology)
+Trade Tools (Bowyer)
+Trade Tools (Butcher)
+Trade Tools (Carpenter)
+Trade Tools (Cartographer)
+Trade Tools (Engineer)
+Trade Tools (Engraver)
+Trade Tools (Farrier)
+Trade Tools (Herbalist)
+Trade Tools (Medicine)
+Trade Tools (Thief)
+Trade Tools (Tinker)
+Trade Tools (Writing)
+Trade Tools (as Trade)
+Trained Animal
+Tripod
+Troll's Head
+Trophy from a Legendary Enemy
+Troupe of Entertainers
+Trusty Second
+Two-handed Pick
+Two-handed Weapon or Ogre Pistol
+Uniform
+Uniform in Unit Colours
+Uniform in the Colours of the Faculty
+Unit Banner
+Unit of Mercenaries
+Unit of Road Wardens
+Unit of Soldiers
+Unit of Troops
+Vellum
+Village Home and Workshop
+Wanderlust
+Wardrobe of Costumes and Props
+Warehouse
+Warhorse
+Warm Coat and Gloves
+Warrant Papers
+Weapon (Any Melee)
+Weapon (Any)
+Well-tailored Robes
+Whip
+Whistle
+White Robes
+Wolfskin Cloak
+Wooden Mask
+Workshop
+Workshop (Artist)
+Workshop (Engineering or Magic)
+Workshop (Herbalist)
+Workshop (Magic)
+Workshop (Medicine)
+Writing Kit
+Zweih├ñnder
+a Ring of Bawds
+book_ranald
+d10 rags
+small lock box
