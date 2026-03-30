@@ -14,11 +14,8 @@
                 "lvl": 1,
                 "characteristic_advances": [
                     "T",
-                    "I",
-                    "Dex",
                     "Int",
-                    "WP",
-                    "Fel"
+                    "WP"
                 ],
                 "skills_ids": [
                     "channelling_chamon",
@@ -50,11 +47,9 @@
                 "lvl": 2,
                 "characteristic_advances": [
                     "T",
-                    "I",
-                    "Dex",
                     "Int",
                     "WP",
-                    "Fel"
+                    "Dex"
                 ],
                 "skills_ids": [
                     "charm",
@@ -115,10 +110,10 @@
                 "lvl": 4,
                 "characteristic_advances": [
                     "T",
-                    "I",
-                    "Dex",
                     "Int",
                     "WP",
+                    "Dex",
+                    "I",
                     "Fel"
                 ],
                 "skills_ids": [
@@ -6663,25 +6658,22 @@
         ]
     },
     {
-        "id": "chasseur-de-blaireaux",
-        "name": "Chasseur de Blaireaux",
-        "description": "Les Chevaucheurs de blaireau sont des figures solitaires qui arpentent le Moot tels des Chevaliers en quête, en plus petits et plus courtauds. L'efficacité constatée des Chevaucheurs de blaireau au combat est littéralement incroyable — les blaireaux, comme les halflings, deviennent étonnamment féroces en cas de menace, capables d'affronter des adversaires bien plus imposants qu'eux-mêmes.",
+        "id": "badger-rider",
+        "name": "Badger Rider",
+        "description": "The origin of the Badger Rider is puzzled over by the few scholars that have been told of them by trustworthy Halfling sources. Perhaps a Halfling was inspired by the noble knights of Bretonnia on their magnificent war horses. Some argue that it was a counter to savage Orcs riding upon their equally fearsome (and, it is often agreed, equally smelly) war-boars. Others still claim the whole thing began as a drunken bet that got completely out of hand. The truth of the matter may never be known, but those same scholars all agree — their reported effectiveness in battle is quite literally incredible. Badgers are highly social and share underground homes which they keep impeccably tidy, virtues greatly respected by Halflings. Observers might add that when threatened, both species become astonishingly ferocious, capable of taking on much larger opponents.\n\nWhile there are too few Badger Riders to form cavalry units - indeed, none have ever been seen by anyone outside the Moot -  it is agreed that no such units shall ever be formed again after the Pie Week Disaster of 2409. Three halflings died and countless pastries were ruined when the parade commission failed to realise they had placed over a dozen adult male badgers in close proximity at the height of mating season. Nowadays the Badger Rider is reportedly a solitary figure, roaming the Moot like a questing knight, albeit a very short, stubby one. Lack of formal organisation, combined with their many travels and previous professions, means Badger Riders possess a variety of skills not usually found in mounted combat. Halfling ingenuity invariably finds a way to exploit this.",
         "class": "Rangers",
         "races": [
             "Halfling"
         ],
         "career_level": [
             {
-                "id": "taquineur-de-blaireau",
-                "name": "Taquineur de Blaireau",
+                "id": "badger-botherer",
+                "name": "Badger Botherer",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "WS",
                     "BS",
-                    "S",
                     "Ag",
-                    "Int",
-                    "Fel"
+                    "Int"
                 ],
                 "skills_ids": [
                     "ride_badger",
@@ -6708,21 +6700,19 @@
                 "status": "Silver 1"
             },
             {
-                "id": "chevaucheur-de-blaireau",
-                "name": "Chevaucheur de Blaireau",
+                "id": "badger-rider",
+                "name": "Badger Rider",
                 "lvl": 2,
                 "characteristic_advances": [
                     "WS",
                     "BS",
-                    "S",
                     "Ag",
-                    "Int",
-                    "Fel"
+                    "Int"
                 ],
                 "skills_ids": [
                     "charm",
                     "melee_basic",
-                    "orientation",
+                    "navigation",
                     "ranged_entangling",
                     "endurance",
                     "animal-care"
@@ -6730,7 +6720,7 @@
                 "talent_ids": [
                     "stout-hearted",
                     "rover",
-                    "sure-shot",
+                    "accurate-shot",
                     "seasoned-traveller"
                 ],
                 "trappings": [
@@ -6741,16 +6731,15 @@
                 "status": "Silver 3"
             },
             {
-                "id": "sergent-blaireau",
-                "name": "Sergent Blaireau",
+                "id": "badger-sergeant",
+                "name": "Badger Sergeant",
                 "lvl": 3,
                 "characteristic_advances": [
                     "WS",
                     "BS",
                     "S",
                     "Ag",
-                    "Int",
-                    "Fel"
+                    "Int"
                 ],
                 "skills_ids": [
                     "melee_cavalry",
@@ -6771,8 +6760,8 @@
                 "status": "Silver 5"
             },
             {
-                "id": "maitre-blaireau",
-                "name": "Maître Blaireau",
+                "id": "badger-master",
+                "name": "Badger Master",
                 "lvl": 4,
                 "characteristic_advances": [
                     "WS",
@@ -6790,11 +6779,11 @@
                     "frightening",
                     "inspiring",
                     "strike-to-injure",
-                    "night-owl"
+                    "carouser"
                 ],
                 "trappings": [
                     "Large Trained Badger (Spotted Moot Badger-Pony)",
-                    "1 Squire (Taquineur de Blaireau)",
+                    "1 Squire (Badger Squire)",
                     "Plate Armour",
                     "Sense of Humour"
                 ],
@@ -7202,31 +7191,28 @@
         ]
     },
     {
-        "id": "gardechamps",
-        "name": "Gardechamps",
-        "description": "Ces halflings courageux patrouillent le long des frontières du Moot, et se servent de leur connaissance poussée du terrain et de leurs tactiques rusées de guérilla pour mettre en déroute les visiteurs clandestins. Les Gardechamps sont avant tout des halflings du peuple, des visages amicaux qui rassurent les citoyens. Les Gardechamps vétérans surprennent souvent les autres aventuriers par leur expérience face à la nécromancie.",
-        "class": "Rangers",
+        "id": "fieldwarden",
+        "name": "Fieldwarden",
+        "description": "Ces halflings courageux patrouillent le long des frontières du Moot, et se servent de leur connaissance poussée du terrain et de leurs tactiques rusées de guérilla pour mettre en déroute les visiteurs clandestins. Les Fieldwardens sont avant tout des halflings du peuple, des visages amicaux qui rassurent les citoyens. Les Fieldwardens vétérans surprennent souvent les autres aventuriers par leur expérience face à la nécromancie.",
+        "class": "Warriors",
         "races": [
             "Halfling"
         ],
         "career_level": [
             {
-                "id": "garde-novice",
-                "name": "Garde Novice",
+                "id": "novice-warden",
+                "name": "Novice Warden",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "WS",
                     "BS",
-                    "T",
                     "Ag",
-                    "Dex",
-                    "Fel"
+                    "WP"
                 ],
                 "skills_ids": [
                     "stealth_rural",
                     "intuition",
                     "trade_any",
-                    "orientation",
+                    "navigation",
                     "perception",
                     "ranged_sling",
                     "gossip",
@@ -7248,30 +7234,28 @@
                 "status": "Brass 4"
             },
             {
-                "id": "gardechamps",
-                "name": "Gardechamps",
+                "id": "field-warden",
+                "name": "Field Warden",
                 "lvl": 2,
                 "characteristic_advances": [
-                    "WS",
                     "BS",
-                    "T",
                     "Ag",
-                    "Dex",
-                    "Fel"
+                    "WP",
+                    "Int"
                 ],
                 "skills_ids": [
                     "charm",
-                    "melee_basic",
+                    "melee",
                     "dodge",
                     "consume-alcohol",
                     "secret-signs_scout",
                     "outdoor-survival"
                 ],
                 "talent_ids": [
-                    "side-by-side",
+                    "drilled",
                     "nose-for-trouble",
                     "orientation",
-                    "sure-shot"
+                    "accurate-shot"
                 ],
                 "trappings": [
                     "Leather Jack",
@@ -7281,16 +7265,15 @@
                 "status": "Silver 1"
             },
             {
-                "id": "sergent-gardechamps",
-                "name": "Sergent Gardechamps",
+                "id": "field-warden-sergeant",
+                "name": "Field Warden Sergeant",
                 "lvl": 3,
                 "characteristic_advances": [
-                    "WS",
                     "BS",
-                    "T",
                     "Ag",
-                    "Dex",
-                    "Fel"
+                    "WP",
+                    "Int",
+                    "WS"
                 ],
                 "skills_ids": [
                     "cool",
@@ -7311,16 +7294,16 @@
                 "status": "Silver 3"
             },
             {
-                "id": "capitaine-gardechamps",
-                "name": "Capitaine Gardechamps",
+                "id": "field-warden-captain",
+                "name": "Field Warden Captain",
                 "lvl": 4,
                 "characteristic_advances": [
-                    "WS",
                     "BS",
-                    "T",
                     "Ag",
-                    "Dex",
-                    "Fel"
+                    "WP",
+                    "Int",
+                    "WS",
+                    "T"
                 ],
                 "skills_ids": [
                     "leadership",
@@ -7328,12 +7311,12 @@
                 ],
                 "talent_ids": [
                     "inspiring",
-                    "sturdy",
+                    "robust",
                     "fearless_undead",
-                    "expert_moot-terrain"
+                    "savant_moot-terrain"
                 ],
                 "trappings": [
-                    "Garrison of Field Guard Sergeants",
+                    "Garrison of Field Wardens Sergeants",
                     "Community Respect"
                 ],
                 "status": "Silver 5"
@@ -7476,25 +7459,22 @@
         ]
     },
     {
-        "id": "patrouilleur-des-karak",
-        "name": "Patrouilleur des Karak",
-        "description": "La sûreté des routes doit être préservée, et un nouveau chemin doit être tracé lorsque l'ancien devient trop dangereux : tel est le devoir des Patrouilleurs des karak. Ces nains endurcis ne doivent leur survie qu'à leur capacité à se préparer. Ils doivent savoir enchaîner chasse, reconnaissance et combat, voire même réparation d'un pont en plein milieu de leur expédition.",
-        "class": "Rangers",
+        "id": "karak-ranger",
+        "name": "Karak Ranger",
+        "description": "The remote mountain strongholds of the dwarfs are protected by all manner of dangerous terrain both above and below ground. A landslide might render a surface route impassable, and every year more underground territory is lost to the greenskins, or a once-safe bridge is torn down by the relentless gnawing of the Raki. It is the duty of the Karak Ranger to patrol these routes and keep them safe, or establish new paths where an old one has become too dangerous.A Karak Ranger’s survival hinges on preparedness; there is little company or comfort to be found along the ancient dark tunnels or secret mountain passes, and even less chance of help should he encounter danger. One must be prepared to leap large chasms, climb sheer surfaces, or cross large bodies of water (or sewage, or even lava), depending on the route. Every bush, every shadow, may contain dangers, waiting to pounce. A Karak Ranger must be tough and adaptable to survive, by turns able to hunt, scout, and fight, or even repair a bridge mid-expedition.\n\nKarak Rangers often spend many months in the field, far away from civilisation. Where human or halfling rangers are often seen by society as becoming wild like nature itself (most dwarves believe elves were always uncivilised tree-lovers), a Karak Ranger remains true to his people; The mountains are brutal and unforgiving, and to live in “harmony” with them would be to abandon one’s traditions and clan, an unthinkable prospect. Karak Rangers seek to tame the wilds, not submit to them. Some Rangers train animal companions such as dogs, birds of prey or even hardy mountain goats, both for company and aid in scouting and hunting.",
+        "class": "Warriors",
         "races": [
             "Dwarf"
         ],
         "career_level": [
             {
-                "id": "coureur-des-forts",
-                "name": "Coureur des Forts",
+                "id": "hold-runner",
+                "name": "Hold Runner",
                 "lvl": 1,
                 "characteristic_advances": [
                     "WS",
-                    "BS",
                     "S",
-                    "T",
-                    "Int",
-                    "WP"
+                    "T"
                 ],
                 "skills_ids": [
                     "melee_basic",
@@ -7508,8 +7488,8 @@
                 ],
                 "talent_ids": [
                     "strider_any",
-                    "hardy",
-                    "tireless",
+                    "implacable",
+                    "strong-back",
                     "orientation"
                 ],
                 "trappings": [
@@ -7521,16 +7501,14 @@
                 "status": "Brass 3"
             },
             {
-                "id": "patrouilleur-des-karak",
-                "name": "Patrouilleur des Karak",
+                "id": "karak-ranger",
+                "name": "Karak Ranger",
                 "lvl": 2,
                 "characteristic_advances": [
-                    "WS",
                     "BS",
+                    "WS",
                     "S",
-                    "T",
-                    "Int",
-                    "WP"
+                    "T"
                 ],
                 "skills_ids": [
                     "charm-animal",
@@ -7543,7 +7521,7 @@
                 "talent_ids": [
                     "strike-mighty-blow",
                     "nose-for-trouble",
-                    "climber",
+                    "scale-sheer-surface",
                     "rover"
                 ],
                 "trappings": [
@@ -7553,28 +7531,27 @@
                 "status": "Silver 1"
             },
             {
-                "id": "gardien-des-routes-des-karak",
-                "name": "Gardien des Routes des Karak",
+                "id": "karak-pathkeeper",
+                "name": "Karak Pathkeeper",
                 "lvl": 3,
                 "characteristic_advances": [
-                    "WS",
                     "BS",
+                    "WS",
                     "S",
                     "T",
-                    "Int",
-                    "WP"
+                    "Ag"
                 ],
                 "skills_ids": [
                     "stealth_underground",
-                    "orientation",
+                    "navigation",
                     "set-trap",
                     "lore_engineering"
                 ],
                 "talent_ids": [
                     "gunner",
-                    "fleet-footed",
+                    "strong-legs",
                     "enclosed-fighter",
-                    "sure-shot"
+                    "accurate-shot"
                 ],
                 "trappings": [
                     "Masonry Tools"
@@ -7582,8 +7559,8 @@
                 "status": "Silver 2"
             },
             {
-                "id": "arpenteur-des-karak",
-                "name": "Arpenteur des Karak",
+                "id": "karak_mountain_strider",
+                "name": "Karak Mountain Strider",
                 "lvl": 4,
                 "characteristic_advances": [
                     "WS",
@@ -7591,7 +7568,7 @@
                     "S",
                     "T",
                     "Int",
-                    "WP"
+                    "Ag"
                 ],
                 "skills_ids": [
                     "cool",
@@ -7599,8 +7576,8 @@
                 ],
                 "talent_ids": [
                     "tinker",
-                    "resolute",
-                    "sturdy",
+                    "robust",
+                    "tenacious",
                     "savant_karak-routes"
                 ],
                 "trappings": [
@@ -8025,40 +8002,37 @@
         ]
     },
     {
-        "id": "rodeur-fantome",
-        "name": "Rôdeur Fantôme",
-        "description": "Les Rôdeurs fantômes sont sans doute la plus mortelle de toutes les menaces que recèlent les forêts antiques du Vieux Monde. La détermination et le savoir-faire avec lesquels ces maîtres archers traquent tout ce qui menace la nature terrifieraient n'importe qui. L'harmonie des Rôdeurs fantômes avec la nature est telle que celle-ci semble presque cacher les traces de leur passage aux yeux indiscrets. Pour les Rôdeurs fantômes, la forêt est sacrée par-dessus tout — ils ne tolèrent aucune transgression.",
+        "id": "ghost-strider",
+        "name": "Ghost Strider",
+        "description": "The forests are ancient and deadly, a haven for bandits and dangerous outcasts. They teem with natural predators such as bears, wolves and giant spiders. If, somehow, these threats weren’t enough to hurry a traveller on their way, there is no shortage of wholly unnatural creatures either, such as foul trolls, Beastman herds, or the walking dead. But perhaps the deadliest threat of all is the Ghost Strider. Even the city-born High Elves respect the beauty of nature, and Wood Elves are renowned for the ferocity with which they defend their lands. The Ghost Strider epitomises this defence. Master archers, they hunt all threats to the natural world with a determination and skill that would be terrifying to behold, if not for their almost supernatural speed and silence. Ghost Striders are so attuned to the natural world that nature itself seems to hide their passage from prying eyes. Indeed, so devoted are they to their task that even other Wood Elves consider them intimidating, perhaps skirting closer to obsession than is healthy for an intensely emotional people.\n\nTo a Ghost Strider the forest is sacred above all else, and no transgression is beneath their punishment, whether beast of Chaos or a peasant cutting branches for firewood. While most commonly seen scouring the forests for their enemies, Ghost Striders are comfortable in any wilderness, and will protect an unspoiled, windswept mountain just as fiercely as a woodland glade (much to the ire of many a Dwarf miner). They tend to be solitary, even preferring the wilderness to the elf kingdoms they protect, but they are pragmatic and not above working with others. ",
         "class": "Rangers",
         "races": [
             "Wood Elf"
         ],
         "career_level": [
             {
-                "id": "garde-forestier",
-                "name": "Garde Forestier",
+                "id": "forest-ranger",
+                "name": "Forest Ranger",
                 "lvl": 1,
                 "characteristic_advances": [
-                    "WS",
                     "BS",
-                    "T",
                     "Ag",
-                    "Dex",
                     "Int"
                 ],
                 "skills_ids": [
                     "stealth_any",
                     "climb",
                     "trade_bowyer",
-                    "orientation",
+                    "navigation",
                     "perception",
-                    "ranged_bow",
+                    "ranged",
                     "lore_beasts",
                     "outdoor-survival"
                 ],
                 "talent_ids": [
                     "strider_woodlands",
                     "silent-move",
-                    "sure-shot",
+                    "accurate-shot",
                     "fleet-footed"
                 ],
                 "trappings": [
@@ -8070,20 +8044,18 @@
                 "status": "Brass 3"
             },
             {
-                "id": "rodeur-fantome",
-                "name": "Rôdeur Fantôme",
+                "id": "ghost-strider",
+                "name": "Ghost Strider",
                 "lvl": 2,
                 "characteristic_advances": [
-                    "WS",
                     "BS",
-                    "T",
                     "Ag",
-                    "Dex",
-                    "Int"
+                    "Int",
+                    "Dex"
                 ],
                 "skills_ids": [
                     "athletics",
-                    "melee_basic",
+                    "melee",
                     "charm-animal",
                     "set-trap",
                     "track",
@@ -8091,7 +8063,7 @@
                 ],
                 "talent_ids": [
                     "animal-affinity",
-                    "climber",
+                    "scale-sheer-surface",
                     "orientation",
                     "fast-shot"
                 ],
@@ -8103,16 +8075,15 @@
                 "status": "Brass 5"
             },
             {
-                "id": "esprit-du-vent",
-                "name": "Esprit du Vent",
+                "id": "windwraith",
+                "name": "Windwraith",
                 "lvl": 3,
                 "characteristic_advances": [
                     "WS",
                     "BS",
-                    "T",
                     "Ag",
-                    "Dex",
-                    "Int"
+                    "Int",
+                    "Dex"
                 ],
                 "skills_ids": [
                     "cool",
@@ -8133,16 +8104,16 @@
                 "status": "Silver 1"
             },
             {
-                "id": "courroux-de-la-foret",
-                "name": "Courroux de la Forêt",
+                "id": "forest-wrath",
+                "name": "Forest Wrath",
                 "lvl": 4,
                 "characteristic_advances": [
                     "WS",
                     "BS",
-                    "T",
+                    "S",
                     "Ag",
-                    "Dex",
-                    "Int"
+                    "Int",
+                    "Dex"
                 ],
                 "skills_ids": [
                     "intimidate",
@@ -8152,7 +8123,7 @@
                     "strike-to-injure",
                     "hatred_any",
                     "sniper",
-                    "hidden-sniper"
+                    "dead-eye-shot"
                 ],
                 "trappings": [
                     "Trophy from a Legendary Enemy",
