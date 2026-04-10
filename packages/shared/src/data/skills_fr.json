@@ -364,7 +364,8 @@
     "id": "stealth",
     "name": "Discrétion",
     "characteristic": "ag",
-    "type": "skill"
+    "type": "skill",
+    "classification": "basic"
   },
   {
     "id": "swim",
