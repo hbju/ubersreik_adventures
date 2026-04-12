@@ -27,6 +27,11 @@ release
 public/assets/music
 packages/*/public/assets/music
 
+.env
+packages/*/.env
+.env.local
+packages/*/.env.local
+
 # Editor directories and files
 .vscode/.debug.env
 .idea

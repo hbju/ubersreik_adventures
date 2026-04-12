@@ -48,7 +48,6 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
 
     // Get NPCs (characters without userId or combatants that aren't players)
     const npcs = React.useMemo(() => {
-        const npcCharacters = characters.filter(c => !c.userId);
         const combatantNpcs = combatants
             .filter(c => !c.isPlayer)
             .map(c => {
@@ -63,7 +62,7 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
             });
 
         // Merge and deduplicate
-        const allNpcs = [...npcCharacters];
+        const allNpcs = [...characters];
         combatantNpcs.forEach(npc => {
             if (!allNpcs.find(n => n.id === npc.id)) {
                 allNpcs.push(npc as Character);
