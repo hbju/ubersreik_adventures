@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Warhammer Fantasy RPG Theme */
+@font-face {
+    font-family: 'Moria Citadel';
+    src: local('../public/assets/fonts/Moria Citadel Regular.ttf');
+}
+
+:root {
+    /* Fonts - Gothic/Medieval style */
+    --font-warhammer: 'Moria Citadel', 'Cinzel Decorative', 'Philosopher', Georgia, serif;
+    --font-primary: 'Crimson Text', 'Cinzel', 'Philosopher', Georgia, serif;
+    --font-heading: 'Cinzel', 'IM Fell English SC', Georgia, serif;
+    --font-body: 'Crimson Text', Georgia, serif;
+
+    /* Color Palette - Aged Parchment & Dark Medieval */
+    --color-parchment: #f4e8d0;
+    --color-parchment-dark: #e8d7b0;
+    --color-parchment-darker: #d4c4a0;
+    --color-leather-dark: #3a2f1e;
+    --color-leather-medium: #4a3f2e;
+    --color-leather-light: #6b5a3e;
+    --color-gold: #d4af37;
+    --color-gold-dark: #b8941e;
+    --color-blood-red: #8b1a1a;
+    --color-blood-red-dark: #5c0f0f;
+    --color-ink: #1a1410;
+    --color-ink-faded: #4a3f2e;
+    --color-seal-red: #a52a2a;
+    --color-vellum: #fef9e7;
+
+    /* Shadows & Effects */
+    --shadow-parchment: 0 4px 12px rgba(58, 47, 30, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --shadow-raised: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-deep: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --border-ornate: 2px solid var(--color-gold);
+
+    font-family: var(--font-body);
+    line-height: 1.6;
+    font-weight: 400;
+
+    color: var(--color-ink);
+    background: linear-gradient(135deg, #1a1410 0%, #2c1f18 100%);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}
+
+a {
+    font-weight: 600;
+    color: var(--color-gold);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-gold-dark);
+    border-bottom-color: var(--color-gold-dark);
+}
+
+body {
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1410 0%, #2c1f18 100%);
+    background-attachment: fixed;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+    font-size: 2.8em;
+    line-height: 1.1;
+    border-bottom: 3px double var(--color-gold);
+    padding-bottom: 0.3em;
+}
+
+h2 {
+    font-size: 2em;
+    border-bottom: 2px solid var(--color-gold-dark);
+    padding-bottom: 0.2em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+button {
+    font-family: var(--font-primary);
+    border-radius: 2px;
+    border: 2px solid var(--color-leather-light);
+    padding: 0.7em 1.4em;
+    font-size: 0.95em;
+    font-weight: 600;
+    background: linear-gradient(to bottom, var(--color-parchment-dark), var(--color-parchment-darker));
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+button:hover {
+    background: linear-gradient(to bottom, var(--color-gold), var(--color-gold-dark));
+    border-color: var(--color-gold-dark);
+    color: var(--color-leather-dark);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+button:focus,
+button:focus-visible {
+    outline: none;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--color-parchment-darker);
+    border-color: var(--color-ink-faded);
+}
+
+code {
+    background-color: var(--color-leather-medium);
+    color: var(--color-parchment);
+    padding: 3px 6px;
+    margin: 0 4px;
+    border-radius: 2px;
+    border: 1px solid var(--color-leather-light);
+    font-family: 'Courier New', monospace;
+}
+
+.card {
+    padding: 2em;
+    background: var(--color-parchment);
+    border: 3px solid var(--color-leather-medium);
+    border-radius: 2px;
+    box-shadow: var(--shadow-parchment);
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 1px solid var(--color-gold);
+    pointer-events: none;
+    border-radius: 2px;
+}
+
+#app {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Parchment texture overlay */
+.parchment {
+    background-color: var(--color-parchment);
+    background-image:
+        repeating-linear-gradient(0deg,
+            transparent,
+            transparent 2px,
+            rgba(139, 26, 26, 0.02) 2px,
+            rgba(139, 26, 26, 0.02) 4px),
+        repeating-linear-gradient(90deg,
+            transparent,
+            transparent 2px,
+            rgba(139, 26, 26, 0.02) 2px,
+            rgba(139, 26, 26, 0.02) 4px);
+}
+
+/* Ornate border decoration */
+.ornate-border {
+    border: 2px solid var(--color-leather-medium);
+    box-shadow:
+        inset 0 0 0 1px var(--color-gold),
+        inset 0 0 0 3px var(--color-leather-light),
+        0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Scrollable areas */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-leather-dark);
+    border: 1px solid var(--color-leather-medium);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--color-leather-medium), var(--color-leather-dark));
+    border: 1px solid var(--color-gold-dark);
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, var(--color-gold-dark), var(--color-gold));
+}
+
+/* Input fields */
+input,
+textarea,
+select {
+    font-family: var(--font-body);
+    background: var(--color-vellum);
+    border: 2px solid var(--color-leather-light);
+    color: var(--color-ink);
+    padding: 0.5em;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.1),
+        0 0 0 2px rgba(212, 175, 55, 0.2);
+}

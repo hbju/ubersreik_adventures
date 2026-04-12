@@ -72,3 +72,5 @@ export { CareerCodexDisplay } from './components/codex/renderers/CareerCodexDisp
 export { ConditionCodexDisplay } from './components/codex/renderers/ConditionCodexDisplay';
 export { QualityCodexDisplay } from './components/codex/renderers/QualityCodexDisplay';
 
+// Supabase
+export * as supabase from './supabase';

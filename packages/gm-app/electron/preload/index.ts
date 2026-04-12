@@ -46,6 +46,84 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         }
     },
 
+    // ==================== Supabase Auth API ====================
+
+    authSignIn(email: string, password: string) {
+        return ipcRenderer.invoke('auth:sign-in', email, password)
+    },
+    authSignUp(email: string, password: string) {
+        return ipcRenderer.invoke('auth:sign-up', email, password)
+    },
+    authSignOut() {
+        return ipcRenderer.invoke('auth:sign-out')
+    },
+    authGetUser() {
+        return ipcRenderer.invoke('auth:get-user')
+    },
+
+    // ==================== Campaign Management API ====================
+
+    listCampaigns() {
+        return ipcRenderer.invoke('campaign:list')
+    },
+    createCampaign(name: string, description?: string) {
+        return ipcRenderer.invoke('campaign:create', name, description)
+    },
+    loadCampaign(campaignId: string) {
+        return ipcRenderer.invoke('campaign:load', campaignId)
+    },
+    deleteCampaign(campaignId: string) {
+        return ipcRenderer.invoke('campaign:delete', campaignId)
+    },
+    importCampaignJson(jsonPath: string, name: string) {
+        return ipcRenderer.invoke('campaign:import-json', jsonPath, name)
+    },
+    exportCampaignJson() {
+        return ipcRenderer.invoke('campaign:export-json')
+    },
+    selectImportFile() {
+        return ipcRenderer.invoke('campaign:select-import-file')
+    },
+    invitePlayer(campaignId: string, email: string) {
+        return ipcRenderer.invoke('campaign:invite-player', campaignId, email)
+    },
+
+    // ==================== Granular Save API ====================
+
+    saveCharacter(character: any) {
+        return ipcRenderer.invoke('save:character', character)
+    },
+    deleteCharacterById(characterId: string) {
+        return ipcRenderer.invoke('save:delete-character', characterId)
+    },
+    saveJournal(entries: any[]) {
+        return ipcRenderer.invoke('save:journal', entries)
+    },
+    saveQuests(quests: any[]) {
+        return ipcRenderer.invoke('save:quests', quests)
+    },
+    saveFactions(factions: any[], territories?: any) {
+        return ipcRenderer.invoke('save:factions', factions, territories)
+    },
+    saveMapPinStates(pinStates: any) {
+        return ipcRenderer.invoke('save:map-pin-states', pinStates)
+    },
+    saveTokens(tokens: any[]) {
+        return ipcRenderer.invoke('save:tokens', tokens)
+    },
+    saveCalendarState(calendar: any) {
+        return ipcRenderer.invoke('save:calendar', calendar)
+    },
+    saveActiveMapId(mapId: string) {
+        return ipcRenderer.invoke('save:active-map-id', mapId)
+    },
+    saveShopInventory(shopInventory: any) {
+        return ipcRenderer.invoke('save:shop-inventory', shopInventory)
+    },
+    saveCustomShopDefinitions(defs: any[]) {
+        return ipcRenderer.invoke('save:custom-shop-definitions', defs)
+    },
+
     // ==================== Campaign Data Persistence API ====================
 
     /**

@@ -17,6 +17,7 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "@supabase/supabase-js": "^2.103.0",
     "d3-delaunay": "^6.0.4",
     "electron-updater": "^6.3.9",
     "fuse.js": "^7.1.0",

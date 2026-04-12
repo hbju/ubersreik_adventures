@@ -27,6 +27,8 @@ import { TimelineManager } from './components/timeline';
 import { DramatisPersonae } from './components/lore/DramatisPersonae';
 import { LoreEditor } from './components/lore/LoreEditor';
 import NPCGeneratorWizard from './components/generator/NPCGeneratorWizard';
+import AuthScreen from './components/AuthScreen';
+import CampaignSelector from './components/CampaignSelector';
 
 import {
     DiscoveredLocationsList, 
@@ -85,6 +87,37 @@ interface ServerStatusData {
 
 function App() {
     const { t } = useTranslation();
+
+    // ==================== Auth & Campaign State ====================
+    const [authUser, setAuthUser] = useState<any>(null);
+    const [campaignLoaded, setCampaignLoaded] = useState(false);
+    const [authChecking, setAuthChecking] = useState(true);
+
+    // Check for existing session on mount
+    useEffect(() => {
+        window.ipcRenderer.authGetUser().then((result: any) => {
+            if (result.success && result.user) {
+                setAuthUser(result.user);
+            }
+        }).finally(() => setAuthChecking(false));
+    }, []);
+
+    const handleAuthenticated = (user: any) => {
+        setAuthUser(user);
+    };
+
+    const handleSignOut = async () => {
+        await window.ipcRenderer.authSignOut();
+        setAuthUser(null);
+        setCampaignLoaded(false);
+    };
+
+    const handleCampaignLoaded = (data: any) => {
+        // Populate all state from loaded campaign data
+        loadCampaignIntoState(data);
+        setCampaignLoaded(true);
+        setSaving(true);
+    };
 
     const { skills, talents, careers, items, weapons, armor, conditions, qualities, shops: shopDefinitions, mapData, maps, mapsList, motivations } = useGameData();
 
@@ -235,49 +268,118 @@ function App() {
         setLogEntries(prev => [...prev, newEntry]);
     };
 
+    /**
+     * Populate all React state from campaign data (used by both initial load and CampaignSelector).
+     */
+    const loadCampaignIntoState = (data: any) => {
+        if (!data) return;
+
+        if (data.characters && data.characters.length > 0) {
+            const updatedCharacters = data.characters.map((char: Character) => ({
+                ...char, status: { ...char.status, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }
+            }));
+            skills.filter(s => s.type === 'skill' && s.classification === 'basic').forEach(skillDef => {
+                updatedCharacters.forEach((char: Character) => {
+                    if (!char.skills.find(s => s.id === skillDef.id)) {
+                        char.skills.push({ id: skillDef.id, name: skillDef.name, characteristic: skillDef.characteristic, advances: 0, modifier: 0, talents: 0 });
+                    }
+                });
+            });
+            setCharacters(updatedCharacters);
+        }
+        if (data.users) setUsers(data.users);
+        if (data.journal) setJournal(data.journal);
+        if (data.mapPinStates) {
+            setMapPinStates(data.mapPinStates);
+        } else {
+            const initialMapPinStates: Record<string, MapPinState> = {};
+            mapData.locations.forEach((location) => {
+                initialMapPinStates[location.id] = { playerDiscovered: [] };
+            });
+            setMapPinStates(initialMapPinStates);
+        }
+        if (data.factions) setFactions(data.factions);
+        if (data.locationTerritories) setLocationTerritories(data.locationTerritories);
+        if (data.shopInventory) setShopInventory(data.shopInventory);
+        if (data.customShopDefinitions) setCustomShopDefinitions(data.customShopDefinitions);
+        if (data.characterTemplates) setCharacterTemplates(data.characterTemplates);
+        if (data.quests) setQuests(data.quests);
+        if (data.calendar) setCalendarState(data.calendar);
+        if (data.tokens) setTokens(data.tokens);
+        if (data.userPins) setUserPins(data.userPins);
+        if (data.activeMapId) setActiveMapId(data.activeMapId);
+    };
+
 
     useEffect(() => {
         if (!saving) return;
 
-        console.log("Saving data, characters:", characters);
-        const campaignData: CampaignState = {
-            characters: characters,
-            users: users,
-            journal: journal,
-            quests: quests,
-            mapPinStates: mapPinStates,
-            factions: factions,
-            shopInventory: shopInventory,
-            customShopDefinitions: customShopDefinitions,
-            characterTemplates: characterTemplates,
-            tokens: tokens,
-            userPins: userPins,
-            playerColors: {},
-            maps: maps, // Include all maps
-            activeMapId: activeMapId, // Current active map
-            calendar: calendarState, // Imperial Calendar state
-            locationTerritories: locationTerritories, // Faction territory assignments
-            version: '1.0.0',
-            lastModified: new Date().toISOString(),
-        };
-        window.ipcRenderer.saveData(campaignData);
+        // Granular saves: each state change saves only its own slice
+        // Characters are saved individually via handleCharacterUpdate
+        // Other slices saved on change below
+    }, [saving]);
 
+    // Granular save effects — each triggers only when its own data changes
+    useEffect(() => {
+        if (!saving) return;
+        characters.forEach(c => window.ipcRenderer.saveCharacter(c));
         charactersRef.current = characters;
-        usersRef.current = users;
+    }, [characters]);
+
+    useEffect(() => {
+        if (!saving) return;
+        window.ipcRenderer.saveJournal(journal);
         journalRef.current = journal;
+    }, [journal]);
+
+    useEffect(() => {
+        if (!saving) return;
+        window.ipcRenderer.saveQuests(quests);
         questsRef.current = quests;
+    }, [quests]);
+
+    useEffect(() => {
+        if (!saving) return;
+        window.ipcRenderer.saveCalendarState(calendarState);
         calendarStateRef.current = calendarState;
+    }, [calendarState]);
+
+    useEffect(() => {
+        if (!saving) return;
+        window.ipcRenderer.saveMapPinStates(mapPinStates);
         mapPinStatesRef.current = mapPinStates;
+    }, [mapPinStates]);
+
+    useEffect(() => {
+        if (!saving) return;
+        window.ipcRenderer.saveFactions(factions, locationTerritories);
         factionsRef.current = factions;
         locationTerritoriesRef.current = locationTerritories;
-        shopInventoryRef.current = shopInventory;
-        customShopDefinitionsRef.current = customShopDefinitions;
-        characterTemplatesRef.current = characterTemplates;
-        tokensRef.current = tokens;
-        userPinsRef.current = userPins;
-        activeMapIdRef.current = activeMapId;
+    }, [factions, locationTerritories]);
 
-    }, [characters, users, journal, quests, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
+    useEffect(() => {
+        if (!saving) return;
+        window.ipcRenderer.saveShopInventory(shopInventory);
+        shopInventoryRef.current = shopInventory;
+    }, [shopInventory]);
+
+    useEffect(() => {
+        if (!saving) return;
+        window.ipcRenderer.saveCustomShopDefinitions(customShopDefinitions);
+        customShopDefinitionsRef.current = customShopDefinitions;
+    }, [customShopDefinitions]);
+
+    useEffect(() => {
+        if (!saving) return;
+        window.ipcRenderer.saveTokens(tokens);
+        tokensRef.current = tokens;
+    }, [tokens]);
+
+    useEffect(() => {
+        if (!saving) return;
+        window.ipcRenderer.saveActiveMapId(activeMapId);
+        activeMapIdRef.current = activeMapId;
+    }, [activeMapId]);
 
     // Broadcast calendar state to all players whenever it changes
     useEffect(() => {
@@ -818,89 +920,13 @@ function App() {
 
 
     useEffect(() => {
-        // Load initial data on component mount
+        // If Supabase auth is active, campaign is loaded via CampaignSelector — skip legacy load
+        if (authUser) return;
+
+        // Legacy: Load initial data on component mount (fallback when Supabase is not configured)
         window.ipcRenderer.getInitialData().then((data: any) => {
-            if (!data)
-                return;
-
-            if (data.characters && data.characters.length > 0) {
-                const updatedCharacters = data.characters.map((char: Character) => ({
-                    ...char, status: { ...char.status, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }
-                }));
-                skills.filter(s => s.type === 'skill' && s.classification === 'basic').forEach(skillDef => {
-                    updatedCharacters.forEach((char: Character) => {
-                        if (!char.skills.find(s => s.id === skillDef.id)) {
-                            char.skills.push({ id: skillDef.id, name: skillDef.name, characteristic: skillDef.characteristic, advances: 0, modifier: 0, talents: 0 });
-                        }
-                    });
-                });
-                setCharacters(updatedCharacters);
-                console.log('Loaded campaign data from file system:', data);
-            }
-            if (data.users) {
-                setUsers(data.users);
-            }
-            if (data.journal) {
-                setJournal(data.journal);
-            }
-
-            // Initialize mapPinStates if not present
-            if (data.mapPinStates) {
-                setMapPinStates(data.mapPinStates);
-            } else {
-                // Create initial map pin states for all locations
-                const initialMapPinStates: Record<string, MapPinState> = {};
-                mapData.locations.forEach((location) => {
-                    initialMapPinStates[location.id] = {
-                        playerDiscovered: [],
-                    };
-                });
-                setMapPinStates(initialMapPinStates);
-            }
-
-            // Load factions if present
-            if (data.factions) {
-                setFactions(data.factions);
-            }
-
-            // Load location territories if present
-            if (data.locationTerritories) {
-                setLocationTerritories(data.locationTerritories);
-            }
-
-            // Load shop inventory if present
-            if (data.shopInventory) {
-                setShopInventory(data.shopInventory);
-            }
-
-            // Load custom shop definitions if present
-            if (data.customShopDefinitions) {
-                setCustomShopDefinitions(data.customShopDefinitions);
-            }
-
-            // Load character templates if present
-            if (data.characterTemplates) {
-                setCharacterTemplates(data.characterTemplates);
-            }
-
-            // Load quests if present
-            if (data.quests) {
-                setQuests(data.quests);
-            }
-
-            // Load calendar state if present
-            if (data.calendar) {
-                setCalendarState(data.calendar);
-            }
-
-            if (data.tokens) {
-                setTokens(data.tokens);
-            }
-
-            if (data.userPins) {
-                setUserPins(data.userPins);
-            }
-
+            if (!data) return;
+            loadCampaignIntoState(data);
             setSaving(true);
         }).catch((error: any) => {
             console.error('Failed to load initial data:', error);
@@ -1421,6 +1447,21 @@ function App() {
         <CodexProvider dataSources={codexDataSources}>
         <AudioProvider>
         <div>
+            {/* Auth gate: show auth screen if not logged in */}
+            {authChecking ? (
+                <div className="min-h-screen flex items-center justify-center bg-stone-900">
+                    <p className="text-stone-400">Loading…</p>
+                </div>
+            ) : !authUser ? (
+                <AuthScreen onAuthenticated={handleAuthenticated} />
+            ) : !campaignLoaded ? (
+                <CampaignSelector
+                    onCampaignLoaded={handleCampaignLoaded}
+                    onSignOut={handleSignOut}
+                    userEmail={authUser.email || ''}
+                />
+            ) : (
+            <>
             <Footer
                 ip={serverInfo.ip}
                 port={serverInfo.port}
@@ -2150,6 +2191,8 @@ function App() {
             <CommandPalette />
             <CodexViewer />
             <CodexPopupModal />
+            </>
+            )}
         </div>
         </AudioProvider>
         </CodexProvider>

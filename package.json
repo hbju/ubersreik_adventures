@@ -26,6 +26,8 @@
     "build:gm": "npm run build -w @wfrp/gm-app",
     "dev:player": "npm run dev -w @wfrp/player-app",
     "build:player": "npm run build -w @wfrp/player-app",
+    "dev:player-web": "npm run dev -w @wfrp/player-web",
+    "build:player-web": "npm run build -w @wfrp/player-web",
     "build:shared": "npm run build -w @wfrp/shared"
   },
   "author": "milouordo",

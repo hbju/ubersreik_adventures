@@ -27,6 +27,12 @@ release
 public/assets/music
 packages/*/public/assets/music
 
+# Environment variables (Supabase keys etc.)
+.env
+.env.local
+packages/*/.env
+packages/*/.env.local
+
 # Editor directories and files
 .vscode/.debug.env
 .idea

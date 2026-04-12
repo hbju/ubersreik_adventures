@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain, protocol } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, protocol, dialog } from 'electron'
 import * as fs from 'fs'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
@@ -8,7 +8,16 @@ import path from 'node:path'
 import os from 'node:os'
 import { update } from './update'
 import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates, broadcastChatMessage, getChatHistory } from './server'
-import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
+import {
+  loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData,
+  saveCharacter, deleteCharacter as deleteCharacterFromDb, saveJournal, saveQuests,
+  saveFactions, saveMapPinStates, saveTokens, saveCalendarState, saveActiveMapId,
+  saveShopInventory, saveCustomShopDefinitions, importCampaignFromJson, exportCampaignToJson,
+} from './dataManager'
+import {
+  initializeSupabase, signIn, signUp, signOut, getCurrentUser,
+  setCurrentCampaignId,
+} from './supabaseManager'
 import { startAudioServer, getAudioServerPort, stopAudioServer } from './audioServer'
 import { selectAndCopyCharacterImage, readCharacterImageAsDataUrl, deleteCharacterImage } from './imageHandler'
 import {
@@ -24,7 +33,9 @@ import {
   deleteTrack,
   updateTrackDisplayName
 } from './audioManager'
-import { CampaignState, ChatMessage, AudioLibrary, Playlist } from '@wfrp/shared'
+import { CampaignState, ChatMessage, AudioLibrary, Playlist, supabase } from '@wfrp/shared'
+
+const { campaignQueries } = supabase;
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -126,9 +137,13 @@ async function createWindow() {
 app.whenReady().then(async () => {
   await startAudioServer();
 
-  // Load campaign data on startup
-  clearCampaignCache();
-  loadCampaignData();
+  // Initialize Supabase client (auth happens later via IPC from renderer)
+  try {
+    initializeSupabase();
+  } catch (error) {
+    console.warn('[STARTUP] Supabase initialization failed:', error);
+  }
+
   createWindow();
 })
 
@@ -187,15 +202,251 @@ ipcMain.handle('open-win', (_, arg) => {
   }
 });
 
+// ==================== Supabase Auth IPC Handlers ====================
+
+ipcMain.handle('auth:sign-in', async (_event, email: string, password: string) => {
+  try {
+    const result = await signIn(email, password);
+    return { success: true, user: result.user };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('auth:sign-up', async (_event, email: string, password: string) => {
+  try {
+    const result = await signUp(email, password);
+    return { success: true, user: result.user };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('auth:sign-out', async () => {
+  try {
+    await signOut();
+    clearCampaignCache();
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('auth:get-user', async () => {
+  try {
+    const user = await getCurrentUser();
+    return user;
+  } catch (error) {
+    return null;
+  }
+});
+
+// ==================== Campaign Management IPC Handlers ====================
+
+ipcMain.handle('campaign:list', async () => {
+  try {
+    var result = await campaignQueries.listMyCampaigns();
+    return { success: true, campaigns: result.map(c => ({ id: c.campaigns.id, name: c.campaigns.name, description: c.campaigns.description, created_at: c.campaigns.created_at, updated_at: c.campaigns.updated_at })) };
+  } catch (error) {
+    console.error('Error listing campaigns:', error);
+    return { success: false, error: (error as Error).message, campaigns: [] };
+  }
+});
+
+ipcMain.handle('campaign:create', async (_event, name: string, description?: string) => {
+  try {
+    const campaign = await campaignQueries.createCampaign(name, description);
+    return campaign;
+  } catch (error) {
+    console.error('Error creating campaign:', error);
+    throw error;
+  }
+});
+
+ipcMain.handle('campaign:load', async (_event, campaignId: string) => {
+  try {
+    setCurrentCampaignId(campaignId);
+    clearCampaignCache();
+    const data = await loadCampaignData();
+    console.log('Campaign loaded from Supabase:', campaignId);
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error loading campaign:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('campaign:delete', async (_event, campaignId: string) => {
+  try {
+    await campaignQueries.deleteCampaign(campaignId);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('campaign:import-json', async (_event, jsonPath: string, name: string) => {
+  try {
+    const newCampaignId = await importCampaignFromJson(jsonPath, name);
+    return { success: true, campaignId: newCampaignId };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('campaign:export-json', async () => {
+  try {
+    const backupPath = exportCampaignToJson();
+    return { success: true, path: backupPath };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('campaign:select-import-file', async () => {
+  const result = await dialog.showOpenDialog({
+    title: 'Select Campaign JSON File',
+    filters: [{ name: 'JSON Files', extensions: ['json'] }],
+    properties: ['openFile'],
+  });
+  if (result.canceled || result.filePaths.length === 0) return { success: false, path: null };
+  return { success: true, path: result.filePaths[0] };
+});
+
+ipcMain.handle('campaign:invite-player', async (_event, campaignId: string, email: string) => {
+  try {
+    // Look up user by email — this would require admin API or a users table
+    // For now, we use the user_id directly if known
+    // TODO: Implement user lookup via email when Supabase project is set up
+    return { success: false, error: 'User lookup by email not yet implemented. Use Supabase dashboard to invite.' };
+  } catch (error) {
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+// ==================== Granular Save IPC Handlers ====================
+
+ipcMain.handle('save:character', async (_event, character: any) => {
+  try {
+    await saveCharacter(character);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving character:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:delete-character', async (_event, characterId: string) => {
+  try {
+    await deleteCharacterFromDb(characterId);
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting character:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:journal', async (_event, entries: any[]) => {
+  try {
+    await saveJournal(entries);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving journal:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:quests', async (_event, quests: any[]) => {
+  try {
+    await saveQuests(quests);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving quests:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:factions', async (_event, factions: any[], territories?: any) => {
+  try {
+    await saveFactions(factions, territories);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving factions:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:map-pin-states', async (_event, pinStates: any) => {
+  try {
+    await saveMapPinStates(pinStates);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving map pin states:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:tokens', async (_event, tokens: any[]) => {
+  try {
+    await saveTokens(tokens);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving tokens:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:calendar', async (_event, calendar: any) => {
+  try {
+    await saveCalendarState(calendar);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving calendar:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:active-map-id', async (_event, mapId: string) => {
+  try {
+    await saveActiveMapId(mapId);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving active map ID:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:shop-inventory', async (_event, shopInventory: any) => {
+  try {
+    await saveShopInventory(shopInventory);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving shop inventory:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
+ipcMain.handle('save:custom-shop-definitions', async (_event, defs: any[]) => {
+  try {
+    await saveCustomShopDefinitions(defs);
+    return { success: true };
+  } catch (error) {
+    console.error('Error saving custom shop definitions:', error);
+    return { success: false, error: (error as Error).message };
+  }
+});
+
 // ==================== Campaign Data Persistence IPC Handlers ====================
 
 /**
  * Handle request for initial campaign data
- * Returns the entire campaign data object loaded from disk
+ * Returns campaign data loaded from Supabase (must be authenticated and have a campaign loaded)
+ * @deprecated Legacy handler — kept for backward compatibility when Supabase is not configured.
+ *             New code should use granular IPC handlers and load data via CampaignSelector.
  */
 ipcMain.handle('get-initial-data', async () => {
   try {
-    const data = loadCampaignData();
+    const data = await loadCampaignData();
     console.log('Sending initial data to renderer');
     return data;
   } catch (error) {
@@ -205,12 +456,14 @@ ipcMain.handle('get-initial-data', async () => {
 });
 
 /**
- * Handle save data request from renderer
- * Saves the data to disk and broadcasts the update to all windows
+ * Handle save data request from renderer (legacy full-state save)
+ * Saves the data to Supabase and broadcasts the update to all players
+ * @deprecated No longer called from the renderer — all saves are granular now.
+ *             Kept because server.ts still uses saveCampaignData() internally.
  */
-ipcMain.on('save-data', (event, data: CampaignState) => {
+ipcMain.on('save-data', async (event, data: CampaignState) => {
   try {
-    saveCampaignData(data);
+    await saveCampaignData(data);
     console.log('Data saved successfully');
 
     // Broadcast journal entries to all connected players
@@ -228,11 +481,11 @@ ipcMain.on('save-data', (event, data: CampaignState) => {
 });
 
 /**
- * Handle backup request from renderer
+ * Handle backup request from renderer (exports to JSON)
  */
 ipcMain.handle('backup-campaign', async () => {
   try {
-    const backupPath = backupCampaignData();
+    const backupPath = exportCampaignToJson();
     return { success: true, path: backupPath };
   } catch (error) {
     console.error('Error backing up campaign:', error);
@@ -416,7 +669,7 @@ ipcMain.handle('select-character-image', async (_event, characterId: string) => 
   try {
     const imagePath = await selectAndCopyCharacterImage(characterId);
     if (imagePath) {
-      const dataUrl = readCharacterImageAsDataUrl(imagePath);
+      const dataUrl = await readCharacterImageAsDataUrl(imagePath);
       return { success: true, path: imagePath, dataUrl };
     }
     return { success: false, cancelled: true };
@@ -431,7 +684,7 @@ ipcMain.handle('select-character-image', async (_event, characterId: string) => 
  */
 ipcMain.handle('load-character-image', async (_event, imagePath: string) => {
   try {
-    const dataUrl = readCharacterImageAsDataUrl(imagePath);
+    const dataUrl = await readCharacterImageAsDataUrl(imagePath);
     return dataUrl;
   } catch (error) {
     console.error('Error loading character image:', error);
@@ -444,7 +697,7 @@ ipcMain.handle('load-character-image', async (_event, imagePath: string) => {
  */
 ipcMain.handle('delete-character-image', async (_event, characterId: string) => {
   try {
-    deleteCharacterImage(characterId);
+    await deleteCharacterImage(characterId);
     return { success: true };
   } catch (error) {
     console.error('Error deleting character image:', error);

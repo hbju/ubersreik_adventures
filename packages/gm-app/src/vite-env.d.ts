@@ -14,6 +14,35 @@ interface IpcRendererApi {
     sendToAllPlayers: (message: any) => void;
     onPlayerMessageReceived: (callback: (value: any) => void) => () => void;
     assignCharacterToPlayer: (characterId: string, socketId: string) => void;
+
+    // Supabase Auth API
+    authSignIn: (email: string, password: string) => Promise<{ success: boolean; user?: any; error?: string }>;
+    authSignUp: (email: string, password: string) => Promise<{ success: boolean; user?: any; error?: string }>;
+    authSignOut: () => Promise<{ success: boolean; error?: string }>;
+    authGetUser: () => Promise<{ success: boolean; user?: any; error?: string }>;
+
+    // Campaign Management API
+    listCampaigns: () => Promise<{ success: boolean; campaigns?: any[]; error?: string }>;
+    createCampaign: (name: string, description?: string) => Promise<{ success: boolean; campaign?: any; error?: string }>;
+    loadCampaign: (campaignId: string) => Promise<{ success: boolean; data?: any; error?: string }>;
+    deleteCampaign: (campaignId: string) => Promise<{ success: boolean; error?: string }>;
+    importCampaignJson: (jsonPath: string, name: string) => Promise<{ success: boolean; error?: string }>;
+    exportCampaignJson: () => Promise<{ success: boolean; path?: string; error?: string }>;
+    selectImportFile: () => Promise<{ success: boolean; path?: string }>;
+    invitePlayer: (campaignId: string, email: string) => Promise<{ success: boolean; error?: string }>;
+
+    // Granular Save API
+    saveCharacter: (character: any) => Promise<any>;
+    deleteCharacterById: (characterId: string) => Promise<any>;
+    saveJournal: (entries: any[]) => Promise<any>;
+    saveQuests: (quests: any[]) => Promise<any>;
+    saveFactions: (factions: any[], territories?: any) => Promise<any>;
+    saveMapPinStates: (pinStates: any) => Promise<any>;
+    saveTokens: (tokens: any[]) => Promise<any>;
+    saveCalendarState: (calendar: any) => Promise<any>;
+    saveActiveMapId: (mapId: string) => Promise<any>;
+    saveShopInventory: (shopInventory: any) => Promise<any>;
+    saveCustomShopDefinitions: (defs: any[]) => Promise<any>;
     
     // Campaign Data Persistence API
     getInitialData: () => Promise<any>;

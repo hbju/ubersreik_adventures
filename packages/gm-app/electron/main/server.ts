@@ -1,9 +1,10 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage, ChatMessage, ChatMessageBroadcast, ChatHistoryMessage, parseChatCommand, executeDiceRoll, LocationTerritory, CalendarSyncMessage, CalendarState, TimelineEvent, GameDate } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage, ChatMessage, ChatMessageBroadcast, ChatHistoryMessage, parseChatCommand, executeDiceRoll, LocationTerritory, CalendarSyncMessage, CalendarState, TimelineEvent, GameDate, supabase as supabaseModule } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 import { getCampaignData, saveCampaignData } from './dataManager';
+import { isSupabaseInitialized } from './supabaseManager';
 
 const PORT = 3003;
 const connectedClients = new Map<string, Socket>();
@@ -47,7 +48,7 @@ function getLocalIpAddress(): string {
 export const localIp = getLocalIpAddress();
 
 /**
- * Hash password - same algorithm as in GM App
+ * Hash password - same algorithm as in GM App (legacy fallback)
  */
 function hashPassword(password: string): string {
     let hash = 0;
@@ -60,10 +61,33 @@ function hashPassword(password: string): string {
 }
 
 /**
- * Authenticate user with username and password
- * Returns the user if credentials are valid, null otherwise
+ * Authenticate user via Supabase Auth token or legacy password.
+ * 
+ * If the player sends a Supabase access_token, we verify it and look up
+ * the campaign member. Otherwise, we fall back to the legacy password hash.
  */
-function authenticateUser(username: string, password: string): User | null {
+async function authenticateUser(username: string, password: string, accessToken?: string): Promise<User | null> {
+    // Try Supabase Auth token verification first
+    if (accessToken && isSupabaseInitialized()) {
+        try {
+            const sb = supabaseModule.getSupabase();
+            const { data: { user }, error } = await sb.auth.getUser(accessToken);
+            if (!error && user) {
+                const campaignData = getCampaignData();
+                if (!campaignData) return null;
+                // Find the campaign member matching this Supabase user
+                const member = campaignData.users.find(u => u.id === user.id);
+                if (member) {
+                    console.log(`[AUTH] Supabase Auth verified: ${user.email}`);
+                    return member;
+                }
+            }
+        } catch (err) {
+            console.log('[AUTH] Supabase token verification failed, falling back to legacy auth');
+        }
+    }
+
+    // Legacy password-based authentication fallback
     const campaignData = getCampaignData();
     if (!campaignData || !campaignData.users) {
         return null;
@@ -101,7 +125,7 @@ function getUserCharacter(userId: string): Character | null {
 /**
  * Get or assign a color for a user
  */
-function getPlayerColor(userId: string): string {
+async function getPlayerColor(userId: string): Promise<string> {
     const campaignData = getCampaignData();
     if (!campaignData) return PLAYER_COLORS[0];
 
@@ -117,7 +141,7 @@ function getPlayerColor(userId: string): string {
     const availableColor = PLAYER_COLORS.find(c => !usedColors.includes(c)) || PLAYER_COLORS[0];
 
     campaignData.playerColors[userId] = availableColor;
-    saveCampaignData(campaignData);
+    await saveCampaignData(campaignData);
 
     return availableColor;
 }
@@ -159,14 +183,15 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
         connectedClients.set(socket.id, socket);
         updateStatus();
 
-        socket.on('player-message', (message: ClientToServerMessage) => {
+        socket.on('player-message', async (message: ClientToServerMessage) => {
             console.log(`[SERVER] Received message from ${socket.id}:`, message);
 
             if (message.type === 'LOGIN_REQUEST') {
                 const { username, password } = message.payload;
+                const accessToken = (message.payload as any).accessToken;
                 console.log(`[AUTH] Login attempt from ${socket.id}: ${username}`);
 
-                const user = authenticateUser(username, password);
+                const user = await authenticateUser(username, password, accessToken);
                 if (!user) {
                     const failureMessage: LoginFailureMessage = {
                         type: 'LOGIN_FAILURE',
@@ -197,7 +222,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 socketToUserId.set(socket.id, user.id);
 
                 const character = getUserCharacter(user.id);
-                const playerColor = getPlayerColor(user.id);
+                const playerColor = await getPlayerColor(user.id);
 
                 const successMessage: LoginSuccessMessage = {
                     type: 'LOGIN_SUCCESS',
@@ -287,7 +312,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 };
 
                 campaignData.characters[characterIndex] = updatedCharacter;
-                saveCampaignData(campaignData);
+                await saveCampaignData(campaignData);
 
                 const updateMessage: CharacterUpdateMessage = {
                     type: 'CHARACTER_UPDATE',
@@ -335,7 +360,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     campaignData.quests.push(quest);
                 }
 
-                saveCampaignData(campaignData);
+                await saveCampaignData(campaignData);
 
                 broadcastQuests(campaignData.quests);
 
@@ -358,7 +383,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 }
 
                 campaignData.quests = campaignData.quests.filter(q => q.id !== questId);
-                saveCampaignData(campaignData);
+                await saveCampaignData(campaignData);
 
                 broadcastQuests(campaignData.quests);
 
@@ -395,7 +420,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     }
 
                     campaignData.tokens[tokenIndex] = { ...token, x, y };
-                    saveCampaignData(campaignData);
+                    await saveCampaignData(campaignData);
 
                     // Broadcast token update to all players
                     broadcastTokens(campaignData.tokens);
@@ -429,7 +454,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 }
 
                 campaignData.userPins.push(pin);
-                saveCampaignData(campaignData);
+                await saveCampaignData(campaignData);
 
                 // Send updated pins to this player only (pins are private)
                 const playerPins = campaignData.userPins.filter(p => p.playerId === userId);
@@ -461,7 +486,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     }
 
                     campaignData.userPins.splice(pinIndex, 1);
-                    saveCampaignData(campaignData);
+                    await saveCampaignData(campaignData);
 
                     const playerPins = campaignData.userPins.filter(p => p.playerId === userId);
                     const pinsMessage: UserPinsUpdateMessage = {
@@ -477,7 +502,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
 
             if (message.type === 'MAP_PING_REQUEST') {
                 const { x, y } = message.payload;
-                const playerColor = getPlayerColor(userId);
+                const playerColor = await getPlayerColor(userId);
 
                 const pingMessage: MapPingMessage = {
                     type: 'MAP_PING',
@@ -501,7 +526,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
 
             if (message.type === 'CHAT_SEND') {
                 const { content, senderName } = message.payload;
-                const playerColor = getPlayerColor(userId);
+                const playerColor = await getPlayerColor(userId);
 
                 const parsed = parseChatCommand(content);
 
