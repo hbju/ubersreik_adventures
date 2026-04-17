@@ -142,9 +142,9 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
                                 const effectSummary = talent.effects
                                     ?.map(e => {
                                         const val = typeof e.value === 'number' ? e.value * rank : e.value;
-                                        return `${e.type.replace(/_/g, ' ')}: ${val}`;
+                                        return `${e.type.replace(/_/g, ' ')}: ${val}`; 
                                     })
-                                    .join(', ');
+                                    .join(', ').concat(talent.tests ? ` | Tests: ${talent.tests.join(', ')}` : '');
                                 return (
                                     <label key={talent.id} className={styles.npcTalentCheckbox}>
                                         <input
