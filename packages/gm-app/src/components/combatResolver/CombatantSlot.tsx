@@ -48,7 +48,6 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
 
     // Get NPCs (characters without userId or combatants that aren't players)
     const npcs = React.useMemo(() => {
-        const npcCharacters = characters.filter(c => !c.userId);
         const combatantNpcs = combatants
             .filter(c => !c.isPlayer)
             .map(c => {
@@ -63,7 +62,7 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
             });
 
         // Merge and deduplicate
-        const allNpcs = [...npcCharacters];
+        const allNpcs = [...characters];
         combatantNpcs.forEach(npc => {
             if (!allNpcs.find(n => n.id === npc.id)) {
                 allNpcs.push(npc as Character);
@@ -143,9 +142,9 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
                                 const effectSummary = talent.effects
                                     ?.map(e => {
                                         const val = typeof e.value === 'number' ? e.value * rank : e.value;
-                                        return `${e.type.replace(/_/g, ' ')}: ${val}`;
+                                        return `${e.type.replace(/_/g, ' ')}: ${val}`; 
                                     })
-                                    .join(', ');
+                                    .join(', ').concat(talent.tests ? ` | Tests: ${talent.tests.join(', ')}` : '');
                                 return (
                                     <label key={talent.id} className={styles.npcTalentCheckbox}>
                                         <input

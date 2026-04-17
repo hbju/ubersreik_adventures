@@ -208,7 +208,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         if (role === 'attacker') {
             const weaponById = Object.fromEntries((weaponsData as Weapon[]).map(w => [w.id, w]));
             const equippedWeaponIds = Object.entries(character.inventory?.weapons || {})
-                .filter(([_, count]) => count > 0)
+                .filter(([id, count]) => count > 0 && (weaponById[id].group.includes(skillId) || skillId.includes(weaponById[id].group)))
                 .map(([id]) => id);
 
             if (equippedWeaponIds.length > 0) {
