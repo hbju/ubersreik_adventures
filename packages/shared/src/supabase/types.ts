@@ -663,6 +663,7 @@ export type Database = {
         Row: {
           advances: number
           character_id: string
+          characteristic: string
           modifier: number
           skill_id: string
           talents: number
@@ -670,6 +671,7 @@ export type Database = {
         Insert: {
           advances?: number
           character_id: string
+          characteristic: string
           modifier?: number
           skill_id: string
           talents?: number
@@ -677,6 +679,7 @@ export type Database = {
         Update: {
           advances?: number
           character_id?: string
+          characteristic?: string
           modifier?: number
           skill_id?: string
           talents?: number
@@ -1799,6 +1802,14 @@ export type Database = {
       }
       is_campaign_gm: { Args: { p_campaign_id: string }; Returns: boolean }
       is_campaign_member: { Args: { p_campaign_id: string }; Returns: boolean }
+      is_journal_shared_with: {
+        Args: { p_journal_id: string; p_target: string }
+        Returns: boolean
+      }
+      journal_entry_campaign_id: {
+        Args: { p_journal_id: string }
+        Returns: string
+      }
       my_character_id: { Args: { p_campaign_id: string }; Returns: string }
       save_character: { Args: { p_data: Json }; Returns: string }
       save_character_relationships: {

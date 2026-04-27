@@ -108,11 +108,13 @@ CREATE INDEX idx_characters_user ON characters(user_id);
 CREATE TABLE character_skills (
     character_id UUID NOT NULL REFERENCES characters(id) ON DELETE CASCADE,
     skill_id TEXT NOT NULL,
+    characteristic TEXT NOT NULL,
     advances INT NOT NULL DEFAULT 0,
     talents INT NOT NULL DEFAULT 0,
     modifier INT NOT NULL DEFAULT 0,
     PRIMARY KEY (character_id, skill_id)
 );
+
 
 CREATE TABLE character_talents (
     character_id UUID NOT NULL REFERENCES characters(id) ON DELETE CASCADE,

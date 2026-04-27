@@ -42,8 +42,8 @@ export function assembleCharacter(row: Record<string, any>): Character {
 
   const skills: Skill[] = (row.skills ?? []).map((s: any) => ({
     id: s.skill_id,
-    name: '', // looked up from static data at the component level
-    characteristic: '', // looked up from static data at the component level
+    name: s.name,
+    characteristic: s.characteristic,
     advances: s.advances ?? 0,
     talents: s.talents ?? 0,
     modifier: s.modifier ?? 0,
@@ -264,6 +264,7 @@ export function decomposeCharacter(char: Character, campaignId: string): Record<
   // Sub-tables
   flat.skills = char.skills.map(s => ({
     skill_id: s.id,
+    characteristic: s.characteristic,
     advances: s.advances,
     talents: s.talents,
     modifier: s.modifier,

@@ -155,6 +155,10 @@
     justify-content: center;
     height: 100vh;
     color: var(--color-parchment);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .loading-screen .spinner {
@@ -179,6 +183,10 @@
     justify-content: center;
     height: 100vh;
     gap: 24px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .auth-card {

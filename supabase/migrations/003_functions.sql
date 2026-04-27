@@ -241,7 +241,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
 -- ============================================================================
 
 CREATE OR REPLACE FUNCTION save_character(p_data JSONB)
-RETURNS UUID AS $$
+RETURNS UUID AS $$  
 DECLARE
     v_char_id UUID;
     v_campaign_id UUID;
@@ -351,8 +351,8 @@ BEGIN
     IF p_data->'skills' IS NOT NULL THEN
         FOR v_skill IN SELECT * FROM jsonb_array_elements(p_data->'skills')
         LOOP
-            INSERT INTO character_skills (character_id, skill_id, advances, talents, modifier)
-            VALUES (v_char_id, v_skill->>'skill_id',
+            INSERT INTO character_skills (character_id, skill_id, characteristic, advances, talents, modifier)
+            VALUES (v_char_id, v_skill->>'skill_id', v_skill->>'characteristic',
                     COALESCE((v_skill->>'advances')::INT, 0),
                     COALESCE((v_skill->>'talents')::INT, 0),
                     COALESCE((v_skill->>'modifier')::INT, 0));

@@ -918,68 +918,6 @@ function App() {
         ? allShopDefinitions.find(sd => sd.id === browsingShopId)!
         : null;
 
-
-    useEffect(() => {
-        // If Supabase auth is active, campaign is loaded via CampaignSelector — skip legacy load
-        if (authUser) return;
-
-        // Legacy: Load initial data on component mount (fallback when Supabase is not configured)
-        window.ipcRenderer.getInitialData().then((data: any) => {
-            if (!data) return;
-            loadCampaignIntoState(data);
-            setSaving(true);
-        }).catch((error: any) => {
-            console.error('Failed to load initial data:', error);
-        });
-
-        // Listen for data updates from the main process
-        const cleanupDataUpdateListener = window.ipcRenderer.onDataUpdated((data: any) => {
-            if (data && data.characters) {
-                setCharacters(data.characters);
-                console.log('Received data update from main process : ', data);
-            }
-            if (data && data.journal) {
-                setJournal(data.journal);
-            }
-            if (data && data.mapPinStates) {
-                setMapPinStates(data.mapPinStates);
-            }
-            if (data && data.quests) {
-                setQuests(data.quests);
-            }
-            if (data && data.tokens) {
-                setTokens(data.tokens);
-            }
-            if (data && data.userPins) {
-                setUserPins(data.userPins);
-            }
-        });
-
-        const cleanupMapPingReceivedListener = window.ipcRenderer.onMapPingReceived(({ x, y, color, userId }: { x: number, y: number, color: string, userId: string }) => {
-            setMapPing({ x, y, color, userId });
-            setTimeout(() => {
-                setMapPing(null);
-            }, 300);
-        });
-
-        window.ipcRenderer.getChatHistory().then((history: ChatMessage[]) => {
-            if (history && history.length > 0) {
-                setChatMessages(history);
-            }
-        });
-
-        const cleanupChatMessageListener = window.ipcRenderer.onChatMessage((message: ChatMessage) => {
-            setChatMessages(prev => [...prev, message]);
-        });
-
-
-        return () => {
-            cleanupDataUpdateListener();
-            cleanupMapPingReceivedListener();
-            cleanupChatMessageListener();
-        };
-    }, []);
-
     useEffect(() => {
         window.ipcRenderer.getServerStatus().then((info) => {
             setServerInfo(info);

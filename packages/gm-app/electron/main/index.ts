@@ -256,10 +256,10 @@ ipcMain.handle('campaign:list', async () => {
 ipcMain.handle('campaign:create', async (_event, name: string, description?: string) => {
   try {
     const campaign = await campaignQueries.createCampaign(name, description);
-    return campaign;
+    return { success: true, campaign: { id: campaign.id, name: campaign.name, description: campaign.description, created_at: campaign.created_at, updated_at: campaign.updated_at } };
   } catch (error) {
     console.error('Error creating campaign:', error);
-    throw error;
+    return { success: false, error: (error as Error).message };
   }
 });
 
