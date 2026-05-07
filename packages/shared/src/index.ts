@@ -72,3 +72,21 @@ export { CareerCodexDisplay } from './components/codex/renderers/CareerCodexDisp
 export { ConditionCodexDisplay } from './components/codex/renderers/ConditionCodexDisplay';
 export { QualityCodexDisplay } from './components/codex/renderers/QualityCodexDisplay';
 
+// Supabase
+export * from './types/database.types';
+export { createSupabaseClient, getSupabaseClient, resetSupabaseClient } from './lib/supabase';
+export type { TypedSupabaseClient } from './lib/supabase';
+export {
+  signUp,
+  signIn,
+  signOut,
+  getSession,
+  getCurrentUserId,
+  getProfile,
+  updateProfile,
+  onAuthStateChange,
+} from './lib/auth';
+export type { Profile } from './lib/auth';
+export { getSupabaseEnvFromVite, getSupabaseEnvFromProcess } from './lib/env';
+export type { SupabaseEnv } from './lib/env';
+

@@ -26,16 +26,19 @@
     "build:gm": "npm run build -w @wfrp/gm-app",
     "dev:player": "npm run dev -w @wfrp/player-app",
     "build:player": "npm run build -w @wfrp/player-app",
-    "build:shared": "npm run build -w @wfrp/shared"
+    "build:shared": "npm run build -w @wfrp/shared",
+    "migrate:supabase": "tsx scripts/migrate-to-supabase.ts"
   },
   "author": "milouordo",
   "license": "ISC",
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.3",
     "@wfrp/shared": "^1.0.0",
     "react-draggable": "^4.5.0",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.18"
+    "tailwindcss": "^3.4.18",
+    "tsx": "^4.21.0"
   }
 }
