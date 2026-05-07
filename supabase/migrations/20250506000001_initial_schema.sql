@@ -220,13 +220,13 @@ CREATE TABLE public.maps (
   campaign_id UUID NOT NULL REFERENCES public.campaigns(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   image_path TEXT NOT NULL, -- Local path initially; Supabase Storage URL later
-  grid_size INTEGER NULL, -- Single grid cell size (existing model uses number, not {w,h})
+  grid_size FLOAT NULL, -- Single grid cell size (existing model uses number, not {w,h})
   spawn_point JSONB NULL, -- { x, y }
   locations JSONB NOT NULL DEFAULT '[]' -- Location[] (always loaded with map)
 );
 
 COMMENT ON TABLE public.maps IS 'Campaign maps. Locations are stored as JSONB since they are always loaded with the map.';
-COMMENT ON COLUMN public.maps.grid_size IS 'Grid cell size in pixels. Single number matching existing MapData.gridSize.';
+COMMENT ON COLUMN public.maps.grid_size IS 'Grid cell size in scale. Single number matching existing MapData.gridSize.';
 COMMENT ON COLUMN public.maps.locations IS 'Array of Location objects: { id, name, coords, playerDescription, gmNotes, image, music, hooks, tag, controllingFactionId?, influenceWeight? }';
 
 CREATE INDEX idx_maps_campaign ON public.maps(campaign_id);

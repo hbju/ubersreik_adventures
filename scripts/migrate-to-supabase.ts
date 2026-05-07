@@ -316,8 +316,8 @@ async function migrateCampaign(
 
   const { error } = await supabase.from('campaigns').upsert({
     id: campaignId,
-    name: 'Ubersreik Adventures', // Default name; can be overridden
-    gm_user_id: '', // Will be set in campaign_members step - placeholder
+    name: 'Les Incels à Ubersreik', // Default name; can be overridden
+    gm_user_id: '3ac32fe1-b9b8-42fe-b54c-d4c5509c3105', 
     active_map_id: null, // Set after maps are created
     calendar_state: state.calendar ? (state.calendar as unknown as Record<string, unknown>) : null,
     last_global_restock: state.shopInventory?.lastGlobalRestock ?? null,
@@ -326,7 +326,7 @@ async function migrateCampaign(
 
   if (error) throw new Error(`Failed to create campaign: ${error.message}`);
 
-  report.campaignName = 'Ubersreik Adventures';
+  report.campaignName = 'Les Incels à Ubersreik';
   report.counts['campaigns'] = 1;
 
   // Store for later active_map_id update
