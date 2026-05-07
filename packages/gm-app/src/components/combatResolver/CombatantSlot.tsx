@@ -74,8 +74,7 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
     const selectedNpc = npcs.find(n => n.id === selectedNpcId);
 
     if (assignedRoll) {
-        const rolledSL = assignedRoll.successLevel;
-        const totalSL = rolledSL + fudge;
+        const totalSL = assignedRoll.successLevel;
         const slSign = totalSL >= 0 ? '+' : '';
         return (
             <div className={`${styles.slot} ${roleClass} ${styles.filled}`}>
@@ -118,14 +117,14 @@ export const CombatantSlot: React.FC<CombatantSlotProps> = ({
                             <span className={styles.fudgeLabel}>GM Modifier:</span>
                             <button
                                 className={styles.fudgeBtn}
-                                onClick={() => onChangeFudge(fudge - 1)}
+                                onClick={() => onChangeFudge(fudge - 10)}
                             >−</button>
                             <span className={`${styles.fudgeValue} ${fudge !== 0 ? styles.fudgeActive : ''}`}>
                                 {fudge >= 0 ? '+' : ''}{fudge}
                             </span>
                             <button
                                 className={styles.fudgeBtn}
-                                onClick={() => onChangeFudge(fudge + 1)}
+                                onClick={() => onChangeFudge(fudge + 10)}
                             >+</button>
                             <button
                                 className={styles.fudgeResetBtn}

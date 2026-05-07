@@ -267,10 +267,8 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     useEffect(() => {
         if (!attackerRoll || !defenderRoll) return;
 
-        const baseAttackerSL = Math.round(attackerRoll.successLevel);
-        const baseDefenderSL = Math.round(defenderRoll.successLevel);
-        const attackerSL = baseAttackerSL + attackerFudge;
-        const defenderSL = baseDefenderSL + defenderFudge;
+        const attackerSL = Math.round(attackerRoll.successLevel);
+        const defenderSL = Math.round(defenderRoll.successLevel);
 
         // Check for criticals and fumbles
         const attackerCriticalCheck = checkCriticalResult(attackerRoll.rollResult, attackerRoll.targetNumber);
@@ -334,7 +332,37 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         });
 
         onLogEntry('info', outcomeMessage);
-    }, [attackerRoll, defenderRoll, isCombatMode, attackerFudge, defenderFudge]);
+    }, [attackerRoll, defenderRoll, isCombatMode]);
+
+    // When fudge change, recalculate result relevant rolls
+    useEffect(() => {
+        if (!attackerRoll && !defenderRoll) return;
+        
+        for (const role of ['attacker', 'defender'] as const) {   
+            const roll = role === 'attacker' ? attackerRoll : defenderRoll; 
+            if (!roll) continue;
+
+            const currentTalents = roll.usedTalents || [];            
+
+            // Recalculate SL: start from the base roll SL (before any talent bonuses)
+            const character = characters.find(c => c.id === roll.characterId);
+            const fudgedRoll = role === 'attacker' ? roll.rollResult - attackerFudge : roll.rollResult - defenderFudge;
+            const SL = calculateSuccessLevel(fudgedRoll, roll.targetNumber);
+            const newSL = applyTalentSLBonuses(SL, currentTalents, talents, character);
+
+            const updatedRoll: AssignedRoll = {
+                ...roll,
+                successLevel: newSL
+            };
+
+            if (role === 'attacker') {
+                setAttackerRoll(updatedRoll);
+            } else {
+                setDefenderRoll(updatedRoll);
+            }
+        }
+    }, [attackerFudge, defenderFudge]);
+
 
     const handleApplyDamage = () => {
         if (!result || !defenderRoll || result.damageDealt === undefined) {
@@ -414,7 +442,8 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
 
         // Recalculate SL: start from the base roll SL (before any talent bonuses)
         const character = characters.find(c => c.id === roll.characterId);
-        const baseSL = calculateSuccessLevel(roll.rollResult, roll.targetNumber);
+        const fudgedRoll = role === 'attacker' ? roll.rollResult - attackerFudge : roll.rollResult - defenderFudge;
+        const baseSL = calculateSuccessLevel(fudgedRoll, roll.targetNumber);
         const newSL = applyTalentSLBonuses(baseSL, newUsedTalents, talents, character);
 
         const updatedRoll: AssignedRoll = {
