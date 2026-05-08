@@ -502,5 +502,32 @@
         "selector": {
             "openSelector": "Sélectionner une Carte"
         }
+    },
+    "auth": {
+        "title": "Aventures à Ubersreik",
+        "subtitle": "Caverne du Maître de Jeu",
+        "loginTab": "Connexion",
+        "signupTab": "Créer un compte",
+        "displayNameLabel": "Nom d'affichage",
+        "displayNamePlaceholder": "Votre nom",
+        "emailLabel": "E-mail",
+        "emailPlaceholder": "vous@exemple.com",
+        "passwordLabel": "Mot de passe",
+        "passwordPlaceholder": "••••••••",
+        "loginButton": "Se connecter",
+        "signupButton": "Créer un compte",
+        "submitting": "Veuillez patienter…",
+        "logout": "Déconnexion",
+        "restoringSession": "Restauration de la session…"
+    },
+    "campaign": {
+        "selectorTitle": "Vos Campagnes",
+        "welcomeBack": "Bienvenue, {{name}}",
+        "loading": "Chargement des campagnes…",
+        "noCampaigns": "Aucune campagne. Créez la première !",
+        "namePlaceholder": "Nom de la campagne",
+        "creating": "Création…",
+        "create": "Créer",
+        "createNew": "Nouvelle Campagne"
     }
 }

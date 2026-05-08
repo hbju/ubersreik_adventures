@@ -27,6 +27,9 @@ import { TimelineManager } from './components/timeline';
 import { DramatisPersonae } from './components/lore/DramatisPersonae';
 import { LoreEditor } from './components/lore/LoreEditor';
 import NPCGeneratorWizard from './components/generator/NPCGeneratorWizard';
+import LoginScreen from './components/LoginScreen';
+import CampaignSelector from './components/CampaignSelector';
+import { useAppContext } from './context/AppContext';
 
 import {
     DiscoveredLocationsList, 
@@ -67,6 +70,7 @@ import {
     createDefaultCalendarState,
 } from '@wfrp/shared';
 import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp.types';
+import { CharacterProvider, useCharacterContext } from './context/CharacterContext';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
@@ -85,6 +89,40 @@ interface ServerStatusData {
 
 function App() {
     const { t } = useTranslation();
+    const { user, currentCampaignId, loading: authLoading } = useAppContext();
+
+    // Auth & campaign gating — show login/campaign screens before main UI
+    if (authLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-stone-900">
+                <p className="text-stone-400 text-lg">{t('auth.restoringSession', 'Restoring session…')}</p>
+            </div>
+        );
+    }
+
+    if (!user) {
+        return <LoginScreen />;
+    }
+
+    if (!currentCampaignId) {
+        return <CampaignSelector />;
+    }
+
+    return (
+    <CharacterProvider>
+        <GmDashboard />
+    </CharacterProvider>
+    );
+}
+
+
+function GmDashboard() {
+    const { t } = useTranslation();
+    const { characters, replaceCharacter, createCharacter: ctxCreateCharacter, deleteCharacter: ctxDeleteCharacter } = useCharacterContext();
+
+    // Ref to access latest characters inside stable useEffect closures
+    const charactersRef = useRef(characters);
+    useEffect(() => { charactersRef.current = characters; }, [characters]);
 
     const { skills, talents, careers, items, weapons, armor, conditions, qualities, shops: shopDefinitions, mapData, maps, mapsList, motivations } = useGameData();
 
@@ -117,8 +155,6 @@ function App() {
 
     const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
 
-    const [characters, setCharacters] = useState<Character[]>([]);
-    const charactersRef = useRef(characters);
     const [users, setUsers] = useState<User[]>([]);
     const usersRef = useRef(users);
     const [journal, setJournal] = useState<JournalEntry[]>([]);
@@ -239,9 +275,8 @@ function App() {
     useEffect(() => {
         if (!saving) return;
 
-        console.log("Saving data, characters:", characters);
         const campaignData: CampaignState = {
-            characters: characters,
+            characters: [], // Characters now managed in Supabase
             users: users,
             journal: journal,
             quests: quests,
@@ -262,7 +297,6 @@ function App() {
         };
         window.ipcRenderer.saveData(campaignData);
 
-        charactersRef.current = characters;
         usersRef.current = users;
         journalRef.current = journal;
         questsRef.current = quests;
@@ -277,7 +311,7 @@ function App() {
         userPinsRef.current = userPins;
         activeMapIdRef.current = activeMapId;
 
-    }, [characters, users, journal, quests, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
+    }, [users, journal, quests, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
 
     // Broadcast calendar state to all players whenever it changes
     useEffect(() => {
@@ -299,11 +333,7 @@ function App() {
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
 
-        const updatedCharacters = charactersRef.current.map(char =>
-            char.id === recaculatedCharacter.id ? recaculatedCharacter : char
-        );
-
-        setCharacters(updatedCharacters);
+        replaceCharacter(recaculatedCharacter);
 
         const newMessage: AssignCharacterMessage = {
             type: "ASSIGN_CHARACTER",
@@ -366,16 +396,14 @@ function App() {
     };
 
     const handleWizardComplete = (newCharacter: Character) => {
-        const updatedCharacters = [...charactersRef.current, newCharacter];
-        setCharacters(updatedCharacters);
+        ctxCreateCharacter(newCharacter);
         setShowCharacterWizard(false);
         addLogEntry('system', `Created new character: ${newCharacter.name}`, 'logs.character_created', { name: newCharacter.name });
     };
 
     const handleGenerateNPC = () => {
         const newNPC = generateRandomNpc(careers, skills);
-        const updatedCharacters = [...charactersRef.current, newNPC];
-        setCharacters(updatedCharacters);
+        ctxCreateCharacter(newNPC);
     }
 
     const handleGenerateNPCDetailed = () => {
@@ -383,27 +411,23 @@ function App() {
     }
 
     const handleNPCGeneratorComplete = (newCharacter: Character) => {
-        const updatedCharacters = [...charactersRef.current, newCharacter];
-        setCharacters(updatedCharacters);
+        ctxCreateCharacter(newCharacter);
         setShowNPCGenerator(false);
         addLogEntry('system', `Generated NPC: ${newCharacter.name}`, 'logs.npc_generated', { name: newCharacter.name });
     }
 
     const handleDeleteCharacter = (characterId: string) => {
-        console.log("trying to delete " + characterId);
-        const characterToDelete = charactersRef.current.find(c => c.id === characterId);
+        const characterToDelete = characters.find(c => c.id === characterId);
         if (!characterToDelete) return;
 
-        console.log("deleting " + characterId);
         if (window.confirm(`Are you sure you want to delete ${characterToDelete.name}? This cannot be undone.`)) {
-            const updatedCharacters = charactersRef.current.filter(char => char.id !== characterId);
-            setCharacters(updatedCharacters);
+            ctxDeleteCharacter(characterId);
             setOpenSheetIds(prev => prev.filter(id => id !== characterId));
         }
     };
 
     const handlePlaceToken = (characterId: string) => {
-        const character = charactersRef.current.find(c => c.id === characterId);
+        const character = characters.find(c => c.id === characterId);
         if (!character) return;
         
         // Use spawn point if available, otherwise default position
@@ -508,7 +532,7 @@ function App() {
     };
 
     const handleUpdateCombatant = (updatedCombatant: Combatant) => {
-        const char = charactersRef.current.find(c => c.id === updatedCombatant.sourceId);
+        const char = characters.find(c => c.id === updatedCombatant.sourceId);
         if (char) {
             // sync wounds & conditions back to character sheet
             const conds = updatedCombatant.conditions || [];
@@ -569,10 +593,10 @@ function App() {
 
         // If user had a character assigned, clear the character's userId
         if (user.characterId) {
-            const updatedCharacters = charactersRef.current.map(char =>
-                char.id === user.characterId ? { ...char, userId: null } : char
-            );
-            setCharacters(updatedCharacters);
+            const charToUnassign = characters.find(c => c.id === user.characterId);
+            if (charToUnassign) {
+                replaceCharacter({ ...charToUnassign, userId: null });
+            }
         }
 
         const updatedUsers = usersRef.current.filter(u => u.id !== userId);
@@ -589,16 +613,11 @@ function App() {
         );
         setUsers(updatedUsers);
 
-        let updatedCharacters = [...charactersRef.current];
-
         // Clear previous assignment
         if (user.characterId) {
-            const oldChar = charactersRef.current.find(c => c.id === user.characterId);
+            const oldChar = characters.find(c => c.id === user.characterId);
             if (oldChar) {
-                updatedCharacters = charactersRef.current.map(char =>
-                    char.id === user.characterId ? { ...char, userId: null } : char
-                );
-                setCharacters(updatedCharacters);
+                replaceCharacter({ ...oldChar, userId: null });
             }
         }
 
@@ -614,17 +633,18 @@ function App() {
                 setUsers(finalUsers);
             }
 
-            updatedCharacters = updatedCharacters.map(char =>
-                char.id === characterId ? { ...char, userId } : char
-            );
-            setCharacters(updatedCharacters);
-            const message: AssignCharacterMessage = {
-                type: "ASSIGN_CHARACTER",
-                payload: { character: updatedCharacters.find(c => c.id === characterId)! }
-            };
-            window.ipcRenderer.sendToPlayer(userId, message);
+            const charToAssign = characters.find(c => c.id === characterId);
+            if (charToAssign) {
+                const assignedChar = { ...charToAssign, userId };
+                replaceCharacter(assignedChar);
+                const message: AssignCharacterMessage = {
+                    type: "ASSIGN_CHARACTER",
+                    payload: { character: assignedChar }
+                };
+                window.ipcRenderer.sendToPlayer(userId, message);
+            }
 
-            const character = charactersRef.current.find(c => c.id === characterId);
+            const character = characters.find(c => c.id === characterId);
             addLogEntry('info', `User ${user.username} assigned to character ${character?.name}`, 'logs.user_assigned', { username: user.username, characterName: character?.name });
         } else {
             addLogEntry('info', `User ${user.username} unassigned from character`, 'logs.user_unassigned', { username: user.username });
@@ -698,7 +718,7 @@ function App() {
     const handleStartSession = () => {
         if (!window.confirm("Start a new session? This will reset Fortune points for all characters.")) return;
 
-        const updatedCharacters = charactersRef.current.map(char => ({
+        const updatedCharacters = characters.map(char => ({
             ...char,
             status: {
                 ...char.status,
@@ -709,7 +729,8 @@ function App() {
             }
         }));
 
-        setCharacters(updatedCharacters);
+        // Persist each updated character
+        updatedCharacters.forEach(char => replaceCharacter(char));
 
         // Send updates to players
         updatedCharacters.forEach(char => {
@@ -726,7 +747,7 @@ function App() {
     };
 
     const handleCorruptionTest = (characterId: string) => {
-        const character = charactersRef.current.find(c => c.id === characterId);
+        const character = characters.find(c => c.id === characterId);
         if (!character) return;
 
         const totalWp = character.characteristics.wp.initial + character.characteristics.wp.advances + character.characteristics.wp.modifier + getTalentCharacteristicBonus(character, talents, 'wp');
@@ -794,7 +815,7 @@ function App() {
         fortuneSpent: number;
         corruptionGained: number;
     }) => {
-        const character = charactersRef.current.find(c => c.id === result.characterId);
+        const character = characters.find(c => c.id === result.characterId);
         if (!character) return;
 
         addLogEntry(
@@ -823,20 +844,8 @@ function App() {
             if (!data)
                 return;
 
-            if (data.characters && data.characters.length > 0) {
-                const updatedCharacters = data.characters.map((char: Character) => ({
-                    ...char, status: { ...char.status, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }
-                }));
-                skills.filter(s => s.type === 'skill' && s.classification === 'basic').forEach(skillDef => {
-                    updatedCharacters.forEach((char: Character) => {
-                        if (!char.skills.find(s => s.id === skillDef.id)) {
-                            char.skills.push({ id: skillDef.id, name: skillDef.name, characteristic: skillDef.characteristic, advances: 0, modifier: 0, talents: 0 });
-                        }
-                    });
-                });
-                setCharacters(updatedCharacters);
-                console.log('Loaded campaign data from file system:', data);
-            }
+            // Characters are now loaded from Supabase via CharacterContext
+
             if (data.users) {
                 setUsers(data.users);
             }
@@ -908,10 +917,7 @@ function App() {
 
         // Listen for data updates from the main process
         const cleanupDataUpdateListener = window.ipcRenderer.onDataUpdated((data: any) => {
-            if (data && data.characters) {
-                setCharacters(data.characters);
-                console.log('Received data update from main process : ', data);
-            }
+            // Characters are now managed via Supabase — skip JSON-based updates
             if (data && data.journal) {
                 setJournal(data.journal);
             }
@@ -1485,7 +1491,6 @@ function App() {
                 <div className={sidebarStyles.sidebarContent}>
                     {leftSidebarMode === 'roster' ? (
                         <CharacterRoster
-                            characters={characters}
                             users={users}
                             openSheetIds={openSheetIds}
                             onToggleCharacterSheet={handleToggleCharacterSheet}
@@ -1493,7 +1498,6 @@ function App() {
                             onCreateCharacter={handleCreateCharacter}
                             onGenerateNpc={handleGenerateNPC}
                             onGenerateNpcDetailed={handleGenerateNPCDetailed}
-                            onDeleteCharacter={handleDeleteCharacter}
                             onAddCombatant={handleAddCombatant}
                             onFightButtonClick={() => setShowCombatResolver(true)}
                             tokens={tokens}
@@ -1652,8 +1656,7 @@ function App() {
                         setCharacterTemplates(updatedTemplates);
                     }}
                     onGenerateCharacter={(newCharacter) => {
-                        const updatedCharacters = [...charactersRef.current, newCharacter];
-                        setCharacters(updatedCharacters);
+                        ctxCreateCharacter(newCharacter);
                         addLogEntry('system', `Generated NPC from template: ${newCharacter.name}`, 'logs.npc_generated', { name: newCharacter.name });
                     }}
                     existingCharacterNames={characters.map(c => c.name)}

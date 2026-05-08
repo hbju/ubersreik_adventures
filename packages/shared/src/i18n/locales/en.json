@@ -457,5 +457,32 @@
         "selector": {
             "openSelector": "Select Map"
         }
+    },
+    "auth": {
+        "title": "Ubersreik Adventures",
+        "subtitle": "Game Master Cavern",
+        "loginTab": "Sign In",
+        "signupTab": "Create Account",
+        "displayNameLabel": "Display Name",
+        "displayNamePlaceholder": "Your name",
+        "emailLabel": "Email",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "••••••••",
+        "loginButton": "Sign In",
+        "signupButton": "Create Account",
+        "submitting": "Please wait…",
+        "logout": "Sign Out",
+        "restoringSession": "Restoring session…"
+    },
+    "campaign": {
+        "selectorTitle": "Your Campaigns",
+        "welcomeBack": "Welcome, {{name}}",
+        "loading": "Loading campaigns…",
+        "noCampaigns": "No campaigns yet. Create your first one!",
+        "namePlaceholder": "Campaign name",
+        "creating": "Creating…",
+        "create": "Create",
+        "createNew": "New Campaign"
     }
 }

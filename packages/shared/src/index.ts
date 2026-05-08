@@ -44,6 +44,7 @@ export * from './utils/qualities';
 export * from './utils/shopGenerator';
 export * from './utils/diceParser';
 export * from './utils/graph';
+export * from './utils/characterConverter';
 
 export { default as criticalHitsData } from './data/critical_hits.json';
 export { default as fumblesData } from './data/fumbles.json';

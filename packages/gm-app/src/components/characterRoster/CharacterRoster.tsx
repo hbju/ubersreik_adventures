@@ -3,9 +3,9 @@ import { Character, User, Location, Faction, useGameData } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 import styles from './CharacterRoster.module.css';
 import RosterFilterBar, { CharacterTypeFilter, ViewMode } from './RosterFilterBar';
+import { useCharacterContext } from '../../context/CharacterContext';
 
 interface CharacterRosterProps {
-    characters: Character[];
     users: User[];
     openSheetIds: string[];
     onToggleCharacterSheet: (characterId: string) => void;
@@ -13,7 +13,6 @@ interface CharacterRosterProps {
     onCreateCharacter: () => void;
     onGenerateNpc: () => void;
     onGenerateNpcDetailed?: () => void;
-    onDeleteCharacter: (characterId: string) => void;
     onAddCombatant: (character: Character) => void;
     onFightButtonClick: () => void;
     tokens?: MapToken[];
@@ -26,7 +25,6 @@ interface GroupedCharacters {
 }
 
 const CharacterRoster: React.FC<CharacterRosterProps> = ({
-    characters,
     users,
     openSheetIds,
     onToggleCharacterSheet,
@@ -34,13 +32,13 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
     onCreateCharacter,
     onGenerateNpc,
     onGenerateNpcDetailed,
-    onDeleteCharacter,
     onAddCombatant,
     onFightButtonClick,
     tokens = [],
     onPlaceToken,
     onRemoveToken,
 }) => {
+    const { characters, deleteCharacter } = useCharacterContext();
     const { mapData: gameData } = useGameData();
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -228,7 +226,7 @@ const CharacterRoster: React.FC<CharacterRosterProps> = ({
                         {isOpen ? 'Close' : 'Open'}
                     </button>
                     <button
-                        onClick={() => onDeleteCharacter(character.id)}
+                        onClick={() => deleteCharacter(character.id)}
                         className={styles.deleteBtn}>
                         Del
                     </button>
