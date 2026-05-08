@@ -74,8 +74,162 @@ export { QualityCodexDisplay } from './components/codex/renderers/QualityCodexDi
 
 // Supabase
 export * from './types/database.types';
+export * from './types/errors';
 export { createSupabaseClient, getSupabaseClient, resetSupabaseClient } from './lib/supabase';
 export type { TypedSupabaseClient } from './lib/supabase';
+
+// Service Layer
+export { createServiceContext } from './services/serviceContext';
+export type { ServiceContext } from './services/serviceContext';
+export { getById, getAll, insert, update, remove, campaignQuery, mapSupabaseError } from './services/baseService';
+export {
+  createCampaign,
+  getCampaignsForUser,
+  getCampaignWithMembers,
+  updateCampaign,
+  deleteCampaign,
+  addMember,
+  removeMember,
+  updateMemberColor,
+} from './services/campaignService';
+export type {
+  Campaign,
+  CampaignMember,
+  CampaignMemberWithProfile,
+  CampaignWithMembers,
+  CampaignUpdate,
+} from './services/campaignService';
+export {
+  getCharacters,
+  getCharacterById,
+  createCharacter,
+  updateCharacter,
+  deleteCharacter,
+  assignCharacterToUser,
+  unassignCharacter,
+  createFromTemplate,
+  batchCreateMinions,
+} from './services/characterService';
+export type {
+  CharacterRow,
+  CharacterInsert,
+  CharacterUpdate,
+  CharacterFilters,
+} from './services/characterService';
+export {
+  getVisibleEntries,
+  getAllEntries,
+  createEntry,
+  updateEntry,
+  deleteEntry,
+  shareEntry,
+} from './services/journalService';
+export type {
+  JournalEntryRow,
+  JournalEntryInsert,
+  JournalEntryUpdate,
+} from './services/journalService';
+export {
+  getQuests,
+  createQuest,
+  updateQuest,
+  toggleObjective,
+  deleteQuest,
+} from './services/questService';
+export type {
+  QuestRow,
+  QuestInsert,
+  QuestUpdate,
+  QuestObjective,
+} from './services/questService';
+export {
+  getFactions,
+  createFaction,
+  updateFaction,
+  deleteFaction,
+  getTerritories,
+  setTerritory,
+  getCharacterReputations,
+  updateCharacterReputation,
+} from './services/factionService';
+export type {
+  FactionRow,
+  FactionInsert,
+  FactionUpdate,
+  TerritoryRow,
+} from './services/factionService';
+export {
+  getMaps,
+  getMapWithDetails,
+  createMap,
+  updateMap,
+  deleteMap,
+  setActiveMap,
+} from './services/mapService';
+export type {
+  MapRow,
+  MapInsert,
+  MapUpdate,
+  MapWithDetails,
+} from './services/mapService';
+export {
+  updatePinState,
+  createToken,
+  moveToken,
+  removeToken,
+  getUserPins,
+  addUserPin,
+  removeUserPin,
+} from './services/mapInteractionService';
+export type {
+  MapPinStateRow,
+  MapTokenRow,
+  UserMapPinRow,
+} from './services/mapInteractionService';
+export {
+  getShops,
+  getShopById,
+  createShop,
+  updateShop,
+  deleteShop,
+  updateInventory,
+  removeInventoryItem,
+} from './services/shopService';
+export type {
+  ShopRow,
+  ShopInsert,
+  ShopUpdate,
+} from './services/shopService';
+export {
+  getTemplates,
+  createTemplate,
+  updateTemplate,
+  deleteTemplate,
+} from './services/templateService';
+export type {
+  TemplateRow,
+  TemplateInsert,
+  TemplateUpdate,
+} from './services/templateService';
+export {
+  getCombatState,
+  updateCombatState,
+  clearCombatState,
+} from './services/combatService';
+export type {
+  CombatStateRow,
+  CombatStateUpdate,
+} from './services/combatService';
+export {
+  getCalendarState,
+  updateCalendarState,
+} from './services/calendarService';
+export {
+  getRecentMessages,
+  sendMessage,
+  getChatHistory,
+} from './services/chatService';
+export type { ChatMessageRow } from './services/chatService';
 export {
   signUp,
   signIn,
