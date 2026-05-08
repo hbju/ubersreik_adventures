@@ -1,4 +1,4 @@
-import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal } from '@wfrp/shared';
+import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, MapTokensUpdateMessage, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal } from '@wfrp/shared';
 import type { CodexDataSources } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
@@ -32,11 +32,9 @@ import CampaignSelector from './components/CampaignSelector';
 import { useAppContext } from './context/AppContext';
 
 import {
-    DiscoveredLocationsList, 
     getAvailableAdvancements,
     calculateEffectiveMaxWounds,
     Character,
-    User,
     Combatant,
     Currency,
     generateRandomNpc,
@@ -60,8 +58,9 @@ import {
     FactionUpdateMessage,
     QueuedRoll,
 } from '@wfrp/shared';
-import { CampaignState } from '@wfrp/shared/src/types/wfrp.types';
 import { CharacterProvider, useCharacterContext } from './context/CharacterContext';
+import { UserProvider, useUserContext } from './context/UserContext';
+import { CharacterTemplateProvider, useCharacterTemplateContext } from './context/CharacterTemplateContext';
 import { CombatProvider, useCombatContext } from './context/CombatContext';
 import { JournalProvider, useJournalContext } from './context/JournalContext';
 import { QuestProvider, useQuestContext } from './context/QuestContext';
@@ -69,6 +68,7 @@ import { FactionProvider, useFactionContext } from './context/FactionContext';
 import { MapProvider, useMapContext } from './context/MapContext';
 import { ShopProvider, useShopContext } from './context/ShopContext';
 import { CalendarProvider, useCalendarContext } from './context/CalendarContext';
+import { ChatProvider } from './context/ChatContext';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
@@ -76,8 +76,8 @@ import './App.css';
 import sidebarStyles from './components/SidebarToggle.module.css';
 import CareerManager from './components/CareerManager';
 import { useTranslation } from 'react-i18next';
-import i18n from './i18n';
 import ShopBrowser from './components/ShopBrowser';
+import GmChatPanel from './components/chat/GmChatPanel';
 
 interface ServerStatusData {
     ip: string;
@@ -108,21 +108,27 @@ function App() {
 
     return (
     <CharacterProvider>
-        <CombatProvider>
-            <JournalProvider>
-                <QuestProvider>
-                    <FactionProvider>
-                        <MapProvider>
-                            <ShopProvider>
-                                <CalendarProvider>
-                                    <GmDashboard />
-                                </CalendarProvider>
-                            </ShopProvider>
-                        </MapProvider>
-                    </FactionProvider>
-                </QuestProvider>
-            </JournalProvider>
-        </CombatProvider>
+        <UserProvider>
+            <CharacterTemplateProvider>
+                <CombatProvider>
+                    <JournalProvider>
+                        <QuestProvider>
+                            <FactionProvider>
+                                <MapProvider>
+                                    <ShopProvider>
+                                        <CalendarProvider>
+                                            <ChatProvider>
+                                                <GmDashboard />
+                                            </ChatProvider>
+                                        </CalendarProvider>
+                                    </ShopProvider>
+                                </MapProvider>
+                            </FactionProvider>
+                        </QuestProvider>
+                    </JournalProvider>
+                </CombatProvider>
+            </CharacterTemplateProvider>
+        </UserProvider>
     </CharacterProvider>
     );
 }
@@ -131,6 +137,8 @@ function App() {
 function GmDashboard() {
     const { t } = useTranslation();
     const { characters, replaceCharacter, createCharacter: ctxCreateCharacter, deleteCharacter: ctxDeleteCharacter } = useCharacterContext();
+    const { users, createUser, deleteUser, setUserCharacter } = useUserContext();
+    const { templates: characterTemplates, replaceAllTemplates } = useCharacterTemplateContext();
     const { combatState, addCombatant, updateCombatant } = useCombatContext();
     const { entries: journal } = useJournalContext();
     const { quests } = useQuestContext();
@@ -155,7 +163,7 @@ function GmDashboard() {
     const charactersRef = useRef(characters);
     useEffect(() => { charactersRef.current = characters; }, [characters]);
 
-    const { skills, talents, careers, items, weapons, armor, conditions, qualities, shops: shopDefinitions, mapData, maps, motivations } = useGameData();
+    const { skills, talents, careers, conditions, qualities, shops: shopDefinitions, mapData, maps, motivations } = useGameData();
 
     // Codex data sources (memoised to avoid rebuilding index on every render)
     const codexDataSources: CodexDataSources = React.useMemo(() => ({
@@ -179,12 +187,9 @@ function GmDashboard() {
 
     const [serverInfo, setServerInfo] = useState({ ip: 'Loading...', port: 0 });
     const [connectedPlayers, setConnectedPlayers] = useState<string[]>([]);
-    const [saving, setSaving] = useState<boolean>(false);
 
     const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
 
-    const [users, setUsers] = useState<User[]>([]);
-    const usersRef = useRef(users);
     const [mapPing, setMapPing] = useState<{ x: number; y: number; color: string; userId: string } | null>(null);
     const [mapViewState, setMapViewState] = useState<{ scale: number; offsetX: number; offsetY: number }>({ scale: 0.3, offsetX: 126, offsetY: -26 });
     const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
@@ -210,9 +215,6 @@ function GmDashboard() {
     const [showDramatisPersonae, setShowDramatisPersonae] = useState(false);
     const [loreEditorCharacter, setLoreEditorCharacter] = useState<Character | null>(null);
     const [leftSidebarMode, setLeftSidebarMode] = useState<'roster' | 'audio'>('roster');
-    const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-    const [characterTemplates, setCharacterTemplates] = useState<CharacterTemplate[]>([]);
-    const characterTemplatesRef = useRef(characterTemplates);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number, charId: string } | null>(null);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
@@ -253,11 +255,6 @@ function GmDashboard() {
 
     const [browsingShopId, setBrowsingShopId] = useState<string | null>(null);
 
-    const allShopDefinitions = useMemo(() => {
-        if (contextShops.length > 0) return contextShops;
-        return shopDefinitions;
-    }, [contextShops, shopDefinitions]);
-
     // Merge default templates with custom ones
     // Custom templates override defaults with the same ID
     const { defaultTemplates } = useGameData();
@@ -267,40 +264,22 @@ function GmDashboard() {
         return [...baseTemplates, ...characterTemplates];
     }, [defaultTemplates, characterTemplates]);
 
+    const usersWithAssignments = useMemo(() => {
+        return users.map((user) => {
+            const assignedCharacter = characters.find((character) => character.userId === user.id);
+            return {
+                ...user,
+                characterId: assignedCharacter?.id ?? user.characterId ?? null,
+            };
+        });
+    }, [characters, users]);
+    const usersRef = useRef(usersWithAssignments);
+    useEffect(() => { usersRef.current = usersWithAssignments; }, [usersWithAssignments]);
+
     const addLogEntry = (type: LogEntry['type'], content: string, messageCode?: string, params?: Record<string, any>) => {
         const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content, messageCode, params };
         setLogEntries(prev => [...prev, newEntry]);
     };
-
-
-    useEffect(() => {
-        if (!saving) return;
-
-        const campaignData: CampaignState = {
-            characters: [], // Characters now managed in Supabase
-            users: users,
-            journal: [],
-            quests: [],
-            mapPinStates: pinStates,
-            factions: [],
-            shopInventory: shopInventory,
-            customShopDefinitions: allShopDefinitions,
-            characterTemplates: characterTemplates,
-            tokens: tokens,
-            userPins: userPins,
-            playerColors: {},
-            maps: maps, // Include all maps
-            activeMapId: activeMapId, // Current active map
-            calendar: calendarState, // Imperial Calendar state
-            locationTerritories: {}, // Faction territory assignments
-            version: '1.0.0',
-            lastModified: new Date().toISOString(),
-        };
-        window.ipcRenderer.saveData(campaignData);
-
-        usersRef.current = users;
-        characterTemplatesRef.current = characterTemplates;
-    }, [users, calendarState, pinStates, shopInventory, allShopDefinitions, characterTemplates, activeMapId, tokens, userPins]);
 
     // Broadcast calendar state to all players whenever it changes
     useEffect(() => {
@@ -452,16 +431,6 @@ function GmDashboard() {
         addLogEntry('system', `Generated NPC: ${newCharacter.name}`, 'logs.npc_generated', { name: newCharacter.name });
     }
 
-    const handleDeleteCharacter = (characterId: string) => {
-        const characterToDelete = characters.find(c => c.id === characterId);
-        if (!characterToDelete) return;
-
-        if (window.confirm(`Are you sure you want to delete ${characterToDelete.name}? This cannot be undone.`)) {
-            ctxDeleteCharacter(characterId);
-            setOpenSheetIds(prev => prev.filter(id => id !== characterId));
-        }
-    };
-
     const handlePlaceToken = (characterId: string) => {
         const character = characters.find(c => c.id === characterId);
         if (!character) return;
@@ -471,13 +440,6 @@ function GmDashboard() {
 
         addToken(character, spawnPoint.x, spawnPoint.y);
     }
-
-    // Handle setting spawn point via right-click
-    const handleSetSpawnPoint = (x: number, y: number) => {
-        // This would require updating the map data in the campaign state
-        // For now, we'll just log it - full implementation would need backend support
-        addLogEntry('system', `Spawn point set at (${Math.round(x)}, ${Math.round(y)}) for ${currentMapData.name}`, 'logs.spawn_point_set', { x: Math.round(x), y: Math.round(y), mapName: currentMapData.name });
-    };
 
     const handleTokenMove = (tokenId: string, x: number, y: number) => {
         moveToken(tokenId, x, y);
@@ -524,80 +486,51 @@ function GmDashboard() {
         updateCombatant(updatedCombatant);
     };
 
-    // User Management Functions
-    const hashPassword = (password: string): string => {
-        let hash = 0;
-        for (let i = 0; i < password.length; i++) {
-            const char = password.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
+    const handleCreateUser = async (username: string, password: string) => {
+        const created = await createUser(username, password);
+        if (created) {
+            addLogEntry('info', `User created: ${username}`, 'logs.user_created', { username });
         }
-        return hash.toString(36);
     };
 
-    const handleCreateUser = (username: string, password: string) => {
-        const newUser: User = {
-            id: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            username,
-            passwordHash: hashPassword(password),
-            characterId: null,
-            createdAt: new Date().toISOString(),
-        };
-        const updatedUsers = [...usersRef.current, newUser];
-        setUsers(updatedUsers);
-        addLogEntry('info', `User created: ${username}`, 'logs.user_created', { username });
-    };
-
-    const handleDeleteUser = (userId: string) => {
-        const user = usersRef.current.find(u => u.id === userId);
+    const handleDeleteUser = async (userId: string) => {
+        const user = usersWithAssignments.find(u => u.id === userId);
         if (!user) return;
 
-        // If user had a character assigned, clear the character's userId
         if (user.characterId) {
             const charToUnassign = characters.find(c => c.id === user.characterId);
             if (charToUnassign) {
-                replaceCharacter({ ...charToUnassign, userId: null });
+                await replaceCharacter({ ...charToUnassign, userId: null });
             }
         }
 
-        const updatedUsers = usersRef.current.filter(u => u.id !== userId);
-        setUsers(updatedUsers);
-        addLogEntry('info', `User deleted: ${user.username}`, 'logs.user_deleted', { username: user.username });
+        const removed = await deleteUser(userId);
+        if (removed) {
+            addLogEntry('info', `User deleted: ${user.username}`, 'logs.user_deleted', { username: user.username });
+        }
     };
 
-    const handleAssignCharacterToUser = (userId: string, characterId: string | null) => {
-        const user = usersRef.current.find(u => u.id === userId);
+    const handleAssignCharacterToUser = async (userId: string, characterId: string | null) => {
+        const user = usersWithAssignments.find(u => u.id === userId);
         if (!user) return;
 
-        const updatedUsers = usersRef.current.map(u =>
-            u.id === userId ? { ...u, characterId } : u
-        );
-        setUsers(updatedUsers);
+        setUserCharacter(userId, characterId);
 
-        // Clear previous assignment
         if (user.characterId) {
             const oldChar = characters.find(c => c.id === user.characterId);
             if (oldChar) {
-                replaceCharacter({ ...oldChar, userId: null });
+                await replaceCharacter({ ...oldChar, userId: null });
             }
         }
 
-        // Update character's user assignment
         if (characterId) {
-            // Clear any other user assigned to this character
-            const otherUsersWithChar = usersRef.current.filter(u => u.id !== userId && u.characterId === characterId);
-            let finalUsers = updatedUsers;
-            if (otherUsersWithChar.length > 0) {
-                finalUsers = updatedUsers.map(u =>
-                    otherUsersWithChar.some(ou => ou.id === u.id) ? { ...u, characterId: null } : u
-                );
-                setUsers(finalUsers);
-            }
+            const otherUsersWithChar = usersWithAssignments.filter(u => u.id !== userId && u.characterId === characterId);
+            otherUsersWithChar.forEach((otherUser) => setUserCharacter(otherUser.id, null));
 
             const charToAssign = characters.find(c => c.id === characterId);
             if (charToAssign) {
                 const assignedChar = { ...charToAssign, userId };
-                replaceCharacter(assignedChar);
+                await replaceCharacter(assignedChar);
                 const message: AssignCharacterMessage = {
                     type: "ASSIGN_CHARACTER",
                     payload: { character: assignedChar }
@@ -711,22 +644,6 @@ function GmDashboard() {
         }
     };
 
-    const handleLocationSelect = (location: Location) => {
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-
-        const effectiveViewportWidth = viewportWidth;
-
-        const targetX = effectiveViewportWidth / 2 - location.coords.x * mapViewState.scale;
-        const targetY = viewportHeight / 2 - location.coords.y * mapViewState.scale;
-
-        setMapViewState({
-            scale: mapViewState.scale,
-            offsetX: targetX,
-            offsetY: targetY,
-        });
-    };
-
     const handleRoll = (result: {
         characterId: string;
         testName: string;
@@ -756,31 +673,6 @@ function GmDashboard() {
         ? shopInventory?.shops[browsingShopId]!
         : null;
     useEffect(() => {
-        // Load initial data on component mount
-        window.ipcRenderer.getInitialData().then((data: any) => {
-            if (!data)
-                return;
-
-            // Characters are now loaded from Supabase via CharacterContext
-
-            if (data.users) {
-                setUsers(data.users);
-            }
-            // Load character templates if present
-            if (data.characterTemplates) {
-                setCharacterTemplates(data.characterTemplates);
-            }
-
-            setSaving(true);
-        }).catch((error: any) => {
-            console.error('Failed to load initial data:', error);
-        });
-
-        // Listen for data updates from the main process
-        const cleanupDataUpdateListener = window.ipcRenderer.onDataUpdated((data: any) => {
-            // Characters are now managed via Supabase — skip JSON-based updates
-        });
-
         const cleanupMapPingReceivedListener = window.ipcRenderer.onMapPingReceived(({ x, y, color, userId }: { x: number, y: number, color: string, userId: string }) => {
             setMapPing({ x, y, color, userId });
             setTimeout(() => {
@@ -788,21 +680,8 @@ function GmDashboard() {
             }, 300);
         });
 
-        window.ipcRenderer.getChatHistory().then((history: ChatMessage[]) => {
-            if (history && history.length > 0) {
-                setChatMessages(history);
-            }
-        });
-
-        const cleanupChatMessageListener = window.ipcRenderer.onChatMessage((message: ChatMessage) => {
-            setChatMessages(prev => [...prev, message]);
-        });
-
-
         return () => {
-            cleanupDataUpdateListener();
             cleanupMapPingReceivedListener();
-            cleanupChatMessageListener();
         };
     }, []);
 
@@ -853,13 +732,10 @@ function GmDashboard() {
 
             if (message.type === 'CHARACTER_CREATE') {
                 const newChar = message.payload.character;
-                const currUsers = usersRef.current;
-                const user = currUsers.find(u => u.username === message.payload.userId);
+                const user = usersRef.current.find(u => u.username === message.payload.userId || u.id === message.payload.userId);
                 if (user) {
                     newChar.userId = user.id;
-                    const newUser = { ...user, characterId: newChar.id };
-                    const updatedUsers = currUsers.map(u => u.id === user.id ? newUser : u);
-                    setUsers(updatedUsers);
+                    setUserCharacter(user.id, newChar.id);
                 }
 
                 handleWizardComplete(newChar);
@@ -1108,60 +984,6 @@ function GmDashboard() {
         }
     }, [combatState]);
 
-    const handleSendChatMessage = (content: string) => {
-        const parsed = parseChatCommand(content);
-        
-        let chatMessage: ChatMessage;
-
-        if (parsed.isRollCommand) {
-            if (parsed.diceRequest) {
-                const rollResult = executeDiceRoll(parsed.diceRequest);
-                chatMessage = {
-                    id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                    timestamp: Date.now(),
-                    senderId: 'gm',
-                    senderName: 'GM',
-                    senderColor: '#d4af37', 
-                    type: 'roll',
-                    content: `Rolling ${rollResult.formula}`,
-                    isPrivate: parsed.isPrivate,
-                    data: rollResult
-                };
-            } else {
-                const errorMessage: ChatMessage = {
-                    id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                    timestamp: Date.now(),
-                    senderId: 'system',
-                    senderName: 'System',
-                    type: 'error',
-                    content: parsed.errorMessage || 'Invalid dice syntax',
-                    isPrivate: parsed.isPrivate,
-                };
-                setChatMessages(prev => [...prev, errorMessage]);
-                return;
-            }
-        } else {
-            chatMessage = {
-                id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                timestamp: Date.now(),
-                senderId: 'gm',
-                senderName: 'GM',
-                senderColor: '#d4af37',
-                type: 'chat',
-                content,
-                isPrivate: parsed.isPrivate,
-            };
-        }
-
-        setChatMessages(prev => [...prev, chatMessage]);
-        
-        window.ipcRenderer.sendChatMessage(chatMessage);
-    };
-
-    const handleItemSelectorClose = () => {
-        setShowItemSelector(null);
-    };
-
     const handleItemSelected = (item: Armor | Weapon | Item, charId: string) => {
         const character = characters.find(c => c.id === charId);
         if (!character) return;
@@ -1239,10 +1061,6 @@ function GmDashboard() {
 
         handleCharacterUpdate(updatedCharacter);
         addLogEntry('system', `${itemId} removed from ${character.name}'s inventory.`, 'logs.item_removed', { itemName: itemId, characterName: character.name });
-    };
-
-    const handleTalentSelectorClose = () => {
-        setShowTalentSelector(null);
     };
 
     const handleTalentSelected = (talent: Talent, charId: string) => {
@@ -1337,7 +1155,7 @@ function GmDashboard() {
                 <div className={sidebarStyles.sidebarContent}>
                     {leftSidebarMode === 'roster' ? (
                         <CharacterRoster
-                            users={users}
+                            users={usersWithAssignments}
                             openSheetIds={openSheetIds}
                             onToggleCharacterSheet={handleToggleCharacterSheet}
                             onAssignCharacter={handleAssignCharacterToUser}
@@ -1475,9 +1293,8 @@ function GmDashboard() {
                 <TemplateManager
                     onClose={() => setShowTemplateManager(false)}
                     templates={allTemplates}
-                    onTemplatesChange={(updatedTemplates) => {
-                        // Only save custom templates (those modified from default)
-                        setCharacterTemplates(updatedTemplates);
+                    onTemplatesChange={async (updatedTemplates) => {
+                        await replaceAllTemplates(updatedTemplates);
                     }}
                     onGenerateCharacter={(newCharacter) => {
                         ctxCreateCharacter(newCharacter);
@@ -1539,13 +1356,7 @@ function GmDashboard() {
                     borderRadius: '8px',
                     overflow: 'hidden'
                 }}>
-                    <ChatBox
-                        messages={chatMessages}
-                        onSendMessage={handleSendChatMessage}
-                        senderName="GM"
-                        onClose={() => setShowChat(false)}
-                        showHeader={true}
-                    />
+                    <GmChatPanel onClose={() => setShowChat(false)} />
                 </div>
             )}
 
@@ -1619,7 +1430,7 @@ function GmDashboard() {
                             ✖ Close
                         </button>
                         <UserManager
-                            users={users}
+                            users={usersWithAssignments}
                             characters={characters}
                             onCreateUser={handleCreateUser}
                             onDeleteUser={handleDeleteUser}
@@ -1893,7 +1704,7 @@ function GmDashboard() {
                         onAddItem={() => setShowItemSelector(character.id)}
                         onMinionViewClick={() => handleCharacterUpdate({ ...character, isMinion: true })}
                         onClose={() => handleToggleCharacterSheet(character.id)}
-                        users={users}
+                        users={usersWithAssignments}
                         renderSecretsManager={(props) => (
                             <SecretsManager
                                 character={props.character}

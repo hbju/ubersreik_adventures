@@ -4,6 +4,9 @@ import * as path from 'node:path';
 import { CampaignState } from '@wfrp/shared';
 
 /**
+ * @deprecated Legacy JSON persistence fallback. Supabase is the primary source of truth.
+ * Keep this module for rollback/reference only; renderer should not call save/get campaign IPC.
+ *
  * In-memory cache of the campaign data
  */
 let campaignData: CampaignState | null = null;

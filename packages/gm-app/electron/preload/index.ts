@@ -46,28 +46,26 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         }
     },
 
-    // ==================== Campaign Data Persistence API ====================
+    // ==================== Campaign Data Persistence API (Legacy) ====================
 
     /**
-     * Get initial campaign data from the main process
-     * @returns Promise resolving to the campaign data
+     * @deprecated Legacy JSON campaign-state bootstrap.
+     * Supabase-backed contexts are the source of truth.
      */
     getInitialData() {
         return ipcRenderer.invoke('get-initial-data')
     },
 
     /**
-     * Save campaign data to the main process
-     * @param data The campaign data to save
+     * @deprecated Legacy JSON persistence path.
+     * Kept for fallback/compatibility only.
      */
     saveData(data: any) {
         return ipcRenderer.send('save-data', data)
     },
 
     /**
-     * Listen for data updates from the main process
-     * @param callback Function to call when data is updated
-     * @returns Cleanup function to remove the listener
+     * @deprecated Legacy campaign-state update stream.
      */
     onDataUpdated(callback: (value: any) => void) {
         const listener = (_event: any, value: any) => callback(value);
