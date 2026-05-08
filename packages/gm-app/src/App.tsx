@@ -53,7 +53,6 @@ import {
     Weapon,
     Item,
     Condition,
-    Advantages,
     JournalEntry,
     MapPinState,
     CareerChangeResponseMessage,
@@ -71,6 +70,7 @@ import {
 } from '@wfrp/shared';
 import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp.types';
 import { CharacterProvider, useCharacterContext } from './context/CharacterContext';
+import { CombatProvider, useCombatContext } from './context/CombatContext';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
@@ -110,7 +110,9 @@ function App() {
 
     return (
     <CharacterProvider>
-        <GmDashboard />
+        <CombatProvider>
+            <GmDashboard />
+        </CombatProvider>
     </CharacterProvider>
     );
 }
@@ -119,6 +121,7 @@ function App() {
 function GmDashboard() {
     const { t } = useTranslation();
     const { characters, replaceCharacter, createCharacter: ctxCreateCharacter, deleteCharacter: ctxDeleteCharacter } = useCharacterContext();
+    const { combatState, addCombatant, updateCombatant } = useCombatContext();
 
     // Ref to access latest characters inside stable useEffect closures
     const charactersRef = useRef(characters);
@@ -165,10 +168,6 @@ function GmDashboard() {
     const [mapViewState, setMapViewState] = useState<{ scale: number; offsetX: number; offsetY: number }>({ scale: 0.3, offsetX: 126, offsetY: -26 });
     const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
     const [openSheetIds, setOpenSheetIds] = useState<string[]>([]);
-    const [combatants, setCombatants] = useState<Combatant[]>([]);
-    const [currentTurnId, setCurrentTurnId] = useState<string | null>(null);
-    const [currentAdvantage, setCurrentAdvantage] = useState<Advantages>({ playerAdvantage: 0, enemyAdvantage: 0 });
-
     const [showGameLog, setShowGameLog] = useState(false);
     const [showShopManager, setShowShopManager] = useState(false);
     const [showShopConfigurator, setShowShopConfigurator] = useState(false);
@@ -511,7 +510,7 @@ function GmDashboard() {
 
     const handleAddCombatant = (character: Character) => {
         // Prevent adding the same character twice
-        if (combatants.some(c => c.sourceId === character.id)) return;
+        if (combatState.combatants.some(c => c.sourceId === character.id)) return;
 
         const newCombatant: Combatant = {
             id: crypto.randomUUID(),
@@ -525,10 +524,7 @@ function GmDashboard() {
             isPlayer: assignedCharacters.includes(character.id),
             conditions: character.conditions.map(cond => [cond.id, ...Array(cond.stack - 1).fill(cond.id)]).flat(),
         };
-        if (combatants.length === 0) {
-            setCurrentAdvantage({ playerAdvantage: 0, enemyAdvantage: 0 });
-        }
-        setCombatants(prev => [...prev, newCombatant]);
+        addCombatant(newCombatant);
     };
 
     const handleUpdateCombatant = (updatedCombatant: Combatant) => {
@@ -550,13 +546,7 @@ function GmDashboard() {
             const newChar = { ...char, status: { ...char.status, wounds: { ...char.status.wounds, current: updatedCombatant.currentWounds }, corruption: { ...char.status.corruption, max: calculateMaxCorruption(char) } }, conditions: newConds };
             handleCharacterUpdate(newChar);
         }
-        setCombatants(prev => prev.map(c => c.id === updatedCombatant.id ? updatedCombatant : c));
-    };
-
-    const handleClearCombatants = () => {
-        setCombatants([]);
-        setCurrentAdvantage({ playerAdvantage: 0, enemyAdvantage: 0 });
-        setCurrentTurnId(null);
+        updateCombatant(updatedCombatant);
     };
 
     const handleUpdateJournal = (updatedJournal: JournalEntry[]) => {
@@ -1111,7 +1101,7 @@ function GmDashboard() {
 
                     // Remove conditions if successful
                     if (successLevel >= 0) {
-                        const combatant = combatants.find(c => c.sourceId === characterId);
+                        const combatant = combatState.combatants.find(c => c.sourceId === characterId);
                         if (combatant && combatant.conditions) {
                             console.log(combatant.conditions);
                             const conditionsToRemove = Math.min(1 + successLevel, combatant.conditions.filter(c => c === conditionId).length);
@@ -1238,13 +1228,13 @@ function GmDashboard() {
 
     // Broadcast initiative tracker updates to all players
     useEffect(() => {
-        if (combatants.length > 0 || currentTurnId !== null) {
+        if (combatState.combatants.length > 0 || combatState.currentTurnId !== null) {
             const message: UpdateInitiativeTrackerMessage = {
                 type: 'UPDATE_INITIATIVE_TRACKER',
                 payload: {
-                    combatants,
-                    currentTurnId,
-                    currentAdvantage: currentAdvantage
+                    combatants: combatState.combatants,
+                    currentTurnId: combatState.currentTurnId,
+                    currentAdvantage: combatState.advantage
                 }
             };
             window.ipcRenderer.sendToAllPlayers(message);
@@ -1253,14 +1243,14 @@ function GmDashboard() {
             const message: UpdateInitiativeTrackerMessage = {
                 type: 'UPDATE_INITIATIVE_TRACKER',
                 payload: {
-                    combatants,
-                    currentTurnId,
-                    currentAdvantage: currentAdvantage
+                    combatants: combatState.combatants,
+                    currentTurnId: combatState.currentTurnId,
+                    currentAdvantage: combatState.advantage
                 }
             };
             window.ipcRenderer.sendToAllPlayers(message);
         }
-    }, [combatants, currentTurnId, currentAdvantage]);
+    }, [combatState]);
 
     const handleSendChatMessage = (content: string) => {
         const parsed = parseChatCommand(content);
@@ -1512,16 +1502,9 @@ function GmDashboard() {
                 </div>
             </div>
 
-            {Object.keys(combatants).length > 0 && (
+            {combatState.combatants.length > 0 && (
                 <InitiativeTracker
-                    combatants={combatants}
-                    onSetCombatants={setCombatants}
                     onUpdateCombatant={handleUpdateCombatant}
-                    onClearCombatants={handleClearCombatants}
-                    currentTurnId={currentTurnId}
-                    onSetCurrentTurnId={setCurrentTurnId}
-                    onUpdateAdvantages={(advantage) => setCurrentAdvantage(advantage)}
-                    advantages={currentAdvantage}
                     characters={characters}
                     onSendToPlayer={(charId: string, message) => {
                         const character = characters.find(c => c.id === charId);
@@ -1602,7 +1585,6 @@ function GmDashboard() {
 
             {showCombatResolver && (<CombatResolver
                 characters={characters}
-                combatants={combatants}
                 opposedTestResults={opposedTestResults}
                 rollQueue={rollQueue}
                 onRemoveFromQueue={(rollId: string) => {
@@ -1623,12 +1605,6 @@ function GmDashboard() {
                 }}
                 onLogEntry={addLogEntry}
                 onUpdateCharacter={handleCharacterUpdate}
-                onUpdateCombatant={handleUpdateCombatant}
-                onUpdateAdvantage={(team, amount) => {
-                    team === 'players'
-                        ? setCurrentAdvantage(prev => ({ ...prev, playerAdvantage: prev.playerAdvantage + amount }))
-                        : setCurrentAdvantage(prev => ({ ...prev, enemyAdvantage: prev.enemyAdvantage + amount }));
-                }}
                 onClose={() => { setShowCombatResolver(false); }}
             />
             )}

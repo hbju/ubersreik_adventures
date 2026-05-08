@@ -13,28 +13,23 @@ import {
     useGameData
 } from '@wfrp/shared';
 import styles from './InitiativeTracker.module.css';
+import { useCombatContext } from '../../context/CombatContext';
 
 interface InitiativeTrackerProps {
-    combatants: Combatant[];
-    onSetCombatants: (combatants: Combatant[]) => void;
     onUpdateCombatant: (combatant: Combatant) => void;
-    onClearCombatants: () => void;
-    currentTurnId: string | null;
-    onSetCurrentTurnId: (id: string | null) => void;
-    advantages?: Advantages;
-    onUpdateAdvantages: (advantage: Advantages) => void;
     characters: Character[];
     onSendToPlayer: (charId: string, message: RequestConditionTestMessage) => void;
 }
 
 const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
-    combatants, onSetCombatants, onUpdateCombatant, onClearCombatants, currentTurnId, onSetCurrentTurnId, advantages, onUpdateAdvantages, characters, onSendToPlayer
+    onUpdateCombatant, characters, onSendToPlayer
 }) => {
+    const { combatState, reorderInitiative, setCurrentTurnId, updateAdvantage, endCombat, incrementRound, nextTurn } = useCombatContext();
     const conditions = useGameData().conditions;
+    const { combatants, currentTurnId, advantage: advantages, roundNumber } = combatState;
 
     const [expandedCombatantId, setExpandedCombatantId] = useState<string | null>(null);
     const [conditionPromptCombatant, setConditionPromptCombatant] = useState<Combatant | null>(null);
-    const [roundNumber, setRoundNumber] = useState<number>(0);
 
     const nodeRef = React.useRef(null);
 
@@ -45,22 +40,15 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
         }));
 
         const sorted = rolledCombatants.sort((a, b) => (b.initiative ?? 0) - (a.initiative ?? 0) || b.baseInitiative - a.initiative);
-        onSetCombatants(sorted);
-        onSetCurrentTurnId(sorted[0]?.id || null);
+        reorderInitiative(sorted);
+        setCurrentTurnId(sorted[0]?.id || null);
     };
 
-    const handleNextTurn = () => {
+    const handleNextTurn = async () => {
         if (!currentTurnId || combatants.length === 0) return;
-
         const currentIndex = combatants.findIndex(c => c.id === currentTurnId);
         const nextIndex = (currentIndex + 1) % combatants.length;
         const nextCombatant = combatants[nextIndex];
-
-        // Check if we're starting a new round
-        if (nextIndex === 0) {
-            // handleEndOfRound();
-            setRoundNumber(prev => prev + 1);
-        }
 
         // Check if next combatant has conditions that need processing. TODO : to be reimplemented later
         /** if (nextCombatant && nextCombatant.conditions && nextCombatant.conditions.length > 0) {
@@ -124,7 +112,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
         }
         **/
         console.log('Next Turn:', nextCombatant?.name);
-        onSetCurrentTurnId(nextCombatant.id);
+        await nextTurn();
     }
 
     // TODO: to be reimplemented later
@@ -157,7 +145,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
             }
         });
 
-        onSetCombatants(updatedCombatants);
+        reorderInitiative(updatedCombatants);
 
         // Log end-of-round effects
         if (allLogs.length > 0) {
@@ -204,7 +192,7 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
             newAdvantage.enemyAdvantage = Math.max(0, advantage.enemyAdvantage + delta);
         }
 
-        onUpdateAdvantages(newAdvantage);
+        updateAdvantage(newAdvantage);
     };
 
     const toggleExpanded = (combatantId: string) => {
@@ -238,8 +226,8 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                     <div className={styles.actions}>
                         <button onClick={handleRollInitiative}>Roll Init</button>
                         <button onClick={handleNextTurn}>Next Turn</button>
-                        <button onClick={() => { /**handleEndOfRound(); */ setRoundNumber(prev => prev + 1); }}>End Round</button>
-                        <button onClick={onClearCombatants} className={styles.clearBtn}>Clear</button>
+                        <button onClick={() => { /**handleEndOfRound(); */ incrementRound(); }}>End Round</button>
+                        <button onClick={endCombat} className={styles.clearBtn}>Clear</button>
                     </div>
                 </header>
                 <div className={styles.advantageDisplay}>

@@ -31,10 +31,10 @@ import {
 import CharacterSelector from './CharacterSelector';
 import { RollQueueCard } from './RollQueueCard';
 import { CombatantSlot } from './CombatantSlot';
+import { useCombatContext } from '../../context/CombatContext';
 
 interface CombatResolverProps {
     characters: Character[];
-    combatants: Combatant[];
     opposedTestResults: Map<string, OpposedTestResultMessage['payload']>;
     rollQueue: QueuedRoll[];
     onRemoveFromQueue: (rollId: string) => void;
@@ -42,8 +42,6 @@ interface CombatResolverProps {
     onSendToPlayer: (charId: string, message: RequestOpposedTestMessage | AssignCharacterMessage) => void;
     onLogEntry: (type: LogEntry['type'], content: string) => void;
     onUpdateCharacter: (character: Character) => void;
-    onUpdateCombatant: (combatant: Combatant) => void;
-    onUpdateAdvantage: (team: 'players' | 'enemies', amount: number) => void;
     onClose: () => void;
 }
 
@@ -82,7 +80,6 @@ interface CombatResult {
 
 const CombatResolver: React.FC<CombatResolverProps> = ({
     characters,
-    combatants,
     opposedTestResults,
     rollQueue,
     onRemoveFromQueue,
@@ -90,10 +87,10 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     onSendToPlayer,
     onLogEntry,
     onUpdateCharacter,
-    onUpdateCombatant,
-    onUpdateAdvantage,
     onClose
 }) => {
+    const { combatState, updateCombatant, updateAdvantage } = useCombatContext();
+    const { combatants, advantage } = combatState;
     const { skills, weapons: weaponsData, talents, armor: armorData } = useGameData();
 
     // State for assigned rolls (async mode)
@@ -379,7 +376,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                 ...defenderCombatant,
                 currentWounds: newWounds
             };
-            onUpdateCombatant(updatedCombatant);
+            updateCombatant(updatedCombatant);
 
             // If defender is a character, update their wounds too
             const defenderCharacter = characters.find(c => c.id === defenderRoll.characterId);
@@ -417,7 +414,10 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             const attackerPlayer = characters.find(c => c.id === attackerRoll.characterId);
             if (attackerPlayer) {
                 const team = attackerPlayer.userId != null ? 'players' : 'enemies';
-                onUpdateAdvantage(team, 1);
+                const next = team === 'players'
+                    ? { ...advantage, playerAdvantage: advantage.playerAdvantage + 1 }
+                    : { ...advantage, enemyAdvantage: advantage.enemyAdvantage + 1 };
+                updateAdvantage(next);
                 onLogEntry('system', `Team ${team} gains +1 Advantage`);
             }
         }
