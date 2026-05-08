@@ -6,26 +6,12 @@ interface IpcRendererApi {
     off(channel: string, listener: (...args: any[]) => void): void;
     send(channel: string, ...args: any[]): void;
     invoke(channel: string, ...args: any[]): Promise<any>;
-    
-    // Server/Connection API
-    getServerStatus: () => Promise<any>;
-    onServerStatusUpdate: (callback: (value: any) => void) => () => void;
-    sendToPlayer: (userId: string, message: any) => void;
-    sendToAllPlayers: (message: any) => void;
-    onPlayerMessageReceived: (callback: (value: any) => void) => () => void;
-    assignCharacterToPlayer: (characterId: string, socketId: string) => void;
-    
+
     // Campaign Data Persistence API
     getInitialData: () => Promise<any>;
     saveData: (data: any) => void;
     onDataUpdated: (callback: (value: any) => void) => () => void;
-    onMapPingReceived: (callback: (value: any) => void) => () => void;
-    
-    // Chat API
-    sendChatMessage: (message: any) => void;
-    onChatMessage: (callback: (value: any) => void) => () => void;
-    getChatHistory: () => Promise<any[]>;
-    
+
     // Backup API
     backupCampaign: () => Promise<{ success: boolean; path?: string; error?: string }>;
     

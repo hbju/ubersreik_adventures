@@ -13,6 +13,7 @@ import {
   type MapRow,
 } from '@wfrp/shared';
 import { useAppContext } from '../context/AppContext';
+import { useGmCampaignRealtime } from '../context/GmCampaignRealtimeContext';
 
 type PinStatesByMap = Record<string, Record<string, MapPinState>>;
 
@@ -33,7 +34,7 @@ function rowToMapData(row: MapRow): MapData {
 }
 
 export function useMap() {
-  const { serviceContext, currentCampaignId } = useAppContext();
+  const { serviceContext, currentCampaignId, user } = useAppContext();
   const [maps, setMaps] = useState<MapData[]>([]);
   const [activeMapId, setActiveMapId] = useState<string>('');
   const [pinStatesByMap, setPinStatesByMap] = useState<PinStatesByMap>({});
@@ -41,6 +42,7 @@ export function useMap() {
   const [userPins, setUserPins] = useState<UserMapPin[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { sendPing } = useGmCampaignRealtime();
 
   const hydrateMapDetails = useCallback(async (mapId: string) => {
     if (!serviceContext) return;
@@ -328,6 +330,11 @@ export function useMap() {
     return result;
   }, [serviceContext, userPins]);
 
+  const sendMapPing = useCallback(async (x: number, y: number, color?: string) => {
+    if (!activeMapId) return;
+    await sendPing(activeMapId, { x, y }, user?.id, color);
+  }, [activeMapId, sendPing, user?.id]);
+
   const activeMap = useMemo(
     () => maps.find((m) => m.id === activeMapId) ?? null,
     [maps, activeMapId]
@@ -365,5 +372,6 @@ export function useMap() {
     removeToken,
     addUserPin,
     removeUserPin,
+    sendMapPing,
   };
 }

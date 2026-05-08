@@ -9,7 +9,15 @@ interface BaseMessage<T extends string, P> {
 
 // == GM to Player Messages ==
 
-export type LoginSuccessMessage = BaseMessage<'LOGIN_SUCCESS', { character: Character | null; username: string; playerColor: string }>;
+export type LoginSuccessMessage = BaseMessage<'LOGIN_SUCCESS', {
+    character: Character | null;
+    username: string;
+    playerColor: string;
+    /** Campaign roster user id (stable key for Presence); omit on legacy GM builds. */
+    campaignUserId?: string;
+    /** Supabase campaign UUID for Realtime Presence/broadcast (when GM has synced it). */
+    realtimeCampaignId?: string | null;
+}>;
 export type LoginFailureMessage = BaseMessage<'LOGIN_FAILURE', { reason: string }>;
 export type AssignCharacterMessage = BaseMessage<'ASSIGN_CHARACTER', { character: Character }>;
 export type RequestTestMessage = BaseMessage<'REQUEST_TEST', { skillName: string; characteristicName: string; modifier: number; }>;
@@ -263,3 +271,16 @@ export type SetSpawnPointMessage = BaseMessage<'SET_SPAWN_POINT', {
 }>;
 
 export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage | TokenMoveMessage | MapAddPinMessage | MapRemovePinMessage | MapPingRequestMessage | ChatSendMessage | MapSwitchRequestMessage | SetSpawnPointMessage | RollWithIntentMessage;
+
+// Ephemeral messages are transient gameplay interactions (broadcast layer).
+export type EphemeralMessage =
+    | MapPingMessage
+    | MapPingRequestMessage
+    | RequestOpposedTestMessage
+    | OpposedTestResultMessage
+    | RequestConditionTestMessage
+    | ConditionTestResultMessage
+    | RollWithIntentMessage;
+
+// Persistent messages are everything else.
+export type PersistentMessage = Exclude<ServerToClientMessage | ClientToServerMessage, EphemeralMessage>;

@@ -8,6 +8,7 @@ interface UserManagerProps {
   onCreateUser: (username: string, password: string) => void;
   onDeleteUser: (userId: string) => void;
   onAssignCharacter: (userId: string, characterId: string | null) => void;
+  isUserOnline?: (userId: string) => boolean;
 }
 
 export const UserManager: React.FC<UserManagerProps> = ({
@@ -16,6 +17,7 @@ export const UserManager: React.FC<UserManagerProps> = ({
   onCreateUser,
   onDeleteUser,
   onAssignCharacter,
+  isUserOnline,
 }) => {
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -116,7 +118,21 @@ export const UserManager: React.FC<UserManagerProps> = ({
             {users.map((user) => (
               <div key={user.id} className={styles.userCard}>
                 <div className={styles.userInfo}>
-                  <div className={styles.userName}>👤 {user.username}</div>
+                  <div className={styles.userName}>
+                    <span
+                      title={isUserOnline?.(user.id) ? 'Online (Realtime)' : 'Offline'}
+                      style={{
+                        display: 'inline-block',
+                        width: 10,
+                        height: 10,
+                        borderRadius: '50%',
+                        marginRight: 8,
+                        background: isUserOnline?.(user.id) ? '#4a9c4a' : '#555',
+                        verticalAlign: 'middle',
+                      }}
+                    />
+                    👤 {user.username}
+                  </div>
                   <div className={styles.userMeta}>
                     <span className={styles.metaLabel}>Character:</span>
                     <span className={styles.metaValue}>

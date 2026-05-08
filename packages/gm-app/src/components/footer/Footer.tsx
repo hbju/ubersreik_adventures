@@ -3,11 +3,15 @@ import styles from './Footer.module.css';
 import { LanguageSwitcher, useCodex } from '@wfrp/shared';
 import { useTranslation } from 'react-i18next';
 import { is } from '@electron-toolkit/utils';
+import { footerConnectionActive, playersOnlineDisplayCount } from '@/lib/footerPresenceStats';
 
 interface FooterProps {
     ip: string,
     port: number,
     clients: string[],
+    /** Players visible on Supabase Presence (campaign ephemeral channel). */
+    presenceOnlinePlayerCount?: number;
+    presenceChannelConnected?: boolean;
     onShowUserManager: () => void,
     onBackup: () => void,
     onStartSession: () => void,
@@ -121,6 +125,8 @@ export const Footer: React.FC<FooterProps> = ({
     ip,
     port,
     clients,
+    presenceOnlinePlayerCount = 0,
+    presenceChannelConnected = false,
     onShowUserManager,
     onBackup,
     onStartSession,
@@ -140,8 +146,14 @@ export const Footer: React.FC<FooterProps> = ({
 }) => {
     const { t } = useTranslation();
     const { openViewer } = useCodex();
-    const connectionCount = clients.length;
-    const connectionStatusClass = connectionCount > 0 ? 'connected' : 'disconnected';
+    const legacySocketCount = clients.length;
+    const presenceInputs = {
+        presenceChannelConnected,
+        presenceOnlinePlayerCount,
+        legacySocketClientCount: legacySocketCount,
+    };
+    const playersOnlineCount = playersOnlineDisplayCount(presenceInputs);
+    const connectionStatusClass = footerConnectionActive(presenceInputs) ? 'connected' : 'disconnected';
 
     const sessionItems = [
         { icon: '👤', label: t('menu.users'), onClick: onShowUserManager },
@@ -179,7 +191,14 @@ export const Footer: React.FC<FooterProps> = ({
         <div className={styles.serverStatus}>
             <div className={styles.statusIndicatorContainer}>
                 <span className={`${styles.statusIndicator} ${connectionStatusClass}`}></span>
-                <span>Server Listening on: <strong>{ip}:{port}</strong></span>
+                <span>
+                    Campaign sync: <strong>{ip}</strong>
+                    <span style={{ opacity: 0.85 }}> ({port === 0 ? 'Realtime' : `${ip}:${port}`})</span>
+                    <span style={{ marginLeft: 12, opacity: 0.85 }}>
+                        Realtime:{' '}
+                        <strong>{presenceChannelConnected ? 'connected' : 'disconnected'}</strong>
+                    </span>
+                </span>
             </div>
 
             <DropUpMenu
@@ -223,7 +242,9 @@ export const Footer: React.FC<FooterProps> = ({
             />
 
             <LanguageSwitcher />
-            <span>Players Connected: <strong>{connectionCount}</strong></span>
+            <span title="Online players from Supabase Presence">
+                Players online: <strong>{playersOnlineCount}</strong>
+            </span>
         </div>
     );
 };

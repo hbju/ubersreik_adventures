@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Character, Currency, Armor, Weapon, Item, PurchaseResponseMessage } from '@wfrp/shared';
+import { useGmCampaignRealtime } from '@/context/GmCampaignRealtimeContext';
 import styles from './PurchaseRequestModal.module.css';
 
 interface PurchaseRequestModalProps {
@@ -19,6 +20,7 @@ export const PurchaseRequestModal: React.FC<PurchaseRequestModalProps> = ({
   onClose,
   onApprove,
 }) => {
+  const { relayGmMessage } = useGmCampaignRealtime();
   const [denyReason, setDenyReason] = useState('');
   const [showDenyInput, setShowDenyInput] = useState(false);
 
@@ -31,7 +33,7 @@ export const PurchaseRequestModal: React.FC<PurchaseRequestModalProps> = ({
       },
     };
 
-    window.ipcRenderer.sendToPlayer(userId, response);
+    void relayGmMessage(response, userId);
     onApprove(item);
     onClose();
   };
@@ -46,7 +48,7 @@ export const PurchaseRequestModal: React.FC<PurchaseRequestModalProps> = ({
       },
     };
 
-    window.ipcRenderer.sendToPlayer(userId, response);
+    void relayGmMessage(response, userId);
     onClose();
   };
 

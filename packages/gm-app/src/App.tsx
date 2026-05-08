@@ -1,4 +1,4 @@
-import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, MapTokensUpdateMessage, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal } from '@wfrp/shared';
+import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, LocationTerritory, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal, useRealtimeSync } from '@wfrp/shared';
 import type { CodexDataSources } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
@@ -45,7 +45,6 @@ import {
     GameLog,
     LogEntry,
     equilibrateCurrency,
-    UpdateInitiativeTrackerMessage,
     OpposedTestResultMessage,
     Armor,
     Weapon,
@@ -55,7 +54,6 @@ import {
     Location,
     Talent,
     TalentSelectionModal,
-    FactionUpdateMessage,
     QueuedRoll,
 } from '@wfrp/shared';
 import { CharacterProvider, useCharacterContext } from './context/CharacterContext';
@@ -69,8 +67,9 @@ import { MapProvider, useMapContext } from './context/MapContext';
 import { ShopProvider, useShopContext } from './context/ShopContext';
 import { CalendarProvider, useCalendarContext } from './context/CalendarContext';
 import { ChatProvider } from './context/ChatContext';
+import { GmCampaignRealtimeProvider, useGmCampaignRealtime } from './context/GmCampaignRealtimeContext';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 
 import './App.css';
 import sidebarStyles from './components/SidebarToggle.module.css';
@@ -78,12 +77,6 @@ import CareerManager from './components/CareerManager';
 import { useTranslation } from 'react-i18next';
 import ShopBrowser from './components/ShopBrowser';
 import GmChatPanel from './components/chat/GmChatPanel';
-
-interface ServerStatusData {
-    ip: string;
-    port: number;
-    clients: string[];
-}
 
 function App() {
     const { t } = useTranslation();
@@ -110,6 +103,7 @@ function App() {
     <CharacterProvider>
         <UserProvider>
             <CharacterTemplateProvider>
+                <GmCampaignRealtimeProvider>
                 <CombatProvider>
                     <JournalProvider>
                         <QuestProvider>
@@ -127,6 +121,7 @@ function App() {
                         </QuestProvider>
                     </JournalProvider>
                 </CombatProvider>
+                </GmCampaignRealtimeProvider>
             </CharacterTemplateProvider>
         </UserProvider>
     </CharacterProvider>
@@ -136,15 +131,23 @@ function App() {
 
 function GmDashboard() {
     const { t } = useTranslation();
-    const { characters, replaceCharacter, createCharacter: ctxCreateCharacter, deleteCharacter: ctxDeleteCharacter } = useCharacterContext();
+    const { serviceContext, user } = useAppContext();
+    const { characters, replaceCharacter, createCharacter: ctxCreateCharacter, deleteCharacter: ctxDeleteCharacter, fetchCharacters } = useCharacterContext();
     const { users, createUser, deleteUser, setUserCharacter } = useUserContext();
     const { templates: characterTemplates, replaceAllTemplates } = useCharacterTemplateContext();
-    const { combatState, addCombatant, updateCombatant } = useCombatContext();
-    const { entries: journal } = useJournalContext();
-    const { quests } = useQuestContext();
-    const { factions, locationTerritories, setTerritory } = useFactionContext();
-    const { shopDefinitions: contextShops, shopInventory } = useShopContext();
-    const { calendarState } = useCalendarContext();
+    const {
+        combatState,
+        addCombatant,
+        updateCombatant,
+        fetchCombatState,
+        broadcastOpposedTestRequest,
+        broadcastConditionTestRequest,
+    } = useCombatContext();
+    const { entries: journal, fetchEntries } = useJournalContext();
+    const { quests, fetchQuests } = useQuestContext();
+    const { factions, locationTerritories, setTerritory, fetchFactions } = useFactionContext();
+    const { shopDefinitions: contextShops, shopInventory, fetchShops } = useShopContext();
+    const { calendarState, fetchCalendar } = useCalendarContext();
     const {
         activeMap,
         activeMapId,
@@ -157,11 +160,16 @@ function GmDashboard() {
         moveToken,
         addToken,
         removeToken,
+        sendMapPing,
+        fetchMaps,
     } = useMapContext();
 
     // Ref to access latest characters inside stable useEffect closures
     const charactersRef = useRef(characters);
     useEffect(() => { charactersRef.current = characters; }, [characters]);
+
+    const combatStateRef = useRef(combatState);
+    useEffect(() => { combatStateRef.current = combatState; }, [combatState]);
 
     const { skills, talents, careers, conditions, qualities, shops: shopDefinitions, mapData, maps, motivations } = useGameData();
 
@@ -184,9 +192,6 @@ function GmDashboard() {
     const calculateMaxCorruption = (character: Character) => {
         return calculateCharacteristicBonus(character.characteristics.wp) + calculateCharacteristicBonus(character.characteristics.t);
     }
-
-    const [serverInfo, setServerInfo] = useState({ ip: 'Loading...', port: 0 });
-    const [connectedPlayers, setConnectedPlayers] = useState<string[]>([]);
 
     const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
 
@@ -276,76 +281,67 @@ function GmDashboard() {
     const usersRef = useRef(usersWithAssignments);
     useEffect(() => { usersRef.current = usersWithAssignments; }, [usersWithAssignments]);
 
-    const addLogEntry = (type: LogEntry['type'], content: string, messageCode?: string, params?: Record<string, any>) => {
+    const realtimeCallbacks = useMemo(() => ({
+        characters: fetchCharacters,
+        quests: () => fetchQuests(),
+        journal: fetchEntries,
+        factions: fetchFactions,
+        maps: fetchMaps,
+        shops: fetchShops,
+        combat: fetchCombatState,
+        calendar: fetchCalendar,
+    }), [fetchCalendar, fetchCharacters, fetchCombatState, fetchEntries, fetchFactions, fetchMaps, fetchQuests, fetchShops]);
+
+    useRealtimeSync({
+        serviceContext,
+        callbacks: realtimeCallbacks,
+    });
+
+    const {
+        lastLatencyMs: broadcastLatencyMs,
+        onlineUsers,
+        isUserOnline,
+        connectionState: broadcastConnectionState,
+        mapPingBridgeRef,
+        relayGmMessage,
+        registerPlayerRelayHandler,
+    } = useGmCampaignRealtime();
+
+    useEffect(() => {
+        mapPingBridgeRef.current.activeMapId = activeMapId;
+    }, [activeMapId, mapPingBridgeRef]);
+
+    useEffect(() => {
+        mapPingBridgeRef.current.showMapPing = (ping) => {
+            setMapPing({
+                x: ping.position.x,
+                y: ping.position.y,
+                color: ping.color ?? '#d4af37',
+                userId: ping.userId ?? 'unknown',
+            });
+            setTimeout(() => setMapPing(null), 300);
+        };
+        return () => {
+            mapPingBridgeRef.current.showMapPing = null;
+        };
+    }, [mapPingBridgeRef]);
+
+    const presenceOnlinePlayerCount = useMemo(
+        () => [...onlineUsers.values()].filter((p) => p.role === 'player').length,
+        [onlineUsers],
+    );
+
+    useEffect(() => {
+        if (broadcastLatencyMs == null) return;
+        console.log(`[Broadcast latency] ${broadcastLatencyMs}ms`);
+    }, [broadcastLatencyMs]);
+
+    const addLogEntry = useCallback((type: LogEntry['type'], content: string, messageCode?: string, params?: Record<string, any>) => {
         const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content, messageCode, params };
         setLogEntries(prev => [...prev, newEntry]);
-    };
+    }, []);
 
-    // Broadcast calendar state to all players whenever it changes
-    useEffect(() => {
-        if (!calendarState) return;
-        const visibleEvents = (calendarState.events || []).filter(
-            e => e.isVisibleToPlayers && !e.isHidden
-        );
-        const calendarMessage = {
-            type: 'CALENDAR_SYNC' as const,
-            payload: {
-                currentDate: calendarState.currentDate,
-                events: visibleEvents,
-                currentWeather: calendarState.currentWeather,
-            },
-        };
-        window.ipcRenderer.sendToAllPlayers(calendarMessage);
-    }, [calendarState]);
-
-    useEffect(() => {
-        const message: FactionUpdateMessage = {
-            type: 'FACTION_UPDATE',
-            payload: {
-                factions,
-                locationTerritories,
-            }
-        };
-        window.ipcRenderer.sendToAllPlayers(message);
-    }, [factions, locationTerritories]);
-
-    useEffect(() => {
-        if (!activeMapId) return;
-        const message: ActiveMapUpdateMessage = {
-            type: 'ACTIVE_MAP_UPDATE',
-            payload: {
-                activeMapId,
-                spawnPoint: currentMapData.spawnPoint,
-            }
-        };
-        window.ipcRenderer.sendToAllPlayers(message);
-    }, [activeMapId, currentMapData]);
-
-    useEffect(() => {
-        const message: MapTokensUpdateMessage = {
-            type: 'MAP_TOKENS_UPDATE',
-            payload: { tokens }
-        };
-        window.ipcRenderer.sendToAllPlayers(message);
-    }, [tokens]);
-
-    useEffect(() => {
-        const message: UserPinsUpdateMessage = {
-            type: 'USER_PINS_UPDATE',
-            payload: { pins: userPins }
-        };
-        window.ipcRenderer.sendToAllPlayers(message);
-    }, [userPins]);
-
-    useEffect(() => {
-        const message = {
-            type: 'MAP_STATE_UPDATE' as const,
-            payload: { pinStates }
-        };
-        window.ipcRenderer.sendToAllPlayers(message);
-    }, [pinStates]);
-
-    const handleCharacterUpdate = (updatedCharacter: Character) => {
+    const handleCharacterUpdate = useCallback((updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
 
         replaceCharacter(recaculatedCharacter);
@@ -355,8 +351,10 @@ function GmDashboard() {
             payload: { character: recaculatedCharacter }
         };
 
-        window.ipcRenderer.sendToPlayer(recaculatedCharacter.userId || '', newMessage);
-    }
+        if (recaculatedCharacter.userId) {
+            void relayGmMessage(newMessage, recaculatedCharacter.userId);
+        }
+    }, [replaceCharacter, talents, relayGmMessage]);
 
     const handleToggleCharacterSheet = (characterId: string) => {
         setOpenSheetIds(prevOpenIds =>
@@ -410,11 +408,11 @@ function GmDashboard() {
         setShowCharacterWizard(true);
     };
 
-    const handleWizardComplete = (newCharacter: Character) => {
+    const handleWizardComplete = useCallback((newCharacter: Character) => {
         ctxCreateCharacter(newCharacter);
         setShowCharacterWizard(false);
         addLogEntry('system', `Created new character: ${newCharacter.name}`, 'logs.character_created', { name: newCharacter.name });
-    };
+    }, [ctxCreateCharacter, addLogEntry]);
 
     const handleGenerateNPC = () => {
         const newNPC = generateRandomNpc(careers, skills);
@@ -464,7 +462,7 @@ function GmDashboard() {
         addCombatant(newCombatant);
     };
 
-    const handleUpdateCombatant = (updatedCombatant: Combatant) => {
+    const handleUpdateCombatant = useCallback((updatedCombatant: Combatant) => {
         const char = characters.find(c => c.id === updatedCombatant.sourceId);
         if (char) {
             // sync wounds & conditions back to character sheet
@@ -484,7 +482,256 @@ function GmDashboard() {
             handleCharacterUpdate(newChar);
         }
         updateCombatant(updatedCombatant);
-    };
+    }, [characters, conditions, handleCharacterUpdate, updateCombatant]);
+
+    const handlePlayerRelayMessage = useCallback((message: ClientToServerMessage) => {
+            console.log("Received message from player:", message);
+            if (message.type === 'TEST_RESULT') {
+                const { characterId, testName, targetNumber, rollResult, successLevel, fortuneSpent, corruptionGained } = message.payload;
+                const outcome = successLevel >= 0
+                    ? `${successLevel} Success Level(s)`
+                    : `${Math.abs(successLevel)} Failure Level(s)`;
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (!character) return;
+
+                const updatedCharacter: Character = {
+                    ...character,
+                    status: {
+                        ...character.status,
+                        fortune: {
+                            ...character.status.fortune,
+                            current: character.status.fortune.current - fortuneSpent
+                        },
+                        corruption: {
+                            ...character.status.corruption,
+                            current: character.status.corruption.current + corruptionGained
+                        }
+                    }
+                };
+                handleCharacterUpdate(updatedCharacter);
+                addLogEntry(
+                    'roll',
+                    `${character.name} tests ${testName}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}] Fortune spent: ${fortuneSpent}, Corruption gained: ${corruptionGained}`,
+                    'logs.test_result',
+                    { name: character.name, testName, rollResult, targetNumber, outcome, fortuneSpent, corruptionGained }
+                );
+            }
+
+            if (message.type === 'CHARACTER_CREATE') {
+                const newChar = message.payload.character;
+                const rosterUser = usersRef.current.find(u => u.username === message.payload.userId || u.id === message.payload.userId);
+                if (rosterUser) {
+                    newChar.userId = rosterUser.id;
+                    setUserCharacter(rosterUser.id, newChar.id);
+                }
+
+                handleWizardComplete(newChar);
+
+                const assignMessage: AssignCharacterMessage = {
+                    type: "ASSIGN_CHARACTER",
+                    payload: { character: newChar }
+                };
+                if (newChar.userId) {
+                    void relayGmMessage(assignMessage, newChar.userId);
+                }
+
+                addLogEntry('system', `New character created: ${newChar.name}`, 'logs.character_created', { name: newChar.name });
+            }
+
+            if (message.type === 'CHARACTER_UPDATE') {
+                const updatedChar = message.payload.character;
+                handleCharacterUpdate(updatedChar);
+                addLogEntry('system', `${updatedChar.name}'s character sheet has been updated.`, 'logs.character_updated', { name: updatedChar.name });
+            }
+
+            if (message.type === 'REQUEST_PURCHASE') {
+                const item = message.payload.item;
+
+                const character = charactersRef.current.find(c => c.id === message.payload.characterId);
+                if (character) {
+                    setPurchaseRequest({
+                        playerName: character.name,
+                        item: item,
+                        playerCurrency: character.currency,
+                        charId: message.payload.characterId,
+                    });
+                }
+            }
+
+            if (message.type === 'CAREER_CHANGE_REQUEST') {
+                const { characterId, characterName, newCareerId, newCareerLevelId, newCareerName, newCareerLevelName, xpCost } = message.payload;
+                setCareerChangeRequest({
+                    characterId,
+                    characterName,
+                    newCareerId,
+                    newCareerLevelId,
+                    newCareerName,
+                    newCareerLevelName,
+                    xpCost
+                });
+                addLogEntry('system', `${characterName} requests career change to ${newCareerName} - ${newCareerLevelName} for ${xpCost} XP.`, 'logs.career_change_request', { characterName, newCareerName, newCareerLevelName, xpCost });
+            }
+
+            if (message.type === 'OPPOSED_TEST_RESULT') {
+                const { testId, characterId, role, rollResult, successLevel, fortuneSpent, corruptionGained } = message.payload;
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (character) {
+                    const updatedCharacter: Character = {
+                        ...character,
+                        status: {
+                            ...character.status,
+                            fortune: {
+                                ...character.status.fortune,
+                                current: character.status.fortune.current - fortuneSpent
+                            },
+                            corruption: {
+                                ...character.status.corruption,
+                                current: Math.min(character.status.corruption.current + corruptionGained, character.status.corruption.max)
+                            }
+                        }
+                    };
+                    handleCharacterUpdate(updatedCharacter);
+
+                    addLogEntry(
+                        'roll',
+                        `${character.name} (${role}) rolled ${rollResult} with SL ${successLevel >= 0 ? '+' : ''}${Math.round(successLevel)}`
+                    );
+                }
+                setOpposedTestResults(prev => {
+                    const newMap = new Map(prev);
+                    const key = `${testId}-${role}`;
+                    newMap.set(key, message.payload);
+                    return newMap;
+                });
+            }
+
+            if (message.type === 'CONDITION_TEST_RESULT') {
+                const { characterId, conditionId, rollResult, successLevel, targetNumber } = message.payload;
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (character) {
+                    const outcome = successLevel >= 0
+                        ? `Success (${successLevel} SL)`
+                        : `Failure (${successLevel} SL)`;
+
+                    addLogEntry(
+                        'roll',
+                        `${character.name} tests to remove ${conditionId}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}]`
+                    );
+
+                    if (successLevel >= 0) {
+                        const combatant = combatStateRef.current.combatants.find(c => c.sourceId === characterId);
+                        if (combatant && combatant.conditions) {
+                            console.log(combatant.conditions);
+                            const conditionsToRemove = Math.min(1 + successLevel, combatant.conditions.filter(c => c === conditionId).length);
+                            const updatedConditions = [...combatant.conditions];
+
+                            for (let i = 0; i < conditionsToRemove; i++) {
+                                const index = updatedConditions.indexOf(conditionId);
+                                if (index > -1) {
+                                    updatedConditions.splice(index, 1);
+                                }
+                            }
+
+                            const shouldAddFatigued = ['condition_broken', 'condition_poisoned', 'condition_stunned', 'condition_unconscious'].includes(conditionId);
+                            const allRemoved = !updatedConditions.includes(conditionId);
+
+                            if (shouldAddFatigued && allRemoved) {
+                                updatedConditions.push('condition_fatigued');
+                                addLogEntry('system', `${character.name} gains Fatigued condition after recovering from ${conditionId}.`);
+                            }
+                            console.log(`Removing ${conditionsToRemove} ${conditionId} condition(s) from ${character.name}`);
+                            handleUpdateCombatant({ ...combatant, conditions: updatedConditions });
+                            addLogEntry('system', `${character.name} removed ${conditionsToRemove} ${conditionId} condition(s).`);
+                        }
+                    }
+                }
+            }
+
+            if (message.type === 'ROLL_WITH_INTENT') {
+                const { characterId, characterName, skillId, skillName, targetNumber, rollResult, successLevel, weaponId, weaponName, weaponDamage, usedTalents, fortuneSpent, corruptionGained } = message.payload;
+
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (character) {
+                    const updatedCharacter: Character = {
+                        ...character,
+                        status: {
+                            ...character.status,
+                            fortune: {
+                                ...character.status.fortune,
+                                current: character.status.fortune.current - fortuneSpent
+                            },
+                            corruption: {
+                                ...character.status.corruption,
+                                current: character.status.corruption.current + corruptionGained
+                            }
+                        }
+                    };
+                    handleCharacterUpdate(updatedCharacter);
+                }
+
+                const queuedRoll: QueuedRoll = {
+                    id: crypto.randomUUID(),
+                    characterId,
+                    characterName,
+                    skillId,
+                    skillName,
+                    rollResult,
+                    targetNumber,
+                    successLevel,
+                    weaponId,
+                    weaponName,
+                    weaponDamage,
+                    timestamp: Date.now(),
+                    usedTalents,
+                    fortuneSpent,
+                    corruptionGained,
+                };
+
+                setRollQueue(prev => {
+                    const newQueue = [queuedRoll, ...prev];
+                    return newQueue.slice(0, MAX_ROLL_QUEUE_SIZE);
+                });
+
+                const slSign = successLevel >= 0 ? '+' : '';
+                addLogEntry(
+                    'roll',
+                    `${characterName} Skill: ${skillName} - Rolled ${rollResult} vs ${targetNumber}. SL: ${slSign}${Math.round(successLevel)}${weaponName ? ` (${weaponName})` : ''}`
+                );
+            }
+
+            if (message.type === 'SHOP_EVALUATE_REQUEST') {
+                const { shopId, instanceId, characterId } = message.payload;
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (character) {
+                    setShopEvaluateRequest({
+                        shopId,
+                        instanceId,
+                        characterId,
+                        characterName: character.name
+                    });
+                    addLogEntry('system', `${character.name} requests to evaluate an item in shop ${shopId}.`);
+                }
+            }
+
+            if (message.type === 'SHOP_PURCHASE_REQUEST') {
+                const { shopId, instanceId, characterId, quantity } = message.payload;
+                const character = charactersRef.current.find(c => c.id === characterId);
+                if (character) {
+                    setShopPurchaseRequest({
+                        shopId,
+                        instanceId,
+                        characterId,
+                        characterName: character.name,
+                        quantity
+                    });
+                    addLogEntry('system', `${character.name} requests to purchase from shop ${shopId}.`);
+                }
+            }
+    }, [handleCharacterUpdate, handleWizardComplete, setUserCharacter, addLogEntry, handleUpdateCombatant, relayGmMessage]);
+
+    useEffect(() => {
+        return registerPlayerRelayHandler(handlePlayerRelayMessage);
+    }, [registerPlayerRelayHandler, handlePlayerRelayMessage]);
 
     const handleCreateUser = async (username: string, password: string) => {
         const created = await createUser(username, password);
@@ -535,7 +782,7 @@ function GmDashboard() {
                     type: "ASSIGN_CHARACTER",
                     payload: { character: assignedChar }
                 };
-                window.ipcRenderer.sendToPlayer(userId, message);
+                void relayGmMessage(message, userId);
             }
 
             const character = characters.find(c => c.id === characterId);
@@ -594,7 +841,7 @@ function GmDashboard() {
                 payload: { character: char }
             };
             if (char.userId) {
-                window.ipcRenderer.sendToPlayer(char.userId, newMessage);
+                void relayGmMessage(newMessage, char.userId);
             }
         });
 
@@ -672,317 +919,6 @@ function GmDashboard() {
     const currentBrowsingShop = browsingShopId
         ? shopInventory?.shops[browsingShopId]!
         : null;
-    useEffect(() => {
-        const cleanupMapPingReceivedListener = window.ipcRenderer.onMapPingReceived(({ x, y, color, userId }: { x: number, y: number, color: string, userId: string }) => {
-            setMapPing({ x, y, color, userId });
-            setTimeout(() => {
-                setMapPing(null);
-            }, 300);
-        });
-
-        return () => {
-            cleanupMapPingReceivedListener();
-        };
-    }, []);
-
-    useEffect(() => {
-        window.ipcRenderer.getServerStatus().then((info) => {
-            setServerInfo(info);
-        });
-
-
-        const listener = (newStatus: ServerStatusData) => {
-            setServerInfo(newStatus);
-            setConnectedPlayers(newStatus.clients);
-        };
-        const cleanupStatusListener = window.ipcRenderer.onServerStatusUpdate(listener);
-
-        const cleanupMessageListener = window.ipcRenderer.onPlayerMessageReceived((message: ClientToServerMessage) => {
-            console.log("Received message from player:", message);
-            if (message.type === 'TEST_RESULT') {
-                const { characterId, testName, targetNumber, rollResult, successLevel, fortuneSpent, corruptionGained } = message.payload;
-                const outcome = successLevel >= 0
-                    ? `${successLevel} Success Level(s)`
-                    : `${Math.abs(successLevel)} Failure Level(s)`;
-                const character = charactersRef.current.find(c => c.id === characterId);
-                if (!character) return;
-
-                const updatedCharacter: Character = {
-                    ...character,
-                    status: {
-                        ...character.status,
-                        fortune: {
-                            ...character.status.fortune,
-                            current: character.status.fortune.current - fortuneSpent
-                        },
-                        corruption: {
-                            ...character.status.corruption,
-                            current: character.status.corruption.current + corruptionGained
-                        }
-                    }
-                };
-                handleCharacterUpdate(updatedCharacter);
-                addLogEntry(
-                    'roll',
-                    `${character.name} tests ${testName}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}] Fortune spent: ${fortuneSpent}, Corruption gained: ${corruptionGained}`,
-                    'logs.test_result',
-                    { name: character.name, testName, rollResult, targetNumber, outcome, fortuneSpent, corruptionGained }
-                );
-            }
-
-            if (message.type === 'CHARACTER_CREATE') {
-                const newChar = message.payload.character;
-                const user = usersRef.current.find(u => u.username === message.payload.userId || u.id === message.payload.userId);
-                if (user) {
-                    newChar.userId = user.id;
-                    setUserCharacter(user.id, newChar.id);
-                }
-
-                handleWizardComplete(newChar);
-
-                const assignMessage: AssignCharacterMessage = {
-                    type: "ASSIGN_CHARACTER",
-                    payload: { character: newChar }
-                };
-                window.ipcRenderer.sendToPlayer(newChar.userId || '', assignMessage);
-
-                addLogEntry('system', `New character created: ${newChar.name}`, 'logs.character_created', { name: newChar.name });
-            }
-
-            if (message.type === 'CHARACTER_UPDATE') {
-                const updatedChar = message.payload.character;
-                handleCharacterUpdate(updatedChar);
-                addLogEntry('system', `${updatedChar.name}'s character sheet has been updated.`, 'logs.character_updated', { name: updatedChar.name });
-            }
-
-            if (message.type === 'REQUEST_PURCHASE') {
-                const item = message.payload.item;
-
-                const character = charactersRef.current.find(c => c.id === message.payload.characterId);
-                if (character) {
-                    setPurchaseRequest({
-                        playerName: character.name,
-                        item: item,
-                        playerCurrency: character.currency,
-                        charId: message.payload.characterId,
-                    });
-                }
-            }
-
-            if (message.type === 'CAREER_CHANGE_REQUEST') {
-                const { characterId, characterName, newCareerId, newCareerLevelId, newCareerName, newCareerLevelName, xpCost } = message.payload;
-                setCareerChangeRequest({
-                    characterId,
-                    characterName,
-                    newCareerId,
-                    newCareerLevelId,
-                    newCareerName,
-                    newCareerLevelName,
-                    xpCost
-                });
-                addLogEntry('system', `${characterName} requests career change to ${newCareerName} - ${newCareerLevelName} for ${xpCost} XP.`, 'logs.career_change_request', { characterName, newCareerName, newCareerLevelName, xpCost });
-            }
-
-            if (message.type === 'OPPOSED_TEST_RESULT') {
-                const { testId, characterId, role, rollResult, successLevel, fortuneSpent, corruptionGained } = message.payload;
-                const character = charactersRef.current.find(c => c.id === characterId);
-                if (character) {
-                    const updatedCharacter: Character = {
-                        ...character,
-                        status: {
-                            ...character.status,
-                            fortune: {
-                                ...character.status.fortune,
-                                current: character.status.fortune.current - fortuneSpent
-                            },
-                            corruption: {
-                                ...character.status.corruption,
-                                current: Math.min(character.status.corruption.current + corruptionGained, character.status.corruption.max)
-                            }
-                        }
-                    };
-                    handleCharacterUpdate(updatedCharacter);
-
-                    addLogEntry(
-                        'roll',
-                        `${character.name} (${role}) rolled ${rollResult} with SL ${successLevel >= 0 ? '+' : ''}${Math.round(successLevel)}`
-                    );
-                }
-                // Store the result for CombatResolver
-                setOpposedTestResults(prev => {
-                    const newMap = new Map(prev);
-                    const key = `${testId}-${role}`;
-                    newMap.set(key, message.payload);
-                    return newMap;
-                });
-            }
-
-            // Not used anymore, should be reimplemented later
-            if (message.type === 'CONDITION_TEST_RESULT') {
-                const { characterId, conditionId, rollResult, successLevel, targetNumber } = message.payload;
-                const character = charactersRef.current.find(c => c.id === characterId);
-                if (character) {
-                    const outcome = successLevel >= 0
-                        ? `Success (${successLevel} SL)`
-                        : `Failure (${successLevel} SL)`;
-
-                    addLogEntry(
-                        'roll',
-                        `${character.name} tests to remove ${conditionId}: Rolled ${rollResult} vs ${targetNumber}. [${outcome}]`
-                    );
-
-                    // Remove conditions if successful
-                    if (successLevel >= 0) {
-                        const combatant = combatState.combatants.find(c => c.sourceId === characterId);
-                        if (combatant && combatant.conditions) {
-                            console.log(combatant.conditions);
-                            const conditionsToRemove = Math.min(1 + successLevel, combatant.conditions.filter(c => c === conditionId).length);
-                            const updatedConditions = [...combatant.conditions];
-
-                            // Remove the specified number of conditions
-                            for (let i = 0; i < conditionsToRemove; i++) {
-                                const index = updatedConditions.indexOf(conditionId);
-                                if (index > -1) {
-                                    updatedConditions.splice(index, 1);
-                                }
-                            }
-
-                            // Add Fatigued condition for certain conditions when all are removed
-                            const shouldAddFatigued = ['condition_broken', 'condition_poisoned', 'condition_stunned', 'condition_unconscious'].includes(conditionId);
-                            const allRemoved = !updatedConditions.includes(conditionId);
-
-                            if (shouldAddFatigued && allRemoved) {
-                                updatedConditions.push('condition_fatigued');
-                                addLogEntry('system', `${character.name} gains Fatigued condition after recovering from ${conditionId}.`);
-                            }
-                            console.log(`Removing ${conditionsToRemove} ${conditionId} condition(s) from ${character.name}`);
-                            handleUpdateCombatant({ ...combatant, conditions: updatedConditions });
-                            addLogEntry('system', `${character.name} removed ${conditionsToRemove} ${conditionId} condition(s).`);
-                        }
-                    }
-                }
-            }
-
-            // Handle Roll With Intent (async opposed tests / roll queue)
-            if (message.type === 'ROLL_WITH_INTENT') {
-                const { characterId, characterName, skillId, skillName, targetNumber, rollResult, successLevel, weaponId, weaponName, weaponDamage, usedTalents, fortuneSpent, corruptionGained } = message.payload;
-                
-                const character = charactersRef.current.find(c => c.id === characterId);
-                if (character) {
-                    // Update fortune/corruption on character
-                    const updatedCharacter: Character = {
-                        ...character,
-                        status: {
-                            ...character.status,
-                            fortune: {
-                                ...character.status.fortune,
-                                current: character.status.fortune.current - fortuneSpent
-                            },
-                            corruption: {
-                                ...character.status.corruption,
-                                current: character.status.corruption.current + corruptionGained
-                            }
-                        }
-                    };
-                    handleCharacterUpdate(updatedCharacter);
-                }
-
-                // Create queued roll
-                const queuedRoll: QueuedRoll = {
-                    id: crypto.randomUUID(),
-                    characterId,
-                    characterName,
-                    skillId,
-                    skillName,
-                    rollResult,
-                    targetNumber,
-                    successLevel,
-                    weaponId,
-                    weaponName,
-                    weaponDamage,
-                    timestamp: Date.now(),
-                    usedTalents,
-                    fortuneSpent,
-                    corruptionGained,
-                };
-
-                // Add to roll queue (limit size)
-                setRollQueue(prev => {
-                    const newQueue = [queuedRoll, ...prev];
-                    return newQueue.slice(0, MAX_ROLL_QUEUE_SIZE);
-                });
-
-                // Log the roll
-                const slSign = successLevel >= 0 ? '+' : '';
-                addLogEntry(
-                    'roll',
-                    `${characterName} Skill: ${skillName} - Rolled ${rollResult} vs ${targetNumber}. SL: ${slSign}${Math.round(successLevel)}${weaponName ? ` (${weaponName})` : ''}`
-                );
-            }
-
-            // Handle shop evaluate request
-            if (message.type === 'SHOP_EVALUATE_REQUEST') {
-                const { shopId, instanceId, characterId, characterName } = message.payload;
-                const character = charactersRef.current.find(c => c.id === characterId);
-                if (character) {
-                    setShopEvaluateRequest({
-                        shopId,
-                        instanceId,
-                        characterId,
-                        characterName: character.name
-                    });
-                    addLogEntry('system', `${character.name} requests to evaluate an item in shop ${shopId}.`);
-                }
-            }
-
-            // Handle shop purchase request
-            if (message.type === 'SHOP_PURCHASE_REQUEST') {
-                const { shopId, instanceId, characterId, quantity } = message.payload;
-                const character = charactersRef.current.find(c => c.id === characterId);
-                if (character) {
-                    setShopPurchaseRequest({
-                        shopId,
-                        instanceId,
-                        characterId,
-                        characterName: character.name,
-                        quantity
-                    });
-                    addLogEntry('system', `${character.name} requests to purchase from shop ${shopId}.`);
-                }
-            }
-        });
-
-        return () => {
-            cleanupStatusListener();
-            cleanupMessageListener();
-        };
-    }, []);
-
-    // Broadcast initiative tracker updates to all players
-    useEffect(() => {
-        if (combatState.combatants.length > 0 || combatState.currentTurnId !== null) {
-            const message: UpdateInitiativeTrackerMessage = {
-                type: 'UPDATE_INITIATIVE_TRACKER',
-                payload: {
-                    combatants: combatState.combatants,
-                    currentTurnId: combatState.currentTurnId,
-                    currentAdvantage: combatState.advantage
-                }
-            };
-            window.ipcRenderer.sendToAllPlayers(message);
-        }
-        else {
-            const message: UpdateInitiativeTrackerMessage = {
-                type: 'UPDATE_INITIATIVE_TRACKER',
-                payload: {
-                    combatants: combatState.combatants,
-                    currentTurnId: combatState.currentTurnId,
-                    currentAdvantage: combatState.advantage
-                }
-            };
-            window.ipcRenderer.sendToAllPlayers(message);
-        }
-    }, [combatState]);
 
     const handleItemSelected = (item: Armor | Weapon | Item, charId: string) => {
         const character = characters.find(c => c.id === charId);
@@ -1092,9 +1028,11 @@ function GmDashboard() {
         <AudioProvider>
         <div>
             <Footer
-                ip={serverInfo.ip}
-                port={serverInfo.port}
-                clients={connectedPlayers}
+                ip="Supabase"
+                port={0}
+                clients={[]}
+                presenceOnlinePlayerCount={presenceOnlinePlayerCount}
+                presenceChannelConnected={broadcastConnectionState === 'CONNECTED'}
                 onShowUserManager={() => setShowUserManager(true)}
                 onBackup={handleBackupCampaign}
                 onStartSession={handleStartSession}
@@ -1184,7 +1122,8 @@ function GmDashboard() {
                         const character = characters.find(c => c.id === charId);
                         if (!character || !character.userId) return;
                         const userId = character.userId;
-                        window.ipcRenderer.sendToPlayer(userId, message);
+                        void broadcastConditionTestRequest(userId, message.payload);
+                        void relayGmMessage(message, userId);
                     }}
                 />)}
 
@@ -1206,10 +1145,7 @@ function GmDashboard() {
                         onViewStateChange={setMapViewState}
                         onTogglePinDiscovery={handleTogglePinDiscovery}
                         onMapPing={(x, y) => {
-                            window.ipcRenderer.sendToAllPlayers({
-                                type: 'MAP_PING',
-                                payload: { x, y }
-                            });
+                            void sendMapPing(x, y, '#d4af37');
                         }}
                         incomingPing={mapPing}
                         shops={shopInventory ? Object.values(shopInventory.shops) : []}
@@ -1272,7 +1208,10 @@ function GmDashboard() {
                     const character = characters.find(c => c.id === charId);
                     if (!character || !character.userId) return;
                     const userId = character.userId;
-                    window.ipcRenderer.sendToPlayer(userId, message);
+                    if (message.type === 'REQUEST_OPPOSED_TEST') {
+                        void broadcastOpposedTestRequest(userId, message.payload);
+                    }
+                    void relayGmMessage(message, userId);
                 }}
                 onLogEntry={addLogEntry}
                 onUpdateCharacter={handleCharacterUpdate}
@@ -1435,6 +1374,7 @@ function GmDashboard() {
                             onCreateUser={handleCreateUser}
                             onDeleteUser={handleDeleteUser}
                             onAssignCharacter={handleAssignCharacterToUser}
+                            isUserOnline={isUserOnline}
                         />
                     </div>
                 </div>

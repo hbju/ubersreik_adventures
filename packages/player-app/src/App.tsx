@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSocket } from './hooks/useSocket';
 import './App.css';
 
@@ -88,7 +88,12 @@ const PlayerApp: React.FC = () => {
         talents, skills, careers, conditions, qualities: qualities ?? [],
     }), [talents, skills, careers, conditions, qualities]);
 
-    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, connect, disconnect, sendMessage } = useSocket();
+    const { connecting, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, realtimeCampaignId, onlineUsers: campaignPresenceUsers, connect, disconnect, sendMessage } = useSocket();
+
+    const gmOnline = useMemo(
+        () => [...campaignPresenceUsers.values()].some((u) => u.role === 'gm'),
+        [campaignPresenceUsers],
+    );
 
     const currentMapData = React.useMemo(() => {
         return maps[activeMapId] || mapData;
@@ -586,7 +591,7 @@ const PlayerApp: React.FC = () => {
                 <ConnectionScreen
                     onConnect={connect}
                     error={authError || undefined}
-                    isConnecting={isConnected && !isAuthenticated}
+                    isConnecting={connecting}
                 />
                 <Update />
             </div>
@@ -596,6 +601,26 @@ const PlayerApp: React.FC = () => {
     return (
         <CodexProvider dataSources={codexDataSources}>
         <div className="player-app-container">
+            {realtimeCampaignId && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: '7%',
+                        right: 12,
+                        zIndex: 1012,
+                        padding: '6px 12px',
+                        borderRadius: 6,
+                        background: gmOnline ? 'rgba(45, 80, 22, 0.95)' : 'rgba(44, 24, 16, 0.95)',
+                        border: `2px solid ${gmOnline ? '#3d6f1f' : '#8b6914'}`,
+                        color: '#d4af37',
+                        fontSize: 12,
+                        fontWeight: 'bold',
+                    }}
+                    title="GM presence (Supabase Realtime)"
+                >
+                    GM: {gmOnline ? 'Online' : 'Offline'}
+                </div>
+            )}
             {/* Navigation tabs */}
             {character && (
                 <div style={{
@@ -937,7 +962,7 @@ const PlayerApp: React.FC = () => {
                         <div style={{
                             position: 'absolute',
                             top: '10px',
-                            left: '10px',
+                            left: '15%',
                             padding: '8px 16px',
                             background: 'rgba(26, 15, 10, 0.9)',
                             border: '2px solid #8b4513',

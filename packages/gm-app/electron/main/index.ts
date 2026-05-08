@@ -2,12 +2,9 @@ import { app, BrowserWindow, shell, ipcMain, protocol } from 'electron'
 import * as fs from 'fs'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
-import { createServer } from 'node:http'
-import { Server } from 'socket.io'
 import path from 'node:path'
 import os from 'node:os'
 import { update } from './update'
-import { startWebSocketServer, sendToPlayer, broadcastJournalEntries, broadcastMapPinStates, broadcastChatMessage, getChatHistory } from './server'
 import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
 import { startAudioServer, getAudioServerPort, stopAudioServer } from './audioServer'
 import { selectAndCopyCharacterImage, readCharacterImageAsDataUrl, deleteCharacterImage } from './imageHandler'
@@ -113,8 +110,6 @@ async function createWindow() {
   // Auto update
   const stopUpdate = update(win)
 
-  startWebSocketServer(win);
-
   // Clean up listeners when the window is closed
   win.on('closed', () => {
     stopUpdate();
@@ -212,16 +207,6 @@ ipcMain.on('save-data', (event, data: CampaignState) => {
   try {
     saveCampaignData(data);
     console.log('Data saved successfully');
-
-    // Broadcast journal entries to all connected players
-    if (data.journal && data.journal.length > 0) {
-      broadcastJournalEntries(data.journal);
-    }
-
-    // Broadcast map pin states to all connected players
-    if (data.mapPinStates) {
-      broadcastMapPinStates(data.mapPinStates);
-    }
   } catch (error) {
     console.error('Error saving data:', error);
   }
@@ -237,31 +222,6 @@ ipcMain.handle('backup-campaign', async () => {
   } catch (error) {
     console.error('Error backing up campaign:', error);
     return { success: false, error: (error as Error).message };
-  }
-});
-
-/**
- * Handle chat message from GM
- * Broadcasts the message to all connected players
- */
-ipcMain.on('send-chat-message', (_event, message: ChatMessage) => {
-  try {
-    broadcastChatMessage(message);
-    console.log('Chat message broadcast successfully');
-  } catch (error) {
-    console.error('Error broadcasting chat message:', error);
-  }
-});
-
-/**
- * Handle get chat history request from renderer
- */
-ipcMain.handle('get-chat-history', async () => {
-  try {
-    return getChatHistory();
-  } catch (error) {
-    console.error('Error getting chat history:', error);
-    return [];
   }
 });
 

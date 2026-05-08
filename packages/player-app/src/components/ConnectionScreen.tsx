@@ -6,32 +6,34 @@ import styles from './ConnectionScreen.module.css';
 const STORAGE_KEY = 'wfrp_saved_credentials';
 
 interface SavedCredentials {
-  ip: string;
+  /** Legacy field — treated as campaign UUID when migrating stored IP addresses */
+  ip?: string;
+  campaignId?: string;
   username: string;
   password: string;
 }
 
 interface ConnectionScreenProps {
-  onConnect: (ip: string, username: string, password: string) => void;
+  onConnect: (campaignId: string, username: string, password: string) => void;
   error?: string;
   isConnecting?: boolean;
 }
 
 export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, error, isConnecting }) => {
   const { t } = useTranslation();
-  const [ip, setIp] = useState('');
+  const [campaignId, setCampaignId] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  // Load saved credentials on mount
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const credentials: SavedCredentials = JSON.parse(saved);
-        setIp(credentials.ip || '');
+        const cid = credentials.campaignId ?? credentials.ip ?? '';
+        setCampaignId(cid);
         setUsername(credentials.username || '');
         setPassword(credentials.password || '');
         setRememberMe(true);
@@ -42,22 +44,22 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
   }, []);
 
   const handleConnect = () => {
-    if (ip.trim() && username.trim() && password.trim()) {
+    if (campaignId.trim() && username.trim() && password.trim()) {
       if (rememberMe) {
         const credentials: SavedCredentials = {
-          ip: ip.trim(),
+          campaignId: campaignId.trim(),
           username: username.trim(),
-          password: password.trim()
+          password: password.trim(),
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(credentials));
       } else {
         localStorage.removeItem(STORAGE_KEY);
       }
-      onConnect(ip.trim(), username.trim(), password.trim());
+      onConnect(campaignId.trim(), username.trim(), password.trim());
     }
   };
 
-  const isFormValid = ip.trim() && username.trim() && password.trim();
+  const isFormValid = campaignId.trim() && username.trim() && password.trim();
 
   return (
     <div className={styles.connectionContainer}>
@@ -67,14 +69,14 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
         </div>
         <h1 className={styles.title}>{t('connection.title')}</h1>
         <p className={styles.subtitle}>{t('connection.subtitle')}</p>
-        
+
         <div className={styles.formGroup}>
-          <label className={styles.label}>{t('connection.ipLabel')}</label>
+          <label className={styles.label}>{t('connection.campaignIdLabel', 'Campaign ID')}</label>
           <input
             type="text"
-            value={ip}
-            onChange={(e) => setIp(e.target.value)}
-            placeholder={t('connection.placeholderIp')}
+            value={campaignId}
+            onChange={(e) => setCampaignId(e.target.value)}
+            placeholder={t('connection.placeholderCampaignId', 'Supabase campaign UUID')}
             onKeyUp={(e) => e.key === 'Enter' && isFormValid && handleConnect()}
             className={styles.input}
             disabled={isConnecting}
@@ -138,8 +140,8 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
           </div>
         )}
 
-        <button 
-          onClick={handleConnect} 
+        <button
+          onClick={handleConnect}
           className={styles.connectButton}
           disabled={!isFormValid || isConnecting}
         >
@@ -147,7 +149,7 @@ export const ConnectionScreen: React.FC<ConnectionScreenProps> = ({ onConnect, e
         </button>
 
         <div className={styles.helpText}>
-          {t('connection.helpText')}
+          {t('connection.helpCampaignId', 'Enter your campaign UUID from the GM and your roster username / password.')}
         </div>
       </div>
     </div>

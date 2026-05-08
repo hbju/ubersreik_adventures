@@ -19,33 +19,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         return ipcRenderer.invoke(channel, ...omit)
     },
 
-    getServerStatus() {
-        return ipcRenderer.invoke('get-server-status')
-    },
-    onServerStatusUpdate(callback: (value: any) => void) {
-        const listener = (_event: any, value: any) => callback(value);
-        ipcRenderer.on('server-status-update', listener)
-        return () => {
-            ipcRenderer.removeListener('server-status-update', listener)
-        }
-    },
-    sendToPlayer(userId: string, message: any) {
-        return ipcRenderer.send('send-to-player', userId, message)
-    },
-    sendToAllPlayers(message: any) {
-        return ipcRenderer.send('send-to-all-players', message)
-    },
-    assignCharacterToPlayer(characterId: string, userId: string) {
-        return ipcRenderer.send('assign-character-to-player', characterId, userId)
-    },
-    onPlayerMessageReceived(callback: (value: any) => void) {
-        const listener = (_event: any, value: any) => callback(value);
-        ipcRenderer.on('player-message-received', listener)
-        return () => {
-            ipcRenderer.removeListener('player-message-received', listener)
-        }
-    },
-
     // ==================== Campaign Data Persistence API (Legacy) ====================
 
     /**
@@ -73,45 +46,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         return () => {
             ipcRenderer.removeListener('data-updated', listener)
         }
-    },
-
-    onMapPingReceived(callback: (value: any) => void) {
-        const listener = (_event: any, value: any) => callback(value);
-        ipcRenderer.on('map-ping', listener)
-        return () => {
-            ipcRenderer.removeListener('map-ping', listener)
-        }
-    },
-
-    // ==================== Chat API ====================
-    
-    /**
-     * Send a chat message from the GM
-     * @param message The chat message to send
-     */
-    sendChatMessage(message: any) {
-        return ipcRenderer.send('send-chat-message', message)
-    },
-
-    /**
-     * Listen for chat messages from players
-     * @param callback Function to call when a chat message is received
-     * @returns Cleanup function to remove the listener
-     */
-    onChatMessage(callback: (value: any) => void) {
-        const listener = (_event: any, value: any) => callback(value);
-        ipcRenderer.on('chat-message', listener)
-        return () => {
-            ipcRenderer.removeListener('chat-message', listener)
-        }
-    },
-
-    /**
-     * Get chat history
-     * @returns Promise resolving to the chat history array
-     */
-    getChatHistory() {
-        return ipcRenderer.invoke('get-chat-history')
     },
 
     /**

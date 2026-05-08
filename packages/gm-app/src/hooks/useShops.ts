@@ -232,14 +232,8 @@ export function useShops() {
     return true;
   }, [serviceContext, shopRows]);
 
-  const broadcastShopState = useCallback((_characters: Character[]) => {
-    if (!window.ipcRenderer?.sendToAllPlayers) return;
-    const allShops = Object.values(shopInventory.shops);
-    window.ipcRenderer.sendToAllPlayers({
-      type: 'SHOP_STATE_UPDATE',
-      payload: { shops: allShops },
-    });
-  }, [shopInventory.shops]);
+  /** Legacy Socket.io broadcast removed — Supabase Realtime syncs shop_definitions to players. */
+  const broadcastShopState = useCallback((_characters: Character[]) => {}, []);
 
   return {
     shopDefinitions,

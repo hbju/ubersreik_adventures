@@ -25,6 +25,9 @@ export { QualityTooltip } from './components/ui/QualityTooltip';
 export * from './components/GameLog';
 export * from './hooks/useGameData';
 export * from './hooks/useDebounce';
+export * from './hooks/useRealtimeSync';
+export * from './hooks/useBroadcast';
+export * from './hooks/usePresence';
 export * from './i18n';
 export * from './types/wfrp.types';
 export * from './types/messaging.types';
@@ -35,7 +38,6 @@ export * from './utils/generator';
 export * from './utils/inventory';
 export * from './utils/mechanics';
 export * from './utils/skills';
-export * from './utils/socket';
 export * from './utils/talents';
 export * from './utils/conditions';
 export * from './utils/career';
@@ -78,6 +80,9 @@ export * from './types/database.types';
 export * from './types/errors';
 export { createSupabaseClient, getSupabaseClient, resetSupabaseClient } from './lib/supabase';
 export type { TypedSupabaseClient } from './lib/supabase';
+export * from './lib/realtime';
+export * from './lib/broadcast';
+export { playerAccountEmail } from './lib/playerAccount';
 
 // Service Layer
 export { createServiceContext } from './services/serviceContext';

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Combatant, Advantages, Json } from '@wfrp/shared';
+import type { Combatant, Advantages, Json, RequestConditionTestMessage, RequestOpposedTestMessage, RollWithIntentMessage } from '@wfrp/shared';
 import { getCombatState, updateCombatState, clearCombatState } from '@wfrp/shared';
 import { useAppContext } from '../context/AppContext';
+import { useGmCampaignRealtime } from '../context/GmCampaignRealtimeContext';
 
 export interface CombatState {
   combatants: Combatant[];
@@ -24,13 +25,19 @@ function toTurnIndex(combatants: Combatant[], turnId: string | null): number {
 }
 
 export function useCombat() {
-  const { serviceContext } = useAppContext();
+  const { serviceContext, user } = useAppContext();
   const [combatState, setCombatState] = useState<CombatState>(DEFAULT_STATE);
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const stateRef = useRef<CombatState>(DEFAULT_STATE);
   const activeRef = useRef(false);
+  const {
+    sendOpposedTestRequest,
+    sendConditionTestRequest,
+    sendTestResult,
+    sendRollWithIntent,
+  } = useGmCampaignRealtime();
 
   useEffect(() => {
     stateRef.current = combatState;
@@ -165,6 +172,38 @@ export function useCombat() {
     await updateState((prev) => ({ ...prev, roundNumber: prev.roundNumber + 1 }));
   }, [updateState]);
 
+  const broadcastOpposedTestRequest = useCallback(async (
+    targetUserId: string,
+    payload: RequestOpposedTestMessage['payload']
+  ) => {
+    await sendOpposedTestRequest(targetUserId, payload, user?.id);
+  }, [sendOpposedTestRequest, user?.id]);
+
+  const broadcastConditionTestRequest = useCallback(async (
+    targetUserId: string,
+    payload: RequestConditionTestMessage['payload']
+  ) => {
+    await sendConditionTestRequest(targetUserId, payload, user?.id);
+  }, [sendConditionTestRequest, user?.id]);
+
+  const broadcastTestResult = useCallback(async (payload: {
+    testId: string;
+    role?: 'attacker' | 'defender';
+    conditionId?: string;
+    rollResult: number;
+    successLevel: number;
+    characterId: string;
+    fortuneSpent?: number;
+    corruptionGained?: number;
+    targetNumber?: number;
+  }) => {
+    await sendTestResult(payload as any, user?.id);
+  }, [sendTestResult, user?.id]);
+
+  const broadcastRollWithIntent = useCallback(async (payload: RollWithIntentMessage['payload']) => {
+    await sendRollWithIntent(payload, user?.id);
+  }, [sendRollWithIntent, user?.id]);
+
   return {
     combatState,
     isActive,
@@ -180,5 +219,9 @@ export function useCombat() {
     addCombatant,
     setCurrentTurnId,
     incrementRound,
+    broadcastOpposedTestRequest,
+    broadcastConditionTestRequest,
+    broadcastTestResult,
+    broadcastRollWithIntent,
   };
 }
