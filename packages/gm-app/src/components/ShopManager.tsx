@@ -15,24 +15,19 @@ import {
     QualityTooltip
 } from '@wfrp/shared';
 import styles from './ShopManager.module.css';
+import { useShopContext } from '../context/ShopContext';
 
 interface ShopManagerProps {
     onClose: () => void;
-    shopInventory: ShopInventoryState | undefined;
-    onShopInventoryChange: (inventory: ShopInventoryState) => void;
     characters: Character[];
-    shops: ShopDefinition[];
 }
 
 export const ShopManager: React.FC<ShopManagerProps> = ({ 
     onClose, 
-    shopInventory,
-    onShopInventoryChange,
     characters,
-    shops
 }) => {
+    const { shopInventory, shopDefinitions: shops, updateInventoryState, broadcastShopState, isLoading, isMutating, error } = useShopContext();
     const gameData = useGameData();
-    const [selectedShopId, setSelectedShopId] = useState<string | null>(null);
     const [expandedShops, setExpandedShops] = useState<Set<string>>(new Set());
 
     // Create lookup maps for items
@@ -55,7 +50,7 @@ export const ShopManager: React.FC<ShopManagerProps> = ({
     };
 
     // Handle restock all shops
-    const handleRestockAll = () => {
+    const handleRestockAll = async () => {
         const generatorData = {
             weapons: gameData.weapons,
             armor: gameData.armor,
@@ -79,14 +74,14 @@ export const ShopManager: React.FC<ShopManagerProps> = ({
             lastGlobalRestock: new Date().toISOString()
         };
 
-        onShopInventoryChange(newInventory);
-
-        // Broadcast to players
-        broadcastShopUpdate(newInventory);
+        const success = await updateInventoryState(newInventory);
+        if (success) {
+            broadcastShopState(characters);
+        }
     };
 
     // Handle restock single shop
-    const handleRestockShop = (shop: ShopDefinition) => {
+    const handleRestockShop = async (shop: ShopDefinition) => {
         const generatorData = {
             weapons: gameData.weapons,
             armor: gameData.armor,
@@ -115,12 +110,14 @@ export const ShopManager: React.FC<ShopManagerProps> = ({
             lastGlobalRestock: shopInventory?.lastGlobalRestock || new Date().toISOString()
         };
 
-        onShopInventoryChange(newInventoryState);
-        broadcastShopUpdate(newInventoryState);
+        const success = await updateInventoryState(newInventoryState);
+        if (success) {
+            broadcastShopState(characters);
+        }
     };
 
     // Toggle player access to a shop
-    const handleTogglePlayerAccess = (shopId: string, characterId: string) => {
+    const handleTogglePlayerAccess = async (shopId: string, characterId: string) => {
         if (!shopInventory?.shops?.[shopId]) return;
 
         const currentAccess = shopInventory.shops[shopId].playerAccess;
@@ -143,12 +140,14 @@ export const ShopManager: React.FC<ShopManagerProps> = ({
             shops: updatedShops
         };
 
-        onShopInventoryChange(newInventoryState);
-        broadcastShopUpdate(newInventoryState);
+        const success = await updateInventoryState(newInventoryState);
+        if (success) {
+            broadcastShopState(characters);
+        }
     };
 
     // Toggle item identification (reveal to players)
-    const handleToggleIdentified = (shopId: string, instanceId: string) => {
+    const handleToggleIdentified = async (shopId: string, instanceId: string) => {
         if (!shopInventory?.shops?.[shopId]) return;
 
         const shopState = shopInventory.shops[shopId];
@@ -172,12 +171,14 @@ export const ShopManager: React.FC<ShopManagerProps> = ({
             shops: updatedShops
         };
 
-        onShopInventoryChange(newInventoryState);
-        broadcastShopUpdate(newInventoryState);
+        const success = await updateInventoryState(newInventoryState);
+        if (success) {
+            broadcastShopState(characters);
+        }
     };
 
     // Remove item from shop inventory
-    const handleRemoveItem = (shopId: string, instanceId: string) => {
+    const handleRemoveItem = async (shopId: string, instanceId: string) => {
         if (!shopInventory?.shops?.[shopId]) return;
 
         const shopState = shopInventory.shops[shopId];
@@ -196,12 +197,14 @@ export const ShopManager: React.FC<ShopManagerProps> = ({
             shops: updatedShops
         };
 
-        onShopInventoryChange(newInventoryState);
-        broadcastShopUpdate(newInventoryState);
+        const success = await updateInventoryState(newInventoryState);
+        if (success) {
+            broadcastShopState(characters);
+        }
     };
 
     // Adjust item quantity
-    const handleAdjustQuantity = (shopId: string, instanceId: string, delta: number) => {
+    const handleAdjustQuantity = async (shopId: string, instanceId: string, delta: number) => {
         if (!shopInventory?.shops?.[shopId]) return;
 
         const shopState = shopInventory.shops[shopId];
@@ -226,8 +229,10 @@ export const ShopManager: React.FC<ShopManagerProps> = ({
             shops: updatedShops
         };
 
-        onShopInventoryChange(newInventoryState);
-        broadcastShopUpdate(newInventoryState);
+        const success = await updateInventoryState(newInventoryState);
+        if (success) {
+            broadcastShopState(characters);
+        }
     };
 
     // Toggle shop expansion
@@ -241,40 +246,6 @@ export const ShopManager: React.FC<ShopManagerProps> = ({
             }
             return newSet;
         });
-    };
-
-    // Broadcast shop update to players
-    const broadcastShopUpdate = (inventory: ShopInventoryState) => {
-        // Send filtered shop data to each player based on their access
-        characters.forEach(character => {
-            const accessibleShops: ShopState[] = [];
-            
-            for (const [shopId, shopState] of Object.entries(inventory.shops)) {
-                if (shopState.playerAccess.includes(character.id)) {
-                    accessibleShops.push(shopState);
-                }
-            }
-
-            if (accessibleShops.length > 0 && window.ipcRenderer) {
-                const message = {
-                    type: 'SHOP_STATE_UPDATE' as const,
-                    payload: { shops: accessibleShops }
-                };
-                
-                // Find user ID for this character
-                // Note: This would need the user ID, for now broadcast to all
-            }
-        });
-
-        // Broadcast to all players
-        if (window.ipcRenderer?.sendToAllPlayers) {
-            const allShops = Object.values(inventory.shops);
-            const message = {
-                type: 'SHOP_STATE_UPDATE' as const,
-                payload: { shops: allShops }
-            };
-            window.ipcRenderer.sendToAllPlayers(message);
-        }
     };
 
     // Get shop state
@@ -367,6 +338,8 @@ export const ShopManager: React.FC<ShopManagerProps> = ({
                     <h2>Shop Manager</h2>
                     <button className={styles.closeButton} onClick={onClose}>&times;</button>
                 </div>
+                {error && <div style={{ color: '#ff6b6b', padding: '8px 12px' }}>{error}</div>}
+                {(isLoading || isMutating) && <div style={{ color: '#aaa', padding: '8px 12px' }}>Syncing shops...</div>}
 
                 <div className={styles.controls}>
                     <div className={styles.globalControls}>

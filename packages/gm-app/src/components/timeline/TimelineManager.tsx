@@ -15,18 +15,16 @@ import { TimelineSidebar } from './TimelineSidebar';
 import { EventModal } from './EventModal';
 import { SetDateModal } from './SetDateModal';
 import styles from './TimelineManager.module.css';
+import { useCalendarContext } from '../../context/CalendarContext';
 
 interface TimelineManagerProps {
-  calendarState: CalendarState | undefined;
-  onUpdateCalendarState: (state: CalendarState) => void;
   onClose: () => void;
 }
 
 export const TimelineManager: React.FC<TimelineManagerProps> = ({
-  calendarState,
-  onUpdateCalendarState,
   onClose
 }) => {
+  const { calendarState, setCalendarState: saveCalendarState, isLoading, error } = useCalendarContext();
   // Initialize state from props or defaults
   const [state, setState] = useState<CalendarState>(() => 
     calendarState || createDefaultCalendarState()
@@ -43,10 +41,17 @@ export const TimelineManager: React.FC<TimelineManagerProps> = ({
   const [showSetDateModal, setShowSetDateModal] = useState(false);
   const [enabledTags, setEnabledTags] = useState<string[]>([]);
 
-  // Sync state changes to parent
+  // Sync state changes from context
   useEffect(() => {
-    onUpdateCalendarState(state);
-  }, [state, onUpdateCalendarState]);
+    if (calendarState) {
+      setState(calendarState);
+    }
+  }, [calendarState]);
+
+  // Sync state changes to context
+  useEffect(() => {
+    saveCalendarState(state);
+  }, [state, saveCalendarState]);
 
   // Check for events on the current date and notify
   useEffect(() => {
@@ -218,6 +223,8 @@ export const TimelineManager: React.FC<TimelineManagerProps> = ({
       </div>
 
       <div className={styles.content}>
+        {error && <div style={{ color: '#ff6b6b', padding: '8px 12px' }}>{error}</div>}
+        {isLoading && <div style={{ color: '#aaa', padding: '8px 12px' }}>Loading calendar...</div>}
         <TimelineSidebar
           currentDate={state.currentDate}
           events={state.events}

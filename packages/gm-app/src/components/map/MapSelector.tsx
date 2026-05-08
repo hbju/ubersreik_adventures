@@ -1,37 +1,32 @@
 import React, { useState } from 'react';
-import { MapData } from '@wfrp/shared';
+import type { MapData } from '@wfrp/shared';
 import { useTranslation } from 'react-i18next';
 import styles from './MapSelector.module.css';
+import { useMapContext } from '../../context/MapContext';
 
 interface MapSelectorProps {
-    maps: MapData[];
-    activeMapId: string;
-    onSwitchMap: (mapId: string, moveTokens: boolean) => void;
     onClose: () => void;
 }
 
 export const MapSelector: React.FC<MapSelectorProps> = ({
-    maps,
-    activeMapId,
-    onSwitchMap,
     onClose,
 }) => {
     const { t } = useTranslation();
-    const [confirmMap, setConfirmMap] = useState<MapData | null>(null);
+    const { maps, activeMapId, switchMap } = useMapContext();
+    const [confirmMapId, setConfirmMapId] = useState<string | null>(null);
 
     const activeMap = maps.find(m => m.id === activeMapId);
 
     const handleMapClick = (map: MapData) => {
         if (map.id === activeMapId) return;
-        setConfirmMap(map);
+        setConfirmMapId(map.id);
     };
 
-    const handleConfirmSwitch = (moveTokens: boolean) => {
-        if (confirmMap) {
-            onSwitchMap(confirmMap.id, moveTokens);
-            setConfirmMap(null);
-            onClose();
-        }
+    const handleConfirmSwitch = async (moveTokens: boolean) => {
+        if (!confirmMapId) return;
+        await switchMap(confirmMapId, moveTokens);
+        setConfirmMapId(null);
+        onClose();
     };
 
     const getMapImagePath = (map: MapData): string => {
@@ -116,11 +111,11 @@ export const MapSelector: React.FC<MapSelectorProps> = ({
             </div>
 
             {/* Confirmation Modal */}
-            {confirmMap && (
-                <div className={styles.confirmModal} onClick={() => setConfirmMap(null)}>
+            {confirmMapId && (
+                <div className={styles.confirmModal} onClick={() => setConfirmMapId(null)}>
                     <div className={styles.confirmContent} onClick={e => e.stopPropagation()}>
                         <div className={styles.confirmTitle}>
-                            {t('map.selector.switchTo', 'Switch to')} "{confirmMap.name}"?
+                            {t('map.selector.switchTo', 'Switch to')} "{maps.find(m => m.id === confirmMapId)?.name}"?
                         </div>
                         <div className={styles.confirmText}>
                             {t('map.selector.moveTokensQuestion', 'Would you like to move all player tokens to this map?')}

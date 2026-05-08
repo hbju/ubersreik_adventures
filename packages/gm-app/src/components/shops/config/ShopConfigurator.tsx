@@ -3,10 +3,9 @@ import { ShopDefinition, Location, useGameData } from '@wfrp/shared';
 import { useTranslation } from 'react-i18next';
 import { ShopEditor } from './ShopEditor';
 import styles from './ShopConfigurator.module.css';
+import { useShopContext } from '../../../context/ShopContext';
 
 interface ShopConfiguratorProps {
-    shops: ShopDefinition[];
-    onUpdateShops: (shops: ShopDefinition[]) => void;
     onClose: () => void;
 }
 
@@ -23,10 +22,9 @@ const getCategoryIcon = (category: ShopDefinition['category']): string => {
 };
 
 export const ShopConfigurator: React.FC<ShopConfiguratorProps> = ({
-    shops,
-    onUpdateShops,
     onClose
 }) => {
+    const { shopDefinitions: shops, upsertShop, deleteShop: deleteShopById, isLoading, isMutating, error } = useShopContext();
     const { t } = useTranslation();
     const gameData = useGameData();
     const locations = gameData.mapData?.locations || [];
@@ -78,28 +76,16 @@ export const ShopConfigurator: React.FC<ShopConfiguratorProps> = ({
     };
 
     // Handle saving a shop
-    const handleSaveShop = (shop: ShopDefinition) => {
-        const existingIndex = shops.findIndex(s => s.id === shop.id);
-        let updatedShops: ShopDefinition[];
-
-        if (existingIndex >= 0) {
-            // Update existing shop
-            updatedShops = shops.map(s => s.id === shop.id ? shop : s);
-        } else {
-            // Add new shop
-            updatedShops = [...shops, shop];
-        }
-
-        onUpdateShops(updatedShops);
+    const handleSaveShop = async (shop: ShopDefinition) => {
+        await upsertShop(shop);
         setSelectedShopId(shop.id);
         setIsCreatingNew(false);
         setHasUnsavedChanges(false);
     };
 
     // Handle deleting a shop
-    const handleDeleteShop = (shopId: string) => {
-        const updatedShops = shops.filter(s => s.id !== shopId);
-        onUpdateShops(updatedShops);
+    const handleDeleteShop = async (shopId: string) => {
+        await deleteShopById(shopId);
         setSelectedShopId(null);
         setHasUnsavedChanges(false);
     };
@@ -131,6 +117,8 @@ export const ShopConfigurator: React.FC<ShopConfiguratorProps> = ({
                         {t('common.close', 'Close')}
                     </button>
                 </div>
+                {error && <div style={{ color: '#ff6b6b', padding: '8px 12px' }}>{error}</div>}
+                {(isLoading || isMutating) && <div style={{ color: '#aaa', padding: '8px 12px' }}>Syncing shop definitions...</div>}
 
                 <div className={styles.content}>
                     {/* Sidebar with shop list */}

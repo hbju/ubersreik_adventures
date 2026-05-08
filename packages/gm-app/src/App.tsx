@@ -1,4 +1,4 @@
-import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal } from '@wfrp/shared';
+import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal } from '@wfrp/shared';
 import type { CodexDataSources } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
@@ -53,24 +53,22 @@ import {
     Weapon,
     Item,
     Condition,
-    MapPinState,
     CareerChangeResponseMessage,
     Location,
     Talent,
     TalentSelectionModal,
     FactionUpdateMessage,
-    ShopInventoryState,
-    ShopDefinition,
     QueuedRoll,
-    CalendarState,
-    createDefaultCalendarState,
 } from '@wfrp/shared';
-import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp.types';
+import { CampaignState } from '@wfrp/shared/src/types/wfrp.types';
 import { CharacterProvider, useCharacterContext } from './context/CharacterContext';
 import { CombatProvider, useCombatContext } from './context/CombatContext';
 import { JournalProvider, useJournalContext } from './context/JournalContext';
 import { QuestProvider, useQuestContext } from './context/QuestContext';
 import { FactionProvider, useFactionContext } from './context/FactionContext';
+import { MapProvider, useMapContext } from './context/MapContext';
+import { ShopProvider, useShopContext } from './context/ShopContext';
+import { CalendarProvider, useCalendarContext } from './context/CalendarContext';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
@@ -114,7 +112,13 @@ function App() {
             <JournalProvider>
                 <QuestProvider>
                     <FactionProvider>
-                        <GmDashboard />
+                        <MapProvider>
+                            <ShopProvider>
+                                <CalendarProvider>
+                                    <GmDashboard />
+                                </CalendarProvider>
+                            </ShopProvider>
+                        </MapProvider>
                     </FactionProvider>
                 </QuestProvider>
             </JournalProvider>
@@ -131,27 +135,39 @@ function GmDashboard() {
     const { entries: journal } = useJournalContext();
     const { quests } = useQuestContext();
     const { factions, locationTerritories, setTerritory } = useFactionContext();
+    const { shopDefinitions: contextShops, shopInventory } = useShopContext();
+    const { calendarState } = useCalendarContext();
+    const {
+        activeMap,
+        activeMapId,
+        pinStates,
+        tokens,
+        activeTokens,
+        userPins,
+        activeUserPins,
+        updatePinState,
+        moveToken,
+        addToken,
+        removeToken,
+    } = useMapContext();
 
     // Ref to access latest characters inside stable useEffect closures
     const charactersRef = useRef(characters);
     useEffect(() => { charactersRef.current = characters; }, [characters]);
 
-    const { skills, talents, careers, items, weapons, armor, conditions, qualities, shops: shopDefinitions, mapData, maps, mapsList, motivations } = useGameData();
+    const { skills, talents, careers, items, weapons, armor, conditions, qualities, shops: shopDefinitions, mapData, maps, motivations } = useGameData();
 
     // Codex data sources (memoised to avoid rebuilding index on every render)
     const codexDataSources: CodexDataSources = React.useMemo(() => ({
         talents, skills, careers, conditions, qualities: qualities ?? [],
     }), [talents, skills, careers, conditions, qualities]);
 
-    // Active map management
-    const [activeMapId, setActiveMapId] = useState<string>('ubersreik_city');
-    const activeMapIdRef = useRef(activeMapId);
     const [showMapSelector, setShowMapSelector] = useState(false);
 
     // Get the current active map data
     const currentMapData = useMemo(() => {
-        return maps[activeMapId] || mapData;
-    }, [maps, activeMapId, mapData]);
+        return activeMap || mapData;
+    }, [activeMap, mapData]);
 
     const calculateMaxWounds = (character: Character) => {
         return calculateEffectiveMaxWounds(character, talents);
@@ -169,8 +185,6 @@ function GmDashboard() {
 
     const [users, setUsers] = useState<User[]>([]);
     const usersRef = useRef(users);
-    const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
-    const mapPinStatesRef = useRef(mapPinStates);
     const [mapPing, setMapPing] = useState<{ x: number; y: number; color: string; userId: string } | null>(null);
     const [mapViewState, setMapViewState] = useState<{ scale: number; offsetX: number; offsetY: number }>({ scale: 0.3, offsetX: 126, offsetY: -26 });
     const [assignedCharacters, setAssignedCharacters] = useState<string[]>([]);
@@ -197,18 +211,8 @@ function GmDashboard() {
     const [loreEditorCharacter, setLoreEditorCharacter] = useState<Character | null>(null);
     const [leftSidebarMode, setLeftSidebarMode] = useState<'roster' | 'audio'>('roster');
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-    const [calendarState, setCalendarState] = useState<CalendarState>(() => createDefaultCalendarState());
-    const calendarStateRef = useRef(calendarState);
     const [characterTemplates, setCharacterTemplates] = useState<CharacterTemplate[]>([]);
     const characterTemplatesRef = useRef(characterTemplates);
-    const [customShopDefinitions, setCustomShopDefinitions] = useState<ShopDefinition[]>([]);
-    const customShopDefinitionsRef = useRef(customShopDefinitions);
-    const [shopInventory, setShopInventory] = useState<ShopInventoryState | undefined>(undefined);
-    const shopInventoryRef = useRef(shopInventory);
-    const [tokens, setTokens] = useState<MapToken[]>([]);
-    const tokensRef = useRef(tokens);
-    const [userPins, setUserPins] = useState<UserMapPin[]>([]);
-    const userPinsRef = useRef(userPins);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number, charId: string } | null>(null);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
@@ -249,13 +253,10 @@ function GmDashboard() {
 
     const [browsingShopId, setBrowsingShopId] = useState<string | null>(null);
 
-    // Merge default shop definitions with custom ones
-    // Custom definitions override defaults with the same ID
     const allShopDefinitions = useMemo(() => {
-        const customIds = new Set(customShopDefinitions.map(s => s.id));
-        const baseShops = shopDefinitions.filter(s => !customIds.has(s.id));
-        return [...baseShops, ...customShopDefinitions];
-    }, [shopDefinitions, customShopDefinitions]);
+        if (contextShops.length > 0) return contextShops;
+        return shopDefinitions;
+    }, [contextShops, shopDefinitions]);
 
     // Merge default templates with custom ones
     // Custom templates override defaults with the same ID
@@ -280,10 +281,10 @@ function GmDashboard() {
             users: users,
             journal: [],
             quests: [],
-            mapPinStates: mapPinStates,
+            mapPinStates: pinStates,
             factions: [],
             shopInventory: shopInventory,
-            customShopDefinitions: customShopDefinitions,
+            customShopDefinitions: allShopDefinitions,
             characterTemplates: characterTemplates,
             tokens: tokens,
             userPins: userPins,
@@ -298,16 +299,8 @@ function GmDashboard() {
         window.ipcRenderer.saveData(campaignData);
 
         usersRef.current = users;
-        calendarStateRef.current = calendarState;
-        mapPinStatesRef.current = mapPinStates;
-        shopInventoryRef.current = shopInventory;
-        customShopDefinitionsRef.current = customShopDefinitions;
         characterTemplatesRef.current = characterTemplates;
-        tokensRef.current = tokens;
-        userPinsRef.current = userPins;
-        activeMapIdRef.current = activeMapId;
-
-    }, [users, calendarState, mapPinStates, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
+    }, [users, calendarState, pinStates, shopInventory, allShopDefinitions, characterTemplates, activeMapId, tokens, userPins]);
 
     // Broadcast calendar state to all players whenever it changes
     useEffect(() => {
@@ -336,6 +329,42 @@ function GmDashboard() {
         };
         window.ipcRenderer.sendToAllPlayers(message);
     }, [factions, locationTerritories]);
+
+    useEffect(() => {
+        if (!activeMapId) return;
+        const message: ActiveMapUpdateMessage = {
+            type: 'ACTIVE_MAP_UPDATE',
+            payload: {
+                activeMapId,
+                spawnPoint: currentMapData.spawnPoint,
+            }
+        };
+        window.ipcRenderer.sendToAllPlayers(message);
+    }, [activeMapId, currentMapData]);
+
+    useEffect(() => {
+        const message: MapTokensUpdateMessage = {
+            type: 'MAP_TOKENS_UPDATE',
+            payload: { tokens }
+        };
+        window.ipcRenderer.sendToAllPlayers(message);
+    }, [tokens]);
+
+    useEffect(() => {
+        const message: UserPinsUpdateMessage = {
+            type: 'USER_PINS_UPDATE',
+            payload: { pins: userPins }
+        };
+        window.ipcRenderer.sendToAllPlayers(message);
+    }, [userPins]);
+
+    useEffect(() => {
+        const message = {
+            type: 'MAP_STATE_UPDATE' as const,
+            payload: { pinStates }
+        };
+        window.ipcRenderer.sendToAllPlayers(message);
+    }, [pinStates]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -439,56 +468,9 @@ function GmDashboard() {
         
         // Use spawn point if available, otherwise default position
         const spawnPoint = currentMapData.spawnPoint || { x: 1000, y: 1000 };
-        
-        const newToken: MapToken = {
-            id: crypto.randomUUID(),
-            characterId: character.id,
-            characterName: character.name,
-            mapId: activeMapIdRef.current,
-            x: spawnPoint.x,
-            y: spawnPoint.y,
-        };
-        setTokens(prev => [...prev, newToken]);
+
+        addToken(character, spawnPoint.x, spawnPoint.y);
     }
-
-    // Handle switching maps
-    const handleSwitchMap = (mapId: string, moveTokens: boolean) => {
-        const newMap = maps[mapId];
-        if (!newMap) return;
-
-        setActiveMapId(mapId);
-        activeMapIdRef.current = mapId;
-
-        // If moveTokens is true, update all player tokens to new map with spawn point
-        if (moveTokens && newMap.spawnPoint) {
-            const updatedTokens = tokensRef.current.map(token => ({
-                ...token,
-                mapId: mapId,
-                x: newMap.spawnPoint!.x,
-                y: newMap.spawnPoint!.y,
-            }));
-            setTokens(updatedTokens);
-
-            // Broadcast updated tokens
-            const tokenMessage: MapTokensUpdateMessage = {
-                type: 'MAP_TOKENS_UPDATE',
-                payload: { tokens: updatedTokens }
-            };
-            window.ipcRenderer.sendToAllPlayers(tokenMessage);
-        }
-
-        // Broadcast the map switch to all players
-        const mapSwitchMessage: ActiveMapUpdateMessage = {
-            type: 'ACTIVE_MAP_UPDATE',
-            payload: { 
-                activeMapId: mapId,
-                spawnPoint: newMap.spawnPoint
-            }
-        };
-        window.ipcRenderer.sendToAllPlayers(mapSwitchMessage);
-
-        addLogEntry('system', `Switched to map: ${newMap.name}`, 'logs.map_switched', { mapName: newMap.name });
-    };
 
     // Handle setting spawn point via right-click
     const handleSetSpawnPoint = (x: number, y: number) => {
@@ -498,22 +480,7 @@ function GmDashboard() {
     };
 
     const handleTokenMove = (tokenId: string, x: number, y: number) => {
-        setTokens(prev =>
-            prev.map(token =>
-                token.id === tokenId ? { ...token, x, y } : token
-            )
-        );
-
-        const message : MapTokensUpdateMessage = {
-            type: 'MAP_TOKENS_UPDATE',
-            payload: {
-                tokens: tokensRef.current.map(token =>
-                    token.id === tokenId ? { ...token, x, y } : token
-                )
-            }
-        };
-
-        window.ipcRenderer.sendToAllPlayers(message);
+        moveToken(tokenId, x, y);
     };
 
     const handleAddCombatant = (character: Character) => {
@@ -646,29 +613,7 @@ function GmDashboard() {
     };
 
     const handleTogglePinDiscovery = (locationId: string, characterIds: string[]) => {
-        console.log(`Toggling pin discovery for location ${locationId} and characters ${characterIds.join(', ')}`);
-        const currentPinState = mapPinStatesRef.current[locationId] || { playerDiscovered: [] };
-
-        const updatedPlayerDiscovered = [...currentPinState.playerDiscovered];
-        characterIds.forEach(characterId => {
-            const isCurrentlyDiscovered = currentPinState.playerDiscovered.includes(characterId);
-            if (isCurrentlyDiscovered) {
-                updatedPlayerDiscovered.splice(updatedPlayerDiscovered.indexOf(characterId), 1);
-            } else {
-                updatedPlayerDiscovered.push(characterId);
-            }
-        });
-
-        const updatedMapPinStates = {
-            ...mapPinStates,
-            [locationId]: {
-                ...currentPinState,
-                playerDiscovered: updatedPlayerDiscovered
-            }
-        };
-
-        console.log(`Updated pin state for location ${locationId}:`, updatedMapPinStates[locationId]);
-        setMapPinStates(updatedMapPinStates);
+        updatePinState(locationId, characterIds);
     };
 
     const handleUpdateTerritory = (locationId: string, territory: LocationTerritory | null) => {
@@ -808,13 +753,8 @@ function GmDashboard() {
 
     // Get current shop being browsed
     const currentBrowsingShop = browsingShopId
-        ? shopInventoryRef.current?.shops[browsingShopId]!
+        ? shopInventory?.shops[browsingShopId]!
         : null;
-    const currentBrowsingShopDefinition = browsingShopId
-        ? allShopDefinitions.find(sd => sd.id === browsingShopId)!
-        : null;
-
-
     useEffect(() => {
         // Load initial data on component mount
         window.ipcRenderer.getInitialData().then((data: any) => {
@@ -826,46 +766,9 @@ function GmDashboard() {
             if (data.users) {
                 setUsers(data.users);
             }
-            // Initialize mapPinStates if not present
-            if (data.mapPinStates) {
-                setMapPinStates(data.mapPinStates);
-            } else {
-                // Create initial map pin states for all locations
-                const initialMapPinStates: Record<string, MapPinState> = {};
-                mapData.locations.forEach((location) => {
-                    initialMapPinStates[location.id] = {
-                        playerDiscovered: [],
-                    };
-                });
-                setMapPinStates(initialMapPinStates);
-            }
-
-            // Load shop inventory if present
-            if (data.shopInventory) {
-                setShopInventory(data.shopInventory);
-            }
-
-            // Load custom shop definitions if present
-            if (data.customShopDefinitions) {
-                setCustomShopDefinitions(data.customShopDefinitions);
-            }
-
             // Load character templates if present
             if (data.characterTemplates) {
                 setCharacterTemplates(data.characterTemplates);
-            }
-
-            // Load calendar state if present
-            if (data.calendar) {
-                setCalendarState(data.calendar);
-            }
-
-            if (data.tokens) {
-                setTokens(data.tokens);
-            }
-
-            if (data.userPins) {
-                setUserPins(data.userPins);
             }
 
             setSaving(true);
@@ -876,15 +779,6 @@ function GmDashboard() {
         // Listen for data updates from the main process
         const cleanupDataUpdateListener = window.ipcRenderer.onDataUpdated((data: any) => {
             // Characters are now managed via Supabase — skip JSON-based updates
-            if (data && data.mapPinStates) {
-                setMapPinStates(data.mapPinStates);
-            }
-            if (data && data.tokens) {
-                setTokens(data.tokens);
-            }
-            if (data && data.userPins) {
-                setUserPins(data.userPins);
-            }
         });
 
         const cleanupMapPingReceivedListener = window.ipcRenderer.onMapPingReceived(({ x, y, color, userId }: { x: number, y: number, color: string, userId: string }) => {
@@ -1454,7 +1348,7 @@ function GmDashboard() {
                             onFightButtonClick={() => setShowCombatResolver(true)}
                             tokens={tokens}
                             onPlaceToken={handlePlaceToken}
-                            onRemoveToken={(tokenId) => setTokens(prev => prev.filter(t => t.id !== tokenId))}
+                            onRemoveToken={(tokenId) => removeToken(tokenId)}
                         />
                     ) : (
                         <AudioSidebar
@@ -1487,7 +1381,7 @@ function GmDashboard() {
                 <div style={{ flex: 1 }}>
                     <MapView
                         mapData={currentMapData}
-                        mapPinStates={mapPinStates}
+                        mapPinStates={pinStates}
                         characters={characters}
                         isGM={true}
                         viewState={mapViewState}
@@ -1502,9 +1396,9 @@ function GmDashboard() {
                         incomingPing={mapPing}
                         shops={shopInventory ? Object.values(shopInventory.shops) : []}
                         onViewWares={handleViewWares}
-                        tokens={tokens.filter(t => t.mapId === activeMapId)}
+                        tokens={activeTokens}
                         onTokenMove={handleTokenMove}
-                        userPins={userPins.filter(p => p.mapId === activeMapId)}
+                        userPins={activeUserPins}
                         gridScale={currentMapData.gridSize}
                         factions={factions}
                         locationTerritories={locationTerritories}
@@ -1538,9 +1432,6 @@ function GmDashboard() {
             {/* Map Selector Modal */}
             {showMapSelector && (
                 <MapSelector
-                    maps={mapsList}
-                    activeMapId={activeMapId}
-                    onSwitchMap={handleSwitchMap}
                     onClose={() => setShowMapSelector(false)}
                 />
             )}
@@ -1576,12 +1467,7 @@ function GmDashboard() {
             {showShopManager && (
                 <ShopManager
                     onClose={() => setShowShopManager(false)}
-                    shopInventory={shopInventory}
-                    onShopInventoryChange={(updatedInventory) => {
-                        setShopInventory(updatedInventory);
-                    }}
                     characters={characters}
-                    shops={allShopDefinitions}
                 />
             )}
 
@@ -1632,8 +1518,7 @@ function GmDashboard() {
 
             {currentBrowsingShop && (
                 <ShopBrowser
-                    shop={currentBrowsingShop}
-                    shopDefinition={currentBrowsingShopDefinition ? currentBrowsingShopDefinition : undefined}
+                    shopId={currentBrowsingShop.shopId}
                     onClose={() => setBrowsingShopId(null)}
                     isGm={true}
                 />
@@ -1681,10 +1566,6 @@ function GmDashboard() {
 
             {showShopConfigurator && (
                 <ShopConfigurator
-                    shops={allShopDefinitions}
-                    onUpdateShops={(updatedShops) => {
-                        setCustomShopDefinitions(updatedShops);
-                    }}
                     onClose={() => setShowShopConfigurator(false)}
                 />
             )}
@@ -1764,8 +1645,6 @@ function GmDashboard() {
 
             {showTimelineManager && (
                 <TimelineManager
-                    calendarState={calendarState}
-                    onUpdateCalendarState={setCalendarState}
                     onClose={() => setShowTimelineManager(false)}
                 />
             )}

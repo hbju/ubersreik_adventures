@@ -8,9 +8,11 @@ import {
     Character,
 } from '@wfrp/shared';
 import styles from './ShopBrowser.module.css';
+import { useShopContext } from '../context/ShopContext';
 
 interface ShopBrowserProps {
-    shop: ShopState;
+    shopId?: string;
+    shop?: ShopState;
     shopDefinition?: ShopDefinition;
     onClose: () => void;
     isGm?: boolean;
@@ -26,7 +28,10 @@ export const ShopBrowser: React.FC<ShopBrowserProps> = ({
     characters,
     onGiveItemToPlayer,
 }) => {
+    const { shopInventory, shopDefinitions } = useShopContext();
     const gameData = useGameData();
+    const resolvedShop = shop ?? (shopId ? shopInventory.shops[shopId] : undefined);
+    const resolvedDefinition = shopDefinition ?? (shopId ? shopDefinitions.find(s => s.id === shopId) : undefined);
 
     const weaponsById = useMemo(() => new Map(gameData.weapons.map(w => [w.id, w])), [gameData.weapons]);
     const armorById = useMemo(() => new Map(gameData.armor.map(a => [a.id, a])), [gameData.armor]);
@@ -102,7 +107,8 @@ export const ShopBrowser: React.FC<ShopBrowserProps> = ({
         );
     };
 
-    const shopName = shopDefinition?.name || shop.shopId;
+    if (!resolvedShop) return null;
+    const shopName = resolvedDefinition?.name || resolvedShop.shopId;
 
     return (
         <div className={styles.overlay}>
@@ -113,12 +119,12 @@ export const ShopBrowser: React.FC<ShopBrowserProps> = ({
                 </div>
 
                 <div className={styles.inventory}>
-                    {shop.inventory.length === 0 ? (
+                    {resolvedShop.inventory.length === 0 ? (
                         <div className={styles.emptyShop}>
                             <p>This shop has no wares available.</p>
                         </div>
                     ) : (
-                        shop.inventory.map(item => renderInventoryItem(item))
+                        resolvedShop.inventory.map(item => renderInventoryItem(item))
                     )}
                 </div>
             </div>
