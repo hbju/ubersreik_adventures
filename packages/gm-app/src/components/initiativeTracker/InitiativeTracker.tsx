@@ -24,7 +24,7 @@ interface InitiativeTrackerProps {
 const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
     onUpdateCombatant, characters, onSendToPlayer
 }) => {
-    const { combatState, reorderInitiative, setCurrentTurnId, updateAdvantage, endCombat, incrementRound, nextTurn } = useCombatContext();
+    const { combatState, reorderInitiative, setCurrentTurnId, updateAdvantage, endCombat, incrementRound, nextTurn, isLoading, error } = useCombatContext();
     const conditions = useGameData().conditions;
     const { combatants, currentTurnId, advantage: advantages, roundNumber } = combatState;
 
@@ -230,6 +230,12 @@ const InitiativeTracker: React.FC<InitiativeTrackerProps> = ({
                         <button onClick={endCombat} className={styles.clearBtn}>Clear</button>
                     </div>
                 </header>
+                {error && (
+                    <div style={{ color: '#ff6b6b', padding: '8px 0' }}>{error}</div>
+                )}
+                {isLoading && (
+                    <div style={{ color: '#aaa', padding: '8px 0' }}>Syncing combat state...</div>
+                )}
                 <div className={styles.advantageDisplay}>
                     {advantages && (
                         <div className={styles.advantageControls}>

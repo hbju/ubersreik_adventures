@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import type { Combatant, Advantages } from '@wfrp/shared';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type { Combatant, Advantages, Json } from '@wfrp/shared';
 import { getCombatState, updateCombatState, clearCombatState } from '@wfrp/shared';
 import { useAppContext } from '../context/AppContext';
 
@@ -29,17 +29,32 @@ export function useCombat() {
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const stateRef = useRef<CombatState>(DEFAULT_STATE);
+  const activeRef = useRef(false);
+
+  useEffect(() => {
+    stateRef.current = combatState;
+  }, [combatState]);
+
+  useEffect(() => {
+    activeRef.current = isActive;
+  }, [isActive]);
 
   const persistState = useCallback(async (next: CombatState, active: boolean) => {
     if (!serviceContext) return;
-    await updateCombatState(serviceContext.client, serviceContext.campaignId, {
-      combatants: next.combatants as unknown as any,
+    const result = await updateCombatState(serviceContext.client, serviceContext.campaignId, {
+      combatants: next.combatants as unknown as Json,
       current_turn_index: toTurnIndex(next.combatants, next.currentTurnId),
       round_number: next.roundNumber,
       is_active: active,
       player_advantage: next.advantage.playerAdvantage,
       enemy_advantage: next.advantage.enemyAdvantage,
     });
+    if (result.error) {
+      setError(result.error.message);
+    } else {
+      setError(null);
+    }
   }, [serviceContext]);
 
   const fetchCombatState = useCallback(async () => {
@@ -52,6 +67,7 @@ export function useCombat() {
       setIsLoading(false);
       return;
     }
+    setError(null);
 
     const row = result.data;
     const combatants = ((row.combatants as unknown) ?? []) as Combatant[];
@@ -74,12 +90,14 @@ export function useCombat() {
   }, [fetchCombatState]);
 
   const updateState = useCallback(async (updater: (prev: CombatState) => CombatState, active?: boolean) => {
-    const next = updater(combatState);
-    const nextActive = active ?? isActive;
+    const next = updater(stateRef.current);
+    const nextActive = active ?? activeRef.current;
+    stateRef.current = next;
+    activeRef.current = nextActive;
     setCombatState(next);
     setIsActive(nextActive);
     await persistState(next, nextActive);
-  }, [combatState, isActive, persistState]);
+  }, [persistState]);
 
   const startCombat = useCallback(async (_characterIds: string[]) => {
     await updateState((prev) => ({

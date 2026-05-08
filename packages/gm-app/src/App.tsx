@@ -53,7 +53,6 @@ import {
     Weapon,
     Item,
     Condition,
-    JournalEntry,
     MapPinState,
     CareerChangeResponseMessage,
     Location,
@@ -63,7 +62,6 @@ import {
     FactionUpdateMessage,
     ShopInventoryState,
     ShopDefinition,
-    Quest,
     QueuedRoll,
     CalendarState,
     createDefaultCalendarState,
@@ -71,6 +69,8 @@ import {
 import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp.types';
 import { CharacterProvider, useCharacterContext } from './context/CharacterContext';
 import { CombatProvider, useCombatContext } from './context/CombatContext';
+import { JournalProvider, useJournalContext } from './context/JournalContext';
+import { QuestProvider, useQuestContext } from './context/QuestContext';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
@@ -111,7 +111,11 @@ function App() {
     return (
     <CharacterProvider>
         <CombatProvider>
-            <GmDashboard />
+            <JournalProvider>
+                <QuestProvider>
+                    <GmDashboard />
+                </QuestProvider>
+            </JournalProvider>
         </CombatProvider>
     </CharacterProvider>
     );
@@ -122,6 +126,8 @@ function GmDashboard() {
     const { t } = useTranslation();
     const { characters, replaceCharacter, createCharacter: ctxCreateCharacter, deleteCharacter: ctxDeleteCharacter } = useCharacterContext();
     const { combatState, addCombatant, updateCombatant } = useCombatContext();
+    const { entries: journal } = useJournalContext();
+    const { quests } = useQuestContext();
 
     // Ref to access latest characters inside stable useEffect closures
     const charactersRef = useRef(characters);
@@ -160,8 +166,6 @@ function GmDashboard() {
 
     const [users, setUsers] = useState<User[]>([]);
     const usersRef = useRef(users);
-    const [journal, setJournal] = useState<JournalEntry[]>([]);
-    const journalRef = useRef(journal);
     const [mapPinStates, setMapPinStates] = useState<Record<string, MapPinState>>({});
     const mapPinStatesRef = useRef(mapPinStates);
     const [mapPing, setMapPing] = useState<{ x: number; y: number; color: string; userId: string } | null>(null);
@@ -194,8 +198,6 @@ function GmDashboard() {
     const factionsRef = useRef(factions);
     const [locationTerritories, setLocationTerritories] = useState<Record<string, LocationTerritory>>({});
     const locationTerritoriesRef = useRef(locationTerritories);
-    const [quests, setQuests] = useState<Quest[]>([]);
-    const questsRef = useRef(quests);
     const [calendarState, setCalendarState] = useState<CalendarState>(() => createDefaultCalendarState());
     const calendarStateRef = useRef(calendarState);
     const [characterTemplates, setCharacterTemplates] = useState<CharacterTemplate[]>([]);
@@ -277,8 +279,8 @@ function GmDashboard() {
         const campaignData: CampaignState = {
             characters: [], // Characters now managed in Supabase
             users: users,
-            journal: journal,
-            quests: quests,
+            journal: [],
+            quests: [],
             mapPinStates: mapPinStates,
             factions: factions,
             shopInventory: shopInventory,
@@ -297,8 +299,6 @@ function GmDashboard() {
         window.ipcRenderer.saveData(campaignData);
 
         usersRef.current = users;
-        journalRef.current = journal;
-        questsRef.current = quests;
         calendarStateRef.current = calendarState;
         mapPinStatesRef.current = mapPinStates;
         factionsRef.current = factions;
@@ -310,7 +310,7 @@ function GmDashboard() {
         userPinsRef.current = userPins;
         activeMapIdRef.current = activeMapId;
 
-    }, [users, journal, quests, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
+    }, [users, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
 
     // Broadcast calendar state to all players whenever it changes
     useEffect(() => {
@@ -547,10 +547,6 @@ function GmDashboard() {
             handleCharacterUpdate(newChar);
         }
         updateCombatant(updatedCombatant);
-    };
-
-    const handleUpdateJournal = (updatedJournal: JournalEntry[]) => {
-        setJournal(updatedJournal);
     };
 
     // User Management Functions
@@ -839,10 +835,6 @@ function GmDashboard() {
             if (data.users) {
                 setUsers(data.users);
             }
-            if (data.journal) {
-                setJournal(data.journal);
-            }
-
             // Initialize mapPinStates if not present
             if (data.mapPinStates) {
                 setMapPinStates(data.mapPinStates);
@@ -882,11 +874,6 @@ function GmDashboard() {
                 setCharacterTemplates(data.characterTemplates);
             }
 
-            // Load quests if present
-            if (data.quests) {
-                setQuests(data.quests);
-            }
-
             // Load calendar state if present
             if (data.calendar) {
                 setCalendarState(data.calendar);
@@ -908,14 +895,8 @@ function GmDashboard() {
         // Listen for data updates from the main process
         const cleanupDataUpdateListener = window.ipcRenderer.onDataUpdated((data: any) => {
             // Characters are now managed via Supabase — skip JSON-based updates
-            if (data && data.journal) {
-                setJournal(data.journal);
-            }
             if (data && data.mapPinStates) {
                 setMapPinStates(data.mapPinStates);
-            }
-            if (data && data.quests) {
-                setQuests(data.quests);
             }
             if (data && data.tokens) {
                 setTokens(data.tokens);
@@ -1801,16 +1782,13 @@ function GmDashboard() {
 
             {showJournalManager && (
                 <JournalManager
-                    journal={journal}
                     characters={characters}
-                    onUpdateJournal={handleUpdateJournal}
                     onClose={() => setShowJournalManager(false)}
                 />
             )}
 
             {showQuestJournal && (
                 <QuestJournalViewer
-                    quests={quests}
                     locations={mapData.locations}
                     onClose={() => setShowQuestJournal(false)}
                 />

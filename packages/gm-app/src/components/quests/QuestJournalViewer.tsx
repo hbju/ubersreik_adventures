@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Quest, QuestStatus, Location } from '@wfrp/shared';
 import styles from './QuestJournalViewer.module.css';
+import { useQuestContext } from '../../context/QuestContext';
 
 interface QuestJournalViewerProps {
-    quests: Quest[];
     locations: Location[];
     onClose: () => void;
 }
@@ -13,10 +13,10 @@ interface QuestJournalViewerProps {
  * Shows what players are tracking without allowing edits
  */
 export const QuestJournalViewer: React.FC<QuestJournalViewerProps> = ({
-    quests,
     locations,
     onClose,
 }) => {
+    const { quests, isLoading, error } = useQuestContext();
     const [selectedQuestId, setSelectedQuestId] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<QuestStatus>('active');
 
@@ -61,6 +61,16 @@ export const QuestJournalViewer: React.FC<QuestJournalViewerProps> = ({
                     <div className={styles.panelHeader}>
                         <h3>Quests</h3>
                     </div>
+                    {error && (
+                        <div style={{ color: '#ff6b6b', padding: '8px 12px' }}>
+                            {error}
+                        </div>
+                    )}
+                    {isLoading && (
+                        <div style={{ color: '#aaa', padding: '8px 12px' }}>
+                            Loading quests...
+                        </div>
+                    )}
 
                     <div className={styles.statusTabs}>
                         <button

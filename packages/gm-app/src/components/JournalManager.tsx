@@ -1,20 +1,18 @@
 import React, { useState, useRef } from 'react';
 import { JournalEntry, Character } from '@wfrp/shared';
 import styles from './JournalManager.module.css';
+import { useJournalContext } from '../context/JournalContext';
 
 interface JournalManagerProps {
-  journal: JournalEntry[];
   characters: Character[];
-  onUpdateJournal: (updatedJournal: JournalEntry[]) => void;
   onClose: () => void;
 }
 
 export const JournalManager: React.FC<JournalManagerProps> = ({
-  journal,
   characters,
-  onUpdateJournal,
   onClose,
 }) => {
+  const { entries, createEntry, updateEntry, deleteEntry, isLoading, error } = useJournalContext();
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [editingEntry, setEditingEntry] = useState<JournalEntry | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -36,27 +34,26 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
     setEditingEntry({ ...entry });
   };
 
-  const handleSaveEntry = () => {
+  const handleSaveEntry = async () => {
     if (!editingEntry) return;
 
-    const existingIndex = journal.findIndex((e) => e.id === editingEntry.id);
-    let updatedJournal: JournalEntry[];
-
-    if (existingIndex >= 0) {
-      // Update existing entry
-      updatedJournal = journal.map((e) =>
-        e.id === editingEntry.id ? editingEntry : e
-      );
+    const existingEntry = entries.find((e) => e.id === editingEntry.id);
+    let result;
+    if (existingEntry) {
+      result = await updateEntry(editingEntry);
     } else {
-      // Add new entry
-      updatedJournal = [...journal, editingEntry];
+      result = await createEntry(editingEntry);
     }
 
-    onUpdateJournal(updatedJournal);
+    if (result?.error) {
+      alert(`Failed to save journal entry: ${result.error.message}`);
+      return;
+    }
+
     setSelectedEntry(editingEntry);
   };
 
-  const handleDeleteEntry = () => {
+  const handleDeleteEntry = async () => {
     if (!editingEntry) return;
 
     if (
@@ -64,8 +61,11 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
         `Are you sure you want to delete "${editingEntry.title}"? This cannot be undone.`
       )
     ) {
-      const updatedJournal = journal.filter((e) => e.id !== editingEntry.id);
-      onUpdateJournal(updatedJournal);
+      const result = await deleteEntry(editingEntry.id);
+      if (result?.error) {
+        alert(`Failed to delete journal entry: ${result.error.message}`);
+        return;
+      }
       setSelectedEntry(null);
       setEditingEntry(null);
     }
@@ -147,6 +147,16 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
         </div>
 
         <div className={styles.content}>
+          {error && (
+            <div style={{ color: '#ff6b6b', padding: '8px 12px' }}>
+              {error}
+            </div>
+          )}
+          {isLoading && (
+            <div style={{ color: '#aaa', padding: '8px 12px' }}>
+              Loading journal entries...
+            </div>
+          )}
           {/* Sidebar with entry list */}
           <div className={styles.sidebar}>
             <div className={styles.sidebarHeader}>
@@ -156,7 +166,7 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
             </div>
 
             <div className={styles.entriesList}>
-              {journal.map((entry) => (
+              {entries.map((entry) => (
                 <div
                   key={entry.id}
                   className={`${styles.entryItem} ${selectedEntry?.id === entry.id ? styles.selected : ''
@@ -173,7 +183,7 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
                   </div>
                 </div>
               ))}
-              {journal.length === 0 && (
+              {entries.length === 0 && (
                 <div style={{ padding: '20px', textAlign: 'center', color: '#888' }}>
                   No entries yet. Create one to get started!
                 </div>
@@ -267,7 +277,7 @@ export const JournalManager: React.FC<JournalManagerProps> = ({
                   <button className={styles.saveButton} onClick={handleSaveEntry}>
                     💾 Save Entry
                   </button>
-                  {journal.some((e) => e.id === editingEntry.id) && (
+                  {entries.some((e) => e.id === editingEntry.id) && (
                     <button className={styles.deleteButton} onClick={handleDeleteEntry}>
                       🗑️ Delete
                     </button>
