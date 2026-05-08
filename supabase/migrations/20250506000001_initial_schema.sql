@@ -210,6 +210,47 @@ COMMENT ON TABLE public.factions IS 'Campaign factions for reputation tracking a
 
 CREATE INDEX idx_factions_campaign ON public.factions(campaign_id);
 
+-- 1) Temp mapping table (fill with your real values)
+create temporary table faction_id_map (
+  old_id text primary key,
+  new_id uuid not null
+);
+
+-- Example rows:
+insert into faction_id_map(old_id, new_id) values
+ ('faction-1764707582116-ulnjn1lzl', 'fa60d41e-f662-4ccb-ba41-93a19539d574'),
+ ('faction-1764708721181-ytnspqhm6', 'e08b36d7-e1b2-4d42-92a8-d953b148fcc1'),
+ ('faction-1764708984917-74rebq7cl', 'b39d69c2-5b8e-4a45-84ec-9c9914a6fc87'),
+ ('faction-1764709335460-4hjytlbav', '40832915-6947-428d-b84e-77ffa1cd0946'),
+ ('faction-1764713890412-uwpa2dn6q', 'd920dd51-ce5e-45d4-a220-1b8cefc79795'),
+ ('faction-1764713923724-dbxbwodcn', '474e8cee-7e7d-4e9e-9447-70ca6600d94a'),
+ ('faction-1764713986980-e77umzjw9', 'e1a69019-26c7-4002-9caf-490322247007'),
+ ('faction-1764715333164-bkipnszd4', '3b39aaa5-c89f-4474-907b-bdd9bc89b71a'),
+ ('faction-1765225553030-0qufa6kdm', '6e1e76e6-f070-4572-9e2b-10c9f3f94f9b'),
+ ('faction-1765225609125-k7fuo35gk', 'f8f42b14-1d48-4c05-93d3-d06d16b94fa0'),
+ ('faction-1765227363476-95l24ff3f', '7b260211-5fe0-4ee4-9c58-a56173a4c833'),
+ ('faction-1765227423556-vs6pxaudr', '3419d08e-941c-4b1c-80e4-bfe51bcb0d53'),
+ ('faction-1765227691044-8jtra7rhu', 'a95e1567-ab03-482f-a039-4f05bd8b2370'),
+ ('faction-1765227794237-8z4y452g4', '86925bcf-4ca6-4eb0-b233-e97d5089b8d0'),
+ ('faction-1765227909934-1y8a2h1t4', '801bc22a-9bcc-4ed4-a285-a48af7bcf671'),
+ ('faction-1767052807053-dxl11trou', '8019bb3b-cc78-41ae-badc-62aab8ed9b12');
+
+-- 2) Update reputations in place
+UPDATE characters c
+SET reputations = (
+  select jsonb_agg(
+    case
+      when m.new_id is not null
+      then jsonb_set(elem, '{factionId}', to_jsonb(m.new_id::text))
+      else elem
+    end
+  )
+  from jsonb_array_elements(coalesce(c.reputations, '[]'::jsonb)) elem
+  left join faction_id_map m
+    on elem->>'factionId' = m.old_id
+)
+where reputations is not null and (reputations) != '[]';
+
 -- ─────────────────────────────────────────────────────────────────────────────
 -- Table: maps
 -- Campaign maps with their locations embedded as JSONB.

@@ -58,7 +58,6 @@ import {
     Location,
     Talent,
     TalentSelectionModal,
-    Faction,
     FactionUpdateMessage,
     ShopInventoryState,
     ShopDefinition,
@@ -71,6 +70,7 @@ import { CharacterProvider, useCharacterContext } from './context/CharacterConte
 import { CombatProvider, useCombatContext } from './context/CombatContext';
 import { JournalProvider, useJournalContext } from './context/JournalContext';
 import { QuestProvider, useQuestContext } from './context/QuestContext';
+import { FactionProvider, useFactionContext } from './context/FactionContext';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 
@@ -113,7 +113,9 @@ function App() {
         <CombatProvider>
             <JournalProvider>
                 <QuestProvider>
-                    <GmDashboard />
+                    <FactionProvider>
+                        <GmDashboard />
+                    </FactionProvider>
                 </QuestProvider>
             </JournalProvider>
         </CombatProvider>
@@ -128,6 +130,7 @@ function GmDashboard() {
     const { combatState, addCombatant, updateCombatant } = useCombatContext();
     const { entries: journal } = useJournalContext();
     const { quests } = useQuestContext();
+    const { factions, locationTerritories, setTerritory } = useFactionContext();
 
     // Ref to access latest characters inside stable useEffect closures
     const charactersRef = useRef(characters);
@@ -194,10 +197,6 @@ function GmDashboard() {
     const [loreEditorCharacter, setLoreEditorCharacter] = useState<Character | null>(null);
     const [leftSidebarMode, setLeftSidebarMode] = useState<'roster' | 'audio'>('roster');
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-    const [factions, setFactions] = useState<Faction[]>([]);
-    const factionsRef = useRef(factions);
-    const [locationTerritories, setLocationTerritories] = useState<Record<string, LocationTerritory>>({});
-    const locationTerritoriesRef = useRef(locationTerritories);
     const [calendarState, setCalendarState] = useState<CalendarState>(() => createDefaultCalendarState());
     const calendarStateRef = useRef(calendarState);
     const [characterTemplates, setCharacterTemplates] = useState<CharacterTemplate[]>([]);
@@ -282,7 +281,7 @@ function GmDashboard() {
             journal: [],
             quests: [],
             mapPinStates: mapPinStates,
-            factions: factions,
+            factions: [],
             shopInventory: shopInventory,
             customShopDefinitions: customShopDefinitions,
             characterTemplates: characterTemplates,
@@ -292,7 +291,7 @@ function GmDashboard() {
             maps: maps, // Include all maps
             activeMapId: activeMapId, // Current active map
             calendar: calendarState, // Imperial Calendar state
-            locationTerritories: locationTerritories, // Faction territory assignments
+            locationTerritories: {}, // Faction territory assignments
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
@@ -301,8 +300,6 @@ function GmDashboard() {
         usersRef.current = users;
         calendarStateRef.current = calendarState;
         mapPinStatesRef.current = mapPinStates;
-        factionsRef.current = factions;
-        locationTerritoriesRef.current = locationTerritories;
         shopInventoryRef.current = shopInventory;
         customShopDefinitionsRef.current = customShopDefinitions;
         characterTemplatesRef.current = characterTemplates;
@@ -310,7 +307,7 @@ function GmDashboard() {
         userPinsRef.current = userPins;
         activeMapIdRef.current = activeMapId;
 
-    }, [users, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
+    }, [users, calendarState, mapPinStates, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
 
     // Broadcast calendar state to all players whenever it changes
     useEffect(() => {
@@ -328,6 +325,17 @@ function GmDashboard() {
         };
         window.ipcRenderer.sendToAllPlayers(calendarMessage);
     }, [calendarState]);
+
+    useEffect(() => {
+        const message: FactionUpdateMessage = {
+            type: 'FACTION_UPDATE',
+            payload: {
+                factions,
+                locationTerritories,
+            }
+        };
+        window.ipcRenderer.sendToAllPlayers(message);
+    }, [factions, locationTerritories]);
 
     const handleCharacterUpdate = (updatedCharacter: Character) => {
         const recaculatedCharacter = recalculateCharacterTalentBonuses(updatedCharacter, talents);
@@ -664,24 +672,7 @@ function GmDashboard() {
     };
 
     const handleUpdateTerritory = (locationId: string, territory: LocationTerritory | null) => {
-        const updated = { ...locationTerritoriesRef.current };
-        if (territory) {
-            updated[locationId] = territory;
-        } else {
-            delete updated[locationId];
-        }
-        setLocationTerritories(updated);
-        locationTerritoriesRef.current = updated;
-
-        // Broadcast territory update to all players
-        const message: FactionUpdateMessage = {
-            type: 'FACTION_UPDATE',
-            payload: {
-                factions: factionsRef.current,
-                locationTerritories: updated,
-            }
-        };
-        window.ipcRenderer.sendToAllPlayers(message);
+        setTerritory(locationId, territory);
     };
 
     const handleBackupCampaign = async () => {
@@ -847,16 +838,6 @@ function GmDashboard() {
                     };
                 });
                 setMapPinStates(initialMapPinStates);
-            }
-
-            // Load factions if present
-            if (data.factions) {
-                setFactions(data.factions);
-            }
-
-            // Load location territories if present
-            if (data.locationTerritories) {
-                setLocationTerritories(data.locationTerritories);
             }
 
             // Load shop inventory if present
@@ -1685,19 +1666,7 @@ function GmDashboard() {
 
             {showFactionManager && (
                 <FactionManager
-                    factions={factions}
                     locations={mapData.locations}
-                    onUpdateFactions={(updatedFactions) => {
-                        setFactions(updatedFactions);
-                        const message: FactionUpdateMessage = {
-                            type: 'FACTION_UPDATE',
-                            payload: {
-                                factions: updatedFactions,
-                                locationTerritories: locationTerritoriesRef.current,
-                            }
-                        };
-                        window.ipcRenderer.sendToAllPlayers(message);
-                    }}
                     onClose={() => setShowFactionManager(false)}
                 />
             )}
@@ -1705,7 +1674,6 @@ function GmDashboard() {
             {showReputationPanel && (
                 <CharacterReputationPanel
                     characters={characters}
-                    factions={factions}
                     onCharacterUpdate={handleCharacterUpdate}
                     onClose={() => setShowReputationPanel(false)}
                 />

@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import {
     Character,
-    Faction,
     ReputationEntry,
     KnowledgeLevel,
     getReputationLabel,
     getReputationColorStyle,
     getFactionCategoryIcon,
-    getFactionCategoryName,
     clampReputation
 } from '@wfrp/shared';
 import styles from './CharacterReputationPanel.module.css';
 import { useTranslation } from 'react-i18next';
+import { useFactionContext } from '../../context/FactionContext';
 
 interface CharacterReputationPanelProps {
     characters: Character[];
-    factions: Faction[];
     onCharacterUpdate: (character: Character) => void;
     onClose: () => void;
 }
@@ -24,15 +22,16 @@ const KNOWLEDGE_LEVELS: KnowledgeLevel[] = ['unknown', 'rumored', 'known'];
 
 export const CharacterReputationPanel: React.FC<CharacterReputationPanelProps> = ({
     characters,
-    factions,
     onCharacterUpdate,
     onClose,
 }) => {
     const { t } = useTranslation();
+    const { factions, updateCharacterReputations, error } = useFactionContext();
     const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(
         characters.length > 0 ? characters[0].id : null
     );
     const [viewMode, setViewMode] = useState<'list' | 'matrix'>('list');
+    const [mutationError, setMutationError] = useState<string | null>(null);
 
     const selectedCharacter = characters.find(c => c.id === selectedCharacterId);
 
@@ -50,7 +49,26 @@ export const CharacterReputationPanel: React.FC<CharacterReputationPanelProps> =
         };
     };
 
-    const updateCharacterReputation = (
+    const persistWithRollback = async (previousCharacter: Character, nextReputations: ReputationEntry[]) => {
+        const optimisticCharacter: Character = {
+            ...previousCharacter,
+            reputations: nextReputations
+        };
+        onCharacterUpdate(optimisticCharacter);
+
+        const result = await updateCharacterReputations(optimisticCharacter, nextReputations);
+        if (result?.error) {
+            // Revert optimistic change if persistence failed.
+            onCharacterUpdate(previousCharacter);
+            setMutationError(result.error.message);
+            return false;
+        }
+
+        setMutationError(null);
+        return true;
+    };
+
+    const updateCharacterReputation = async (
         character: Character,
         factionId: string,
         updates: Partial<ReputationEntry>
@@ -75,13 +93,10 @@ export const CharacterReputationPanel: React.FC<CharacterReputationPanelProps> =
             newReputations = [...existingReputations, newEntry];
         }
 
-        onCharacterUpdate({
-            ...character,
-            reputations: newReputations
-        });
+        await persistWithRollback(character, newReputations);
     };
 
-    const handleRevealAll = (character: Character) => {
+    const handleRevealAll = async (character: Character) => {
         if (!window.confirm(t('factions.confirmRevealAll', { name: character.name }))) return;
 
         const newReputations: ReputationEntry[] = factions.map(faction => {
@@ -94,19 +109,13 @@ export const CharacterReputationPanel: React.FC<CharacterReputationPanelProps> =
             };
         });
 
-        onCharacterUpdate({
-            ...character,
-            reputations: newReputations
-        });
+        await persistWithRollback(character, newReputations);
     };
 
-    const handleResetAll = (character: Character) => {
+    const handleResetAll = async (character: Character) => {
         if (!window.confirm(t('factions.confirmResetAll', { name: character.name }))) return;
 
-        onCharacterUpdate({
-            ...character,
-            reputations: []
-        });
+        await persistWithRollback(character, []);
     };
 
     const getKnowledgeBadgeClass = (level: KnowledgeLevel): string => {
@@ -143,6 +152,14 @@ export const CharacterReputationPanel: React.FC<CharacterReputationPanelProps> =
                 </div>
 
                 <div className={styles.content}>
+                    {error && (
+                        <div style={{ color: '#ff6b6b', padding: '8px 12px' }}>{error}</div>
+                    )}
+                    {mutationError && (
+                        <div style={{ color: '#ff6b6b', padding: '8px 12px' }}>
+                            Failed to save reputation update: {mutationError}
+                        </div>
+                    )}
                     {viewMode === 'list' ? (
                         // List View
                         <>

@@ -2,11 +2,10 @@ import React, { useRef, useState } from 'react';
 import { Faction, FactionCategory, getFactionCategoryIcon, Location } from '@wfrp/shared';
 import styles from './FactionManager.module.css';
 import { useTranslation } from 'react-i18next';
+import { useFactionContext } from '../../context/FactionContext';
 
 interface FactionManagerProps {
-    factions: Faction[];
     locations: Location[];
-    onUpdateFactions: (factions: Faction[]) => void;
     onClose: () => void;
 }
 
@@ -44,12 +43,11 @@ const DEFAULT_FACTION: Omit<Faction, 'id'> = {
 };
 
 export const FactionManager: React.FC<FactionManagerProps> = ({
-    factions,
     locations,
-    onUpdateFactions,
     onClose,
 }) => {
     const { t } = useTranslation();
+    const { factions, createFaction, updateFaction, deleteFaction, isLoading, error } = useFactionContext();
     const [selectedFaction, setSelectedFaction] = useState<Faction | null>(null);
     const [editingFaction, setEditingFaction] = useState<Faction | null>(null);
     const [filterCategory, setFilterCategory] = useState<FactionCategory | 'all'>('all');
@@ -69,30 +67,31 @@ export const FactionManager: React.FC<FactionManagerProps> = ({
         setEditingFaction({ ...faction });
     };
 
-    const handleSaveFaction = () => {
+    const handleSaveFaction = async () => {
         if (!editingFaction) return;
 
-        const existingIndex = factions.findIndex((f) => f.id === editingFaction.id);
-        let updatedFactions: Faction[];
+        const existingFaction = factions.find((f) => f.id === editingFaction.id);
+        const result = existingFaction
+            ? await updateFaction(editingFaction)
+            : await createFaction(editingFaction);
 
-        if (existingIndex >= 0) {
-            updatedFactions = factions.map((f) =>
-                f.id === editingFaction.id ? editingFaction : f
-            );
+        if (result?.error) {
+            alert(`Failed to save faction: ${result.error.message}`);
+            return;
         } else {
-            updatedFactions = [...factions, editingFaction];
+            setSelectedFaction(editingFaction);
         }
-
-        onUpdateFactions(updatedFactions);
-        setSelectedFaction(editingFaction);
     };
 
-    const handleDeleteFaction = () => {
+    const handleDeleteFaction = async () => {
         if (!editingFaction) return;
 
         if (window.confirm(t('factions.confirmDelete', { name: editingFaction.name }))) {
-            const updatedFactions = factions.filter((f) => f.id !== editingFaction.id);
-            onUpdateFactions(updatedFactions);
+            const result = await deleteFaction(editingFaction.id);
+            if (result?.error) {
+                alert(`Failed to delete faction: ${result.error.message}`);
+                return;
+            }
             setSelectedFaction(null);
             setEditingFaction(null);
         }
@@ -151,6 +150,12 @@ export const FactionManager: React.FC<FactionManagerProps> = ({
                 </div>
 
                 <div className={styles.content}>
+                    {error && (
+                        <div style={{ color: '#ff6b6b', padding: '8px 12px' }}>{error}</div>
+                    )}
+                    {isLoading && (
+                        <div style={{ color: '#aaa', padding: '8px 12px' }}>Loading factions...</div>
+                    )}
                     {/* Sidebar with faction list */}
                     <div className={styles.sidebar}>
                         <div className={styles.sidebarHeader}>
