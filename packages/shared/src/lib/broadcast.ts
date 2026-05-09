@@ -97,7 +97,9 @@ export async function broadcast<TPayload>(
     event: eventType,
     payload: envelope,
   });
-  if (status === 'ok' || status === 'timed out' || status === 'error') return status;
+  if (status === 'ok' || status === 'timed out' || status === 'error') {
+    return status as 'ok' | 'timed out' | 'error';
+  }
   return 'error';
 }
 

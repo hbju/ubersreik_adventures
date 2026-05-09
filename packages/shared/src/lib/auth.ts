@@ -1,6 +1,6 @@
 import type { AuthChangeEvent, Session, Subscription } from '@supabase/supabase-js';
 import { getSupabaseClient } from './supabase';
-import type { Tables, UpdateDto } from '../types/database.types';
+import type { Tables, TablesUpdate } from '../types/database.types';
 
 export type Profile = Tables<'profiles'>;
 
@@ -89,7 +89,7 @@ export async function getProfile(userId: string): Promise<Profile | null> {
  */
 export async function updateProfile(
   userId: string,
-  updates: Omit<UpdateDto<'profiles'>, 'id' | 'created_at'>
+  updates: Omit<TablesUpdate<'profiles'>, 'id' | 'created_at'>
 ): Promise<Profile> {
   const client = getSupabaseClient();
   const { data, error } = await client
