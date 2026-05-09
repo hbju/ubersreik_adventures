@@ -82,6 +82,7 @@ export type Database = {
           created_at: string
           gm_user_id: string
           id: string
+          join_code: string | null
           last_global_restock: string | null
           name: string
           updated_at: string
@@ -93,6 +94,7 @@ export type Database = {
           created_at?: string
           gm_user_id: string
           id?: string
+          join_code?: string | null
           last_global_restock?: string | null
           name: string
           updated_at?: string
@@ -104,6 +106,7 @@ export type Database = {
           created_at?: string
           gm_user_id?: string
           id?: string
+          join_code?: string | null
           last_global_restock?: string | null
           name?: string
           updated_at?: string
@@ -836,6 +839,10 @@ export type Database = {
     Functions: {
       is_campaign_gm: { Args: { campaign_uuid: string }; Returns: boolean }
       is_campaign_member: { Args: { campaign_uuid: string }; Returns: boolean }
+      join_campaign_with_code: {
+        Args: { p_campaign_id: string; p_code: string }
+        Returns: Json
+      }
       owns_character: { Args: { character_uuid: string }; Returns: boolean }
       user_has_character_in: {
         Args: { character_ids: string[] }

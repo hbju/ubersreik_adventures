@@ -1,84 +1,57 @@
-import { useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { LanguageSwitcher, type Character } from '@wfrp/shared'
+import { ConfigMissing } from './components/ConfigMissing'
+import { LoadingCard } from './components/LoadingCard'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import { RootRedirect } from './routes/RootRedirect'
+import { CampaignListScreen } from './screens/CampaignListScreen'
+import { LoginScreen } from './screens/LoginScreen'
+import { PlayerCampaignHome } from './screens/PlayerCampaignHome'
 
-function LoginPage({ onLogin }: { onLogin: () => void }) {
-  const { t } = useTranslation()
-
-  return (
-    <div className="card parchment mx-auto max-w-md text-left">
-      <h1 className="mb-4 text-center">{t('connection.title')}</h1>
-      <p className="mb-6 text-center text-sm text-[var(--color-ink-faded)]">
-        {t('connection.subtitle')}
-      </p>
-      <button type="button" className="w-full" onClick={onLogin}>
-        {t('connection.connectButton')}
-      </button>
-    </div>
-  )
+function LoginRoute() {
+  const { configured, loading, session } = useAuth()
+  if (!configured) return <ConfigMissing />
+  if (loading) return <LoadingCard />
+  if (session) return <Navigate to="/" replace />
+  return <LoginScreen />
 }
 
-function HomePage({ onLogout }: { onLogout: () => void }) {
-  const { t } = useTranslation()
-  const sample: Pick<Character, 'name'> = useMemo(
-    () => ({ name: 'Shared types OK' }),
-    [],
-  )
-
-  const supabaseReady =
-    Boolean(import.meta.env.VITE_SUPABASE_URL?.length) &&
-    Boolean(import.meta.env.VITE_SUPABASE_ANON_KEY?.length)
-
-  return (
-    <div className="card parchment mx-auto max-w-lg text-left">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-        <h1 className="mb-0 border-0 pb-0">{t('menu.session')}</h1>
-        <LanguageSwitcher />
-      </div>
-      <p className="mb-2">
-        <strong>{sample.name}</strong> — {t('common.cancel')}
-      </p>
-      <p className="mb-4 text-sm text-[var(--color-ink-faded)]">
-        Supabase env: {supabaseReady ? 'variables set' : 'configure .env (see .env.example)'}
-      </p>
-      <button type="button" onClick={onLogout}>
-        {t('common.back')}
-      </button>
-    </div>
-  )
+function Protected({ children }: { children: ReactNode }) {
+  const { configured, loading, session } = useAuth()
+  if (!configured) return <ConfigMissing />
+  if (loading) return <LoadingCard />
+  if (!session) return <Navigate to="/login" replace />
+  return children
 }
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-
   return (
     <BrowserRouter>
-      <div id="app" className="w-full min-h-screen flex flex-col items-center justify-center p-6">
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              isAuthenticated ? (
-                <Navigate to="/" replace />
-              ) : (
-                <LoginPage onLogin={() => setIsAuthenticated(true)} />
-              )
-            }
-          />
-          <Route
-            path="/"
-            element={
-              isAuthenticated ? (
-                <HomePage onLogout={() => setIsAuthenticated(false)} />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
+      <AuthProvider>
+        <div id="app" className="flex min-h-screen w-full flex-col items-center justify-center p-4 md:p-6">
+          <Routes>
+            <Route path="/login" element={<LoginRoute />} />
+            <Route path="/" element={<RootRedirect />} />
+            <Route
+              path="/campaigns"
+              element={
+                <Protected>
+                  <CampaignListScreen />
+                </Protected>
+              }
+            />
+            <Route
+              path="/play/:campaignId"
+              element={
+                <Protected>
+                  <PlayerCampaignHome />
+                </Protected>
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

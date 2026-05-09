@@ -15,6 +15,8 @@ export interface Campaign {
   version: string;
   created_at: string;
   updated_at: string;
+  /** When set by GM, players may join via joinCampaignWithCode (RPC). */
+  join_code?: string | null;
 }
 
 export interface CampaignMember {
@@ -180,6 +182,40 @@ export async function addMember(
 
   if (error) return mapSupabaseError<CampaignMember>(error);
   return success(data as CampaignMember);
+}
+
+/**
+ * Self-join a campaign using the optional join_code stored on the campaign (GM must set it).
+ */
+export async function joinCampaignWithCode(
+  client: TypedSupabaseClient,
+  campaignId: string,
+  code: string
+): Promise<ServiceResult<void>> {
+  const trimmed = code.trim();
+  const { data, error } = await client.rpc('join_campaign_with_code', {
+    p_campaign_id: campaignId,
+    p_code: trimmed,
+  });
+
+  if (error) return mapSupabaseError<void>(error);
+
+  const result = data as { ok?: boolean; error?: string } | null;
+  if (!result?.ok) {
+    const err = result?.error;
+    if (err === 'join_not_enabled') {
+      return failure(
+        ErrorCode.VALIDATION_ERROR,
+        'Join by code is not enabled for this campaign. Ask your GM to add your account, then refresh your campaign list.'
+      );
+    }
+    if (err === 'invalid_code') {
+      return failure(ErrorCode.VALIDATION_ERROR, 'Invalid campaign ID or join code.');
+    }
+    return failure(ErrorCode.VALIDATION_ERROR, 'Unable to join this campaign.');
+  }
+
+  return success(undefined as void);
 }
 
 /**

@@ -95,6 +95,7 @@ export {
   updateCampaign,
   deleteCampaign,
   addMember,
+  joinCampaignWithCode,
   removeMember,
   updateMemberColor,
 } from './services/campaignService';
