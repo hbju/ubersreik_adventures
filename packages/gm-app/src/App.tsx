@@ -55,6 +55,7 @@ import {
     Talent,
     TalentSelectionModal,
     QueuedRoll,
+    exportCampaignBackupFromSupabase,
 } from '@wfrp/shared';
 import { CharacterProvider, useCharacterContext } from './context/CharacterContext';
 import { UserProvider, useUserContext } from './context/UserContext';
@@ -801,8 +802,24 @@ function GmDashboard() {
     };
 
     const handleBackupCampaign = async () => {
+        if (!serviceContext) {
+            addLogEntry('system', 'Backup failed: no campaign context.', 'logs.backup_failed', {});
+            alert('Backup failed: no campaign loaded.');
+            return;
+        }
         try {
-            const result = await window.ipcRenderer.backupCampaign();
+            const exportResult = await exportCampaignBackupFromSupabase(
+                serviceContext.client,
+                serviceContext.campaignId
+            );
+            if (exportResult.error || exportResult.data == null) {
+                const msg = exportResult.error?.message ?? 'Could not export campaign from Supabase.';
+                addLogEntry('system', `Backup failed: ${msg}`, 'logs.backup_failed', { error: msg });
+                alert(`Backup failed: ${msg}`);
+                return;
+            }
+            const json = JSON.stringify(exportResult.data, null, 2);
+            const result = await window.ipcRenderer.backupCampaign(json);
             if (result.success) {
                 addLogEntry('system', `Campaign backup created successfully at: ${result.path}`, 'logs.backup_success', { path: result.path });
                 alert(`Backup created successfully!\nPath: ${result.path}`);

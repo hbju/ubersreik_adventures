@@ -49,11 +49,10 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     },
 
     /**
-     * Trigger a manual backup of the campaign data
-     * @returns Promise resolving to the result { success: boolean, path?: string, error?: string }
+     * Write campaign backup JSON to the userData/backups folder (payload from Supabase export).
      */
-    backupCampaign() {
-        return ipcRenderer.invoke('backup-campaign')
+    backupCampaign(jsonContent: string) {
+        return ipcRenderer.invoke('backup-campaign', jsonContent)
     },
 
     // ==================== Audio Manager API ====================

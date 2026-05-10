@@ -11,7 +11,8 @@ type QuestUpdate = Database['public']['Tables']['quests']['Update'];
 
 export type { QuestRow, QuestInsert, QuestUpdate };
 
-export interface QuestObjective {
+/** Legacy JSON shape for objectives stored in DB (distinct from {@link QuestObjective} in wfrp.types). */
+export interface QuestObjectiveJson {
   text: string;
   completed: boolean;
 }

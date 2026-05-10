@@ -12,8 +12,8 @@ interface IpcRendererApi {
     saveData: (data: any) => void;
     onDataUpdated: (callback: (value: any) => void) => () => void;
 
-    // Backup API
-    backupCampaign: () => Promise<{ success: boolean; path?: string; error?: string }>;
+    // Backup API — writes JSON exported from Supabase (`exportCampaignBackupFromSupabase`)
+    backupCampaign: (jsonContent: string) => Promise<{ success: boolean; path?: string; error?: string }>;
     
     // Audio Manager API
     getAudioServerPort: () => Promise<number>;

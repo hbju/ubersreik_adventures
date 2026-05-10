@@ -115,8 +115,28 @@ export function saveCampaignData(data: CampaignState): void {
 }
 
 /**
- * Create a backup of the current campaign data
+ * Write a JSON snapshot to the backups folder (source: Supabase export from renderer).
  * @returns The path to the backup file
+ */
+export function saveCampaignBackupJson(jsonContent: string): string {
+    const userDataPath = app.getPath('userData');
+    const backupsDir = path.join(userDataPath, 'backups');
+
+    if (!fs.existsSync(backupsDir)) {
+        fs.mkdirSync(backupsDir, { recursive: true });
+    }
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const backupPath = path.join(backupsDir, `campaign-backup-${timestamp}.json`);
+
+    fs.writeFileSync(backupPath, jsonContent, 'utf-8');
+    console.log('Campaign backup written:', backupPath);
+
+    return backupPath;
+}
+
+/**
+ * @deprecated Legacy copy of local campaign-state.json — unused now that Supabase is authoritative.
  */
 export function backupCampaignData(): string {
     const filePath = getCampaignFilePath();
@@ -129,7 +149,6 @@ export function backupCampaignData(): string {
         const userDataPath = app.getPath('userData');
         const backupsDir = path.join(userDataPath, 'backups');
 
-        // Ensure backups directory exists
         if (!fs.existsSync(backupsDir)) {
             fs.mkdirSync(backupsDir, { recursive: true });
         }

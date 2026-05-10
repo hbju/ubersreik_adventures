@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { LanguageSwitcher, getCampaignsForUser, getSupabaseClient, type Campaign } from '@wfrp/shared'
+import { Navigate, useParams } from 'react-router-dom'
+import { getCampaignsForUser, getSupabaseClient, type Campaign } from '@wfrp/shared'
 import { LAST_CAMPAIGN_STORAGE_KEY } from '../constants'
 import { useAuth } from '../context/AuthContext'
+import { PlayerModalProvider } from '../context/PlayerModalContext'
+import { PlayerNavigationProvider } from '../context/PlayerNavigationContext'
+import { PlayerSessionProvider } from '../context/PlayerSessionContext'
+import { PlayerLayout } from '../components/layout/PlayerLayout'
+import { PlayerModalHost } from '../components/layout/PlayerModalHost'
 
 export function PlayerCampaignHome() {
   const { campaignId } = useParams<{ campaignId: string }>()
-  const navigate = useNavigate()
-  const { t } = useTranslation()
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const [campaign, setCampaign] = useState<Campaign | null>(null)
   const [denied, setDenied] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -58,34 +60,27 @@ export function PlayerCampaignHome() {
 
   if (loading || !campaign) {
     return (
-      <div className="card parchment mx-auto max-w-lg w-full text-center">
-        <p className="mb-0 text-[var(--color-ink-faded)]">{t('campaign.loading')}</p>
+      <div className="flex min-h-screen w-full items-center justify-center p-4">
+        <div className="card parchment mx-auto max-w-lg w-full text-center">
+          <p className="mb-0 text-[var(--color-ink-faded)]">Loading campaign…</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="w-full max-w-3xl px-4">
-      <div className="card parchment text-left">
-        <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <h1 className="mb-1 border-0 pb-0 text-2xl">{campaign.name}</h1>
-            <p className="mb-0 text-sm text-[var(--color-ink-faded)]">
-              Player session — full character and play UI will land here in later PBIs.
-            </p>
+    <PlayerSessionProvider
+      campaignId={campaign.id}
+      campaignName={campaign.name}
+    >
+      <PlayerModalProvider>
+        <PlayerNavigationProvider>
+          <div className="flex min-h-screen w-full flex-col bg-[var(--color-vellum)]">
+            <PlayerLayout />
+            <PlayerModalHost />
           </div>
-          <LanguageSwitcher />
-        </header>
-
-        <div className="flex flex-wrap gap-2">
-          <button type="button" className="min-h-[44px]" onClick={() => navigate('/campaigns')}>
-            {t('campaign.selectorTitle')}
-          </button>
-          <button type="button" className="min-h-[44px]" onClick={() => void logout()}>
-            {t('auth.logout')}
-          </button>
-        </div>
-      </div>
-    </div>
+        </PlayerNavigationProvider>
+      </PlayerModalProvider>
+    </PlayerSessionProvider>
   )
 }

@@ -28,6 +28,7 @@ export * from './hooks/useDebounce';
 export * from './hooks/useRealtimeSync';
 export * from './hooks/useBroadcast';
 export * from './hooks/usePresence';
+export * from './hooks/player';
 export * from './i18n';
 export * from './types/wfrp.types';
 export * from './types/messaging.types';
@@ -107,6 +108,13 @@ export type {
   CampaignUpdate,
 } from './services/campaignService';
 export {
+  exportCampaignBackupFromSupabase,
+} from './services/campaignBackupExport';
+export type {
+  CampaignBackupPayload,
+  SupabaseBackupExtra,
+} from './services/campaignBackupExport';
+export {
   getCharacters,
   getCharacterById,
   createCharacter,
@@ -147,7 +155,7 @@ export type {
   QuestRow,
   QuestInsert,
   QuestUpdate,
-  QuestObjective,
+  QuestObjectiveJson,
 } from './services/questService';
 export {
   getFactions,

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import os from 'node:os'
 import { update } from './update'
-import { loadCampaignData, saveCampaignData, clearCampaignCache, backupCampaignData } from './dataManager'
+import { loadCampaignData, saveCampaignData, clearCampaignCache, saveCampaignBackupJson } from './dataManager'
 import { startAudioServer, getAudioServerPort, stopAudioServer } from './audioServer'
 import { selectAndCopyCharacterImage, readCharacterImageAsDataUrl, deleteCharacterImage } from './imageHandler'
 import {
@@ -213,11 +213,14 @@ ipcMain.on('save-data', (event, data: CampaignState) => {
 });
 
 /**
- * Handle backup request from renderer
+ * Write a Supabase-exported JSON snapshot from the renderer to the backups folder.
  */
-ipcMain.handle('backup-campaign', async () => {
+ipcMain.handle('backup-campaign', async (_event, jsonContent: string) => {
   try {
-    const backupPath = backupCampaignData();
+    if (!jsonContent || typeof jsonContent !== 'string') {
+      return { success: false, error: 'Missing backup JSON payload.' };
+    }
+    const backupPath = saveCampaignBackupJson(jsonContent);
     return { success: true, path: backupPath };
   } catch (error) {
     console.error('Error backing up campaign:', error);

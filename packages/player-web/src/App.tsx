@@ -28,7 +28,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div id="app" className="flex min-h-screen w-full flex-col items-center justify-center p-4 md:p-6">
+        <div id="app" className="flex min-h-screen w-full flex-col items-center justify-center">
           <Routes>
             <Route path="/login" element={<LoginRoute />} />
             <Route path="/" element={<RootRedirect />} />
@@ -44,7 +44,9 @@ export default function App() {
               path="/play/:campaignId"
               element={
                 <Protected>
-                  <PlayerCampaignHome />
+                  <div className="flex min-h-screen w-full flex-col">
+                    <PlayerCampaignHome />
+                  </div>
                 </Protected>
               }
             />
