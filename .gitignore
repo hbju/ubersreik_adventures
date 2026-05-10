@@ -42,6 +42,8 @@ packages/*/.env.local
 *.sln
 *.sw?
 
+*/.temp
+
 /packages/*/.vscode/.debug.env
 /packages/*/.idea
 /packages/*/.DS_Store
