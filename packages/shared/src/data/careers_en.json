@@ -8268,6 +8268,1129 @@
         ]
     },
     {
+        "id": "beachcomber",
+        "name": "Beachcomber",
+        "description": "Beachcombers live by their wits upon the littoral, finding most of what they need to survive through Manann's providence. A diverse range of flotsam and jetsam gets washed up on the beaches of the Sea of Claws, and Beachcombers take full advantage of this. Almost any item that can be traded will find itself aboard a ship on the Sea of Claws, and therefore, provided it floats for a time, could end up washed up on a beach.",
+        "class": "Riverfolk",
+        "races": [
+            "Halfling",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "scavenger",
+                "name": "Scavenger",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "climb",
+                    "dodge",
+                    "gossip",
+                    "haggle",
+                    "lore_coasts-and-tides",
+                    "melee_basic",
+                    "outdoor-survival",
+                    "perception",
+                    "row",
+                    "stealth_rural"
+                ],
+                "talent_ids": [
+                    "fisherman",
+                    "orientation",
+                    "strider_coastal",
+                    "strong-swimmer"
+                ],
+                "trappings": [
+                    "Fishing Net",
+                    "String Bag"
+                ],
+                "status": "Brass 1"
+            },
+            {
+                "id": "beachcomber",
+                "name": "Beachcomber",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "consume-alcohol",
+                    "endurance",
+                    "lore_any",
+                    "ranged_sling",
+                    "set-trap",
+                    "swim"
+                ],
+                "talent_ids": [
+                    "coolheaded",
+                    "flee",
+                    "rover",
+                    "stone-soup"
+                ],
+                "trappings": [
+                    "Found Boots",
+                    "Leather Jerkin",
+                    "Rain Hat"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "drifter",
+                "name": "Drifter",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "evaluate",
+                    "gamble",
+                    "sail"
+                ],
+                "talent_ids": [
+                    "old-salt",
+                    "savant_coasts-and-tides",
+                    "sea-legs",
+                    "tinker"
+                ],
+                "trappings": [
+                    "Boat",
+                    "Hut",
+                    "Storm Lantern"
+                ],
+                "status": "Brass 5"
+            },
+            {
+                "id": "master-of-the-beach",
+                "name": "Master of the Beach",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "leadership",
+                    "trade_boatbuilder"
+                ],
+                "talent_ids": [
+                    "dealmaker",
+                    "river-guide",
+                    "seasoned-traveller",
+                    "tenacious"
+                ],
+                "trappings": [
+                    "Wreck Dwelling"
+                ],
+                "status": "Silver 2"
+            }
+        ]
+    },
+    {
+        "id": "chantyman",
+        "name": "Chantyman",
+        "description": "Any sailor worth their salt performs better to the sound of a Chantyman. Some say they are just singers and musicians, like any others. However, it is a common belief amongst most ship's crews that the best Chantymen can have an unnatural effect upon the crew. They coordinate the actions of the ship's crew, guide their activity, and raise morale with rousing ditties.",
+        "class": "Riverfolk",
+        "races": [
+            "High Elf",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "chanter",
+                "name": "Chanter",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "consume-alcohol",
+                    "dodge",
+                    "entertain_singing",
+                    "gossip",
+                    "melee_brawling",
+                    "play_any",
+                    "row",
+                    "sail",
+                    "swim"
+                ],
+                "talent_ids": [
+                    "etiquette_crew",
+                    "perfect-pitch",
+                    "sea-legs",
+                    "strider_coastal"
+                ],
+                "trappings": [
+                    "Musical Instrument",
+                    "Rain Hat"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "chantyman",
+                "name": "Chantyman",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "climb",
+                    "endurance",
+                    "gamble",
+                    "melee_basic",
+                    "perform_any"
+                ],
+                "talent_ids": [
+                    "chanty",
+                    "jump-up",
+                    "seasoned-traveller",
+                    "strong-swimmer"
+                ],
+                "trappings": [
+                    "Sealskin Coat"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "chanty-captain",
+                "name": "Chanty Captain",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "language_any",
+                    "leadership",
+                    "perception"
+                ],
+                "talent_ids": [
+                    "carouser",
+                    "fisherman",
+                    "old-salt",
+                    "public-speaker"
+                ],
+                "trappings": [
+                    "Quality Instrument"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "chanty-master",
+                "name": "Chanty Master",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "lore_oceans",
+                    "navigation"
+                ],
+                "talent_ids": [
+                    "tenacious",
+                    "magnum-opus",
+                    "orientation",
+                    "read-write"
+                ],
+                "trappings": [
+                    "Quality Hat"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
+        "id": "huffer",
+        "name": "Huffer",
+        "description": "Huffers are known to work on the rivers of the Empire, but pilots and navigators are obviously even more invaluable to captains of ocean-going vessels. Not only is knowledge of areas of rock, reef, or sandbank necessary, but seafarers often sail beyond sight of any landmark, so navigators at sea must display practical knowledge of how to pinpoint their location from the position of the sun and the stars.",
+        "class": "Riverfolk",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "High Elf",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "portguide",
+                "name": "Portguide",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "consume-alcohol",
+                    "gossip",
+                    "intuition",
+                    "lore_local",
+                    "lore_oceans",
+                    "melee_basic",
+                    "navigation",
+                    "perception",
+                    "row",
+                    "swim"
+                ],
+                "talent_ids": [
+                    "fisherman",
+                    "night-vision",
+                    "orientation",
+                    "waterman"
+                ],
+                "trappings": [
+                    "Hand Weapon (Boat Hook)",
+                    "Storm Lantern and Oil"
+                ],
+                "status": "Brass 4"
+            },
+            {
+                "id": "huffer",
+                "name": "Huffer",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "charm",
+                    "climb",
+                    "cool",
+                    "entertain_storytelling",
+                    "language_any"
+                ],
+                "talent_ids": [
+                    "dealmaker",
+                    "etiquette_guilder",
+                    "nose-for-trouble",
+                    "old-salt"
+                ],
+                "trappings": [
+                    "Leather Jerkin",
+                    "Rope",
+                    "Row Boat"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "pilot",
+                "name": "Pilot",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "haggle",
+                    "intimidate",
+                    "lore_local",
+                    "lore_wrecks"
+                ],
+                "talent_ids": [
+                    "acute-sense_sight",
+                    "pilot",
+                    "sea-legs",
+                    "very-strong"
+                ],
+                "trappings": [
+                    "Pole",
+                    "Storm Lantern and Oil"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "master-pilot",
+                "name": "Master Pilot",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "T",
+                    "I",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "leadership",
+                    "sail"
+                ],
+                "talent_ids": [
+                    "sharp",
+                    "sixth-sense",
+                    "strong-swimmer",
+                    "tenacious"
+                ],
+                "trappings": [
+                    "Boathand",
+                    "Small Boat"
+                ],
+                "status": "Silver 5"
+            }
+        ]
+    },
+    {
+        "id": "officer",
+        "name": "Officer",
+        "description": "Ship's Officers, especially captains, are judge, jury, and executioner aboard their vessels. They have Manann-given power of life and death over the crew, but this is a double-edged sword. The Officer must also inspire the crew to trust their judgement and competence, or the hands might mutiny.",
+        "class": "Riverfolk",
+        "races": [
+            "Dwarf",
+            "High Elf",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "midshipman",
+                "name": "Midshipman",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "climb",
+                    "gossip",
+                    "leadership",
+                    "melee_basic",
+                    "outdoor-survival",
+                    "perception",
+                    "row",
+                    "sail",
+                    "swim"
+                ],
+                "talent_ids": [
+                    "etiquette_crew",
+                    "orientation",
+                    "read-write",
+                    "sea-legs"
+                ],
+                "trappings": [
+                    "Hand Weapon",
+                    "Uniform"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "officer",
+                "name": "Officer",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "endurance",
+                    "intimidate",
+                    "lore_oceans",
+                    "navigation",
+                    "ranged_blackpowder"
+                ],
+                "talent_ids": [
+                    "coolheaded",
+                    "old-salt",
+                    "master-and-commander",
+                    "pilot"
+                ],
+                "trappings": [
+                    "Quality Uniform",
+                    "Ship's Chest"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "captain",
+                "name": "Captain",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "art_cartography",
+                    "charm",
+                    "dodge",
+                    "intuition"
+                ],
+                "talent_ids": [
+                    "coolheaded",
+                    "inspiring",
+                    "seasoned-traveller",
+                    "warleader"
+                ],
+                "trappings": [
+                    "Big Hat",
+                    "Boat to Command",
+                    "Captain's Log"
+                ],
+                "status": "Gold 2"
+            },
+            {
+                "id": "admiral",
+                "name": "Admiral",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "T",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_any"
+                ],
+                "talent_ids": [
+                    "commanding-presence",
+                    "iron-will",
+                    "public-speaking",
+                    "stout-hearted"
+                ],
+                "trappings": [
+                    "A Fleet"
+                ],
+                "status": "Gold 5"
+            }
+        ]
+    },
+    {
+        "id": "sailor",
+        "name": "Sailor",
+        "description": "Humans of the Old World had to learn the skills of sailing for themselves, for the Dwarfs were never a great maritime civilisation, and the Elves had no desire to encourage Human exploration of the wider world. Yet once the rudiments of catching the wind and navigating by sun and stars were learned, the Humans of the Old World grew to be confident and competent sailors.",
+        "class": "Riverfolk",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "High Elf",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "landsman",
+                "name": "Landsman",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "climb",
+                    "consume-alcohol",
+                    "gamble",
+                    "gossip",
+                    "lore_oceans",
+                    "melee_brawling",
+                    "play_pennywhistle",
+                    "row",
+                    "sail",
+                    "swim"
+                ],
+                "talent_ids": [
+                    "fisherman",
+                    "strider_coastal",
+                    "strong-back",
+                    "strong-swimmer"
+                ],
+                "trappings": [
+                    "Brush",
+                    "Bucket",
+                    "Mop"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "sailor",
+                "name": "Sailor",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "dodge",
+                    "endurance",
+                    "entertain_singing",
+                    "language_any",
+                    "melee_basic"
+                ],
+                "talent_ids": [
+                    "catfall",
+                    "sea-legs",
+                    "seasoned-traveller",
+                    "strong-legs"
+                ],
+                "trappings": [
+                    "Boat Hook",
+                    "Leather Jerkin"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "boatswain",
+                "name": "Boatswain",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "leadership",
+                    "perception",
+                    "trade_carpenter"
+                ],
+                "talent_ids": [
+                    "old-salt",
+                    "strike-mighty-blow",
+                    "tenacious",
+                    "very-strong"
+                ],
+                "trappings": [
+                    "Trade Tools (Carpenter)"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "ships-master",
+                "name": "Ship's Master",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "I",
+                    "Ag",
+                    "Dex",
+                    "Int",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "navigation"
+                ],
+                "talent_ids": [
+                    "orientation",
+                    "pilot",
+                    "public-speaking",
+                    "savvy"
+                ],
+                "trappings": [
+                    "Sailing Ship and Crew",
+                    "Sextant",
+                    "Shipping Charts",
+                    "Spyglass"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
+        "id": "sailor-priest-of-manann",
+        "name": "Sailor-Priest of Manann",
+        "description": "Priests of Manann are found working and ministering on board vessels as often as they are found in his temples and shrines. Manann is a fickle and moody deity, but he seems to respect a degree of practical ability and experience of the seas in his priests, and most of them spend a part of their career at sea.",
+        "class": "Riverfolk",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "initiate",
+                "name": "Initiate",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "consume-alcohol",
+                    "cool",
+                    "endurance",
+                    "language_classical",
+                    "lore_manann",
+                    "pray",
+                    "row",
+                    "sail",
+                    "swim"
+                ],
+                "talent_ids": [
+                    "bless_manann",
+                    "holy-visions",
+                    "sea-legs",
+                    "very-strong"
+                ],
+                "trappings": [
+                    "Blue or Green or Turquoise Robes",
+                    "Cutlass",
+                    "Symbol of Manann"
+                ],
+                "status": "Brass 2"
+            },
+            {
+                "id": "sailor-priest",
+                "name": "Sailor-Priest",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "intuition",
+                    "entertain_singing",
+                    "gamble",
+                    "intimidate",
+                    "melee_polearm",
+                    "navigation"
+                ],
+                "talent_ids": [
+                    "invoke_manann",
+                    "public-speaking",
+                    "read-write",
+                    "strong-back"
+                ],
+                "trappings": [
+                    "Holy Book of Manann",
+                    "Trident (counts as Spear)"
+                ],
+                "status": "Silver 1"
+            },
+            {
+                "id": "priest-captain",
+                "name": "Priest-Captain",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "consume-alcohol",
+                    "leadership",
+                    "lore_oceans",
+                    "ranged_blackpowder"
+                ],
+                "talent_ids": [
+                    "hatred_followers-of-stromfels",
+                    "old-salt",
+                    "pilot",
+                    "strong-swimmer"
+                ],
+                "trappings": [
+                    "Ceremonial Boat",
+                    "Quality Robes",
+                    "Subordinate Priests",
+                    "Temple"
+                ],
+                "status": "Gold 1"
+            },
+            {
+                "id": "wave-lord",
+                "name": "Wave Lord",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "language_any",
+                    "lore_politics"
+                ],
+                "talent_ids": [
+                    "chanty",
+                    "inspiring",
+                    "pure-soul",
+                    "seasoned-traveller"
+                ],
+                "trappings": [
+                    "Flotilla of Ships",
+                    "Holy Relic",
+                    "Subordinate High Priests"
+                ],
+                "status": "Gold 2"
+            }
+        ]
+    },
+    {
+        "id": "ships-gunner",
+        "name": "Ship's Gunner",
+        "description": "The Ship's Gunner is part of the crew, and just like any other crew member they are expected to help with the sailing of their vessel and to put their hand to anything involved in running the ship. In addition, they are experts on blackpowder weapons and their use at sea.",
+        "class": "Riverfolk",
+        "races": [
+            "Dwarf",
+            "Halfling",
+            "High Elf",
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "powder-monkey",
+                "name": "Powder Monkey",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "BS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "athletics",
+                    "climb",
+                    "dodge",
+                    "endurance",
+                    "language_battle",
+                    "melee_brawling",
+                    "perception",
+                    "ranged_blackpowder",
+                    "row",
+                    "swim"
+                ],
+                "talent_ids": [
+                    "old-salt",
+                    "rapid-reload",
+                    "sea-legs",
+                    "strong-back"
+                ],
+                "trappings": [
+                    "Bucket",
+                    "Hammock"
+                ],
+                "status": "Brass 3"
+            },
+            {
+                "id": "ships-gunner",
+                "name": "Ship's Gunner",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "BS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "consume-alcohol",
+                    "cool",
+                    "gamble",
+                    "gossip",
+                    "melee_basic",
+                    "sail"
+                ],
+                "talent_ids": [
+                    "etiquette_crew",
+                    "gunner",
+                    "marksman",
+                    "sniper"
+                ],
+                "trappings": [
+                    "Hat",
+                    "Sea Chest",
+                    "Tools"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "gunnery-captain",
+                "name": "Gunnery Captain",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "BS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "leadership",
+                    "lore_artillery",
+                    "navigation",
+                    "trade_gunsmith"
+                ],
+                "talent_ids": [
+                    "combat-aware",
+                    "crew-commander",
+                    "orientation",
+                    "read-write"
+                ],
+                "trappings": [
+                    "Crew",
+                    "Telescope"
+                ],
+                "status": "Silver 5"
+            },
+            {
+                "id": "master-gunner",
+                "name": "Master Gunner",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "BS",
+                    "T",
+                    "I",
+                    "Ag",
+                    "Int",
+                    "WP"
+                ],
+                "skills_ids": [
+                    "charm",
+                    "lore_oceans"
+                ],
+                "talent_ids": [
+                    "accurate-shot",
+                    "inspiring",
+                    "seasoned-traveller",
+                    "stout-hearted"
+                ],
+                "trappings": [
+                    "Cabin",
+                    "Quality Uniform"
+                ],
+                "status": "Gold 1"
+            }
+        ]
+    },
+    {
+        "id": "priest-of-stromfels",
+        "name": "Priest of Stromfels",
+        "description": "Priests of Stromfels are actively involved in the business of piracy, raiding, or wrecking — to do less would be hypocrisy. You may not take the Priest of Stromfels as your first career, and it can only be undertaken after you have completed the first tier of a predatory occupation. This need not be a seafaring career; there are Outlaws, Protagonists, and Racketeers who might find much to admire in Stromfels, but most of his priests have either served as crew on a pirate vessel, or worked as Wreckers.",
+        "class": "Riverfolk",
+        "races": [
+            "Human"
+        ],
+        "career_level": [
+            {
+                "id": "initiate",
+                "name": "Initiate",
+                "lvl": 1,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "climb",
+                    "consume-alcohol",
+                    "endurance",
+                    "intimidate",
+                    "intuition",
+                    "melee_basic",
+                    "pray",
+                    "row",
+                    "sail",
+                    "swim"
+                ],
+                "talent_ids": [
+                    "bless_stromfels",
+                    "criminal",
+                    "holy-visions",
+                    "strong-swimmer"
+                ],
+                "trappings": [
+                    "Crowbar",
+                    "Hand Weapon",
+                    "Large Sack",
+                    "Leather Jerkin",
+                    "Leather Gloves"
+                ],
+                "status": "Silver 2"
+            },
+            {
+                "id": "priest-of-stromfels",
+                "name": "Priest of Stromfels",
+                "lvl": 2,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "cool",
+                    "entertain_chanties",
+                    "lore_stromfels",
+                    "navigation",
+                    "perception",
+                    "track"
+                ],
+                "talent_ids": [
+                    "fearless_any",
+                    "flee",
+                    "invoke_stromfels",
+                    "menacing"
+                ],
+                "trappings": [
+                    "Leather Jack",
+                    "Storm Lantern and Oil"
+                ],
+                "status": "Silver 3"
+            },
+            {
+                "id": "pirate-priest",
+                "name": "Pirate Priest",
+                "lvl": 3,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "gossip",
+                    "leadership",
+                    "lore_oceans",
+                    "set-trap"
+                ],
+                "talent_ids": [
+                    "hatred_any",
+                    "impassioned-zeal",
+                    "master-orator",
+                    "rover"
+                ],
+                "trappings": [
+                    "Grappling Hook and Rope",
+                    "Religious Relic",
+                    "Riverboat"
+                ],
+                "status": "Silver 4"
+            },
+            {
+                "id": "priest-captain",
+                "name": "Priest Captain",
+                "lvl": 4,
+                "characteristic_advances": [
+                    "WS",
+                    "BS",
+                    "S",
+                    "I",
+                    "Ag",
+                    "Fel"
+                ],
+                "skills_ids": [
+                    "melee_any",
+                    "ranged_blackpowder"
+                ],
+                "talent_ids": [
+                    "furious-assault",
+                    "in-fighter",
+                    "pilot",
+                    "warrior-born"
+                ],
+                "trappings": [
+                    "Group of Cultists",
+                    "Pistol with 10 Shots"
+                ],
+                "status": "Silver 5"
+            }
+        ]
+    },
+    {
         "id": "boatman",
         "name": "Boatman",
         "description": "You ply the dangerous waters of the Old World, transporting people, goods, and the latest news. Boats and barges travel the Empire's waterways, bringing goods from the remotest corners of the provinces to the greatest cities. These shallow-drafted vessels can travel much further upriver than larger ships, and a comprehensive network of canals adds to their reach. Barge Masters are expert river sailors and have an exhaustive knowledge of their rivers. A Boat-hand is the dogsbody, but will learn the ropes swiftly. Boatmen crew merchant barges carrying cargo to and from markets, either working for themselves or for a larger Merchant House. Many Boatmen are also ferrymen, taking passengers across rivers, or to and from towns. In large towns, some also crew rivertaxis, sail pleasure vessels, or otherwise pilot boats on the behalf of others. A boatman will not need to seek out adventure, for more than likely adventure will come to them. Boats are useful to nearly everyone, and therefore useful to almost any adventure plot; they also make an excellent base of operations. Boatmen will not need to worry about following investigation and adventure if the plot stays on or close to the river. Even if the plot leaves the river, they could still easily allow a talented Boathand to look after their business while they take a break from river life.",
@@ -8395,138 +9518,6 @@
                 "trappings": [
                     "Hat",
                     "Riverboat and Crew"
-                ],
-                "status": "Silver 5"
-            }
-        ]
-    },
-    {
-        "id": "huffer",
-        "name": "Huffer",
-        "description": "You pilot ships and boats through the most treacherous waters of the Old World. Huffers are specialist river guides with expert knowledge of local river systems. They are a common sight near the most dangerous stretches of the Empire's rivers and can command significant wages for what many view as easy work. Others view it as cheap compared to the potential cost of lost cargo. Many Huffers specialise in a single, notorious stretch of water, while others make their money at certain times of the year when the waters are at their worst. Other Huffers have broader knowledge and will guide vessels for their entire journey, effectively acting as navigators. This is especially true of merchant ships with particularly valuable cargo at difficult times of the year. As an expert for hire, Huffers are often hired by wealthy patrons, frequently brought in as specialists on journeys of discovery. Even when travelling into the unknown, Huffers are useful for their broad range of knowledge concerning river conditions and piloting. Because of the regional and seasonal nature of the work, many Huffers are ready to drop everything and travel to where they're needed. This freedom transfers well to the adventuring lifestyle, and also suits those seeking to return to Huffing should adventuring not supply their needs.",
-        "class": "Riverfolk",
-        "races": [
-            "Dwarf",
-            "Halfling",
-            "Human"
-        ],
-        "career_level": [
-            {
-                "id": "riverguide",
-                "name": "Riverguide",
-                "lvl": 1,
-                "characteristic_advances": [
-                    "WS",
-                    "I",
-                    "T"
-                ],
-                "talent_ids": [
-                    "fisherman",
-                    "night-vision",
-                    "orientation",
-                    "waterman"
-                ],
-                "skills_ids": [
-                    "consume-alcohol",
-                    "gossip",
-                    "intuition",
-                    "lore_local",
-                    "lore_riverways",
-                    "perception",
-                    "row",
-                    "swim"
-                ],
-                "trappings": [
-                    "Hand Weapon (Boat Hook)",
-                    "Storm Lantern and Oil"
-                ],
-                "status": "Brass 4"
-            },
-            {
-                "id": "huffer",
-                "name": "Huffer",
-                "lvl": 2,
-                "characteristic_advances": [
-                    "WS",
-                    "I",
-                    "T",
-                    "WP"
-                ],
-                "talent_ids": [
-                    "dealmaker",
-                    "etiquette_guilder",
-                    "nose-for-trouble",
-                    "river-guide"
-                ],
-                "skills_ids": [
-                    "charm",
-                    "cool",
-                    "entertain_storytelling",
-                    "language_any",
-                    "melee",
-                    "navigation"
-                ],
-                "trappings": [
-                    "Leather Jerkin",
-                    "Rope",
-                    "Row Boat"
-                ],
-                "status": "Silver 1"
-            },
-            {
-                "id": "pilot",
-                "name": "Pilot",
-                "lvl": 3,
-                "characteristic_advances": [
-                    "WS",
-                    "I",
-                    "T",
-                    "WP",
-                    "Int"
-                ],
-                "talent_ids": [
-                    "acute-sense_sight",
-                    "pilot",
-                    "sea-legs",
-                    "very-strong"
-                ],
-                "skills_ids": [
-                    "haggle",
-                    "intimidate",
-                    "lore_local",
-                    "lore_wrecks"
-                ],
-                "trappings": [
-                    "Pole",
-                    "Storm Lantern and Oil"
-                ],
-                "status": "Silver 3"
-            },
-            {
-                "id": "master-pilot",
-                "name": "Master Pilot",
-                "lvl": 4,
-                "characteristic_advances": [
-                    "WS",
-                    "I",
-                    "T",
-                    "WP",
-                    "Int",
-                    "Fel"
-                ],
-                "talent_ids": [
-                    "sixth-sense",
-                    "sharp",
-                    "strong-swimmer",
-                    "tenacious"
-                ],
-                "skills_ids": [
-                    "leadership",
-                    "sail"
-                ],
-                "trappings": [
-                    "Boathand",
-                    "Small Riverboat"
                 ],
                 "status": "Silver 5"
             }

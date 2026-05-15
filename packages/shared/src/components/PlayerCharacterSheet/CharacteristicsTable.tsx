@@ -76,6 +76,11 @@ export const CharacteristicsTable: React.FC<CharacteristicsTableProps> = ({
     };
 
     const charKeys = Object.keys(character.characteristics) as Array<keyof Character['characteristics']>;
+    // sort charKeys based on the order defined in CHAR_NAMES
+    charKeys.sort((a, b) => {
+        const order = Object.keys(CHAR_NAMES);
+        return order.indexOf(a) - order.indexOf(b);
+    });
 
     return (
         <div className="characteristics-panel">
