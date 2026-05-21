@@ -126,7 +126,7 @@ function SkillRow({ skill, character, compact, onSkillClick }: SkillRowProps) {
       title={`Roll ${skill.name}`}
     >
       <span
-        className={`flex-1 text-primary truncate ${compact ? 'text-sm' : 'text-base'} ${
+        className={`flex-1 text-accent truncate ${compact ? 'text-sm' : 'text-base'} ${
           skill.advances > 0 ? '' : 'text-secondary'
         }`}
       >

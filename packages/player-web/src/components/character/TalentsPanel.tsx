@@ -65,11 +65,11 @@ export function TalentsPanel({ character }: TalentsPanelProps) {
             onClick={() => handleTalentClick(def!, rank)}
             className="w-full text-left rounded-sm border border-border-dark bg-bg-dark
               px-3 py-2 transition-colors hover:border-brass/50 hover:bg-bg-elevated
-              active:bg-bg-surface"
+              active:bg-bg-surface text-accent hover:text-primary"
           >
             <div className="flex items-center gap-2">
-              <span className="text-sm text-primary flex-1 truncate">{def!.name}</span>
-              {rank > 1 && <Badge size="sm">×{rank}</Badge>}
+              <span className="text-sm  flex-1 truncate">{def!.name}</span>
+              {rank > 1 && <Badge size="lg" variant='info'>×{rank}</Badge>}
             </div>
             {def!.description && (
               <p className="text-xs text-secondary mt-1 mb-0 line-clamp-2">
