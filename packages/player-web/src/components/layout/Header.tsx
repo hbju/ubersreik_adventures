@@ -1,4 +1,5 @@
 import { usePlayerSession } from '../../context/PlayerSessionContext'
+import { ConnectionIndicator } from './ConnectionIndicator'
 
 export function Header() {
   const { campaignName, playerData } = usePlayerSession()
@@ -7,7 +8,6 @@ export function Header() {
   const currentCareer = careerHistory?.length
     ? careerHistory[careerHistory.length - 1].careerName
     : null
-  const isOnline = playerData.isConnected
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 flex h-14 md:h-[56px] items-center border-b border-brass bg-bg-dark px-4">
@@ -32,13 +32,7 @@ export function Header() {
 
       {/* Right: Connection indicator + settings */}
       <div className="flex-1 flex items-center justify-end gap-3">
-        {/* Connection dot */}
-        <span
-          className={`inline-block h-2.5 w-2.5 rounded-full ${
-            isOnline ? 'bg-poison-light' : 'bg-blood-light'
-          }`}
-          title={isOnline ? 'Connected' : 'Disconnected'}
-        />
+        <ConnectionIndicator showLabel />
 
         {/* Settings gear */}
         <button

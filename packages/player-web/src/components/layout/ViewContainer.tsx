@@ -38,7 +38,7 @@ export function ViewContainer() {
   return (
     <main
       ref={scrollRef}
-      className="flex-1 overflow-y-auto wfrp-scrollbar p-4 md:p-6 lg:p-8"
+      className="flex flex-1 flex-col overflow-y-auto wfrp-scrollbar p-4 md:p-6 lg:p-8"
     >
       <ViewPlaceholder view={activeView} />
     </main>

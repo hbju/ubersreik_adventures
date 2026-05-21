@@ -1,4 +1,9 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PlayerModalProvider, usePlayerModal } from '../../context/PlayerModalContext'
+import { ModalHeader, ModalBody, ModalFooter } from '../modal/ModalParts'
+import { PlayerModalHost } from '../layout/PlayerModalHost'
+import { Button, Input, TextArea, Select, Tooltip, Badge, Tabs, Divider } from '../ui'
 
 const COLORS = [
   { label: 'bg-deepest', var: '--bg-deepest' },
@@ -66,6 +71,7 @@ export function ThemeShowcase() {
   const { t } = useTranslation()
 
   return (
+    <PlayerModalProvider>
     <div className="wfrp-dark min-h-screen p-8 wfrp-grain-overlay">
       <div className="max-w-5xl mx-auto">
         <h1 className="wfrp-text-heading text-4xl mb-2">
@@ -216,7 +222,7 @@ export function ThemeShowcase() {
           </div>
         </Section>
 
-        {/* ─── Scrollbar ─── */}
+        {/* ─── Custom Scrollbar ─── */}
         <Section title="Custom Scrollbar">
           <div className="wfrp-panel wfrp-scrollbar h-32 overflow-y-auto">
             {Array.from({ length: 20 }, (_, i) => (
@@ -226,7 +232,254 @@ export function ThemeShowcase() {
             ))}
           </div>
         </Section>
+
+        {/* ─── Modal Demos ─── */}
+        <Section title="Modals">
+          <ModalDemoButtons />
+        </Section>
+
+        {/* ─── Components ─── */}
+        <Section title="Components">
+          <ComponentShowcase />
+        </Section>
       </div>
     </div>
+    <PlayerModalHost />
+    </PlayerModalProvider>
+  )
+}
+
+function ModalDemoButtons() {
+  const { openModal, closeModal } = usePlayerModal()
+
+  const openConfirm = () => {
+    openModal(
+      'demo-confirm',
+      <ConfirmDemo onClose={() => closeModal('demo-confirm')} />,
+      { size: 'sm', dismissable: true }
+    )
+  }
+
+  const openScrollable = () => {
+    openModal(
+      'demo-scrollable',
+      <ScrollableDemo />,
+      { size: 'lg', dismissable: true }
+    )
+  }
+
+  const openSheet = () => {
+    openModal(
+      'demo-sheet',
+      <SheetDemo />,
+      { variant: 'sheet', dismissable: true }
+    )
+  }
+
+  return (
+    <div className="wfrp-panel">
+      <p className="text-xs text-muted mb-3 uppercase tracking-wider">Demo Modals (dev-only)</p>
+      <div className="flex flex-wrap gap-3">
+        <button type="button" onClick={openConfirm}>Confirmation Dialog</button>
+        <button type="button" onClick={openScrollable}>Scrollable Content</button>
+        <button type="button" onClick={openSheet}>Sheet (Mobile)</button>
+      </div>
+    </div>
+  )
+}
+
+function ConfirmDemo({ onClose }: { onClose: () => void }) {
+  return (
+    <>
+      <ModalHeader title="Confirm Action" subtitle="This action cannot be undone." />
+      <ModalBody>
+        <p className="text-secondary mb-0">
+          Are you sure you want to spend <span className="text-accent font-bold">25 XP</span> to advance Weapon Skill?
+        </p>
+      </ModalBody>
+      <ModalFooter>
+        <button type="button" onClick={onClose} className="opacity-70">Cancel</button>
+        <button type="button" onClick={onClose}>Confirm</button>
+      </ModalFooter>
+    </>
+  )
+}
+
+function ScrollableDemo() {
+  return (
+    <>
+      <ModalHeader title="Tome of Knowledge" subtitle="A lengthy scroll of ancient lore" />
+      <ModalBody>
+        {Array.from({ length: 30 }, (_, i) => (
+          <p key={i} className="text-secondary mb-3">
+            <span className="text-accent font-display">Chapter {i + 1}:</span>{' '}
+            The Empire stretches from the Grey Mountains in the west to the World&apos;s Edge Mountains in the east.
+            Its provinces are bound by the will of the Emperor and the strength of its armies.
+            Yet darkness lurks in every shadow, and chaos whispers at the gates.
+          </p>
+        ))}
+      </ModalBody>
+    </>
+  )
+}
+
+function SheetDemo() {
+  return (
+    <>
+      <ModalHeader title="Quick Actions" />
+      <ModalBody>
+        <div className="space-y-3">
+          {['View Inventory', 'Check Skills', 'Roll Initiative', 'Rest & Recover'].map((action) => (
+            <button key={action} type="button" className="w-full text-left">
+              {action}
+            </button>
+          ))}
+        </div>
+      </ModalBody>
+    </>
+  )
+}
+
+function ComponentShowcase() {
+  const [selectVal, setSelectVal] = useState('')
+  const [textareaVal, setTextareaVal] = useState('')
+  const [activeTab, setActiveTab] = useState('stats')
+
+  return (
+    <div className="space-y-8">
+      {/* Buttons */}
+      <div className="wfrp-panel space-y-4">
+        <p className="text-xs text-muted mb-2 uppercase tracking-wider">Buttons</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button variant="primary">Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="danger">Danger</Button>
+          <Button variant="ghost">Ghost</Button>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button disabled>Disabled</Button>
+          <Button loading>Loading</Button>
+          <Button iconLeft={<SwordIcon />}>With Icon</Button>
+        </div>
+      </div>
+
+      {/* Inputs */}
+      <div className="wfrp-panel space-y-4 max-w-md">
+        <p className="text-xs text-muted mb-2 uppercase tracking-wider">Inputs</p>
+        <Input label="Character Name" placeholder="Enter name…" />
+        <Input label="Wounds" placeholder="0" size="sm" helperText="Current wounds taken" />
+        <Input label="Invalid Field" placeholder="Error shown" error="This field is required" />
+        <Input label="Disabled" placeholder="Cannot edit" disabled />
+      </div>
+
+      {/* TextArea */}
+      <div className="wfrp-panel space-y-4 max-w-md">
+        <p className="text-xs text-muted mb-2 uppercase tracking-wider">TextArea</p>
+        <TextArea
+          label="Journal Entry"
+          placeholder="Write your notes…"
+          value={textareaVal}
+          onChange={(e) => setTextareaVal(e.target.value)}
+          maxLength={200}
+          showCount
+        />
+        <TextArea label="Auto-grow" placeholder="This grows as you type…" autoGrow />
+      </div>
+
+      {/* Select */}
+      <div className="wfrp-panel space-y-4 max-w-sm">
+        <p className="text-xs text-muted mb-2 uppercase tracking-wider">Select</p>
+        <Select
+          label="Career"
+          placeholder="Choose a career…"
+          value={selectVal}
+          onChange={setSelectVal}
+          options={[
+            { label: 'Warrior', options: [{ value: 'soldier', label: 'Soldier' }, { value: 'knight', label: 'Knight' }] },
+            { label: 'Academic', options: [{ value: 'wizard', label: 'Wizard' }, { value: 'physician', label: 'Physician' }] },
+            { value: 'rat-catcher', label: 'Rat Catcher' },
+          ]}
+        />
+        <Select label="Disabled" placeholder="—" options={[]} disabled />
+      </div>
+
+      {/* Tooltip */}
+      <div className="wfrp-panel">
+        <p className="text-xs text-muted mb-3 uppercase tracking-wider">Tooltips</p>
+        <div className="flex flex-wrap items-center gap-6">
+          <Tooltip content="Attack bonus +10%">
+            <Button variant="secondary" size="sm">Hover me (top)</Button>
+          </Tooltip>
+          <Tooltip content="Defensive stance active" position="bottom">
+            <Button variant="ghost" size="sm">Bottom tooltip</Button>
+          </Tooltip>
+          <Tooltip content="Critical hit!" position="right">
+            <Badge variant="danger">Crit</Badge>
+          </Tooltip>
+        </div>
+      </div>
+
+      {/* Badges */}
+      <div className="wfrp-panel">
+        <p className="text-xs text-muted mb-3 uppercase tracking-wider">Badges</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <Badge>Default</Badge>
+          <Badge variant="success">Success</Badge>
+          <Badge variant="danger">Danger</Badge>
+          <Badge variant="magic">Magic</Badge>
+          <Badge variant="info">Info</Badge>
+        </div>
+        <div className="flex flex-wrap items-center gap-3 mt-3">
+          <Badge size="sm">Small</Badge>
+          <Badge size="md" onDismiss={() => {}}>Dismissable</Badge>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="wfrp-panel">
+        <p className="text-xs text-muted mb-3 uppercase tracking-wider">Tabs</p>
+        <Tabs
+          tabs={[
+            { id: 'stats', label: 'Statistics' },
+            { id: 'skills', label: 'Skills' },
+            { id: 'talents', label: 'Talents' },
+            { id: 'inventory', label: 'Inventory' },
+            { id: 'notes', label: 'Notes' },
+          ]}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
+        <p className="text-sm text-secondary mt-3 mb-0">Active: {activeTab}</p>
+      </div>
+
+      {/* Dividers */}
+      <div className="wfrp-panel space-y-4">
+        <p className="text-xs text-muted mb-2 uppercase tracking-wider">Dividers</p>
+        <Divider variant="subtle" />
+        <Divider variant="ornate" />
+        <Divider variant="section" label="Chapter II" />
+        <div className="flex items-center gap-4 h-8">
+          <span className="text-sm text-secondary">Left</span>
+          <Divider variant="ornate" direction="vertical" />
+          <span className="text-sm text-secondary">Right</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function SwordIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14.5 17.5 3 6V3h3l11.5 11.5" />
+      <path d="M13 19l6-6" />
+      <path d="M16 16l4 4" />
+      <path d="M19 21l2-2" />
+    </svg>
   )
 }

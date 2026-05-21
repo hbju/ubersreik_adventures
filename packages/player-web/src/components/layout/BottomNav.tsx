@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { usePlayerNavigation, type PlayerView } from '../../context/PlayerNavigationContext'
+import { NavBadge } from './NavBadge'
+import type { NavBadges } from './Sidebar'
 
 interface TabDef {
   id: PlayerView | 'more'
@@ -97,7 +99,7 @@ const MORE_ITEMS: { id: PlayerView; label: string; icon: React.ReactNode }[] = [
   { id: 'calendar', label: 'Calendar', icon: <CalendarIcon /> },
 ]
 
-export function BottomNav() {
+export function BottomNav({ badges = {} }: { badges?: NavBadges }) {
   const { activeView, setActiveView } = usePlayerNavigation()
   const [moreOpen, setMoreOpen] = useState(false)
 
@@ -178,6 +180,9 @@ export function BottomNav() {
               )}
               <span className="relative">
                 {tab.icon}
+                {tab.id !== 'more' && badges[tab.id as PlayerView] != null && (
+                  <NavBadge value={badges[tab.id as PlayerView]!} />
+                )}
               </span>
               <span className="text-[10px] leading-tight">{tab.label}</span>
             </button>

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { usePlayerNavigation, type PlayerView } from '../../context/PlayerNavigationContext'
+import { NavBadge } from './NavBadge'
 
 const COLLAPSED_KEY = 'wfrp-sidebar-collapsed'
 
@@ -105,12 +106,15 @@ const NAV_ITEMS: NavItem[] = [
   { id: 'calendar', label: 'Calendar', icon: <CalendarIcon /> },
 ]
 
+export type NavBadges = Partial<Record<PlayerView, number | 'dot'>>
+
 interface SidebarProps {
   collapsed: boolean
   onToggleCollapse: () => void
+  badges?: NavBadges
 }
 
-export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
+export function Sidebar({ collapsed, onToggleCollapse, badges = {} }: SidebarProps) {
   const { activeView, setActiveView } = usePlayerNavigation()
 
   useEffect(() => {
@@ -141,8 +145,9 @@ export function Sidebar({ collapsed, onToggleCollapse }: SidebarProps) {
                     ${collapsed ? 'justify-center px-0' : ''}
                   `}
                 >
-                  <span className={`shrink-0 ${isActive ? 'text-accent' : ''}`}>
+                  <span className={`relative shrink-0 ${isActive ? 'text-accent' : ''}`}>
                     {item.icon}
+                    {badges[item.id] != null && <NavBadge value={badges[item.id]!} />}
                   </span>
                   {!collapsed && (
                     <span className="truncate">{item.label}</span>
