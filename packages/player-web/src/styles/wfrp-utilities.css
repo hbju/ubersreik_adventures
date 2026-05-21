@@ -1,0 +1,219 @@
+/* ==========================================================================
+   WFRP Utility Classes
+   Reusable patterns for the grimdark Warhammer Fantasy visual identity.
+   ========================================================================== */
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Panels
+   ────────────────────────────────────────────────────────────────────────── */
+
+.wfrp-panel {
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset);
+  padding: var(--space-panel, 1rem);
+}
+
+.wfrp-panel-elevated {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-elevated);
+  padding: var(--space-panel, 1rem);
+}
+
+.wfrp-panel-parchment {
+  background-color: var(--parchment);
+  color: var(--bg-dark);
+  border: 1px solid var(--parchment-dark);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset);
+  padding: var(--space-panel, 1rem);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Borders
+   ────────────────────────────────────────────────────────────────────────── */
+
+.wfrp-border-ornate {
+  border: 2px solid var(--border-brass-solid);
+  box-shadow:
+    inset 0 0 0 1px var(--bg-panel),
+    inset 0 0 0 3px var(--border-dark),
+    0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.wfrp-border-subtle {
+  border: 1px solid var(--border-dark);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Grain / Noise Overlay (CSS-only via SVG filter)
+   Apply to a container; uses a pseudo-element so it doesn't block interaction.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.wfrp-grain-overlay {
+  position: relative;
+  isolation: isolate;
+}
+
+.wfrp-grain-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  border-radius: inherit;
+  z-index: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Divider
+   ────────────────────────────────────────────────────────────────────────── */
+
+.wfrp-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--border-brass) 20%,
+    var(--border-brass-solid) 50%,
+    var(--border-brass) 80%,
+    transparent
+  );
+  margin: 1rem 0;
+}
+
+.wfrp-divider-strong {
+  border: none;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--brass-dark) 15%,
+    var(--brass) 50%,
+    var(--brass-dark) 85%,
+    transparent
+  );
+  margin: 1.5rem 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Typography helpers
+   ────────────────────────────────────────────────────────────────────────── */
+
+.wfrp-text-heading {
+  font-family: var(--font-display);
+  font-variant-caps: small-caps;
+  letter-spacing: 0.05em;
+  color: var(--text-accent);
+}
+
+.wfrp-text-body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  line-height: var(--leading-relaxed);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Glow effects
+   ────────────────────────────────────────────────────────────────────────── */
+
+.wfrp-glow-brass {
+  box-shadow: var(--shadow-glow-brass);
+}
+
+.wfrp-glow-brass-hover:hover {
+  box-shadow: var(--shadow-glow-brass);
+  border-color: var(--border-brass-solid);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Custom Scrollbar (dark + brass thumb)
+   Apply to a scrollable container.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.wfrp-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.wfrp-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+  border-radius: var(--radius-sm);
+}
+
+.wfrp-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-brass);
+  border-radius: var(--radius-sm);
+}
+
+.wfrp-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--brass-dark);
+}
+
+/* Firefox */
+.wfrp-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-elevated) var(--bg-dark);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Dark theme base overrides for the player game UI
+   Scope: `.wfrp-dark` wrapper or as a root-level body class.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.wfrp-dark {
+  background-color: var(--bg-deepest);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: var(--leading-normal);
+}
+
+.wfrp-dark h1,
+.wfrp-dark h2,
+.wfrp-dark h3,
+.wfrp-dark h4 {
+  font-family: var(--font-display);
+  color: var(--text-accent);
+  letter-spacing: 0.04em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.wfrp-dark h1,
+.wfrp-dark h2 {
+  font-variant-caps: small-caps;
+}
+
+.wfrp-dark h1 {
+  font-size: var(--text-3xl);
+  border-bottom: 2px solid var(--border-brass);
+  padding-bottom: 0.3em;
+}
+
+.wfrp-dark h2 {
+  font-size: var(--text-2xl);
+  border-bottom: 1px solid var(--border-dark);
+  padding-bottom: 0.2em;
+}
+
+.wfrp-dark h3 {
+  font-size: var(--text-xl);
+}
+
+.wfrp-dark h4 {
+  font-size: var(--text-lg);
+}
+
+.wfrp-dark a {
+  color: var(--brass-light);
+}
+
+.wfrp-dark a:hover {
+  color: var(--brass);
+}

@@ -69,16 +69,11 @@ export function PlayerCampaignHome() {
   }
 
   return (
-    <PlayerSessionProvider
-      campaignId={campaign.id}
-      campaignName={campaign.name}
-    >
+    <PlayerSessionProvider campaignId={campaign.id} campaignName={campaign.name}>
       <PlayerModalProvider>
         <PlayerNavigationProvider>
-          <div className="flex min-h-screen w-full flex-col bg-[var(--color-vellum)]">
-            <PlayerLayout />
-            <PlayerModalHost />
-          </div>
+          <PlayerLayout />
+          <PlayerModalHost />
         </PlayerNavigationProvider>
       </PlayerModalProvider>
     </PlayerSessionProvider>

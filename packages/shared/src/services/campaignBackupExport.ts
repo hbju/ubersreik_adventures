@@ -131,7 +131,7 @@ function rowToShopState(row: ShopRow): ShopState {
   return {
     shopId: row.id,
     lastRestockDate: row.last_restock_date ?? row.updated_at,
-    inventory: (Array.isArray(row.inventory) ? row.inventory : []) as ShopInventoryItem[],
+    inventory: (Array.isArray(row.inventory) ? row.inventory : []) as unknown as ShopInventoryItem[],
     playerAccess: row.player_access ?? [],
   };
 }

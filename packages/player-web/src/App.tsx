@@ -7,6 +7,7 @@ import { RootRedirect } from './routes/RootRedirect'
 import { CampaignListScreen } from './screens/CampaignListScreen'
 import { LoginScreen } from './screens/LoginScreen'
 import { PlayerCampaignHome } from './screens/PlayerCampaignHome'
+import { ThemeShowcase } from './components/dev/ThemeShowcase'
 
 function LoginRoute() {
   const { configured, loading, session } = useAuth()
@@ -32,6 +33,9 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<LoginRoute />} />
             <Route path="/" element={<RootRedirect />} />
+            {import.meta.env.DEV && (
+              <Route path="/dev/theme" element={<ThemeShowcase />} />
+            )}
             <Route
               path="/campaigns"
               element={
@@ -44,9 +48,7 @@ export default function App() {
               path="/play/:campaignId"
               element={
                 <Protected>
-                  <div className="flex min-h-screen w-full flex-col">
-                    <PlayerCampaignHome />
-                  </div>
+                  <PlayerCampaignHome />
                 </Protected>
               }
             />
