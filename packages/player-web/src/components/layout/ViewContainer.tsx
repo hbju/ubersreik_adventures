@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { usePlayerNavigation, type PlayerView } from '../../context/PlayerNavigationContext'
+import { CharacterView } from '../character/CharacterView'
 
 const VIEW_LABELS: Record<PlayerView, string> = {
   character: 'Character Sheet',
@@ -35,12 +36,21 @@ export function ViewContainer() {
     scrollRef.current?.scrollTo(0, 0)
   }, [activeView])
 
+  const renderView = () => {
+    switch (activeView) {
+      case 'character':
+        return <CharacterView />
+      default:
+        return <ViewPlaceholder view={activeView} />
+    }
+  }
+
   return (
     <main
       ref={scrollRef}
       className="flex flex-1 flex-col overflow-y-auto wfrp-scrollbar p-4 md:p-6 lg:p-8"
     >
-      <ViewPlaceholder view={activeView} />
+      {renderView()}
     </main>
   )
 }

@@ -3,6 +3,7 @@ export { default as CharacterSheet } from './components/CharacterSheet';
 export { ChatBox, default as ChatBoxDefault } from './components/chat/ChatBox';
 export { default as MessageItem } from './components/chat/MessageItem';
 export { default as PlayerCharacterSheet } from './components/PlayerCharacterSheet/PlayerCharacterSheet';
+export { CharacteristicsTable } from './components/PlayerCharacterSheet/CharacteristicsTable';
 export { default as EditableField } from './components/EditableField';
 export { default as InventoryView } from './components/InventoryView';
 export { default as MapDisplay } from './components/MapDisplay';
