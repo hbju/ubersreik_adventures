@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Héraut d'Ubersreik — Numéro XII</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #2a2218;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: #f0e6d0;
+            background-image:
+                url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            position: relative;
+            padding: 7mm 8mm 8mm 8mm;
+            font-family: 'IM Fell English', serif;
+            color: #1a1510;
+            line-height: 1.45;
+            font-size: 10.5pt;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 10%, rgba(139, 109, 71, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 90%, rgba(139, 109, 71, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(100, 75, 45, 0.08) 100%);
+            pointer-events: none;
+        }
+
+        /* Header bar */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px solid #1a1510;
+            padding-bottom: 3px;
+            margin-bottom: 6px;
+            font-family: 'IM Fell English SC', serif;
+            font-size: 7.5pt;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main title */
+        .main-title {
+            text-align: center;
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 32pt;
+            line-height: 1.1;
+            margin-bottom: 4px;
+            color: #1a1510;
+            text-shadow: 1px 1px 0px rgba(139, 109, 71, 0.3);
+        }
+
+        .subtitle-bar {
+            text-align: center;
+            font-family: 'IM Fell English SC', serif;
+            font-size: 7pt;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-top: 2px solid #1a1510;
+            border-bottom: 2px solid #1a1510;
+            padding: 3px 0;
+            margin-bottom: 10px;
+        }
+
+        /* Skull divider */
+        .skull-divider {
+            text-align: center;
+            font-size: 14pt;
+            margin: 6px 0;
+            color: #3a2e1e;
+        }
+
+        /* Two column layout */
+        .columns {
+            column-count: 2;
+            column-gap: 16px;
+            column-rule: 1px solid #8a7a60;
+        }
+
+        /* Article blocks */
+        .article {
+            break-inside: avoid;
+            margin-bottom: 12px;
+        }
+
+        .article-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .article-title-large {
+            font-family: 'Cinzel Decorative', cursive;
+            font-weight: 700;
+            font-size: 11pt;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            line-height: 1.15;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .article-title-huge {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 14pt;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.1;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .article p {
+            text-align: justify;
+            margin-bottom: 5px;
+            hyphens: auto;
+        }
+
+        .article p:last-child {
+            margin-bottom: 0;
+        }
+
+        .emphasis {
+            font-family: 'IM Fell English SC', serif;
+            letter-spacing: 0.3px;
+        }
+
+        .loud {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 11pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .very-loud {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 13pt;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: block;
+            text-align: center;
+            margin: 4px 0;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+
+        /* Boxed articles */
+        .boxed {
+            border: 2px solid #1a1510;
+            padding: 8px 10px;
+            margin-bottom: 12px;
+            background: rgba(255, 250, 235, 0.4);
+        }
+
+        .boxed-thin {
+            border: 1px solid #6a5a40;
+            padding: 6px 8px;
+            margin-bottom: 12px;
+        }
+
+        /* Decorative rule */
+        .rule {
+            border: none;
+            border-top: 1px solid #6a5a40;
+            margin: 8px 0;
+        }
+
+        .rule-thick {
+            border: none;
+            border-top: 2px solid #1a1510;
+            margin: 8px 0;
+        }
+
+        .rule-ornate {
+            text-align: center;
+            font-size: 9pt;
+            color: #5a4a30;
+            margin: 6px 0;
+            letter-spacing: 4px;
+        }
+
+        /* Small print */
+        .small-print {
+            font-size: 7.5pt;
+            line-height: 1.3;
+            color: #4a3e2e;
+        }
+
+        /* Ad style */
+        .advert {
+            font-size: 9pt;
+            text-align: center;
+            padding: 5px;
+            border: 1px dashed #8a7a60;
+            margin-bottom: 12px;
+            break-inside: avoid;
+        }
+
+        .advert .ad-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 2px solid #1a1510;
+            margin-top: 10px;
+            padding-top: 6px;
+            font-size: 7.5pt;
+            text-align: center;
+            font-family: 'IM Fell English SC', serif;
+            color: #4a3e2e;
+            line-height: 1.4;
+        }
+
+        /* Wanted-style callout */
+        .callout {
+            text-align: center;
+            padding: 6px;
+            border: 3px double #1a1510;
+            margin-bottom: 12px;
+            break-inside: avoid;
+        }
+
+        .callout .callout-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 15pt;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+
+            .page {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- Header -->
+        <div class="header-bar">
+            <span>Numéro XII</span>
+            <span>Imprimé mais non approuvé par les Presses Engbart d'Übersreik</span>
+        </div>
+
+        <!-- Title -->
+        <div class="main-title">Le Héraut d'Ubersreik</div>
+
+        <div class="subtitle-bar">
+            Le seul journal d'Übersreik qui ose publier ce que d'autres murmurent &bull; Sans soutien de personne &bull;
+            Sans obligation envers personne
+        </div>
+
+        <!-- Content columns -->
+        <div class="columns">
+
+            <!-- LEAD ARTICLE: Wizard murders -->
+            <div class="article boxed">
+                <div class="article-title-huge">Les Sorciers.<br>Je Ne Les Aime Pas</div>
+                <hr class="rule">
+                <p class="loud" style="text-align:center;">Je n'aime pas leurs sorcelleries démoniaques.<br>
+                    Je n'aime pas leurs grandes bâtisses étranges et laides.<br>
+                    Je n'aime pas leur manière de s'habiller.<br>
+                    Et je n'aime pas qu'ils tuent des prêtres!</p>
+                <hr class="rule">
+                <p>Exactement! Plusieurs prêtres ont été assassinés récemment dans les villes à travers l'Empire et une
+                    confrérie de sorciers est presque certainement responsable. Les sorciers ont toujours désiré
+                    détruire nos précieuses institutions religieuses et maintenant — grâce à l'erreur du dit Pieux
+                    Magnus — ils commettent des atrocités!</p>
+                <p>En 2511 ils ont attaqué Wurtbad, maintenant ils attaquent <span class="emphasis">nous</span>! Au
+                    cours des semaines passées <strong>Patti</strong>, dévouée à Rhya, <strong>Yan</strong>, fils loyal
+                    d'Ulric, <strong>Klein</strong>, favori du saint Heldenhammer… tous trouvés morts.</p>
+                <p class="very-loud">Morts! Et tués<br>par des sorciers!</p>
+                <p style="text-align:center;" class="italic">(Un voleur Ranaldan est également décédé.)</p>
+                <p>Cherchez <span class="emphasis">Ottokar</span> pour <span class="loud"> en savoir plus sur une forte
+                        récompense!!</span></p>
+            </div>
+
+            <div class="rule-ornate">✦ ✦ ✦</div>
+
+            <div class="article">
+                <div class="article-title">Que cachent-ils <br>au Palais Bruner?</div>
+                <p>Les serviteurs nous parlent, mes amis. Et les serviteurs du <span class="emphasis">Palais Bruner</span> parlent plus
+                    que la plupart. Trois ont ont démissionné en une semaine, et tous nous ont données des histoires étranges.</p>
+                <p>Le fils Heinrich jette de l'or devant chaque temple de la ville. Vous n'achetez pas autant de pardon
+                    à moins d'avoir quelque chose pour lequel vous voulez être pardonné.</p>
+            </div>
+
+            <!-- ARTICLE: The Sewers -->
+            <div class="article boxed-thin">
+                <div class="article-title">Quelque chose dans les égouts?</div>
+                <p>Des informations ont été reçues par <span class="emphasis">Ottokar</span> concernant des sons
+                    étranges sous le Quartier des Artisans. Un marchand sur Kanalweg affirme avoir entendu "grattages et
+                    cliquetis" sous son comptoir chaque soir cette semaine. Son voisin, un chien, refuse de s'approcher
+                    de la trappe du canal.</p>
+                <p>Plus inquiétant encore, un chasseur de rats étranger nommé <span class="emphasis">Wahlund</span>
+                    s'est récemment installé comme maître de guilde des chasseurs de rats locaux et a envoyé ses
+                    soi-disant "Exterminateurs" dans les tunnels lors de missions mystérieuses. Qu'est-ce qu'ils
+                    chassent? Pourquoi refuse-t-il d'en parler?</p>
+                <p><span class="emphasis">Ottokar</span> soupçonne des <span class="loud">hommes-bêtes</span>. Ou pire
+                    encore. La Garde, comme toujours, nie tout.</p>
+            </div>
+
+            <div class="rule-ornate">⚜ ⚜ ⚜</div>
+
+            <!-- ARTICLE: Jungfreud -->
+            <div class="article boxed-thin">
+                <div class="article-title">La Calamité Jungfreud!</div>
+                <p>Nos nobles supérieurs, victimes de complots étrangers ! Les agents kislevites sont-ils vraiment
+                    responsables de la prise soudaine d'Übersreik par l'Empereur ? Pourquoi les troupes d'Altdorf se
+                    massaient-elles déjà à la frontière, <span class="italic">avant</span> que l'édit ne soit signé?</p>
+                <p><span class="emphasis">Ottokar</span> tient de sources très fiables qu'une personne vêtue de noir a
+                    été aperçue entrant dans l'hémicycle de la Diète du Reikland la veille du vote. Grande. Elle parlait
+                    avec un accent de Middenheim. Elle portait une lettre cachetée portant le sceau de… mais non, <span
+                        class="emphasis">Ottokar</span> n'ose pas l'imprimer. Pas encore.</p>
+                <p>Trouvez toutes ces informations dans le pamphlet d'Ottokar <span class="loud">très bientôt!</span>
+                </p>
+            </div>
+
+            <div class="rule-ornate">✦ ✦ ✦</div>
+
+            <!-- ADVERTS -->
+            <div class="advert">
+                <div class="ad-title">Fleur de Lune</div>
+                <p>Panacée. Vous pensez que les elfes graillent des pétales pour rien ? <span
+                        class="loud">L'Immortalité</span> attend le discernant imbibeur de Fleur de Lune!</p>
+                <p class="italic">Alleuve également la dropsie.</p>
+            </div>
+
+        </div><!-- end columns -->
+
+        <!-- Footer -->
+        <div class="footer">
+            <strong>Vous!</strong> Oui, <strong>vous!</strong> Vous avez besoin de savoir plus. Trouvez <span
+                class="emphasis">Ottokar Stiegler</span> travaillant dur chaque jour au sommet du glorieux et célèbre
+            <span class="emphasis">Sprichstumpf</span> d'Ubersreik. (S'il n'est pas présent, vérifiez au Loup et au
+            Hobgobelin.)<br><br>
+            Ottokar utilise et recommande Engbart Press, situé dans la ruelle derrière le Bridge House Inn.<br>
+            Le Héraut d'Ubersreik de Ottokar Stiegler est fier de supporter le <span class="emphasis">Theatre
+                Varieté</span>: en ce moment des spectacles quotidiens des hilarants Mootland Minstrels, du captivant
+            Erengrad Ensemble et de la talentueuse Lena Stein.<br>
+        </div>
+
+    </div><!-- end page -->
+
+</body>
+
+</html>

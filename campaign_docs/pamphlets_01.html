@@ -1,0 +1,183 @@
+--- START OF FILE pamphlet_isolde.html ---
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tract Historique - L'Héritage d'Ubersreik</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=UnifrakturMaguntia&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1c140d;
+            padding: 40px 20px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            justify-content: center;
+            font-family: 'IM Fell English', serif;
+        }
+
+        .pamphlet {
+            background: #fdf5e6;
+            background-image: 
+                radial-gradient(circle at 100% 100%, rgba(139, 90, 43, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 0% 0%, rgba(139, 90, 43, 0.05) 0%, transparent 50%);
+            max-width: 650px;
+            padding: 35px 45px;
+            color: #2b1d14;
+            box-shadow: 
+                0 0 30px rgba(0, 0, 0, 0.8),
+                inset 0 0 40px rgba(139, 90, 43, 0.15);
+            border: 1px solid #c2a782;
+            position: relative;
+        }
+
+        /* Cadre ornemental fin */
+        .pamphlet::before {
+            content: '';
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 2px solid #3e2723;
+            pointer-events: none;
+        }
+
+        .pamphlet::after {
+            content: '';
+            position: absolute;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 1px dashed #5d4037;
+            pointer-events: none;
+        }
+
+        .ornament {
+            text-align: center;
+            font-size: 1.5em;
+            color: #4a3520;
+            margin: 0 0;
+            letter-spacing: 5px;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title h1 {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 2em;
+            line-height: 1.1;
+            color: #1a100a;
+            margin-bottom: 10px;
+        }
+
+        .title .subtitle {
+            font-style: italic;
+            font-size: 1em;
+            color: #4a3520;
+            border-bottom: 1px solid #8b5a2b;
+            padding-bottom: 15px;
+            margin: 0 10%;
+        }
+
+        .content p {
+            text-align: justify;
+            font-size: 0.75em;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            text-indent: 1.5em;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Lettrine élégante pour le premier paragraphe */
+        .content p:first-of-type {
+            text-indent: 0;
+        }
+
+        .content p:first-of-type::first-letter {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 3.5em;
+            float: left;
+            line-height: 0.8;
+            padding-right: 8px;
+            padding-top: 4px;
+            color: #003366; /* Bleu sombre pour rappeler l'Aigle Azur des Jungfreud */
+        }
+
+        .highlight {
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+            font-style: italic;
+            color: #5d4037;
+            border-top: 1px solid #8b5a2b;
+            padding-top: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer strong {
+            font-family: 'UnifrakturMaguntia', cursive;
+            font-size: 1.2em;
+            font-weight: normal;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .pamphlet {
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pamphlet">
+        <header class="title">
+            <div class="ornament">&#10086;</div>
+            <h1>Des Fondations de notre Noble Cité</h1>
+            <p class="subtitle">Un traité historique pour l'édification de nos citoyens, en ce jour du Magnustag</p>
+        </header>
+
+        <div class="content">
+            <p>À l'heure où les feux sacrés de Magnus illuminent nos cieux, l'esprit de tout honnête homme se tourne naturellement vers les bâtisseurs d'Ubersreik. Les pierres mêmes de nos remparts et les fiers pavés du Quartier des Artisans murmurent le récit d'un Âge d'Or ; une époque révolue où l'ordre, la justice et le commerce n'étaient point des fardeaux dictés par une capitale lointaine, mais une réalité forgée par le sang de nos seigneurs locaux.</p>
+
+            <p>Les chroniques rappellent avec quelle noble dévotion la <span class="highlight">Maison Jungfreud</span>, au fil des générations, a veillé sur notre vallée. Sous leur regard tutélaire, l'artisan prospérait sans subir l'outrage d'une taxation arbitraire. Le marchand voyageait sans crainte, protégé par une milice née de notre sol, connaissant nos coutumes et respectant nos traditions. Le Cerf d'Azur veillait sur la passe, et la cité dormait en paix.</p>
+
+            <div class="ornament">&#10010;</div>
+
+            <p>Aujourd'hui, l'historien érudit ne peut que s'attrister de la rupture de cette harmonie naturelle. Des bottes étrangères résonnent sourdement sur nos places marchandes. Nos guildes se voient imposer des décrets rédigés par des clercs qui n'ont jamais foulé nos terres, ne voyant en Ubersreik qu'un vulgaire pion sur l'échiquier politique d'Altdorf et une bourse inépuisable à vider.</p>
+
+            <p>Pire encore, les violences prolifèrent dans nos rues assombries, fruit amer du déracinement de l'autorité naturelle qui maintenait jadis l'équilibre parfait de notre société. Un pouvoir distant ne saurait commander le respect, et une garnison de mercenaires impériaux ne remplacera jamais la loyauté séculaire d'un suzerain envers son peuple.</p>
+
+            <p>Que celui qui lit ces humbles lignes s'en souvienne : la véritable prospérité ne naît point des lois imposées par la force des hallebardes, mais de l'alliance sacrée entre un peuple travailleur et ses <span class="highlight">gardiens légitimes</span>. Gardons le souvenir vivace de la gloire passée de notre cité, car c'est dans la mémoire de ce qui fut que repose la seule promesse de ce qui doit redevenir.</p>
+        </div>
+
+        <footer class="footer">
+            <p>Imprimé de manière privée pour l'édification des esprits libres.</p>
+            <p><strong>Que Sigmar protège notre véritable Héritage.</strong></p>
+        </footer>
+    </div>
+</body>
+
+</html>

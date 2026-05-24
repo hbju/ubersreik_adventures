@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lord Erich von Holzenauer — Documents & Invitation au Bal</title>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700;900&family=Dancing+Script:wght@400;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1e1a14;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  /* Section labels (GM only, won't print) */
+  .gm-label {
+    font-family: 'Cinzel', serif;
+    color: #c4a46a;
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+  .gm-label .gm-note {
+    display: block;
+    font-family: 'IM Fell English', serif;
+    font-size: 8.5pt;
+    color: #8a7a5a;
+    letter-spacing: 0.5px;
+    text-transform: none;
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* Base parchment */
+  .parchment {
+    width: 180mm;
+    background: #f3e8ce;
+    background-image:
+      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    position: relative;
+    padding: 25mm;
+    font-family: 'IM Fell English', serif;
+    color: #2a2015;
+    line-height: 1.65;
+    font-size: 11pt;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.45), 0 0 60px rgba(0,0,0,0.2);
+  }
+  .parchment::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 8%, rgba(160,120,60,0.14) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 92%, rgba(160,120,60,0.16) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 50%, transparent 25%, rgba(120,90,40,0.06) 100%);
+    pointer-events: none;
+  }
+
+  /* Dark / aged variant */
+  .parchment-dark {
+    background: #e8dcc0;
+  }
+  .parchment-dark::before {
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(100,70,30,0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 75% 80%, rgba(100,70,30,0.2) 0%, transparent 50%);
+  }
+
+  /* Small note variant */
+  .note-small {
+    width: 130mm;
+    padding: 18mm 20mm;
+  }
+
+  /* Wax seal */
+  .seal {
+    position: absolute;
+    top: 12mm;
+    right: 18mm;
+    width: 48px;
+    height: 48px;
+    background: radial-gradient(circle at 38% 33%, #8b1a1a, #5a0e0e 55%, #3a0808);
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.45), inset 0 1px 3px rgba(255,255,255,0.12), inset 0 -2px 5px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: rgba(255,200,150,0.45);
+    font-size: 16pt;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    z-index: 2;
+  }
+  .seal-green {
+    background: radial-gradient(circle at 38% 33%, #2a6b3a, #184a24 55%, #0e2e16);
+    color: rgba(200,255,200,0.35);
+  }
+
+  /* Typography helpers */
+  .handwritten {
+    font-family: 'Dancing Script', cursive;
+    font-size: 12.5pt;
+    line-height: 1.75;
+  }
+  .handwritten p { margin-bottom: 6px; }
+
+  .blackletter {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: 16pt;
+    line-height: 1.55;
+    text-align: center;
+    color: #1a1008;
+  }
+
+  .formal { font-family: 'IM Fell English', serif; font-size: 10.5pt; line-height: 1.65; }
+  .formal p { margin-bottom: 7px; text-indent: 1.5em; }
+  .formal p:first-child, .formal .salutation, .formal .closing { text-indent: 0; }
+
+  .sc { font-family: 'IM Fell English SC', serif; letter-spacing: 0.3px; }
+  .italic { font-style: italic; }
+  .underline { text-decoration: underline; }
+  .struck { text-decoration: line-through; color: #6a5a4a; }
+  .signature { font-family: 'Pinyon Script', cursive; font-size: 22pt; text-align: right; margin-top: 6px; color: #1a150d; }
+  .letter-date { text-align: right; font-family: 'IM Fell English SC', serif; font-size: 8.5pt; color: #5a4e3e; margin-bottom: 14px; position: relative; z-index: 1; }
+
+  /* Checklist styling */
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .checklist li {
+    margin-bottom: 8px;
+    padding-left: 28px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .checklist li::before {
+    content: '☐';
+    position: absolute;
+    left: 0;
+    font-size: 13pt;
+    top: -1px;
+  }
+  .checklist li.checked::before {
+    content: '☒';
+  }
+
+  /* Horizontal rule ornament */
+  .ornament {
+    text-align: center;
+    font-size: 10pt;
+    color: #7a6a4a;
+    margin: 14px 0;
+    letter-spacing: 6px;
+  }
+
+  /* Invitation specific styles */
+  .invitation {
+    width: 170mm;
+    padding: 28mm 30mm 24mm 30mm;
+    text-align: center;
+    background: #f8f0dc;
+    border: 3px double #8a7a5a;
+  }
+  .invitation::before {
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(200,180,130,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 80%, rgba(160,130,70,0.1) 0%, transparent 50%);
+  }
+
+  .inv-crest {
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle at 40% 35%, #4a6a3a, #2a4a20 60%, #1a3010);
+    border-radius: 50%;
+    margin: 0 auto 12px auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    color: rgba(220,200,150,0.55);
+    font-size: 20pt;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .inv-house {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: #4a5a3a;
+    margin-bottom: 10px;
+  }
+
+  .inv-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 20pt;
+    line-height: 1.25;
+    margin-bottom: 6px;
+    color: #1a1510;
+  }
+
+  .inv-rule {
+    border: none;
+    border-top: 1px solid #a09070;
+    width: 55%;
+    margin: 12px auto;
+  }
+
+  .inv-body {
+    font-family: 'IM Fell English', serif;
+    font-size: 11pt;
+    line-height: 2;
+    color: #2a2015;
+  }
+  .inv-body .inv-blank {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 20pt;
+    color: #1a150d;
+    display: inline-block;
+    min-width: 180px;
+    border-bottom: 1px solid #8a7a60;
+    line-height: 1.2;
+    vertical-align: baseline;
+    margin: 0 4px;
+    padding-bottom: 2px;
+  }
+
+  .inv-detail {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 9pt;
+    color: #5a4e3e;
+  }
+
+  .inv-footer {
+    font-family: 'IM Fell English', serif;
+    font-size: 8pt;
+    color: #7a6a50;
+    font-style: italic;
+    line-height: 1.45;
+    margin-top: 4px;
+  }
+
+  .inv-motto {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 7pt;
+    letter-spacing: 3px;
+    color: #9a8a6a;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+
+  /* Page break helper for printing */
+  .page-break { break-before: page; }
+
+  @media print {
+    body { background: none; padding: 0; gap: 0; }
+    .parchment, .invitation { box-shadow: none; page-break-after: always; }
+    .gm-label { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!--  DOCUMENT 1: L'INVITATION AU BAL                             -->
+<!-- ============================================================ -->
+
+<div class="gm-label">
+  L'Invitation au Bal Masqué
+  <span class="gm-note">Remise aux PJ par Heinrich von Bruner. Imprimez-en un exemplaire par joueur et inscrivez le nom de leur personnage sur la ligne en blanc.</span>
+</div>
+
+<div class="parchment invitation">
+
+  <div class="inv-crest">H</div>
+  <div class="inv-house">Maison Holzenauer</div>
+
+  <div class="inv-title">Un Bal Masqué<br>de l'Unité</div>
+
+  <hr class="inv-rule">
+
+  <div class="inv-body">
+    <p>Lord <span class="sc">Erich von Holzenauer</span></p>
+    <p class="inv-detail">sollicite l'honneur de la présence de</p>
+    <p><span class="inv-blank">&nbsp;</span></p>
+    <p class="inv-detail">Invité de Lord Heinrich von Bruner</p>
+  </div>
+
+  <hr class="inv-rule">
+
+  <div class="inv-body">
+    <p>à un <span class="sc">Grand Bal Masqué</span></p>
+    <p>qui se tiendra à <span class="sc">Niederstadt Haus</span>, Morgenseite</p>
+    <p>le soir du <span class="sc">15 Sigmarzeit, 2512</span></p>
+    <p>de la septième cloche jusqu'à l'heure de minuit</p>
+  </div>
+
+  <hr class="inv-rule">
+
+  <div class="inv-footer">
+    Masques et costumes sont attendus et chaleureusement encouragés.<br>
+    Les invités sont priés de bien vouloir remettre leurs armes au vestiaire. Un garde veillera à leur sécurité.<br>
+    Rafraîchissements fins offerts par Maître Brasseur Borgun Barbe-d'Écume.
+  </div>
+
+  <div class="inv-motto">Les carrosses peuvent être dirigés vers le portique &bull; Le personnel sera présent</div>
+
+</div>
+
+
+<!-- ============================================================ -->
+<!--  DOCUMENT 2: LA LISTE DE PRÉPARATION « INNOCENTE » D'ERICH   -->
+<!-- ============================================================ -->
+
+<div class="gm-label">
+  La Liste de Préparation du Soir d'Erich
+  <span class="gm-note">Trouvée dans le bureau du maître de chambre. Se lit comme une planification de soirée ordinaire — mais une analyse attentive (test d'Intuition ou d'Évaluer) révèle les doubles sens. Clé MJ : les annotations entre [crochets] ci-dessous NE figurent PAS sur le document. Les éléments barrés sont visibles pour le joueur.</span>
+</div>
+
+<div class="parchment" style="padding: 22mm 24mm;">
+
+  <div class="handwritten">
+
+    <p style="text-align: center; font-weight: 700; font-size: 15pt; margin-bottom: 4px; text-decoration: underline;">Préparatifs du Soir</p>
+    <p style="text-align: center; font-size: 10pt; margin-bottom: 18px; color: #5a4e3e;">15 Sigmarzeit — le Bal</p>
+
+    <ul class="checklist">
+
+      <!-- INNOCENT: logistique du vin et de la nourriture -->
+      <li class="checked">Confirmer la livraison de Barbe-d'Écume : 6 tonneaux de stout nain, 4 de bière de blé. Tonneaux à la <span class="underline">cour arrière près du puits</span>. Ses Nains géreront la mise en perce.</li>
+      <!-- [Parfaitement innocent — mais établit qu'Erich sait où les tonneaux sont entreposés] -->
+
+      <li class="checked">Cuisine : menu final confirmé avec le cuisinier. Commande d'épices de chez Vorgim reçue ce matin. Recette du punch approuvée.</li>
+
+      <li class="checked"><span class="struck">Demander à Hessler des échantillons de calligraphie pour le livre d'or</span> — Fait. Hessler confirme que <span class="underline">l'écriture est parfaite</span>. Échantillons détruits.</li>
+      <!-- [CACHÉ : « l'écriture » = la fausse écriture Aschaffenberg. « Échantillons détruits » = preuves supprimées. Un test d'Intuition révèle que des échantillons de calligraphie pour un livre d'or n'auraient pas besoin d'être détruits.] -->
+
+      <li class="checked">Table de jeu : Seedling le Halfelin gérera les cartes et les dés. S'assurer qu'un <span class="underline">jeu complet</span> est disponible — y compris les <span class="underline">couleurs spéciales</span> que j'ai fait commander. Les garder dans ma <span class="struck">poche</span> étude jusqu'au moment voulu.</li>
+      <!-- [CACHÉ : « couleurs spéciales » = la carte marquée de Slaanesh. « Dans ma poche » a été barré et remplacé par « étude » — il a failli écrire l'endroit où il les garderait vraiment.] -->
+
+      <li>Cartons et placement : <span class="sc">Aschaffenberg</span> près de la galerie. <span class="sc">Bruner</span> dans la salle à manger. Les tenir <span class="underline">séparés jusqu'à la onzième cloche</span>, puis s'assurer qu'ils se trouvent en conversation ensemble.</li>
+      <!-- [CACHÉ : Pourquoi s'assurer qu'ils sont ensemble à 23h ? C'est à ce moment que la carte est placée. En soi, cela ressemble à de la gestion de soirée, mais combiné aux autres indices...] -->
+
+      <li class="checked">Cadeaux de poche pour les invités d'honneur — mouchoirs de soie, monogrammés. Je les <span class="underline">remettrai personnellement</span> au cours de la soirée. <span class="struck">Rappeler à Hessler : emballer le spécial séparément</span>.</li>
+      <!-- [CACHÉ : Les « cadeaux de poche » servent de prétexte pour approcher ses mains des poches des invités. « Le spécial » = la fausse note + la carte. Un test d'Évaluer ou d'Intuition pourrait faire remarquer : pourquoi un mouchoir doit-il être emballé séparément ?] -->
+
+      <li>Le Général — le placer à une place de choix. Le flatter. Il ne contrôle rien, mais <span class="italic">croit</span> qu'il le fait, et c'est <span class="underline">utile</span>.</li>
+      <!-- [Innocent mais révélateur du caractère d'Erich — c'est un manipulateur.] -->
+
+      <li>Surveiller le garçon Saponatheim. Il <span class="italic">fanfaronne</span> à propos de surprises. Que prépare cet idiot ?</li>
+
+      <li><span class="struck">L'affaire de Lotte et l'enfant</span> — réglée. Elle ne sera pas admise. Les gardes ont son signalement.</li>
+      <!-- [CACHÉ : Il s'agit de l'enfant naturel de Lord Erich et de sa mère. Il croit l'avoir bloquée — il ne sait pas que la Gräfin a arrangé son entrée. Le texte barré montre qu'il s'en inquiète.] -->
+
+      <li>Après minuit : s'assurer que les <span class="sc">contacts du Chasseur de Sorcières</span> sont prêts. Si tout se passe comme prévu, ils voudront <span class="underline">agir rapidement</span> dès que les preuves feront surface.</li>
+      <!-- [CACHÉ : C'est la ligne la plus accablante — mais se lit innocemment si on suppose que les « preuves » désignent une autre menace. Ce n'est qu'en contexte de la fausse carte que tout devient clair : il a pré-arrangé des chasseurs de sorcières pour enquêter sur le « culte du Chaos » qu'il est en train de fabriquer.] -->
+
+    </ul>
+
+    <div class="ornament">✦ ✦ ✦</div>
+
+    <p style="font-size: 10.5pt; font-style: italic; color: #5a4a3a; text-align: center;">N'oublie pas : sourire. Être généreux. Être l'homme qu'ils souhaitent appeler Seigneur.</p>
+
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!--  DOCUMENT 3: LES FAUSSES NOTES (plusieurs versions)          -->
+<!-- ============================================================ -->
+
+<div class="gm-label">
+  Les Fausses Notes — À Glisser sur les Nobles Rivaux
+  <span class="gm-note">Trouvées enveloppées dans un tissu sombre dans le tiroir verrouillé du bureau (test de Crochetage pour l'ouvrir). Erich a préparé plusieurs versions ciblant différentes combinaisons de rivaux. Chacune est enroulée autour d'une carte à jouer portant des images de Slaanesh. Imprimez-les et découpez-les individuellement — ce sont de petits billets pliés.</span>
+</div>
+
+<!-- NOTE 1: Aschaffenberg → Bruner (la version principale du scénario) -->
+<div class="parchment parchment-dark note-small" style="transform: rotate(-0.5deg);">
+  <div class="blackletter">
+    Magister,<br><br>
+    Tout est prêt pour le sacrifice de ce soir.<br>
+    Que les Dieux Sombres sourient<br>
+    à notre entreprise<br>
+    et que les von Bruner<br>
+    soient vengés.<br><br>
+    <span style="font-family: 'Pinyon Script', cursive; font-size: 20pt;">Aschaffenberg</span>
+  </div>
+</div>
+
+<!-- NOTE 2: Bruner → Aschaffenberg (ciblage inversé) -->
+<div class="parchment parchment-dark note-small" style="transform: rotate(0.8deg);">
+  <div class="blackletter">
+    Frère dans l'ombre,<br><br>
+    Le sixième sceau est préparé.<br>
+    Notre patron observe<br>
+    depuis au-delà du voile.<br>
+    Les chiens Aschaffenberg<br>
+    ne nous troubleront plus<br>
+    après cette nuit.<br><br>
+    <span style="font-family: 'Pinyon Script', cursive; font-size: 20pt;">H. von Bruner</span>
+  </div>
+</div>
+
+<!-- NOTE 3: Version Saponatheim (de secours) -->
+<div class="parchment parchment-dark note-small" style="transform: rotate(-1.2deg);">
+  <div class="blackletter">
+    Le Prince du Plaisir<br>
+    réclame son tribut.<br><br>
+    Apportez l'offrande<br>
+    quand l'horloge sonne douze coups.<br>
+    Le cercle attend<br>
+    sous le pont.<br><br>
+    <span style="font-family: 'Pinyon Script', cursive; font-size: 20pt;">S. von Saponatheim</span>
+  </div>
+</div>
+
+<!-- NOTE 4: Une note « générique » de secours pouvant incriminer n'importe qui -->
+<div class="parchment parchment-dark note-small" style="transform: rotate(0.4deg);">
+  <div class="blackletter">
+    Mon bien-aimé maître,<br><br>
+    Quatre âmes pour les Quatre.<br>
+    Le rituel est accompli.<br>
+    Ubersreik sera Nôtre<br>
+    avant que la nouvelle lune ne se lève.<br><br>
+    <span style="font-family: 'Pinyon Script', cursive; font-size: 20pt;">Votre fidèle serviteur</span>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!--  DOCUMENT 4: LA LETTRE D'ERICH À HESSLER (la preuve décisive) -->
+<!-- ============================================================ -->
+
+<div class="gm-label">
+  Lettre à l'Agent Hessler — La Preuve Décisive
+  <span class="gm-note">Trouvée froissée dans la grille de la cheminée, partiellement brûlée. Erich était censé la détruire mais n'a pas terminé le travail. Seuls des fragments sont lisibles. Remettez ceci à Gilsebert s'il fouille la cheminée (test de Perception). Les parties manquantes sont brûlées — indiquées par des espaces ci-dessous.</span>
+</div>
+
+<div class="parchment parchment-dark" style="padding: 22mm 24mm; position: relative;">
+
+  <!-- Traces de brûlure -->
+  <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 2;
+    background:
+      radial-gradient(ellipse at 10% 5%, rgba(30,20,10,0.95) 0%, rgba(60,40,20,0.7) 8%, transparent 18%),
+      radial-gradient(ellipse at 95% 8%, rgba(30,20,10,0.9) 0%, rgba(60,40,20,0.6) 10%, transparent 20%),
+      radial-gradient(ellipse at 85% 95%, rgba(30,20,10,0.95) 0%, rgba(60,40,20,0.8) 12%, transparent 22%),
+      radial-gradient(ellipse at 5% 90%, rgba(30,20,10,0.85) 0%, rgba(60,40,20,0.5) 8%, transparent 16%),
+      radial-gradient(ellipse at 50% 100%, rgba(30,20,10,0.7) 0%, rgba(60,40,20,0.4) 5%, transparent 12%);
+  "></div>
+
+  <!-- Marques de roussissement sur les bords -->
+  <div style="position: absolute; inset: 0; pointer-events: none; z-index: 3;
+    border: 4px solid transparent;
+    border-image: radial-gradient(ellipse at 50% 50%, transparent 70%, rgba(80,50,20,0.3) 100%) 1;
+  "></div>
+
+  <div class="letter-date" style="position: relative; z-index: 4;">Niederstadt Haus<br><span style="color: #8a7a60;">Le 1█ Sig██████, 2512</span></div>
+
+  <div class="formal" style="position: relative; z-index: 4;">
+    <p class="salutation">Hessler,</p>
+
+    <p>████████████ presque achevé. Le bal a lieu ██████ ce soir, et je compte sur vous pour avoir procuré les articles dont nous avons discuté. J'ai besoin que la carte et la note soient remises à mon cabinet avant ██████████. Enveloppez-les dans du tissu — je ne veux pas que des domestiques ████████████ tout ruinent ██████████ commérages.</p>
+
+    <p>La note doit être dans <span class="underline">l'écriture Aschaffenberg</span>. Vous m'avez assuré que votre ████████ pouvait la reproduire avec précision. Si elle n'est pas parfaite, Hessler, elle est sans valeur. ██████ chasseur de sorcières qui se respecte l'examinera ██████. Elle doit <span class="sc">convaincre</span>.</p>
+
+    <p>Quant à la carte elle-même — je vous fais confiance pour savoir où vous procurer ce ██████ sans attirer l'attention. Les ████████ images doivent être sans équivoque. Je veux que les chasseurs de sorcières ████████ à sa vue. Je veux qu'Aschaffenberg et Bruner répondent à des questions pendant des <span class="underline">mois</span>.</p>
+
+    <p>████████████████████████████ la note sur le ████████████ baron moi-même. Un de mes hommes s'assurera qu'elle soit « découverte » au ████████████ moment voulu. À minuit, toutes les langues d'Ubersreik jaseront sur ██████ les cultes dans les maisons nobles — toutes les maisons sauf <span class="sc underline">Holzenauer</span>.</p>
+
+    <p>████████████████ avant le bal. Détruisez cette lettre ████████████████.</p>
+
+    <p class="closing" style="color: #5a4a3a;">██ confiance et ████████████,</p>
+    <p class="signature" style="color: #4a3a2a;">Erich v████████████</p>
+  </div>
+</div>
+
+
+<!-- ============================================================ -->
+<!--  BONUS : LA CARTE À JOUER DE SLAANESH (carte de description) -->
+<!-- ============================================================ -->
+
+<div class="gm-label">
+  La Carte à Jouer de Slaanesh — Fiche de Description
+  <span class="gm-note">Vous pouvez décrire ceci verbalement ou remettre cette carte aux joueurs. La carte elle-même est enveloppée à l'intérieur de la fausse note qu'Erich place. Des doublons se trouvent dans le tiroir de son bureau.</span>
+</div>
+
+<div class="parchment parchment-dark note-small" style="padding: 15mm 18mm; text-align: center; background: #1a1510; color: #d4c8a8; border: 2px solid #3a3025;">
+  <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, rgba(80,40,60,0.15) 0%, transparent 70%); pointer-events: none;"></div>
+  
+  <div style="position: relative; z-index: 1;">
+    <p style="font-family: 'IM Fell English SC', serif; font-size: 7pt; letter-spacing: 3px; color: #7a6a5a; margin-bottom: 12px;">— DESCRIPTION POUR LES JOUEURS —</p>
+
+    <p style="font-family: 'IM Fell English', serif; font-size: 11pt; line-height: 1.7; text-align: left; color: #c4b898;">
+      Une carte à jouer, légèrement plus grande qu'une carte standard du jeu impérial. Le carton est épais, coûteux — elle n'a pas été achetée chez un imprimeur ordinaire. La face de la carte représente une image qui vous retourne l'estomac :
+    </p>
+
+    <p style="font-family: 'IM Fell English', serif; font-size: 11pt; line-height: 1.7; text-align: left; color: #c4b898; margin-top: 8px;">
+      Une silhouette d'une beauté impossible et troublante, enveloppée de vignes épineuses et de corps se tordant. Ses six bras tiennent chacun un symbole différent de l'excès — un calice débordant de vin, une lame dégoulinant de quelque chose qui pourrait être du sang ou du miel, un miroir reflétant un visage qui n'est pas celui du spectateur. Le style est magistral. Celui qui a peint cela était talentueux, et <span style="font-style: italic;">damné</span>.
+    </p>
+
+    <p style="font-family: 'IM Fell English', serif; font-size: 11pt; line-height: 1.7; text-align: left; color: #c4b898; margin-top: 8px;">
+      Tout serviteur de Sigmar, tout chasseur de sorcières, toute personne ayant ne serait-ce qu'une connaissance superficielle des Puissances de la Ruine reconnaîtrait ceci immédiatement : c'est une image dévotionnelle de <span style="font-family: 'IM Fell English SC', serif; letter-spacing: 1px;">Slaanesh</span>, le Prince Sombre du Chaos, le Seigneur de l'Excès et de la Dépravation.
+    </p>
+
+    <p style="font-family: 'IM Fell English', serif; font-size: 11pt; line-height: 1.7; text-align: left; color: #c4b898; margin-top: 8px;">
+      Posséder cette carte est, en soi, un crime punissable de mort.
+    </p>
+
+    <p style="font-family: 'IM Fell English SC', serif; font-size: 8pt; letter-spacing: 2px; color: #6a5a4a; margin-top: 16px;">
+      [ Savoir (Théologie) ou Savoir (Chaos) — Moyen : identifier Slaanesh spécifiquement ]<br>
+      [ Évaluer — Exigeant : la qualité du carton et de la peinture suggère un commanditaire fortuné ]<br>
+      [ Intuition — Difficile : cette carte a été faite récemment, pas une relique — la peinture est encore vive ]
+    </p>
+  </div>
+</div>
+
+</body>
+</html>
