@@ -4,9 +4,12 @@ import { usePlayerSession } from '../../context/PlayerSessionContext'
 import { usePlayerModal } from '../../context/PlayerModalContext'
 import { useBreakpoint } from '../../hooks/useBreakpoint'
 import { CharacterHeader } from './CharacterHeader'
+import { StatusBar } from './StatusBar'
+import { ConditionsBar } from './ConditionsBar'
 import { CharacteristicsGrid } from './CharacteristicsGrid'
 import { SkillsPanel } from './SkillsPanel'
 import { TalentsPanel } from './TalentsPanel'
+import { InventoryPanel } from './InventoryPanel'
 import { Divider } from '../ui/Divider'
 import { TestModalContent, type TestResult } from './TestModalContent'
 
@@ -42,7 +45,7 @@ export function CharacterView() {
   )
 
   const handleCharacteristicClick = useCallback(
-    (charId: string, charName: string, charValue: number) => {
+    (_charId: string, charName: string, charValue: number) => {
       if (!character) return
       openModal(
         'test-modal',
@@ -99,6 +102,10 @@ export function CharacterView() {
   return (
     <div className="space-y-4 w-full max-w-6xl mx-auto">
       <CharacterHeader character={character} />
+      <StatusBar character={character} onUpdate={playerData.updateCharacter} />
+      {character.conditions.length > 0 && (
+        <ConditionsBar conditions={character.conditions} />
+      )}
       <CharacteristicsGrid
         character={character}
         onCharacteristicClick={handleCharacteristicClick}
@@ -114,6 +121,8 @@ export function CharacterView() {
         <SkillsPanel character={character} onSkillClick={handleSkillClick} />
         <TalentsPanel character={character} />
       </div>
+      <Divider variant="ornate" />
+      <InventoryPanel character={character} onUpdate={playerData.updateCharacter} />
     </div>
   )
 }
