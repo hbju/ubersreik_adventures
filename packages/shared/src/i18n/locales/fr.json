@@ -129,6 +129,22 @@
         "engagement": {
             "engaged": "{{aName}} engage {{bName}}.",
             "disengaged": "{{combatantName}} se désengage."
+        },
+        "condition": {
+            "applied": "{{targetId}} gagne {{conditionId}}.",
+            "effect": {
+                "damage": "{{conditionId}} inflige {{damage}} Blessure(s).",
+                "removed": "{{conditionId}} retire {{stacks}} cumul(s).",
+                "gained": "{{conditionId}} ajoute {{stacks}} cumul(s).",
+                "death": "{{conditionId}} tue le combattant.",
+                "clotted": "L'hemorragie coagule et retire 1 cumul.",
+                "pendingTest": "{{conditionId}} requiert un Test de {{testType}}.",
+                "consciousnessBlocked": "L'hemorragie empeche de reprendre conscience."
+            },
+            "collapse": {
+                "unopposed": "Le defenseur ne peut pas se defendre.",
+                "autoHit": "L'attaque touche automatiquement et inflige une Blessure Critique."
+            }
         }
     },
     "system": {

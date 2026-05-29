@@ -26,7 +26,7 @@
   {
     "id": "condition_deafened",
     "name": "Deafened",
-    "description": "Whether caused by a loud noise or a blow to the head, you are unable to hear properly. You suffer a –10 penalty to all Tests involving hearing, and any opponent attacking you in close combat from the flank or rear gains an extra bonus of +10 to hit you (this bonus does not increase with multiple Deafened Conditions). One Deafened condition is removed at the end of every other Round and is often replaced with tinnitus.",
+    "description": "Whether caused by a loud noise or a blow to the head, you are unable to hear properly. You suffer a –10 penalty to all Tests involving hearing. One Deafened condition is removed at the end of every other Round and is often replaced with tinnitus.",
     "stack": 0
   },
   {

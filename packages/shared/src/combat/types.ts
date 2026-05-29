@@ -182,7 +182,7 @@ export type AdvantageChangedEvent = CombatEventBase<'AdvantageChanged', {
     poolBefore: number;
     poolAfter: number;
     total: number;
-    reason: 'opposedTestWin' | 'spendActionWin' | 'spendActionLoss' | 'seed' | 'reallocation' | 'manual';
+    reason: 'opposedTestWin' | 'spendActionWin' | 'spendActionLoss' | 'seed' | 'reallocation' | 'condition' | 'manual';
     sourceCombatantId?: string;
 }>;
 

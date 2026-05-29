@@ -1,5 +1,6 @@
 import type { Armor, Character } from '../types/wfrp.types';
 import { normalizeArmorLocations } from '../utils/armorLocations';
+import { attackerModifiersFor } from '../utils/conditions';
 import { calculateSuccessLevel, getHitLocation, rolld100 } from '../utils/mechanics';
 import { calculateCharacteristicBonus } from '../utils/skills';
 import { applyTalentSLBonuses, checkCriticalResult, getTalentDamageBonus } from '../utils/talents';
@@ -159,15 +160,31 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
 export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction, rng: Rng = mathRandomRng): CombatEngineResult {
     const attacker = getCombatant(state, action.attackerId);
     const defender = getCombatant(state, action.defenderId);
-    const attackerRoll = resolveOpposedRoll(action.attacker, attacker.character, state, rng);
-    const defenderRoll = resolveOpposedRoll(action.defender, defender.character, state, rng);
+    const conditionModifiers = attackerModifiersFor(defender);
+    let currentState = state;
+    const events: CombatEvent[] = [];
+
+    if (conditionModifiers.advantageToAttacker > 0) {
+        const advantageResult = grantAdvantage(currentState, attacker.side, conditionModifiers.advantageToAttacker, {
+            reason: 'condition',
+            sourceCombatantId: defender.id,
+        });
+        currentState = advantageResult.state;
+        events.push(...advantageResult.events);
+    }
+
+    const attackerRoll = resolveOpposedRoll({
+        ...action.attacker,
+        testModifier: (action.attacker.testModifier ?? 0) + conditionModifiers.toHitModifier,
+    }, attacker.character, currentState, rng);
+    const defenderRoll = resolveOpposedRoll(action.defender, defender.character, currentState, rng);
     const attackerCriticalCheck = checkCriticalResult(attackerRoll.rollResult, attackerRoll.targetNumber, rng);
     const defenderCriticalCheck = checkCriticalResult(defenderRoll.rollResult, defenderRoll.targetNumber, rng);
     const outcome = determineOutcome(attackerRoll, defenderRoll);
     const slDifference = Math.abs(attackerRoll.roundedSuccessLevel - defenderRoll.roundedSuccessLevel);
     const hitLocation = outcome === 'attacker' && action.combatMode !== false ? getHitLocation(attackerRoll.rollResult) : undefined;
 
-    const events: CombatEvent[] = [
+    events.push(
         {
             type: 'AttackResolved',
             i18nKey: `combat.attack.${outcome}`,
@@ -184,7 +201,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
                 hitLocation,
             },
         },
-    ];
+    );
 
     if (attackerCriticalCheck.isCritical && attackerCriticalCheck.critRoll !== undefined) {
         events.push({
@@ -245,10 +262,8 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         });
     }
 
-    let currentState = state;
-
     if (outcome === 'attacker' && action.combatMode !== false) {
-        const damageResult = resolveDamage(state, {
+        const damageResult = resolveDamage(currentState, {
             attackerId: attacker.id,
             defenderId: defender.id,
             skillId: attackerRoll.skillId,

@@ -71,7 +71,7 @@ export function grantAdvantage(
     state: CombatState,
     side: SideId,
     amount: number,
-    options: { reason?: 'opposedTestWin' | 'spendActionWin' | 'spendActionLoss' | 'seed' | 'reallocation' | 'manual'; sourceCombatantId?: string } = {}
+    options: { reason?: 'opposedTestWin' | 'spendActionWin' | 'spendActionLoss' | 'seed' | 'reallocation' | 'condition' | 'manual'; sourceCombatantId?: string } = {}
 ): CombatEngineResult {
     const poolBefore = state.advantagePools[side];
     const poolAfter = Math.max(0, poolBefore + amount);
@@ -383,7 +383,9 @@ function actionEvent(
 
 function applyCondition(state: CombatState, combatantId: string, conditionId: string): CombatState {
     const combatant = getCombatant(state, combatantId);
-    if (combatant.conditions.includes(conditionId)) return state;
+    if (['condition_prone', 'condition_surprised', 'condition_unconscious'].includes(conditionId) && combatant.conditions.includes(conditionId)) {
+        return state;
+    }
     return replaceCombatants(state, [{ ...combatant, conditions: [...combatant.conditions, conditionId] }]);
 }
 

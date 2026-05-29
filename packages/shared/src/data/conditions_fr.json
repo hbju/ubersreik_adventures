@@ -26,7 +26,7 @@
   {
     "id": "condition_deafened",
     "name": "Assourdi",
-    "description": "Que ce soit à cause d’un bruit fort ou d’un coup à la tête, vous êtes incapable d’entendre correctement. Vous subissez une pénalité de –10 à tous les Tests impliquant l’ouïe, et tout adversaire vous attaquant au corps à corps depuis le flanc ou l’arrière gagne un bonus supplémentaire de +10 pour vous toucher (ce bonus n’augmente pas avec plusieurs États Assourdi). Un État Assourdi est retiré à la fin de chaque deuxième Round et est souvent remplacé par des acouphènes.",
+    "description": "Que ce soit à cause d’un bruit fort ou d’un coup à la tête, vous êtes incapable d’entendre correctement. Vous subissez une pénalité de –10 à tous les Tests impliquant l’ouïe. Un État Assourdi est retiré à la fin de chaque deuxième Round et est souvent remplacé par des acouphènes.",
     "stack": 0
   },
   {

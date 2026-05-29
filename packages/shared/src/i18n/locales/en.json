@@ -202,6 +202,22 @@
         "engagement": {
             "engaged": "{{aName}} engaged {{bName}}.",
             "disengaged": "{{combatantName}} disengaged."
+        },
+        "condition": {
+            "applied": "{{targetId}} gains {{conditionId}}.",
+            "effect": {
+                "damage": "{{conditionId}} deals {{damage}} Wound(s).",
+                "removed": "{{conditionId}} removes {{stacks}} stack(s).",
+                "gained": "{{conditionId}} adds {{stacks}} stack(s).",
+                "death": "{{conditionId}} kills the combatant.",
+                "clotted": "Bleeding clots and removes 1 stack.",
+                "pendingTest": "{{conditionId}} requires a {{testType}} Test.",
+                "consciousnessBlocked": "Bleeding prevents regaining consciousness."
+            },
+            "collapse": {
+                "unopposed": "The defender cannot defend.",
+                "autoHit": "The attack automatically hits and inflicts a Critical Wound."
+            }
         }
     },
     "menu": {
