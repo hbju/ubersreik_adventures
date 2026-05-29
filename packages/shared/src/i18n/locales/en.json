@@ -157,6 +157,53 @@
         "talent_added": "{{talentName}} added to {{characterName}}'s talents.",
         "purchase": "{{name}} purchased {{itemName}} for {{price}}."
     },
+    "combat": {
+        "advantage": {
+            "changed": "{{side}} Advantage changes by {{delta}} to {{total}}.",
+            "spent": "{{side}} spends {{amount}} Advantage on {{action}}.",
+            "additionalEffort": "{{side}} prepares +{{modifier}} for a pending test.",
+            "reallocated": {
+                "changed": "Advantage shifts toward {{dominantSide}}.",
+                "none": "No Advantage reallocation occurs."
+            },
+            "spendRejected": {
+                "insufficientAdvantage": "{{side}} does not have enough Advantage for {{action}}.",
+                "missingActor": "{{action}} requires an acting combatant.",
+                "missingTarget": "{{action}} requires a target combatant.",
+                "alreadyUsedThisTurn": "This combatant has already used {{action}} this turn.",
+                "invalidAmount": "Invalid Advantage amount for {{action}}."
+            },
+            "action": {
+                "batter": {
+                    "win": "Batter succeeds.",
+                    "loss": "Batter fails."
+                },
+                "trick": {
+                    "win": "Trick succeeds.",
+                    "loss": "Trick fails."
+                },
+                "fleeFromHarm": {
+                    "applied": "Flee from Harm is applied."
+                },
+                "additionalAction": {
+                    "applied": "Additional Action is applied."
+                }
+            }
+        },
+        "movement": {
+            "moved": "{{combatantName}} moved {{distance}} yards from {{from}} to {{to}}.",
+            "rejected": {
+                "engaged": "{{combatantName}} cannot move while engaged. Use Disengage first.",
+                "noMove": "{{combatantName}} has no movement remaining this turn.",
+                "noAction": "{{combatantName}} has no action available for {{mode}} movement.",
+                "insufficientBudget": "{{combatantName}} cannot move {{distance}} yards with {{mode}} movement."
+            }
+        },
+        "engagement": {
+            "engaged": "{{aName}} engaged {{bName}}.",
+            "disengaged": "{{combatantName}} disengaged."
+        }
+    },
     "menu": {
         "users": "Users",
         "backup": "Backup",

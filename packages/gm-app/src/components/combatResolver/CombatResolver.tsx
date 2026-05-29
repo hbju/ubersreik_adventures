@@ -3,7 +3,6 @@ import styles from './CombatResolver.module.css';
 import {
     rolld100,
     calculateSuccessLevel,
-    getHitLocation,
     Character,
     Combatant,
     SkillCharDefinition,
@@ -14,18 +13,18 @@ import {
     OpposedTestResultMessage,
     AssignCharacterMessage,
     LogEntry,
-    checkCriticalResult,
     CriticalHitModal,
     FumbleModal,
     getApplicableTalents,
-    getTalentDamageBonus,
-    getTalentTestBonus,
     applyTalentSLBonuses,
     useGameData,
     Weapon,
     Talent,
     QueuedRoll,
-    normalizeArmorLocations,
+    createCombatantFromCharacter,
+    createCombatState,
+    getArmorPointsAtLocation,
+    resolveMeleeAttack,
 } from '@wfrp/shared';
 
 import CharacterSelector from './CharacterSelector';
@@ -78,6 +77,11 @@ interface CombatResult {
     defenderCritRoll?: number;
     attackerName?: string;
     defenderName?: string;
+    toughnessBonus?: number;
+    armourPoints?: number;
+    defenderRemainingWounds?: number;
+    advantageTeam?: 'players' | 'enemies';
+    advantageDelta?: number;
 }
 
 const CombatResolver: React.FC<CombatResolverProps> = ({
@@ -120,22 +124,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
 
     // Calculate armour points for a character at a specific location
     const getArmourPoints = (character: Character, location: string): number => {
-        let totalAP = 0;
-        const armorById: Record<string, typeof armorData[0]> = Object.fromEntries((armorData as any[]).map(a => [a.id, a]));
-        Object.entries(character.inventory?.equippedArmor || {}).forEach(([armorId, equipped]) => {
-            if (!equipped) return;
-            const armor = armorById[armorId];
-            if (!armor) return;
-
-            const loc = normalizeArmorLocations([location])[0];
-            const armorLocs = normalizeArmorLocations(armor.locations);
-
-            if (armorLocs.some((l: string) => l.includes(loc) || loc.includes(l))) {
-                totalAP += armor.ap;
-            }
-        });
-
-        return totalAP;
+        return getArmorPointsAtLocation(character, location, armorData as any);
     };
 
     // Assign a roll from the queue to attacker
@@ -267,43 +256,87 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
     useEffect(() => {
         if (!attackerRoll || !defenderRoll) return;
 
-        const attackerSL = Math.round(attackerRoll.successLevel);
-        const defenderSL = Math.round(defenderRoll.successLevel);
+        const attackerCharacter = characters.find(c => c.id === attackerRoll.characterId);
+        const defenderCharacter = characters.find(c => c.id === defenderRoll.characterId);
+        if (!attackerCharacter || !defenderCharacter) return;
 
-        // Check for criticals and fumbles
-        const attackerCriticalCheck = checkCriticalResult(attackerRoll.rollResult, attackerRoll.targetNumber);
-        const defenderCriticalCheck = checkCriticalResult(defenderRoll.rollResult, defenderRoll.targetNumber);
+        const attackerCombatant = combatants.find(c => c.sourceId === attackerRoll.characterId);
+        const defenderCombatant = combatants.find(c => c.sourceId === defenderRoll.characterId);
+        const combatState = createCombatState([
+            createCombatantFromCharacter(attackerCharacter, {
+                id: attackerRoll.characterId,
+                currentWounds: attackerCombatant?.currentWounds ?? attackerCharacter.status.wounds.current,
+                maxWounds: attackerCombatant?.maxWounds ?? attackerCharacter.status.wounds.max,
+                side: attackerCharacter.userId != null ? 'ally' : 'adversary',
+            }),
+            createCombatantFromCharacter(defenderCharacter, {
+                id: defenderRoll.characterId,
+                currentWounds: defenderCombatant?.currentWounds ?? defenderCharacter.status.wounds.current,
+                maxWounds: defenderCombatant?.maxWounds ?? defenderCharacter.status.wounds.max,
+                side: defenderCharacter.userId != null ? 'ally' : 'adversary',
+            }),
+        ], { armor: armorData as any, talents });
+
+        const engineResult = resolveMeleeAttack(combatState, {
+            attackerId: attackerRoll.characterId,
+            defenderId: defenderRoll.characterId,
+            combatMode: isCombatMode,
+            attacker: {
+                skillId: attackerRoll.skillId,
+                skillName: attackerRoll.skillName,
+                rollResult: attackerRoll.rollResult,
+                targetNumber: attackerRoll.targetNumber,
+                successLevel: attackerRoll.successLevel,
+                weaponName: attackerRoll.weaponName,
+                weaponDamage: attackerRoll.weaponDamage,
+                usedTalents: attackerRoll.usedTalents,
+            },
+            defender: {
+                skillId: defenderRoll.skillId,
+                skillName: defenderRoll.skillName,
+                rollResult: defenderRoll.rollResult,
+                targetNumber: defenderRoll.targetNumber,
+                successLevel: defenderRoll.successLevel,
+                weaponName: defenderRoll.weaponName,
+                weaponDamage: defenderRoll.weaponDamage,
+                usedTalents: defenderRoll.usedTalents,
+            },
+        });
+
+        const attackEvent = engineResult.events.find(event => event.type === 'AttackResolved');
+        if (!attackEvent || attackEvent.type !== 'AttackResolved') return;
+
+        const damageEvent = engineResult.events.find(event => event.type === 'DamageDealt');
+        const advantageEvent = engineResult.events.find(event => event.type === 'AdvantageChanged');
+        const attackerCriticalEvent = engineResult.events.find(event => event.type === 'CritRolled' && event.data.role === 'attacker');
+        const attackerFumbleEvent = engineResult.events.find(event => event.type === 'FumbleRolled' && event.data.role === 'attacker');
+        const defenderCriticalEvent = engineResult.events.find(event => event.type === 'CritRolled' && event.data.role === 'defender');
+        const defenderFumbleEvent = engineResult.events.find(event => event.type === 'FumbleRolled' && event.data.role === 'defender');
+        const attackerCriticalRoll = attackerCriticalEvent?.type === 'CritRolled' ? attackerCriticalEvent.data.critRoll : undefined;
+        const attackerFumbleRoll = attackerFumbleEvent?.type === 'FumbleRolled' ? attackerFumbleEvent.data.fumbleRoll : undefined;
+        const defenderCriticalRoll = defenderCriticalEvent?.type === 'CritRolled' ? defenderCriticalEvent.data.critRoll : undefined;
+        const defenderFumbleRoll = defenderFumbleEvent?.type === 'FumbleRolled' ? defenderFumbleEvent.data.fumbleRoll : undefined;
+
+        const attackerSL = attackEvent.data.attackerRoll.roundedSuccessLevel;
+        const defenderSL = attackEvent.data.defenderRoll.roundedSuccessLevel;
 
         let outcomeMessage = '';
         let damageDealt: number | undefined;
         let rawDamage: number = 0;
         let hitLocation: string | undefined;
 
-        if (attackerSL > defenderSL || (attackerSL === defenderSL && attackerRoll.targetNumber > defenderRoll.targetNumber)) {
-            const slDiff = attackerSL - defenderSL;
-
+        if (attackEvent.data.outcome === 'attacker') {
+            const slDiff = attackEvent.data.slDifference;
             if (isCombatMode) {
-                const talentDamageBonus = getTalentDamageBonus(
-                    attackerRoll.usedTalents || [],
-                    attackerRoll.skillId,
-                    talents
-                );
-
-                // Get defender's toughness bonus and armor
-                const defender = characters.find(c => c.id === defenderRoll.characterId);
-                const toughnessBonus = defender ? calculateCharacteristicBonus(defender.characteristics.t) : 0;
-                hitLocation = getHitLocation(attackerRoll.rollResult);
-                const armourPoints = defender ? getArmourPoints(defender, hitLocation) : 0;
-
-                const damage = (attackerRoll.weaponDamage || 0) + slDiff + talentDamageBonus - toughnessBonus - armourPoints;
-                damageDealt = Math.max(damage, 0);
-                rawDamage = (attackerRoll.weaponDamage || 0) + slDiff + talentDamageBonus;
+                hitLocation = damageEvent?.data.hitLocation;
+                damageDealt = damageEvent?.data.damageDealt;
+                rawDamage = damageEvent?.data.rawDamage ?? 0;
                 outcomeMessage = `${attackerRoll.characterName} wins by ${slDiff} SL! Damage: ${damageDealt} to ${hitLocation}.`;
             } else {
                 outcomeMessage = `${attackerRoll.characterName} wins by ${slDiff} SL!`;
             }
-        } else if (attackerSL < defenderSL || (attackerSL === defenderSL && attackerRoll.targetNumber < defenderRoll.targetNumber)) {
-            const slDiff = defenderSL - attackerSL;
+        } else if (attackEvent.data.outcome === 'defender') {
+            const slDiff = attackEvent.data.slDifference;
             outcomeMessage = `${defenderRoll.characterName} wins by ${slDiff} SL!`;
         } else {
             outcomeMessage = 'Result is a tie! (Re-roll or narrative resolution)';
@@ -311,6 +344,11 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
 
         const roundedAttackSL = attackerSL >= 0 ? `+${attackerSL}` : `${attackerSL}`;
         const roundedDefenseSL = defenderSL >= 0 ? `+${defenderSL}` : `${defenderSL}`;
+        const advantageTeam = advantageEvent?.data.side === 'ally'
+            ? 'players'
+            : advantageEvent?.data.side === 'adversary'
+                ? 'enemies'
+                : undefined;
 
         setResult({
             attackRoll: attackerRoll.rollResult,
@@ -321,14 +359,19 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             rawDamage: rawDamage,
             damageDealt,
             hitLocation,
-            attackerCritical: attackerCriticalCheck.isCritical,
-            attackerFumble: attackerCriticalCheck.isFumble,
-            attackerCritRoll: attackerCriticalCheck.critRoll,
-            defenderCritical: defenderCriticalCheck.isCritical,
-            defenderFumble: defenderCriticalCheck.isFumble,
-            defenderCritRoll: defenderCriticalCheck.critRoll,
+            attackerCritical: attackerCriticalEvent !== undefined,
+            attackerFumble: attackerFumbleEvent !== undefined,
+            attackerCritRoll: attackerCriticalRoll ?? attackerFumbleRoll,
+            defenderCritical: defenderCriticalEvent !== undefined,
+            defenderFumble: defenderFumbleEvent !== undefined,
+            defenderCritRoll: defenderCriticalRoll ?? defenderFumbleRoll,
             attackerName: attackerRoll.characterName,
             defenderName: defenderRoll.characterName,
+            toughnessBonus: damageEvent?.data.toughnessBonus,
+            armourPoints: damageEvent?.data.armourPoints,
+            defenderRemainingWounds: damageEvent?.data.woundsAfter,
+            advantageTeam,
+            advantageDelta: advantageEvent?.data.delta,
         });
 
         onLogEntry('info', outcomeMessage);
@@ -374,7 +417,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
         // Apply damage to defender
         const defenderCombatant = combatants.find(c => c.sourceId === defenderRoll.characterId);
         if (defenderCombatant) {
-            const newWounds = Math.max(0, defenderCombatant.currentWounds - result.damageDealt);
+            const newWounds = result.defenderRemainingWounds ?? Math.max(0, defenderCombatant.currentWounds - result.damageDealt);
             const updatedCombatant: Combatant = {
                 ...defenderCombatant,
                 currentWounds: newWounds
@@ -412,14 +455,11 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
             onLogEntry('system', `${result.damageDealt} damage applied to ${defenderRoll.characterName} (${newWounds} wounds remaining)${fudgeNote}`);
         }
 
-        // Grant advantage to attacker if they won (dealt damage)
-        if (result.damageDealt > 0 && attackerRoll) {
-            const attackerPlayer = characters.find(c => c.id === attackerRoll.characterId);
-            if (attackerPlayer) {
-                const team = attackerPlayer.userId != null ? 'players' : 'enemies';
-                onUpdateAdvantage(team, 1);
-                onLogEntry('system', `Team ${team} gains +1 Advantage`);
-            }
+        // Apply any Advantage event emitted by the shared resolver.
+        if (result.advantageTeam && result.advantageDelta) {
+            const advantageDelta = result.advantageDelta ?? 1;
+            onUpdateAdvantage(result.advantageTeam, advantageDelta);
+            onLogEntry('system', `Team ${result.advantageTeam} gains +${advantageDelta} Advantage`);
         }
 
         handleDiscardResult();
@@ -530,7 +570,7 @@ const CombatResolver: React.FC<CombatResolverProps> = ({
                         <p className={styles.outcomeMessage}>{result.outcomeMessage}</p>
                         {result.hitLocation && result.defenderName && (
                             <p className={styles.hitLocation}>Hit Location: {result.hitLocation}. Raw Damage: {result.rawDamage}. <br />
-                            Armour Points at Location: {getArmourPoints(characters.find(c => c.name === result.defenderName)!, result.hitLocation)}. Toughness Bonus : {calculateCharacteristicBonus(characters.find(c => c.name === result.defenderName)!.characteristics.t)} </p>
+                            Armour Points at Location: {result.armourPoints}. Toughness Bonus : {result.toughnessBonus} </p>
                         )}
                     </div>
                     {(result.attackerCritical || result.attackerFumble || result.defenderCritical || result.defenderFumble) && (

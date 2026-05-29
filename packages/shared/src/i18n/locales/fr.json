@@ -84,6 +84,53 @@
         "talent_added": "{{talentName}} ajouté aux talents de {{characterName}}.",
         "purchase": "{{name}} a acheté {{itemName}} pour {{price}}."
     },
+    "combat": {
+        "advantage": {
+            "changed": "L'Avantage {{side}} varie de {{delta}} pour atteindre {{total}}.",
+            "spent": "{{side}} dépense {{amount}} Avantage pour {{action}}.",
+            "additionalEffort": "{{side}} prépare +{{modifier}} pour un test à venir.",
+            "reallocated": {
+                "changed": "L'Avantage bascule vers {{dominantSide}}.",
+                "none": "Aucune réallocation d'Avantage n'a lieu."
+            },
+            "spendRejected": {
+                "insufficientAdvantage": "{{side}} n'a pas assez d'Avantage pour {{action}}.",
+                "missingActor": "{{action}} nécessite un combattant actif.",
+                "missingTarget": "{{action}} nécessite une cible.",
+                "alreadyUsedThisTurn": "Ce combattant a déjà utilisé {{action}} ce tour.",
+                "invalidAmount": "Montant d'Avantage invalide pour {{action}}."
+            },
+            "action": {
+                "batter": {
+                    "win": "Bousculade réussie.",
+                    "loss": "Bousculade ratée."
+                },
+                "trick": {
+                    "win": "Ruse réussie.",
+                    "loss": "Ruse ratée."
+                },
+                "fleeFromHarm": {
+                    "applied": "Fuir le danger est appliqué."
+                },
+                "additionalAction": {
+                    "applied": "Action supplémentaire appliquée."
+                }
+            }
+        },
+        "movement": {
+            "moved": "{{combatantName}} se déplace de {{distance}} yards, de {{from}} à {{to}}.",
+            "rejected": {
+                "engaged": "{{combatantName}} ne peut pas se déplacer en étant engagé. Utilisez Désengagement d'abord.",
+                "noMove": "{{combatantName}} n'a plus de mouvement disponible ce tour.",
+                "noAction": "{{combatantName}} n'a plus d'action disponible pour le mouvement {{mode}}.",
+                "insufficientBudget": "{{combatantName}} ne peut pas se déplacer de {{distance}} yards avec le mouvement {{mode}}."
+            }
+        },
+        "engagement": {
+            "engaged": "{{aName}} engage {{bName}}.",
+            "disengaged": "{{combatantName}} se désengage."
+        }
+    },
     "system": {
         "backupSuccess": "Sauvegarde de la campagne créée avec succès : {{path}}",
         "backupFailed": "Échec de la sauvegarde : {{error}}",

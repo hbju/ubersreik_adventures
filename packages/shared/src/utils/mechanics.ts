@@ -1,11 +1,13 @@
-export const rolld100 = (): number => {
-    return Math.floor(Math.random() * 100) + 1;
+import { mathRandomRng, Rng } from '../combat/rng';
+
+export const rolld100 = (rng: Rng = mathRandomRng): number => {
+    return Math.floor(rng.next() * 100) + 1;
 };
 
-export const rollDice  = (numDice: number, dieSides: number): number => {
+export const rollDice  = (numDice: number, dieSides: number, rng: Rng = mathRandomRng): number => {
     let total = 0;
     for (let i = 0; i < numDice; i++) {
-        total += Math.floor(Math.random() * dieSides) + 1;
+        total += Math.floor(rng.next() * dieSides) + 1;
     }
     return total;
 };

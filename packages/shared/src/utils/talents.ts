@@ -1,4 +1,5 @@
 import { Character, Talent, TalentEffect } from '../types/wfrp.types';
+import { Rng } from '../combat/rng';
 import { calculateCharacteristicBonus } from './skills';
 import { rolld100 } from './mechanics';
 import { useGameData } from '..';
@@ -250,7 +251,7 @@ function calculateTalentBonus(character: Character, talentType: string, talents:
  * @param target The target number
  * @returns Object indicating if it's a critical/fumble
  */
-export function checkCriticalResult(roll: number, target: number): {
+export function checkCriticalResult(roll: number, target: number, rng?: Rng): {
     isCritical: boolean;
     isFumble: boolean;
     critRoll?: number;
@@ -259,7 +260,7 @@ export function checkCriticalResult(roll: number, target: number): {
     const isFumble = roll >= 96 || (roll > target && roll % 11 === 0);
 
     if (isCritical || isFumble) {
-        return { isCritical, isFumble, critRoll: rolld100() };
+        return { isCritical, isFumble, critRoll: rolld100(rng) };
     }
 
     return { isCritical, isFumble };

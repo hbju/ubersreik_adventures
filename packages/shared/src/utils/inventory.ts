@@ -1,5 +1,8 @@
 import { useGameData } from '..';
 import { Character, Currency, Weapon, Armor, Item } from '../types/wfrp.types';
+import { normalizeArmorLocations } from './armorLocations';
+
+export { normalizeArmorLocations } from './armorLocations';
 
 
 function getItemsData(): { armors: Partial<Record<string, Armor[]>>, weapons: Partial<Record<string, Weapon[]>>, items: Partial<Record<string, Item[]>> } {
@@ -58,36 +61,6 @@ export function isArmorSoftLeather(armor: Armor): boolean {
 }
 
 
-
-/**
- * Get the armor locations as a normalized array of lowercase strings.
- */
-export function normalizeArmorLocations(locations: string[]): string[] {
-    const normalized: string[] = [];
-    for (const loc of locations) {
-        const lower = loc.toLowerCase();
-        if (lower.includes('head')) normalized.push('head');
-        if (lower.includes('body') || lower.includes('torso')) normalized.push('body');
-        if (lower.includes('arm')) {
-            // Check for specific arm or both
-            if (lower.includes('left')) normalized.push('left arm');
-            else if (lower.includes('right')) normalized.push('right arm');
-            else {
-                normalized.push('left arm');
-                normalized.push('right arm');
-            }
-        }
-        if (lower.includes('leg')) {
-            if (lower.includes('left')) normalized.push('left leg');
-            else if (lower.includes('right')) normalized.push('right leg');
-            else {
-                normalized.push('left leg');
-                normalized.push('right leg');
-            }
-        }
-    }
-    return [...new Set(normalized)]; // Remove duplicates
-}
 
 /**
  * Check if two armor pieces have overlapping locations.
