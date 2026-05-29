@@ -1,4 +1,4 @@
-import type { Armor, Character, Status, Talent, Weapon } from '../types/wfrp.types';
+import type { Armor, Character, ConditionInstance, Status, Talent, Weapon } from '../types/wfrp.types';
 
 export type SideId = 'ally' | 'adversary';
 export type AdvantagePools = Record<SideId, number>;
@@ -37,11 +37,19 @@ export interface Combatant {
     engagementIds: string[];
     budget: CombatantBudget;
     conditions: string[];
+    conditionInstances?: ConditionInstance[];
     resources: CombatantResources;
 }
 
 export interface CombatTurnFlags {
     additionalActionCombatantIds: string[];
+    chargedCombatantIds: string[];
+}
+
+export interface CombatEngagement {
+    aId: string;
+    bId: string;
+    lastAttackRound: number;
 }
 
 export interface CombatState {
@@ -53,6 +61,7 @@ export interface CombatState {
     advantagePools: AdvantagePools;
     tacticalDominantSide?: SideId;
     turnFlags: CombatTurnFlags;
+    engagements: Record<string, CombatEngagement>;
 }
 
 export interface UsedTalent {
@@ -63,12 +72,14 @@ export interface UsedTalent {
 export interface OpposedRollInput {
     skillId: string;
     skillName?: string;
+    weaponId?: string;
     rollResult?: number;
     targetNumber: number;
     testModifier?: number;
     successLevel?: number;
     weaponName?: string;
     weaponDamage?: number;
+    weaponDamageFormula?: string;
     usedTalents?: UsedTalent[];
 }
 
@@ -81,6 +92,8 @@ export interface ResolvedOpposedRoll {
     roundedSuccessLevel: number;
     weaponName?: string;
     weaponDamage?: number;
+    weaponId?: string;
+    weaponDamageFormula?: string;
     usedTalents: UsedTalent[];
 }
 
@@ -93,6 +106,9 @@ export interface DamageHit {
     attackRoll?: number;
     hitLocation?: string;
     usedTalents?: UsedTalent[];
+    disableMinimumWound?: boolean;
+    hooks?: Partial<MeleeResolutionHooks>;
+    sl?: number;
 }
 
 export interface MeleeAttackAction {
@@ -103,6 +119,12 @@ export interface MeleeAttackAction {
     combatMode?: boolean;
     generatesAdvantage?: boolean;
     grantAdvantage?: boolean;
+    isCharging?: boolean;
+    chosenHitLocation?: string;
+    attackerSize?: CombatantSize;
+    defenderSize?: CombatantSize;
+    disableMinimumWound?: boolean;
+    hooks?: Partial<MeleeResolutionHooks>;
 }
 
 export interface CombatEngineResult {
@@ -112,6 +134,85 @@ export interface CombatEngineResult {
 
 export type CombatOutcome = 'attacker' | 'defender' | 'tie';
 export type MovementMode = 'walk' | 'run' | 'charge';
+export type CombatantSize = 'tiny' | 'little' | 'small' | 'average' | 'large' | 'enormous' | 'monstrous';
+export type ModifierPhase = 'preRollModifiers' | 'slModifiers' | 'damageModifiers' | 'apModifiers';
+export type ModifierSourceType =
+    | 'condition'
+    | 'outnumbering'
+    | 'weaponLength'
+    | 'size'
+    | 'charging'
+    | 'range'
+    | 'cover'
+    | 'group'
+    | 'advantage'
+    | 'talent'
+    | 'quality'
+    | 'manual';
+
+export interface ModifierSource {
+    id: string;
+    type: ModifierSourceType;
+    phase: ModifierPhase;
+    label?: string;
+    value: number;
+    combatantId?: string;
+}
+
+export interface ModifierTotal {
+    sources: ModifierSource[];
+    uncappedBonus: number;
+    uncappedPenalty: number;
+    cappedBonus: number;
+    cappedPenalty: number;
+    total: number;
+}
+
+export interface MeleeHookContext {
+    state: CombatState;
+    action: MeleeAttackAction;
+    attacker: Combatant;
+    defender: Combatant;
+}
+
+export interface SlModifierContext extends MeleeHookContext {
+    attackerRoll: ResolvedOpposedRoll;
+    defenderRoll?: ResolvedOpposedRoll;
+}
+
+export interface DamageModifierContext extends SlModifierContext {
+    hitLocation: string;
+    weaponDamage: number;
+    attackerSuccessLevel: number;
+}
+
+export interface ApModifierContext extends DamageModifierContext {
+    armourPoints: number;
+}
+
+export interface OnHitContext extends ApModifierContext {
+    damageDealt: number;
+    woundsBefore: number;
+    woundsAfter: number;
+}
+
+export interface CritResolverContext extends OnHitContext {
+    trigger: 'roll' | 'zeroWounds' | 'unconsciousAuto' | 'fumbleInjury';
+    combatantId: string;
+    role?: 'attacker' | 'defender' | 'target';
+    roll?: number;
+    targetNumber?: number;
+    woundsBeyondZero?: number;
+}
+
+export interface MeleeResolutionHooks {
+    preRollModifiers(context: MeleeHookContext): ModifierSource[];
+    slModifiers(context: SlModifierContext): number;
+    damageModifiers(context: DamageModifierContext): number;
+    apModifiers(context: ApModifierContext): number;
+    onHitEffects(context: OnHitContext): CombatEngineResult | CombatEvent[];
+    critResolver(context: CritResolverContext): CombatEvent[];
+}
 
 export interface CombatEventBase<TType extends string, TData> {
     type: TType;
@@ -130,6 +231,10 @@ export type AttackResolvedEvent = CombatEventBase<'AttackResolved', {
     winnerId?: string;
     slDifference: number;
     hitLocation?: string;
+    modifiers?: ModifierTotal;
+    defenderCanCrit?: boolean;
+    defenderAvoidsOnly?: boolean;
+    collapsed?: 'none' | 'surprised' | 'unconscious';
 }>;
 
 export type DamageDealtEvent = CombatEventBase<'DamageDealt', {
@@ -141,6 +246,8 @@ export type DamageDealtEvent = CombatEventBase<'DamageDealt', {
     damageDealt: number;
     toughnessBonus: number;
     armourPoints: number;
+    minimumOneWoundApplied: boolean;
+    woundsBeyondZero: number;
     woundsBefore: number;
     woundsAfter: number;
 }>;
@@ -154,11 +261,12 @@ export type ConditionAppliedEvent = CombatEventBase<'ConditionApplied', {
 export type CritRolledEvent = CombatEventBase<'CritRolled', {
     combatantId: string;
     role?: 'attacker' | 'defender' | 'target';
-    trigger: 'roll' | 'zeroWounds';
+    trigger: 'roll' | 'zeroWounds' | 'unconsciousAuto' | 'fumbleInjury';
     roll?: number;
     targetNumber?: number;
     critRoll: number;
     hitLocation?: string;
+    woundsBeyondZero?: number;
 }>;
 
 export type FumbleRolledEvent = CombatEventBase<'FumbleRolled', {
@@ -167,6 +275,14 @@ export type FumbleRolledEvent = CombatEventBase<'FumbleRolled', {
     roll: number;
     targetNumber: number;
     fumbleRoll: number;
+}>;
+
+export type FumbleResolvedEvent = CombatEventBase<'FumbleResolved', {
+    combatantId: string;
+    role?: 'attacker' | 'defender';
+    roll: number;
+    effect: string;
+    description: string;
 }>;
 
 export type ResourceSpentEvent = CombatEventBase<'ResourceSpent', {
@@ -234,6 +350,12 @@ export type AdvantageReallocatedEvent = CombatEventBase<'AdvantageReallocatedEve
     pools: AdvantagePools;
 }>;
 
+export type MeleeHookPhaseEvent = CombatEventBase<'MeleeHookPhase', {
+    phase: keyof MeleeResolutionHooks;
+    sources?: number;
+    modifier?: number;
+}>;
+
 export type MovedEvent = CombatEventBase<'MovedEvent', {
     combatantId: string;
     combatantName: string;
@@ -276,6 +398,7 @@ export type CombatEvent =
     | ConditionAppliedEvent
     | CritRolledEvent
     | FumbleRolledEvent
+    | FumbleResolvedEvent
     | ResourceSpentEvent
     | AdvantageChangedEvent
     | AdvantageSpentEvent
@@ -283,6 +406,7 @@ export type CombatEvent =
     | AdvantageActionResolvedEvent
     | AdvantageModifierPreparedEvent
     | AdvantageReallocatedEvent
+    | MeleeHookPhaseEvent
     | MovedEvent
     | MoveRejectedEvent
     | EngagedEvent

@@ -139,6 +139,10 @@ export function applyMove(
     const maxDistance = Math.min(mode === 'walk' ? allowance.walk : allowance.run, combatant.movementBudget.remaining);
     if (distance > maxDistance) return reject('insufficientBudget');
 
+    const chargedIntoMelee = mode === 'charge'
+        && typeof target === 'object'
+        && 'combatantId' in target
+        && !combatant.engagementIds.includes(target.combatantId);
     const updatedCombatant: Combatant = {
         ...combatant,
         position: to,
@@ -153,9 +157,20 @@ export function applyMove(
         },
     };
 
-    return {
-        state: replaceCombatants(state, [updatedCombatant]),
-        events: [{
+    const movedState = replaceCombatants({
+        ...state,
+        turnFlags: {
+            ...state.turnFlags,
+            chargedCombatantIds: chargedIntoMelee
+                ? [...new Set([...state.turnFlags.chargedCombatantIds, combatant.id])]
+                : state.turnFlags.chargedCombatantIds,
+        },
+        advantagePools: chargedIntoMelee ? {
+            ...state.advantagePools,
+            [combatant.side]: state.advantagePools[combatant.side] + 1,
+        } : state.advantagePools,
+    }, [updatedCombatant]);
+    const events: CombatEngineResult['events'] = [{
             type: 'MovedEvent',
             i18nKey: 'combat.movement.moved',
             data: {
@@ -168,8 +183,25 @@ export function applyMove(
                 actionSpent,
                 remainingMovement: updatedCombatant.movementBudget.remaining,
             },
-        }],
-    };
+        }];
+
+    if (chargedIntoMelee) {
+        events.push({
+            type: 'AdvantageChanged',
+            i18nKey: 'combat.advantage.changed',
+            data: {
+                side: combatant.side,
+                delta: 1,
+                poolBefore: state.advantagePools[combatant.side],
+                poolAfter: movedState.advantagePools[combatant.side],
+                total: movedState.advantagePools[combatant.side],
+                reason: 'condition',
+                sourceCombatantId: combatant.id,
+            },
+        });
+    }
+
+    return { state: movedState, events };
 }
 
 export function engage(state: CombatState, aId: string, bId: string): CombatEngineResult {

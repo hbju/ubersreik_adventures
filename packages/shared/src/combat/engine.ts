@@ -1,10 +1,11 @@
 import type { Armor, Character } from '../types/wfrp.types';
 import { normalizeArmorLocations } from '../utils/armorLocations';
-import { attackerModifiersFor } from '../utils/conditions';
+import { attackerModifiersFor, conditionsRemovedAfterAttack, opposedTestCollapseFor } from '../utils/conditions';
 import { calculateSuccessLevel, getHitLocation, rolld100 } from '../utils/mechanics';
 import { calculateCharacteristicBonus } from '../utils/skills';
-import { applyTalentSLBonuses, checkCriticalResult, getTalentDamageBonus } from '../utils/talents';
+import { applyTalentSLBonuses, getTalentDamageBonus } from '../utils/talents';
 import { createAdvantagePools, grantAdvantage } from './advantage';
+import { collectMeleePreRollModifiers, resolveModifierTotal } from './modifiers';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
 import type {
@@ -12,16 +13,18 @@ import type {
     CombatEvent,
     CombatState,
     Combatant,
-    DamageDealtEvent,
+    CritResolverContext,
     DamageHit,
+    MeleeResolutionHooks,
     MeleeAttackAction,
     OpposedRollInput,
     ResolvedOpposedRoll,
+    SideId,
 } from './types';
 
 export function createCombatantFromCharacter(
     character: Character,
-    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions'>> = {}
+    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions' | 'conditionInstances'>> = {}
 ): Combatant {
     const currentWounds = options.currentWounds ?? character.status.wounds.current;
     const maxWounds = options.maxWounds ?? character.status.wounds.max;
@@ -40,6 +43,7 @@ export function createCombatantFromCharacter(
         engagementIds: options.engagementIds ?? [],
         budget: options.budget ?? { actions: 1, moves: 1, reactions: 1 },
         conditions: options.conditions ?? character.conditions.map(condition => condition.id),
+        conditionInstances: options.conditionInstances,
         resources: {
             wounds: { ...character.status.wounds, current: currentWounds, max: maxWounds },
             fate: character.status.fate,
@@ -52,7 +56,7 @@ export function createCombatantFromCharacter(
 
 export function createCombatState(
     combatants: Combatant[],
-    options: { armor?: Armor[]; talents?: CombatState['talents']; weapons?: CombatState['weapons']; advantagePools?: CombatState['advantagePools']; tacticalDominantSide?: CombatState['tacticalDominantSide']; turnFlags?: CombatState['turnFlags']; round?: number } = {}
+    options: { armor?: Armor[]; talents?: CombatState['talents']; weapons?: CombatState['weapons']; advantagePools?: CombatState['advantagePools']; tacticalDominantSide?: CombatState['tacticalDominantSide']; turnFlags?: Partial<CombatState['turnFlags']>; engagements?: CombatState['engagements']; round?: number } = {}
 ): CombatState {
     return {
         combatants: Object.fromEntries(combatants.map(combatant => [combatant.id, combatant])),
@@ -62,7 +66,11 @@ export function createCombatState(
         talents: options.talents ?? [],
         advantagePools: createAdvantagePools(options.advantagePools),
         tacticalDominantSide: options.tacticalDominantSide,
-        turnFlags: options.turnFlags ?? { additionalActionCombatantIds: [] },
+        turnFlags: {
+            additionalActionCombatantIds: options.turnFlags?.additionalActionCombatantIds ?? [],
+            chargedCombatantIds: options.turnFlags?.chargedCombatantIds ?? [],
+        },
+        engagements: options.engagements ?? {},
     };
 }
 
@@ -89,18 +97,59 @@ export function getArmorPointsAtLocation(character: Character, location: string,
 export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mathRandomRng): CombatEngineResult {
     const attacker = getCombatant(state, hit.attackerId);
     const defender = getCombatant(state, hit.defenderId);
+    const hooks = normalizeHooks(hit.hooks, rng);
     const hitLocation = hit.hitLocation ?? (hit.attackRoll ? getHitLocation(hit.attackRoll) : 'Unknown');
     const toughnessBonus = calculateCharacteristicBonus(defender.character.characteristics.t);
-    const armourPoints = getArmorPointsAtLocation(defender.character, hitLocation, state.armor);
+    const baseArmourPoints = getArmorPointsAtLocation(defender.character, hitLocation, state.armor);
+    const armourPoints = Math.max(0, baseArmourPoints + hooks.apModifiers({
+        state,
+        action: {
+            attackerId: attacker.id,
+            defenderId: defender.id,
+            attacker: { skillId: hit.skillId, targetNumber: 0 },
+            defender: { skillId: 'melee_basic', targetNumber: 0 },
+        },
+        attacker,
+        defender,
+        attackerRoll: rollFromDamageHit(hit),
+        hitLocation,
+        weaponDamage: hit.weaponDamage,
+        attackerSuccessLevel: hit.sl ?? hit.slDifference,
+        armourPoints: baseArmourPoints,
+    }));
     const talentDamageBonus = getTalentDamageBonus(hit.usedTalents || [], hit.skillId, state.talents);
-    const rawDamage = hit.weaponDamage + hit.slDifference + talentDamageBonus;
-    const damageDealt = Math.max(rawDamage - toughnessBonus - armourPoints, 0);
+    const hookDamageBonus = hooks.damageModifiers({
+        state,
+        action: {
+            attackerId: attacker.id,
+            defenderId: defender.id,
+            attacker: { skillId: hit.skillId, targetNumber: 0 },
+            defender: { skillId: 'melee_basic', targetNumber: 0 },
+        },
+        attacker,
+        defender,
+        attackerRoll: rollFromDamageHit(hit),
+        hitLocation,
+        weaponDamage: hit.weaponDamage,
+        attackerSuccessLevel: hit.sl ?? hit.slDifference,
+    });
+    const rawDamage = hit.weaponDamage + (hit.sl ?? hit.slDifference) + talentDamageBonus + hookDamageBonus;
+    const mitigatedDamage = rawDamage - toughnessBonus - armourPoints;
+    const minimumOneWoundApplied = !hit.disableMinimumWound && mitigatedDamage <= 0;
+    const damageDealt = hit.disableMinimumWound ? Math.max(mitigatedDamage, 0) : Math.max(mitigatedDamage, 1);
     const woundsBefore = defender.currentWounds;
+    const woundsBeyondZero = Math.max(0, damageDealt - woundsBefore);
     const woundsAfter = Math.max(0, woundsBefore - damageDealt);
 
     const updatedDefender: Combatant = {
         ...defender,
         currentWounds: woundsAfter,
+        conditions: woundsBefore > 0 && woundsAfter === 0
+            ? addCondition(defender.conditions, 'condition_prone')
+            : defender.conditions,
+        conditionInstances: woundsBefore > 0 && woundsAfter === 0
+            ? [...(defender.conditionInstances || []), { id: 'condition_unconscious_pending', roundApplied: state.round }]
+            : defender.conditionInstances,
         character: {
             ...defender.character,
             status: {
@@ -134,6 +183,8 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
                 damageDealt,
                 toughnessBonus,
                 armourPoints,
+                minimumOneWoundApplied,
+                woundsBeyondZero,
                 woundsBefore,
                 woundsAfter,
             },
@@ -141,28 +192,76 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
     ];
 
     if (woundsBefore > 0 && woundsAfter === 0 && damageDealt > 0) {
-        events.push({
-            type: 'CritRolled',
-            i18nKey: 'combat.critical.zeroWounds',
-            data: {
-                combatantId: defender.id,
-                role: 'target',
-                trigger: 'zeroWounds',
-                critRoll: rolld100(rng),
-                hitLocation,
-            },
-        });
+        events.push({ type: 'ConditionApplied', i18nKey: 'combat.condition.applied', data: { targetId: defender.id, conditionId: 'condition_prone', stacks: 1 } });
+        events.push(...hooks.critResolver(critContext({
+            state,
+            attacker,
+            defender: updatedDefender,
+            hit,
+            hitLocation,
+            trigger: 'zeroWounds',
+            combatantId: defender.id,
+            role: 'target',
+            woundsBeyondZero,
+            damageDealt,
+            woundsBefore,
+            woundsAfter,
+            rawWeaponDamage: hit.weaponDamage,
+            armourPoints,
+        })));
     }
 
-    return { state: nextState, events };
+    const onHit = hooks.onHitEffects({
+        state: nextState,
+        action: {
+            attackerId: attacker.id,
+            defenderId: defender.id,
+            attacker: { skillId: hit.skillId, targetNumber: 0 },
+            defender: { skillId: 'melee_basic', targetNumber: 0 },
+        },
+        attacker,
+        defender: updatedDefender,
+        attackerRoll: rollFromDamageHit(hit),
+        hitLocation,
+        weaponDamage: hit.weaponDamage,
+        attackerSuccessLevel: hit.sl ?? hit.slDifference,
+        armourPoints,
+        damageDealt,
+        woundsBefore,
+        woundsAfter,
+    });
+
+    if (Array.isArray(onHit)) {
+        events.push(...onHit);
+        return { state: nextState, events };
+    }
+
+    events.push(...onHit.events);
+    return { state: onHit.state, events };
 }
 
 export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction, rng: Rng = mathRandomRng): CombatEngineResult {
     const attacker = getCombatant(state, action.attackerId);
     const defender = getCombatant(state, action.defenderId);
+    const hooks = normalizeHooks(action.hooks, rng);
+    const hookContext = { state, action, attacker, defender };
+    const hookPreRollSources = hooks.preRollModifiers(hookContext);
+    const preRollSources = [
+        ...collectMeleePreRollModifiers(state, action, attacker, defender),
+        ...hookPreRollSources,
+    ];
+    const modifierTotal = resolveModifierTotal(preRollSources);
     const conditionModifiers = attackerModifiersFor(defender);
+    const collapse = opposedTestCollapseFor(defender, {
+        attackTargetNumber: action.attacker.targetNumber + modifierTotal.total,
+        chosenHitLocation: action.chosenHitLocation,
+    });
     let currentState = state;
-    const events: CombatEvent[] = [];
+    const events: CombatEvent[] = [{
+        type: 'MeleeHookPhase',
+        i18nKey: 'combat.melee.hook.preRollModifiers',
+        data: { phase: 'preRollModifiers', sources: preRollSources.length, modifier: modifierTotal.total },
+    }];
 
     if (conditionModifiers.advantageToAttacker > 0) {
         const advantageResult = grantAdvantage(currentState, attacker.side, conditionModifiers.advantageToAttacker, {
@@ -173,16 +272,56 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         events.push(...advantageResult.events);
     }
 
+    if (action.isCharging) {
+        const wasEngaged = attacker.engagementIds.includes(defender.id);
+        if (!wasEngaged) {
+            const chargeAdvantage = grantAdvantage(currentState, attacker.side, 1, {
+                reason: 'condition',
+                sourceCombatantId: attacker.id,
+            });
+            currentState = chargeAdvantage.state;
+            events.push(...chargeAdvantage.events);
+        }
+    }
+
+    currentState = stampAttackEngagement(currentState, attacker.id, defender.id);
+
     const attackerRoll = resolveOpposedRoll({
         ...action.attacker,
-        testModifier: (action.attacker.testModifier ?? 0) + conditionModifiers.toHitModifier,
+        testModifier: (action.attacker.testModifier ?? 0) + modifierTotal.total,
     }, attacker.character, currentState, rng);
-    const defenderRoll = resolveOpposedRoll(action.defender, defender.character, currentState, rng);
-    const attackerCriticalCheck = checkCriticalResult(attackerRoll.rollResult, attackerRoll.targetNumber, rng);
-    const defenderCriticalCheck = checkCriticalResult(defenderRoll.rollResult, defenderRoll.targetNumber, rng);
-    const outcome = determineOutcome(attackerRoll, defenderRoll);
-    const slDifference = Math.abs(attackerRoll.roundedSuccessLevel - defenderRoll.roundedSuccessLevel);
-    const hitLocation = outcome === 'attacker' && action.combatMode !== false ? getHitLocation(attackerRoll.rollResult) : undefined;
+    const slModifier = hooks.slModifiers({ ...hookContext, state: currentState, attackerRoll });
+    const modifiedAttackerRoll = withSlModifier(attackerRoll, slModifier);
+    events.push({ type: 'MeleeHookPhase', i18nKey: 'combat.melee.hook.slModifiers', data: { phase: 'slModifiers', modifier: slModifier } });
+
+    const defenderCanCrit = isMeleeDefense(action.defender.skillId);
+    const defenderAvoidsOnly = !defenderCanCrit;
+    let defenderRoll: ResolvedOpposedRoll | undefined;
+    let outcome: 'attacker' | 'defender' | 'tie';
+    let slDifference: number;
+    let hitLocation: string | undefined;
+    let collapsed: 'none' | 'surprised' | 'unconscious' = 'none';
+
+    if (collapse.mode === 'autoHit') {
+        collapsed = 'unconscious';
+        outcome = 'attacker';
+        defenderRoll = autoDefenderRoll(action.defender);
+        slDifference = Math.max(0, collapse.maxSuccessLevel ?? modifiedAttackerRoll.roundedSuccessLevel);
+        hitLocation = action.chosenHitLocation ?? 'Body';
+    } else if (collapse.mode === 'unopposed') {
+        collapsed = 'surprised';
+        defenderRoll = autoDefenderRoll(action.defender);
+        outcome = modifiedAttackerRoll.roundedSuccessLevel >= 0 ? 'attacker' : 'defender';
+        slDifference = outcome === 'attacker' ? Math.max(0, modifiedAttackerRoll.roundedSuccessLevel) : 0;
+        hitLocation = outcome === 'attacker' && action.combatMode !== false ? getHitLocation(modifiedAttackerRoll.rollResult) : undefined;
+    } else {
+        defenderRoll = resolveOpposedRoll(action.defender, defender.character, currentState, rng);
+        const defenderSlModifier = hooks.slModifiers({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll, defenderRoll });
+        defenderRoll = withSlModifier(defenderRoll, defenderSlModifier);
+        outcome = determineOutcome(modifiedAttackerRoll, defenderRoll);
+        slDifference = Math.abs(modifiedAttackerRoll.roundedSuccessLevel - defenderRoll.roundedSuccessLevel);
+        hitLocation = outcome === 'attacker' && action.combatMode !== false ? getHitLocation(modifiedAttackerRoll.rollResult) : undefined;
+    }
 
     events.push(
         {
@@ -193,96 +332,106 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
                 defenderId: defender.id,
                 attackerName: attacker.name,
                 defenderName: defender.name,
-                attackerRoll,
-                defenderRoll,
+                attackerRoll: modifiedAttackerRoll,
+                defenderRoll: defenderRoll!,
                 outcome,
                 winnerId: outcome === 'attacker' ? attacker.id : outcome === 'defender' ? defender.id : undefined,
                 slDifference: outcome === 'tie' ? 0 : slDifference,
                 hitLocation,
+                modifiers: modifierTotal,
+                defenderCanCrit,
+                defenderAvoidsOnly,
+                collapsed,
             },
         },
     );
 
-    if (attackerCriticalCheck.isCritical && attackerCriticalCheck.critRoll !== undefined) {
-        events.push({
-            type: 'CritRolled',
-            i18nKey: 'combat.critical.roll',
-            data: {
-                combatantId: attacker.id,
-                role: 'attacker',
-                trigger: 'roll',
-                roll: attackerRoll.rollResult,
-                targetNumber: attackerRoll.targetNumber,
-                critRoll: attackerCriticalCheck.critRoll,
-                hitLocation,
-            },
-        });
+    if (isCriticalRoll(modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber)) {
+        events.push(...hooks.critResolver(critContext({
+            state: currentState,
+            attacker,
+            defender,
+            hitLocation: hitLocation ?? getHitLocation(modifiedAttackerRoll.rollResult),
+            trigger: 'roll',
+            combatantId: attacker.id,
+            role: 'attacker',
+            roll: modifiedAttackerRoll.rollResult,
+            targetNumber: modifiedAttackerRoll.targetNumber,
+            rawWeaponDamage: modifiedAttackerRoll.weaponDamage ?? 0,
+        })));
     }
 
-    if (attackerCriticalCheck.isFumble && attackerCriticalCheck.critRoll !== undefined) {
-        events.push({
-            type: 'FumbleRolled',
-            i18nKey: 'combat.fumble.roll',
-            data: {
-                combatantId: attacker.id,
-                role: 'attacker',
-                roll: attackerRoll.rollResult,
-                targetNumber: attackerRoll.targetNumber,
-                fumbleRoll: attackerCriticalCheck.critRoll,
-            },
-        });
+    if (isFumbleRoll(modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber)) {
+        const fumble = resolveFumble(currentState, attacker.id, 'attacker', modifiedAttackerRoll, hooks, rng);
+        currentState = fumble.state;
+        events.push(...fumble.events);
     }
 
-    if (defenderCriticalCheck.isCritical && defenderCriticalCheck.critRoll !== undefined) {
-        events.push({
-            type: 'CritRolled',
-            i18nKey: 'combat.critical.roll',
-            data: {
-                combatantId: defender.id,
-                role: 'defender',
-                trigger: 'roll',
-                roll: defenderRoll.rollResult,
-                targetNumber: defenderRoll.targetNumber,
-                critRoll: defenderCriticalCheck.critRoll,
-            },
-        });
+    if (defenderRoll && defenderCanCrit && isCriticalRoll(defenderRoll.rollResult, defenderRoll.targetNumber)) {
+        events.push(...hooks.critResolver(critContext({
+            state: currentState,
+            attacker,
+            defender,
+            hitLocation: hitLocation ?? getHitLocation(defenderRoll.rollResult),
+            trigger: 'roll',
+            combatantId: defender.id,
+            role: 'defender',
+            roll: defenderRoll.rollResult,
+            targetNumber: defenderRoll.targetNumber,
+            rawWeaponDamage: defenderRoll.weaponDamage ?? 0,
+        })));
     }
 
-    if (defenderCriticalCheck.isFumble && defenderCriticalCheck.critRoll !== undefined) {
-        events.push({
-            type: 'FumbleRolled',
-            i18nKey: 'combat.fumble.roll',
-            data: {
-                combatantId: defender.id,
-                role: 'defender',
-                roll: defenderRoll.rollResult,
-                targetNumber: defenderRoll.targetNumber,
-                fumbleRoll: defenderCriticalCheck.critRoll,
-            },
-        });
+    if (defenderRoll && collapse.mode === 'opposed' && isFumbleRoll(defenderRoll.rollResult, defenderRoll.targetNumber)) {
+        const fumble = resolveFumble(currentState, defender.id, 'defender', defenderRoll, hooks, rng);
+        currentState = fumble.state;
+        events.push(...fumble.events);
     }
 
     if (outcome === 'attacker' && action.combatMode !== false) {
+        if (!hitLocation) hitLocation = getHitLocation(modifiedAttackerRoll.rollResult);
+        const weaponDamage = collapse.mode === 'autoHit'
+            ? Math.max(parseMeleeWeaponDamage(modifiedAttackerRoll, attacker, currentState), modifiedAttackerRoll.targetNumber >= 100 ? 10 : Math.floor(modifiedAttackerRoll.targetNumber / 10))
+            : parseMeleeWeaponDamage(modifiedAttackerRoll, attacker, currentState);
         const damageResult = resolveDamage(currentState, {
             attackerId: attacker.id,
             defenderId: defender.id,
-            skillId: attackerRoll.skillId,
+            skillId: modifiedAttackerRoll.skillId,
             slDifference,
-            weaponDamage: attackerRoll.weaponDamage || 0,
-            attackRoll: attackerRoll.rollResult,
+            weaponDamage,
+            attackRoll: modifiedAttackerRoll.rollResult,
             hitLocation,
-            usedTalents: attackerRoll.usedTalents,
+            usedTalents: modifiedAttackerRoll.usedTalents,
+            disableMinimumWound: action.disableMinimumWound || weaponHasQuality(modifiedAttackerRoll, currentState, 'undamaging'),
+            hooks,
+            sl: collapse.mode === 'autoHit' ? slDifference : modifiedAttackerRoll.roundedSuccessLevel,
         }, rng);
 
         currentState = damageResult.state;
         events.push(...damageResult.events);
+
+        if (collapse.mode === 'autoHit') {
+            events.push(...hooks.critResolver(critContext({
+                state: currentState,
+                attacker,
+                defender: getCombatant(currentState, defender.id),
+                hitLocation,
+                trigger: 'unconsciousAuto',
+                combatantId: defender.id,
+                role: 'target',
+                rawWeaponDamage: weaponDamage,
+            })));
+        }
     }
 
-    if (outcome !== 'tie' && action.generatesAdvantage !== false && action.grantAdvantage !== false) {
-        const winner = outcome === 'attacker' ? attacker : defender;
-        const advantageResult = grantAdvantage(currentState, winner.side, 1, {
+    currentState = applyLoserActionEnd(currentState, outcome === 'attacker' ? defender.id : outcome === 'defender' ? attacker.id : undefined);
+    currentState = clearChargeFlag(currentState, attacker.id);
+    currentState = removeConditions(currentState, defender.id, conditionsRemovedAfterAttack(defender));
+
+    if (outcome === 'attacker' && action.generatesAdvantage !== false && action.grantAdvantage !== false) {
+        const advantageResult = grantAdvantage(currentState, attacker.side, 1, {
             reason: 'opposedTestWin',
-            sourceCombatantId: winner.id,
+            sourceCombatantId: attacker.id,
         });
         events.push(...advantageResult.events);
         return { state: advantageResult.state, events };
@@ -310,6 +459,8 @@ function resolveOpposedRoll(input: OpposedRollInput, character: Character, state
         roundedSuccessLevel: Math.round(successLevel),
         weaponName: input.weaponName,
         weaponDamage: input.weaponDamage,
+        weaponId: input.weaponId,
+        weaponDamageFormula: input.weaponDamageFormula,
         usedTalents: input.usedTalents || [],
     };
 }
@@ -330,6 +481,361 @@ function determineOutcome(attackerRoll: ResolvedOpposedRoll, defenderRoll: Resol
     }
 
     return 'tie';
+}
+
+export function decayEngagementsEndOfRound(state: CombatState): CombatEngineResult {
+    const staleKeys = Object.entries(state.engagements)
+        .filter(([, engagement]) => state.round - engagement.lastAttackRound >= 1)
+        .map(([key]) => key);
+
+    if (staleKeys.length === 0) return { state, events: [] };
+
+    let combatants = state.combatants;
+    for (const key of staleKeys) {
+        const engagement = state.engagements[key];
+        const a = combatants[engagement.aId];
+        const b = combatants[engagement.bId];
+        if (a) combatants = { ...combatants, [a.id]: { ...a, engagementIds: a.engagementIds.filter(id => id !== b?.id) } };
+        if (b) combatants = { ...combatants, [b.id]: { ...b, engagementIds: b.engagementIds.filter(id => id !== a?.id) } };
+    }
+
+    const engagements = { ...state.engagements };
+    staleKeys.forEach(key => delete engagements[key]);
+    return { state: { ...state, combatants, engagements }, events: [] };
+}
+
+export function initiativeOrder(combatants: Combatant[], rng: Rng = mathRandomRng): Array<{
+    combatant: Combatant;
+    initiative: number;
+    roll: number;
+}> {
+    return combatants
+        .map(combatant => {
+            const roll = Math.floor(rng.next() * 10) + 1;
+            return {
+                combatant,
+                roll,
+                initiative: characteristicValue(combatant.character.characteristics.ag) + roll,
+            };
+        })
+        .sort((a, b) => (
+            b.initiative - a.initiative
+            || characteristicValue(b.combatant.character.characteristics.ag) - characteristicValue(a.combatant.character.characteristics.ag)
+            || characteristicValue(b.combatant.character.characteristics.i) - characteristicValue(a.combatant.character.characteristics.i)
+            || a.combatant.name.localeCompare(b.combatant.name)
+            || a.combatant.id.localeCompare(b.combatant.id)
+        ));
+}
+
+export function determineSurprise<TCombatant extends Pick<Combatant, 'id' | 'conditions'>>(
+    combatants: TCombatant[],
+    setup: { surprisedIds?: string[]; unsurprisedIds?: string[]; surprisedSide?: SideId; sides?: Record<string, SideId> }
+): TCombatant[] {
+    const surprisedIds = new Set(setup.surprisedIds || []);
+    const unsurprisedIds = new Set(setup.unsurprisedIds || []);
+    return combatants.map(combatant => {
+        const side = setup.sides?.[combatant.id];
+        const surprised = surprisedIds.has(combatant.id) || (!!setup.surprisedSide && side === setup.surprisedSide);
+        if (!surprised || unsurprisedIds.has(combatant.id) || combatant.conditions.includes('condition_surprised')) return combatant;
+        return { ...combatant, conditions: [...combatant.conditions, 'condition_surprised'] };
+    });
+}
+
+function normalizeHooks(hooks: Partial<MeleeResolutionHooks> | undefined, rng: Rng): MeleeResolutionHooks {
+    return {
+        preRollModifiers: hooks?.preRollModifiers ?? (() => []),
+        slModifiers: hooks?.slModifiers ?? (() => 0),
+        damageModifiers: hooks?.damageModifiers ?? (() => 0),
+        apModifiers: hooks?.apModifiers ?? (() => 0),
+        onHitEffects: hooks?.onHitEffects ?? (() => []),
+        critResolver: hooks?.critResolver ?? ((context: CritResolverContext) => [{
+            type: 'CritRolled',
+            i18nKey: context.trigger === 'zeroWounds' ? 'combat.critical.zeroWounds' : 'combat.critical.roll',
+            data: {
+                combatantId: context.combatantId,
+                role: context.role,
+                trigger: context.trigger,
+                roll: context.roll,
+                targetNumber: context.targetNumber,
+                critRoll: rolld100(rng),
+                hitLocation: context.hitLocation,
+                woundsBeyondZero: context.woundsBeyondZero,
+            },
+        }]),
+    };
+}
+
+function withSlModifier(roll: ResolvedOpposedRoll, modifier: number): ResolvedOpposedRoll {
+    if (modifier === 0) return roll;
+    const successLevel = roll.successLevel + modifier;
+    return { ...roll, successLevel, roundedSuccessLevel: Math.round(successLevel) };
+}
+
+function autoDefenderRoll(input: OpposedRollInput): ResolvedOpposedRoll {
+    return {
+        skillId: input.skillId,
+        skillName: input.skillName,
+        rollResult: input.rollResult ?? 0,
+        targetNumber: input.targetNumber + (input.testModifier ?? 0),
+        successLevel: Number.NEGATIVE_INFINITY,
+        roundedSuccessLevel: Number.NEGATIVE_INFINITY,
+        weaponName: input.weaponName,
+        weaponDamage: input.weaponDamage,
+        weaponId: input.weaponId,
+        weaponDamageFormula: input.weaponDamageFormula,
+        usedTalents: input.usedTalents || [],
+    };
+}
+
+function isMeleeDefense(skillId: string): boolean {
+    return skillId.toLowerCase().startsWith('melee');
+}
+
+function isCriticalRoll(roll: number, targetNumber: number): boolean {
+    return roll <= targetNumber && isD100Double(roll);
+}
+
+function isFumbleRoll(roll: number, targetNumber: number): boolean {
+    return roll > targetNumber && isD100Double(roll);
+}
+
+function isD100Double(roll: number): boolean {
+    return roll === 100 || (roll >= 11 && roll <= 99 && roll % 11 === 0);
+}
+
+function parseMeleeWeaponDamage(roll: ResolvedOpposedRoll, attacker: Combatant, state: CombatState): number {
+    if (roll.weaponDamage !== undefined) return roll.weaponDamage;
+
+    const formula = roll.weaponDamageFormula
+        ?? (roll.weaponId ? state.weapons.find(weapon => weapon.id === roll.weaponId)?.damage : undefined)
+        ?? equippedWeapon(attacker, state)?.damage
+        ?? '+SB';
+    const strengthBonus = calculateCharacteristicBonus(attacker.character.characteristics.s);
+    const normalized = String(formula).toUpperCase().replace(/\s+/g, '');
+    const withoutBonus = normalized.replace('SB', String(strengthBonus));
+    const terms = withoutBonus.match(/[+-]?\d+/g) || [];
+    return terms.reduce((total, term) => total + Number(term), 0);
+}
+
+function weaponHasQuality(roll: ResolvedOpposedRoll, state: CombatState, quality: string): boolean {
+    const weapon = roll.weaponId ? state.weapons.find(candidate => candidate.id === roll.weaponId) : undefined;
+    return (weapon?.qualities || []).some(candidate => candidate.toLowerCase().replace(/\*.*/, '') === quality.toLowerCase());
+}
+
+function equippedWeapon(attacker: Combatant, state: CombatState) {
+    const equippedId = Object.entries(attacker.character.inventory.equippedWeapons || {}).find(([, equipped]) => equipped)?.[0];
+    const fallbackId = Object.entries(attacker.character.inventory.weapons || {}).find(([, count]) => count > 0)?.[0];
+    const weaponId = equippedId ?? fallbackId;
+    return weaponId ? state.weapons.find(weapon => weapon.id === weaponId) : undefined;
+}
+
+function rollFromDamageHit(hit: DamageHit): ResolvedOpposedRoll {
+    return {
+        skillId: hit.skillId,
+        rollResult: hit.attackRoll ?? 0,
+        targetNumber: 0,
+        successLevel: hit.sl ?? hit.slDifference,
+        roundedSuccessLevel: Math.round(hit.sl ?? hit.slDifference),
+        weaponDamage: hit.weaponDamage,
+        usedTalents: hit.usedTalents || [],
+    };
+}
+
+function critContext(input: {
+    state: CombatState;
+    attacker: Combatant;
+    defender: Combatant;
+    hit?: DamageHit;
+    hitLocation: string;
+    trigger: CritResolverContext['trigger'];
+    combatantId: string;
+    role?: CritResolverContext['role'];
+    roll?: number;
+    targetNumber?: number;
+    woundsBeyondZero?: number;
+    damageDealt?: number;
+    woundsBefore?: number;
+    woundsAfter?: number;
+    rawWeaponDamage: number;
+    armourPoints?: number;
+}): CritResolverContext {
+    const attackerRoll = input.hit ? rollFromDamageHit(input.hit) : {
+        skillId: 'melee_basic',
+        rollResult: input.roll ?? 0,
+        targetNumber: input.targetNumber ?? 0,
+        successLevel: 0,
+        roundedSuccessLevel: 0,
+        usedTalents: [],
+    };
+    return {
+        state: input.state,
+        action: {
+            attackerId: input.attacker.id,
+            defenderId: input.defender.id,
+            attacker: { skillId: attackerRoll.skillId, targetNumber: attackerRoll.targetNumber },
+            defender: { skillId: 'melee_basic', targetNumber: 0 },
+        },
+        attacker: input.attacker,
+        defender: input.defender,
+        attackerRoll,
+        hitLocation: input.hitLocation,
+        weaponDamage: input.rawWeaponDamage,
+        attackerSuccessLevel: attackerRoll.roundedSuccessLevel,
+        armourPoints: input.armourPoints ?? 0,
+        damageDealt: input.damageDealt ?? 0,
+        woundsBefore: input.woundsBefore ?? input.defender.currentWounds,
+        woundsAfter: input.woundsAfter ?? input.defender.currentWounds,
+        trigger: input.trigger,
+        combatantId: input.combatantId,
+        role: input.role,
+        roll: input.roll,
+        targetNumber: input.targetNumber,
+        woundsBeyondZero: input.woundsBeyondZero,
+    };
+}
+
+function resolveFumble(
+    state: CombatState,
+    combatantId: string,
+    role: 'attacker' | 'defender',
+    roll: ResolvedOpposedRoll,
+    hooks: MeleeResolutionHooks,
+    rng: Rng
+): CombatEngineResult {
+    const fumbleRoll = rolld100(rng);
+    const result = fumbleResult(fumbleRoll);
+    let currentState = state;
+    const events: CombatEvent[] = [
+        {
+            type: 'FumbleRolled',
+            i18nKey: 'combat.fumble.roll',
+            data: { combatantId, role, roll: roll.rollResult, targetNumber: roll.targetNumber, fumbleRoll },
+        },
+        {
+            type: 'FumbleResolved',
+            i18nKey: `combat.fumble.effect.${result.effect}`,
+            data: { combatantId, role, roll: fumbleRoll, effect: result.effect, description: result.description },
+        },
+    ];
+
+    const combatant = getCombatant(state, combatantId);
+    if (result.effect === 'wounds_minus_1') {
+        currentState = replaceCombatant(currentState, woundCombatant(combatant, Math.max(0, combatant.currentWounds - 1)));
+    } else if (result.effect === 'lose_next_move') {
+        currentState = replaceCombatant(currentState, { ...combatant, budget: { ...combatant.budget, moves: 0 } });
+    } else if (result.effect === 'lose_next_action') {
+        currentState = replaceCombatant(currentState, { ...combatant, budget: { ...combatant.budget, actions: 0 } });
+    } else if (result.effect === 'hit_ally_or_stunned_self') {
+        currentState = replaceCombatant(currentState, { ...combatant, conditions: addCondition(combatant.conditions, 'condition_stunned') });
+        events.push({ type: 'ConditionApplied', i18nKey: 'combat.condition.applied', data: { targetId: combatantId, conditionId: 'condition_stunned', stacks: 1 } });
+    } else if (result.effect === 'torn_muscle_minor_critical_wound') {
+        events.push(...hooks.critResolver(critContext({
+            state,
+            attacker: combatant,
+            defender: combatant,
+            hitLocation: 'Body',
+            trigger: 'fumbleInjury',
+            combatantId,
+            role,
+            roll: roll.rollResult,
+            targetNumber: roll.targetNumber,
+            rawWeaponDamage: 0,
+        })));
+    }
+
+    return { state: currentState, events };
+}
+
+function fumbleResult(roll: number): { effect: string; description: string } {
+    if (roll <= 20) return { effect: 'wounds_minus_1', description: 'Lose 1 Wound, ignoring Toughness Bonus or Armour Points.' };
+    if (roll <= 40) return { effect: 'weapon_1_damage_act_last', description: 'Weapon suffers 1 Damage and the combatant acts last next round.' };
+    if (roll <= 60) return { effect: 'action_penalty_minus_10', description: 'Next round, the combatant suffers -10 to their Action.' };
+    if (roll <= 70) return { effect: 'lose_next_move', description: 'Lose your next Move.' };
+    if (roll <= 80) return { effect: 'lose_next_action', description: 'Miss your next Action.' };
+    if (roll <= 90) return { effect: 'torn_muscle_minor_critical_wound', description: 'Suffer a Torn Muscle (Minor) injury.' };
+    return { effect: 'hit_ally_or_stunned_self', description: 'Hit an ally if possible; otherwise gain Stunned.' };
+}
+
+function stampAttackEngagement(state: CombatState, attackerId: string, defenderId: string): CombatState {
+    const attacker = getCombatant(state, attackerId);
+    const defender = getCombatant(state, defenderId);
+    const key = engagementKey(attackerId, defenderId);
+    return {
+        ...state,
+        combatants: {
+            ...state.combatants,
+            [attackerId]: { ...attacker, engagementIds: addUnique(attacker.engagementIds, defenderId) },
+            [defenderId]: { ...defender, engagementIds: addUnique(defender.engagementIds, attackerId) },
+        },
+        engagements: {
+            ...state.engagements,
+            [key]: { aId: attackerId, bId: defenderId, lastAttackRound: state.round },
+        },
+    };
+}
+
+function applyLoserActionEnd(state: CombatState, loserId?: string): CombatState {
+    if (!loserId) return state;
+    const loser = getCombatant(state, loserId);
+    return replaceCombatant(state, { ...loser, budget: { ...loser.budget, actions: 0 } });
+}
+
+function clearChargeFlag(state: CombatState, combatantId: string): CombatState {
+    return {
+        ...state,
+        turnFlags: {
+            ...state.turnFlags,
+            chargedCombatantIds: state.turnFlags.chargedCombatantIds.filter(id => id !== combatantId),
+        },
+    };
+}
+
+function removeConditions(state: CombatState, combatantId: string, conditionIds: string[]): CombatState {
+    if (conditionIds.length === 0) return state;
+    const combatant = getCombatant(state, combatantId);
+    let conditions = [...combatant.conditions];
+    for (const conditionId of conditionIds) {
+        const index = conditions.indexOf(conditionId);
+        if (index >= 0) conditions = [...conditions.slice(0, index), ...conditions.slice(index + 1)];
+    }
+    return replaceCombatant(state, { ...combatant, conditions });
+}
+
+function woundCombatant(combatant: Combatant, currentWounds: number): Combatant {
+    return {
+        ...combatant,
+        currentWounds,
+        character: {
+            ...combatant.character,
+            status: {
+                ...combatant.character.status,
+                wounds: { ...combatant.character.status.wounds, current: currentWounds },
+            },
+        },
+        resources: {
+            ...combatant.resources,
+            wounds: { ...combatant.resources.wounds, current: currentWounds },
+        },
+    };
+}
+
+function characteristicValue(characteristic: Character['characteristics']['ag']): number {
+    return characteristic.initial + characteristic.advances + characteristic.talents + characteristic.modifier;
+}
+
+function addCondition(conditions: string[], conditionId: string): string[] {
+    if (['condition_prone', 'condition_surprised', 'condition_unconscious'].includes(conditionId) && conditions.includes(conditionId)) {
+        return conditions;
+    }
+    return [...conditions, conditionId];
+}
+
+function addUnique(ids: string[], id: string): string[] {
+    return [...new Set([...ids, id])];
+}
+
+function engagementKey(aId: string, bId: string): string {
+    return [aId, bId].sort().join('::');
 }
 
 function getCombatant(state: CombatState, combatantId: string): Combatant {

@@ -203,6 +203,26 @@
             "engaged": "{{aName}} engaged {{bName}}.",
             "disengaged": "{{combatantName}} disengaged."
         },
+        "melee": {
+            "hook": {
+                "preRollModifiers": "Pre-roll melee modifiers total {{modifier}}.",
+                "slModifiers": "Success Level modifiers total {{modifier}}.",
+                "damageModifiers": "Damage modifiers total {{modifier}}.",
+                "apModifiers": "AP modifiers total {{modifier}}."
+            }
+        },
+        "fumble": {
+            "roll": "{{combatantId}} fumbles with {{fumbleRoll}}.",
+            "effect": {
+                "wounds_minus_1": "{{combatantId}} loses 1 Wound from the fumble.",
+                "weapon_1_damage_act_last": "{{combatantId}}'s weapon is damaged and they act last next round.",
+                "action_penalty_minus_10": "{{combatantId}} suffers -10 to their next Action.",
+                "lose_next_move": "{{combatantId}} loses their next Move.",
+                "lose_next_action": "{{combatantId}} loses their next Action.",
+                "torn_muscle_minor_critical_wound": "{{combatantId}} suffers Torn Muscle (Minor).",
+                "hit_ally_or_stunned_self": "{{combatantId}} hits an ally or becomes Stunned."
+            }
+        },
         "condition": {
             "applied": "{{targetId}} gains {{conditionId}}.",
             "effect": {

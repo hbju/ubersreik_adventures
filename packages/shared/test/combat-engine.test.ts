@@ -82,7 +82,7 @@ describe('combat engine', () => {
         expect(state.combatants.defender.currentWounds).toBe(10);
     });
 
-    it('floors damage at zero across low SL boundaries', () => {
+    it('applies the default minimum 1 Wound after mitigation', () => {
         const attacker = makeCharacter('attacker', 'Attacker');
         const defender = makeCharacter('defender', 'Defender', {
             toughness: 35,
@@ -110,8 +110,9 @@ describe('combat engine', () => {
                 rawDamage: 5,
                 toughnessBonus: 3,
                 armourPoints: 2,
-                damageDealt: 0,
-                woundsAfter: 10,
+                damageDealt: 1,
+                minimumOneWoundApplied: true,
+                woundsAfter: 9,
             },
         });
     });
@@ -133,8 +134,8 @@ describe('combat engine', () => {
             hitLocation: 'Body',
         }, createSeededRng('zero-wounds'));
 
-        expect(result.events.map(event => event.type)).toEqual(['DamageDealt', 'CritRolled']);
-        expect(result.events[1]).toMatchObject({
+        expect(result.events.map(event => event.type)).toEqual(['DamageDealt', 'ConditionApplied', 'CritRolled']);
+        expect(result.events[2]).toMatchObject({
             type: 'CritRolled',
             i18nKey: 'combat.critical.zeroWounds',
             data: {
@@ -153,8 +154,8 @@ describe('combat engine', () => {
         const second = resolveGoldenMelee();
 
         expect(second).toEqual(first);
-        expect(first.events.map(event => event.type)).toEqual(['AttackResolved', 'DamageDealt', 'AdvantageChanged']);
-        expect(first.events[0]).toMatchObject({
+        expect(first.events.map(event => event.type)).toEqual(['MeleeHookPhase', 'MeleeHookPhase', 'AttackResolved', 'DamageDealt', 'AdvantageChanged']);
+        expect(first.events[2]).toMatchObject({
             type: 'AttackResolved',
             i18nKey: 'combat.attack.attacker',
             data: {
@@ -173,18 +174,18 @@ describe('combat engine', () => {
                 },
             },
         });
-        expect(first.events[1]).toMatchObject({
+        expect(first.events[3]).toMatchObject({
             type: 'DamageDealt',
             data: {
                 hitLocation: 'Head',
-                rawDamage: 8,
+                rawDamage: 5,
                 toughnessBonus: 3,
                 armourPoints: 0,
-                damageDealt: 5,
-                woundsAfter: 7,
+                damageDealt: 2,
+                woundsAfter: 10,
             },
         });
-        expect(first.events[2]).toMatchObject({
+        expect(first.events[4]).toMatchObject({
             type: 'AdvantageChanged',
             i18nKey: 'combat.advantage.changed',
             data: {
@@ -197,7 +198,7 @@ describe('combat engine', () => {
                 sourceCombatantId: 'attacker',
             },
         });
-        expect(first.state.combatants.defender.currentWounds).toBe(7);
+        expect(first.state.combatants.defender.currentWounds).toBe(10);
         expect(first.state.advantagePools.adversary).toBe(1);
     });
 

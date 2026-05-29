@@ -130,6 +130,26 @@
             "engaged": "{{aName}} engage {{bName}}.",
             "disengaged": "{{combatantName}} se désengage."
         },
+        "melee": {
+            "hook": {
+                "preRollModifiers": "Les modificateurs de melee avant jet totalisent {{modifier}}.",
+                "slModifiers": "Les modificateurs de DR totalisent {{modifier}}.",
+                "damageModifiers": "Les modificateurs de degats totalisent {{modifier}}.",
+                "apModifiers": "Les modificateurs de PA totalisent {{modifier}}."
+            }
+        },
+        "fumble": {
+            "roll": "{{combatantId}} maladresse avec {{fumbleRoll}}.",
+            "effect": {
+                "wounds_minus_1": "{{combatantId}} perd 1 Blessure a cause de la maladresse.",
+                "weapon_1_damage_act_last": "L'arme de {{combatantId}} est endommagee et il agit dernier au prochain round.",
+                "action_penalty_minus_10": "{{combatantId}} subit -10 a sa prochaine Action.",
+                "lose_next_move": "{{combatantId}} perd son prochain Mouvement.",
+                "lose_next_action": "{{combatantId}} perd sa prochaine Action.",
+                "torn_muscle_minor_critical_wound": "{{combatantId}} subit une Dechirure musculaire (mineure).",
+                "hit_ally_or_stunned_self": "{{combatantId}} touche un allie ou devient Etourdi."
+            }
+        },
         "condition": {
             "applied": "{{targetId}} gagne {{conditionId}}.",
             "effect": {

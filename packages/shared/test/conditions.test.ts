@@ -229,7 +229,7 @@ describe('condition effects engine', () => {
             defender: { skillId: 'melee_basic', targetNumber: 40, rollResult: 90 },
         });
 
-        expect(result.events[0]).toMatchObject({
+        expect(result.events.find(event => event.type === 'AdvantageChanged')).toMatchObject({
             type: 'AdvantageChanged',
             data: { side: 'ally', delta: 1, reason: 'condition', sourceCombatantId: 'defender' },
         });

@@ -225,6 +225,7 @@ export function spendAdvantage(
             ...actor,
             budget: { ...actor.budget, actions: actor.budget.actions + 1 },
         }], {
+            ...currentState.turnFlags,
             additionalActionCombatantIds: [...currentState.turnFlags.additionalActionCombatantIds, actor.id],
         });
         events.push(actionEvent(side, action, 'applied', params.actorId));
