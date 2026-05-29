@@ -182,7 +182,8 @@
         "journals": "Journals",
         "commerce": "Commerce",
         "tools": "Tools",
-        "world": "World"
+        "world": "World",
+        "notebook": "Notebook"
     },
     "lore": {
         "dramatisPersonae": "Dramatis Personae",
@@ -457,5 +458,22 @@
         "selector": {
             "openSelector": "Select Map"
         }
+    },
+    "notebook": {
+        "title": "Notebook",
+        "addPage": "Add Page",
+        "deletePage": "Delete Page",
+        "emptyTitle": "No Pages Yet",
+        "emptyText": "Click the + button to create your first notebook page.",
+        "selectPage": "Select a Page",
+        "selectPageText": "Select a page from the sidebar to view or edit it.",
+        "previewToggle": "Preview",
+        "editToggle": "Edit",
+        "untitled": "Untitled",
+        "newPageTitle": "New Page",
+        "sortManual": "Manual",
+        "sortAlpha": "A-Z",
+        "sortRecent": "Recent",
+        "placeholder": "Write your notes in markdown..."
     }
 }

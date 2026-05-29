@@ -1,7 +1,7 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import { Server, Socket } from 'socket.io';
 import { networkInterfaces } from 'os';
-import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage, ChatMessage, ChatMessageBroadcast, ChatHistoryMessage, parseChatCommand, executeDiceRoll, LocationTerritory, CalendarSyncMessage, CalendarState, TimelineEvent, GameDate } from '@wfrp/shared';
+import { ClientToServerMessage, ServerToClientMessage, JournalUpdateMessage, JournalEntry, MapStateUpdateMessage, MapPinState, User, Character, LoginSuccessMessage, LoginFailureMessage, Faction, FactionUpdateMessage, CharacterUpdateMessage, ShopInventoryState, ShopStateUpdateMessage, ShopItemRevealedMessage, ShopState, ShopInventoryItem, Quest, QuestSyncMessage, UserMapPin, MapTokensUpdateMessage, UserPinsUpdateMessage, MapPingMessage, ChatMessage, ChatMessageBroadcast, ChatHistoryMessage, parseChatCommand, executeDiceRoll, LocationTerritory, CalendarSyncMessage, CalendarState, TimelineEvent, GameDate, NotebookSyncMessage } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 import { getCampaignData, saveCampaignData } from './dataManager';
 
@@ -499,6 +499,32 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 return;
             }
 
+            if (message.type === 'NOTEBOOK_UPDATE') {
+                const { notebook } = message.payload;
+                const campaignData = getCampaignData();
+                if (!campaignData) {
+                    console.log(`[SERVER] No campaign data available`);
+                    return;
+                }
+
+                if (!campaignData.playerNotebooks) {
+                    campaignData.playerNotebooks = {};
+                }
+
+                campaignData.playerNotebooks[userId] = notebook;
+                saveCampaignData(campaignData);
+
+                // Echo back to the same player only (private data)
+                const syncMessage: NotebookSyncMessage = {
+                    type: 'NOTEBOOK_SYNC',
+                    payload: { notebook },
+                };
+                socket.emit('gm-message', syncMessage);
+
+                console.log(`[SERVER] Notebook updated for user ${userId} (${notebook.pages.length} pages)`);
+                return;
+            }
+
             if (message.type === 'CHAT_SEND') {
                 const { content, senderName } = message.payload;
                 const playerColor = getPlayerColor(userId);
@@ -824,6 +850,16 @@ function sendInitialStateToPlayer(socket: Socket, userId: string, characterId: s
         };
         socket.emit('gm-message', calendarMessage);
         console.log(`[SERVER] Sent calendar (${visibleEvents.length} visible events) to player ${socket.id}`);
+    }
+
+    // Send player notebook (private to this player)
+    if (campaignData.playerNotebooks && campaignData.playerNotebooks[userId]) {
+        const notebookMessage: NotebookSyncMessage = {
+            type: 'NOTEBOOK_SYNC',
+            payload: { notebook: campaignData.playerNotebooks[userId] },
+        };
+        socket.emit('gm-message', notebookMessage);
+        console.log(`[SERVER] Sent notebook to player ${socket.id}`);
     }
 }
 

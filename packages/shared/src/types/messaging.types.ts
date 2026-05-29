@@ -1,6 +1,7 @@
 import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, JournalEntry, MapPinState, Faction, ShopState, ShopInventoryItem, Quest, MapToken, UserMapPin, LocationTerritory } from './wfrp.types';
 import { ChatMessage } from './chat.types';
 import { GameDate, TimelineEvent } from '../data/calendar';
+import { Notebook } from './notebook.types';
 
 interface BaseMessage<T extends string, P> {
     type: T;
@@ -106,7 +107,12 @@ export type CalendarSyncMessage = BaseMessage<'CALENDAR_SYNC', {
     currentWeather?: string;
 }>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage | ChatMessageBroadcast | ChatHistoryMessage | MapSwitchMessage | ActiveMapUpdateMessage | CalendarSyncMessage;
+// Notebook sync (server → player, on login/assign or after update)
+export type NotebookSyncMessage = BaseMessage<'NOTEBOOK_SYNC', {
+    notebook: Notebook;
+}>;
+
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage | ChatMessageBroadcast | ChatHistoryMessage | MapSwitchMessage | ActiveMapUpdateMessage | CalendarSyncMessage | NotebookSyncMessage;
 
 // == Roll Queue Types ==
 
@@ -262,4 +268,9 @@ export type SetSpawnPointMessage = BaseMessage<'SET_SPAWN_POINT', {
     y: number;
 }>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage | TokenMoveMessage | MapAddPinMessage | MapRemovePinMessage | MapPingRequestMessage | ChatSendMessage | MapSwitchRequestMessage | SetSpawnPointMessage | RollWithIntentMessage;
+// Notebook update (player → server, full notebook payload)
+export type NotebookUpdateMessage = BaseMessage<'NOTEBOOK_UPDATE', {
+    notebook: Notebook;
+}>;
+
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage | TokenMoveMessage | MapAddPinMessage | MapRemovePinMessage | MapPingRequestMessage | ChatSendMessage | MapSwitchRequestMessage | SetSpawnPointMessage | RollWithIntentMessage | NotebookUpdateMessage;

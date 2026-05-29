@@ -40,6 +40,9 @@ import {
     Weapon,
     RollWithIntentMessage,
     DateWeatherWidget,
+    NotebookView,
+    NotebookUpdateMessage,
+    Notebook,
 } from '@wfrp/shared';
 
 import { TalentModal } from './components/TalentModal';
@@ -88,7 +91,7 @@ const PlayerApp: React.FC = () => {
         talents, skills, careers, conditions, qualities: qualities ?? [],
     }), [talents, skills, careers, conditions, qualities]);
 
-    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, notebook, connect, disconnect, sendMessage } = useSocket();
 
     const currentMapData = React.useMemo(() => {
         return maps[activeMapId] || mapData;
@@ -112,7 +115,7 @@ const PlayerApp: React.FC = () => {
     const [createCharacterWizardOpen, setCreateCharacterWizardOpen] = useState(false);
     const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
-    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'quests' | 'map' | 'reputation' | 'calendar'>('character');
+    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'quests' | 'map' | 'reputation' | 'calendar' | 'notebook'>('character');
     const [isCareerChangeModalOpen, setIsCareerChangeModalOpen] = useState(false);
     const [canChangeCareer, setCanChangeCareer] = useState(false);
     const [mapViewState, setMapViewState] = useState({ scale: 0.3, offsetX: 126, offsetY: -26 });
@@ -494,6 +497,14 @@ const PlayerApp: React.FC = () => {
         sendMessage(message);
     };
 
+    const handleNotebookChange = (updated: Notebook) => {
+        const message: NotebookUpdateMessage = {
+            type: 'NOTEBOOK_UPDATE',
+            payload: { notebook: updated },
+        };
+        sendMessage(message);
+    }
+
     const handleLocationSelect = (location: Location) => {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
@@ -739,6 +750,22 @@ const PlayerApp: React.FC = () => {
                         </button>
                     )}
                     <button
+                        onClick={() => setCurrentView('notebook')}
+                        style={{
+                            padding: '10px 20px',
+                            background: currentView === 'notebook' ? '#2d5016' : '#2c1810',
+                            color: '#d4af37',
+                            border: currentView === 'notebook' ? '2px solid #3d6f1f' : '2px solid #8b6914',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: '0.75rem',
+                            minWidth: '10%'
+                        }}
+                    >
+                        📓 Notebook
+                    </button>
+                    <button
                         onClick={() => setShowChat(!showChat)}
                         style={{
                             padding: '10px 20px',
@@ -981,6 +1008,17 @@ const PlayerApp: React.FC = () => {
                     weather={calendarWeather}
                     onClose={() => setCurrentView('character')}
                 />
+            )}
+
+            {/* Notebook View */}
+            {currentView === 'notebook' && (
+                <div style={{ paddingLeft: '30%', width: '80vw', height: '100vh' }}>
+                    <NotebookView
+                        notebook={notebook}
+                        editable={true}
+                        onChange={handleNotebookChange}
+                    />
+                </div>
             )}
 
             {/* Date/Weather Widget (shown in non-calendar views when calendar data is available) */}

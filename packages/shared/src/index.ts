@@ -30,6 +30,7 @@ export * from './types/wfrp.types';
 export * from './types/messaging.types';
 export * from './types/chat.types';
 export * from './types/audio.types';
+export * from './types/notebook.types';
 export * from './utils/advancement';
 export * from './utils/generator';
 export * from './utils/inventory';
@@ -44,6 +45,7 @@ export * from './utils/qualities';
 export * from './utils/shopGenerator';
 export * from './utils/diceParser';
 export * from './utils/graph';
+export * from './utils/notebook';
 
 export { default as criticalHitsData } from './data/critical_hits.json';
 export { default as fumblesData } from './data/fumbles.json';
@@ -71,4 +73,7 @@ export { SkillCodexDisplay } from './components/codex/renderers/SkillCodexDispla
 export { CareerCodexDisplay } from './components/codex/renderers/CareerCodexDisplay';
 export { ConditionCodexDisplay } from './components/codex/renderers/ConditionCodexDisplay';
 export { QualityCodexDisplay } from './components/codex/renderers/QualityCodexDisplay';
+
+// Notebook
+export { NotebookView } from './components/notebook/NotebookView';
 

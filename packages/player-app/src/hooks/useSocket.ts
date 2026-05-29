@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin, ChatMessage, LocationTerritory, GameDate, TimelineEvent } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin, ChatMessage, LocationTerritory, GameDate, TimelineEvent, Notebook } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
 
 interface OpposedTestRequest {
@@ -52,6 +52,7 @@ export const useSocket = () => {
     const [calendarDate, setCalendarDate] = useState<GameDate | null>(null);
     const [calendarEvents, setCalendarEvents] = useState<TimelineEvent[]>([]);
     const [calendarWeather, setCalendarWeather] = useState<string | undefined>(undefined);
+    const [notebook, setNotebook] = useState<Notebook>({ pages: [] });
 
 
     const connect = useCallback((ipAddress: string, username: string, password: string) => {
@@ -266,6 +267,11 @@ export const useSocket = () => {
                 setCalendarWeather(message.payload.currentWeather);
             }
 
+            if (message.type === 'NOTEBOOK_SYNC') {
+                console.log('[CLIENT] Notebook sync received:', message.payload);
+                setNotebook(message.payload.notebook);
+            }
+
             if (message.type === 'MAP_TOKENS_UPDATE') {
                 console.log('[CLIENT] Map tokens update received:', message.payload);
                 setTokens(message.payload.tokens);
@@ -353,6 +359,7 @@ export const useSocket = () => {
         calendarDate,
         calendarEvents,
         calendarWeather,
+        notebook,
         connect,
         disconnect,
         sendMessage

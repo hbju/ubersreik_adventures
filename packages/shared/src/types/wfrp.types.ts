@@ -1,4 +1,5 @@
 import type { CalendarState } from '../data/calendar';
+import type { Notebook } from './notebook.types';
 
 export interface Coordinates {
     x: number;
@@ -541,6 +542,7 @@ export interface CampaignState {
     activeMapId: string; // Currently active map
     calendar?: CalendarState; // Imperial Calendar state
     locationTerritories?: Record<string, LocationTerritory>; // locationId -> territory data
+    playerNotebooks?: Record<string, Notebook>; // userId -> Notebook (private player notes)
     version: string;
     lastModified: string;
 }

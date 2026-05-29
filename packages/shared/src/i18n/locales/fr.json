@@ -183,7 +183,8 @@
         "journals": "Journaux",
         "commerce": "Commerce",
         "tools": "Outils",
-        "world": "Monde"
+        "world": "Monde",
+        "notebook": "Carnet"
     },
     "lore": {
         "dramatisPersonae": "Dramatis Personae",
@@ -502,5 +503,22 @@
         "selector": {
             "openSelector": "Sélectionner une Carte"
         }
+    },
+    "notebook": {
+        "title": "Carnet",
+        "addPage": "Ajouter une Page",
+        "deletePage": "Supprimer la Page",
+        "emptyTitle": "Aucune Page",
+        "emptyText": "Cliquez sur le bouton + pour créer votre première page de carnet.",
+        "selectPage": "Sélectionner une Page",
+        "selectPageText": "Sélectionnez une page dans la barre latérale pour la consulter ou la modifier.",
+        "previewToggle": "Aperçu",
+        "editToggle": "Éditer",
+        "untitled": "Sans titre",
+        "newPageTitle": "Nouvelle Page",
+        "sortManual": "Manuel",
+        "sortAlpha": "A-Z",
+        "sortRecent": "Récent",
+        "placeholder": "Écrivez vos notes en markdown..."
     }
 }
