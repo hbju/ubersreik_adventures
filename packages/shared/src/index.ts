@@ -75,7 +75,7 @@ export { ConditionCodexDisplay } from './components/codex/renderers/ConditionCod
 export { QualityCodexDisplay } from './components/codex/renderers/QualityCodexDisplay';
 
 // Notebook
-export { NotebookView } from './components/notebook/NotebookView';
+export { NotebookView } from './components/notebook/NotebookView (old)';
 
 // Keyboard Shortcuts
 export * from './types/shortcuts.types';

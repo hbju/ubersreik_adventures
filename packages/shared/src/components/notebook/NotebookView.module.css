@@ -1,10 +1,15 @@
 .notebookContainer {
     display: flex;
-    height: 100vh;
+    height: 80%;
     width: 80vw;
     background: #1a0f0a;
     color: #e8dcc8;
     font-family: 'Cinzel', serif;
+    border: 2px solid #5a3e1b;
+    border-radius: 6px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 /* Sidebar */
@@ -34,8 +39,8 @@
 }
 
 .addPageBtn {
-    background: #2d5016;
-    border: 1px solid #3d6f1f;
+    background: #502b16;
+    border: 1px solid #522b0c;
     color: #d4af37;
     width: 28px;
     height: 28px;
@@ -48,7 +53,7 @@
 }
 
 .addPageBtn:hover {
-    background: #3d6f1f;
+    background: #964f0c;
 }
 
 .pageList {
@@ -136,7 +141,6 @@
 .contentHeader {
     padding: 12px 20px;
     border-bottom: 1px solid #3d2b1f;
-    display: flex;
     align-items: center;
     gap: 12px;
 }
@@ -195,7 +199,7 @@
 
 .textarea {
     width: 100%;
-    height: 99%;
+    height: 80%;
     min-height: 300px;
     background: #120a06;
     border: 1px solid #3d2b1f;

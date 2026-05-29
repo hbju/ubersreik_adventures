@@ -65,6 +65,7 @@ import {
     QueuedRoll,
     CalendarState,
     createDefaultCalendarState,
+    Notebook
 } from '@wfrp/shared';
 import { CampaignState, MapToken, UserMapPin } from '@wfrp/shared/src/types/wfrp.types';
 
@@ -173,6 +174,8 @@ function App() {
     const tokensRef = useRef(tokens);
     const [userPins, setUserPins] = useState<UserMapPin[]>([]);
     const userPinsRef = useRef(userPins);
+    const [playerNotebooks, setPlayerNotebooks] = useState<Record<string, Notebook>>({});
+    const playerNotebooksRef = useRef(playerNotebooks);
     const [testModalInfo, setTestModalInfo] = useState<{ id: string, name: string, value: number, charId: string } | null>(null);
     const [purchaseRequest, setPurchaseRequest] = useState<{
         playerName: string;
@@ -270,7 +273,6 @@ function App() {
     useEffect(() => {
         if (!saving) return;
 
-        console.log("Saving data, characters:", characters);
         const campaignData: CampaignState = {
             characters: characters,
             users: users,
@@ -288,9 +290,11 @@ function App() {
             activeMapId: activeMapId, // Current active map
             calendar: calendarState, // Imperial Calendar state
             locationTerritories: locationTerritories, // Faction territory assignments
+            playerNotebooks: playerNotebooks,
             version: '1.0.0',
             lastModified: new Date().toISOString(),
         };
+        console.log('Saving campaign data : ', campaignData);
         window.ipcRenderer.saveData(campaignData);
 
         charactersRef.current = characters;
@@ -306,9 +310,10 @@ function App() {
         characterTemplatesRef.current = characterTemplates;
         tokensRef.current = tokens;
         userPinsRef.current = userPins;
+        playerNotebooksRef.current = playerNotebooks;
         activeMapIdRef.current = activeMapId;
 
-    }, [characters, users, journal, quests, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId]);
+    }, [characters, users, journal, quests, calendarState, mapPinStates, factions, locationTerritories, shopInventory, customShopDefinitions, characterTemplates, activeMapId, tokens, userPins, playerNotebooks]);
 
     // Broadcast calendar state to all players whenever it changes
     useEffect(() => {
@@ -939,6 +944,7 @@ function App() {
 
         // Listen for data updates from the main process
         const cleanupDataUpdateListener = window.ipcRenderer.onDataUpdated((data: any) => {
+            console.log('Received data update from main process : ', data);
             if (data && data.characters) {
                 setCharacters(data.characters);
                 console.log('Received data update from main process : ', data);
@@ -957,6 +963,10 @@ function App() {
             }
             if (data && data.userPins) {
                 setUserPins(data.userPins);
+            }
+            if (data && data.playerNotebooks) {
+                setPlayerNotebooks(data.playerNotebooks);
+                console.log('Received player notebooks update from main process : ', data.playerNotebooks);
             }
         });
 

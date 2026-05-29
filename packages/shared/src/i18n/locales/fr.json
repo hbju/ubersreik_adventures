@@ -554,6 +554,7 @@
             "toggleUserManager": "Gestion des Joueurs",
             "toggleQuestJournal": "Journal de Quêtes",
             "toggleAtmosphere": "Panneau Ambiance",
-            "toggleTimeline": "Chronologie"
+            "toggleTimeline": "Chronologie",
+            "actionBar": "Barre d'Actions" 
         }    }
 }

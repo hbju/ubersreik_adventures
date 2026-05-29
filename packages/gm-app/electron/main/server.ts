@@ -439,6 +439,9 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 };
                 socket.emit('gm-message', pinsMessage);
 
+                
+                mainWindow.webContents.send('data-updated', { userPins: campaignData.userPins });
+
                 console.log(`[SERVER] Pin added by user ${userId}: ${pin.label}`);
                 return;
             }
@@ -469,6 +472,9 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                         payload: { pins: playerPins }
                     };
                     socket.emit('gm-message', pinsMessage);
+
+                    
+                    mainWindow.webContents.send('data-updated', { userPins: campaignData.userPins });
 
                     console.log(`[SERVER] Pin ${pinId} deleted by user ${userId}`);
                 }
@@ -508,6 +514,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 }
 
                 if (!campaignData.playerNotebooks) {
+                    console.log(`[SERVER] Initializing player notebooks`);
                     campaignData.playerNotebooks = {};
                 }
 
@@ -520,6 +527,8 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                     payload: { notebook },
                 };
                 socket.emit('gm-message', syncMessage);
+
+                mainWindow.webContents.send('data-updated', { playerNotebooks: campaignData.playerNotebooks });
 
                 console.log(`[SERVER] Notebook updated for user ${userId} (${notebook.pages.length} pages)`);
                 return;

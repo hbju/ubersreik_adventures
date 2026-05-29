@@ -88,6 +88,17 @@ function recomputeOrder(pages: NotebookPage[]): NotebookPage[] {
     }));
 }
 
+export function sortPages(pages: NotebookPage[], method: 'manual' | 'title' | 'updatedAt' = 'manual'): NotebookPage[] {
+    switch (method) {
+        case 'title':
+            return sortByTitle(pages);
+        case 'updatedAt':
+            return sortByUpdatedAt(pages);
+        default:
+            return sortByManual(pages);
+    }
+}
+
 /**
  * Sort pages by their manual order field (ascending)
  */

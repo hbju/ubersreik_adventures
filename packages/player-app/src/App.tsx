@@ -123,21 +123,23 @@ const PlayerApp: React.FC = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [useNewSheet, setUseNewSheet] = useState(true); // Toggle between old and new sheet
     const [showChat, setShowChat] = useState(false);
+    const [showActionbar, setShowActionbar] = useState(true);
 
     const chatSenderName = character?.name || username || 'Player';
 
     // --- Keyboard Shortcuts ---
     const shortcutActions: ShortcutAction[] = React.useMemo(() => [
-        { id: 'tab-character', label: 'shortcuts.action.tabCharacter', category: 'shortcuts.category.navigation', defaultBinding: { key: '1' }, handler: () => setCurrentView('character') },
-        { id: 'tab-notebook', label: 'shortcuts.action.tabNotebook', category: 'shortcuts.category.navigation', defaultBinding: { key: '2' }, handler: () => setCurrentView('notebook') },
-        { id: 'tab-map', label: 'shortcuts.action.tabMap', category: 'shortcuts.category.navigation', defaultBinding: { key: '3' }, handler: () => setCurrentView('map') },
-        { id: 'tab-journal', label: 'shortcuts.action.tabJournal', category: 'shortcuts.category.navigation', defaultBinding: { key: '4' }, handler: () => setCurrentView('journal') },
-        { id: 'tab-quests', label: 'shortcuts.action.tabQuests', category: 'shortcuts.category.navigation', defaultBinding: { key: '5' }, handler: () => setCurrentView('quests') },
-        { id: 'tab-calendar', label: 'shortcuts.action.tabCalendar', category: 'shortcuts.category.navigation', defaultBinding: { key: '6' }, handler: () => setCurrentView('calendar') },
+        { id: 'tab-character', label: 'shortcuts.action.tabCharacter', category: 'shortcuts.category.navigation', defaultBinding: { key: 'f1' }, handler: () => setCurrentView('character') },
+        { id: 'tab-notebook', label: 'shortcuts.action.tabNotebook', category: 'shortcuts.category.navigation', defaultBinding: { key: 'f2' }, handler: () => setCurrentView('notebook') },
+        { id: 'tab-map', label: 'shortcuts.action.tabMap', category: 'shortcuts.category.navigation', defaultBinding: { key: 'f3' }, handler: () => setCurrentView('map') },
+        { id: 'tab-journal', label: 'shortcuts.action.tabJournal', category: 'shortcuts.category.navigation', defaultBinding: { key: 'f4' }, handler: () => setCurrentView('journal') },
+        { id: 'tab-quests', label: 'shortcuts.action.tabQuests', category: 'shortcuts.category.navigation', defaultBinding: { key: 'f5' }, handler: () => setCurrentView('quests') },
+        { id: 'tab-calendar', label: 'shortcuts.action.tabCalendar', category: 'shortcuts.category.navigation', defaultBinding: { key: 'f6' }, handler: () => setCurrentView('calendar') },
         { id: 'focus-chat', label: 'shortcuts.action.focusChat', category: 'shortcuts.category.actions', defaultBinding: { key: 'c' }, handler: () => setShowChat(true) },
         { id: 'dice-tray', label: 'shortcuts.action.diceTray', category: 'shortcuts.category.actions', defaultBinding: { key: 'd' }, handler: () => setTestModalInfo({ id: 'quick', name: 'Quick Roll', value: 0 }) },
         { id: 'open-codex', label: 'shortcuts.action.openCodex', category: 'shortcuts.category.actions', defaultBinding: { key: 'k', ctrl: true } },
         { id: 'help', label: 'shortcuts.action.help', category: 'shortcuts.category.actions', defaultBinding: { key: 'M' } },
+        { id: 'actionbar', label: 'shortcuts.action.actionBar', category: 'shortcuts.category.actions', defaultBinding: { key: 'tab' }, handler: () => setShowActionbar(prev => !prev) },
         { id: 'close-modal', label: 'shortcuts.action.closeModal', category: 'shortcuts.category.actions', defaultBinding: { key: 'Escape' }, handler: () => {
             if (isShopModalOpen) setIsShopModalOpen(false);
             else if (isTalentModalOpen) setIsTalentModalOpen(false);
@@ -1135,7 +1137,7 @@ const PlayerApp: React.FC = () => {
                 />
             )}
 
-            {character && (
+            {character && showActionbar && (
                 <ActionBar
                     character={character}
                     onCharacterUpdate={handleEditModeCharacterUpdate}

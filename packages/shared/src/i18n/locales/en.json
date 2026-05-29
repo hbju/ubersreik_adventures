@@ -510,7 +510,8 @@
             "toggleUserManager": "User Manager",
             "toggleQuestJournal": "Quest Journal",
             "toggleAtmosphere": "Atmosphere Panel",
-            "toggleTimeline": "Timeline"
+            "toggleTimeline": "Timeline",
+            "actionBar": "Action Bar"
         }
     }
 }
