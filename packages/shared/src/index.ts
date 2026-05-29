@@ -77,3 +77,11 @@ export { QualityCodexDisplay } from './components/codex/renderers/QualityCodexDi
 // Notebook
 export { NotebookView } from './components/notebook/NotebookView';
 
+// Keyboard Shortcuts
+export * from './types/shortcuts.types';
+export * from './utils/shortcuts';
+export { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+export type { UseKeyboardShortcutsOptions, UseKeyboardShortcutsReturn } from './hooks/useKeyboardShortcuts';
+export { ShortcutsHelpOverlay } from './components/shortcuts/ShortcutsHelpOverlay';
+export { ShortcutsSettings } from './components/shortcuts/ShortcutsSettings';
+

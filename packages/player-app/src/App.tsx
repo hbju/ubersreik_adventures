@@ -55,8 +55,8 @@ import { ReputationDisplay } from './components/ReputationDisplay';
 import { QuestJournal } from './components/journal/QuestJournal';
 import { MapTransitionOverlay } from './components/MapTransitionOverlay';
 import { ActionBar } from './components/actionbar';
-import { Quest, QuestUpdateMessage, QuestDeleteMessage, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal, useCodex } from '@wfrp/shared';
-import type { CodexDataSources } from '@wfrp/shared';
+import { Quest, QuestUpdateMessage, QuestDeleteMessage, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal, useCodex, useKeyboardShortcuts, ShortcutsHelpOverlay, ShortcutsSettings } from '@wfrp/shared';
+import type { CodexDataSources, ShortcutAction } from '@wfrp/shared';
 import { PlayerTimeline } from './components/timeline/PlayerTimeline';
 
 /** Small wrapper so we can call useCodex inside CodexProvider */
@@ -125,6 +125,31 @@ const PlayerApp: React.FC = () => {
     const [showChat, setShowChat] = useState(false);
 
     const chatSenderName = character?.name || username || 'Player';
+
+    // --- Keyboard Shortcuts ---
+    const shortcutActions: ShortcutAction[] = React.useMemo(() => [
+        { id: 'tab-character', label: 'shortcuts.action.tabCharacter', category: 'shortcuts.category.navigation', defaultBinding: { key: '1' }, handler: () => setCurrentView('character') },
+        { id: 'tab-notebook', label: 'shortcuts.action.tabNotebook', category: 'shortcuts.category.navigation', defaultBinding: { key: '2' }, handler: () => setCurrentView('notebook') },
+        { id: 'tab-map', label: 'shortcuts.action.tabMap', category: 'shortcuts.category.navigation', defaultBinding: { key: '3' }, handler: () => setCurrentView('map') },
+        { id: 'tab-journal', label: 'shortcuts.action.tabJournal', category: 'shortcuts.category.navigation', defaultBinding: { key: '4' }, handler: () => setCurrentView('journal') },
+        { id: 'tab-quests', label: 'shortcuts.action.tabQuests', category: 'shortcuts.category.navigation', defaultBinding: { key: '5' }, handler: () => setCurrentView('quests') },
+        { id: 'tab-calendar', label: 'shortcuts.action.tabCalendar', category: 'shortcuts.category.navigation', defaultBinding: { key: '6' }, handler: () => setCurrentView('calendar') },
+        { id: 'focus-chat', label: 'shortcuts.action.focusChat', category: 'shortcuts.category.actions', defaultBinding: { key: 'c' }, handler: () => setShowChat(true) },
+        { id: 'dice-tray', label: 'shortcuts.action.diceTray', category: 'shortcuts.category.actions', defaultBinding: { key: 'd' }, handler: () => setTestModalInfo({ id: 'quick', name: 'Quick Roll', value: 0 }) },
+        { id: 'open-codex', label: 'shortcuts.action.openCodex', category: 'shortcuts.category.actions', defaultBinding: { key: 'k', ctrl: true } },
+        { id: 'help', label: 'shortcuts.action.help', category: 'shortcuts.category.actions', defaultBinding: { key: 'M' } },
+        { id: 'close-modal', label: 'shortcuts.action.closeModal', category: 'shortcuts.category.actions', defaultBinding: { key: 'Escape' }, handler: () => {
+            if (isShopModalOpen) setIsShopModalOpen(false);
+            else if (isTalentModalOpen) setIsTalentModalOpen(false);
+            else if (isCareerChangeModalOpen) setIsCareerChangeModalOpen(false);
+            else if (testModalInfo) setTestModalInfo(null);
+            else if (showChat) setShowChat(false);
+            else if (currentView === 'calendar') setCurrentView('character');
+        }},
+    ], [isShopModalOpen, isTalentModalOpen, isCareerChangeModalOpen, testModalInfo, showChat]);
+
+    const { shortcuts, overrides, conflicts, isHelpOpen, setHelpOpen, rebind, resetBinding, resetAll } = useKeyboardShortcuts({ actions: shortcutActions, enabled: isAuthenticated });
+    const [showShortcutSettings, setShowShortcutSettings] = useState(false);
 
     const handleSkillClick = (skillId: string, skillName: string, skillValue: number) => {
         setTestModalInfo({ id: skillId, name: skillName, value: skillValue });
@@ -633,6 +658,37 @@ const PlayerApp: React.FC = () => {
                         ⚔️ Character
                     </button>
                     <button
+                        onClick={() => setCurrentView('notebook')}
+                        style={{
+                            padding: '10px 20px',
+                            background: currentView === 'notebook' ? '#2d5016' : '#2c1810',
+                            color: '#d4af37',
+                            border: currentView === 'notebook' ? '2px solid #3d6f1f' : '2px solid #8b6914',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: '0.75rem',
+                            minWidth: '10%'
+                        }}
+                    >
+                        📓 Notebook
+                    </button>
+                    <button
+                        onClick={() => setCurrentView('map')}
+                        style={{
+                            padding: '10px 20px',
+                            background: currentView === 'map' ? '#2d5016' : '#2c1810',
+                            color: '#d4af37',
+                            border: currentView === 'map' ? '2px solid #3d6f1f' : '2px solid #8b6914',
+                            borderRadius: '6px',
+                            cursor: 'pointer',
+                            fontWeight: 'bold',
+                            fontSize: '0.75rem'
+                        }}
+                    >
+                        🗺️ Map
+                    </button>
+                    <button
                         onClick={() => setCurrentView('journal')}
                         style={{
                             padding: '10px 20px',
@@ -665,21 +721,6 @@ const PlayerApp: React.FC = () => {
                                 {journalEntries.length}
                             </span>
                         )}
-                    </button>
-                    <button
-                        onClick={() => setCurrentView('map')}
-                        style={{
-                            padding: '10px 20px',
-                            background: currentView === 'map' ? '#2d5016' : '#2c1810',
-                            color: '#d4af37',
-                            border: currentView === 'map' ? '2px solid #3d6f1f' : '2px solid #8b6914',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                            fontWeight: 'bold',
-                            fontSize: '0.75rem'
-                        }}
-                    >
-                        🗺️ Map
                     </button>
                     <button
                         onClick={() => setCurrentView('quests')}
@@ -749,22 +790,6 @@ const PlayerApp: React.FC = () => {
                             📅 Calendar
                         </button>
                     )}
-                    <button
-                        onClick={() => setCurrentView('notebook')}
-                        style={{
-                            padding: '10px 20px',
-                            background: currentView === 'notebook' ? '#2d5016' : '#2c1810',
-                            color: '#d4af37',
-                            border: currentView === 'notebook' ? '2px solid #3d6f1f' : '2px solid #8b6914',
-                            borderRadius: '6px',
-                            cursor: 'pointer',
-                            fontWeight: 'bold',
-                            fontSize: '0.75rem',
-                            minWidth: '10%'
-                        }}
-                    >
-                        📓 Notebook
-                    </button>
                     <button
                         onClick={() => setShowChat(!showChat)}
                         style={{
@@ -1126,6 +1151,24 @@ const PlayerApp: React.FC = () => {
             <CommandPalette />
             <CodexViewer />
             <CodexPopupModal />
+
+            {/* Keyboard Shortcuts Help */}
+            <ShortcutsHelpOverlay
+                shortcuts={shortcuts}
+                isOpen={isHelpOpen}
+                onClose={() => setHelpOpen(false)}
+                onOpenSettings={() => setShowShortcutSettings(true)}
+            />
+            {showShortcutSettings && (
+                <ShortcutsSettings
+                    shortcuts={shortcuts}
+                    conflicts={conflicts}
+                    onRebind={rebind}
+                    onResetBinding={resetBinding}
+                    onResetAll={resetAll}
+                    onClose={() => setShowShortcutSettings(false)}
+                />
+            )}
         </div>
         </CodexProvider>
     );

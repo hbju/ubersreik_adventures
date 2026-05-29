@@ -519,6 +519,41 @@
         "sortManual": "Manuel",
         "sortAlpha": "A-Z",
         "sortRecent": "Récent",
-        "placeholder": "Écrivez vos notes en markdown..."
-    }
+        "placeholder": "Écrivez vos notes en markdown..."    },
+    "shortcuts": {
+        "title": "Raccourcis Clavier",
+        "settings": "Paramètres des Raccourcis",
+        "helpHint": "Appuyez sur ? à tout moment pour afficher cette aide",
+        "customize": "Personnaliser les Raccourcis",
+        "settingsHint": "Cliquez sur un raccourci pour le modifier. Échap pour annuler.",
+        "pressKey": "Appuyez sur une touche...",
+        "conflict": "Conflit",
+        "resetAll": "Tout Réinitialiser",
+        "resetOne": "Réinitialiser par défaut",
+        "category": {
+            "navigation": "Navigation",
+            "actions": "Actions"
+        },
+        "action": {
+            "tabCharacter": "Personnage",
+            "tabJournal": "Journal",
+            "tabMap": "Carte",
+            "tabQuests": "Quêtes",
+            "tabReputation": "Réputation",
+            "tabCalendar": "Calendrier",
+            "tabNotebook": "Carnet",
+            "focusChat": "Focus Chat",
+            "diceTray": "Plateau de Dés",
+            "openCodex": "Ouvrir le Codex",
+            "help": "Afficher l'Aide Raccourcis",
+            "closeModal": "Fermer la Fenêtre",
+            "toggleGameLog": "Journal de Jeu",
+            "toggleShopManager": "Gestion des Boutiques",
+            "toggleCombatResolver": "Résolution de Combat",
+            "toggleJournalManager": "Gestion du Journal",
+            "toggleUserManager": "Gestion des Joueurs",
+            "toggleQuestJournal": "Journal de Quêtes",
+            "toggleAtmosphere": "Panneau Ambiance",
+            "toggleTimeline": "Chronologie"
+        }    }
 }

@@ -1,5 +1,5 @@
-import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal } from '@wfrp/shared';
-import type { CodexDataSources } from '@wfrp/shared';
+import { getGroupedSkill, getTalentInitiativeBonus, isSkillGrouped, MapDisplay, MapView, recalculateCharacterTalentBonuses, Skill, getTalentCharacteristicBonus, useGameData, CharacterCreationWizard, CharacterTemplate, generateCharacterFromTemplate, MapTokensUpdateMessage, ChatBox, ChatMessage, parseChatCommand, executeDiceRoll, ActiveMapUpdateMessage, UserPinsUpdateMessage, LocationTerritory, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal, useKeyboardShortcuts, ShortcutsHelpOverlay, ShortcutsSettings } from '@wfrp/shared';
+import type { CodexDataSources, ShortcutAction } from '@wfrp/shared';
 import CombatResolver from './components/combatResolver/CombatResolver';
 import CharacterRoster from './components/characterRoster/CharacterRoster';
 import AtmospherePanel from './components/atmospherePanel/AtmospherePanel';
@@ -229,6 +229,37 @@ function App() {
         const baseTemplates = (defaultTemplates || []).filter(t => !customIds.has(t.id));
         return [...baseTemplates, ...characterTemplates];
     }, [defaultTemplates, characterTemplates]);
+
+    // --- Keyboard Shortcuts ---
+    const gmShortcutActions: ShortcutAction[] = React.useMemo(() => [
+        { id: 'toggle-game-log', label: 'shortcuts.action.toggleGameLog', category: 'shortcuts.category.navigation', defaultBinding: { key: '1' }, handler: () => setShowGameLog(v => !v) },
+        { id: 'toggle-combat', label: 'shortcuts.action.toggleCombatResolver', category: 'shortcuts.category.navigation', defaultBinding: { key: '2' }, handler: () => setShowCombatResolver(v => !v) },
+        { id: 'toggle-journal', label: 'shortcuts.action.toggleJournalManager', category: 'shortcuts.category.navigation', defaultBinding: { key: '3' }, handler: () => setShowJournalManager(v => !v) },
+        { id: 'toggle-shop', label: 'shortcuts.action.toggleShopManager', category: 'shortcuts.category.navigation', defaultBinding: { key: '4' }, handler: () => setShowShopManager(v => !v) },
+        { id: 'toggle-quests', label: 'shortcuts.action.toggleQuestJournal', category: 'shortcuts.category.navigation', defaultBinding: { key: '5' }, handler: () => setShowQuestJournal(v => !v) },
+        { id: 'toggle-users', label: 'shortcuts.action.toggleUserManager', category: 'shortcuts.category.navigation', defaultBinding: { key: '6' }, handler: () => setShowUserManager(v => !v) },
+        { id: 'toggle-atmosphere', label: 'shortcuts.action.toggleAtmosphere', category: 'shortcuts.category.navigation', defaultBinding: { key: '7' }, handler: () => setShowAtmospherePanel(v => !v) },
+        { id: 'toggle-timeline', label: 'shortcuts.action.toggleTimeline', category: 'shortcuts.category.navigation', defaultBinding: { key: '8' }, handler: () => setShowTimelineManager(v => !v) },
+        { id: 'focus-chat', label: 'shortcuts.action.focusChat', category: 'shortcuts.category.actions', defaultBinding: { key: 'c' }, handler: () => setShowChat(true) },
+        { id: 'dice-tray', label: 'shortcuts.action.diceTray', category: 'shortcuts.category.actions', defaultBinding: { key: 'd' }, handler: () => setShowDiceTray(v => !v) },
+        { id: 'open-codex', label: 'shortcuts.action.openCodex', category: 'shortcuts.category.actions', defaultBinding: { key: 'k', ctrl: true } },
+        { id: 'help', label: 'shortcuts.action.help', category: 'shortcuts.category.actions', defaultBinding: { key: '?' }, handler: () => setGmHelpOpen(true) },
+        { id: 'close-modal', label: 'shortcuts.action.closeModal', category: 'shortcuts.category.actions', defaultBinding: { key: 'Escape' }, handler: () => {
+            if (showDiceTray) setShowDiceTray(false);
+            else if (showGameLog) setShowGameLog(false);
+            else if (showCombatResolver) setShowCombatResolver(false);
+            else if (showJournalManager) setShowJournalManager(false);
+            else if (showShopManager) setShowShopManager(false);
+            else if (showQuestJournal) setShowQuestJournal(false);
+            else if (showUserManager) setShowUserManager(false);
+            else if (showAtmospherePanel) setShowAtmospherePanel(false);
+            else if (showTimelineManager) setShowTimelineManager(false);
+            else if (showChat) setShowChat(false);
+        }},
+    ], [showDiceTray, showGameLog, showCombatResolver, showJournalManager, showShopManager, showQuestJournal, showUserManager, showAtmospherePanel, showTimelineManager, showChat]);
+
+    const { shortcuts: gmShortcuts, overrides: gmOverrides, conflicts: gmConflicts, isHelpOpen: isGmHelpOpen, setHelpOpen: setGmHelpOpen, rebind: gmRebind, resetBinding: gmResetBinding, resetAll: gmResetAll } = useKeyboardShortcuts({ actions: gmShortcutActions });
+    const [showShortcutSettings, setShowShortcutSettings] = useState(false);
 
     const addLogEntry = (type: LogEntry['type'], content: string, messageCode?: string, params?: Record<string, any>) => {
         const newEntry: LogEntry = { id: new Date().toISOString() + Math.random().toString(36), type, content, messageCode, params };
@@ -2150,6 +2181,24 @@ function App() {
             <CommandPalette />
             <CodexViewer />
             <CodexPopupModal />
+
+            {/* Keyboard Shortcuts Help */}
+            <ShortcutsHelpOverlay
+                shortcuts={gmShortcuts}
+                isOpen={isGmHelpOpen}
+                onClose={() => setGmHelpOpen(false)}
+                onOpenSettings={() => setShowShortcutSettings(true)}
+            />
+            {showShortcutSettings && (
+                <ShortcutsSettings
+                    shortcuts={gmShortcuts}
+                    conflicts={gmConflicts}
+                    onRebind={gmRebind}
+                    onResetBinding={gmResetBinding}
+                    onResetAll={gmResetAll}
+                    onClose={() => setShowShortcutSettings(false)}
+                />
+            )}
         </div>
         </AudioProvider>
         </CodexProvider>

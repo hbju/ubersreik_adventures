@@ -475,5 +475,42 @@
         "sortAlpha": "A-Z",
         "sortRecent": "Recent",
         "placeholder": "Write your notes in markdown..."
+    },
+    "shortcuts": {
+        "title": "Keyboard Shortcuts",
+        "settings": "Shortcut Settings",
+        "helpHint": "Press ? at any time to show this overlay",
+        "customize": "Customize Shortcuts",
+        "settingsHint": "Click a binding to rebind. Press Escape to cancel.",
+        "pressKey": "Press a key...",
+        "conflict": "Conflict",
+        "resetAll": "Reset All",
+        "resetOne": "Reset to default",
+        "category": {
+            "navigation": "Navigation",
+            "actions": "Actions"
+        },
+        "action": {
+            "tabCharacter": "Character",
+            "tabJournal": "Journal",
+            "tabMap": "Map",
+            "tabQuests": "Quests",
+            "tabReputation": "Reputation",
+            "tabCalendar": "Calendar",
+            "tabNotebook": "Notebook",
+            "focusChat": "Focus Chat",
+            "diceTray": "Dice Tray",
+            "openCodex": "Open Codex",
+            "help": "Show Shortcuts Help",
+            "closeModal": "Close Modal / Overlay",
+            "toggleGameLog": "Game Log",
+            "toggleShopManager": "Shop Manager",
+            "toggleCombatResolver": "Combat Resolver",
+            "toggleJournalManager": "Journal Manager",
+            "toggleUserManager": "User Manager",
+            "toggleQuestJournal": "Quest Journal",
+            "toggleAtmosphere": "Atmosphere Panel",
+            "toggleTimeline": "Timeline"
+        }
     }
 }
