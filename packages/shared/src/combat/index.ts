@@ -1,5 +1,6 @@
 export * from './advantage';
 export * from './audit';
+export * from './critical';
 export * from './engine';
 export * from './modifiers';
 export * from './rng';

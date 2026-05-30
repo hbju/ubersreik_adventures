@@ -223,6 +223,25 @@
                 "hit_ally_or_stunned_self": "{{combatantId}} hits an ally or becomes Stunned."
             }
         },
+        "critical": {
+            "roll": "{{combatantId}} suffers a Critical Wound.",
+            "zeroWounds": "{{combatantId}} suffers a Critical Wound after reaching 0 Wounds.",
+            "woundResolved": "{{combatantId}} suffers {{name}} on the {{location}}.",
+            "effect": {
+                "loseWounds": "{{combatantId}} loses {{amount}} extra Wound(s).",
+                "dropItem": "{{combatantId}} drops an item.",
+                "recordOnly": "{{effect}}"
+            }
+        },
+        "injury": {
+            "recorded": "{{combatantId}} records a {{severity}} {{injuryType}} injury on {{location}}."
+        },
+        "death": {
+            "criticalWound": "{{combatantId}} dies from a Critical Wound.",
+            "accumulatedCriticals": "{{combatantId}} dies from accumulated Critical Wounds.",
+            "coupDeGrace": "{{combatantId}} is killed by a coup de grace.",
+            "suddenDeath": "{{combatantId}} is removed by Sudden Death."
+        },
         "condition": {
             "applied": "{{targetId}} gains {{conditionId}}.",
             "effect": {

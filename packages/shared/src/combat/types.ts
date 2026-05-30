@@ -205,13 +205,22 @@ export interface CritResolverContext extends OnHitContext {
     woundsBeyondZero?: number;
 }
 
+export interface CritHookContext extends CritResolverContext {
+    resultRoll?: number;
+    locationRoll?: number;
+}
+
 export interface MeleeResolutionHooks {
     preRollModifiers(context: MeleeHookContext): ModifierSource[];
     slModifiers(context: SlModifierContext): number;
     damageModifiers(context: DamageModifierContext): number;
     apModifiers(context: ApModifierContext): number;
     onHitEffects(context: OnHitContext): CombatEngineResult | CombatEvent[];
-    critResolver(context: CritResolverContext): CombatEvent[];
+    critTriggerExtensions(context: CritResolverContext): boolean;
+    critIgnoreConditions(context: CritResolverContext): boolean;
+    critApModifiers(context: CritHookContext): number;
+    onCritEffects(context: CritHookContext): CombatEngineResult | CombatEvent[];
+    critResolver(context: CritResolverContext): CombatEngineResult | CombatEvent[];
 }
 
 export interface CombatEventBase<TType extends string, TData> {
@@ -267,6 +276,39 @@ export type CritRolledEvent = CombatEventBase<'CritRolled', {
     critRoll: number;
     hitLocation?: string;
     woundsBeyondZero?: number;
+}>;
+
+export type CriticalWoundResolvedEvent = CombatEventBase<'CriticalWoundResolved', {
+    combatantId: string;
+    location: string;
+    tableRoll: number;
+    modifiedRoll: number;
+    modifier: number;
+    name: string;
+    wounds: number | 'death';
+    trivial: boolean;
+}>;
+
+export type CriticalEffectAppliedEvent = CombatEventBase<'CriticalEffectApplied', {
+    combatantId: string;
+    effect: string;
+    conditionId?: string;
+    amount?: number;
+    location?: string;
+}>;
+
+export type InjuryRecordedEvent = CombatEventBase<'InjuryRecorded', {
+    combatantId: string;
+    injuryType: string;
+    severity: string;
+    location: string;
+    penalty?: number;
+    movementHalved?: boolean;
+}>;
+
+export type CombatantDiedEvent = CombatEventBase<'CombatantDied', {
+    combatantId: string;
+    reason: 'criticalWound' | 'accumulatedCriticals' | 'coupDeGrace' | 'suddenDeath';
 }>;
 
 export type FumbleRolledEvent = CombatEventBase<'FumbleRolled', {
@@ -397,6 +439,10 @@ export type CombatEvent =
     | DamageDealtEvent
     | ConditionAppliedEvent
     | CritRolledEvent
+    | CriticalWoundResolvedEvent
+    | CriticalEffectAppliedEvent
+    | InjuryRecordedEvent
+    | CombatantDiedEvent
     | FumbleRolledEvent
     | FumbleResolvedEvent
     | ResourceSpentEvent

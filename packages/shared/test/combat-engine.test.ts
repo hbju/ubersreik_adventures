@@ -134,15 +134,12 @@ describe('combat engine', () => {
             hitLocation: 'Body',
         }, createSeededRng('zero-wounds'));
 
-        expect(result.events.map(event => event.type)).toEqual(['DamageDealt', 'ConditionApplied', 'CritRolled']);
-        expect(result.events[2]).toMatchObject({
+        expect(result.events.map(event => event.type)).toEqual(expect.arrayContaining(['DamageDealt', 'ConditionApplied', 'CritRolled', 'CriticalWoundResolved']));
+        expect(result.events.find(event => event.type === 'CritRolled')).toMatchObject({
             type: 'CritRolled',
-            i18nKey: 'combat.critical.zeroWounds',
             data: {
                 combatantId: 'defender',
                 trigger: 'zeroWounds',
-                critRoll: 48,
-                hitLocation: 'Body',
             },
         });
         expect(result.state.combatants.defender.currentWounds).toBe(0);

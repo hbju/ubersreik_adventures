@@ -150,6 +150,25 @@
                 "hit_ally_or_stunned_self": "{{combatantId}} touche un allie ou devient Etourdi."
             }
         },
+        "critical": {
+            "roll": "{{combatantId}} subit une Blessure Critique.",
+            "zeroWounds": "{{combatantId}} subit une Blessure Critique apres etre tombe a 0 Blessure.",
+            "woundResolved": "{{combatantId}} subit {{name}} sur {{location}}.",
+            "effect": {
+                "loseWounds": "{{combatantId}} perd {{amount}} Blessure(s) supplementaire(s).",
+                "dropItem": "{{combatantId}} lache un objet.",
+                "recordOnly": "{{effect}}"
+            }
+        },
+        "injury": {
+            "recorded": "{{combatantId}} note une blessure {{injuryType}} {{severity}} sur {{location}}."
+        },
+        "death": {
+            "criticalWound": "{{combatantId}} meurt d'une Blessure Critique.",
+            "accumulatedCriticals": "{{combatantId}} meurt de ses Blessures Critiques accumulees.",
+            "coupDeGrace": "{{combatantId}} est tue par un coup de grace.",
+            "suddenDeath": "{{combatantId}} est retire par Mort Subite."
+        },
         "condition": {
             "applied": "{{targetId}} gagne {{conditionId}}.",
             "effect": {

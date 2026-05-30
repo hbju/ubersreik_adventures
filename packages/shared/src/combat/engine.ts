@@ -5,6 +5,7 @@ import { calculateSuccessLevel, getHitLocation, rolld100 } from '../utils/mechan
 import { calculateCharacteristicBonus } from '../utils/skills';
 import { applyTalentSLBonuses, getTalentDamageBonus } from '../utils/talents';
 import { createAdvantagePools, grantAdvantage } from './advantage';
+import { criticalRoll } from './critical';
 import { collectMeleePreRollModifiers, resolveModifierTotal } from './modifiers';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
@@ -170,6 +171,7 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
     };
 
     const nextState = replaceCombatant(state, updatedDefender);
+    let currentStateAfterCrit = nextState;
     const events: CombatEvent[] = [
         {
             type: 'DamageDealt',
@@ -193,8 +195,8 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
 
     if (woundsBefore > 0 && woundsAfter === 0 && damageDealt > 0) {
         events.push({ type: 'ConditionApplied', i18nKey: 'combat.condition.applied', data: { targetId: defender.id, conditionId: 'condition_prone', stacks: 1 } });
-        events.push(...hooks.critResolver(critContext({
-            state,
+        const critical = resolveCritHook(hooks, critContext({
+            state: currentStateAfterCrit,
             attacker,
             defender: updatedDefender,
             hit,
@@ -208,11 +210,13 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
             woundsAfter,
             rawWeaponDamage: hit.weaponDamage,
             armourPoints,
-        })));
+        }));
+        events.push(...critical.events);
+        currentStateAfterCrit = critical.state;
     }
 
     const onHit = hooks.onHitEffects({
-        state: nextState,
+        state: currentStateAfterCrit,
         action: {
             attackerId: attacker.id,
             defenderId: defender.id,
@@ -233,7 +237,7 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
 
     if (Array.isArray(onHit)) {
         events.push(...onHit);
-        return { state: nextState, events };
+        return { state: currentStateAfterCrit, events };
     }
 
     events.push(...onHit.events);
@@ -346,19 +350,32 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         },
     );
 
-    if (isCriticalRoll(modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber)) {
-        events.push(...hooks.critResolver(critContext({
+    if (outcome === 'attacker' && shouldTriggerCritical(hooks, critContext({
+        state: currentState,
+        attacker,
+        defender,
+        hitLocation: hitLocation ?? getHitLocation(modifiedAttackerRoll.rollResult),
+        trigger: 'roll',
+        combatantId: defender.id,
+        role: 'target',
+        roll: modifiedAttackerRoll.rollResult,
+        targetNumber: modifiedAttackerRoll.targetNumber,
+        rawWeaponDamage: modifiedAttackerRoll.weaponDamage ?? 0,
+    }), modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber)) {
+        const critical = resolveCritHook(hooks, critContext({
             state: currentState,
             attacker,
             defender,
             hitLocation: hitLocation ?? getHitLocation(modifiedAttackerRoll.rollResult),
             trigger: 'roll',
-            combatantId: attacker.id,
-            role: 'attacker',
+            combatantId: defender.id,
+            role: 'target',
             roll: modifiedAttackerRoll.rollResult,
             targetNumber: modifiedAttackerRoll.targetNumber,
             rawWeaponDamage: modifiedAttackerRoll.weaponDamage ?? 0,
-        })));
+        }));
+        currentState = critical.state;
+        events.push(...critical.events);
     }
 
     if (isFumbleRoll(modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber)) {
@@ -367,19 +384,32 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         events.push(...fumble.events);
     }
 
-    if (defenderRoll && defenderCanCrit && isCriticalRoll(defenderRoll.rollResult, defenderRoll.targetNumber)) {
-        events.push(...hooks.critResolver(critContext({
+    if (defenderRoll && defenderCanCrit && outcome === 'defender' && shouldTriggerCritical(hooks, critContext({
+        state: currentState,
+        attacker,
+        defender,
+        hitLocation: hitLocation ?? getHitLocation(defenderRoll.rollResult),
+        trigger: 'roll',
+        combatantId: attacker.id,
+        role: 'target',
+        roll: defenderRoll.rollResult,
+        targetNumber: defenderRoll.targetNumber,
+        rawWeaponDamage: defenderRoll.weaponDamage ?? 0,
+    }), defenderRoll.rollResult, defenderRoll.targetNumber)) {
+        const critical = resolveCritHook(hooks, critContext({
             state: currentState,
-            attacker,
-            defender,
+            attacker: defender,
+            defender: attacker,
             hitLocation: hitLocation ?? getHitLocation(defenderRoll.rollResult),
             trigger: 'roll',
-            combatantId: defender.id,
-            role: 'defender',
+            combatantId: attacker.id,
+            role: 'target',
             roll: defenderRoll.rollResult,
             targetNumber: defenderRoll.targetNumber,
             rawWeaponDamage: defenderRoll.weaponDamage ?? 0,
-        })));
+        }));
+        currentState = critical.state;
+        events.push(...critical.events);
     }
 
     if (defenderRoll && collapse.mode === 'opposed' && isFumbleRoll(defenderRoll.rollResult, defenderRoll.targetNumber)) {
@@ -411,7 +441,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         events.push(...damageResult.events);
 
         if (collapse.mode === 'autoHit') {
-            events.push(...hooks.critResolver(critContext({
+            const critical = resolveCritHook(hooks, critContext({
                 state: currentState,
                 attacker,
                 defender: getCombatant(currentState, defender.id),
@@ -420,7 +450,9 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
                 combatantId: defender.id,
                 role: 'target',
                 rawWeaponDamage: weaponDamage,
-            })));
+            }));
+            currentState = critical.state;
+            events.push(...critical.events);
         }
     }
 
@@ -548,20 +580,11 @@ function normalizeHooks(hooks: Partial<MeleeResolutionHooks> | undefined, rng: R
         damageModifiers: hooks?.damageModifiers ?? (() => 0),
         apModifiers: hooks?.apModifiers ?? (() => 0),
         onHitEffects: hooks?.onHitEffects ?? (() => []),
-        critResolver: hooks?.critResolver ?? ((context: CritResolverContext) => [{
-            type: 'CritRolled',
-            i18nKey: context.trigger === 'zeroWounds' ? 'combat.critical.zeroWounds' : 'combat.critical.roll',
-            data: {
-                combatantId: context.combatantId,
-                role: context.role,
-                trigger: context.trigger,
-                roll: context.roll,
-                targetNumber: context.targetNumber,
-                critRoll: rolld100(rng),
-                hitLocation: context.hitLocation,
-                woundsBeyondZero: context.woundsBeyondZero,
-            },
-        }]),
+        critTriggerExtensions: hooks?.critTriggerExtensions ?? (() => false),
+        critIgnoreConditions: hooks?.critIgnoreConditions ?? (() => false),
+        critApModifiers: hooks?.critApModifiers ?? (() => 0),
+        onCritEffects: hooks?.onCritEffects ?? (() => []),
+        critResolver: hooks?.critResolver ?? ((context: CritResolverContext) => criticalRoll(context, { rng })),
     };
 }
 
@@ -601,6 +624,26 @@ function isFumbleRoll(roll: number, targetNumber: number): boolean {
 
 function isD100Double(roll: number): boolean {
     return roll === 100 || (roll >= 11 && roll <= 99 && roll % 11 === 0);
+}
+
+function shouldTriggerCritical(hooks: MeleeResolutionHooks, context: CritResolverContext, roll: number, targetNumber: number): boolean {
+    if (hooks.critIgnoreConditions(context)) return false;
+    return isCriticalRoll(roll, targetNumber) || hooks.critTriggerExtensions(context);
+}
+
+function resolveCritHook(hooks: MeleeResolutionHooks, context: CritResolverContext): CombatEngineResult {
+    hooks.critApModifiers({ ...context });
+    const resolved = hooks.critResolver(context);
+    const baseResult = Array.isArray(resolved) ? { state: context.state, events: resolved } : resolved;
+    const followUp = hooks.onCritEffects({ ...context, state: baseResult.state });
+    if (Array.isArray(followUp)) {
+        return { state: baseResult.state, events: [...baseResult.events, ...followUp] };
+    }
+
+    return {
+        state: followUp.state,
+        events: [...baseResult.events, ...followUp.events],
+    };
 }
 
 function parseMeleeWeaponDamage(roll: ResolvedOpposedRoll, attacker: Combatant, state: CombatState): number {
@@ -729,7 +772,7 @@ function resolveFumble(
         currentState = replaceCombatant(currentState, { ...combatant, conditions: addCondition(combatant.conditions, 'condition_stunned') });
         events.push({ type: 'ConditionApplied', i18nKey: 'combat.condition.applied', data: { targetId: combatantId, conditionId: 'condition_stunned', stacks: 1 } });
     } else if (result.effect === 'torn_muscle_minor_critical_wound') {
-        events.push(...hooks.critResolver(critContext({
+        const critical = resolveCritHook(hooks, critContext({
             state,
             attacker: combatant,
             defender: combatant,
@@ -740,7 +783,9 @@ function resolveFumble(
             roll: roll.rollResult,
             targetNumber: roll.targetNumber,
             rawWeaponDamage: 0,
-        })));
+        }));
+        currentState = critical.state;
+        events.push(...critical.events);
     }
 
     return { state: currentState, events };

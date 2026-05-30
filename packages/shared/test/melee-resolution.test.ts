@@ -4,7 +4,7 @@ import { createCombatantFromCharacter, createCombatState, decayEngagementsEndOfR
 import { createSeededRng, type Rng } from '../src/combat/rng';
 import { engage } from '../src/combat/spatial';
 import { collectMeleePreRollModifiers, resolveModifierTotal, sizeDifferenceModifier } from '../src/combat/modifiers';
-import type { CombatEvent, MeleeResolutionHooks } from '../src/combat/types';
+import type { MeleeResolutionHooks } from '../src/combat/types';
 
 const spear: Weapon = {
     id: 'spear',
@@ -144,7 +144,7 @@ describe('core melee resolution flow', () => {
         expect(melee.events.find(event => event.type === 'AttackResolved')).toMatchObject({
             data: { outcome: 'defender', defenderCanCrit: true, defenderAvoidsOnly: false },
         });
-        expect(melee.events).toContainEqual(expect.objectContaining({ type: 'CritRolled', data: expect.objectContaining({ role: 'defender' }) }));
+        expect(melee.events).toContainEqual(expect.objectContaining({ type: 'CritRolled', data: expect.objectContaining({ combatantId: 'attacker', role: 'target' }) }));
 
         const dodge = resolveMeleeAttack(testState(), attack({
             attackerRoll: 90,
@@ -154,7 +154,7 @@ describe('core melee resolution flow', () => {
         expect(dodge.events.find(event => event.type === 'AttackResolved')).toMatchObject({
             data: { outcome: 'defender', defenderCanCrit: false, defenderAvoidsOnly: true },
         });
-        expect(dodge.events).not.toContainEqual(expect.objectContaining({ type: 'CritRolled', data: expect.objectContaining({ role: 'defender' }) }));
+        expect(dodge.events).not.toContainEqual(expect.objectContaining({ type: 'CritRolled', data: expect.objectContaining({ combatantId: 'attacker' }) }));
 
         const other = resolveMeleeAttack(testState(), attack({
             attackerRoll: 90,
