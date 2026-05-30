@@ -268,6 +268,80 @@
                 "unopposed": "The defender cannot defend.",
                 "autoHit": "The attack automatically hits and inflicts a Critical Wound."
             }
+        },
+        "action": {
+            "assess": {
+                "success": "{{actorId}} assesses the situation and grants Advantage.",
+                "failure": "{{actorId}} fails to assess the situation."
+            },
+            "defend": {
+                "applied": "{{actorId}} goes on the defensive."
+            },
+            "sprint": {
+                "success": "{{actorId}} sprints {{distanceMoved}} yards.",
+                "failure": "{{actorId}} fails the sprint test."
+            },
+            "firstAid": {
+                "success": "First Aid staunches bleeding on {{targetId}}.",
+                "failure": "First Aid fails to staunch bleeding."
+            },
+            "infighting": {
+                "success": "In-fighting mode is set for {{targetId}}."
+            },
+            "disengageDodge": {
+                "success": "{{actorId}} disengages with Dodge.",
+                "failure": "{{actorId}} fails to disengage; opponents strike from behind.",
+                "blowToBack": "{{attackerId}} may make a free blow to {{defenderId}}'s back."
+            },
+            "grappleInitiate": {
+                "success": "{{actorId}} grapples {{targetId}}.",
+                "failure": "{{actorId}} fails to initiate a grapple."
+            },
+            "grappleMaintain": {
+                "success": "{{actorId}} maintains the grapple.",
+                "failure": "{{actorId}} struggles in the grapple."
+            },
+            "grappleBreak": {
+                "success": "{{actorId}} breaks the grapple.",
+                "failure": "{{actorId}} cannot break the grapple by Advantage alone."
+            },
+            "attackWithBoth": {
+                "slot": "Dual Wielder may attack with both weapons."
+            },
+            "rejected": {
+                "noAction": "{{kind}} requires an available Action.",
+                "noMove": "{{kind}} requires an available Move.",
+                "missingTarget": "{{kind}} requires a target.",
+                "missingSkill": "{{kind}} requires a valid skill.",
+                "notEngaged": "{{kind}} requires an engagement.",
+                "notGrappling": "{{kind}} requires an active grapple.",
+                "invalidLoadout": "{{kind}} requires a primary and secondary weapon."
+            }
+        },
+        "fortune": {
+            "spent": "{{combatantId}} spends Fortune on {{spendAction}}.",
+            "reroll": "{{combatantId}} prepares a Fortune reroll.",
+            "rerollResult": "{{combatantId}} rerolls with Fortune.",
+            "plusOneSl": "{{combatantId}} adds +1 SL with Fortune.",
+            "actFirst": "{{combatantId}} will act first next round.",
+            "spendRejected": {
+                "insufficientFortune": "{{combatantId}} has no Fortune remaining.",
+                "policyRejected": "Fortune spend rejected by policy.",
+                "missingActor": "Fortune spend requires a combatant.",
+                "testAlreadySucceeded": "Fortune reroll requires a failed test."
+            }
+        },
+        "fate": {
+            "spent": "{{combatantId}} spends Fate on {{spendAction}}.",
+            "howDidThatMiss": "{{combatantId}} negates incoming damage with How Did That Miss?",
+            "dieAnotherDay": "{{combatantId}} survives with Die Another Day.",
+            "removedFromEncounter": "{{combatantId}} is removed from the encounter but survives.",
+            "spendRejected": {
+                "insufficientFate": "{{combatantId}} has no Fate remaining.",
+                "policyRejected": "Fate spend rejected by policy.",
+                "missingActor": "Fate spend requires a combatant.",
+                "notApplicable": "Fate spend is not applicable."
+            }
         }
     },
     "menu": {

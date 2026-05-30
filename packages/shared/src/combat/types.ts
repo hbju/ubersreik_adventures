@@ -39,6 +39,10 @@ export interface Combatant {
     conditions: string[];
     conditionInstances?: ConditionInstance[];
     resources: CombatantResources;
+    defensiveBonus?: DefensiveBonusState;
+    weaponLoadout?: WeaponLoadout;
+    initiativeOverride?: boolean;
+    removedFromEncounter?: boolean;
 }
 
 export interface CombatTurnFlags {
@@ -46,10 +50,23 @@ export interface CombatTurnFlags {
     chargedCombatantIds: string[];
 }
 
+export interface DefensiveBonusState {
+    skillId: string;
+    bonus: number;
+    activeUntilRound: number;
+}
+
+export interface WeaponLoadout {
+    primaryWeaponId?: string;
+    secondaryWeaponId?: string;
+}
+
 export interface CombatEngagement {
     aId: string;
     bId: string;
     lastAttackRound: number;
+    infightingMode?: boolean;
+    grappling?: boolean;
 }
 
 export interface CombatState {
@@ -111,6 +128,7 @@ export interface DamageHit {
     hooks?: Partial<MeleeResolutionHooks>;
     sl?: number;
     isCharging?: boolean;
+    fatePolicy?: ResourceSpendPolicy;
 }
 
 export interface MeleeAttackAction {
@@ -127,6 +145,54 @@ export interface MeleeAttackAction {
     defenderSize?: CombatantSize;
     disableMinimumWound?: boolean;
     hooks?: Partial<MeleeResolutionHooks>;
+    hand?: 'primary' | 'secondary';
+    isGrappleDamage?: boolean;
+}
+
+export type CombatActionCost = 'action' | 'move' | 'free';
+
+export type CombatActionKind =
+    | 'attack'
+    | 'move'
+    | 'run'
+    | 'charge'
+    | 'assess'
+    | 'defend'
+    | 'sprint'
+    | 'firstAid'
+    | 'infighting'
+    | 'disengageDodge'
+    | 'grappleInitiate'
+    | 'grappleMaintain'
+    | 'grappleBreak'
+    | 'attackWithBoth';
+
+export interface CombatActionDefinition {
+    kind: CombatActionKind;
+    cost: CombatActionCost;
+    generatesAdvantage: boolean;
+}
+
+export type ResourceSpendPolicy = 'always' | 'never' | 'stub';
+
+export type FortuneSpendAction = 'reroll' | 'plusOneSl' | 'actFirst';
+
+export type FateSpendAction = 'dieAnotherDay' | 'howDidThatMiss';
+
+export interface CombatActionRequest {
+    kind: CombatActionKind;
+    actorId: string;
+    targetId?: string;
+    skillId?: string;
+    targetNumber?: number;
+    rollResult?: number;
+    opponentRollResult?: number;
+    opponentTargetNumber?: number;
+    opponentSkillId?: string;
+    infightingMode?: 'normal' | 'infighting';
+    moveTarget?: number | { position: number } | { combatantId: string };
+    pendingTestId?: string;
+    policy?: ResourceSpendPolicy;
 }
 
 export interface CombatEngineResult {
@@ -357,6 +423,60 @@ export type ResourceSpentEvent = CombatEventBase<'ResourceSpent', {
     resource: keyof CombatantResources;
     amount: number;
     remaining: number;
+    spendAction?: FortuneSpendAction | FateSpendAction;
+}>;
+
+export type FortuneSpendRejectedEvent = CombatEventBase<'FortuneSpendRejectedEvent', {
+    combatantId: string;
+    action: FortuneSpendAction;
+    reason: 'insufficientFortune' | 'policyRejected' | 'missingActor' | 'testAlreadySucceeded';
+}>;
+
+export type FortuneModifierPreparedEvent = CombatEventBase<'FortuneModifierPreparedEvent', {
+    combatantId: string;
+    action: FortuneSpendAction;
+    pendingTestId?: string;
+    reroll?: boolean;
+    slBonus?: number;
+    actFirst?: boolean;
+}>;
+
+export type FateSpendRejectedEvent = CombatEventBase<'FateSpendRejectedEvent', {
+    combatantId: string;
+    action: FateSpendAction;
+    reason: 'insufficientFate' | 'policyRejected' | 'missingActor' | 'notApplicable';
+}>;
+
+export type FateInterceptionEvent = CombatEventBase<'FateInterceptionEvent', {
+    combatantId: string;
+    action: FateSpendAction;
+    intercepted: 'death' | 'damage';
+    damageNegated?: number;
+    removedFromEncounter?: boolean;
+}>;
+
+export type CombatActionResolvedEvent = CombatEventBase<'CombatActionResolved', {
+    kind: CombatActionKind;
+    actorId: string;
+    targetId?: string;
+    outcome: 'success' | 'failure' | 'applied' | 'partial';
+    advantageGranted?: number;
+    distanceMoved?: number;
+    infightingMode?: boolean;
+    grappling?: boolean;
+    generatesAdvantage: boolean;
+}>;
+
+export type CombatActionRejectedEvent = CombatEventBase<'CombatActionRejected', {
+    kind: CombatActionKind;
+    actorId: string;
+    reason: 'noAction' | 'noMove' | 'missingTarget' | 'missingSkill' | 'notEngaged' | 'notGrappling' | 'invalidLoadout';
+}>;
+
+export type BlowToBackAttackEvent = CombatEventBase<'BlowToBackAttackEvent', {
+    attackerId: string;
+    defenderId: string;
+    freeAttack: true;
 }>;
 
 export type AdvantageChangedEvent = CombatEventBase<'AdvantageChanged', {
@@ -459,6 +579,11 @@ export type DisengagedEvent = CombatEventBase<'DisengagedEvent', {
     actionSpent: boolean;
 }>;
 
+export type CombatantRemovedFromEncounterEvent = CombatEventBase<'CombatantRemovedFromEncounter', {
+    combatantId: string;
+    reason: 'dieAnotherDay';
+}>;
+
 export type CombatEvent =
     | AttackResolvedEvent
     | DamageDealtEvent
@@ -482,4 +607,12 @@ export type CombatEvent =
     | MovedEvent
     | MoveRejectedEvent
     | EngagedEvent
-    | DisengagedEvent;
+    | DisengagedEvent
+    | FortuneSpendRejectedEvent
+    | FortuneModifierPreparedEvent
+    | FateSpendRejectedEvent
+    | FateInterceptionEvent
+    | CombatActionResolvedEvent
+    | CombatActionRejectedEvent
+    | BlowToBackAttackEvent
+    | CombatantRemovedFromEncounterEvent;

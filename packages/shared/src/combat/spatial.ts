@@ -324,20 +324,25 @@ export function reachOrder(state: CombatState, aId: string, bId: string, weapons
     };
 }
 
+export function engagementKey(aId: string, bId: string): string {
+    return [aId, bId].sort().join(':');
+}
+
+export function isEngagedWith(state: CombatState, aId: string, bId: string): boolean {
+    const combatant = state.combatants[aId];
+    return !!combatant?.engagementIds.includes(bId);
+}
+
 export function isInfighting(
     state: CombatState,
     aId: string,
     bId: string,
-    weapons: Weapon[] = state.weapons,
-    thresholds: RangeBandThresholds = DEFAULT_RANGE_THRESHOLDS
+    _weapons: Weapon[] = state.weapons,
+    _thresholds: RangeBandThresholds = DEFAULT_RANGE_THRESHOLDS
 ): boolean {
-    const a = getCombatant(state, aId);
-    const b = getCombatant(state, bId);
-    if (bandFor(distanceBetween(a, b), thresholds) !== 'Engaged') return false;
-
-    const aReach = reachOf(a, weapons);
-    const bReach = reachOf(b, weapons);
-    return aReach.rank !== bReach.rank;
+    const key = engagementKey(aId, bId);
+    if (state.engagements[key]?.infightingMode) return true;
+    return false;
 }
 
 function resolveMoveTargetPosition(state: CombatState, combatant: Combatant, target: MoveTarget, thresholds: RangeBandThresholds): number {

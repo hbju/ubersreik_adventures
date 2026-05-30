@@ -1,6 +1,8 @@
 import { getHitLocation, rolld100, rollDice } from '../utils/mechanics';
 import { calculateCharacteristicBonus } from '../utils/skills';
 import { mathRandomRng, type Rng } from './rng';
+import { tryInterceptDeathWithFate } from './resources';
+import type { ResourceSpendPolicy } from './types';
 import type {
     CombatEngineResult,
     CombatEvent,
@@ -493,7 +495,17 @@ function appendInjury(state: CombatState, combatantId: string, injuryRecord: Inj
     } as Combatant);
 }
 
-function killCombatant(state: CombatState, combatantId: string, reason: 'criticalWound' | 'accumulatedCriticals' | 'coupDeGrace' | 'suddenDeath'): CombatEngineResult {
+function killCombatant(
+    state: CombatState,
+    combatantId: string,
+    reason: 'criticalWound' | 'accumulatedCriticals' | 'coupDeGrace' | 'suddenDeath',
+    fatePolicy: ResourceSpendPolicy = 'stub'
+): CombatEngineResult {
+    const intercepted = tryInterceptDeathWithFate(state, combatantId, fatePolicy);
+    if (intercepted.intercepted) {
+        return intercepted;
+    }
+
     const combatant = getCombatant(state, combatantId) as Combatant & CriticalCombatantState;
     return {
         state: replaceCombatant(state, { ...woundCombatant(combatant, 0), dead: true } as Combatant),

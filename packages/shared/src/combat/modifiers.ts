@@ -1,4 +1,5 @@
 import { attackerModifiersFor } from '../utils/conditions';
+import { grappleOutsiderToHitModifier, SECONDARY_HAND_PENALTY } from './actions';
 import type { Combatant, CombatantSize, CombatState, MeleeAttackAction, ModifierSource, ModifierTotal } from './types';
 import { reachOf } from './spatial';
 
@@ -68,6 +69,15 @@ export function collectMeleePreRollModifiers(
 
     if (action.isCharging || state.turnFlags.chargedCombatantIds.includes(attacker.id)) {
         sources.push({ id: 'charging:firstMeleeTest', type: 'charging', phase: 'preRollModifiers', value: 10, combatantId: attacker.id });
+    }
+
+    if (action.hand === 'secondary') {
+        sources.push({ id: 'dualWield:offHand', type: 'manual', phase: 'preRollModifiers', value: SECONDARY_HAND_PENALTY, combatantId: attacker.id });
+    }
+
+    const grappleOutsider = grappleOutsiderToHitModifier(state, attacker, defender);
+    if (grappleOutsider !== 0) {
+        sources.push({ id: 'grapple:outsider', type: 'manual', phase: 'preRollModifiers', value: grappleOutsider, combatantId: attacker.id });
     }
 
     // Registered for PBI 4; melee attacks currently provide no ranged values.

@@ -4,9 +4,11 @@ import { calculateSuccessLevel, getHitLocation, rolld100 } from '../utils/mechan
 import { calculateCharacteristicBonus } from '../utils/skills';
 import { applyTalentSLBonuses, getTalentDamageBonus } from '../utils/talents';
 import { createAdvantagePools, grantAdvantage } from './advantage';
+import { defensiveBonusForSkill, resolveEffectiveWeapon, SECONDARY_HAND_PENALTY } from './actions';
 import { criticalRoll } from './critical';
 import { collectMeleePreRollModifiers, resolveModifierTotal } from './modifiers';
 import { applyBlackpowderTargetEffect, armourPointsAtLocation, createQualityHooks, defenderTargetModifierFromQualities } from './qualities';
+import { tryInterceptDamageWithFate } from './resources';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
 import type {
@@ -123,7 +125,7 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
     const rawDamage = hit.weaponDamage + hit.slDifference + talentDamageBonus + hookDamageBonus;
     const mitigatedDamage = rawDamage - toughnessBonus - armourPoints;
     const minimumOneWoundApplied = !hit.disableMinimumWound && mitigatedDamage <= 0;
-    const damageDealt = hit.disableMinimumWound ? Math.max(mitigatedDamage, 0) : Math.max(mitigatedDamage, 1);
+    let damageDealt = hit.disableMinimumWound ? Math.max(mitigatedDamage, 0) : Math.max(mitigatedDamage, 1);
     const woundsBefore = defender.currentWounds;
     const woundsBeyondZero = Math.max(0, damageDealt - woundsBefore);
     const woundsAfter = Math.max(0, woundsBefore - damageDealt);
@@ -151,6 +153,12 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
     if (onHitResult.suppressNormalDamage) {
         return { state: onHitResult.state, events: onHitResult.events };
     }
+
+    const fateIntercept = tryInterceptDamageWithFate(onHitResult.state, defender.id, damageDealt, hit.fatePolicy);
+    if (fateIntercept.intercepted) {
+        return { state: fateIntercept.state, events: [...onHitResult.events, ...fateIntercept.events] };
+    }
+
     const defenderAfterOnHit = getCombatant(onHitResult.state, defender.id);
 
     const updatedDefender: Combatant = {
@@ -308,7 +316,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         const defenderTargetModifier = defenderTargetModifierFromQualities({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll });
         defenderRoll = resolveOpposedRoll({
             ...action.defender,
-            testModifier: (action.defender.testModifier ?? 0) + defenderTargetModifier,
+            testModifier: (action.defender.testModifier ?? 0) + defenderTargetModifier + defensiveBonusForSkill(defender, action.defender.skillId, currentState.round),
         }, defender.character, currentState, rng);
         const defenderSlModifier = hooks.slModifiers({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll, defenderRoll });
         defenderRoll = withSlModifier(defenderRoll, defenderSlModifier);
@@ -415,8 +423,8 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
     if (outcome === 'attacker' && action.combatMode !== false) {
         if (!hitLocation) hitLocation = getHitLocation(modifiedAttackerRoll.rollResult);
         const weaponDamage = collapse.mode === 'autoHit'
-            ? Math.max(parseMeleeWeaponDamage(modifiedAttackerRoll, attacker, currentState), modifiedAttackerRoll.targetNumber >= 100 ? 10 : Math.floor(modifiedAttackerRoll.targetNumber / 10))
-            : parseMeleeWeaponDamage(modifiedAttackerRoll, attacker, currentState);
+            ? Math.max(parseMeleeWeaponDamage(modifiedAttackerRoll, attacker, currentState, defender.id, action.hand ?? 'primary'), modifiedAttackerRoll.targetNumber >= 100 ? 10 : Math.floor(modifiedAttackerRoll.targetNumber / 10))
+            : parseMeleeWeaponDamage(modifiedAttackerRoll, attacker, currentState, defender.id, action.hand ?? 'primary');
         const damageResult = resolveDamage(currentState, {
             attackerId: attacker.id,
             defenderId: defender.id,
@@ -666,12 +674,13 @@ function resolveCritHook(hooks: MeleeResolutionHooks, context: CritResolverConte
     };
 }
 
-function parseMeleeWeaponDamage(roll: ResolvedOpposedRoll, attacker: Combatant, state: CombatState): number {
+function parseMeleeWeaponDamage(roll: ResolvedOpposedRoll, attacker: Combatant, state: CombatState, defenderId?: string, hand: 'primary' | 'secondary' = 'primary'): number {
     if (roll.weaponDamage !== undefined) return roll.weaponDamage;
 
     const formula = roll.weaponDamageFormula
         ?? (roll.weaponId ? state.weapons.find(weapon => weapon.id === roll.weaponId)?.damage : undefined)
-        ?? equippedWeapon(attacker, state)?.damage
+        ?? resolveEffectiveWeapon(attacker, state, defenderId, hand)?.damage
+        ?? equippedWeapon(attacker, state, defenderId, hand)?.damage
         ?? '+SB';
     const strengthBonus = calculateCharacteristicBonus(attacker.character.characteristics.s);
     const normalized = String(formula).toUpperCase().replace(/\s+/g, '');
@@ -685,7 +694,10 @@ function weaponHasQuality(roll: ResolvedOpposedRoll, state: CombatState, quality
     return (weapon?.qualities || []).some(candidate => candidate.toLowerCase().replace(/\*.*/, '') === quality.toLowerCase());
 }
 
-function equippedWeapon(attacker: Combatant, state: CombatState) {
+function equippedWeapon(attacker: Combatant, state: CombatState, defenderId?: string, hand: 'primary' | 'secondary' = 'primary') {
+    const effective = resolveEffectiveWeapon(attacker, state, defenderId, hand);
+    if (effective) return effective;
+
     const equippedId = Object.entries(attacker.character.inventory.equippedWeapons || {}).find(([, equipped]) => equipped)?.[0];
     const fallbackId = Object.entries(attacker.character.inventory.weapons || {}).find(([, count]) => count > 0)?.[0];
     const weaponId = equippedId ?? fallbackId;

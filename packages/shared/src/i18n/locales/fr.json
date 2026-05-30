@@ -195,6 +195,80 @@
                 "unopposed": "Le defenseur ne peut pas se defendre.",
                 "autoHit": "L'attaque touche automatiquement et inflige une Blessure Critique."
             }
+        },
+        "action": {
+            "assess": {
+                "success": "{{actorId}} evalue la situation et accorde de l'Avantage.",
+                "failure": "{{actorId}} echoue a evaluer la situation."
+            },
+            "defend": {
+                "applied": "{{actorId}} passe en posture defensive."
+            },
+            "sprint": {
+                "success": "{{actorId}} sprinte sur {{distanceMoved}} yards.",
+                "failure": "{{actorId}} echoue au test de sprint."
+            },
+            "firstAid": {
+                "success": "Les premiers soins stanchent l'hemorragie de {{targetId}}.",
+                "failure": "Les premiers soins echouent a stancher l'hemorragie."
+            },
+            "infighting": {
+                "success": "Le mode corps-a-corps est fixe contre {{targetId}}."
+            },
+            "disengageDodge": {
+                "success": "{{actorId}} se desengage avec Esquive.",
+                "failure": "{{actorId}} echoue a se desengager ; les adversaires frappent dans le dos.",
+                "blowToBack": "{{attackerId}} peut porter un coup gratuit dans le dos de {{defenderId}}."
+            },
+            "grappleInitiate": {
+                "success": "{{actorId}} lutte au corps-a-corps avec {{targetId}}.",
+                "failure": "{{actorId}} echoue a initier une lutte."
+            },
+            "grappleMaintain": {
+                "success": "{{actorId}} maintient la lutte.",
+                "failure": "{{actorId}} se debat dans la lutte."
+            },
+            "grappleBreak": {
+                "success": "{{actorId}} brise la lutte.",
+                "failure": "{{actorId}} ne peut pas briser la lutte par l'Avantage seul."
+            },
+            "attackWithBoth": {
+                "slot": "Ambidextre peut attaquer avec les deux armes."
+            },
+            "rejected": {
+                "noAction": "{{kind}} necessite une Action disponible.",
+                "noMove": "{{kind}} necessite un Mouvement disponible.",
+                "missingTarget": "{{kind}} necessite une cible.",
+                "missingSkill": "{{kind}} necessite une competence valide.",
+                "notEngaged": "{{kind}} necessite un engagement.",
+                "notGrappling": "{{kind}} necessite une lutte active.",
+                "invalidLoadout": "{{kind}} necessite une arme principale et secondaire."
+            }
+        },
+        "fortune": {
+            "spent": "{{combatantId}} depense de la Fortune pour {{spendAction}}.",
+            "reroll": "{{combatantId}} prepare un relancer de Fortune.",
+            "rerollResult": "{{combatantId}} relance avec la Fortune.",
+            "plusOneSl": "{{combatantId}} ajoute +1 DR avec la Fortune.",
+            "actFirst": "{{combatantId}} agira en premier au prochain round.",
+            "spendRejected": {
+                "insufficientFortune": "{{combatantId}} n'a plus de Fortune.",
+                "policyRejected": "Depense de Fortune rejetee par la politique.",
+                "missingActor": "La depense de Fortune necessite un combattant.",
+                "testAlreadySucceeded": "Le relancer de Fortune exige un test echoue."
+            }
+        },
+        "fate": {
+            "spent": "{{combatantId}} depense du Destin pour {{spendAction}}.",
+            "howDidThatMiss": "{{combatantId}} annule les degats entrants avec Comment ai-je rate ?",
+            "dieAnotherDay": "{{combatantId}} survit avec Un Autre Jour.",
+            "removedFromEncounter": "{{combatantId}} est retire de la rencontre mais survit.",
+            "spendRejected": {
+                "insufficientFate": "{{combatantId}} n'a plus de Destin.",
+                "policyRejected": "Depense de Destin rejetee par la politique.",
+                "missingActor": "La depense de Destin necessite un combattant.",
+                "notApplicable": "La depense de Destin n'est pas applicable."
+            }
         }
     },
     "system": {

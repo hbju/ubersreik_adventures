@@ -9,6 +9,7 @@ import {
     disengage,
     distanceBetween,
     engage,
+    engagementKey,
     getWalkRun,
     isInfighting,
     movementAllowanceFromMovement,
@@ -162,7 +163,7 @@ describe('combat spatial model', () => {
         expect(disengaged.state.combatants.p1.budget.actions).toBe(0);
     });
 
-    it('exposes reach order and in-fighting flags without applying rules effects', () => {
+    it('exposes reach order and outcome-driven in-fighting flags', () => {
         const spearFighter = combatant('spear', 'Spear Fighter', {
             position: 0,
             weapons: { [spear.id]: 1 },
@@ -180,7 +181,7 @@ describe('combat spatial model', () => {
             weapons: { [axe.id]: 1 },
             equippedWeapons: { [axe.id]: true },
         });
-        const state = createState([spearFighter, daggerFighter, axeFighter], [spear, dagger, axe]);
+        let state = createState([spearFighter, daggerFighter, axeFighter], [spear, dagger, axe]);
 
         expect(reachOf(spearFighter, state.weapons)).toMatchObject({ reach: 'Very Long', rank: 6, weaponId: spear.id });
         expect(reachOrder(state, 'spear', 'dagger')).toMatchObject({
@@ -188,6 +189,23 @@ describe('combat spatial model', () => {
             firstCombatantId: 'spear',
             tied: false,
         });
+        expect(isInfighting(state, 'spear', 'dagger')).toBe(false);
+
+        state = engage(state, 'spear', 'dagger').state;
+        const key = engagementKey('spear', 'dagger');
+        state = {
+            ...state,
+            engagements: {
+                ...state.engagements,
+                [key]: {
+                    aId: 'dagger',
+                    bId: 'spear',
+                    lastAttackRound: 0,
+                    infightingMode: true,
+                },
+            },
+        };
+
         expect(isInfighting(state, 'spear', 'dagger')).toBe(true);
         expect(isInfighting(state, 'spear', 'axe')).toBe(false);
     });
