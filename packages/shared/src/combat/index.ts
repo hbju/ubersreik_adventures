@@ -3,6 +3,7 @@ export * from './audit';
 export * from './critical';
 export * from './engine';
 export * from './modifiers';
+export * from './qualities';
 export * from './rng';
 export * from './spatial';
 export * from './types';

@@ -169,6 +169,17 @@
             "coupDeGrace": "{{combatantId}} est tue par un coup de grace.",
             "suddenDeath": "{{combatantId}} est retire par Mort Subite."
         },
+        "quality": {
+            "pummel": { "stunned": "Pummel Etourdit {{targetId}}." },
+            "entangle": { "entangled": "Entangle immobilise {{targetId}} avec une Force {{amount}}." },
+            "distract": { "push": "Distract repousse {{targetId}} de {{amount}} yard(s)." },
+            "trip": { "activationAvailable": "Trip peut etre active pour {{amount}} Avantage." },
+            "blackpowder": { "coolTestRequired": "{{targetId}} doit tester Calme contre Blackpowder." },
+            "slash": {
+                "bleeding": "Slash donne 1 Hemorragie a {{targetId}}.",
+                "activationAvailable": "Slash peut ajouter une Hemorragie pour {{amount}} Avantage."
+            }
+        },
         "condition": {
             "applied": "{{targetId}} gagne {{conditionId}}.",
             "effect": {

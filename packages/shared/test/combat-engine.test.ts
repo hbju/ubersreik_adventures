@@ -25,9 +25,9 @@ const bodyLeather: Armor = {
     availability: 'Common',
     type: 'Soft Leather',
     penalty: '',
-    locations: ['Torso'],
+    locations: ['Body'],
     ap: 1,
-    qualities: [],
+    qualities: ['flexible'],
 };
 
 describe('combat engine', () => {
@@ -175,11 +175,11 @@ describe('combat engine', () => {
             type: 'DamageDealt',
             data: {
                 hitLocation: 'Head',
-                rawDamage: 5,
+                rawDamage: 8,
                 toughnessBonus: 3,
                 armourPoints: 0,
-                damageDealt: 2,
-                woundsAfter: 10,
+                damageDealt: 5,
+                woundsAfter: 7,
             },
         });
         expect(first.events[4]).toMatchObject({
@@ -195,7 +195,7 @@ describe('combat engine', () => {
                 sourceCombatantId: 'attacker',
             },
         });
-        expect(first.state.combatants.defender.currentWounds).toBe(10);
+        expect(first.state.combatants.defender.currentWounds).toBe(7);
         expect(first.state.advantagePools.adversary).toBe(1);
     });
 

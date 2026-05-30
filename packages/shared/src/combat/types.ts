@@ -104,11 +104,13 @@ export interface DamageHit {
     slDifference: number;
     weaponDamage: number;
     attackRoll?: number;
+    defenderSuccessLevel?: number;
     hitLocation?: string;
     usedTalents?: UsedTalent[];
     disableMinimumWound?: boolean;
     hooks?: Partial<MeleeResolutionHooks>;
     sl?: number;
+    isCharging?: boolean;
 }
 
 export interface MeleeAttackAction {
@@ -184,6 +186,7 @@ export interface DamageModifierContext extends SlModifierContext {
     hitLocation: string;
     weaponDamage: number;
     attackerSuccessLevel: number;
+    defenderSuccessLevel?: number;
 }
 
 export interface ApModifierContext extends DamageModifierContext {
@@ -194,6 +197,10 @@ export interface OnHitContext extends ApModifierContext {
     damageDealt: number;
     woundsBefore: number;
     woundsAfter: number;
+}
+
+export interface OnHitEffectResult extends CombatEngineResult {
+    suppressNormalDamage?: boolean;
 }
 
 export interface CritResolverContext extends OnHitContext {
@@ -215,12 +222,21 @@ export interface MeleeResolutionHooks {
     slModifiers(context: SlModifierContext): number;
     damageModifiers(context: DamageModifierContext): number;
     apModifiers(context: ApModifierContext): number;
-    onHitEffects(context: OnHitContext): CombatEngineResult | CombatEvent[];
+    onHitEffects(context: OnHitContext): OnHitEffectResult | CombatEvent[];
     critTriggerExtensions(context: CritResolverContext): boolean;
     critIgnoreConditions(context: CritResolverContext): boolean;
     critApModifiers(context: CritHookContext): number;
-    onCritEffects(context: CritHookContext): CombatEngineResult | CombatEvent[];
-    critResolver(context: CritResolverContext): CombatEngineResult | CombatEvent[];
+    onCritEffects(context: CritHookContext): OnHitEffectResult | CombatEvent[];
+    fumbleTriggers(context: SlModifierContext): boolean;
+    critResolver(context: CritResolverContext): OnHitEffectResult | CombatEvent[];
+}
+
+export interface QualityActivation {
+    trigger: 'onHit' | 'onDefend' | 'onCrit';
+    cost?: { resource: 'advantage'; amount: number };
+    effect: string;
+    gate?: string;
+    policy?: 'always' | 'never';
 }
 
 export interface CombatEventBase<TType extends string, TData> {
@@ -309,6 +325,15 @@ export type InjuryRecordedEvent = CombatEventBase<'InjuryRecorded', {
 export type CombatantDiedEvent = CombatEventBase<'CombatantDied', {
     combatantId: string;
     reason: 'criticalWound' | 'accumulatedCriticals' | 'coupDeGrace' | 'suddenDeath';
+}>;
+
+export type QualityEffectAppliedEvent = CombatEventBase<'QualityEffectApplied', {
+    combatantId: string;
+    targetId?: string;
+    qualityId: string;
+    effect: string;
+    amount?: number;
+    activation?: QualityActivation;
 }>;
 
 export type FumbleRolledEvent = CombatEventBase<'FumbleRolled', {
@@ -443,6 +468,7 @@ export type CombatEvent =
     | CriticalEffectAppliedEvent
     | InjuryRecordedEvent
     | CombatantDiedEvent
+    | QualityEffectAppliedEvent
     | FumbleRolledEvent
     | FumbleResolvedEvent
     | ResourceSpentEvent

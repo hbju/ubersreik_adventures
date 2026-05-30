@@ -242,6 +242,17 @@
             "coupDeGrace": "{{combatantId}} is killed by a coup de grace.",
             "suddenDeath": "{{combatantId}} is removed by Sudden Death."
         },
+        "quality": {
+            "pummel": { "stunned": "Pummel Stuns {{targetId}}." },
+            "entangle": { "entangled": "Entangle restrains {{targetId}} with Strength {{amount}}." },
+            "distract": { "push": "Distract pushes {{targetId}} {{amount}} yard(s)." },
+            "trip": { "activationAvailable": "Trip can be activated for {{amount}} Advantage." },
+            "blackpowder": { "coolTestRequired": "{{targetId}} must test Cool against Blackpowder." },
+            "slash": {
+                "bleeding": "Slash gives {{targetId}} 1 Bleeding Condition.",
+                "activationAvailable": "Slash can add Bleeding for {{amount}} Advantage."
+            }
+        },
         "condition": {
             "applied": "{{targetId}} gains {{conditionId}}.",
             "effect": {
