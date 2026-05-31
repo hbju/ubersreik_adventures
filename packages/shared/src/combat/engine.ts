@@ -2,15 +2,15 @@ import type { Armor, Character } from '../types/wfrp.types';
 import { attackerModifiersFor, conditionsRemovedAfterAttack, opposedTestCollapseFor } from '../utils/conditions';
 import { calculateSuccessLevel, getHitLocation, rolld100 } from '../utils/mechanics';
 import { calculateCharacteristicBonus } from '../utils/skills';
-import { applyTalentSLBonuses, getTalentDamageBonus } from '../utils/talents';
 import { createAdvantagePools, grantAdvantage } from './advantage';
-import { defensiveBonusForSkill, resolveEffectiveWeapon, SECONDARY_HAND_PENALTY } from './actions';
+import { defensiveBonusForSkill, resolveEffectiveWeapon } from './actions';
 import { criticalRoll } from './critical';
 import { collectMeleePreRollModifiers, resolveModifierTotal } from './modifiers';
 import { applyBlackpowderTargetEffect, armourPointsAtLocation, createQualityHooks, defenderTargetModifierFromQualities } from './qualities';
 import { tryInterceptDamageWithFate } from './resources';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
+import { createTalentHooks, getTalentInitiativeModifier } from './talents';
 import type {
     CombatEngineResult,
     CombatEvent,
@@ -72,6 +72,7 @@ export function createCombatState(
         turnFlags: {
             additionalActionCombatantIds: options.turnFlags?.additionalActionCombatantIds ?? [],
             chargedCombatantIds: options.turnFlags?.chargedCombatantIds ?? [],
+            talentExtraAttackCombatantIds: options.turnFlags?.talentExtraAttackCombatantIds ?? [],
         },
         engagements: options.engagements ?? {},
     };
@@ -104,7 +105,6 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
         attackerSuccessLevel: hit.sl ?? hit.slDifference,
         armourPoints: baseArmourPoints,
     }));
-    const talentDamageBonus = getTalentDamageBonus(hit.usedTalents || [], hit.skillId, state.talents);
     const hookDamageBonus = hooks.damageModifiers({
         state,
         action: {
@@ -122,7 +122,7 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
         attackerSuccessLevel: hit.sl ?? hit.slDifference,
         defenderSuccessLevel: hit.defenderSuccessLevel,
     });
-    const rawDamage = hit.weaponDamage + hit.slDifference + talentDamageBonus + hookDamageBonus;
+    const rawDamage = hit.weaponDamage + hit.slDifference + hookDamageBonus;
     const mitigatedDamage = rawDamage - toughnessBonus - armourPoints;
     const minimumOneWoundApplied = !hit.disableMinimumWound && mitigatedDamage <= 0;
     let damageDealt = hit.disableMinimumWound ? Math.max(mitigatedDamage, 0) : Math.max(mitigatedDamage, 1);
@@ -479,12 +479,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
 function resolveOpposedRoll(input: OpposedRollInput, character: Character, state: CombatState, rng: Rng): ResolvedOpposedRoll {
     const rollResult = input.rollResult ?? rolld100(rng);
     const targetNumber = input.targetNumber + (input.testModifier ?? 0);
-    const successLevel = input.successLevel ?? applyTalentSLBonuses(
-        calculateSuccessLevel(rollResult, targetNumber),
-        input.usedTalents || [],
-        state.talents,
-        character
-    );
+    const successLevel = input.successLevel ?? calculateSuccessLevel(rollResult, targetNumber);
 
     return {
         skillId: input.skillId,
@@ -540,18 +535,19 @@ export function decayEngagementsEndOfRound(state: CombatState): CombatEngineResu
     return { state: { ...state, combatants, engagements }, events: [] };
 }
 
-export function initiativeOrder(combatants: Combatant[], rng: Rng = mathRandomRng): Array<{
+export function initiativeOrder(combatants: Combatant[], rng: Rng = mathRandomRng, talents: CombatState['talents'] = []): Array<{
     combatant: Combatant;
     initiative: number;
     roll: number;
 }> {
+    const stateForTalents = createCombatState(combatants, { talents });
     return combatants
         .map(combatant => {
             const roll = Math.floor(rng.next() * 10) + 1;
             return {
                 combatant,
                 roll,
-                initiative: characteristicValue(combatant.character.characteristics.ag) + roll,
+                initiative: characteristicValue(combatant.character.characteristics.ag) + roll + getTalentInitiativeModifier(combatant, stateForTalents),
             };
         })
         .sort((a, b) => (
@@ -579,19 +575,21 @@ export function determineSurprise<TCombatant extends Pick<Combatant, 'id' | 'con
 
 function normalizeHooks(hooks: Partial<MeleeResolutionHooks> | undefined, rng: Rng): MeleeResolutionHooks {
     const qualityHooks = createQualityHooks();
+    const talentHooks = createTalentHooks();
     return {
         preRollModifiers: context => [
             ...(qualityHooks.preRollModifiers?.(context) ?? []),
+            ...(talentHooks.preRollModifiers?.(context) ?? []),
             ...(hooks?.preRollModifiers?.(context) ?? []),
         ],
-        slModifiers: context => (qualityHooks.slModifiers?.(context) ?? 0) + (hooks?.slModifiers?.(context) ?? 0),
-        damageModifiers: context => (qualityHooks.damageModifiers?.(context) ?? 0) + (hooks?.damageModifiers?.(context) ?? 0),
+        slModifiers: context => (qualityHooks.slModifiers?.(context) ?? 0) + (talentHooks.slModifiers?.(context) ?? 0) + (hooks?.slModifiers?.(context) ?? 0),
+        damageModifiers: context => (qualityHooks.damageModifiers?.(context) ?? 0) + (talentHooks.damageModifiers?.(context) ?? 0) + (hooks?.damageModifiers?.(context) ?? 0),
         apModifiers: context => (qualityHooks.apModifiers?.(context) ?? 0) + (hooks?.apModifiers?.(context) ?? 0),
-        onHitEffects: context => mergeHookResult(context.state, qualityHooks.onHitEffects?.(context), hooks?.onHitEffects?.(context)),
+        onHitEffects: context => mergeHookResult(context.state, qualityHooks.onHitEffects?.(context), talentHooks.onHitEffects?.(context), hooks?.onHitEffects?.(context)),
         critTriggerExtensions: context => !!qualityHooks.critTriggerExtensions?.(context) || !!hooks?.critTriggerExtensions?.(context),
         critIgnoreConditions: context => !!qualityHooks.critIgnoreConditions?.(context) || !!hooks?.critIgnoreConditions?.(context),
         critApModifiers: context => (qualityHooks.critApModifiers?.(context) ?? 0) + (hooks?.critApModifiers?.(context) ?? 0),
-        onCritEffects: context => mergeHookResult(context.state, qualityHooks.onCritEffects?.(context), hooks?.onCritEffects?.(context)),
+        onCritEffects: context => mergeHookResult(context.state, qualityHooks.onCritEffects?.(context), talentHooks.onCritEffects?.(context), hooks?.onCritEffects?.(context)),
         fumbleTriggers: context => !!qualityHooks.fumbleTriggers?.(context) || !!hooks?.fumbleTriggers?.(context),
         critResolver: hooks?.critResolver ?? ((context: CritResolverContext) => criticalRoll(context, { rng })),
     };
@@ -600,7 +598,8 @@ function normalizeHooks(hooks: Partial<MeleeResolutionHooks> | undefined, rng: R
 function mergeHookResult(
     initialState: CombatState,
     first: ReturnType<MeleeResolutionHooks['onHitEffects']> | undefined,
-    second: ReturnType<MeleeResolutionHooks['onHitEffects']> | undefined
+    second: ReturnType<MeleeResolutionHooks['onHitEffects']> | undefined,
+    third?: ReturnType<MeleeResolutionHooks['onHitEffects']> | undefined
 ) {
     const normalize = (result: ReturnType<MeleeResolutionHooks['onHitEffects']> | undefined, state: CombatState) => {
         if (!result) return { state, events: [], suppressNormalDamage: false };
@@ -609,10 +608,11 @@ function mergeHookResult(
     };
     const firstResult = normalize(first, initialState);
     const secondResult = normalize(second, firstResult.state);
+    const thirdResult = normalize(third, secondResult.state);
     return {
-        state: secondResult.state,
-        events: [...firstResult.events, ...secondResult.events],
-        suppressNormalDamage: firstResult.suppressNormalDamage || secondResult.suppressNormalDamage,
+        state: thirdResult.state,
+        events: [...firstResult.events, ...secondResult.events, ...thirdResult.events],
+        suppressNormalDamage: firstResult.suppressNormalDamage || secondResult.suppressNormalDamage || thirdResult.suppressNormalDamage,
     };
 }
 

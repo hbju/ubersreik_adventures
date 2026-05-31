@@ -1,5 +1,6 @@
 import { attackerModifiersFor } from '../utils/conditions';
-import { grappleOutsiderToHitModifier, SECONDARY_HAND_PENALTY } from './actions';
+import { grappleOutsiderToHitModifier } from './actions';
+import { offHandPenaltyFor } from './talents';
 import type { Combatant, CombatantSize, CombatState, MeleeAttackAction, ModifierSource, ModifierTotal } from './types';
 import { reachOf } from './spatial';
 
@@ -72,7 +73,7 @@ export function collectMeleePreRollModifiers(
     }
 
     if (action.hand === 'secondary') {
-        sources.push({ id: 'dualWield:offHand', type: 'manual', phase: 'preRollModifiers', value: SECONDARY_HAND_PENALTY, combatantId: attacker.id });
+        sources.push({ id: 'dualWield:offHand', type: 'manual', phase: 'preRollModifiers', value: offHandPenaltyFor(attacker), combatantId: attacker.id });
     }
 
     const grappleOutsider = grappleOutsiderToHitModifier(state, attacker, defender);

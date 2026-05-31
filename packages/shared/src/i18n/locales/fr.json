@@ -269,6 +269,39 @@
                 "missingActor": "La depense de Destin necessite un combattant.",
                 "notApplicable": "La depense de Destin n'est pas applicable."
             }
+        },
+        "talent": {
+            "reaction": {
+                "registered": "{{combatantId}} enregistre {{talentId}} pour {{window}}."
+            },
+            "rejected": {
+                "missingTalent": "{{combatantId}} ne possede pas {{talentId}}.",
+                "policyRejected": "{{talentId}} attend la politique du controleur.",
+                "insufficientAdvantage": "{{combatantId}} manque d'Avantage pour {{talentId}}.",
+                "invalidTrigger": "{{talentId}} ne peut pas se declencher ici.",
+                "missingTarget": "{{talentId}} necessite une cible.",
+                "invalidLoadout": "{{talentId}} necessite le bon equipement."
+            },
+            "shieldsman": {
+                "push": "Shieldsman repousse {{targetId}}.",
+                "damage": "Shieldsman blesse {{targetId}}."
+            },
+            "riposte": {
+                "reactionDamage": "Riposte blesse {{targetId}}."
+            },
+            "dual-wielder": {
+                "attackWithBoth": "Ambidextre prepare les deux attaques."
+            },
+            "furious-assault": {
+                "extraAttack": "Assaut Furieux prepare une attaque supplementaire.",
+                "extraAttackAvailable": "Assaut Furieux peut preparer une attaque supplementaire."
+            },
+            "strike-to-injure": {
+                "chooseCriticalRoll": "Frapper pour blesser peut choisir entre les jets critiques."
+            },
+            "alley-cat": {
+                "reroll": "Chat de gouttiere inverse le jet echoue."
+            }
         }
     },
     "system": {

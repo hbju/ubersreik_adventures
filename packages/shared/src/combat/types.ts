@@ -48,6 +48,7 @@ export interface Combatant {
 export interface CombatTurnFlags {
     additionalActionCombatantIds: string[];
     chargedCombatantIds: string[];
+    talentExtraAttackCombatantIds: string[];
 }
 
 export interface DefensiveBonusState {
@@ -147,6 +148,7 @@ export interface MeleeAttackAction {
     hooks?: Partial<MeleeResolutionHooks>;
     hand?: 'primary' | 'secondary';
     isGrappleDamage?: boolean;
+    isExtraAttack?: boolean;
 }
 
 export type CombatActionCost = 'action' | 'move' | 'free';
@@ -298,7 +300,7 @@ export interface MeleeResolutionHooks {
 }
 
 export interface QualityActivation {
-    trigger: 'onHit' | 'onDefend' | 'onCrit';
+    trigger: 'onHit' | 'onDefend' | 'onCrit' | 'reaction' | 'postRoll' | 'economy';
     cost?: { resource: 'advantage'; amount: number };
     effect: string;
     gate?: string;
@@ -584,6 +586,33 @@ export type CombatantRemovedFromEncounterEvent = CombatEventBase<'CombatantRemov
     reason: 'dieAnotherDay';
 }>;
 
+export type TalentEffectAppliedEvent = CombatEventBase<'TalentEffectApplied', {
+    combatantId: string;
+    targetId?: string;
+    talentId: string;
+    effect: string;
+    trigger?: QualityActivation['trigger'];
+    amount?: number;
+    primaryRoll?: number;
+    secondaryRoll?: number;
+    policy?: 'always' | 'never';
+    deferred?: boolean;
+}>;
+
+export type TalentActivationRejectedEvent = CombatEventBase<'TalentActivationRejected', {
+    combatantId: string;
+    targetId?: string;
+    talentId: string;
+    reason: 'missingTalent' | 'policyRejected' | 'insufficientAdvantage' | 'invalidTrigger' | 'missingTarget' | 'invalidLoadout';
+}>;
+
+export type TalentReactionRegisteredEvent = CombatEventBase<'TalentReactionRegistered', {
+    combatantId: string;
+    talentId: string;
+    window: 'winningDefence' | 'charged' | 'postRoll' | 'extraAttack';
+    policy: 'always' | 'never';
+}>;
+
 export type CombatEvent =
     | AttackResolvedEvent
     | DamageDealtEvent
@@ -615,4 +644,7 @@ export type CombatEvent =
     | CombatActionResolvedEvent
     | CombatActionRejectedEvent
     | BlowToBackAttackEvent
-    | CombatantRemovedFromEncounterEvent;
+    | CombatantRemovedFromEncounterEvent
+    | TalentEffectAppliedEvent
+    | TalentActivationRejectedEvent
+    | TalentReactionRegisteredEvent;

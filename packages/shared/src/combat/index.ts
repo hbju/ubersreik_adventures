@@ -8,4 +8,5 @@ export * from './qualities';
 export * from './resources';
 export * from './rng';
 export * from './spatial';
+export * from './talents';
 export * from './types';

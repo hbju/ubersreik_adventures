@@ -249,6 +249,10 @@ describe('special actions and resources', () => {
         const state = createState([
             {
                 ...combatant('dual', 'Dual', { meleeSkill: 50 }),
+                character: {
+                    ...combatant('dual', 'Dual', { meleeSkill: 50 }).character,
+                    talents: { 'dual-wielder': 1 },
+                },
                 weaponLoadout: { primaryWeaponId: dagger.id, secondaryWeaponId: spear.id },
             },
             combatant('foe', 'Foe', { side: 'adversary', position: 1 }),

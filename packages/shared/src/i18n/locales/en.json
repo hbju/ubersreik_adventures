@@ -342,6 +342,39 @@
                 "missingActor": "Fate spend requires a combatant.",
                 "notApplicable": "Fate spend is not applicable."
             }
+        },
+        "talent": {
+            "reaction": {
+                "registered": "{{combatantId}} registers {{talentId}} for {{window}}."
+            },
+            "rejected": {
+                "missingTalent": "{{combatantId}} does not have {{talentId}}.",
+                "policyRejected": "{{talentId}} is waiting for controller policy.",
+                "insufficientAdvantage": "{{combatantId}} lacks Advantage for {{talentId}}.",
+                "invalidTrigger": "{{talentId}} cannot trigger here.",
+                "missingTarget": "{{talentId}} requires a target.",
+                "invalidLoadout": "{{talentId}} requires the right equipment."
+            },
+            "shieldsman": {
+                "push": "Shieldsman pushes {{targetId}} back.",
+                "damage": "Shieldsman damages {{targetId}}."
+            },
+            "riposte": {
+                "reactionDamage": "Riposte damages {{targetId}}."
+            },
+            "dual-wielder": {
+                "attackWithBoth": "Dual Wielder readies both attacks."
+            },
+            "furious-assault": {
+                "extraAttack": "Furious Assault prepares an extra attack.",
+                "extraAttackAvailable": "Furious Assault can prepare an extra attack."
+            },
+            "strike-to-injure": {
+                "chooseCriticalRoll": "Strike to Injure can choose between critical rolls."
+            },
+            "alley-cat": {
+                "reroll": "Alley Cat reverses the failed roll."
+            }
         }
     },
     "menu": {

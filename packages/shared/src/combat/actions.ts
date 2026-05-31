@@ -9,6 +9,7 @@ import {
     getWalkRun,
     isEngagedWith,
 } from './spatial';
+import { hasCombatTalent, offHandPenaltyFor } from './talents';
 import type {
     CombatActionDefinition,
     CombatActionKind,
@@ -40,9 +41,9 @@ export const IMPROVISED_WEAPON_PROFILE = {
     id: 'weapon_improvised',
     name: 'Improvised',
     damage: '+SB+1',
-    qualities: ['Undamaging', 'Unbalanced'],
+    qualities: ['Undamaging', 'Unbalanced'] as string[],
     reach: 'Personal',
-} as const;
+};
 
 export const SECONDARY_HAND_PENALTY = -20;
 export const DEFENSIVE_BONUS = 20;
@@ -510,6 +511,12 @@ function resolveAttackWithBoth(state: CombatState, request: CombatActionRequest)
     if (!loadout?.primaryWeaponId || !loadout?.secondaryWeaponId) {
         return rejectAction(state, 'attackWithBoth', request.actorId, 'invalidLoadout');
     }
+    if (!hasCombatTalent(actor, 'dual-wielder')) {
+        return rejectAction(state, 'attackWithBoth', request.actorId, 'invalidLoadout');
+    }
+
+    const primaryRoll = request.rollResult;
+    const secondaryRoll = primaryRoll === undefined ? undefined : reverseD100(primaryRoll);
 
     return {
         state,
@@ -519,8 +526,23 @@ function resolveAttackWithBoth(state: CombatState, request: CombatActionRequest)
             data: {
                 kind: 'attackWithBoth',
                 actorId: actor.id,
+                targetId: request.targetId,
                 outcome: 'applied',
                 generatesAdvantage: COMBAT_ACTION_DEFINITIONS.attackWithBoth.generatesAdvantage,
+            },
+        }, {
+            type: 'TalentEffectApplied',
+            i18nKey: 'combat.talent.dual-wielder.attackWithBoth',
+            data: {
+                combatantId: actor.id,
+                targetId: request.targetId,
+                talentId: 'dual-wielder',
+                effect: 'attackWithBoth',
+                amount: offHandPenaltyFor(actor),
+                primaryRoll,
+                secondaryRoll,
+                trigger: 'onHit',
+                deferred: true,
             },
         }],
     };
@@ -673,6 +695,13 @@ function findFallbackWeapon(combatant: Combatant, weapons: Weapon[]): Weapon | u
     return firstOwned ? weaponById.get(firstOwned) : undefined;
 }
 
+function reverseD100(roll: number): number {
+    if (roll === 100) return 1;
+    const tens = Math.floor(roll / 10);
+    const ones = roll % 10;
+    return ones * 10 + tens;
+}
+
 function rejectAction(state: CombatState, kind: CombatActionKind, actorId: string, reason: 'noAction' | 'noMove' | 'missingTarget' | 'missingSkill' | 'notEngaged' | 'notGrappling' | 'invalidLoadout'): CombatEngineResult {
     return {
         state,
@@ -689,7 +718,7 @@ function actionResolved(
     actorId: string,
     outcome: 'success' | 'failure' | 'applied' | 'partial',
     generatesAdvantage: boolean,
-    extra: Partial<CombatEvent & { data: Record<string, unknown> }>['data'] = {}
+    extra: Record<string, unknown> = {}
 ): CombatEvent {
     return {
         type: 'CombatActionResolved',
