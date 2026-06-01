@@ -388,6 +388,29 @@
             },
             "alley-cat": {
                 "reroll": "Alley Cat reverses the failed roll."
+            },
+            "beat-blade": {
+                "poolReduced": "Beat Blade removes {{amount}} Advantage from the opposing pool.",
+                "failed": "Beat Blade fails."
+            },
+            "disarm": {
+                "disarmed": "{{targetId}} is disarmed.",
+                "disarmedAndGrabbed": "{{targetId}} is disarmed and the weapon is taken.",
+                "failed": "Disarm fails."
+            },
+            "feint": {
+                "buffStored": "Feint stores +{{amount}} SL against {{targetId}}.",
+                "failed": "Feint fails."
+            },
+            "distract": {
+                "advantageBlocked": "{{targetId}} cannot generate Advantage until the end of the next Round.",
+                "advantageBlockedEvent": "Advantage gain blocked for {{combatantId}}.",
+                "failed": "Distract fails."
+            },
+            "reversal": {
+                "armed": "Reversal is armed for the next winning defence.",
+                "disarmed": "Reversal is turned off.",
+                "stoleAdvantage": "Reversal steals 1 Advantage from the opposing pool."
             }
         }
     },

@@ -2,6 +2,7 @@ import type { NormalizedTalentEffect, Talent, TalentEffect, TalentEffectKind, Ta
 import { calculateSuccessLevel } from '../utils/mechanics';
 import { calculateCharacteristicBonus } from '../utils/skills';
 import { spendAdvantage } from './advantage';
+import { resolveShieldsmanActivation } from './talent-actions';
 import { hasQuality } from './qualities';
 import { applyFortunePostRollHook, type FortunePostRollHook } from './resources';
 import { engagementKey, isInfighting } from './spatial';
@@ -427,7 +428,13 @@ export function resolveTalentActivation(state: CombatState, request: TalentActiv
     if (!request.targetId) return { state, events: [talentRejected(actor.id, request.talentId, 'missingTarget')] };
 
     if (request.talentId === 'shieldsman') {
-        return resolveShieldsman(state, actor, request.targetId, request.effect === 'push' ? 'push' : 'damage');
+        return resolveShieldsmanActivation(
+            state,
+            actor.id,
+            request.targetId,
+            request.effect === 'push' ? 'push' : 'damage',
+            request.policy ?? DEFAULT_TALENT_POLICY
+        );
     }
 
     if (request.talentId === 'riposte') {
@@ -673,47 +680,6 @@ function talentCritEffects(context: DamageModifierContext): CombatEvent[] {
         events.push(talentEvent(context.attacker.id, 'slayer', 'largerTargetMultiplier', { targetId: context.defender.id, trigger: 'onCrit', amount: slayerSteps }));
     }
     return events;
-}
-
-function resolveShieldsman(state: CombatState, actor: Combatant, targetId: string, mode: 'damage' | 'push'): CombatEngineResult {
-    if (!equippedShield(actor, state)) return { state, events: [talentRejected(actor.id, 'shieldsman', 'invalidLoadout', targetId)] };
-    if (state.advantagePools[actor.side] < 2) return { state, events: [talentRejected(actor.id, 'shieldsman', 'insufficientAdvantage', targetId)] };
-
-    const spent = spendAdvantage(state, actor.side, 'additionalEffort', { actorId: actor.id, amount: 2 });
-    let currentState = spent.state;
-    const events = [...spent.events];
-    const target = getCombatant(currentState, targetId);
-
-    if (mode === 'push') {
-        const direction = target.position >= actor.position ? 1 : -1;
-        currentState = replaceCombatants(currentState, [
-            { ...target, position: target.position + direction * 2, engagementIds: target.engagementIds.filter(id => id !== actor.id) },
-            { ...getCombatant(currentState, actor.id), engagementIds: actor.engagementIds.filter(id => id !== target.id) },
-        ]);
-        delete currentState.engagements[engagementKey(actor.id, target.id)];
-        events.push(talentEvent(actor.id, 'shieldsman', 'push', { targetId, amount: 2, trigger: 'onDefend', policy: 'always' }));
-        return { state: currentState, events };
-    }
-
-    const damage = Math.max(1, shieldDamage(actor, state));
-    const woundsAfter = Math.max(0, target.currentWounds - damage);
-    currentState = replaceCombatant(currentState, {
-        ...target,
-        currentWounds: woundsAfter,
-        character: {
-            ...target.character,
-            status: {
-                ...target.character.status,
-                wounds: { ...target.character.status.wounds, current: woundsAfter },
-            },
-        },
-        resources: {
-            ...target.resources,
-            wounds: { ...target.resources.wounds, current: woundsAfter },
-        },
-    });
-    events.push(talentEvent(actor.id, 'shieldsman', 'damage', { targetId, amount: damage, trigger: 'onDefend', policy: 'always' }));
-    return { state: currentState, events };
 }
 
 function resolveRiposteReaction(state: CombatState, actor: Combatant, targetId: string): CombatEngineResult {

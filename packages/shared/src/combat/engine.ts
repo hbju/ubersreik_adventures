@@ -10,6 +10,7 @@ import { applyBlackpowderTargetEffect, armourPointsAtLocation, createQualityHook
 import { tryInterceptDamageWithFate } from './resources';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
+import { consumeFeintBuff, feintSlBonusForAttack, resolveReversalOnDefenderWin } from './talent-actions';
 import { createTalentHooks, getTalentInitiativeModifier, resolveCarefulStrikeHitLocation } from './talents';
 import type {
     CombatEngineResult,
@@ -27,7 +28,7 @@ import type {
 
 export function createCombatantFromCharacter(
     character: Character,
-    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions' | 'conditionInstances'>> = {}
+    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions' | 'conditionInstances' | 'weaponLoadout'>> = {}
 ): Combatant {
     const currentWounds = options.currentWounds ?? character.status.wounds.current;
     const maxWounds = options.maxWounds ?? character.status.wounds.max;
@@ -54,6 +55,7 @@ export function createCombatantFromCharacter(
             resilience: character.status.resilience,
             resolve: character.status.resolve,
         },
+        weaponLoadout: options.weaponLoadout,
     };
 }
 
@@ -73,6 +75,7 @@ export function createCombatState(
             additionalActionCombatantIds: options.turnFlags?.additionalActionCombatantIds ?? [],
             chargedCombatantIds: options.turnFlags?.chargedCombatantIds ?? [],
             talentExtraAttackCombatantIds: options.turnFlags?.talentExtraAttackCombatantIds ?? [],
+            shieldsmanUsedThisTurnIds: options.turnFlags?.shieldsmanUsedThisTurnIds ?? [],
         },
         engagements: options.engagements ?? {},
     };
@@ -240,6 +243,17 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         ...collectMeleePreRollModifiers(state, action, attacker, defender),
         ...hookPreRollSources,
     ];
+    const feintBonus = feintSlBonusForAttack(attacker, defender.id, state.round);
+    if (feintBonus > 0) {
+        preRollSources.push({
+            id: 'feint:sl',
+            type: 'talent',
+            phase: 'preRollModifiers',
+            value: feintBonus * 10,
+            combatantId: attacker.id,
+        });
+    }
+
     const modifierTotal = resolveModifierTotal(preRollSources);
     const conditionModifiers = attackerModifiersFor(defender);
     const collapse = opposedTestCollapseFor(defender, {
@@ -296,9 +310,10 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
             : undefined;
     } else {
         const defenderTargetModifier = defenderTargetModifierFromQualities({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll });
+        const dualWieldDefensePenalty = defender.dualWieldDefensivePenalty ? -10 : 0;
         defenderRoll = resolveOpposedRoll({
             ...action.defender,
-            testModifier: (action.defender.testModifier ?? 0) + defenderTargetModifier + defensiveBonusForSkill(defender, action.defender.skillId, currentState.round),
+            testModifier: (action.defender.testModifier ?? 0) + defenderTargetModifier + defensiveBonusForSkill(defender, action.defender.skillId, currentState.round) + dualWieldDefensePenalty,
         }, defender.character, currentState, rng);
         const defenderSlModifier = hooks.slModifiers({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll, defenderRoll });
         defenderRoll = withSlModifier(defenderRoll, defenderSlModifier);
@@ -439,6 +454,25 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
     currentState = applyLoserActionEnd(currentState, outcome === 'attacker' ? defender.id : outcome === 'defender' ? attacker.id : undefined);
     currentState = clearChargeFlag(currentState, attacker.id);
     currentState = removeConditions(currentState, defender.id, conditionsRemovedAfterAttack(defender));
+
+    if (feintBonus > 0) {
+        currentState = consumeFeintBuff(currentState, attacker.id, defender.id);
+    }
+
+    if (outcome === 'defender' && action.grantAdvantage !== false) {
+        const defenderCombatant = getCombatant(currentState, defender.id);
+        if (defenderCombatant.reversalActive && (defenderCombatant.character.talents?.reversal ?? 0) > 0) {
+            const reversal = resolveReversalOnDefenderWin(currentState, defender.id, attacker.side);
+            return { state: reversal.state, events: [...events, ...reversal.events] };
+        }
+        if (action.generatesAdvantage !== false) {
+            const advantageResult = grantAdvantage(currentState, defender.side, 1, {
+                reason: 'opposedTestWin',
+                sourceCombatantId: defender.id,
+            });
+            return { state: advantageResult.state, events: [...events, ...advantageResult.events] };
+        }
+    }
 
     if (outcome === 'attacker' && action.generatesAdvantage !== false && action.grantAdvantage !== false) {
         const advantageResult = grantAdvantage(currentState, attacker.side, 1, {

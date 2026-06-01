@@ -43,12 +43,24 @@ export interface Combatant {
     weaponLoadout?: WeaponLoadout;
     initiativeOverride?: boolean;
     removedFromEncounter?: boolean;
+    cannotGenerateAdvantageUntilRound?: number;
+    feintBuffs?: FeintBuff[];
+    reversalActive?: boolean;
+    dualWieldDefensivePenalty?: boolean;
+    disarmedWeaponIds?: string[];
+}
+
+export interface FeintBuff {
+    opponentId: string;
+    slBonus: number;
+    expiresEndOfRound: number;
 }
 
 export interface CombatTurnFlags {
     additionalActionCombatantIds: string[];
     chargedCombatantIds: string[];
     talentExtraAttackCombatantIds: string[];
+    shieldsmanUsedThisTurnIds: string[];
 }
 
 export interface DefensiveBonusState {
@@ -168,7 +180,11 @@ export type CombatActionKind =
     | 'grappleInitiate'
     | 'grappleMaintain'
     | 'grappleBreak'
-    | 'attackWithBoth';
+    | 'attackWithBoth'
+    | 'beatBlade'
+    | 'disarm'
+    | 'feint'
+    | 'distractOpponent';
 
 export interface CombatActionDefinition {
     kind: CombatActionKind;
@@ -196,6 +212,11 @@ export interface CombatActionRequest {
     moveTarget?: number | { position: number } | { combatantId: string };
     pendingTestId?: string;
     policy?: ResourceSpendPolicy;
+    secondaryTargetId?: string;
+    defenderRollResult?: number;
+    defenderTargetNumber?: number;
+    defenderSkillId?: string;
+    reversalActive?: boolean;
 }
 
 export interface CombatEngineResult {
@@ -602,6 +623,8 @@ export type TalentEffectAppliedEvent = CombatEventBase<'TalentEffectApplied', {
     amount?: number;
     primaryRoll?: number;
     secondaryRoll?: number;
+    primaryHit?: boolean;
+    secondaryHit?: boolean;
     policy?: 'always' | 'never';
     deferred?: boolean;
 }>;
@@ -618,6 +641,12 @@ export type TalentReactionRegisteredEvent = CombatEventBase<'TalentReactionRegis
     talentId: string;
     window: 'winningDefence' | 'charged' | 'postRoll' | 'extraAttack';
     policy: 'always' | 'never';
+}>;
+
+export type AdvantageGainBlockedEvent = CombatEventBase<'AdvantageGainBlocked', {
+    combatantId: string;
+    side: SideId;
+    reason: 'cannotGenerateAdvantage';
 }>;
 
 export type CombatEvent =
@@ -654,4 +683,5 @@ export type CombatEvent =
     | CombatantRemovedFromEncounterEvent
     | TalentEffectAppliedEvent
     | TalentActivationRejectedEvent
-    | TalentReactionRegisteredEvent;
+    | TalentReactionRegisteredEvent
+    | AdvantageGainBlockedEvent;

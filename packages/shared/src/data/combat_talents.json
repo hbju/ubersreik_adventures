@@ -881,6 +881,14 @@
         "max_ranks": "s",
         "effects": [
             {
+                "kind": "slBonus",
+                "value": 1,
+                "when": "defendingWithShield",
+                "appliesTo": [
+                    "melee"
+                ]
+            },
+            {
                 "kind": "activation",
                 "trigger": "onDefend",
                 "cost": {

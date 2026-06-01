@@ -9,7 +9,9 @@ import {
     getWalkRun,
     isEngagedWith,
 } from './spatial';
-import { hasCombatTalent, offHandPenaltyFor } from './talents';
+import { resolveDualWieldAttack } from './dual-wield';
+import { resolveTalentCombatAction } from './talent-actions';
+import { hasCombatTalent } from './talents';
 import type {
     CombatActionDefinition,
     CombatActionKind,
@@ -35,6 +37,10 @@ export const COMBAT_ACTION_DEFINITIONS: Record<CombatActionKind, CombatActionDef
     grappleMaintain: { kind: 'grappleMaintain', cost: 'action', generatesAdvantage: false },
     grappleBreak: { kind: 'grappleBreak', cost: 'free', generatesAdvantage: false },
     attackWithBoth: { kind: 'attackWithBoth', cost: 'action', generatesAdvantage: true },
+    beatBlade: { kind: 'beatBlade', cost: 'action', generatesAdvantage: false },
+    disarm: { kind: 'disarm', cost: 'action', generatesAdvantage: false },
+    feint: { kind: 'feint', cost: 'action', generatesAdvantage: false },
+    distractOpponent: { kind: 'distractOpponent', cost: 'move', generatesAdvantage: false },
 };
 
 export const IMPROVISED_WEAPON_PROFILE = {
@@ -76,7 +82,12 @@ export function resolveCombatAction(
         case 'grappleBreak':
             return resolveGrappleBreak(state, request);
         case 'attackWithBoth':
-            return resolveAttackWithBoth(state, request);
+            return resolveDualWieldAttack(state, request, rng);
+        case 'beatBlade':
+        case 'disarm':
+        case 'feint':
+        case 'distractOpponent':
+            return resolveTalentCombatAction(state, request, rng);
         default:
             return rejectAction(state, request.kind, request.actorId, 'noAction');
     }
@@ -84,10 +95,14 @@ export function resolveCombatAction(
 
 export function clearDefensiveBonusAtTurnStart(state: CombatState, combatantId: string): CombatState {
     const combatant = getCombatant(state, combatantId);
-    if (!combatant.defensiveBonus || combatant.defensiveBonus.activeUntilRound > state.round) {
-        return state;
+    const clearedPenalty = combatant.dualWieldDefensivePenalty
+        ? replaceCombatant(state, { ...combatant, dualWieldDefensivePenalty: false })
+        : state;
+    const updatedCombatant = getCombatant(clearedPenalty, combatantId);
+    if (!updatedCombatant.defensiveBonus || updatedCombatant.defensiveBonus.activeUntilRound > state.round) {
+        return clearedPenalty;
     }
-    return replaceCombatant(state, { ...combatant, defensiveBonus: undefined });
+    return replaceCombatant(clearedPenalty, { ...updatedCombatant, defensiveBonus: undefined });
 }
 
 export function defensiveBonusForSkill(combatant: Combatant, skillId: string, round: number): number {
@@ -505,47 +520,8 @@ function resolveGrappleBreak(state: CombatState, request: CombatActionRequest): 
     };
 }
 
-function resolveAttackWithBoth(state: CombatState, request: CombatActionRequest): CombatEngineResult {
-    const actor = getCombatant(state, request.actorId);
-    const loadout = actor.weaponLoadout;
-    if (!loadout?.primaryWeaponId || !loadout?.secondaryWeaponId) {
-        return rejectAction(state, 'attackWithBoth', request.actorId, 'invalidLoadout');
-    }
-    if (!hasCombatTalent(actor, 'dual-wielder')) {
-        return rejectAction(state, 'attackWithBoth', request.actorId, 'invalidLoadout');
-    }
-
-    const primaryRoll = request.rollResult;
-    const secondaryRoll = primaryRoll === undefined ? undefined : reverseD100(primaryRoll);
-
-    return {
-        state,
-        events: [{
-            type: 'CombatActionResolved',
-            i18nKey: 'combat.action.attackWithBoth.slot',
-            data: {
-                kind: 'attackWithBoth',
-                actorId: actor.id,
-                targetId: request.targetId,
-                outcome: 'applied',
-                generatesAdvantage: COMBAT_ACTION_DEFINITIONS.attackWithBoth.generatesAdvantage,
-            },
-        }, {
-            type: 'TalentEffectApplied',
-            i18nKey: 'combat.talent.dual-wielder.attackWithBoth',
-            data: {
-                combatantId: actor.id,
-                targetId: request.targetId,
-                talentId: 'dual-wielder',
-                effect: 'attackWithBoth',
-                amount: offHandPenaltyFor(actor),
-                primaryRoll,
-                secondaryRoll,
-                trigger: 'onHit',
-                deferred: true,
-            },
-        }],
-    };
+export function combatantSkillTarget(combatant: Combatant, skillId: string): number {
+    return skillTarget(combatant, skillId);
 }
 
 function applyForcedMove(

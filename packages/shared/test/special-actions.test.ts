@@ -267,8 +267,17 @@ describe('special actions and resources', () => {
         }, state.combatants.dual, state.combatants.foe));
         expect(modifiers.total).toBe(SECONDARY_HAND_PENALTY);
 
-        const slot = resolveCombatAction(state, { kind: 'attackWithBoth', actorId: 'dual' });
-        expect(slot.events[0]).toMatchObject({ type: 'CombatActionResolved', data: { kind: 'attackWithBoth', outcome: 'applied' } });
+        const slot = resolveCombatAction(state, {
+            kind: 'attackWithBoth',
+            actorId: 'dual',
+            targetId: 'foe',
+            rollResult: 34,
+            defenderRollResult: 90,
+            defenderTargetNumber: 30,
+            opponentRollResult: 90,
+            opponentTargetNumber: 30,
+        });
+        expect(slot.events.some(event => event.type === 'TalentEffectApplied' && event.data.talentId === 'dual-wielder')).toBe(true);
     });
 
     it('supports Fortune reroll, +1 SL, and Act First hooks', () => {

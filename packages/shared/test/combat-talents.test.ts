@@ -128,7 +128,7 @@ describe('combat talent effects', () => {
 
         const attack = defended.events.find(event => event.type === 'AttackResolved');
         expect(attack?.data.outcome).toBe('defender');
-        expect(attack?.data.defenderRoll.roundedSuccessLevel).toBe(2);
+        expect(attack?.data.defenderRoll.roundedSuccessLevel).toBe(3);
 
         const pushed = resolveTalentActivation(defended.state, {
             talentId: 'shieldsman',
@@ -240,6 +240,7 @@ describe('combat talent effects', () => {
                 equippedWeapons: { [dagger.id]: true },
                 loadout: { primaryWeaponId: dagger.id, secondaryWeaponId: dagger.id },
             }),
+            combatant('foe', 'Foe', { side: 'adversary', ws: 30 }),
         ], { weapons: [dagger], talents: combatTalents });
 
         const dual = resolveCombatAction(state, {
@@ -247,9 +248,13 @@ describe('combat talent effects', () => {
             actorId: 'dual',
             targetId: 'foe',
             rollResult: 34,
+            defenderRollResult: 90,
+            defenderTargetNumber: 30,
+            opponentRollResult: 90,
+            opponentTargetNumber: 30,
         });
-        expect(dual.events.find(event => event.type === 'TalentEffectApplied')).toMatchObject({
-            data: { talentId: 'dual-wielder', effect: 'attackWithBoth', primaryRoll: 34, secondaryRoll: 43 },
+        expect(dual.events.find(event => event.type === 'TalentEffectApplied' && event.data.talentId === 'dual-wielder')).toMatchObject({
+            data: { talentId: 'dual-wielder', effect: 'attackWithBoth' },
         });
 
         const extra = prepareTalentExtraAttack(state, 'dual', 'always');

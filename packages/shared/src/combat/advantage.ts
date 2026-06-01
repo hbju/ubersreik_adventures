@@ -67,12 +67,59 @@ export function opposingSide(side: SideId): SideId {
     return side === 'ally' ? 'adversary' : 'ally';
 }
 
+export function canCombatantGenerateAdvantage(state: CombatState, combatantId: string): boolean {
+    const combatant = state.combatants[combatantId];
+    if (!combatant?.cannotGenerateAdvantageUntilRound) return true;
+    return state.round > combatant.cannotGenerateAdvantageUntilRound;
+}
+
+export function transferAdvantage(
+    state: CombatState,
+    fromSide: SideId,
+    toSide: SideId,
+    amount = 1,
+    options: { sourceCombatantId?: string; targetCombatantId?: string } = {}
+): CombatEngineResult {
+    const transferred = Math.min(state.advantagePools[fromSide], amount);
+    const events: CombatEvent[] = [];
+    let currentState = state;
+
+    if (transferred > 0) {
+        const removed = grantAdvantage(currentState, fromSide, -transferred, { reason: 'reallocation' });
+        currentState = removed.state;
+        events.push(...removed.events);
+        const granted = grantAdvantage(currentState, toSide, transferred, {
+            reason: 'reallocation',
+            sourceCombatantId: options.targetCombatantId,
+        });
+        currentState = granted.state;
+        events.push(...granted.events);
+    }
+
+    return { state: currentState, events };
+}
+
 export function grantAdvantage(
     state: CombatState,
     side: SideId,
     amount: number,
     options: { reason?: 'opposedTestWin' | 'spendActionWin' | 'spendActionLoss' | 'seed' | 'reallocation' | 'condition' | 'manual'; sourceCombatantId?: string } = {}
 ): CombatEngineResult {
+    if (amount > 0 && options.sourceCombatantId && !canCombatantGenerateAdvantage(state, options.sourceCombatantId)) {
+        return {
+            state,
+            events: [{
+                type: 'AdvantageGainBlocked',
+                i18nKey: 'combat.talent.distract.advantageBlocked',
+                data: {
+                    combatantId: options.sourceCombatantId,
+                    side,
+                    reason: 'cannotGenerateAdvantage',
+                },
+            }],
+        };
+    }
+
     const poolBefore = state.advantagePools[side];
     const poolAfter = Math.max(0, poolBefore + amount);
     const nextState = {

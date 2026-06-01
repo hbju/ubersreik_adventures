@@ -315,6 +315,29 @@
             },
             "alley-cat": {
                 "reroll": "Chat de gouttiere inverse le jet echoue."
+            },
+            "beat-blade": {
+                "poolReduced": "Battre la lame retire {{amount}} Avantage du pool adverse.",
+                "failed": "Battre la lame echoue."
+            },
+            "disarm": {
+                "disarmed": "{{targetId}} est desarme.",
+                "disarmedAndGrabbed": "{{targetId}} est desarme et l'arme est saisie.",
+                "failed": "Desarmer echoue."
+            },
+            "feint": {
+                "buffStored": "Feinte enregistre +{{amount}} NS contre {{targetId}}.",
+                "failed": "Feinte echoue."
+            },
+            "distract": {
+                "advantageBlocked": "{{targetId}} ne peut plus generer d'Avantage jusqu'a la fin du prochain tour.",
+                "advantageBlockedEvent": "Gain d'Avantage bloque pour {{combatantId}}.",
+                "failed": "Distraire echoue."
+            },
+            "reversal": {
+                "armed": "Renversement est arme pour la prochaine defense gagnante.",
+                "disarmed": "Renversement est desactive.",
+                "stoleAdvantage": "Renversement vole 1 Avantage du pool adverse."
             }
         }
     },
