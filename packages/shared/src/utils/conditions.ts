@@ -593,7 +593,8 @@ export function applyEndOfRoundConditionEffects<TCombatant extends ConditionSubj
   }
 
   const bleedingCount = originalCounts.get('condition_bleeding') || 0;
-  if (bleedingCount > 0 && (working.currentWounds ?? 0) > 0) {
+  const bleedingIgnored = Math.min(bleedingCount, talentRank(working, 'implacable'));
+  if (bleedingCount > bleedingIgnored && (working.currentWounds ?? 0) > 0) {
     working = setWounds(working, Math.max(0, (working.currentWounds ?? 0) - 1));
     result.log.push(`${name} loses 1 wound from Bleeding.`);
     result.events.push(conditionEvent('ConditionDamage', 'combat.condition.effect.damage', {
@@ -986,6 +987,10 @@ function earliestAppliedRound(combatant: ConditionSubject, conditionId: string):
 
 function toughnessBonusFor(combatant: ConditionSubject): number {
   return combatant.character ? calculateCharacteristicBonus(combatant.character.characteristics.t) : 0;
+}
+
+function talentRank(combatant: ConditionSubject, talentId: string): number {
+  return combatant.character?.talents?.[talentId] ?? 0;
 }
 
 function poisonedDeathTestDue(combatant: ConditionSubject, currentRound: number): boolean {

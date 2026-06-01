@@ -299,6 +299,20 @@
             "strike-to-injure": {
                 "chooseCriticalRoll": "Frapper pour blesser peut choisir entre les jets critiques."
             },
+            "strike-to-stun": {
+                "pummelStun": "Frapper pour etourdir donne 1 condition Etourdi a {{targetId}}."
+            },
+            "slayer": {
+                "largerTargetMultiplier": "Tueur multiplie les degats contre la cible plus grande par {{amount}}."
+            },
+            "iron-jaw": {
+                "conditionRemoved": "Machoire d'acier retire {{amount}} condition(s) Etourdi.",
+                "reactionFailed": "Machoire d'acier ne parvient pas a ignorer la condition."
+            },
+            "jump-up": {
+                "conditionRemoved": "Saut acrobatique retire A terre.",
+                "reactionFailed": "Saut acrobatique ne parvient pas a retirer A terre."
+            },
             "alley-cat": {
                 "reroll": "Chat de gouttiere inverse le jet echoue."
             }

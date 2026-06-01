@@ -129,6 +129,7 @@ export interface DamageHit {
     hooks?: Partial<MeleeResolutionHooks>;
     sl?: number;
     isCharging?: boolean;
+    criticalHit?: boolean;
     fatePolicy?: ResourceSpendPolicy;
 }
 
@@ -255,6 +256,11 @@ export interface DamageModifierContext extends SlModifierContext {
     weaponDamage: number;
     attackerSuccessLevel: number;
     defenderSuccessLevel?: number;
+    criticalHit?: boolean;
+}
+
+export interface DamageMultiplierContext extends DamageModifierContext {
+    rawDamage: number;
 }
 
 export interface ApModifierContext extends DamageModifierContext {
@@ -289,6 +295,7 @@ export interface MeleeResolutionHooks {
     preRollModifiers(context: MeleeHookContext): ModifierSource[];
     slModifiers(context: SlModifierContext): number;
     damageModifiers(context: DamageModifierContext): number;
+    damageMultiplier(context: DamageMultiplierContext): number;
     apModifiers(context: ApModifierContext): number;
     onHitEffects(context: OnHitContext): OnHitEffectResult | CombatEvent[];
     critTriggerExtensions(context: CritResolverContext): boolean;

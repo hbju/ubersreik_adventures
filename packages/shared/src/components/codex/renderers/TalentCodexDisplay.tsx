@@ -1,9 +1,15 @@
 import React from 'react';
-import type { Talent } from '../../../types/wfrp.types';
+import type { Talent, TalentEffect } from '../../../types/wfrp.types';
 import styles from '../CodexViewer.module.css';
 
 interface TalentCodexDisplayProps {
   data: unknown;
+}
+
+function effectLabel(effect: TalentEffect): string {
+  return (effect.type ?? effect.kind ?? 'effect')
+    .replace(/_/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2');
 }
 
 export function TalentCodexDisplay({ data }: TalentCodexDisplayProps) {
@@ -40,7 +46,7 @@ export function TalentCodexDisplay({ data }: TalentCodexDisplayProps) {
           {talent.effects.map((eff, i) => (
             <div key={i} className={styles.effectItem}>
               <span className={styles.effectType}>
-                {eff.type.replace(/_/g, ' ')}
+                {effectLabel(eff)}
               </span>
               <span className={styles.effectValue}>
                 {typeof eff.value === 'number' && eff.value > 0 ? '+' : ''}

@@ -55,7 +55,7 @@ function mapTalents(talents: Talent[]): CodexEntry[] {
     tags: [
       t.name,
       ...(t.tests ?? []),
-      ...(t.effects?.map((e) => e.type) ?? []),
+      ...(t.effects?.map<string | undefined>((e) => e.type ?? e.kind).filter((tag): tag is string => Boolean(tag)) ?? []),
       ...(t.racial ?? []),
       ...Object.keys(t.careers ?? {}),
     ],

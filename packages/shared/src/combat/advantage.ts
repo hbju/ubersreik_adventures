@@ -171,7 +171,7 @@ export function spendAdvantage(
     params: SpendAdvantageParams = {},
     rng: Rng = mathRandomRng
 ): CombatEngineResult {
-    const cost = advantageCost(action, params);
+    const cost = advantageCost(action, params, state);
     const available = state.advantagePools[side];
     const reject = (reason: 'insufficientAdvantage' | 'missingActor' | 'missingTarget' | 'alreadyUsedThisTurn' | 'invalidAmount'): CombatEngineResult => ({
         state,
@@ -264,10 +264,13 @@ export function spendAdvantage(
     return { state: currentState, events };
 }
 
-function advantageCost(action: AdvantageSpendAction, params: SpendAdvantageParams): number {
+function advantageCost(action: AdvantageSpendAction, params: SpendAdvantageParams, state: CombatState): number {
     if (action === 'additionalEffort') return params.amount ?? 2;
     if (action === 'additionalAction') return 4;
-    if (action === 'fleeFromHarm') return 2;
+    if (action === 'fleeFromHarm') {
+        const actor = params.actorId ? state.combatants[params.actorId] : undefined;
+        return actor && talentRank(actor, 'relentless') > 0 ? 1 : 2;
+    }
     return 1;
 }
 
@@ -303,12 +306,16 @@ function computeOutnumberingSeed(state: CombatState): AdvantageSeedModifier | nu
         const enemyCount = outnumberingFor(combatant.id, state);
         if (enemyCount === 0) continue;
 
-        const friendlyCount = Object.values(state.combatants).filter(other => (
+        const friendlyCombatants = Object.values(state.combatants).filter(other => (
             isLiving(other)
             && other.side === combatant.side
             && (other.id === combatant.id || combatant.engagementIds.some(id => state.combatants[id]?.side !== combatant.side))
-        )).length;
-        const value = friendlyCount - enemyCount;
+        ));
+        const friendlyCount = friendlyCombatants.length;
+        const combatMasterCount = friendlyCount < enemyCount
+            ? friendlyCombatants.reduce((total, other) => total + talentRank(other, 'combat-master'), 0)
+            : 0;
+        const value = friendlyCount + combatMasterCount - enemyCount;
         if (value > bestBySide[combatant.side]) {
             bestBySide[combatant.side] = value;
         }
@@ -329,8 +336,12 @@ function dominantLivingSide(state: CombatState): SideId | null {
 function livingCounts(state: CombatState): AdvantagePools {
     return Object.values(state.combatants).filter(isLiving).reduce((counts, combatant) => ({
         ...counts,
-        [combatant.side]: counts[combatant.side] + 1,
+        [combatant.side]: counts[combatant.side] + 1 + (talentRank(combatant, 'drilled') > 0 ? 1 : 0),
     }), createAdvantagePools());
+}
+
+function talentRank(combatant: Combatant, talentId: string): number {
+    return combatant.character.talents?.[talentId] ?? 0;
 }
 
 function isLiving(combatant: Combatant): boolean {

@@ -1,6 +1,6 @@
 import { attackerModifiersFor } from '../utils/conditions';
 import { grappleOutsiderToHitModifier } from './actions';
-import { offHandPenaltyFor } from './talents';
+import { calledShotPenaltyFor, ignoresWeaponLengthPenalty, offHandPenaltyFor } from './talents';
 import type { Combatant, CombatantSize, CombatState, MeleeAttackAction, ModifierSource, ModifierTotal } from './types';
 import { reachOf } from './spatial';
 
@@ -56,8 +56,13 @@ export function collectMeleePreRollModifiers(
 
     const attackerReach = reachOf(attacker, state.weapons);
     const defenderReach = reachOf(defender, state.weapons);
-    if (attackerReach.rank < defenderReach.rank) {
+    if (attackerReach.rank < defenderReach.rank && !ignoresWeaponLengthPenalty(attacker)) {
         sources.push({ id: 'weaponLength:shorterAttacker', type: 'weaponLength', phase: 'preRollModifiers', value: -10, combatantId: attacker.id });
+    }
+
+    const calledShotPenalty = calledShotPenaltyFor({ state, action, attacker, defender });
+    if (calledShotPenalty !== 0) {
+        sources.push({ id: 'calledShot:location', type: 'manual', phase: 'preRollModifiers', value: calledShotPenalty, combatantId: attacker.id });
     }
 
     const sizeModifier = sizeDifferenceModifier(
@@ -94,20 +99,35 @@ export function collectMeleePreRollModifiers(
 export function outnumberingToHitModifier(state: CombatState, attacker: Combatant, defender: Combatant): number {
     const virtualState = withVirtualEngagement(state, attacker.id, defender.id);
     const groupIds = engagementGroupIds(virtualState, defender.id);
-    let attackingSideCount = 0;
-    let defendingSideCount = 0;
-
-    for (const id of groupIds) {
-        const combatant = virtualState.combatants[id];
-        if (!combatant || combatant.currentWounds <= 0) continue;
-        if (combatant.side === attacker.side) attackingSideCount += 1;
-        if (combatant.side === defender.side) defendingSideCount += 1;
-    }
+    const counts = effectiveOutnumberingCounts(virtualState, groupIds);
+    const attackingSideCount = counts[attacker.side];
+    const defendingSideCount = counts[defender.side];
 
     if (defendingSideCount <= 0) return 0;
     if (attackingSideCount >= defendingSideCount * 3) return 40;
     if (attackingSideCount >= defendingSideCount * 2) return 20;
     return 0;
+}
+
+function effectiveOutnumberingCounts(state: CombatState, groupIds: Set<string>): Record<Combatant['side'], number> {
+    const living = [...groupIds]
+        .map(id => state.combatants[id])
+        .filter((combatant): combatant is Combatant => !!combatant && combatant.currentWounds > 0);
+    const baseCounts = living.reduce((counts, combatant) => ({
+        ...counts,
+        [combatant.side]: counts[combatant.side] + 1,
+    }), { ally: 0, adversary: 0 });
+    const outnumberedSide = baseCounts.ally === baseCounts.adversary
+        ? undefined
+        : baseCounts.ally < baseCounts.adversary ? 'ally' : 'adversary';
+
+    return living.reduce((counts, combatant) => {
+        const combatMasterRanks = outnumberedSide === combatant.side ? combatant.character.talents?.['combat-master'] ?? 0 : 0;
+        return {
+            ...counts,
+            [combatant.side]: counts[combatant.side] + combatMasterRanks,
+        };
+    }, baseCounts);
 }
 
 export function sizeDifferenceModifier(attackerSize: CombatantSize, defenderSize: CombatantSize): number {

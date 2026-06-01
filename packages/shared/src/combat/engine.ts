@@ -10,7 +10,7 @@ import { applyBlackpowderTargetEffect, armourPointsAtLocation, createQualityHook
 import { tryInterceptDamageWithFate } from './resources';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
-import { createTalentHooks, getTalentInitiativeModifier } from './talents';
+import { createTalentHooks, getTalentInitiativeModifier, resolveCarefulStrikeHitLocation } from './talents';
 import type {
     CombatEngineResult,
     CombatEvent,
@@ -89,23 +89,7 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
     const hitLocation = hit.hitLocation ?? (hit.attackRoll ? getHitLocation(hit.attackRoll) : 'Unknown');
     const toughnessBonus = calculateCharacteristicBonus(defender.character.characteristics.t);
     const baseArmourPoints = getArmorPointsAtLocation(defender.character, hitLocation, state.armor);
-    const armourPoints = Math.max(0, baseArmourPoints + hooks.apModifiers({
-        state,
-        action: {
-            attackerId: attacker.id,
-            defenderId: defender.id,
-            attacker: { skillId: hit.skillId, targetNumber: 0 },
-            defender: { skillId: 'melee_basic', targetNumber: 0 },
-        },
-        attacker,
-        defender,
-        attackerRoll: rollFromDamageHit(hit),
-        hitLocation,
-        weaponDamage: hit.weaponDamage,
-        attackerSuccessLevel: hit.sl ?? hit.slDifference,
-        armourPoints: baseArmourPoints,
-    }));
-    const hookDamageBonus = hooks.damageModifiers({
+    const baseDamageContext = {
         state,
         action: {
             attackerId: attacker.id,
@@ -121,8 +105,16 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
         weaponDamage: hit.weaponDamage,
         attackerSuccessLevel: hit.sl ?? hit.slDifference,
         defenderSuccessLevel: hit.defenderSuccessLevel,
-    });
-    const rawDamage = hit.weaponDamage + hit.slDifference + hookDamageBonus;
+        criticalHit: hit.criticalHit,
+    };
+    const armourPoints = Math.max(0, baseArmourPoints + hooks.apModifiers({
+        ...baseDamageContext,
+        armourPoints: baseArmourPoints,
+    }));
+    const hookDamageBonus = hooks.damageModifiers(baseDamageContext);
+    const unmultipliedDamage = hit.weaponDamage + hit.slDifference + hookDamageBonus;
+    const damageMultiplier = hooks.damageMultiplier({ ...baseDamageContext, rawDamage: unmultipliedDamage });
+    const rawDamage = Math.max(0, Math.ceil(unmultipliedDamage * damageMultiplier));
     const mitigatedDamage = rawDamage - toughnessBonus - armourPoints;
     const minimumOneWoundApplied = !hit.disableMinimumWound && mitigatedDamage <= 0;
     let damageDealt = hit.disableMinimumWound ? Math.max(mitigatedDamage, 0) : Math.max(mitigatedDamage, 1);
@@ -311,7 +303,9 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         defenderRoll = autoDefenderRoll(action.defender);
         outcome = modifiedAttackerRoll.roundedSuccessLevel >= 0 ? 'attacker' : 'defender';
         slDifference = outcome === 'attacker' ? Math.max(0, modifiedAttackerRoll.roundedSuccessLevel) : 0;
-        hitLocation = outcome === 'attacker' && action.combatMode !== false ? getHitLocation(modifiedAttackerRoll.rollResult) : undefined;
+        hitLocation = outcome === 'attacker' && action.combatMode !== false
+            ? resolveCarefulStrikeHitLocation(attacker, modifiedAttackerRoll.rollResult, getHitLocation(modifiedAttackerRoll.rollResult), action.chosenHitLocation)
+            : undefined;
     } else {
         const defenderTargetModifier = defenderTargetModifierFromQualities({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll });
         defenderRoll = resolveOpposedRoll({
@@ -322,7 +316,9 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         defenderRoll = withSlModifier(defenderRoll, defenderSlModifier);
         outcome = determineOutcome(modifiedAttackerRoll, defenderRoll);
         slDifference = Math.abs(modifiedAttackerRoll.roundedSuccessLevel - defenderRoll.roundedSuccessLevel);
-        hitLocation = outcome === 'attacker' && action.combatMode !== false ? getHitLocation(modifiedAttackerRoll.rollResult) : undefined;
+        hitLocation = outcome === 'attacker' && action.combatMode !== false
+            ? resolveCarefulStrikeHitLocation(attacker, modifiedAttackerRoll.rollResult, getHitLocation(modifiedAttackerRoll.rollResult), action.chosenHitLocation)
+            : undefined;
     }
 
     events.push(
@@ -352,7 +348,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
     currentState = blackpowder.state;
     events.push(...blackpowder.events);
 
-    if (outcome === 'attacker' && shouldTriggerCritical(hooks, critContext({
+    const attackerCritContext = critContext({
         state: currentState,
         attacker,
         defender,
@@ -363,19 +359,10 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         roll: modifiedAttackerRoll.rollResult,
         targetNumber: modifiedAttackerRoll.targetNumber,
         rawWeaponDamage: modifiedAttackerRoll.weaponDamage ?? 0,
-    }), modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber)) {
-        const critical = resolveCritHook(hooks, critContext({
-            state: currentState,
-            attacker,
-            defender,
-            hitLocation: hitLocation ?? getHitLocation(modifiedAttackerRoll.rollResult),
-            trigger: 'roll',
-            combatantId: defender.id,
-            role: 'target',
-            roll: modifiedAttackerRoll.rollResult,
-            targetNumber: modifiedAttackerRoll.targetNumber,
-            rawWeaponDamage: modifiedAttackerRoll.weaponDamage ?? 0,
-        }));
+    });
+    const attackerCriticalHit = outcome === 'attacker' && shouldTriggerCritical(hooks, attackerCritContext, modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber);
+    if (attackerCriticalHit) {
+        const critical = resolveCritHook(hooks, attackerCritContext);
         currentState = critical.state;
         events.push(...critical.events);
     }
@@ -421,7 +408,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
     }
 
     if (outcome === 'attacker' && action.combatMode !== false) {
-        if (!hitLocation) hitLocation = getHitLocation(modifiedAttackerRoll.rollResult);
+        if (!hitLocation) hitLocation = resolveCarefulStrikeHitLocation(attacker, modifiedAttackerRoll.rollResult, getHitLocation(modifiedAttackerRoll.rollResult), action.chosenHitLocation);
         const weaponDamage = collapse.mode === 'autoHit'
             ? Math.max(parseMeleeWeaponDamage(modifiedAttackerRoll, attacker, currentState, defender.id, action.hand ?? 'primary'), modifiedAttackerRoll.targetNumber >= 100 ? 10 : Math.floor(modifiedAttackerRoll.targetNumber / 10))
             : parseMeleeWeaponDamage(modifiedAttackerRoll, attacker, currentState, defender.id, action.hand ?? 'primary');
@@ -439,6 +426,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
             hooks: action.hooks,
             sl: collapse.mode === 'autoHit' ? slDifference : modifiedAttackerRoll.roundedSuccessLevel,
             isCharging: action.isCharging,
+            criticalHit: attackerCriticalHit,
         }, rng);
 
         currentState = damageResult.state;
@@ -584,35 +572,42 @@ function normalizeHooks(hooks: Partial<MeleeResolutionHooks> | undefined, rng: R
         ],
         slModifiers: context => (qualityHooks.slModifiers?.(context) ?? 0) + (talentHooks.slModifiers?.(context) ?? 0) + (hooks?.slModifiers?.(context) ?? 0),
         damageModifiers: context => (qualityHooks.damageModifiers?.(context) ?? 0) + (talentHooks.damageModifiers?.(context) ?? 0) + (hooks?.damageModifiers?.(context) ?? 0),
+        damageMultiplier: context => (talentHooks.damageMultiplier?.(context) ?? 1) * (hooks?.damageMultiplier?.(context) ?? 1),
         apModifiers: context => (qualityHooks.apModifiers?.(context) ?? 0) + (hooks?.apModifiers?.(context) ?? 0),
-        onHitEffects: context => mergeHookResult(context.state, qualityHooks.onHitEffects?.(context), talentHooks.onHitEffects?.(context), hooks?.onHitEffects?.(context)),
+        onHitEffects: context => mergeHookResult(context, qualityHooks.onHitEffects, talentHooks.onHitEffects, hooks?.onHitEffects),
         critTriggerExtensions: context => !!qualityHooks.critTriggerExtensions?.(context) || !!hooks?.critTriggerExtensions?.(context),
         critIgnoreConditions: context => !!qualityHooks.critIgnoreConditions?.(context) || !!hooks?.critIgnoreConditions?.(context),
         critApModifiers: context => (qualityHooks.critApModifiers?.(context) ?? 0) + (hooks?.critApModifiers?.(context) ?? 0),
-        onCritEffects: context => mergeHookResult(context.state, qualityHooks.onCritEffects?.(context), talentHooks.onCritEffects?.(context), hooks?.onCritEffects?.(context)),
+        onCritEffects: context => mergeHookResult(context, qualityHooks.onCritEffects, talentHooks.onCritEffects, hooks?.onCritEffects),
         fumbleTriggers: context => !!qualityHooks.fumbleTriggers?.(context) || !!hooks?.fumbleTriggers?.(context),
         critResolver: hooks?.critResolver ?? ((context: CritResolverContext) => criticalRoll(context, { rng })),
     };
 }
 
-function mergeHookResult(
-    initialState: CombatState,
-    first: ReturnType<MeleeResolutionHooks['onHitEffects']> | undefined,
-    second: ReturnType<MeleeResolutionHooks['onHitEffects']> | undefined,
-    third?: ReturnType<MeleeResolutionHooks['onHitEffects']> | undefined
+function mergeHookResult<TContext extends { state: CombatState }>(
+    context: TContext,
+    ...hookFns: Array<((context: TContext) => ReturnType<MeleeResolutionHooks['onHitEffects']>) | undefined>
 ) {
     const normalize = (result: ReturnType<MeleeResolutionHooks['onHitEffects']> | undefined, state: CombatState) => {
         if (!result) return { state, events: [], suppressNormalDamage: false };
         if (Array.isArray(result)) return { state, events: result, suppressNormalDamage: false };
         return { state: result.state, events: result.events, suppressNormalDamage: !!result.suppressNormalDamage };
     };
-    const firstResult = normalize(first, initialState);
-    const secondResult = normalize(second, firstResult.state);
-    const thirdResult = normalize(third, secondResult.state);
+
+    let state = context.state;
+    const events: CombatEvent[] = [];
+    let suppressNormalDamage = false;
+    for (const hookFn of hookFns) {
+        const result = normalize(hookFn?.({ ...context, state }), state);
+        state = result.state;
+        events.push(...result.events);
+        suppressNormalDamage ||= result.suppressNormalDamage;
+    }
+
     return {
-        state: thirdResult.state,
-        events: [...firstResult.events, ...secondResult.events, ...thirdResult.events],
-        suppressNormalDamage: firstResult.suppressNormalDamage || secondResult.suppressNormalDamage || thirdResult.suppressNormalDamage,
+        state,
+        events,
+        suppressNormalDamage,
     };
 }
 

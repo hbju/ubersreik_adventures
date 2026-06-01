@@ -372,6 +372,20 @@
             "strike-to-injure": {
                 "chooseCriticalRoll": "Strike to Injure can choose between critical rolls."
             },
+            "strike-to-stun": {
+                "pummelStun": "Strike to Stun gives {{targetId}} 1 Stunned Condition."
+            },
+            "slayer": {
+                "largerTargetMultiplier": "Slayer multiplies damage against the larger target by {{amount}}."
+            },
+            "iron-jaw": {
+                "conditionRemoved": "Iron Jaw removes {{amount}} Stunned Condition(s).",
+                "reactionFailed": "Iron Jaw fails to shake off the condition."
+            },
+            "jump-up": {
+                "conditionRemoved": "Jump Up removes Prone.",
+                "reactionFailed": "Jump Up fails to remove Prone."
+            },
             "alley-cat": {
                 "reroll": "Alley Cat reverses the failed roll."
             }

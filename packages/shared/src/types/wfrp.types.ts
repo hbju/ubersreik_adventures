@@ -96,7 +96,116 @@ export interface Talent {
     effects?: TalentEffect[]
 }
 
-export interface TalentEffect {
+export type TalentEffectKind =
+    'testBonus' |
+    'slBonus' |
+    'damageBonus' |
+    'damageReduction' |
+    'initiativeBonus' |
+    'attributeBonus' |
+    'characteristicBonus' |
+    'woundsBonus' |
+    'encumbranceBonus' |
+    'reverseRollOnFail' |
+    'offHandPenaltyReduction' |
+    'hitLocationShift' |
+    'armourPointIgnore' |
+    'weaponLengthImmunity' |
+    'calledShotPenaltyWaiver' |
+    'weaponQualityGrant' |
+    'criticalRollChoice' |
+    'criticalDamageMultiplier' |
+    'outnumberingCount' |
+    'losingAdvantageCount' |
+    'advantageCostReduction' |
+    'conditionLossIgnore' |
+    'conditionGainReaction' |
+    'fearRating' |
+    'autoPassFirstTest' |
+    'damageCalculationModifier' |
+    'advantageBonus' |
+    'activation' |
+    'reaction' |
+    'ruleNote';
+
+export type TalentEffectTrigger =
+    'always' |
+    'preRoll' |
+    'postRoll' |
+    'onSuccess' |
+    'onHit' |
+    'onDefend' |
+    'onCrit' |
+    'onGainCondition' |
+    'onConditionLoss' |
+    'initiative' |
+    'economy' |
+    'reaction';
+
+export type TalentEffectWhen =
+    'always' |
+    'charging' |
+    'whenCharge' |
+    'whenDefending' |
+    'defendingWithShield' |
+    'weaponFast' |
+    'duringMelee' |
+    'duringCombatRounds' |
+    'surprise' |
+    'frenzied' |
+    'beatBlade' |
+    'disarming' |
+    'touchOpponent' |
+    'distracting' |
+    'besideAllyWithDrilled' |
+    'attackingWithTwoWeapons' |
+    'fastShot' |
+    'feint' |
+    'extraAttack' |
+    'combatInitiative' |
+    'infighting' |
+    'resistStunned' |
+    'prone' |
+    'aiming' |
+    'reload' |
+    'hatedGroup' |
+    'resistGroup' |
+    'usingBandages' |
+    'fleeing' |
+    'confinedSpace' |
+    'specifiedEnemy' |
+    'dailyFlagellation' |
+    'associatedThreat' |
+    'determiningDamage' |
+    'largerTargetCritical' |
+    'longExtremeRange' |
+    'running' |
+    'stepAside' |
+    'removeBroken' |
+    'strikingToStun' |
+    'opposedStrength' |
+    'blackpowderPanic' |
+    'duringWar';
+
+export interface TalentEffectCost {
+    resource: 'advantage' | 'move' | 'action' | 'reaction';
+    amount: number;
+}
+
+export interface NormalizedTalentEffect {
+    kind: TalentEffectKind;
+    type?: never;
+    value?: number | string;
+    appliesTo?: string[];
+    condition?: never;
+    when?: TalentEffectWhen | TalentEffectWhen[];
+    trigger?: TalentEffectTrigger;
+    cost?: TalentEffectCost;
+    params?: Record<string, number | string | boolean | string[] | number[] | undefined>;
+}
+
+export interface LegacyTalentEffect {
+    kind?: never;
     type:
     'SL_BONUS_ON_SUCCESS' |
     'SL_BONUS' |
@@ -104,6 +213,11 @@ export interface TalentEffect {
     'ENCUMBRANCE_BONUS' |
     'TEST_BONUS' |
     'DAMAGE_BONUS' |
+    'DAMAGE_REDUCTION' |
+    'DAMAGE_CALCULATION_MODIFIER' |
+    'DAMAGE_MULTIPLIER_ON_CRITICAL' |
+    'CRITICAL_DAMAGE_TABLE_ROLL_MODIFIER' |
+    'ARMOUR_PIERCING' |
     'INITIATIVE_BONUS' |
     'PASSIVE' |
     'REVERSE_ROLL_ON_FAIL' |
@@ -113,11 +227,15 @@ export interface TalentEffect {
     'ATTRIBUTE_BONUS' |
     'CHARACTERISTIC_BONUS' |
     'FEAR_RATING' |
+    'AUTO_PASS_FIRST_TEST' |
+    'ADVANTAGE_BONUS' |
     'BLEEDING_CONDITION_IGNORE';
     value: number | string; // number for fixed values, string for formulas like "TB" (Toughness Bonus)
     appliesTo?: string[]; // skill names, characteristic names, or descriptors like "ranged", "melee"
     condition?: string; // optional condition for when the effect applies
 }
+
+export type TalentEffect = NormalizedTalentEffect | LegacyTalentEffect;
 
 interface BaseItem {
     id: string;
