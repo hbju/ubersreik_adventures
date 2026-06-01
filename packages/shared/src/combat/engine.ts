@@ -465,13 +465,6 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
             const reversal = resolveReversalOnDefenderWin(currentState, defender.id, attacker.side);
             return { state: reversal.state, events: [...events, ...reversal.events] };
         }
-        if (action.generatesAdvantage !== false) {
-            const advantageResult = grantAdvantage(currentState, defender.side, 1, {
-                reason: 'opposedTestWin',
-                sourceCombatantId: defender.id,
-            });
-            return { state: advantageResult.state, events: [...events, ...advantageResult.events] };
-        }
     }
 
     if (outcome === 'attacker' && action.generatesAdvantage !== false && action.grantAdvantage !== false) {

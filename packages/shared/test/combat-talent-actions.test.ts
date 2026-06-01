@@ -123,7 +123,7 @@ describe('combat talent actions (3g-2)', () => {
         expect(high.state.advantagePools.adversary).toBe(1);
     });
 
-    it('transfers Advantage on Reversal and skips normal defender gain', () => {
+    it('transfers Advantage on Reversal when defending (no default defender pool gain)', () => {
         let state = createCombatState([
             combatant('defender', { talents: { reversal: 1 }, ws: 50 }),
             combatant('attacker', { side: 'adversary', ws: 30 }),

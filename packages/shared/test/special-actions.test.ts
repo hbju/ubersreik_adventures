@@ -97,6 +97,30 @@ describe('special actions and resources', () => {
         expect(defensiveBonusForSkill(nextTurn.combatants.guard, 'melee_basic', 1)).toBe(0);
     });
 
+    it('resolves First Aid to remove Bleeding with SL-based extra removal', () => {
+        const patient = combatant('patient', 'Patient');
+        const state = createState([
+            combatant('medic', 'Medic'),
+            createCombatantFromCharacter(patient.character, {
+                ...patient,
+                conditions: ['condition_bleeding'],
+            }),
+        ]);
+
+        const success = resolveCombatAction(state, {
+            kind: 'firstAid',
+            actorId: 'medic',
+            targetId: 'patient',
+            rollResult: 5,
+            targetNumber: 40,
+        });
+
+        expect(success.events.find(event => event.type === 'CombatActionResolved')).toMatchObject({
+            data: { kind: 'firstAid', outcome: 'success' },
+        });
+        expect(success.state.combatants.patient.conditions).not.toContain('condition_bleeding');
+    });
+
     it('resolves Sprint distance as Move + Run + SL', () => {
         const state = createState([combatant('runner', 'Runner', { movement: 4, athletics: 50 })]);
         const sprinted = resolveCombatAction(state, {
