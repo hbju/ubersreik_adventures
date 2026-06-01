@@ -259,7 +259,7 @@ describe('combat talent effects', () => {
 
     it('derives tied-test SL bonuses centrally from tests and rank', () => {
         const state = createCombatState([
-            combatant('attacker', 'Attacker', { ws: 50, talents: { 'battle-rage': 2 }, conditions: ['condition_frenzied'] }),
+            combatant('attacker', 'Attacker', { ws: 50, talents: { 'battle-rage': 2, 'berserk-charge': 1 }, conditions: ['condition_frenzied'] }),
             combatant('defender', 'Defender', { side: 'adversary', ws: 30 }),
         ], { talents: combatTalents });
 
@@ -269,10 +269,11 @@ describe('combat talent effects', () => {
             attacker: { skillId: 'melee_basic', targetNumber: 50, rollResult: 20, weaponDamage: 6 },
             defender: { skillId: 'melee_basic', targetNumber: 30, rollResult: 90 },
             grantAdvantage: false,
+            isCharging: true,
         });
 
         expect(result.events.find(event => event.type === 'AttackResolved')).toMatchObject({
-            data: { attackerRoll: { roundedSuccessLevel: 5 } },
+            data: { attackerRoll: { roundedSuccessLevel: 7 } },
         });
     });
 

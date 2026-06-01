@@ -97,7 +97,7 @@
         "name": "Berserk Charge",
         "description": "You hurl yourself at your enemies with reckless abandon, using the force of your charge to add weight to your strikes. When you Charge, you gain +1 Damage to all Melee attacks per level in this Talent.",
         "tests": [
-            "Melee on a Round when you Charge"
+            "Melee on a Round when Charging"
         ],
         "max_ranks": "s",
         "effects": [

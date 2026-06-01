@@ -262,18 +262,6 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         events.push(...advantageResult.events);
     }
 
-    if (action.isCharging) {
-        const wasEngaged = attacker.engagementIds.includes(defender.id);
-        if (!wasEngaged) {
-            const chargeAdvantage = grantAdvantage(currentState, attacker.side, 1, {
-                reason: 'condition',
-                sourceCombatantId: attacker.id,
-            });
-            currentState = chargeAdvantage.state;
-            events.push(...chargeAdvantage.events);
-        }
-    }
-
     currentState = stampAttackEngagement(currentState, attacker.id, defender.id);
 
     const attackerRoll = resolveOpposedRoll({

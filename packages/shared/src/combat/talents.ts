@@ -588,7 +588,6 @@ function talentSlModifier(context: SlModifierContext): number {
     const combatant = defenderPhase ? context.defender : context.attacker;
     const opponent = defenderPhase ? context.attacker : context.defender;
     const roll = defenderPhase ? context.defenderRoll! : context.attackerRoll;
-    if (roll.roundedSuccessLevel < 0) return 0;
 
     const effectBonus = applicableEffects(combatant, context.state, roll.skillId, {
         ...context,
@@ -600,6 +599,8 @@ function talentSlModifier(context: SlModifierContext): number {
     })
         .filter(effect => effect.kind === 'slBonus' && typeof effect.value === 'number' && effect.trigger !== 'onSuccess')
         .reduce((total, effect) => total + Number(effect.value) * talentRank(combatant, effect.talentId), 0);
+
+    if (roll.roundedSuccessLevel + effectBonus < 0) return effectBonus;
 
     return effectBonus + tiedTestSlBonus(combatant, context.state, roll.skillId, {
         ...context,
