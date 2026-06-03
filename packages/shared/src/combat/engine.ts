@@ -5,8 +5,8 @@ import { calculateCharacteristicBonus } from '../utils/skills';
 import { createAdvantagePools, grantAdvantage } from './advantage';
 import { defensiveBonusForSkill, resolveEffectiveWeapon } from './actions';
 import { criticalRoll } from './critical';
-import { collectMeleePreRollModifiers, resolveModifierTotal } from './modifiers';
-import { applyBlackpowderTargetEffect, armourPointsAtLocation, createQualityHooks, defenderTargetModifierFromQualities } from './qualities';
+import { collectMeleePreRollModifiers, collectRangedPreRollModifiers, resolveModifierTotal } from './modifiers';
+import { applyBlackpowderTargetEffect, armourPointsAtLocation, createQualityHooks, defenderTargetModifierFromQualities, hasQuality, qualityRating } from './qualities';
 import { tryInterceptDamageWithFate } from './resources';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
@@ -22,6 +22,9 @@ import type {
     MeleeResolutionHooks,
     MeleeAttackAction,
     OpposedRollInput,
+    RangedRangeBand,
+    RangedAttackAction,
+    RangedDefenceOption,
     ResolvedOpposedRoll,
     SideId,
 } from './types';
@@ -231,6 +234,213 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
 
     events.push(...onHitResult.events);
     return { state: currentStateAfterCrit, events };
+}
+
+export function rangeBandForDistance(distance: number, weaponRange: number): RangedRangeBand {
+    if (distance <= weaponRange / 10) return 'pointBlank';
+    if (distance <= weaponRange / 2) return 'short';
+    if (distance <= weaponRange) return 'normal';
+    if (distance <= weaponRange * 2) return 'long';
+    if (distance <= weaponRange * 3) return 'extreme';
+    return 'outOfRange';
+}
+
+export function rangedDefenceOptions(
+    target: Combatant,
+    context: { state: CombatState; attackerId: string; distance: number; rangeBand?: RangedRangeBand }
+): RangedDefenceOption[] {
+    const options: RangedDefenceOption[] = [];
+    const shield = equippedShield(target, context.state);
+    if ((shield ? qualityRating(shield, 'shield') ?? 0 : 0) >= 2) {
+        options.push(
+            { kind: 'shieldParry', skillId: 'melee_parry', modifier: 0, reason: 'shield2Plus' },
+            { kind: 'shieldBasic', skillId: 'melee_basic', modifier: -20, reason: 'shield2Plus' },
+        );
+    }
+    if (context.rangeBand === 'pointBlank') {
+        options.push({ kind: 'pointBlankDodge', skillId: 'dodge', modifier: 0, reason: 'pointBlank' });
+    }
+    if (target.engagementIds.includes(context.attackerId)) {
+        options.push({ kind: 'engagedMelee', skillId: 'melee_basic', modifier: 0, reason: 'shooterEngagedWithTarget' });
+    }
+    return options;
+}
+
+export function resolveRangedAttack(state: CombatState, action: RangedAttackAction, rng: Rng = mathRandomRng): CombatEngineResult {
+    const attacker = getCombatant(state, action.attackerId);
+    const defender = getCombatant(state, action.defenderId);
+    const hooks = normalizeHooks(action.hooks, rng);
+    const weapon = action.attacker.weaponId
+        ? state.weapons.find(candidate => candidate.id === action.attacker.weaponId)
+        : resolveEffectiveWeapon(attacker, state, defender.id);
+    if (!weapon) return rejectRangedShot(state, attacker.id, defender.id, 'missingWeapon');
+
+    if (attacker.engagementIds.length > 0 && !hasQuality(weapon, 'pistol')) {
+        return rejectRangedShot(state, attacker.id, defender.id, 'engagedWithoutPistol');
+    }
+
+    const distance = action.distance ?? Math.abs(attacker.position - defender.position);
+    const weaponRange = rangedWeaponRange(weapon);
+    const rangeBand = rangeBandForDistance(distance, weaponRange);
+    if (rangeBand === 'outOfRange') {
+        return rejectRangedShot(state, attacker.id, defender.id, 'outOfRange', rangeBand, distance);
+    }
+
+    const hookAction: MeleeAttackAction = {
+        ...action,
+        defender: action.defender ?? { skillId: 'none', targetNumber: 0 },
+    };
+    const hookContext = { state, action: hookAction, attacker, defender };
+    const preRollSources = [
+        ...collectRangedPreRollModifiers(state, action, attacker, defender, rangeBand),
+        ...hooks.preRollModifiers(hookContext),
+    ];
+    const modifierTotal = resolveModifierTotal(preRollSources);
+    const conditionModifiers = attackerModifiersFor(defender);
+    let currentState = state;
+    const events: CombatEvent[] = [{
+        type: 'MeleeHookPhase',
+        i18nKey: 'combat.ranged.hook.preRollModifiers',
+        data: { phase: 'preRollModifiers', sources: preRollSources.length, modifier: modifierTotal.total },
+    }];
+
+    if (conditionModifiers.advantageToAttacker > 0) {
+        const advantageResult = grantAdvantage(currentState, attacker.side, conditionModifiers.advantageToAttacker, {
+            reason: 'condition',
+            sourceCombatantId: defender.id,
+        });
+        currentState = advantageResult.state;
+        events.push(...advantageResult.events);
+    }
+
+    const attackerRoll = resolveOpposedRoll({
+        ...action.attacker,
+        weaponId: action.attacker.weaponId ?? weapon.id,
+        weaponDamageFormula: action.attacker.weaponDamageFormula ?? weapon.damage,
+        testModifier: (action.attacker.testModifier ?? 0) + modifierTotal.total,
+    }, attacker.character, currentState, rng);
+    const slModifier = hooks.slModifiers({ ...hookContext, state: currentState, attackerRoll });
+    const modifiedAttackerRoll = withSlModifier(attackerRoll, slModifier);
+    events.push({ type: 'MeleeHookPhase', i18nKey: 'combat.ranged.hook.slModifiers', data: { phase: 'slModifiers', modifier: slModifier } });
+
+    const defenceOptions = rangedDefenceOptions(defender, { state: currentState, attackerId: attacker.id, distance, rangeBand });
+    const selectedDefence = action.defenceKind
+        ? defenceOptions.find(option => option.kind === action.defenceKind)
+        : defenceOptions[0];
+    let defenderRoll: ResolvedOpposedRoll;
+    let outcome: 'attacker' | 'defender' | 'tie';
+    let slDifference: number;
+    const opposed = !!selectedDefence || !!action.defender;
+
+    if (opposed) {
+        const defenderInput = action.defender ?? {
+            skillId: selectedDefence?.skillId ?? 'dodge',
+            targetNumber: skillTarget(defender, selectedDefence?.skillId ?? 'dodge'),
+        };
+        defenderRoll = resolveOpposedRoll({
+            ...defenderInput,
+            testModifier: (defenderInput.testModifier ?? 0) + (selectedDefence?.modifier ?? 0) + defensiveBonusForSkill(defender, defenderInput.skillId, currentState.round),
+        }, defender.character, currentState, rng);
+        const defenderSlModifier = hooks.slModifiers({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll, defenderRoll });
+        defenderRoll = withSlModifier(defenderRoll, defenderSlModifier);
+        outcome = determineOutcome(modifiedAttackerRoll, defenderRoll);
+        slDifference = outcome === 'tie' ? 0 : Math.abs(modifiedAttackerRoll.roundedSuccessLevel - defenderRoll.roundedSuccessLevel);
+    } else {
+        defenderRoll = autoDefenderRoll({ skillId: 'none', targetNumber: 0 });
+        outcome = modifiedAttackerRoll.roundedSuccessLevel >= 0 ? 'attacker' : 'defender';
+        slDifference = outcome === 'attacker' ? Math.max(0, modifiedAttackerRoll.roundedSuccessLevel) : 0;
+    }
+
+    const hitLocation = outcome === 'attacker'
+        ? resolveRangedHitLocation(attacker, modifiedAttackerRoll.rollResult, action.chosenHitLocation)
+        : undefined;
+
+    events.push({
+        type: 'AttackResolved',
+        i18nKey: `combat.ranged.attack.${outcome}`,
+        data: {
+            attackerId: attacker.id,
+            defenderId: defender.id,
+            attackerName: attacker.name,
+            defenderName: defender.name,
+            attackerRoll: modifiedAttackerRoll,
+            defenderRoll,
+            outcome,
+            winnerId: outcome === 'attacker' ? attacker.id : outcome === 'defender' ? defender.id : undefined,
+            slDifference,
+            hitLocation,
+            modifiers: modifierTotal,
+            defenderCanCrit: false,
+            defenderAvoidsOnly: true,
+            collapsed: 'none',
+        },
+    });
+
+    if (isBlackpowderMisfire(weapon, modifiedAttackerRoll.rollResult)) {
+        const misfire = resolveBlackpowderMisfire(currentState, attacker, weapon, modifiedAttackerRoll, rng);
+        currentState = misfire.state;
+        events.push(...misfire.events);
+    } else if (isFumbleRoll(modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber) || hooks.fumbleTriggers({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll })) {
+        const fumble = resolveFumble(currentState, attacker.id, 'attacker', modifiedAttackerRoll, hooks, rng);
+        currentState = fumble.state;
+        events.push(...fumble.events);
+    }
+
+    const attackerCritContext = critContext({
+        state: currentState,
+        attacker,
+        defender,
+        hitLocation: hitLocation ?? getHitLocation(modifiedAttackerRoll.rollResult),
+        trigger: 'roll',
+        combatantId: defender.id,
+        role: 'target',
+        roll: modifiedAttackerRoll.rollResult,
+        targetNumber: modifiedAttackerRoll.targetNumber,
+        rawWeaponDamage: modifiedAttackerRoll.weaponDamage ?? parseRangedWeaponDamage(modifiedAttackerRoll, attacker, currentState),
+    });
+    const attackerCriticalHit = outcome === 'attacker' && shouldTriggerCritical(hooks, attackerCritContext, modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber);
+    if (attackerCriticalHit) {
+        const critical = resolveCritHook(hooks, attackerCritContext);
+        currentState = critical.state;
+        events.push(...critical.events);
+    }
+
+    if (outcome === 'attacker' && hitLocation) {
+        const weaponDamage = parseRangedWeaponDamage(modifiedAttackerRoll, attacker, currentState);
+        const damageResult = resolveDamage(currentState, {
+            attackerId: attacker.id,
+            defenderId: defender.id,
+            skillId: modifiedAttackerRoll.skillId,
+            slDifference,
+            weaponDamage,
+            attackRoll: modifiedAttackerRoll.rollResult,
+            defenderSuccessLevel: opposed ? defenderRoll.roundedSuccessLevel : undefined,
+            hitLocation,
+            usedTalents: modifiedAttackerRoll.usedTalents,
+            disableMinimumWound: weaponHasQuality(modifiedAttackerRoll, currentState, 'undamaging'),
+            hooks: action.hooks,
+            sl: modifiedAttackerRoll.roundedSuccessLevel,
+            criticalHit: attackerCriticalHit,
+        }, rng);
+        currentState = damageResult.state;
+        events.push(...damageResult.events);
+    }
+
+    currentState = replaceCombatant(currentState, {
+        ...getCombatant(currentState, attacker.id),
+        aimedRangedAttack: false,
+    });
+
+    if (outcome === 'attacker' && action.generatesAdvantage !== false && action.grantAdvantage !== false) {
+        const advantageResult = grantAdvantage(currentState, attacker.side, 1, {
+            reason: 'opposedTestWin',
+            sourceCombatantId: attacker.id,
+        });
+        events.push(...advantageResult.events);
+        return { state: advantageResult.state, events };
+    }
+
+    return { state: currentState, events };
 }
 
 export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction, rng: Rng = mathRandomRng): CombatEngineResult {
@@ -588,7 +798,7 @@ function normalizeHooks(hooks: Partial<MeleeResolutionHooks> | undefined, rng: R
         slModifiers: context => (qualityHooks.slModifiers?.(context) ?? 0) + (talentHooks.slModifiers?.(context) ?? 0) + (hooks?.slModifiers?.(context) ?? 0),
         damageModifiers: context => (qualityHooks.damageModifiers?.(context) ?? 0) + (talentHooks.damageModifiers?.(context) ?? 0) + (hooks?.damageModifiers?.(context) ?? 0),
         damageMultiplier: context => (talentHooks.damageMultiplier?.(context) ?? 1) * (hooks?.damageMultiplier?.(context) ?? 1),
-        apModifiers: context => (qualityHooks.apModifiers?.(context) ?? 0) + (hooks?.apModifiers?.(context) ?? 0),
+        apModifiers: context => (qualityHooks.apModifiers?.(context) ?? 0) + (talentHooks.apModifiers?.(context) ?? 0) + (hooks?.apModifiers?.(context) ?? 0),
         onHitEffects: context => mergeHookResult(context, qualityHooks.onHitEffects, talentHooks.onHitEffects, hooks?.onHitEffects),
         critTriggerExtensions: context => !!qualityHooks.critTriggerExtensions?.(context) || !!hooks?.critTriggerExtensions?.(context),
         critIgnoreConditions: context => !!qualityHooks.critIgnoreConditions?.(context) || !!hooks?.critIgnoreConditions?.(context),
@@ -697,6 +907,119 @@ function parseMeleeWeaponDamage(roll: ResolvedOpposedRoll, attacker: Combatant, 
     const withoutBonus = normalized.replace('SB', String(strengthBonus));
     const terms = withoutBonus.match(/[+-]?\d+/g) || [];
     return terms.reduce((total, term) => total + Number(term), 0);
+}
+
+function parseRangedWeaponDamage(roll: ResolvedOpposedRoll, attacker: Combatant, state: CombatState): number {
+    if (roll.weaponDamage !== undefined) return roll.weaponDamage + rangedTalentDamageBonus(roll, attacker);
+
+    const formula = roll.weaponDamageFormula
+        ?? (roll.weaponId ? state.weapons.find(weapon => weapon.id === roll.weaponId)?.damage : undefined)
+        ?? equippedWeapon(attacker, state)?.damage
+        ?? '+0';
+    const strengthBonus = calculateCharacteristicBonus(attacker.character.characteristics.s);
+    const normalized = String(formula).toUpperCase().replace(/\s+/g, '');
+    const withoutBonus = normalized.replace('SB', String(strengthBonus));
+    const terms = withoutBonus.match(/[+-]?\d+/g) || [];
+    const base = terms.reduce((total, term) => total + Number(term), 0);
+    return base + rangedTalentDamageBonus(roll, attacker);
+}
+
+function rangedTalentDamageBonus(roll: ResolvedOpposedRoll, attacker: Combatant): number {
+    const accurateShot = talentRank(attacker, 'accurate-shot');
+    if (accurateShot > 0 && roll.skillId.toLowerCase().startsWith('ranged')) return accurateShot;
+    return 0;
+}
+
+function resolveRangedHitLocation(attacker: Combatant, roll: number, chosenLocation?: string): string {
+    if (chosenLocation && talentRank(attacker, 'dead-eye-shot') > 0) return chosenLocation;
+    return getHitLocation(roll);
+}
+
+function rangedWeaponRange(weapon: { reach?: string }): number {
+    const parsed = Number(String(weapon.reach ?? '').match(/\d+/)?.[0] ?? 0);
+    return parsed > 0 ? parsed : 1;
+}
+
+function equippedShield(combatant: Combatant, state: CombatState) {
+    const weaponIds = [
+        ...Object.entries(combatant.character.inventory.equippedWeapons || {}).filter(([, equipped]) => equipped).map(([id]) => id),
+        combatant.weaponLoadout?.primaryWeaponId,
+        combatant.weaponLoadout?.secondaryWeaponId,
+    ].filter((id): id is string => !!id);
+    return weaponIds
+        .map(id => state.weapons.find(weapon => weapon.id === id))
+        .find(weapon => !!weapon && hasQuality(weapon, 'shield'));
+}
+
+function isBlackpowderMisfire(weapon: { qualities?: string[] }, roll: number): boolean {
+    return hasQuality(weapon, 'blackpowder') && isD100Double(roll) && roll % 2 === 0;
+}
+
+function resolveBlackpowderMisfire(
+    state: CombatState,
+    attacker: Combatant,
+    weapon: { id?: string },
+    roll: ResolvedOpposedRoll,
+    rng: Rng
+): CombatEngineResult {
+    const unitsDie = roll.rollResult % 10 || 10;
+    const weaponDamage = parseRangedWeaponDamage(roll, attacker, state);
+    const damage = resolveDamage(state, {
+        attackerId: attacker.id,
+        defenderId: attacker.id,
+        skillId: roll.skillId,
+        slDifference: unitsDie,
+        weaponDamage,
+        attackRoll: roll.rollResult,
+        hitLocation: 'Primary Arm',
+        disableMinimumWound: true,
+    }, rng);
+    return {
+        state: {
+            ...damage.state,
+            weapons: weapon.id ? damage.state.weapons.filter(candidate => candidate.id !== weapon.id) : damage.state.weapons,
+        },
+        events: [
+            {
+                type: 'RangedMisfire',
+                i18nKey: 'combat.ranged.misfire.blackpowder',
+                data: { attackerId: attacker.id, weaponId: weapon.id, roll: roll.rollResult, unitsDie, hitLocation: 'Primary Arm', weaponDestroyed: true },
+            },
+            ...damage.events,
+        ],
+    };
+}
+
+function rejectRangedShot(
+    state: CombatState,
+    attackerId: string,
+    defenderId: string | undefined,
+    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget',
+    rangeBand?: RangedRangeBand,
+    distance?: number
+): CombatEngineResult {
+    return {
+        state,
+        events: [{
+            type: 'RangedShotRejected',
+            i18nKey: `combat.ranged.rejected.${reason}`,
+            data: { attackerId, defenderId, reason, rangeBand, distance },
+        }],
+    };
+}
+
+function skillTarget(combatant: Combatant, skillId: string): number {
+    const skill = combatant.character.skills.find(candidate => candidate.id === skillId || candidate.name.toLowerCase() === skillId.toLowerCase());
+    if (skill) {
+        const characteristic = combatant.character.characteristics[skill.characteristic as keyof typeof combatant.character.characteristics];
+        return characteristicValue(characteristic) + skill.advances + skill.talents + skill.modifier;
+    }
+    return characteristicValue(combatant.character.characteristics.ag);
+}
+
+function talentRank(combatant: Combatant, talentId: string): number {
+    const compact = talentId.toLowerCase().replace(/[\s_]+/g, '-');
+    return combatant.character.talents?.[talentId] ?? combatant.character.talents?.[compact] ?? 0;
 }
 
 function weaponHasQuality(roll: ResolvedOpposedRoll, state: CombatState, quality: string): boolean {

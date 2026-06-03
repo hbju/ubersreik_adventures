@@ -11,6 +11,7 @@ import type {
     CombatEvent,
     CombatState,
     Combatant,
+    ApModifierContext,
     DamageModifierContext,
     DamageMultiplierContext,
     MeleeHookContext,
@@ -358,6 +359,7 @@ export function createTalentHooks(): Partial<MeleeResolutionHooks> {
         slModifiers: talentSlModifier,
         damageModifiers: talentDamageModifier,
         damageMultiplier: talentDamageMultiplier,
+        apModifiers: talentApModifier,
         onHitEffects: context => talentOnHitEffects(context),
         onCritEffects: context => talentCritEffects(context),
     };
@@ -646,6 +648,12 @@ function talentDamageModifier(context: DamageModifierContext): number {
         : 0;
 
     return damageBonus + slayerStrengthBonus - damageReduction;
+}
+
+function talentApModifier(context: ApModifierContext): number {
+    if (!context.action.attacker.skillId.toLowerCase().startsWith('ranged')) return 0;
+    const rank = talentRank(context.attacker, 'sure-shot');
+    return rank > 0 ? -Math.min(context.armourPoints, rank) : 0;
 }
 
 function talentDamageMultiplier(context: DamageMultiplierContext): number {

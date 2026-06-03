@@ -27,6 +27,7 @@ export const COMBAT_ACTION_DEFINITIONS: Record<CombatActionKind, CombatActionDef
     move: { kind: 'move', cost: 'move', generatesAdvantage: false },
     run: { kind: 'run', cost: 'action', generatesAdvantage: false },
     charge: { kind: 'charge', cost: 'action', generatesAdvantage: true },
+    aim: { kind: 'aim', cost: 'action', generatesAdvantage: false },
     assess: { kind: 'assess', cost: 'action', generatesAdvantage: false },
     defend: { kind: 'defend', cost: 'action', generatesAdvantage: false },
     sprint: { kind: 'sprint', cost: 'action', generatesAdvantage: false },
@@ -71,6 +72,8 @@ export function resolveCombatAction(
             return resolveSprint(state, request, rng);
         case 'firstAid':
             return resolveFirstAid(state, request, rng);
+        case 'aim':
+            return resolveAim(state, request);
         case 'infighting':
             return resolveInfighting(state, request, rng);
         case 'disengageDodge':
@@ -218,6 +221,17 @@ function resolveDefend(state: CombatState, request: CombatActionRequest): Combat
     return {
         state: updated,
         events: [actionResolved('defend', actor.id, 'applied', false)],
+    };
+}
+
+function resolveAim(state: CombatState, request: CombatActionRequest): CombatEngineResult {
+    const actor = getCombatant(state, request.actorId);
+    if (actor.budget.actions <= 0) return rejectAction(state, 'aim', request.actorId, 'noAction');
+    const afterSpend = spendAction(state, actor.id);
+    const spentActor = getCombatant(afterSpend, actor.id);
+    return {
+        state: replaceCombatant(afterSpend, { ...spentActor, aimedRangedAttack: true }),
+        events: [actionResolved('aim', actor.id, 'applied', false)],
     };
 }
 

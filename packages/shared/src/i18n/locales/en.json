@@ -211,6 +211,26 @@
                 "apModifiers": "AP modifiers total {{modifier}}."
             }
         },
+        "ranged": {
+            "attack": {
+                "attacker": "Ranged attack hits.",
+                "defender": "Ranged attack is avoided.",
+                "tie": "Ranged attack is avoided."
+            },
+            "hook": {
+                "preRollModifiers": "Ranged pre-roll modifiers applied.",
+                "slModifiers": "Ranged SL modifiers applied."
+            },
+            "rejected": {
+                "engagedWithoutPistol": "Cannot fire while Engaged without a Pistol weapon.",
+                "outOfRange": "Target is out of range.",
+                "missingWeapon": "No ranged weapon is available.",
+                "missingTarget": "No target selected."
+            },
+            "misfire": {
+                "blackpowder": "Blackpowder misfire."
+            }
+        },
         "fumble": {
             "roll": "{{combatantId}} fumbles with {{fumbleRoll}}.",
             "effect": {

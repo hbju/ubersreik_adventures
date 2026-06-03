@@ -138,6 +138,26 @@
                 "apModifiers": "Les modificateurs de PA totalisent {{modifier}}."
             }
         },
+        "ranged": {
+            "attack": {
+                "attacker": "L'attaque a distance touche.",
+                "defender": "L'attaque a distance est evitee.",
+                "tie": "L'attaque a distance est evitee."
+            },
+            "hook": {
+                "preRollModifiers": "Modificateurs de tir appliques.",
+                "slModifiers": "Modificateurs de DR de tir appliques."
+            },
+            "rejected": {
+                "engagedWithoutPistol": "Impossible de tirer en etant engage sans arme Pistol.",
+                "outOfRange": "La cible est hors de portee.",
+                "missingWeapon": "Aucune arme de tir disponible.",
+                "missingTarget": "Aucune cible selectionnee."
+            },
+            "misfire": {
+                "blackpowder": "Incident de tir blackpowder."
+            }
+        },
         "fumble": {
             "roll": "{{combatantId}} maladresse avec {{fumbleRoll}}.",
             "effect": {

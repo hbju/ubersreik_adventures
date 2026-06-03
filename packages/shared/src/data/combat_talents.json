@@ -539,7 +539,16 @@
         "description": "You can reload blackpowder weapons with practiced ease. Add SL equal to your level in Gunner to any Extended Test to reload a Blackpowder weapon.",
         "tests": [],
         "max_ranks": "dex",
-        "effects": []
+        "effects": [
+            {
+                "kind": "slBonus",
+                "value": 1,
+                "appliesTo": [
+                    "blackpowder"
+                ],
+                "when": "reload"
+            }
+        ]
     },
     {
         "id": "hatred",

@@ -12,6 +12,7 @@ import type {
     MeleeResolutionHooks,
     OnHitContext,
     QualityActivation,
+    ModifierSource,
     SlModifierContext,
 } from './types';
 
@@ -43,6 +44,7 @@ export const qualityEffectRegistry: Record<string, QualityEffectDefinition[]> = 
     distract: [{ qualityId: 'distract', phase: 'onHitEffects' }],
     trip: [{ qualityId: 'trip', phase: 'onHitEffects', activation: activation('onHit', 'trip', 2, 'never') }],
     blackpowder: [{ qualityId: 'blackpowder', phase: 'onHitEffects' }],
+    accurate: [{ qualityId: 'accurate', phase: 'preRollModifiers' }],
     pistol: [{ qualityId: 'pistol', phase: 'preRollModifiers', deferred: true }],
     impale: [{ qualityId: 'impale', phase: 'critTriggerExtensions' }],
     impenetrable: [{ qualityId: 'impenetrable', phase: 'critIgnoreConditions' }],
@@ -58,6 +60,7 @@ export const qualityEffectRegistry: Record<string, QualityEffectDefinition[]> = 
 
 export function createQualityHooks(): Partial<MeleeResolutionHooks> {
     return {
+        preRollModifiers: qualityPreRollModifiers,
         slModifiers: qualitySlModifier,
         damageModifiers: qualityDamageModifier,
         apModifiers: qualityApModifier,
@@ -68,6 +71,18 @@ export function createQualityHooks(): Partial<MeleeResolutionHooks> {
         onCritEffects: qualityOnCritEffects,
         fumbleTriggers: qualityFumbleTriggers,
     };
+}
+
+function qualityPreRollModifiers(context: { state: CombatState; attacker: Combatant; action: { attacker: { weaponId?: string; skillId: string } } }): ModifierSource[] {
+    const weapon = weaponFromRollOrEquipped(context.state, context.attacker, context.action.attacker.weaponId);
+    if (!weapon || !hasQuality(weapon, 'accurate') || !context.action.attacker.skillId.toLowerCase().startsWith('ranged')) return [];
+    return [{
+        id: 'quality:accurate',
+        type: 'quality',
+        phase: 'preRollModifiers',
+        value: 10,
+        combatantId: context.attacker.id,
+    }];
 }
 
 export function applyBlackpowderTargetEffect(context: SlModifierContext): CombatEngineResult {

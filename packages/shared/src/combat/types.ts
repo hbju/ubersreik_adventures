@@ -41,6 +41,7 @@ export interface Combatant {
     resources: CombatantResources;
     defensiveBonus?: DefensiveBonusState;
     weaponLoadout?: WeaponLoadout;
+    aimedRangedAttack?: boolean;
     initiativeOverride?: boolean;
     removedFromEncounter?: boolean;
     cannotGenerateAdvantageUntilRound?: number;
@@ -171,6 +172,7 @@ export type CombatActionKind =
     | 'move'
     | 'run'
     | 'charge'
+    | 'aim'
     | 'assess'
     | 'defend'
     | 'sprint'
@@ -217,6 +219,7 @@ export interface CombatActionRequest {
     defenderTargetNumber?: number;
     defenderSkillId?: string;
     reversalActive?: boolean;
+    ranged?: RangedAttackRequest;
 }
 
 export interface CombatEngineResult {
@@ -241,6 +244,46 @@ export type ModifierSourceType =
     | 'talent'
     | 'quality'
     | 'manual';
+
+export type RangedRangeBand = 'pointBlank' | 'short' | 'normal' | 'long' | 'extreme' | 'outOfRange';
+export type CoverLevel = 'none' | 'soft' | 'medium' | 'hard';
+export type RangedDefenceKind = 'shieldParry' | 'shieldBasic' | 'pointBlankDodge' | 'engagedMelee';
+
+export interface RangedDefenceOption {
+    kind: RangedDefenceKind;
+    skillId: string;
+    modifier: number;
+    reason: 'shield2Plus' | 'pointBlank' | 'shooterEngagedWithTarget';
+}
+
+export interface RangedAttackAction {
+    attackerId: string;
+    defenderId: string;
+    attacker: OpposedRollInput;
+    defender?: OpposedRollInput;
+    distance?: number;
+    cover?: CoverLevel;
+    shootingWhileMoving?: boolean;
+    darkness?: boolean;
+    aimed?: boolean;
+    chosenHitLocation?: string;
+    attackerSize?: CombatantSize;
+    defenderSize?: CombatantSize;
+    defenceKind?: RangedDefenceKind;
+    generatesAdvantage?: boolean;
+    grantAdvantage?: boolean;
+    hooks?: Partial<MeleeResolutionHooks>;
+}
+
+export interface RangedAttackRequest extends Partial<Omit<RangedAttackAction, 'attackerId' | 'defenderId' | 'attacker'>> {
+    defenderId: string;
+    skillId?: string;
+    targetNumber?: number;
+    rollResult?: number;
+    weaponId?: string;
+    weaponDamage?: number;
+    weaponDamageFormula?: string;
+}
 
 export interface ModifierSource {
     id: string;
@@ -503,6 +546,23 @@ export type CombatActionRejectedEvent = CombatEventBase<'CombatActionRejected', 
     reason: 'noAction' | 'noMove' | 'missingTarget' | 'missingSkill' | 'notEngaged' | 'notGrappling' | 'invalidLoadout';
 }>;
 
+export type RangedShotRejectedEvent = CombatEventBase<'RangedShotRejected', {
+    attackerId: string;
+    defenderId?: string;
+    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget';
+    rangeBand?: RangedRangeBand;
+    distance?: number;
+}>;
+
+export type RangedMisfireEvent = CombatEventBase<'RangedMisfire', {
+    attackerId: string;
+    weaponId?: string;
+    roll: number;
+    unitsDie: number;
+    hitLocation: 'Primary Arm';
+    weaponDestroyed: true;
+}>;
+
 export type BlowToBackAttackEvent = CombatEventBase<'BlowToBackAttackEvent', {
     attackerId: string;
     defenderId: string;
@@ -679,6 +739,8 @@ export type CombatEvent =
     | FateInterceptionEvent
     | CombatActionResolvedEvent
     | CombatActionRejectedEvent
+    | RangedShotRejectedEvent
+    | RangedMisfireEvent
     | BlowToBackAttackEvent
     | CombatantRemovedFromEncounterEvent
     | TalentEffectAppliedEvent

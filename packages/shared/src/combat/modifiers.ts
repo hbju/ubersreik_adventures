@@ -1,7 +1,7 @@
 import { attackerModifiersFor } from '../utils/conditions';
 import { grappleOutsiderToHitModifier } from './actions';
 import { calledShotPenaltyFor, ignoresWeaponLengthPenalty, offHandPenaltyFor } from './talents';
-import type { Combatant, CombatantSize, CombatState, MeleeAttackAction, ModifierSource, ModifierTotal } from './types';
+import type { Combatant, CombatantSize, CombatState, CoverLevel, MeleeAttackAction, ModifierSource, ModifierTotal, RangedRangeBand, RangedAttackAction } from './types';
 import { reachOf } from './spatial';
 
 const SIZE_RANK: Record<CombatantSize, number> = {
@@ -94,6 +94,81 @@ export function collectMeleePreRollModifiers(
     );
 
     return sources;
+}
+
+export function collectRangedPreRollModifiers(
+    state: CombatState,
+    action: RangedAttackAction,
+    attacker: Combatant,
+    defender: Combatant,
+    rangeBand: Exclude<RangedRangeBand, 'outOfRange'>
+): ModifierSource[] {
+    const sources: ModifierSource[] = [];
+    const conditionModifiers = attackerModifiersFor(defender);
+
+    for (const source of conditionModifiers.sources.filter(source => source.kind === 'toHit')) {
+        sources.push({
+            id: `condition:${source.conditionId}`,
+            type: 'condition',
+            phase: 'preRollModifiers',
+            value: source.value,
+            combatantId: defender.id,
+        });
+    }
+
+    const rangeModifier = rangeBandModifier(rangeBand, attacker);
+    if (rangeModifier !== 0) {
+        sources.push({ id: `range:${rangeBand}`, type: 'range', phase: 'preRollModifiers', value: rangeModifier, combatantId: attacker.id });
+    }
+
+    const sizeModifier = sizeDifferenceModifier(
+        action.attackerSize ?? combatantSize(attacker),
+        action.defenderSize ?? combatantSize(defender)
+    );
+    if (sizeModifier !== 0 && !(sizeModifier < 0 && hasRangedTalent(attacker, 'sharpshooter'))) {
+        sources.push({ id: 'size:difference', type: 'size', phase: 'preRollModifiers', value: sizeModifier, combatantId: defender.id });
+    }
+
+    const coverModifier = coverPenalty(action.cover ?? 'none');
+    if (coverModifier !== 0) {
+        sources.push({ id: `cover:${action.cover}`, type: 'cover', phase: 'preRollModifiers', value: coverModifier, combatantId: defender.id });
+    }
+
+    if (action.shootingWhileMoving) {
+        sources.push({ id: 'movement:shootingWhileMoving', type: 'manual', phase: 'preRollModifiers', value: -10, combatantId: attacker.id });
+    }
+
+    if (action.darkness) {
+        sources.push({ id: 'darkness', type: 'manual', phase: 'preRollModifiers', value: -20, combatantId: attacker.id });
+    }
+
+    if (action.aimed || attacker.aimedRangedAttack) {
+        sources.push({ id: 'aim:previousAction', type: 'manual', phase: 'preRollModifiers', value: 20, combatantId: attacker.id });
+    }
+
+    return sources;
+}
+
+function rangeBandModifier(rangeBand: Exclude<RangedRangeBand, 'outOfRange'>, attacker: Combatant): number {
+    if (rangeBand === 'pointBlank') return 40;
+    if (rangeBand === 'short') return 20;
+    if (rangeBand === 'long' && hasRangedTalent(attacker, 'sniper')) return 0;
+    if (rangeBand === 'extreme' && hasRangedTalent(attacker, 'sniper')) return -15;
+    if (rangeBand === 'long') return -10;
+    if (rangeBand === 'extreme') return -30;
+    return 0;
+}
+
+function coverPenalty(cover: CoverLevel): number {
+    if (cover === 'soft') return -10;
+    if (cover === 'medium') return -20;
+    if (cover === 'hard') return -30;
+    return 0;
+}
+
+function hasRangedTalent(combatant: Combatant, talentId: string): boolean {
+    const normalized = talentId.toLowerCase();
+    return (combatant.character.talents?.[talentId] ?? combatant.character.talents?.[normalized] ?? 0) > 0;
 }
 
 export function outnumberingToHitModifier(state: CombatState, attacker: Combatant, defender: Combatant): number {
