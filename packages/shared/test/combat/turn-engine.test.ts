@@ -272,7 +272,7 @@ function oneVsOne(options: { advantage?: { ally?: number; adversary?: number } }
     return createCombatState([
         combatant('ally', 'ally', ['sword'], 0),
         combatant('enemy', 'adversary', ['sword'], 2, { wounds: 3 }),
-    ], { weapons: [sword], advantagePools: options.advantage });
+    ], { weapons: [sword], advantagePools: { ally: options.advantage?.ally ?? 0, adversary: options.advantage?.adversary ?? 0 } } );
 }
 
 function melee(actorId: string, defenderId: string, rollResult: number): CombatDecision {
