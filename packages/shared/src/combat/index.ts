@@ -13,5 +13,6 @@ export * from './rng';
 export * from './spatial';
 export * from './talents';
 export * from './talent-actions';
+export * from './turn-engine';
 export * from './dual-wield';
 export * from './types';

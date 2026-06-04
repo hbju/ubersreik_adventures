@@ -172,6 +172,19 @@
                 "lodged": "Une munition Impale reste logee dans {{defenderId}}."
             }
         },
+        "turn": {
+            "started": "Le combat commence.",
+            "ended": "Le combat se termine.",
+            "roundStarted": "Le round {{round}} commence.",
+            "roundEnded": "Le round {{round}} se termine.",
+            "roundSequenceResolved": "La sequence de fin de round est resolue.",
+            "startedActor": "{{combatantId}} commence son tour.",
+            "endedActor": "{{combatantId}} termine son tour.",
+            "rejected": {
+                "wrongActor": "Ce n'est pas le tour de {{actorId}}.",
+                "illegal": "{{actorId}} ne peut pas prendre cette decision."
+            }
+        },
         "reload": {
             "progress": "{{combatantId}} progresse dans le rechargement de {{weaponId}}.",
             "completed": "{{combatantId}} recharge {{weaponId}}."

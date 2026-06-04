@@ -245,6 +245,19 @@
                 "lodged": "Impaling ammunition lodges in {{defenderId}}."
             }
         },
+        "turn": {
+            "started": "Combat starts.",
+            "ended": "Combat ends.",
+            "roundStarted": "Round {{round}} starts.",
+            "roundEnded": "Round {{round}} ends.",
+            "roundSequenceResolved": "End-of-round sequence resolves.",
+            "startedActor": "{{combatantId}} starts their turn.",
+            "endedActor": "{{combatantId}} ends their turn.",
+            "rejected": {
+                "wrongActor": "It is not {{actorId}}'s turn.",
+                "illegal": "{{actorId}} cannot take that decision."
+            }
+        },
         "reload": {
             "progress": "{{combatantId}} makes reload progress on {{weaponId}}.",
             "completed": "{{combatantId}} reloads {{weaponId}}."

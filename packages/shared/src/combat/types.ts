@@ -1,3 +1,4 @@
+import { ConditionEffectEvent } from '..';
 import type { Armor, Character, ConditionInstance, Status, Talent, Weapon } from '../types/wfrp.types';
 
 export type SideId = 'ally' | 'adversary';
@@ -814,6 +815,7 @@ export type CombatEvent =
     | AttackResolvedEvent
     | DamageDealtEvent
     | ConditionAppliedEvent
+    | ConditionEffectEvent
     | CritRolledEvent
     | CriticalWoundResolvedEvent
     | CriticalEffectAppliedEvent

@@ -72,7 +72,8 @@ function interruptedCombatantIds(events: CombatEvent[]): Set<string> {
         } else if (event.type === 'TalentEffectApplied' && event.data.effect === 'push' && event.data.targetId) {
             ids.add(event.data.targetId);
         } else if (event.type === 'AmmoStateChanged' && event.data.reason === 'interrupted') {
-            ids.delete(event.data.combatantId);
+            const combatantId = event.data.combatantId;
+            if (typeof combatantId === 'string') ids.delete(combatantId);
         }
     }
 
