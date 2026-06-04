@@ -292,8 +292,42 @@ export interface RangedAttackAction {
     generatesAdvantage?: boolean;
     grantAdvantage?: boolean;
     finiteAmmo?: boolean;
+    damageModifier?: number;
+    weaponRangeOverride?: number;
+    skipAmmoConsumption?: boolean;
     hooks?: Partial<MeleeResolutionHooks>;
 }
+
+export type IntoMeleeMode = 'specific' | 'groupFriendlyFire';
+
+export interface RangedGroupAttackAction extends Omit<RangedAttackAction, 'defenderId'> {
+    candidateTargetIds: string[];
+}
+
+export interface RangedIntoMeleeAttackAction extends RangedAttackAction {
+    enabled?: boolean;
+    mode?: IntoMeleeMode;
+}
+
+export interface RangedAreaAttackAction extends RangedAttackAction {
+    targetPoint?: number;
+}
+
+export type RangedMultiTargetResolvedEvent = CombatEventBase<'RangedMultiTargetResolved', {
+    attackerId: string;
+    primaryTargetId?: string;
+    targetIds: string[];
+    mode: 'group' | 'intoMelee' | 'blast' | 'spread' | 'thrown';
+    rangeBand?: RangedRangeBand;
+    rating?: number;
+}>;
+
+export type LodgedAmmunitionRecordedEvent = CombatEventBase<'LodgedAmmunitionRecorded', {
+    attackerId: string;
+    defenderId: string;
+    weaponId?: string;
+    removalTest: 'healChallenging';
+}>;
 
 export interface RangedAttackRequest extends Partial<Omit<RangedAttackAction, 'attackerId' | 'defenderId' | 'attacker'>> {
     defenderId: string;
@@ -810,6 +844,8 @@ export type CombatEvent =
     | RangedMisfireEvent
     | AmmoStateChangedEvent
     | ReloadTestResolvedEvent
+    | RangedMultiTargetResolvedEvent
+    | LodgedAmmunitionRecordedEvent
     | BlowToBackAttackEvent
     | CombatantRemovedFromEncounterEvent
     | TalentEffectAppliedEvent

@@ -146,7 +146,20 @@ export function collectRangedPreRollModifiers(
         sources.push({ id: 'aim:previousAction', type: 'manual', phase: 'preRollModifiers', value: 20, combatantId: attacker.id });
     }
 
+    const groupCount = (action as RangedAttackAction & { groupTargetCount?: number }).groupTargetCount;
+    const groupModifier = groupCount ? groupShotModifier(groupCount) : 0;
+    if (groupModifier !== 0) {
+        sources.push({ id: `group:targets:${groupCount}`, type: 'group', phase: 'preRollModifiers', value: groupModifier, combatantId: attacker.id });
+    }
+
     return sources;
+}
+
+export function groupShotModifier(count: number): number {
+    if (count >= 13) return 60;
+    if (count >= 7) return 40;
+    if (count >= 3) return 20;
+    return 0;
 }
 
 function rangeBandModifier(rangeBand: Exclude<RangedRangeBand, 'outOfRange'>, attacker: Combatant): number {

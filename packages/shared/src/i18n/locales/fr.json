@@ -159,6 +159,16 @@
             },
             "misfire": {
                 "blackpowder": "Incident de tir blackpowder."
+            },
+            "multi": {
+                "group": "Un tir dans un groupe touche une cible.",
+                "intoMelee": "Un tir dans une melee est resolu.",
+                "blast": "Une attaque Blast affecte les creatures proches.",
+                "spread": "Une attaque Spread affecte ses cibles.",
+                "thrown": "Une attaque lancee est resolue."
+            },
+            "impale": {
+                "lodged": "Une munition Impale reste logee dans {{defenderId}}."
             }
         },
         "reload": {

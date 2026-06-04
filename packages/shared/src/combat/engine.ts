@@ -25,8 +25,11 @@ import type {
     MeleeAttackAction,
     OpposedRollInput,
     RangedRangeBand,
+    RangedAreaAttackAction,
     RangedAttackAction,
     RangedDefenceOption,
+    RangedGroupAttackAction,
+    RangedIntoMeleeAttackAction,
     ReloadAction,
     ReloadResolutionHooks,
     ResolvedOpposedRoll,
@@ -288,7 +291,7 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
     }
 
     const distance = action.distance ?? Math.abs(attacker.position - defender.position);
-    const weaponRange = rangedWeaponRange(weapon);
+    const weaponRange = action.weaponRangeOverride ?? rangedWeaponRange(weapon);
     const rangeBand = rangeBandForDistance(distance, weaponRange);
     if (rangeBand === 'outOfRange') {
         return rejectRangedShot(state, attacker.id, defender.id, 'outOfRange', rangeBand, distance);
@@ -389,9 +392,11 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
         },
     });
 
-    const consumedShot = consumeRangedShot(currentState, attacker.id, weapon, action.finiteAmmo);
-    currentState = consumedShot.state;
-    events.push(...consumedShot.events);
+    if (!action.skipAmmoConsumption) {
+        const consumedShot = consumeRangedShot(currentState, attacker.id, weapon, action.finiteAmmo);
+        currentState = consumedShot.state;
+        events.push(...consumedShot.events);
+    }
 
     if (isBlackpowderMisfire(weapon, modifiedAttackerRoll.rollResult)) {
         const misfire = resolveBlackpowderMisfire(currentState, attacker, weapon, modifiedAttackerRoll, rng);
@@ -420,10 +425,22 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
         const critical = resolveCritHook(hooks, attackerCritContext);
         currentState = critical.state;
         events.push(...critical.events);
+        if (hasQuality(weapon, 'impale')) {
+            events.push({
+                type: 'LodgedAmmunitionRecorded',
+                i18nKey: 'combat.ranged.impale.lodged',
+                data: {
+                    attackerId: attacker.id,
+                    defenderId: defender.id,
+                    weaponId: weapon.id,
+                    removalTest: 'healChallenging',
+                },
+            });
+        }
     }
 
     if (outcome === 'attacker' && hitLocation) {
-        const weaponDamage = parseRangedWeaponDamage(modifiedAttackerRoll, attacker, currentState);
+        const weaponDamage = Math.max(0, parseRangedWeaponDamage(modifiedAttackerRoll, attacker, currentState) + (action.damageModifier ?? 0));
         const damageResult = resolveDamage(currentState, {
             attackerId: attacker.id,
             defenderId: defender.id,
@@ -458,6 +475,262 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
     }
 
     return applyReloadInterruptGuard({ state: currentState, events });
+}
+
+export function resolveRangedGroupAttack(state: CombatState, action: RangedGroupAttackAction, rng: Rng = mathRandomRng): CombatEngineResult {
+    const candidates = livingCombatants(state, action.candidateTargetIds);
+    if (candidates.length === 0) return rejectRangedShot(state, action.attackerId, undefined, 'missingTarget');
+    const target = candidates[Math.floor(rng.next() * candidates.length)] ?? candidates[0];
+    const result = resolveRangedAttack(state, {
+        ...action,
+        defenderId: target.id,
+        groupTargetCount: candidates.length,
+    } as RangedAttackAction & { groupTargetCount: number }, rng);
+    if (!rangedAttackHit(result.events)) return result;
+    return {
+        state: result.state,
+        events: [
+            ...result.events,
+            multiTargetEvent(action.attackerId, target.id, candidates.map(candidate => candidate.id), 'group'),
+        ],
+    };
+}
+
+export function resolveRangedIntoMeleeAttack(state: CombatState, action: RangedIntoMeleeAttackAction, rng: Rng = mathRandomRng): CombatEngineResult {
+    if (!action.enabled) return resolveRangedAttack(state, action, rng);
+    const target = getCombatant(state, action.defenderId);
+    const meleeIds = meleeGroupIds(state, target.id);
+    const others = meleeIds.filter(id => id !== target.id);
+
+    if (action.mode === 'groupFriendlyFire') {
+        return resolveRangedGroupAttack(state, { ...action, candidateTargetIds: meleeIds }, rng);
+    }
+
+    const penalized = resolveRangedAttack(state, {
+        ...action,
+        attacker: { ...action.attacker, testModifier: (action.attacker.testModifier ?? 0) - 20 },
+    }, rng);
+    const resolved = penalized.events.find(event => event.type === 'AttackResolved');
+    if (!resolved) return penalized;
+    if (resolved.data.outcome === 'attacker') {
+        return {
+            state: penalized.state,
+            events: [
+                ...penalized.events,
+                multiTargetEvent(action.attackerId, action.defenderId, [action.defenderId], 'intoMelee'),
+            ],
+        };
+    }
+    if (others.length === 0) return penalized;
+
+    const unpenalizedTarget = action.attacker.targetNumber + (action.attacker.testModifier ?? 0);
+    if (resolved.data.attackerRoll.rollResult > unpenalizedTarget) return penalized;
+
+    const redirectId = others[Math.floor(rng.next() * others.length)] ?? others[0];
+    const redirected = resolveRangedAttack(penalized.state, {
+        ...action,
+        defenderId: redirectId,
+        skipAmmoConsumption: true,
+        grantAdvantage: false,
+        attacker: { ...action.attacker, rollResult: resolved.data.attackerRoll.rollResult },
+    }, rng);
+    return {
+        state: redirected.state,
+        events: [
+            ...penalized.events,
+            ...redirected.events,
+            multiTargetEvent(action.attackerId, redirectId, [redirectId], 'intoMelee', action.defenderId),
+        ],
+    };
+}
+
+export function resolveBlastAttack(state: CombatState, action: RangedAreaAttackAction, rng: Rng = mathRandomRng): CombatEngineResult {
+    const weapon = rangedActionWeapon(state, action);
+    const rating = weapon ? qualityRating(weapon, 'blast') ?? 0 : 0;
+    const primary = resolveRangedAttack(state, action, rng);
+    const resolved = primary.events.find(event => event.type === 'AttackResolved');
+    if (!weapon || rating <= 0 || !resolved || resolved.data.outcome !== 'attacker') return primary;
+
+    const point = action.targetPoint ?? getCombatant(primary.state, action.defenderId).position;
+    const targetIds = Object.values(primary.state.combatants)
+        .filter(combatant => combatant.currentWounds > 0 && Math.abs(combatant.position - point) <= rating)
+        .map(combatant => combatant.id);
+    const extraIds = targetIds.filter(id => id !== action.defenderId);
+    const applied = applyRangedDamageToTargets(primary.state, action, weapon, resolved.data.slDifference, extraIds, rng);
+    return {
+        state: applied.state,
+        events: [
+            ...primary.events,
+            ...applied.events,
+            multiTargetEvent(action.attackerId, action.defenderId, targetIds, 'blast', undefined, undefined, rating),
+        ],
+    };
+}
+
+export function resolveSpreadAttack(state: CombatState, action: RangedAreaAttackAction, rng: Rng = mathRandomRng): CombatEngineResult {
+    const weapon = rangedActionWeapon(state, action);
+    const rating = weapon ? qualityRating(weapon, 'spread') ?? 0 : 0;
+    if (!weapon || rating <= 0) return resolveRangedAttack(state, action, rng);
+
+    const attacker = getCombatant(state, action.attackerId);
+    const defender = getCombatant(state, action.defenderId);
+    const rangeBand = rangeBandForDistance(action.distance ?? Math.abs(attacker.position - defender.position), action.weaponRangeOverride ?? rangedWeaponRange(weapon));
+    const damageModifier = rangeBand === 'pointBlank' ? rating : rangeBand === 'extreme' ? -rating : 0;
+    const primary = resolveRangedAttack(state, { ...action, damageModifier: (action.damageModifier ?? 0) + damageModifier }, rng);
+    const resolved = primary.events.find(event => event.type === 'AttackResolved');
+    if (!resolved || resolved.data.outcome !== 'attacker') return primary;
+    if (rangeBand === 'pointBlank') {
+        return {
+            state: primary.state,
+            events: [...primary.events, multiTargetEvent(action.attackerId, action.defenderId, [action.defenderId], 'spread', undefined, rangeBand, rating)],
+        };
+    }
+
+    const chainedIds = spreadChainTargetIds(primary.state, action.defenderId, rating, rating);
+    const applied = applyRangedDamageToTargets(primary.state, { ...action, damageModifier: (action.damageModifier ?? 0) + damageModifier }, weapon, resolved.data.slDifference, chainedIds, rng);
+    return {
+        state: applied.state,
+        events: [
+            ...primary.events,
+            ...applied.events,
+            multiTargetEvent(action.attackerId, action.defenderId, [action.defenderId, ...chainedIds], 'spread', undefined, rangeBand, rating),
+        ],
+    };
+}
+
+export function resolveThrownAttack(state: CombatState, action: RangedAttackAction, rng: Rng = mathRandomRng): CombatEngineResult {
+    const attacker = getCombatant(state, action.attackerId);
+    const weapon = rangedActionWeapon(state, action);
+    const strengthBonus = calculateCharacteristicBonus(attacker.character.characteristics.s);
+    const result = resolveRangedAttack(state, {
+        ...action,
+        weaponRangeOverride: action.weaponRangeOverride ?? (weapon && numericReach(weapon.reach) > 0 ? numericReach(weapon.reach) : strengthBonus * 3),
+        skipAmmoConsumption: true,
+    }, rng);
+    if (!rangedAttackHit(result.events)) return result;
+    return {
+        state: result.state,
+        events: [
+            ...result.events,
+            multiTargetEvent(action.attackerId, action.defenderId, [action.defenderId], 'thrown'),
+        ],
+    };
+}
+
+function applyRangedDamageToTargets(
+    state: CombatState,
+    action: RangedAttackAction,
+    weapon: CombatState['weapons'][number],
+    slDifference: number,
+    targetIds: string[],
+    rng: Rng
+): CombatEngineResult {
+    let currentState = state;
+    const events: CombatEvent[] = [];
+    const attacker = getCombatant(currentState, action.attackerId);
+
+    for (const targetId of targetIds) {
+        const hitRoll = rolld100(rng);
+        const weaponDamage = Math.max(0, parseRangedWeaponDamage({
+            skillId: action.attacker.skillId,
+            rollResult: action.attacker.rollResult ?? hitRoll,
+            targetNumber: action.attacker.targetNumber,
+            successLevel: slDifference,
+            roundedSuccessLevel: slDifference,
+            weaponId: weapon.id,
+            weaponDamage: action.attacker.weaponDamage,
+            weaponDamageFormula: action.attacker.weaponDamageFormula ?? weapon.damage,
+            usedTalents: action.attacker.usedTalents || [],
+        }, attacker, currentState) + (action.damageModifier ?? 0));
+        const damage = resolveDamage(currentState, {
+            attackerId: action.attackerId,
+            defenderId: targetId,
+            skillId: action.attacker.skillId,
+            slDifference,
+            weaponDamage,
+            attackRoll: hitRoll,
+            hitLocation: getHitLocation(hitRoll),
+            hooks: action.hooks,
+            sl: slDifference,
+            criticalHit: false,
+        }, rng);
+        currentState = damage.state;
+        events.push(...damage.events);
+    }
+
+    return { state: currentState, events };
+}
+
+function livingCombatants(state: CombatState, ids: string[]): Combatant[] {
+    return ids
+        .map(id => state.combatants[id])
+        .filter((combatant): combatant is Combatant => !!combatant && combatant.currentWounds > 0);
+}
+
+function rangedAttackHit(events: CombatEvent[]): boolean {
+    return events.some(event => event.type === 'AttackResolved' && event.data.outcome === 'attacker');
+}
+
+function meleeGroupIds(state: CombatState, combatantId: string): string[] {
+    const visited = new Set<string>();
+    const queue = [combatantId];
+    while (queue.length > 0) {
+        const id = queue.shift();
+        if (!id || visited.has(id)) continue;
+        visited.add(id);
+        for (const engagedId of state.combatants[id]?.engagementIds || []) {
+            if (!visited.has(engagedId)) queue.push(engagedId);
+        }
+    }
+    return [...visited].filter(id => state.combatants[id]?.currentWounds > 0);
+}
+
+function spreadChainTargetIds(state: CombatState, primaryTargetId: string, rating: number, count: number): string[] {
+    const selected: string[] = [];
+    let anchor = getCombatant(state, primaryTargetId);
+    const remaining = Object.values(state.combatants)
+        .filter(combatant => combatant.id !== primaryTargetId && combatant.currentWounds > 0)
+        .sort((a, b) => Math.abs(a.position - anchor.position) - Math.abs(b.position - anchor.position) || a.id.localeCompare(b.id));
+
+    while (selected.length < count) {
+        const nextIndex = remaining.findIndex(combatant => Math.abs(combatant.position - anchor.position) <= rating);
+        if (nextIndex < 0) break;
+        const [next] = remaining.splice(nextIndex, 1);
+        selected.push(next.id);
+        anchor = next;
+    }
+
+    return selected;
+}
+
+function multiTargetEvent(
+    attackerId: string,
+    primaryTargetId: string | undefined,
+    targetIds: string[],
+    mode: 'group' | 'intoMelee' | 'blast' | 'spread' | 'thrown',
+    originalTargetId?: string,
+    rangeBand?: RangedRangeBand,
+    rating?: number
+): CombatEvent {
+    return {
+        type: 'RangedMultiTargetResolved',
+        i18nKey: `combat.ranged.multi.${mode}`,
+        data: {
+            attackerId,
+            primaryTargetId: primaryTargetId ?? originalTargetId,
+            targetIds,
+            mode,
+            rangeBand,
+            rating,
+        },
+    };
+}
+
+function rangedActionWeapon(state: CombatState, action: RangedAttackAction) {
+    const attacker = getCombatant(state, action.attackerId);
+    return action.attacker.weaponId
+        ? state.weapons.find(candidate => candidate.id === action.attacker.weaponId)
+        : resolveEffectiveWeapon(attacker, state, action.defenderId);
 }
 
 export function resolveReloadAction(state: CombatState, action: ReloadAction, rng: Rng = mathRandomRng): CombatEngineResult {
@@ -1176,8 +1449,13 @@ function resolveRangedHitLocation(attacker: Combatant, roll: number, chosenLocat
 }
 
 function rangedWeaponRange(weapon: { reach?: string }): number {
-    const parsed = Number(String(weapon.reach ?? '').match(/\d+/)?.[0] ?? 0);
+    const parsed = numericReach(weapon.reach);
     return parsed > 0 ? parsed : 1;
+}
+
+function numericReach(reach: string | undefined): number {
+    const parsed = Number(String(reach ?? '').match(/\d+/)?.[0] ?? 0);
+    return parsed;
 }
 
 function equippedShield(combatant: Combatant, state: CombatState) {

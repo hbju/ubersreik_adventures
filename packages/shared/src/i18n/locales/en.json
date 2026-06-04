@@ -232,6 +232,16 @@
             },
             "misfire": {
                 "blackpowder": "Blackpowder misfire."
+            },
+            "multi": {
+                "group": "A shot into a group strikes a target.",
+                "intoMelee": "A shot into melee resolves.",
+                "blast": "A blast attack affects nearby creatures.",
+                "spread": "A spread attack affects its targets.",
+                "thrown": "A thrown attack resolves."
+            },
+            "impale": {
+                "lodged": "Impaling ammunition lodges in {{defenderId}}."
             }
         },
         "reload": {
