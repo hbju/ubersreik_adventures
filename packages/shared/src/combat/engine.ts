@@ -5,13 +5,15 @@ import { calculateCharacteristicBonus } from '../utils/skills';
 import { createAdvantagePools, grantAdvantage } from './advantage';
 import { defensiveBonusForSkill, resolveEffectiveWeapon } from './actions';
 import { criticalRoll } from './critical';
+import { resolveExtendedTest } from './extended-tests';
 import { collectMeleePreRollModifiers, collectRangedPreRollModifiers, resolveModifierTotal } from './modifiers';
 import { applyBlackpowderTargetEffect, armourPointsAtLocation, createQualityHooks, defenderTargetModifierFromQualities, hasQuality, qualityRating } from './qualities';
+import { applyReloadInterruptGuard } from './reload-interrupts';
 import { tryInterceptDamageWithFate } from './resources';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
 import { consumeFeintBuff, feintSlBonusForAttack, resolveReversalOnDefenderWin } from './talent-actions';
-import { createTalentHooks, getTalentInitiativeModifier, resolveCarefulStrikeHitLocation } from './talents';
+import { createReloadTalentHooks, createTalentHooks, getTalentInitiativeModifier, resolveCarefulStrikeHitLocation } from './talents';
 import type {
     CombatEngineResult,
     CombatEvent,
@@ -25,13 +27,16 @@ import type {
     RangedRangeBand,
     RangedAttackAction,
     RangedDefenceOption,
+    ReloadAction,
+    ReloadResolutionHooks,
     ResolvedOpposedRoll,
     SideId,
+    WeaponAmmoState,
 } from './types';
 
 export function createCombatantFromCharacter(
     character: Character,
-    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions' | 'conditionInstances' | 'weaponLoadout'>> = {}
+    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions' | 'conditionInstances' | 'weaponLoadout' | 'weaponAmmo' | 'ammunition'>> = {}
 ): Combatant {
     const currentWounds = options.currentWounds ?? character.status.wounds.current;
     const maxWounds = options.maxWounds ?? character.status.wounds.max;
@@ -59,12 +64,14 @@ export function createCombatantFromCharacter(
             resolve: character.status.resolve,
         },
         weaponLoadout: options.weaponLoadout,
+        weaponAmmo: options.weaponAmmo,
+        ammunition: options.ammunition,
     };
 }
 
 export function createCombatState(
     combatants: Combatant[],
-    options: { armor?: Armor[]; talents?: CombatState['talents']; weapons?: CombatState['weapons']; advantagePools?: CombatState['advantagePools']; tacticalDominantSide?: CombatState['tacticalDominantSide']; turnFlags?: Partial<CombatState['turnFlags']>; engagements?: CombatState['engagements']; round?: number } = {}
+    options: { armor?: Armor[]; talents?: CombatState['talents']; weapons?: CombatState['weapons']; advantagePools?: CombatState['advantagePools']; tacticalDominantSide?: CombatState['tacticalDominantSide']; turnFlags?: Partial<CombatState['turnFlags']>; engagements?: CombatState['engagements']; round?: number; ammoPolicy?: CombatState['ammoPolicy'] } = {}
 ): CombatState {
     return {
         combatants: Object.fromEntries(combatants.map(combatant => [combatant.id, combatant])),
@@ -81,6 +88,7 @@ export function createCombatState(
             shieldsmanUsedThisTurnIds: options.turnFlags?.shieldsmanUsedThisTurnIds ?? [],
         },
         engagements: options.engagements ?? {},
+        ammoPolicy: options.ammoPolicy,
     };
 }
 
@@ -149,12 +157,12 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
     });
     const onHitResult = Array.isArray(onHit) ? { state, events: onHit, suppressNormalDamage: false } : onHit;
     if (onHitResult.suppressNormalDamage) {
-        return { state: onHitResult.state, events: onHitResult.events };
+        return applyReloadInterruptGuard({ state: onHitResult.state, events: onHitResult.events });
     }
 
     const fateIntercept = tryInterceptDamageWithFate(onHitResult.state, defender.id, damageDealt, hit.fatePolicy);
     if (fateIntercept.intercepted) {
-        return { state: fateIntercept.state, events: [...onHitResult.events, ...fateIntercept.events] };
+        return applyReloadInterruptGuard({ state: fateIntercept.state, events: [...onHitResult.events, ...fateIntercept.events] });
     }
 
     const defenderAfterOnHit = getCombatant(onHitResult.state, defender.id);
@@ -233,7 +241,7 @@ export function resolveDamage(state: CombatState, hit: DamageHit, rng: Rng = mat
     }
 
     events.push(...onHitResult.events);
-    return { state: currentStateAfterCrit, events };
+    return applyReloadInterruptGuard({ state: currentStateAfterCrit, events });
 }
 
 export function rangeBandForDistance(distance: number, weaponRange: number): RangedRangeBand {
@@ -284,6 +292,11 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
     const rangeBand = rangeBandForDistance(distance, weaponRange);
     if (rangeBand === 'outOfRange') {
         return rejectRangedShot(state, attacker.id, defender.id, 'outOfRange', rangeBand, distance);
+    }
+
+    const readiness = rangedWeaponReadiness(state, attacker, weapon, action.finiteAmmo);
+    if (!readiness.canFire) {
+        return rejectRangedShot(state, attacker.id, defender.id, readiness.reason, rangeBand, distance, weapon.id);
     }
 
     const hookAction: MeleeAttackAction = {
@@ -376,6 +389,10 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
         },
     });
 
+    const consumedShot = consumeRangedShot(currentState, attacker.id, weapon, action.finiteAmmo);
+    currentState = consumedShot.state;
+    events.push(...consumedShot.events);
+
     if (isBlackpowderMisfire(weapon, modifiedAttackerRoll.rollResult)) {
         const misfire = resolveBlackpowderMisfire(currentState, attacker, weapon, modifiedAttackerRoll, rng);
         currentState = misfire.state;
@@ -437,7 +454,94 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
             sourceCombatantId: attacker.id,
         });
         events.push(...advantageResult.events);
-        return { state: advantageResult.state, events };
+        return applyReloadInterruptGuard({ state: advantageResult.state, events });
+    }
+
+    return applyReloadInterruptGuard({ state: currentState, events });
+}
+
+export function resolveReloadAction(state: CombatState, action: ReloadAction, rng: Rng = mathRandomRng): CombatEngineResult {
+    const actor = getCombatant(state, action.actorId);
+    if (actor.budget.actions <= 0) {
+        return {
+            state,
+            events: [{
+                type: 'CombatActionRejected',
+                i18nKey: 'combat.action.rejected.noAction',
+                data: { kind: 'reload', actorId: actor.id, reason: 'noAction' },
+            }],
+        };
+    }
+
+    const weapon = state.weapons.find(candidate => candidate.id === action.weaponId);
+    if (!weapon) return rejectRangedShot(state, actor.id, undefined, 'missingWeapon', undefined, undefined, action.weaponId);
+
+    const reloadTarget = reloadRating(weapon);
+    if (reloadTarget <= 0) {
+        return {
+            state,
+            events: [ammoStateEvent(actor.id, weapon.id, loadedAmmoState(weapon), undefined, 'reloaded')],
+        };
+    }
+
+    const hooks = normalizeReloadHooks(action.hooks);
+    const skillId = action.skillId ?? reloadSkillId(weapon);
+    const rollResult = action.rollResult ?? rolld100(rng);
+    const targetNumber = (action.targetNumber ?? skillTarget(actor, skillId)) + (action.testModifier ?? 0);
+    const rawSuccessLevel = Math.round(calculateSuccessLevel(rollResult, targetNumber));
+    const slModifier = hooks.reloadSlModifiers({
+        state,
+        actor,
+        weaponId: weapon.id,
+        weaponGroup: weapon.group,
+        weaponQualities: weapon.qualities,
+        skillId,
+    });
+    const successLevel = rawSuccessLevel + slModifier;
+    const currentAmmo = ammoStateFor(actor, weapon);
+    const progress = resolveExtendedTest({
+        progress: currentAmmo.reloadProgress,
+        targetSL: reloadTarget,
+        successLevel,
+    });
+    const nextAmmo: WeaponAmmoState = progress.completed
+        ? loadedAmmoState(weapon)
+        : { loaded: false, shotsRemaining: 0, reloadProgress: progress.progress };
+    const spentActor = {
+        ...actor,
+        budget: { ...actor.budget, actions: Math.max(0, actor.budget.actions - 1) },
+        weaponAmmo: { ...(actor.weaponAmmo || {}), [weapon.id]: nextAmmo },
+    };
+    let currentState = replaceCombatant(state, spentActor);
+    const events: CombatEvent[] = [
+        {
+            type: 'ReloadTestResolved',
+            i18nKey: progress.completed ? 'combat.reload.completed' : 'combat.reload.progress',
+            data: {
+                combatantId: actor.id,
+                weaponId: weapon.id,
+                skillId,
+                roll: rollResult,
+                targetNumber,
+                successLevel,
+                slModifier,
+                accumulatedSL: progress.accumulatedSL,
+                targetSL: reloadTarget,
+                completed: progress.completed,
+            },
+        },
+        ammoStateEvent(actor.id, weapon.id, nextAmmo, ammunitionRemainingFor(spentActor, weapon.id), progress.completed ? 'reloaded' : 'reloadProgress'),
+    ];
+
+    const rapidReloadRank = talentRank(actor, 'rapid-reload');
+    if (rapidReloadRank > 0 && successLevel >= 0) {
+        const assessAmount = (successLevel >= 6 ? 3 : 2) + rapidReloadRank;
+        const granted = grantAdvantage(currentState, actor.side, assessAmount, {
+            reason: 'spendActionWin',
+            sourceCombatantId: actor.id,
+        });
+        currentState = granted.state;
+        events.push(...granted.events);
     }
 
     return { state: currentState, events };
@@ -673,7 +777,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         const defenderCombatant = getCombatant(currentState, defender.id);
         if (defenderCombatant.reversalActive && (defenderCombatant.character.talents?.reversal ?? 0) > 0) {
             const reversal = resolveReversalOnDefenderWin(currentState, defender.id, attacker.side);
-            return { state: reversal.state, events: [...events, ...reversal.events] };
+            return applyReloadInterruptGuard({ state: reversal.state, events: [...events, ...reversal.events] });
         }
     }
 
@@ -683,10 +787,10 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
             sourceCombatantId: attacker.id,
         });
         events.push(...advantageResult.events);
-        return { state: advantageResult.state, events };
+        return applyReloadInterruptGuard({ state: advantageResult.state, events });
     }
 
-    return { state: currentState, events };
+    return applyReloadInterruptGuard({ state: currentState, events });
 }
 
 function resolveOpposedRoll(input: OpposedRollInput, character: Character, state: CombatState, rng: Rng): ResolvedOpposedRoll {
@@ -924,6 +1028,142 @@ function parseRangedWeaponDamage(roll: ResolvedOpposedRoll, attacker: Combatant,
     return base + rangedTalentDamageBonus(roll, attacker);
 }
 
+function rangedWeaponReadiness(
+    state: CombatState,
+    attacker: Combatant,
+    weapon: { id: string; group: string; qualities?: string[] },
+    finiteAmmo?: boolean
+): { canFire: true } | { canFire: false; reason: 'unloaded' | 'reloading' | 'outOfAmmo' } {
+    if (usesFiniteAmmo(state, finiteAmmo) && (ammunitionRemainingFor(attacker, weapon.id, weapon.group) ?? 0) <= 0) {
+        return { canFire: false, reason: 'outOfAmmo' };
+    }
+
+    if (!hasReloadFlaw(weapon)) return { canFire: true };
+
+    const ammo = ammoStateFor(attacker, weapon);
+    if (ammo.reloadProgress) return { canFire: false, reason: 'reloading' };
+    if (!ammo.loaded) return { canFire: false, reason: 'unloaded' };
+    if ((repeaterRating(weapon) > 0) && (ammo.shotsRemaining ?? 0) <= 0) return { canFire: false, reason: 'unloaded' };
+    return { canFire: true };
+}
+
+function consumeRangedShot(
+    state: CombatState,
+    attackerId: string,
+    weapon: { id: string; group: string; qualities?: string[] },
+    finiteAmmo?: boolean
+): CombatEngineResult {
+    const attacker = getCombatant(state, attackerId);
+    const events: CombatEvent[] = [];
+    let updated: Combatant = attacker;
+
+    if (usesFiniteAmmo(state, finiteAmmo)) {
+        const key = ammunitionKey(attacker, weapon.id, weapon.group);
+        const remaining = Math.max(0, (attacker.ammunition?.[key] ?? 0) - 1);
+        updated = {
+            ...updated,
+            ammunition: { ...(updated.ammunition || {}), [key]: remaining },
+        };
+    }
+
+    if (hasReloadFlaw(weapon)) {
+        const current = ammoStateFor(updated, weapon);
+        const repeater = repeaterRating(weapon);
+        const nextAmmo: WeaponAmmoState = repeater > 0
+            ? {
+                loaded: (current.shotsRemaining ?? repeater) - 1 > 0,
+                shotsRemaining: Math.max(0, (current.shotsRemaining ?? repeater) - 1),
+                reloadProgress: null,
+            }
+            : { loaded: false, reloadProgress: null };
+        updated = {
+            ...updated,
+            weaponAmmo: { ...(updated.weaponAmmo || {}), [weapon.id]: nextAmmo },
+        };
+        events.push(ammoStateEvent(updated.id, weapon.id, nextAmmo, ammunitionRemainingFor(updated, weapon.id, weapon.group), 'fired'));
+    } else if (usesFiniteAmmo(state, finiteAmmo)) {
+        events.push(ammoStateEvent(updated.id, weapon.id, { loaded: true, reloadProgress: null }, ammunitionRemainingFor(updated, weapon.id, weapon.group), 'fired'));
+    }
+
+    if (updated === attacker) return { state, events };
+    return { state: replaceCombatant(state, updated), events };
+}
+
+function ammoStateFor(combatant: Combatant, weapon: { id: string; qualities?: string[] }): WeaponAmmoState {
+    const existing = combatant.weaponAmmo?.[weapon.id];
+    if (existing) return existing;
+    return loadedAmmoState(weapon);
+}
+
+function loadedAmmoState(weapon: { qualities?: string[] }): WeaponAmmoState {
+    const repeater = repeaterRating(weapon);
+    return {
+        loaded: true,
+        shotsRemaining: repeater > 0 ? repeater : undefined,
+        reloadProgress: null,
+    };
+}
+
+function ammoStateEvent(
+    combatantId: string,
+    weaponId: string,
+    ammo: WeaponAmmoState,
+    ammunitionRemaining: number | undefined,
+    reason: 'fired' | 'reloadStarted' | 'reloadProgress' | 'reloaded' | 'interrupted'
+): CombatEvent {
+    return {
+        type: 'AmmoStateChanged',
+        i18nKey: `combat.ammo.${reason}`,
+        data: {
+            combatantId,
+            weaponId,
+            loaded: ammo.loaded,
+            shotsRemaining: ammo.shotsRemaining,
+            reloadProgress: ammo.reloadProgress,
+            ammunitionRemaining,
+            reason,
+        },
+    };
+}
+
+function hasReloadFlaw(weapon: { qualities?: string[] }): boolean {
+    return reloadRating(weapon) > 0;
+}
+
+function reloadRating(weapon: { qualities?: string[] }): number {
+    return qualityRating(weapon, 'reload') ?? 0;
+}
+
+function repeaterRating(weapon: { qualities?: string[] }): number {
+    return qualityRating(weapon, 'repeater') ?? 0;
+}
+
+function reloadSkillId(weapon: { group: string }): string {
+    return `ranged_${weapon.group.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '')}`;
+}
+
+function usesFiniteAmmo(state: CombatState, finiteAmmo?: boolean): boolean {
+    return finiteAmmo ?? state.ammoPolicy?.finiteAmmo ?? false;
+}
+
+function ammunitionRemainingFor(combatant: Combatant, weaponId: string, group?: string): number | undefined {
+    const key = ammunitionKey(combatant, weaponId, group);
+    return combatant.ammunition?.[key];
+}
+
+function ammunitionKey(combatant: Combatant, weaponId: string, group?: string): string {
+    if (combatant.ammunition && weaponId in combatant.ammunition) return weaponId;
+    if (group && combatant.ammunition && group in combatant.ammunition) return group;
+    return weaponId;
+}
+
+function normalizeReloadHooks(hooks: Partial<ReloadResolutionHooks> | undefined): ReloadResolutionHooks {
+    const talentHooks = createReloadTalentHooks();
+    return {
+        reloadSlModifiers: context => (talentHooks.reloadSlModifiers?.(context) ?? 0) + (hooks?.reloadSlModifiers?.(context) ?? 0),
+    };
+}
+
 function rangedTalentDamageBonus(roll: ResolvedOpposedRoll, attacker: Combatant): number {
     const accurateShot = talentRank(attacker, 'accurate-shot');
     if (accurateShot > 0 && roll.skillId.toLowerCase().startsWith('ranged')) return accurateShot;
@@ -994,16 +1234,17 @@ function rejectRangedShot(
     state: CombatState,
     attackerId: string,
     defenderId: string | undefined,
-    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget',
+    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget' | 'unloaded' | 'reloading' | 'outOfAmmo',
     rangeBand?: RangedRangeBand,
-    distance?: number
+    distance?: number,
+    weaponId?: string
 ): CombatEngineResult {
     return {
         state,
         events: [{
             type: 'RangedShotRejected',
             i18nKey: `combat.ranged.rejected.${reason}`,
-            data: { attackerId, defenderId, reason, rangeBand, distance },
+            data: { attackerId, defenderId, reason, rangeBand, distance, weaponId },
         }],
     };
 }

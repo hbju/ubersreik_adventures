@@ -152,11 +152,25 @@
                 "engagedWithoutPistol": "Impossible de tirer en etant engage sans arme Pistol.",
                 "outOfRange": "La cible est hors de portee.",
                 "missingWeapon": "Aucune arme de tir disponible.",
-                "missingTarget": "Aucune cible selectionnee."
+                "missingTarget": "Aucune cible selectionnee.",
+                "unloaded": "L'arme n'est pas chargee.",
+                "reloading": "L'arme est en cours de rechargement.",
+                "outOfAmmo": "Il ne reste plus de munitions."
             },
             "misfire": {
                 "blackpowder": "Incident de tir blackpowder."
             }
+        },
+        "reload": {
+            "progress": "{{combatantId}} progresse dans le rechargement de {{weaponId}}.",
+            "completed": "{{combatantId}} recharge {{weaponId}}."
+        },
+        "ammo": {
+            "fired": "{{combatantId}} tire avec {{weaponId}}.",
+            "reloadStarted": "{{combatantId}} commence a recharger {{weaponId}}.",
+            "reloadProgress": "{{combatantId}} continue a recharger {{weaponId}}.",
+            "reloaded": "{{combatantId}} recharge {{weaponId}}.",
+            "interrupted": "Le rechargement de {{weaponId}} par {{combatantId}} est interrompu."
         },
         "fumble": {
             "roll": "{{combatantId}} maladresse avec {{fumbleRoll}}.",

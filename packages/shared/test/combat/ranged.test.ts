@@ -7,6 +7,7 @@ import {
     rangedDefenceOptions,
     resolveCombatAction,
     resolveRangedAttack,
+    RangedShotRejectedEvent
 } from '../../src/combat';
 
 const bow: Weapon = {
@@ -179,19 +180,19 @@ describe('ranged combat 4a', () => {
         const target = combatant('target', 'adversary', [], 200);
         const state = createCombatState([attacker, target], { weapons: [bow] });
 
-        expect(resolveRangedAttack(state, {
+        expect((resolveRangedAttack(state, {
             attackerId: attacker.id,
             defenderId: target.id,
             distance: 20,
             attacker: { skillId: 'ranged_bow', targetNumber: 50, rollResult: 24, weaponId: 'bow' },
-        }).events[0].data.reason).toBe('engagedWithoutPistol');
+        }).events[0] as RangedShotRejectedEvent).data.reason).toBe('engagedWithoutPistol');
 
-        expect(resolveRangedAttack(createCombatState([{ ...attacker, engagementIds: [] }, target], { weapons: [bow] }), {
+        expect((resolveRangedAttack(createCombatState([{ ...attacker, engagementIds: [] }, target], { weapons: [bow] }), {
             attackerId: attacker.id,
             defenderId: target.id,
             distance: 151,
             attacker: { skillId: 'ranged_bow', targetNumber: 50, rollResult: 24, weaponId: 'bow' },
-        }).events[0].data.reason).toBe('outOfRange');
+        }).events[0] as RangedShotRejectedEvent).data.reason).toBe('outOfRange');
     });
 });
 
@@ -234,7 +235,7 @@ function characterFixture(id: string, weapons: string[], talents: Record<string,
         userId: null,
         tags,
         locationId: null,
-        xp: { total: 0, spent: 0, current: 0 },
+        xp: { spent: 0, current: 0 },
         careerHistory: [],
         unlockedCharacteristicIds: [],
         unlockedSkillIds: [],

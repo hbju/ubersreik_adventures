@@ -4,6 +4,7 @@ import { calculateCharacteristicBonus } from '../utils/skills';
 import { spendAdvantage } from './advantage';
 import { resolveShieldsmanActivation } from './talent-actions';
 import { hasQuality } from './qualities';
+import { applyReloadInterruptGuard } from './reload-interrupts';
 import { applyFortunePostRollHook, type FortunePostRollHook } from './resources';
 import { engagementKey, isInfighting } from './spatial';
 import type {
@@ -19,6 +20,8 @@ import type {
     ModifierSource,
     OnHitContext,
     QualityActivation,
+    ReloadResolutionHooks,
+    ReloadHookContext,
     ResolvedOpposedRoll,
     SlModifierContext,
 } from './types';
@@ -430,17 +433,17 @@ export function resolveTalentActivation(state: CombatState, request: TalentActiv
     if (!request.targetId) return { state, events: [talentRejected(actor.id, request.talentId, 'missingTarget')] };
 
     if (request.talentId === 'shieldsman') {
-        return resolveShieldsmanActivation(
+        return applyReloadInterruptGuard(resolveShieldsmanActivation(
             state,
             actor.id,
             request.targetId,
             request.effect === 'push' ? 'push' : 'damage',
             request.policy ?? DEFAULT_TALENT_POLICY
-        );
+        ));
     }
 
     if (request.talentId === 'riposte') {
-        return resolveRiposteReaction(state, actor, request.targetId);
+        return applyReloadInterruptGuard(resolveRiposteReaction(state, actor, request.targetId));
     }
 
     return { state, events: [talentRejected(actor.id, request.talentId, 'invalidTrigger', request.targetId)] };
@@ -650,10 +653,31 @@ function talentDamageModifier(context: DamageModifierContext): number {
     return damageBonus + slayerStrengthBonus - damageReduction;
 }
 
+export function createReloadTalentHooks(): Partial<ReloadResolutionHooks> {
+    return {
+        reloadSlModifiers: talentReloadSlModifier,
+    };
+}
+
 function talentApModifier(context: ApModifierContext): number {
     if (!context.action.attacker.skillId.toLowerCase().startsWith('ranged')) return 0;
     const rank = talentRank(context.attacker, 'sure-shot');
     return rank > 0 ? -Math.min(context.armourPoints, rank) : 0;
+}
+
+function talentReloadSlModifier(context: ReloadHookContext): number {
+    const rapidReload = talentRank(context.actor, 'rapid-reload');
+    const gunner = isBlackpowderOrEngineering(context.weaponGroup, context.weaponQualities)
+        ? talentRank(context.actor, 'gunner')
+        : 0;
+    return rapidReload + gunner;
+}
+
+function isBlackpowderOrEngineering(group: string, qualities: string[]): boolean {
+    const normalizedGroup = group.toLowerCase();
+    return normalizedGroup.includes('blackpowder')
+        || normalizedGroup.includes('engineering')
+        || qualities.some(quality => quality.toLowerCase().includes('blackpowder'));
 }
 
 function talentDamageMultiplier(context: DamageMultiplierContext): number {

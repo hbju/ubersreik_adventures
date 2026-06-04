@@ -41,6 +41,8 @@ export interface Combatant {
     resources: CombatantResources;
     defensiveBonus?: DefensiveBonusState;
     weaponLoadout?: WeaponLoadout;
+    weaponAmmo?: Record<string, WeaponAmmoState>;
+    ammunition?: Record<string, number>;
     aimedRangedAttack?: boolean;
     initiativeOverride?: boolean;
     removedFromEncounter?: boolean;
@@ -93,6 +95,22 @@ export interface CombatState {
     tacticalDominantSide?: SideId;
     turnFlags: CombatTurnFlags;
     engagements: Record<string, CombatEngagement>;
+    ammoPolicy?: AmmoPolicy;
+}
+
+export interface AmmoPolicy {
+    finiteAmmo?: boolean;
+}
+
+export interface ExtendedTestProgress {
+    accumulatedSL: number;
+    targetSL: number;
+}
+
+export interface WeaponAmmoState {
+    loaded: boolean;
+    shotsRemaining?: number;
+    reloadProgress: ExtendedTestProgress | null;
 }
 
 export interface UsedTalent {
@@ -173,6 +191,7 @@ export type CombatActionKind =
     | 'run'
     | 'charge'
     | 'aim'
+    | 'reload'
     | 'assess'
     | 'defend'
     | 'sprint'
@@ -272,6 +291,7 @@ export interface RangedAttackAction {
     defenceKind?: RangedDefenceKind;
     generatesAdvantage?: boolean;
     grantAdvantage?: boolean;
+    finiteAmmo?: boolean;
     hooks?: Partial<MeleeResolutionHooks>;
 }
 
@@ -283,6 +303,29 @@ export interface RangedAttackRequest extends Partial<Omit<RangedAttackAction, 'a
     weaponId?: string;
     weaponDamage?: number;
     weaponDamageFormula?: string;
+}
+
+export interface ReloadAction {
+    actorId: string;
+    weaponId: string;
+    skillId?: string;
+    targetNumber?: number;
+    rollResult?: number;
+    testModifier?: number;
+    hooks?: Partial<ReloadResolutionHooks>;
+}
+
+export interface ReloadHookContext {
+    state: CombatState;
+    actor: Combatant;
+    weaponId: string;
+    weaponGroup: string;
+    weaponQualities: string[];
+    skillId: string;
+}
+
+export interface ReloadResolutionHooks {
+    reloadSlModifiers(context: ReloadHookContext): number;
 }
 
 export interface ModifierSource {
@@ -549,9 +592,10 @@ export type CombatActionRejectedEvent = CombatEventBase<'CombatActionRejected', 
 export type RangedShotRejectedEvent = CombatEventBase<'RangedShotRejected', {
     attackerId: string;
     defenderId?: string;
-    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget';
+    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget' | 'unloaded' | 'reloading' | 'outOfAmmo';
     rangeBand?: RangedRangeBand;
     distance?: number;
+    weaponId?: string;
 }>;
 
 export type RangedMisfireEvent = CombatEventBase<'RangedMisfire', {
@@ -561,6 +605,29 @@ export type RangedMisfireEvent = CombatEventBase<'RangedMisfire', {
     unitsDie: number;
     hitLocation: 'Primary Arm';
     weaponDestroyed: true;
+}>;
+
+export type AmmoStateChangedEvent = CombatEventBase<'AmmoStateChanged', {
+    combatantId: string;
+    weaponId: string;
+    loaded: boolean;
+    shotsRemaining?: number;
+    reloadProgress: ExtendedTestProgress | null;
+    ammunitionRemaining?: number;
+    reason: 'fired' | 'reloadStarted' | 'reloadProgress' | 'reloaded' | 'interrupted';
+}>;
+
+export type ReloadTestResolvedEvent = CombatEventBase<'ReloadTestResolved', {
+    combatantId: string;
+    weaponId: string;
+    skillId: string;
+    roll: number;
+    targetNumber: number;
+    successLevel: number;
+    slModifier: number;
+    accumulatedSL: number;
+    targetSL: number;
+    completed: boolean;
 }>;
 
 export type BlowToBackAttackEvent = CombatEventBase<'BlowToBackAttackEvent', {
@@ -741,6 +808,8 @@ export type CombatEvent =
     | CombatActionRejectedEvent
     | RangedShotRejectedEvent
     | RangedMisfireEvent
+    | AmmoStateChangedEvent
+    | ReloadTestResolvedEvent
     | BlowToBackAttackEvent
     | CombatantRemovedFromEncounterEvent
     | TalentEffectAppliedEvent

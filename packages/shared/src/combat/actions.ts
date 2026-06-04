@@ -10,6 +10,7 @@ import {
     isEngagedWith,
 } from './spatial';
 import { resolveDualWieldAttack } from './dual-wield';
+import { applyReloadInterruptGuard } from './reload-interrupts';
 import { resolveTalentCombatAction } from './talent-actions';
 import { hasCombatTalent } from './talents';
 import type {
@@ -28,6 +29,7 @@ export const COMBAT_ACTION_DEFINITIONS: Record<CombatActionKind, CombatActionDef
     run: { kind: 'run', cost: 'action', generatesAdvantage: false },
     charge: { kind: 'charge', cost: 'action', generatesAdvantage: true },
     aim: { kind: 'aim', cost: 'action', generatesAdvantage: false },
+    reload: { kind: 'reload', cost: 'action', generatesAdvantage: false },
     assess: { kind: 'assess', cost: 'action', generatesAdvantage: false },
     defend: { kind: 'defend', cost: 'action', generatesAdvantage: false },
     sprint: { kind: 'sprint', cost: 'action', generatesAdvantage: false },
@@ -63,6 +65,7 @@ export function resolveCombatAction(
     request: CombatActionRequest,
     rng: Rng = mathRandomRng
 ): CombatEngineResult {
+    const result = (() => {
     switch (request.kind) {
         case 'assess':
             return resolveAssess(state, request, rng);
@@ -94,6 +97,9 @@ export function resolveCombatAction(
         default:
             return rejectAction(state, request.kind, request.actorId, 'noAction');
     }
+    })();
+
+    return request.kind === 'reload' ? result : applyReloadInterruptGuard(result);
 }
 
 export function clearDefensiveBonusAtTurnStart(state: CombatState, combatantId: string): CombatState {

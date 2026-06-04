@@ -225,11 +225,25 @@
                 "engagedWithoutPistol": "Cannot fire while Engaged without a Pistol weapon.",
                 "outOfRange": "Target is out of range.",
                 "missingWeapon": "No ranged weapon is available.",
-                "missingTarget": "No target selected."
+                "missingTarget": "No target selected.",
+                "unloaded": "Weapon is unloaded.",
+                "reloading": "Weapon is being reloaded.",
+                "outOfAmmo": "No ammunition remains."
             },
             "misfire": {
                 "blackpowder": "Blackpowder misfire."
             }
+        },
+        "reload": {
+            "progress": "{{combatantId}} makes reload progress on {{weaponId}}.",
+            "completed": "{{combatantId}} reloads {{weaponId}}."
+        },
+        "ammo": {
+            "fired": "{{combatantId}} fires {{weaponId}}.",
+            "reloadStarted": "{{combatantId}} starts reloading {{weaponId}}.",
+            "reloadProgress": "{{combatantId}} continues reloading {{weaponId}}.",
+            "reloaded": "{{combatantId}} reloads {{weaponId}}.",
+            "interrupted": "{{combatantId}}'s reload of {{weaponId}} is interrupted."
         },
         "fumble": {
             "roll": "{{combatantId}} fumbles with {{fumbleRoll}}.",

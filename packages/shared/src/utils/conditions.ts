@@ -2,6 +2,7 @@ import { Combatant, Character, ConditionInstance } from '../types/wfrp.types';
 import { calculateCharacteristicBonus } from './skills';
 import { calculateSuccessLevel, rolld100, rollDice } from './mechanics';
 import { mathRandomRng, type Rng } from '../combat/rng';
+import { applyReloadInterruptGuardToCombatant } from '../combat/reload-interrupts';
 
 export type ConditionTestCategory = 'all' | 'sight' | 'hearing' | 'movement';
 
@@ -81,7 +82,8 @@ export interface ConditionEffectEvent {
   | 'ConditionDeath'
   | 'ConditionClotted'
   | 'ConditionPendingTest'
-  | 'ConditionConsciousnessBlocked';
+  | 'ConditionConsciousnessBlocked'
+  | 'AmmoStateChanged';
   i18nKey: string;
   data: Record<string, number | string | boolean | undefined>;
 }
@@ -669,7 +671,9 @@ export function applyEndOfRoundConditionEffects<TCombatant extends ConditionSubj
     mergeConditionResult(result, removal);
   }
 
-  result.combatant = working;
+  const guarded = applyReloadInterruptGuardToCombatant(working, result.events);
+  result.combatant = guarded.combatant;
+  result.events = guarded.events as ConditionEffectEvent[];
   return result;
 }
 
