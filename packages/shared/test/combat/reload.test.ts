@@ -381,10 +381,10 @@ function characterFixture(id: string, weapons: string[], talents: Record<string,
             fel: characteristic(30),
         },
         skills: [
-            { id: 'ranged_bow', name: 'Ranged (Bow)', characteristic: 'bs', advances: 0, talents: 0, modifier: 0 },
-            { id: 'ranged_blackpowder', name: 'Ranged (Blackpowder)', characteristic: 'bs', advances: 0, talents: 0, modifier: 0 },
+            { id: 'ranged_bow', name: 'Ranged (Bow)', characteristic: 'bs', advances: 5, talents: 0, modifier: 0 },
+            { id: 'ranged_blackpowder', name: 'Ranged (Blackpowder)', characteristic: 'bs', advances: 5, talents: 0, modifier: 0 },
             { id: 'dodge', name: 'Dodge', characteristic: 'ag', advances: 0, talents: 0, modifier: 0 },
-            { id: 'melee_basic', name: 'Melee (Basic)', characteristic: 'ws', advances: 0, talents: 0, modifier: 0 },
+            { id: 'melee_basic', name: 'Melee (Basic)', characteristic: 'ws', advances: 5, talents: 0, modifier: 0 },
         ],
         status: {
             wounds: { current: 99, max: 99 },

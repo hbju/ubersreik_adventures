@@ -228,7 +228,8 @@
                 "missingTarget": "No target selected.",
                 "unloaded": "Weapon is unloaded.",
                 "reloading": "Weapon is being reloaded.",
-                "outOfAmmo": "No ammunition remains."
+                "outOfAmmo": "No ammunition remains.",
+                "weaponUnusable": "The weapon cannot be used without the required training."
             },
             "misfire": {
                 "blackpowder": "Blackpowder misfire."

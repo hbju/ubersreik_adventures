@@ -155,7 +155,8 @@
                 "missingTarget": "Aucune cible selectionnee.",
                 "unloaded": "L'arme n'est pas chargee.",
                 "reloading": "L'arme est en cours de rechargement.",
-                "outOfAmmo": "Il ne reste plus de munitions."
+                "outOfAmmo": "Il ne reste plus de munitions.",
+                "weaponUnusable": "L'arme ne peut pas etre utilisee sans l'entrainement requis."
             },
             "misfire": {
                 "blackpowder": "Incident de tir blackpowder."

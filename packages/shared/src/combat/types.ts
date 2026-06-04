@@ -626,7 +626,7 @@ export type CombatActionRejectedEvent = CombatEventBase<'CombatActionRejected', 
 export type RangedShotRejectedEvent = CombatEventBase<'RangedShotRejected', {
     attackerId: string;
     defenderId?: string;
-    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget' | 'unloaded' | 'reloading' | 'outOfAmmo';
+    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget' | 'unloaded' | 'reloading' | 'outOfAmmo' | 'weaponUnusable';
     rangeBand?: RangedRangeBand;
     distance?: number;
     weaponId?: string;

@@ -1,4 +1,4 @@
-import type { Armor, Character } from '../types/wfrp.types';
+import type { Armor, Character, Weapon } from '../types/wfrp.types';
 import { attackerModifiersFor, conditionsRemovedAfterAttack, opposedTestCollapseFor } from '../utils/conditions';
 import { calculateSuccessLevel, getHitLocation, rolld100 } from '../utils/mechanics';
 import { calculateCharacteristicBonus } from '../utils/skills';
@@ -9,6 +9,7 @@ import { resolveExtendedTest } from './extended-tests';
 import { collectMeleePreRollModifiers, collectRangedPreRollModifiers, resolveModifierTotal } from './modifiers';
 import { applyBlackpowderTargetEffect, armourPointsAtLocation, createQualityHooks, defenderTargetModifierFromQualities, hasQuality, qualityRating } from './qualities';
 import { applyReloadInterruptGuard } from './reload-interrupts';
+import { resolveWeaponUse, weaponForUse } from './proficiency';
 import { tryInterceptDamageWithFate } from './resources';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
@@ -285,30 +286,38 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
         ? state.weapons.find(candidate => candidate.id === action.attacker.weaponId)
         : resolveEffectiveWeapon(attacker, state, defender.id);
     if (!weapon) return rejectRangedShot(state, attacker.id, defender.id, 'missingWeapon');
+    const weaponUse = resolveWeaponUse(attacker, weapon);
+    if (!weaponUse.usable) {
+        return rejectRangedShot(state, attacker.id, defender.id, 'weaponUnusable', undefined, undefined, weapon.id);
+    }
+    const effectiveWeapon = weaponForUse(weapon, weaponUse);
+    const resolvedAttackerInput = rollInputForWeaponUse(action.attacker, weaponUse, effectiveWeapon);
 
-    if (attacker.engagementIds.length > 0 && !hasQuality(weapon, 'pistol')) {
+    if (attacker.engagementIds.length > 0 && !hasQuality(effectiveWeapon, 'pistol')) {
         return rejectRangedShot(state, attacker.id, defender.id, 'engagedWithoutPistol');
     }
 
     const distance = action.distance ?? Math.abs(attacker.position - defender.position);
-    const weaponRange = action.weaponRangeOverride ?? rangedWeaponRange(weapon);
+    const weaponRange = action.weaponRangeOverride ?? rangedWeaponRange(effectiveWeapon);
     const rangeBand = rangeBandForDistance(distance, weaponRange);
     if (rangeBand === 'outOfRange') {
         return rejectRangedShot(state, attacker.id, defender.id, 'outOfRange', rangeBand, distance);
     }
 
-    const readiness = rangedWeaponReadiness(state, attacker, weapon, action.finiteAmmo);
+    const readiness = rangedWeaponReadiness(state, attacker, effectiveWeapon, action.finiteAmmo);
     if (!readiness.canFire) {
         return rejectRangedShot(state, attacker.id, defender.id, readiness.reason, rangeBand, distance, weapon.id);
     }
 
     const hookAction: MeleeAttackAction = {
         ...action,
+        attacker: resolvedAttackerInput,
         defender: action.defender ?? { skillId: 'none', targetNumber: 0 },
     };
+    const resolvedAction = { ...action, attacker: resolvedAttackerInput };
     const hookContext = { state, action: hookAction, attacker, defender };
     const preRollSources = [
-        ...collectRangedPreRollModifiers(state, action, attacker, defender, rangeBand),
+        ...collectRangedPreRollModifiers(state, resolvedAction, attacker, defender, rangeBand),
         ...hooks.preRollModifiers(hookContext),
     ];
     const modifierTotal = resolveModifierTotal(preRollSources);
@@ -330,10 +339,10 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
     }
 
     const attackerRoll = resolveOpposedRoll({
-        ...action.attacker,
-        weaponId: action.attacker.weaponId ?? weapon.id,
-        weaponDamageFormula: action.attacker.weaponDamageFormula ?? weapon.damage,
-        testModifier: (action.attacker.testModifier ?? 0) + modifierTotal.total,
+        ...resolvedAttackerInput,
+        weaponId: resolvedAttackerInput.weaponId ?? effectiveWeapon.id,
+        weaponDamageFormula: resolvedAttackerInput.weaponDamageFormula ?? effectiveWeapon.damage,
+        testModifier: (resolvedAttackerInput.testModifier ?? 0) + modifierTotal.total,
     }, attacker.character, currentState, rng);
     const slModifier = hooks.slModifiers({ ...hookContext, state: currentState, attackerRoll });
     const modifiedAttackerRoll = withSlModifier(attackerRoll, slModifier);
@@ -393,13 +402,13 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
     });
 
     if (!action.skipAmmoConsumption) {
-        const consumedShot = consumeRangedShot(currentState, attacker.id, weapon, action.finiteAmmo);
+        const consumedShot = consumeRangedShot(currentState, attacker.id, effectiveWeapon, action.finiteAmmo);
         currentState = consumedShot.state;
         events.push(...consumedShot.events);
     }
 
-    if (isBlackpowderMisfire(weapon, modifiedAttackerRoll.rollResult)) {
-        const misfire = resolveBlackpowderMisfire(currentState, attacker, weapon, modifiedAttackerRoll, rng);
+    if (isBlackpowderMisfire(effectiveWeapon, modifiedAttackerRoll.rollResult)) {
+        const misfire = resolveBlackpowderMisfire(currentState, attacker, effectiveWeapon, modifiedAttackerRoll, rng);
         currentState = misfire.state;
         events.push(...misfire.events);
     } else if (isFumbleRoll(modifiedAttackerRoll.rollResult, modifiedAttackerRoll.targetNumber) || hooks.fumbleTriggers({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll })) {
@@ -425,14 +434,14 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
         const critical = resolveCritHook(hooks, attackerCritContext);
         currentState = critical.state;
         events.push(...critical.events);
-        if (hasQuality(weapon, 'impale')) {
+        if (hasQuality(effectiveWeapon, 'impale')) {
             events.push({
                 type: 'LodgedAmmunitionRecorded',
                 i18nKey: 'combat.ranged.impale.lodged',
                 data: {
                     attackerId: attacker.id,
                     defenderId: defender.id,
-                    weaponId: weapon.id,
+                    weaponId: effectiveWeapon.id,
                     removalTest: 'healChallenging',
                 },
             });
@@ -451,7 +460,7 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
             defenderSuccessLevel: opposed ? defenderRoll.roundedSuccessLevel : undefined,
             hitLocation,
             usedTalents: modifiedAttackerRoll.usedTalents,
-            disableMinimumWound: weaponHasQuality(modifiedAttackerRoll, currentState, 'undamaging'),
+            disableMinimumWound: weaponHasQualityForCombatant(attacker, modifiedAttackerRoll, currentState, 'undamaging'),
             hooks: action.hooks,
             sl: modifiedAttackerRoll.roundedSuccessLevel,
             criticalHit: attackerCriticalHit,
@@ -728,9 +737,10 @@ function multiTargetEvent(
 
 function rangedActionWeapon(state: CombatState, action: RangedAttackAction) {
     const attacker = getCombatant(state, action.attackerId);
-    return action.attacker.weaponId
+    const weapon = action.attacker.weaponId
         ? state.weapons.find(candidate => candidate.id === action.attacker.weaponId)
         : resolveEffectiveWeapon(attacker, state, action.defenderId);
+    return weapon ? weaponForUse(weapon, resolveWeaponUse(attacker, weapon)) : undefined;
 }
 
 export function resolveReloadAction(state: CombatState, action: ReloadAction, rng: Rng = mathRandomRng): CombatEngineResult {
@@ -824,10 +834,17 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
     const attacker = getCombatant(state, action.attackerId);
     const defender = getCombatant(state, action.defenderId);
     const hooks = normalizeHooks(action.hooks, rng);
-    const hookContext = { state, action, attacker, defender };
+    const weapon = resolveEffectiveWeapon(attacker, state, defender.id, action.hand ?? 'primary');
+    const weaponUse = weapon ? resolveWeaponUse(attacker, weapon) : undefined;
+    const effectiveWeapon = weapon && weaponUse ? weaponForUse(weapon, weaponUse) : undefined;
+    const resolvedAttackerInput = weaponUse && effectiveWeapon
+        ? rollInputForWeaponUse(action.attacker, weaponUse, effectiveWeapon)
+        : action.attacker;
+    const resolvedAction = { ...action, attacker: resolvedAttackerInput };
+    const hookContext = { state, action: resolvedAction, attacker, defender };
     const hookPreRollSources = hooks.preRollModifiers(hookContext);
     const preRollSources = [
-        ...collectMeleePreRollModifiers(state, action, attacker, defender),
+        ...collectMeleePreRollModifiers(state, resolvedAction, attacker, defender),
         ...hookPreRollSources,
     ];
     const feintBonus = feintSlBonusForAttack(attacker, defender.id, state.round);
@@ -844,7 +861,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
     const modifierTotal = resolveModifierTotal(preRollSources);
     const conditionModifiers = attackerModifiersFor(defender);
     const collapse = opposedTestCollapseFor(defender, {
-        attackTargetNumber: action.attacker.targetNumber + modifierTotal.total,
+        attackTargetNumber: resolvedAttackerInput.targetNumber + modifierTotal.total,
         chosenHitLocation: action.chosenHitLocation,
     });
     let currentState = state;
@@ -866,8 +883,8 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
     currentState = stampAttackEngagement(currentState, attacker.id, defender.id);
 
     const attackerRoll = resolveOpposedRoll({
-        ...action.attacker,
-        testModifier: (action.attacker.testModifier ?? 0) + modifierTotal.total,
+        ...resolvedAttackerInput,
+        testModifier: (resolvedAttackerInput.testModifier ?? 0) + modifierTotal.total,
     }, attacker.character, currentState, rng);
     const slModifier = hooks.slModifiers({ ...hookContext, state: currentState, attackerRoll });
     const modifiedAttackerRoll = withSlModifier(attackerRoll, slModifier);
@@ -897,7 +914,9 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
             : undefined;
     } else {
         const defenderTargetModifier = defenderTargetModifierFromQualities({ ...hookContext, state: currentState, attackerRoll: modifiedAttackerRoll });
-        const dualWieldDefensePenalty = defender.dualWieldDefensivePenalty ? -10 : 0;
+        const dualWieldDefensePenalty = defender.dualWieldDefensivePenalty && !hasParryOffHandExemption(defender, currentState, action.defender)
+            ? -10
+            : 0;
         defenderRoll = resolveOpposedRoll({
             ...action.defender,
             testModifier: (action.defender.testModifier ?? 0) + defenderTargetModifier + defensiveBonusForSkill(defender, action.defender.skillId, currentState.round) + dualWieldDefensePenalty,
@@ -1012,7 +1031,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
             defenderSuccessLevel: defenderRoll?.roundedSuccessLevel,    
             hitLocation,
             usedTalents: modifiedAttackerRoll.usedTalents,
-            disableMinimumWound: action.disableMinimumWound || weaponHasQuality(modifiedAttackerRoll, currentState, 'undamaging'),
+            disableMinimumWound: action.disableMinimumWound || weaponHasQualityForCombatant(attacker, modifiedAttackerRoll, currentState, 'undamaging'),
             hooks: action.hooks,
             sl: collapse.mode === 'autoHit' ? slDifference : modifiedAttackerRoll.roundedSuccessLevel,
             isCharging: action.isCharging,
@@ -1512,7 +1531,7 @@ function rejectRangedShot(
     state: CombatState,
     attackerId: string,
     defenderId: string | undefined,
-    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget' | 'unloaded' | 'reloading' | 'outOfAmmo',
+    reason: 'engagedWithoutPistol' | 'outOfRange' | 'missingWeapon' | 'missingTarget' | 'unloaded' | 'reloading' | 'outOfAmmo' | 'weaponUnusable',
     rangeBand?: RangedRangeBand,
     distance?: number,
     weaponId?: string
@@ -1541,9 +1560,31 @@ function talentRank(combatant: Combatant, talentId: string): number {
     return combatant.character.talents?.[talentId] ?? combatant.character.talents?.[compact] ?? 0;
 }
 
-function weaponHasQuality(roll: ResolvedOpposedRoll, state: CombatState, quality: string): boolean {
+function weaponHasQualityForCombatant(combatant: Combatant, roll: ResolvedOpposedRoll, state: CombatState, quality: string): boolean {
     const weapon = roll.weaponId ? state.weapons.find(candidate => candidate.id === roll.weaponId) : undefined;
-    return (weapon?.qualities || []).some(candidate => candidate.toLowerCase().replace(/\*.*/, '') === quality.toLowerCase());
+    if (!weapon) return false;
+    const weaponUse = resolveWeaponUse(combatant, weapon);
+    return hasQuality(weaponForUse(weapon, weaponUse), quality);
+}
+
+function rollInputForWeaponUse(input: OpposedRollInput, weaponUse: ReturnType<typeof resolveWeaponUse>, weapon: Weapon): OpposedRollInput {
+    const test = weaponUse.test;
+    return {
+        ...input,
+        skillId: test.type === 'skill' ? test.skillId : test.characteristic,
+        skillName: test.type === 'skill' ? test.skillName : test.characteristic.toUpperCase(),
+        weaponId: input.weaponId ?? weapon.id,
+        weaponDamageFormula: input.weaponDamageFormula ?? weapon.damage,
+    };
+}
+
+function hasParryOffHandExemption(defender: Combatant, state: CombatState, defenderInput: OpposedRollInput): boolean {
+    if (defenderInput.skillId.toLowerCase() !== 'melee_parry') return false;
+    const weapon = defenderInput.weaponId
+        ? state.weapons.find(candidate => candidate.id === defenderInput.weaponId)
+        : resolveEffectiveWeapon(defender, state, undefined, 'secondary') ?? resolveEffectiveWeapon(defender, state);
+    if (!weapon) return false;
+    return resolveWeaponUse(defender, weapon).parryOffHandExempt === true;
 }
 
 function equippedWeapon(attacker: Combatant, state: CombatState, defenderId?: string, hand: 'primary' | 'secondary' = 'primary') {

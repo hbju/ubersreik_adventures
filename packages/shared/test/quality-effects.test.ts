@@ -239,7 +239,9 @@ function character(id: string, name: string, equippedWeapon: Weapon, armorItems:
             wp: characteristic(30),
             fel: characteristic(30),
         },
-        skills: [],
+        skills: [
+            { id: 'melee_basic', name: 'Melee (Basic)', characteristic: 'ws', advances: 5, talents: 0, modifier: 0 },
+        ],
         status: {
             wounds: { current: wounds, max: wounds },
             fate: { current: 0, max: 0 },

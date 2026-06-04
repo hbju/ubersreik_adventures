@@ -15,6 +15,7 @@ import type {
     ModifierSource,
     SlModifierContext,
 } from './types';
+import { resolveWeaponUse, weaponForUse } from './proficiency';
 
 export type QualityHookPhase = 'preRollModifiers' | 'slModifiers' | 'damageModifiers' | 'apModifiers' | 'onHitEffects' | 'onCritEffects' | 'critTriggerExtensions' | 'critIgnoreConditions' | 'critApModifiers' | 'fumbleTriggers';
 
@@ -278,7 +279,8 @@ function weaponFromRollOrEquipped(state: CombatState, combatant: Combatant, weap
     const id = weaponId
         ?? Object.entries(combatant.character.inventory.equippedWeapons || {}).find(([, equipped]) => equipped)?.[0]
         ?? Object.entries(combatant.character.inventory.weapons || {}).find(([, count]) => count > 0)?.[0];
-    return id ? state.weapons.find(weapon => weapon.id === id) : undefined;
+    const weapon = id ? state.weapons.find(weapon => weapon.id === id) : undefined;
+    return weapon ? weaponForUse(weapon, resolveWeaponUse(combatant, weapon)) : undefined;
 }
 
 function qualityEntries(item: { qualities?: string[] }): Array<{ id: string; rating?: number }> {

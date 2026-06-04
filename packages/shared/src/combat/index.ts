@@ -6,6 +6,7 @@ export * from './engine';
 export * from './extended-tests';
 export * from './modifiers';
 export * from './qualities';
+export * from './proficiency';
 export * from './reload-interrupts';
 export * from './resources';
 export * from './rng';
