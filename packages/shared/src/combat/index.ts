@@ -8,6 +8,7 @@ export * from './modifiers';
 export * from './qualities';
 export * from './proficiency';
 export * from './reload-interrupts';
+export * from './reactions';
 export * from './resources';
 export * from './rng';
 export * from './spatial';

@@ -90,6 +90,7 @@ export function createCombatState(
             chargedCombatantIds: options.turnFlags?.chargedCombatantIds ?? [],
             talentExtraAttackCombatantIds: options.turnFlags?.talentExtraAttackCombatantIds ?? [],
             shieldsmanUsedThisTurnIds: options.turnFlags?.shieldsmanUsedThisTurnIds ?? [],
+            reactionStrikeChargerPairs: options.turnFlags?.reactionStrikeChargerPairs ?? [],
         },
         engagements: options.engagements ?? {},
         ammoPolicy: options.ammoPolicy,
@@ -464,6 +465,7 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
             hooks: action.hooks,
             sl: modifiedAttackerRoll.roundedSuccessLevel,
             criticalHit: attackerCriticalHit,
+            fatePolicy: action.fatePolicy,
         }, rng);
         currentState = damageResult.state;
         events.push(...damageResult.events);
@@ -1036,6 +1038,7 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
             sl: collapse.mode === 'autoHit' ? slDifference : modifiedAttackerRoll.roundedSuccessLevel,
             isCharging: action.isCharging,
             criticalHit: attackerCriticalHit,
+            fatePolicy: action.fatePolicy,
         }, rng);
 
         currentState = damageResult.state;

@@ -65,6 +65,7 @@ export interface CombatTurnFlags {
     chargedCombatantIds: string[];
     talentExtraAttackCombatantIds: string[];
     shieldsmanUsedThisTurnIds: string[];
+    reactionStrikeChargerPairs: string[];
 }
 
 export interface DefensiveBonusState {
@@ -182,6 +183,7 @@ export interface MeleeAttackAction {
     hand?: 'primary' | 'secondary';
     isGrappleDamage?: boolean;
     isExtraAttack?: boolean;
+    fatePolicy?: ResourceSpendPolicy;
 }
 
 export type CombatActionCost = 'action' | 'move' | 'free';
@@ -297,6 +299,7 @@ export interface RangedAttackAction {
     weaponRangeOverride?: number;
     skipAmmoConsumption?: boolean;
     hooks?: Partial<MeleeResolutionHooks>;
+    fatePolicy?: ResourceSpendPolicy;
 }
 
 export type IntoMeleeMode = 'specific' | 'groupFriendlyFire';
@@ -805,6 +808,46 @@ export type TalentReactionRegisteredEvent = CombatEventBase<'TalentReactionRegis
     policy: 'always' | 'never';
 }>;
 
+export type ReactionTrigger =
+    | 'attacked-in-melee'
+    | 'charged'
+    | 'test-rolled'
+    | 'test-failed'
+    | 'won-Dodge-defence'
+    | 'won-defensive-Melee'
+    | 'scored-a-defensive-crit'
+    | 'damage-about-to-apply'
+    | 'would-die';
+
+export type ReactionKind =
+    | 'riposte'
+    | 'reactionStrike'
+    | 'stepAside'
+    | 'shieldsman'
+    | 'reversal'
+    | 'slashExtraBleeding'
+    | 'howDidThatMiss'
+    | 'dieAnotherDay'
+    | 'fortuneReroll'
+    | 'fortunePlusOneSl';
+
+export type ReactionOfferedEvent = CombatEventBase<'ReactionOffered', {
+    trigger: ReactionTrigger;
+    actorId: string;
+    targetId?: string;
+    reaction: ReactionKind;
+    initiativeIndex?: number;
+}>;
+
+export type ReactionResolvedEvent = CombatEventBase<'ReactionResolved', {
+    trigger: ReactionTrigger;
+    actorId: string;
+    targetId?: string;
+    reaction: ReactionKind;
+    chosen: boolean;
+    depth: number;
+}>;
+
 export type AdvantageGainBlockedEvent = CombatEventBase<'AdvantageGainBlocked', {
     combatantId: string;
     side: SideId;
@@ -853,4 +896,6 @@ export type CombatEvent =
     | TalentEffectAppliedEvent
     | TalentActivationRejectedEvent
     | TalentReactionRegisteredEvent
+    | ReactionOfferedEvent
+    | ReactionResolvedEvent
     | AdvantageGainBlockedEvent;

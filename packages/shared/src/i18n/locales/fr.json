@@ -328,6 +328,10 @@
                 "notApplicable": "La depense de Destin n'est pas applicable."
             }
         },
+        "reaction": {
+            "offered": "{{actorId}} peut utiliser {{reaction}} a {{trigger}}.",
+            "resolved": "{{actorId}} resout {{reaction}} a {{trigger}}."
+        },
         "talent": {
             "reaction": {
                 "registered": "{{combatantId}} enregistre {{talentId}} pour {{window}}."

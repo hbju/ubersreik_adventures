@@ -401,6 +401,10 @@
                 "notApplicable": "Fate spend is not applicable."
             }
         },
+        "reaction": {
+            "offered": "{{actorId}} may use {{reaction}} at {{trigger}}.",
+            "resolved": "{{actorId}} resolves {{reaction}} at {{trigger}}."
+        },
         "talent": {
             "reaction": {
                 "registered": "{{combatantId}} registers {{talentId}} for {{window}}."
