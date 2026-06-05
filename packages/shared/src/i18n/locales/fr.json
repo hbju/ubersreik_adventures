@@ -332,6 +332,75 @@
             "offered": "{{actorId}} peut utiliser {{reaction}} a {{trigger}}.",
             "resolved": "{{actorId}} resout {{reaction}} a {{trigger}}."
         },
+        "decision": {
+            "profile": {
+                "berserker": {
+                    "charge": "Le Berserker charge pour fermer la distance."
+                },
+                "skirmisher": {
+                    "disengage": "L'Escarmoucheur se desengage pour reprendre de l'espace.",
+                    "fleeFromHarm": "L'Escarmoucheur depense de l'Avantage pour fuir."
+                },
+                "marksman": {
+                    "shoot": "Le Tireur maintient la pression avec un tir.",
+                    "reload": "Le Tireur recharge pour continuer a tirer.",
+                    "keepRange": "Le Tireur se replace pour garder la portee."
+                },
+                "duellist": {
+                    "defendWhenPressed": "Le Duelliste defend quand il est sous pression.",
+                    "attack": "Le Duelliste attaque la meilleure cible."
+                }
+            },
+            "action": {
+                "attackBestTarget": "Attaquer la meilleure cible.",
+                "rangedBestTarget": "Tirer sur la meilleure cible."
+            },
+            "target": {
+                "focusFire": "Concentrer les attaques sur la cible choisie."
+            },
+            "advantage": {
+                "additionalAction": "Depenser de l'Avantage pour une Action supplementaire.",
+                "additionalEffort": "Depenser de l'Avantage pour Effort supplementaire.",
+                "fleeFromHarm": "Depenser de l'Avantage pour fuir le danger.",
+                "batter": "Depenser de l'Avantage pour Bousculer.",
+                "trick": "Depenser de l'Avantage pour Ruser.",
+                "furiousAssault": "Depenser de l'Avantage pour Assaut Furieux."
+            },
+            "resource": {
+                "fateAvoidDeath": "Depenser du Destin pour eviter la mort.",
+                "fateAvoidDamage": "Depenser du Destin pour eviter les degats.",
+                "fortuneReroll": "Depenser de la Fortune pour relancer.",
+                "fortunePlusOneSl": "Depenser de la Fortune pour +1 DR."
+            },
+            "reaction": {
+                "riposte": {
+                    "freeDamage": "Riposter pour infliger des degats gratuits."
+                },
+                "reactionStrike": {
+                    "preemptCharge": "Frapper en reaction avant la charge."
+                },
+                "stepAside": {
+                    "kite": "Faire un pas de cote pour se replacer.",
+                    "defensive": "Faire un pas de cote defensif."
+                }
+            },
+            "spend": {
+                "quality": "Depenser de l'Avantage pour activer une qualite."
+            },
+            "decline": {
+                "quality": "Refuser l'activation optionnelle de qualite."
+            },
+            "competence": {
+                "noUsefulOption": "Aucune option utile n'est disponible.",
+                "firstUsefulOption": "Prendre la premiere option utile.",
+                "firstLegalResolution": "Prendre la premiere option de resolution legale."
+            },
+            "subdecision": {
+                "reversal": { "on": "Garder Reversal pret." },
+                "infighting": { "infighting": "Choisir le combat rapproche.", "normal": "Garder la distance normale." },
+                "shieldsman": { "push": "Utiliser Shieldsman pour repousser.", "damage": "Utiliser Shieldsman pour blesser." }
+            }
+        },
         "talent": {
             "reaction": {
                 "registered": "{{combatantId}} enregistre {{talentId}} pour {{window}}."

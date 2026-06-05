@@ -25,6 +25,7 @@ export interface ReactionDecision {
     rollResult?: number;
     targetNumber?: number;
     policy?: 'always' | 'never';
+    decisionLog?: import('./types').DecisionLogEntry;
 }
 
 export interface ReactionWindowContext {

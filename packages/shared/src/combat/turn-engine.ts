@@ -1,9 +1,9 @@
 import { applyEndOfRoundConditionEffects, combatantCapabilities } from '../utils/conditions';
 import { calculateCharacteristicValue } from '../utils/skills';
 import { reallocateEndOfRound, seedInitialAdvantage, spendAdvantage } from './advantage';
-import { resolveCombatAction } from './actions';
+import { isGrapplingEngagement, resolveCombatAction } from './actions';
 import { decayEngagementsEndOfRound, determineSurprise, resolveMeleeAttack, resolveRangedAttack, resolveReloadAction } from './engine';
-import { applyMove, type MoveTarget } from './spatial';
+import { applyMove, REACH_ENGAGEMENT_DISTANCE, WeaponReach, type MoveTarget } from './spatial';
 import { resolveWeaponUse } from './proficiency';
 import { hasQuality, qualityRating } from './qualities';
 import { eligibleReactions, reactionOfferEvent, resolveReactionDecision, type ReactionDecision } from './reactions';
@@ -17,6 +17,7 @@ import type {
     CombatEngineResult,
     CombatEvent,
     CombatState,
+    DecisionLogEntry,
     MeleeAttackAction,
     MovementMode,
     RangedAttackAction,
@@ -74,6 +75,7 @@ export interface CombatDecision {
     trigger?: ReactionDecision['trigger'];
     rollResult?: number;
     targetNumber?: number;
+    decisionLog?: DecisionLogEntry;
     parameterDomains?: Record<string, unknown>;
 }
 
@@ -164,7 +166,7 @@ export function cloneTurnEngine(engine: TurnEngineState): TurnEngineState {
 }
 
 export function advanceToNextDecision(engine: TurnEngineState, options: TurnEngineOptions = {}): TurnEngineState {
-    let current: TurnEngineState = { ...engine, events: [] };
+    let current: TurnEngineState = engine;
     while (current.phase !== 'awaitingDecision' && current.phase !== 'complete') {
         current = stepAutomatic(current, options);
     }
@@ -189,6 +191,7 @@ export function applyDecision(engine: TurnEngineState, decision: CombatDecision,
     result = threadDeferredResolutionDecisions(engine, decision, result, controller);
     result = threadDamageInterceptions({ ...engine, state: result.state }, decision, result, controller);
     result = threadDeathInterceptions({ ...engine, state: result.state }, decision, result, controller);
+    result = appendDecisionLog(result, decision, 'turn');
 
     const next = {
         ...engine,
@@ -249,13 +252,24 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             if (actor.budget.moves <= 0 || !capabilities.canMove) return [];
             const walk = actor.movementBudget.walk;
             const run = actor.movementBudget.run;
-            const destinations = [
-                { mode: 'walk' as MovementMode, target: actor.position - walk },
-                { mode: 'walk' as MovementMode, target: actor.position + walk },
-                { mode: 'run' as MovementMode, target: actor.position - run },
-                { mode: 'run' as MovementMode, target: actor.position + run },
-                ...enemyIds(state, actor).map(targetId => ({ mode: 'charge' as MovementMode, target: { combatantId: targetId } })),
-            ];
+            let destinations: { mode: MovementMode; target: number | { combatantId: string } }[] = [];
+            for (const mode of ['walk', 'run'] as MovementMode[]) {
+                for (const i of [...Array(mode === 'walk' ? 2 * walk + 1 : 2 * run + 1).keys()].map(i => -walk + i).filter(i => i !== 0)) {
+                    destinations.push({ mode, target: actor.position + i });
+                }
+            }
+            if (actor.budget.actions > 0) {
+                const inRangeEnemies = enemyIds(state, actor).filter(targetId => {
+                    const target = state.combatants[targetId];
+                    const distance = Math.abs(target.position - actor.position);
+                    return distance >= actor.movementBudget.walk / 2 && distance <= actor.movementBudget.run;
+                });
+                destinations = [
+                    ...destinations,
+                    ...inRangeEnemies.map(targetId => ({ mode: 'charge' as MovementMode, target: { combatantId: targetId } })),
+
+                ]
+            }
             return destinations.map(destination => ({
                 kind: 'move',
                 actorId: actor.id,
@@ -277,9 +291,12 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
     },
     {
         kind: 'meleeAttack',
-        legal: (state, actor) => actionBudgetReady(actor)
-            ? enemyIds(state, actor).map(targetId => ({ kind: 'meleeAttack', actorId: actor.id, targetId, targetIds: [targetId] }))
-            : [],
+        legal: (state, actor) => {
+            const actorReach = REACH_ENGAGEMENT_DISTANCE[(state.weapons.filter(weapon => weapon.id === (actor.weaponLoadout?.primaryWeaponId ?? ''))?.[0]?.reach as WeaponReach) ?? "Short"];
+            return actionBudgetReady(actor)
+            ? enemyIds(state, actor).filter(id => Math.abs(state.combatants[id].position - actor.position) <= actorReach).map(targetId => ({ kind: 'meleeAttack', actorId: actor.id, targetId, targetIds: [targetId] }))
+            : []
+        },
         dispatch: (engine, decision, controller) => {
             const action = decision.action as MeleeAttackAction | undefined;
             if (!action) return { state: engine.state, events: [decisionRejected(decision, 'missingAction')] };
@@ -386,6 +403,10 @@ function targetedCombatActionEntries(kinds: CombatActionKind[]): ActionCatalogue
         legal: (state, actor) => {
             if (!combatActionBudgetReady(actor, kind)) return [];
             if (!combatActionTalentReady(actor, kind)) return [];
+            if (kind === 'grappleBreak' || kind === 'grappleMaintain') {
+                if (!actor.engagementIds.some(id => isGrapplingEngagement(state, actor.id, id))) return [];
+            }
+
             const targets = kind === 'disengageDodge'
                 ? actor.engagementIds.filter(id => isActive(state.combatants[id]))
                 : enemyIds(state, actor);
@@ -468,6 +489,7 @@ function threadDeferredResolutionDecisions(engine: TurnEngineState, parent: Comb
             state = applied.state;
             events.push(...applied.events);
         }
+        if (choice?.decisionLog) events.push(decisionLogEvent(choice, 'resolution'));
         events.push(turnEvent('ResolutionDecisionRequested', 'combat.turn.resolutionDecision', {
             actorId: parent.actorId,
             reason: 'qualityActivation',
@@ -537,6 +559,7 @@ function threadAttackReactions(engine: TurnEngineState, parent: CombatDecision, 
             }, engine.rng);
             state = resolved.state;
             events.push(...resolved.events);
+            if (choice.decisionLog) events.push(decisionLogEvent(choice, 'resolution'));
         } else {
             events.push(turnEvent('ReactionResolved', 'combat.reaction.resolved', {
                 trigger: window.trigger,
@@ -587,6 +610,7 @@ function threadChargeReactions(engine: TurnEngineState, parent: CombatDecision, 
         }, engine.rng);
         state = resolved.state;
         events.push(...resolved.events);
+        if (choice.decisionLog) events.push(decisionLogEvent(choice, 'resolution'));
     } else {
         events.push(turnEvent('ReactionResolved', 'combat.reaction.resolved', {
             trigger: 'charged',
@@ -623,6 +647,7 @@ function withFateInterceptionChoice<TAction extends MeleeAttackAction | RangedAt
         rng: engine.rng,
     }) as ReactionDecision | undefined;
     const chosen = selected?.kind === 'reaction' && selected.reaction === 'howDidThatMiss';
+    if (selected?.decisionLog) events.push(decisionLogEvent(selected, 'resolution'));
     events.push(turnEvent('ReactionResolved', 'combat.reaction.resolved', {
         trigger: 'damage-about-to-apply',
         actorId: defenderId,
@@ -663,6 +688,7 @@ function threadDeathInterceptions(engine: TurnEngineState, parent: CombatDecisio
             rng: engine.rng,
         }) as ReactionDecision | undefined;
         const chosen = selected?.kind === 'reaction' && selected.reaction === 'dieAnotherDay';
+        if (selected?.decisionLog) events.push(decisionLogEvent(selected, 'resolution'));
         if (!chosen) {
             events.push(turnEvent('ReactionResolved', 'combat.reaction.resolved', {
                 trigger: 'would-die',
@@ -748,6 +774,7 @@ function threadDamageInterceptions(engine: TurnEngineState, parent: CombatDecisi
             rng: engine.rng,
         }) as ReactionDecision | undefined;
         const chosen = selected?.kind === 'reaction' && selected.reaction === 'howDidThatMiss';
+        if (selected?.decisionLog) events.push(decisionLogEvent(selected, 'resolution'));
         events.push(turnEvent('ReactionResolved', 'combat.reaction.resolved', {
             trigger: 'damage-about-to-apply',
             actorId: defenderId,
@@ -950,7 +977,7 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
         };
         state = { ...state, advantagePools: seedInitialAdvantage({ state }) };
         const start = turnEvent('CombatStarted', 'combat.turn.started', { round: state.round });
-        return { ...engine, state, phase: 'roundStart', events: [start] };
+        return { ...engine, state, phase: 'roundStart', events: engine.events.concat(start) };
     }
 
     if (engine.phase === 'roundStart') {
@@ -966,6 +993,7 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
             phase: order.length === 0 ? 'complete' : 'awaitingDecision',
             activeCombatantId: order[0],
             events: [
+                ...engine.events,
                 turnEvent('RoundStarted', 'combat.turn.roundStarted', { round }),
                 turnEvent('TurnStarted', 'combat.turn.startedActor', { round, combatantId: order[0] }),
             ],
@@ -981,7 +1009,10 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
             state: result.state,
             phase: 'roundStart',
             activeCombatantId: undefined,
-            events: result.events,
+            events: [
+                ...engine.events,
+                ...result.events,
+            ]
         };
     }
 
@@ -1162,7 +1193,7 @@ function complete(engine: TurnEngineState, outcome: 'ally' | 'adversary' | 'draw
         phase: 'complete',
         outcome,
         terminalReason: reason,
-        events: [turnEvent('CombatEnded', 'combat.turn.ended', { outcome, reason })],
+        events: [ ...engine.events, turnEvent('CombatEnded', 'combat.turn.ended', { outcome, reason })],
     };
 }
 
@@ -1171,7 +1202,13 @@ function rejectDecision(engine: TurnEngineState, decision: CombatDecision, reaso
 }
 
 function withEvents(engine: TurnEngineState, events: CombatEvent[]): TurnEngineState {
-    return { ...engine, events };
+    return { ...engine, events: [...engine.events, ...events] };
+}
+
+function appendDecisionLog(result: CombatEngineResult, decision: CombatDecision, level: 'turn' | 'resolution'): CombatEngineResult {
+    return decision.decisionLog
+        ? { state: result.state, events: [...result.events, decisionLogEvent(decision, level)] }
+        : result;
 }
 
 function canUseRangedWeapon(state: CombatState, combatant: Combatant): boolean {
@@ -1232,4 +1269,14 @@ function structuredCloneSafe<T>(value: T): T {
 
 function turnEvent(type: string, i18nKey: string, data: Record<string, unknown>): CombatEvent {
     return { type, i18nKey, data } as CombatEvent;
+}
+
+function decisionLogEvent(decision: CombatDecision, level: 'turn' | 'resolution'): CombatEvent {
+    return turnEvent('DecisionLogged', `combat.decision.${decision.decisionLog?.reasonCode ?? 'unknown'}`, {
+        actorId: decision.actorId,
+        level,
+        chosen: decision.decisionLog?.chosen ?? decision.kind,
+        reasonCode: decision.decisionLog?.reasonCode ?? 'unknown',
+        rejectedAlternatives: decision.decisionLog?.rejectedAlternatives ?? [],
+    });
 }

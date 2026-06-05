@@ -17,7 +17,7 @@ export interface MovementAllowance {
 
 export type MoveTarget = number | { position: number } | { combatantId: string };
 
-export type WeaponReach = 'N/A' | 'Personal' | 'Very Short' | 'Short' | 'Average' | 'Long' | 'Very Long' | 'Varies';
+export type WeaponReach = 'N/A' | 'Personal' | 'Very Short' | 'Short' | 'Average' | 'Long' | 'Very Long' | 'Massive' | 'Varies';
 
 export interface ReachInfo {
     reach: WeaponReach;
@@ -47,7 +47,20 @@ const REACH_RANK: Record<WeaponReach, number> = {
     'Average': 4,
     'Long': 5,
     'Very Long': 6,
+    'Massive': 7,
     'Varies': 4,
+};
+
+export const REACH_ENGAGEMENT_DISTANCE = {
+    'N/A': 0,
+    'Personal': 2,
+    'Very Short': 2,
+    'Short': 2,
+    'Average': 2,
+    'Long': 2,
+    'Very Long': 4,
+    'Massive': 6,
+    'Varies': 2,
 };
 
 export function movementAllowanceFromMovement(movement: number): MovementAllowance {
@@ -131,7 +144,6 @@ export function applyMove(
         }],
     });
 
-    if (combatant.engagementIds.length > 0 && distance > 0) return reject('engaged');
     if (combatant.budget.moves <= 0) return reject('noMove');
     if (actionSpent && combatant.budget.actions <= 0) return reject('noAction');
 

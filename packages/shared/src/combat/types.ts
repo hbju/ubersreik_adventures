@@ -831,6 +831,12 @@ export type ReactionKind =
     | 'fortuneReroll'
     | 'fortunePlusOneSl';
 
+export interface DecisionLogEntry {
+    chosen: string;
+    reasonCode: string;
+    rejectedAlternatives: string[];
+}
+
 export type ReactionOfferedEvent = CombatEventBase<'ReactionOffered', {
     trigger: ReactionTrigger;
     actorId: string;
@@ -846,6 +852,14 @@ export type ReactionResolvedEvent = CombatEventBase<'ReactionResolved', {
     reaction: ReactionKind;
     chosen: boolean;
     depth: number;
+}>;
+
+export type DecisionLoggedEvent = CombatEventBase<'DecisionLogged', {
+    actorId: string;
+    level: 'turn' | 'resolution';
+    chosen: string;
+    reasonCode: string;
+    rejectedAlternatives: string[];
 }>;
 
 export type AdvantageGainBlockedEvent = CombatEventBase<'AdvantageGainBlocked', {
@@ -898,4 +912,5 @@ export type CombatEvent =
     | TalentReactionRegisteredEvent
     | ReactionOfferedEvent
     | ReactionResolvedEvent
+    | DecisionLoggedEvent
     | AdvantageGainBlockedEvent;

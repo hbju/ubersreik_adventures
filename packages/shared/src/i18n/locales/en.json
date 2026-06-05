@@ -405,6 +405,75 @@
             "offered": "{{actorId}} may use {{reaction}} at {{trigger}}.",
             "resolved": "{{actorId}} resolves {{reaction}} at {{trigger}}."
         },
+        "decision": {
+            "profile": {
+                "berserker": {
+                    "charge": "Berserker closes with a charge."
+                },
+                "skirmisher": {
+                    "disengage": "Skirmisher disengages to regain space.",
+                    "fleeFromHarm": "Skirmisher spends Advantage to escape."
+                },
+                "marksman": {
+                    "shoot": "Marksman keeps pressure with a shot.",
+                    "reload": "Marksman reloads to keep firing.",
+                    "keepRange": "Marksman repositions to keep range."
+                },
+                "duellist": {
+                    "defendWhenPressed": "Duellist defends while pressed.",
+                    "attack": "Duellist attacks the best target."
+                }
+            },
+            "action": {
+                "attackBestTarget": "Attack the best target.",
+                "rangedBestTarget": "Shoot the best target."
+            },
+            "target": {
+                "focusFire": "Focus fire on the selected target."
+            },
+            "advantage": {
+                "additionalAction": "Spend Advantage for another Action.",
+                "additionalEffort": "Spend Advantage for Additional Effort.",
+                "fleeFromHarm": "Spend Advantage to flee from harm.",
+                "batter": "Spend Advantage to Batter.",
+                "trick": "Spend Advantage to Trick.",
+                "furiousAssault": "Spend Advantage for Furious Assault."
+            },
+            "resource": {
+                "fateAvoidDeath": "Spend Fate to avoid death.",
+                "fateAvoidDamage": "Spend Fate to avoid damage.",
+                "fortuneReroll": "Spend Fortune to reroll.",
+                "fortunePlusOneSl": "Spend Fortune for +1 SL."
+            },
+            "reaction": {
+                "riposte": {
+                    "freeDamage": "Riposte for free damage."
+                },
+                "reactionStrike": {
+                    "preemptCharge": "Reaction Strike before the charge lands."
+                },
+                "stepAside": {
+                    "kite": "Step Aside to reposition.",
+                    "defensive": "Step Aside defensively."
+                }
+            },
+            "spend": {
+                "quality": "Spend Advantage to activate a quality."
+            },
+            "decline": {
+                "quality": "Decline the optional quality activation."
+            },
+            "competence": {
+                "noUsefulOption": "No useful option is available.",
+                "firstUsefulOption": "Take the first useful option.",
+                "firstLegalResolution": "Take the first legal resolution option."
+            },
+            "subdecision": {
+                "reversal": { "on": "Keep Reversal armed." },
+                "infighting": { "infighting": "Choose In-fighting.", "normal": "Keep normal range." },
+                "shieldsman": { "push": "Use Shieldsman to push.", "damage": "Use Shieldsman to damage." }
+            }
+        },
         "talent": {
             "reaction": {
                 "registered": "{{combatantId}} registers {{talentId}} for {{window}}."
