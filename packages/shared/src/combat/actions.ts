@@ -2,7 +2,7 @@ import type { Weapon } from '../types/wfrp.types';
 import { applyConditionRemovalTest } from '../utils/conditions';
 import { calculateSuccessLevel, rolld100 } from '../utils/mechanics';
 import { calculateCharacteristicBonus } from '../utils/skills';
-import { grantAdvantage } from './advantage';
+import { additionalEffortTestModifier, consumeAdditionalEffortBuff, grantAdvantage } from './advantage';
 import { mathRandomRng, type Rng } from './rng';
 import {
     engagementKey,
@@ -184,13 +184,18 @@ function resolveAssess(state: CombatState, request: CombatActionRequest, rng: Rn
     const actor = getCombatant(state, request.actorId);
     if (actor.budget.actions <= 0) return rejectAction(state, 'assess', request.actorId, 'noAction');
 
+
+    const additionalEffortModifier = additionalEffortTestModifier(state, actor.id);
+
     const skillId = request.skillId ?? 'observe';
-    const targetNumber = request.targetNumber ?? skillTarget(actor, skillId);
+    const targetNumber = (request.targetNumber ?? skillTarget(actor, skillId)) + additionalEffortModifier;
     const rollResult = request.rollResult ?? rolld100(rng);
     const successLevel = Math.round(calculateSuccessLevel(rollResult, targetNumber));
     const spent = spendAction(state, actor.id);
     const events: CombatEvent[] = [];
+
     let currentState = spent;
+    currentState = consumeAdditionalEffortBuff(currentState, actor.id);
 
     if (successLevel >= 0) {
         const amount = successLevel >= 6 ? 3 : 2;
@@ -245,12 +250,17 @@ function resolveSprint(state: CombatState, request: CombatActionRequest, rng: Rn
     const actor = getCombatant(state, request.actorId);
     if (actor.budget.actions <= 0) return rejectAction(state, 'sprint', request.actorId, 'noAction');
 
-    const targetNumber = (request.targetNumber ?? skillTarget(actor, 'athletics')) + AVERAGE_TEST_MODIFIER;
+    const additionalEffortModifier = additionalEffortTestModifier(state, actor.id);
+
+    const targetNumber = (request.targetNumber ?? skillTarget(actor, 'athletics')) + AVERAGE_TEST_MODIFIER + additionalEffortModifier;
     const rollResult = request.rollResult ?? rolld100(rng);
     const successLevel = Math.round(calculateSuccessLevel(rollResult, targetNumber));
+    
+    let consumedState = consumeAdditionalEffortBuff(state, actor.id);
+
     if (successLevel < 0) {
         return {
-            state: spendAction(state, actor.id),
+            state: spendAction(consumedState, actor.id),
             events: [actionResolved('sprint', actor.id, 'failure', false)],
         };
     }
@@ -284,10 +294,14 @@ function resolveFirstAid(state: CombatState, request: CombatActionRequest, rng: 
         };
     }
 
-    const targetNumber = (request.targetNumber ?? skillTarget(actor, 'heal')) + AVERAGE_TEST_MODIFIER;
+    const additionalEffortModifier = additionalEffortTestModifier(state, actor.id);
+
+    const targetNumber = (request.targetNumber ?? skillTarget(actor, 'heal')) + AVERAGE_TEST_MODIFIER + additionalEffortModifier;
     const rollResult = request.rollResult ?? rolld100(rng);
     const successLevel = Math.round(calculateSuccessLevel(rollResult, targetNumber));
-    let currentState = spendAction(state, actor.id);
+
+    let currentState = consumeAdditionalEffortBuff(state, actor.id);
+    currentState = spendAction(currentState, actor.id);
     const events: CombatEvent[] = [];
 
     if (successLevel >= 0) {

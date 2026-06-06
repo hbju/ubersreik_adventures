@@ -1,7 +1,7 @@
 import { applyEndOfRoundConditionEffects, combatantCapabilities } from '../utils/conditions';
 import { calculateCharacteristicValue } from '../utils/skills';
-import { reallocateEndOfRound, seedInitialAdvantage, spendAdvantage } from './advantage';
-import { isGrapplingEngagement, resolveCombatAction } from './actions';
+import { consumeAdditionalEffortBuff, reallocateEndOfRound, resetAdditionalEffortBuff, seedInitialAdvantage, spendAdvantage } from './advantage';
+import { isGrapplingEngagement, resolveCombatAction, resolveEffectiveWeapon } from './actions';
 import { decayEngagementsEndOfRound, determineSurprise, resolveMeleeAttack, resolveRangedAttack, resolveReloadAction } from './engine';
 import { applyMove, REACH_ENGAGEMENT_DISTANCE, WeaponReach, type MoveTarget } from './spatial';
 import { resolveWeaponUse } from './proficiency';
@@ -25,6 +25,8 @@ import type {
     SideId,
 } from './types';
 import { accumulatedCriticalDeathCheck } from './critical';
+import { Weapon } from 'src/types/wfrp.types';
+import { rolld100 } from 'src/utils/mechanics';
 
 export type TurnEnginePhase = 'setup' | 'roundStart' | 'awaitingDecision' | 'roundEnd' | 'complete';
 export type CombatDecisionKind =
@@ -196,7 +198,7 @@ export function applyDecision(engine: TurnEngineState, decision: CombatDecision,
     const next = {
         ...engine,
         state: result.state,
-        events: [...result.events],
+        events: [...engine.events, ...result.events],
     };
     return shouldEndTurn(next, decision.actorId, decision.kind)
         ? finishTurn(next)
@@ -267,7 +269,6 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
                 destinations = [
                     ...destinations,
                     ...inRangeEnemies.map(targetId => ({ mode: 'charge' as MovementMode, target: { combatantId: targetId } })),
-
                 ]
             }
             return destinations.map(destination => ({
@@ -275,6 +276,7 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
                 actorId: actor.id,
                 mode: destination.mode,
                 target: destination.target,
+                targetId: typeof destination.target === 'object' && destination.target && 'combatantId' in destination.target ? destination.target.combatantId : undefined,
                 destination: destination.target,
                 parameterDomains: { modes: ['walk', 'run', 'charge'] },
             }));
@@ -284,7 +286,17 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             if (target === undefined) return { state: engine.state, events: [decisionRejected(decision, 'missingTarget')] };
             let result = applyMove(engine.state, decision.actorId, target, decision.mode ?? 'walk', engine.rng);
             if (decision.mode === 'charge' && controller) {
+                const action = decision.action as MeleeAttackAction | undefined;
+                if (!action) return { state: engine.state, events: [decisionRejected(decision, 'missingAction')] };
+
                 result = threadChargeReactions({ ...engine, state: result.state }, decision, result, controller);
+
+                let prepared = withFateInterceptionChoice({ ...engine, state: result.state, events: [...result.events] }, controller, action.defenderId, action);
+                prepared = { ...prepared, events: [...engine.events, ...prepared.events] };
+                result = resolveMeleeAttack(prepared.state, prepared.action, engine.rng);
+                result = { state: result.state, events: [...prepared.events, ...result.events] };
+                result = threadAttackReactions({ ...engine, state: result.state }, decision, result, controller);
+                return spendTurnAction(result.state, decision.actorId, result.events);
             }
             return result;
         },
@@ -1020,21 +1032,27 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
 }
 
 function finishTurn(engine: TurnEngineState): TurnEngineState {
-    const endedId = engine.activeCombatantId!;
-    const nextIndex = engine.turnIndex + 1;
-    const nextId = engine.initiativeOrder.slice(nextIndex).find(id => isActive(engine.state.combatants[id]));
-    const events = [...engine.events, turnEvent('TurnEnded', 'combat.turn.endedActor', { round: engine.round, combatantId: endedId })];
-    const terminated = sideDownTermination(engine.state);
-    if (terminated) return { ...engine, events, ...terminated };
+
+    
+    const result = resetAdditionalEffortBuff(engine.state, engine.activeCombatantId!);
+    const currentState = result.state;
+    const nextEngine = { ...engine, state: currentState, events: [...engine.events, ...result.events] };
+
+    const endedId = nextEngine.activeCombatantId!;
+    const nextIndex = nextEngine.turnIndex + 1;
+    const nextId = nextEngine.initiativeOrder.slice(nextIndex).find(id => isActive(nextEngine.state.combatants[id]));
+    const events = [...nextEngine.events, turnEvent('TurnEnded', 'combat.turn.endedActor', { round: nextEngine.round, combatantId: endedId })];
+    const terminated = sideDownTermination(nextEngine.state);
+    if (terminated) return { ...nextEngine, events, ...terminated };
     if (!nextId) {
-        return { ...engine, phase: 'roundEnd', activeCombatantId: undefined, turnIndex: nextIndex, events };
+        return { ...nextEngine, phase: 'roundEnd', activeCombatantId: undefined, turnIndex: nextIndex, events };
     }
     return {
-        ...engine,
+        ...nextEngine,
         phase: 'awaitingDecision',
         activeCombatantId: nextId,
         turnIndex: nextIndex,
-        events: [...events, turnEvent('TurnStarted', 'combat.turn.startedActor', { round: engine.round, combatantId: nextId })],
+        events: [...events, turnEvent('TurnStarted', 'combat.turn.startedActor', { round: nextEngine.round, combatantId: nextId })],
     };
 }
 
@@ -1230,7 +1248,7 @@ function reloadBlocked(combatant: Combatant, weaponId: string): boolean {
     return !!ammo && (!ammo.loaded || !!ammo.reloadProgress || (ammo.shotsRemaining !== undefined && ammo.shotsRemaining <= 0));
 }
 
-function equippedWeapon(state: CombatState, combatant: Combatant) {
+function equippedWeapon(state: CombatState, combatant: Combatant): Weapon | undefined {
     const weaponId = combatant.weaponLoadout?.primaryWeaponId
         ?? Object.entries(combatant.character.inventory.equippedWeapons || {}).find(([, equipped]) => equipped)?.[0];
     return weaponId ? state.weapons.find(weapon => weapon.id === weaponId) : undefined;

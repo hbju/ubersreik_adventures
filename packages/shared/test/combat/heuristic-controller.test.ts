@@ -212,8 +212,8 @@ describe('heuristic controller 5c', () => {
 
     it('runs a heuristic-driven fight to termination unaided and deterministically', () => {
         const state = createCombatState([
-            combatant('ally', 'ally', ['sword'], 0, { wounds: 4, maxWounds: 4 }),
-            combatant('enemy', 'adversary', ['sword'], 7, { wounds: 4, maxWounds: 4 }),
+            combatant('ally', 'ally', ['sword'], 0, { wounds: 10, maxWounds: 10 }),
+            combatant('enemy', 'adversary', ['sword'], 7, { wounds: 10, maxWounds: 10 }),
         ], { weapons: [sword] });
         const run = () => runCombatToCompletion(state, new HeuristicController({ profile: 'berserker' }), { seed: 'heuristic-fight', maxRounds: 6 });
 

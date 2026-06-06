@@ -3,6 +3,7 @@ import { grappleOutsiderToHitModifier } from './actions';
 import { calledShotPenaltyFor, ignoresWeaponLengthPenalty, offHandPenaltyFor } from './talents';
 import type { Combatant, CombatantSize, CombatState, CoverLevel, MeleeAttackAction, ModifierSource, ModifierTotal, RangedRangeBand, RangedAttackAction } from './types';
 import { reachOf } from './spatial';
+import { additionalEffortTestModifier } from './advantage';
 
 const SIZE_RANK: Record<CombatantSize, number> = {
     tiny: 0,
@@ -86,6 +87,12 @@ export function collectMeleePreRollModifiers(
         sources.push({ id: 'grapple:outsider', type: 'manual', phase: 'preRollModifiers', value: grappleOutsider, combatantId: attacker.id });
     }
 
+    const effortModifier = additionalEffortTestModifier(state, attacker.id);
+    if (effortModifier !== 0) {
+        sources.push({ id: 'additionalEffort', type: 'additionalEffort', phase: 'preRollModifiers', value: effortModifier, combatantId: attacker.id });
+        
+    }
+
     // Registered for PBI 4; melee attacks currently provide no ranged values.
     sources.push(
         { id: 'range:empty', type: 'range', phase: 'preRollModifiers', value: 0 },
@@ -144,6 +151,11 @@ export function collectRangedPreRollModifiers(
 
     if (action.aimed || attacker.aimedRangedAttack) {
         sources.push({ id: 'aim:previousAction', type: 'manual', phase: 'preRollModifiers', value: 20, combatantId: attacker.id });
+    }
+
+    const effortModifier = additionalEffortTestModifier(state, attacker.id);
+    if (effortModifier !== 0) {
+        sources.push({ id: 'additionalEffort', type: 'additionalEffort', phase: 'preRollModifiers', value: effortModifier, combatantId: attacker.id });
     }
 
     const groupCount = (action as RangedAttackAction & { groupTargetCount?: number }).groupTargetCount;

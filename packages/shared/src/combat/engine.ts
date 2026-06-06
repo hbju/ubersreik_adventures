@@ -2,7 +2,7 @@ import type { Armor, Character, Weapon } from '../types/wfrp.types';
 import { attackerModifiersFor, conditionsRemovedAfterAttack, opposedTestCollapseFor } from '../utils/conditions';
 import { calculateSuccessLevel, getHitLocation, rolld100 } from '../utils/mechanics';
 import { calculateCharacteristicBonus } from '../utils/skills';
-import { createAdvantagePools, grantAdvantage } from './advantage';
+import { additionalEffortTestModifier, consumeAdditionalEffortBuff, createAdvantagePools, grantAdvantage } from './advantage';
 import { defensiveBonusForSkill, resolveEffectiveWeapon } from './actions';
 import { criticalRoll } from './critical';
 import { resolveExtendedTest } from './extended-tests';
@@ -475,6 +475,8 @@ export function resolveRangedAttack(state: CombatState, action: RangedAttackActi
         ...getCombatant(currentState, attacker.id),
         aimedRangedAttack: false,
     });
+
+    currentState = consumeAdditionalEffortBuff(currentState, attacker.id);
 
     if (outcome === 'attacker' && action.generatesAdvantage !== false && action.grantAdvantage !== false) {
         const advantageResult = grantAdvantage(currentState, attacker.side, 1, {
@@ -1060,13 +1062,14 @@ export function resolveMeleeAttack(state: CombatState, action: MeleeAttackAction
         }
     }
 
-    currentState = applyLoserActionEnd(currentState, outcome === 'attacker' ? defender.id : outcome === 'defender' ? attacker.id : undefined);
     currentState = clearChargeFlag(currentState, attacker.id);
     currentState = removeConditions(currentState, defender.id, conditionsRemovedAfterAttack(defender));
 
     if (feintBonus > 0) {
         currentState = consumeFeintBuff(currentState, attacker.id, defender.id);
     }
+
+    currentState = consumeAdditionalEffortBuff(currentState, attacker.id);
 
     if (outcome === 'defender' && action.grantAdvantage !== false) {
         const defenderCombatant = getCombatant(currentState, defender.id);
@@ -1745,12 +1748,6 @@ function stampAttackEngagement(state: CombatState, attackerId: string, defenderI
             [key]: { aId: attackerId, bId: defenderId, lastAttackRound: state.round },
         },
     };
-}
-
-function applyLoserActionEnd(state: CombatState, loserId?: string): CombatState {
-    if (!loserId) return state;
-    const loser = getCombatant(state, loserId);
-    return replaceCombatant(state, { ...loser, budget: { ...loser.budget, actions: 0 } });
 }
 
 function clearChargeFlag(state: CombatState, combatantId: string): CombatState {

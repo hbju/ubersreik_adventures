@@ -34,7 +34,7 @@ export interface ReachOrderHint {
 }
 
 export const DEFAULT_RANGE_THRESHOLDS: RangeBandThresholds = {
-    engaged: 1.5,
+    engaged: 2,
     short: 6,
     medium: 20,
 };
@@ -126,7 +126,7 @@ export function applyMove(
     const combatant = getCombatant(state, combatantId);
     const to = resolveMoveTargetPosition(state, combatant, target, options.thresholds ?? DEFAULT_RANGE_THRESHOLDS);
     const distance = Math.abs(to - combatant.position);
-    const actionSpent = mode === 'run' || mode === 'charge';
+    const actionSpent = mode === 'sprint';
     const reject = (reason: 'engaged' | 'noMove' | 'noAction' | 'insufficientBudget'): CombatEngineResult => ({
         state,
         events: [{

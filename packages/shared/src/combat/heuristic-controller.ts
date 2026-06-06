@@ -5,6 +5,7 @@ import type {
     Combatant,
     CombatState,
     DecisionLogEntry,
+    MeleeAttackAction,
     OpposedRollInput,
     RangedAttackAction,
 } from './types';
@@ -14,6 +15,8 @@ import type {
     DecisionContext,
     LegalDecision,
 } from './turn-engine';
+import { resolveWeaponUse } from './proficiency';
+import { additionalEffortTestModifier } from './advantage';
 
 export type HeuristicProfileId = 'berserker' | 'duellist' | 'skirmisher' | 'marksman' | 'brute';
 
@@ -201,13 +204,17 @@ export class HeuristicController implements CombatantController {
         }
 
         if (this.profile.id === 'berserker') {
-            const charge = useful.find(decision => decision.kind === 'move' && decision.mode === 'charge');
-            if (charge) return withLog(charge, 'profile.berserker.charge', legal);
+            const charge = useful.filter(decision => decision.kind === 'move' && decision.mode === 'charge');
+            if (charge.length > 0) return withLog(this.materializeCharge(context, charge), 'profile.berserker.charge', legal);
             if (!useful.some(decision => decision.kind === 'meleeAttack')) {
-                const nearestEnemy = Object.values(context.state.combatants).filter(combatant => combatant.side !== context.actor.side).sort((a, b) => Math.abs(a.position - context.actor.position) - Math.abs(b.position - context.actor.position))[0];
-                if (nearestEnemy) {
-                    const movesTowards = useful.filter(decision => decision.kind === 'move' && decision.mode !== 'charge' && typeof decision.target === 'number' && decision.target !== nearestEnemy.position).sort((a, b) => Math.abs(a.target as number - nearestEnemy.position) - Math.abs(b.target as number - nearestEnemy.position));
-                    if (movesTowards) return withLog(movesTowards[0], 'profile.berserker.moveTowards', legal);
+                const bestTarget = this.bestTargetId(context.state, context.actor, candidateTargets(useful.filter(decision => decision.kind === 'move' && decision.mode !== 'charge')));
+                if (bestTarget) {
+                    const move = useful.filter(decision => decision.kind === 'move' && typeof decision.target === 'number').sort((a, b) => {
+                        const distanceA = Math.abs((a.target as number) - context.state.combatants[bestTarget].position);
+                        const distanceB = Math.abs((b.target as number) - context.state.combatants[bestTarget].position);
+                        return distanceA - distanceB;
+                    })[0];
+                    if (move) return withLog(move, 'profile.berserker.closeIn', legal);
                 }
             }
         }
@@ -223,8 +230,10 @@ export class HeuristicController implements CombatantController {
         const ranged = useful.filter(decision => decision.kind === 'rangedAttack');
         if (ranged.length > 0) return withLog(this.materializeRanged(context, ranged), 'action.rangedBestTarget', legal);
 
-        const action = useful.find(decision => decision.kind !== 'move') ?? useful[0];
-        return withLog(withRequest(action), 'competence.firstUsefulOption', legal);
+        const action = useful.find(decision => decision.kind !== 'move' && decision.kind !== 'spendAdvantage');
+        if (action) return withLog(withRequest(action), 'competence.firstUsefulOption', legal);
+        
+        return actor.engagementIds.filter(id => isActive(context.state.combatants[id])).length > 0 ? withLog(legal.find(decision => decision.kind === 'endTurn') ?? legal[0], 'action.endTurn', legal) : withLog(legal[0], 'competence.firstUsefulOption', legal);
     }
 
     private chooseAdvantageSpend(context: DecisionContext, legal: LegalDecision[]): LegalDecision | undefined {
@@ -237,7 +246,7 @@ export class HeuristicController implements CombatantController {
             const flee = legal.find(decision => decision.kind === 'spendAdvantage' && decision.advantageAction === 'fleeFromHarm');
             if (flee) return flee;
         }
-        if (pool >= 1 && this.profile.aggression >= 0.85) {
+        if (pool >= 2 && context.actor.budget.actions > 0 && this.profile.aggression >= 0.85) {
             return legal.find(decision => decision.kind === 'spendAdvantage' && decision.advantageAction === 'additionalEffort');
         }
         return undefined;
@@ -248,14 +257,34 @@ export class HeuristicController implements CombatantController {
         const base = legal.find(decision => decision.targetId === targetId) ?? legal[0];
         const defender = targetId ? context.state.combatants[targetId] : undefined;
         const weapon = primaryWeapon(context.state, context.actor);
+        const weaponUse = weapon ? resolveWeaponUse(context.actor, weapon) : undefined;
         return {
             ...base,
             action: {
                 attackerId: context.actor.id,
                 defenderId: targetId!,
-                attacker: rollInput(context, context.actor, 'melee_basic', weapon?.id),
+                attacker: rollInput(context, context.actor, weaponUse ? (weaponUse?.test.type === 'skill' ? weaponUse.test.skillId : weaponUse.test.characteristic) : 'melee_basic', weapon?.id),
                 defender: rollInput(context, defender, 'melee_basic', primaryWeapon(context.state, defender)?.id),
                 isCharging: context.state.turnFlags.chargedCombatantIds.includes(context.actor.id),
+                grantAdvantage: additionalEffortTestModifier !== undefined
+            },
+        };
+    }
+
+    private materializeCharge(context: DecisionContext, legal: LegalDecision[]): CombatDecision {
+        const targetId = this.bestTargetId(context.state, context.actor, candidateTargets(legal)) ?? legal[0].targetId;
+        const base = legal.find(decision => decision.targetId === targetId) ?? legal[0];
+        const defender = targetId ? context.state.combatants[targetId] : undefined;
+        const weapon = primaryWeapon(context.state, context.actor);
+        const weaponUse = weapon ? resolveWeaponUse(context.actor, weapon) : undefined;
+        return {
+            ...base,
+            action: {
+            attackerId: context.actor.id,
+            defenderId: targetId!,
+            attacker: rollInput(context, context.actor, weaponUse ? (weaponUse?.test.type === 'skill' ? weaponUse.test.skillId : weaponUse.test.characteristic) : 'melee_basic', weapon?.id),
+                defender: rollInput(context, defender, 'melee_basic', primaryWeapon(context.state, defender)?.id),
+                isCharging: true,
             },
         };
     }
@@ -268,6 +297,7 @@ export class HeuristicController implements CombatantController {
             attackerId: context.actor.id,
             defenderId: targetId!,
             attacker: rollInput(context, context.actor, rangedSkillId(weapon), weapon?.id),
+            grantAdvantage: additionalEffortTestModifier !== undefined
         };
         return { ...base, action };
     }
@@ -396,4 +426,8 @@ function decisionLabel(decision: CombatDecision): string {
     if (decision.targetId) parts.push(`target:${decision.targetId}`);
     if (decision.mode) parts.push(decision.mode);
     return parts.join(':');
+}
+
+function isActive(combatant: Combatant | undefined): boolean {
+    return !!combatant && combatant.currentWounds > 0 && !combatant.removedFromEncounter && !(combatant as any).dead && !combatant.conditions.includes('condition_unconscious');
 }

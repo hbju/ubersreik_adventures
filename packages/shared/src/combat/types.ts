@@ -49,6 +49,7 @@ export interface Combatant {
     removedFromEncounter?: boolean;
     cannotGenerateAdvantageUntilRound?: number;
     feintBuffs?: FeintBuff[];
+    additionalEffortBuff?: AdditionalEffortBuff;
     reversalActive?: boolean;
     dualWieldDefensivePenalty?: boolean;
     disarmedWeaponIds?: string[];
@@ -58,6 +59,10 @@ export interface FeintBuff {
     opponentId: string;
     slBonus: number;
     expiresEndOfRound: number;
+}
+
+export interface AdditionalEffortBuff {
+    testModifier: number;        
 }
 
 export interface CombatTurnFlags {
@@ -250,7 +255,7 @@ export interface CombatEngineResult {
 }
 
 export type CombatOutcome = 'attacker' | 'defender' | 'tie';
-export type MovementMode = 'walk' | 'run' | 'charge';
+export type MovementMode = 'walk' | 'run' | 'sprint' | 'charge';
 export type CombatantSize = 'tiny' | 'little' | 'small' | 'average' | 'large' | 'enormous' | 'monstrous';
 export type ModifierPhase = 'preRollModifiers' | 'slModifiers' | 'damageModifiers' | 'apModifiers';
 export type ModifierSourceType =
@@ -265,6 +270,7 @@ export type ModifierSourceType =
     | 'advantage'
     | 'talent'
     | 'quality'
+    | 'additionalEffort'
     | 'manual';
 
 export type RangedRangeBand = 'pointBlank' | 'short' | 'normal' | 'long' | 'extreme' | 'outOfRange';
@@ -680,7 +686,7 @@ export type AdvantageChangedEvent = CombatEventBase<'AdvantageChanged', {
     poolBefore: number;
     poolAfter: number;
     total: number;
-    reason: 'opposedTestWin' | 'spendActionWin' | 'spendActionLoss' | 'seed' | 'reallocation' | 'condition' | 'manual';
+    reason: 'opposedTestWin' | 'spendActionWin' | 'spendActionLoss' | 'seed' | 'reallocation' | 'condition' | 'additionalEffortReset' | 'manual';
     sourceCombatantId?: string;
 }>;
 

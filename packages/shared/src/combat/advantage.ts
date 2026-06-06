@@ -103,7 +103,7 @@ export function grantAdvantage(
     state: CombatState,
     side: SideId,
     amount: number,
-    options: { reason?: 'opposedTestWin' | 'spendActionWin' | 'spendActionLoss' | 'seed' | 'reallocation' | 'condition' | 'manual'; sourceCombatantId?: string } = {}
+    options: { reason?: 'opposedTestWin' | 'spendActionWin' | 'spendActionLoss' | 'seed' | 'reallocation' | 'condition' | 'additionalEffortReset' | 'manual'; sourceCombatantId?: string } = {}
 ): CombatEngineResult {
     if (amount > 0 && options.sourceCombatantId && !canCombatantGenerateAdvantage(state, options.sourceCombatantId)) {
         return {
@@ -250,6 +250,12 @@ export function spendAdvantage(
     }];
 
     if (action === 'additionalEffort') {
+        if (!params.actorId) return reject('missingActor');
+        const actor = getCombatant(currentState, params.actorId!);
+        currentState = replaceCombatants(currentState, [{
+            ...actor,
+            additionalEffortBuff: { testModifier: (cost - 1) * 10 },
+        }]);
         events.push({
             type: 'AdvantageModifierPreparedEvent',
             i18nKey: 'combat.advantage.additionalEffort',
@@ -309,6 +315,32 @@ export function spendAdvantage(
     events.push(actionEvent(side, action, actorWon ? 'win' : 'loss', params.actorId, params.targetId, opposed), ...grantResult.events);
 
     return { state: currentState, events };
+}
+
+
+export function additionalEffortTestModifier(state: CombatState, actorId: string): number {
+    const actor = getCombatant(state, actorId);
+    return actor.additionalEffortBuff?.testModifier ?? 0;
+}
+
+export function consumeAdditionalEffortBuff(state: CombatState, actorId: string): CombatState {
+    const actor = getCombatant(state, actorId);
+    return replaceCombatants(state, [{
+        ...actor,
+        additionalEffortBuff: undefined,
+    }]);
+}
+
+export function resetAdditionalEffortBuff(state: CombatState, actorId: string): CombatEngineResult {
+    if (!actorId) return { state, events: [] };
+    const actor = getCombatant(state, actorId);
+    if (!actor.additionalEffortBuff) return { state, events: [] };
+    const advSpent = actor.additionalEffortBuff.testModifier / 10 + 1;
+    const nextState = replaceCombatants(state, [{
+        ...actor,
+        additionalEffortBuff: undefined,
+    }]);
+    return grantAdvantage(nextState, actor.side, advSpent, { reason: 'additionalEffortReset' });
 }
 
 function advantageCost(action: AdvantageSpendAction, params: SpendAdvantageParams, state: CombatState): number {
@@ -413,6 +445,7 @@ function resolveAdvantageOpposedTest(state: CombatState, action: 'batter' | 'tri
         targetSuccessLevel: Math.round(calculateSuccessLevel(targetRoll, targetTargetNumber)),
     };
 }
+
 
 function actionEvent(
     side: SideId,
