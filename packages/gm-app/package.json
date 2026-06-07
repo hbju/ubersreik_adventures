@@ -20,8 +20,10 @@
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",
     "preview": "vite preview",
-    "pretest": "vite build --mode=test",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "pretest:e2e": "vite build --mode=test",
+    "test:e2e": "npm run pretest:e2e && playwright test"
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",

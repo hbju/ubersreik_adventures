@@ -25,8 +25,8 @@ import type {
     SideId,
 } from './types';
 import { accumulatedCriticalDeathCheck } from './critical';
-import { Weapon } from 'src/types/wfrp.types';
-import { rolld100 } from 'src/utils/mechanics';
+import type { Weapon } from '../types/wfrp.types';
+import { rolld100 } from '../utils/mechanics';
 
 export type TurnEnginePhase = 'setup' | 'roundStart' | 'awaitingDecision' | 'roundEnd' | 'complete';
 export type CombatDecisionKind =

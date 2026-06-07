@@ -1,6 +1,7 @@
 export * from './actions';
 export * from './advantage';
 export * from './audit';
+export * from './batch-runner';
 export * from './critical';
 export * from './engine';
 export * from './extended-tests';

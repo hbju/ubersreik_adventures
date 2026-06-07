@@ -475,6 +475,12 @@
             }
         },
         "encounter": {
+            "batch": {
+                "progress": "Completed {{completedCount}} of {{totalCount}} fights.",
+                "cancelled": "Batch cancelled after {{completedCount}} fights.",
+                "complete": "Batch completed with {{successfulCount}} outcomes and {{failureCount}} failures.",
+                "failure": "Fight {{index}} failed with seed {{seed}}: {{error}}"
+            },
             "outcome": {
                 "winner": "Winner",
                 "draw": "Draw",

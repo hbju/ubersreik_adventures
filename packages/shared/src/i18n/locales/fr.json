@@ -402,6 +402,12 @@
             }
         },
         "encounter": {
+            "batch": {
+                "progress": "{{completedCount}} combats termines sur {{totalCount}}.",
+                "cancelled": "Lot annule apres {{completedCount}} combats.",
+                "complete": "Lot termine avec {{successfulCount}} resultats et {{failureCount}} echecs.",
+                "failure": "Le combat {{index}} a echoue avec la graine {{seed}} : {{error}}"
+            },
             "outcome": {
                 "winner": "Vainqueur",
                 "draw": "Match nul",
