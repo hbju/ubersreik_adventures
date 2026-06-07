@@ -486,6 +486,7 @@
                 "draw": "Draw",
                 "rounds": "Rounds",
                 "survived": "Survived",
+                "incapacitated": "Incapacitated",
                 "finalWounds": "Final Wounds",
                 "died": "Died",
                 "critsDealt": "Critical Wounds Dealt",
@@ -495,6 +496,40 @@
                 "fortuneSpent": "Fortune Spent",
                 "advantageGenerated": "Advantage Generated",
                 "advantageSpent": "Advantage Spent"
+            },
+            "metrics": {
+                "report": "Simulation Report",
+                "sideOutcome": "Side Outcome",
+                "winRate": "Win Rate",
+                "lossRate": "Loss Rate",
+                "drawRate": "Draw Rate",
+                "rounds": "Rounds Distribution",
+                "combatant": "Combatant Metrics",
+                "survivalRate": "Survival Rate",
+                "deathRate": "Death Rate",
+                "finalWoundsAmongSurvivors": "Final Wounds Among Survivors",
+                "critsDealt": "Critical Wounds Dealt",
+                "critsTaken": "Critical Wounds Taken",
+                "conditionsInflicted": "Conditions Inflicted",
+                "fateSpent": "Average Fate Spent",
+                "fateBurnRate": "Fights With Fate Spent",
+                "fortuneSpent": "Average Fortune Spent",
+                "advantageGenerated": "Average Advantage Generated",
+                "damageDealt": "Average Damage Dealt",
+                "damageTaken": "Average Damage Taken",
+                "sideRisk": "Side Risk",
+                "partyDefeatedRate": "Party Defeated",
+                "atLeastOneDeathRate": "At Least One Death",
+                "allDeadRate": "All Combatants Dead",
+                "decisiveness": "Decisiveness",
+                "averageWinningSideSurvivors": "Average Survivors on Winning Side",
+                "roundsByOutcome": "Rounds by Outcome",
+                "comparison": {
+                    "report": "Report Comparison",
+                    "winRate": "Win Rate Difference",
+                    "partyDefeatedRate": "Party Defeat Difference",
+                    "survivalRate": "Survival Rate Difference"
+                }
             },
             "validation": {
                 "missingSides": "The encounter must define both sides.",
@@ -610,7 +645,96 @@
         "commerce": "Commerce",
         "tools": "Tools",
         "world": "World",
-        "notebook": "Notebook"
+        "notebook": "Notebook",
+        "fightLab": "Fight Lab"
+    },
+    "fightLab": {
+        "title": "Fight Lab",
+        "workspace": "Fight Lab workspace",
+        "scenarioName": "Scenario name",
+        "unsaved": "Unsaved",
+        "save": "Save scenario",
+        "library": "Scenario Library",
+        "newScenario": "New scenario",
+        "loading": "Loading scenarios...",
+        "emptyLibrary": "No saved scenarios.",
+        "duplicate": "Duplicate",
+        "delete": "Delete",
+        "edit": "Edit",
+        "remove": "Remove",
+        "combatants": "combatants",
+        "addCombatant": "Add combatant",
+        "sidePosition": "Side position",
+        "profile": "Profile",
+        "profileAuto": "Auto-pick",
+        "cover": "Cover",
+        "offset": "Offset",
+        "none": "None",
+        "initialAdvantage": "Initial Advantage",
+        "rules": "Rules",
+        "batch": "Batch",
+        "suddenDeath": "Sudden Death",
+        "shootingIntoMelee": "Shooting into melee",
+        "maxRounds": "Maximum rounds",
+        "tacticalDominantSide": "Tactical dominant side",
+        "iterations": "Iterations",
+        "masterSeed": "Master seed",
+        "randomizeSeed": "Randomize seed",
+        "lockSeed": "Lock seed",
+        "unlockSeed": "Unlock seed",
+        "tab": {
+            "configurator": "Configure",
+            "run": "Run",
+            "dashboard": "Dashboard",
+            "replay": "Replay",
+            "compare": "Compare"
+        },
+        "placeholder": {
+            "run": "Run workspace reserved for Epic 7b",
+            "dashboard": "Dashboard workspace reserved for Epic 7b",
+            "replay": "Replay workspace reserved for Epic 7c",
+            "compare": "Comparison workspace reserved for Epic 7d"
+        },
+        "side": {
+            "ally": "Ally",
+            "adversary": "Adversary"
+        },
+        "source": {
+            "title": "Add Combatant",
+            "templates": "Templates",
+            "library": "Character Library",
+            "campaign": "Current Campaign",
+            "search": "Search sources...",
+            "partyMember": "Live party"
+        },
+        "validation": {
+            "valid": "Encounter config is valid",
+            "invalid": "Encounter config needs attention"
+        },
+        "warning": {
+            "unskilledWeapon": "{{weapon}} is unskilled; its Qualities will be inactive.",
+            "unusableWeapon": "{{weapon}} cannot be used with this combatant's training."
+        },
+        "profileName": {
+            "berserker": "Berserker",
+            "duellist": "Duellist",
+            "skirmisher": "Skirmisher",
+            "marksman": "Marksman",
+            "brute": "Brute"
+        },
+        "coverName": {
+            "none": "None",
+            "soft": "Soft",
+            "medium": "Medium",
+            "hard": "Hard"
+        },
+        "advantage": {
+            "surprise": "Surprise",
+            "terrain": "Terrain",
+            "threat": "Threat",
+            "manoeuvrability": "Manoeuvrability",
+            "outnumbering": "Outnumbering (automatic)"
+        }
     },
     "lore": {
         "dramatisPersonae": "Dramatis Personae",

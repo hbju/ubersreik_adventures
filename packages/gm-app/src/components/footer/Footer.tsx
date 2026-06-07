@@ -24,6 +24,7 @@ interface FooterProps {
     onShowDramatisPersonae: () => void,
     onShowChat: () => void,
     onShowGameLog: () => void,
+    onShowFightLab: () => void,
 }
 
 interface DropUpMenuProps {
@@ -137,6 +138,7 @@ export const Footer: React.FC<FooterProps> = ({
     onShowDramatisPersonae,
     onShowChat,
     onShowGameLog,
+    onShowFightLab,
 }) => {
     const { t } = useTranslation();
     const { openViewer } = useCodex();
@@ -221,6 +223,15 @@ export const Footer: React.FC<FooterProps> = ({
                 variant="brown"
                 shortcutKey='5'
             />
+
+            <button
+                className={styles.categoryButton}
+                onClick={onShowFightLab}
+                title={t('menu.fightLab', 'Fight Lab')}
+            >
+                <span className={styles.fightLabMark} aria-hidden="true">FL</span>
+                {t('menu.fightLab', 'Fight Lab')}
+            </button>
 
             <LanguageSwitcher />
             <span>Players Connected: <strong>{connectionCount}</strong></span>

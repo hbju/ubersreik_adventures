@@ -95,6 +95,7 @@ export interface FightCombatantOutcome {
     name: string;
     side: SideId;
     survived: boolean;
+    incapacitated?: boolean;
     finalWounds: number;
     died: boolean;
     critsDealt: number;
@@ -103,6 +104,8 @@ export interface FightCombatantOutcome {
     fateSpent: number;
     fortuneSpent: number;
     advantageGenerated: number;
+    damageDealt?: number;
+    damageTaken?: number;
 }
 
 export interface FightSideResourceTotals {
@@ -310,6 +313,10 @@ function summarizeFight(engine: TurnEngineState, seed: FightSeed): FightOutcome 
             name: combatant.name,
             side: combatant.side,
             survived: !(combatant as Combatant & { dead?: boolean }).dead,
+            incapacitated: combatant.currentWounds <= 0
+                || !!combatant.removedFromEncounter
+                || !!(combatant as Combatant & { dead?: boolean }).dead
+                || combatant.conditions.includes('condition_unconscious'),
             finalWounds: combatant.currentWounds,
             died: !!(combatant as Combatant & { dead?: boolean }).dead,
             critsDealt: 0,
@@ -318,6 +325,8 @@ function summarizeFight(engine: TurnEngineState, seed: FightSeed): FightOutcome 
             fateSpent: 0,
             fortuneSpent: 0,
             advantageGenerated: 0,
+            damageDealt: 0,
+            damageTaken: 0,
         },
     ]));
     const sideResources = {
@@ -328,7 +337,13 @@ function summarizeFight(engine: TurnEngineState, seed: FightSeed): FightOutcome 
 
     for (const event of engine.events) {
         if (event.type === 'AttackResolved') latestSourceByTarget.set(event.data.defenderId, event.data.attackerId);
-        if (event.type === 'DamageDealt') latestSourceByTarget.set(event.data.defenderId, event.data.attackerId);
+        if (event.type === 'DamageDealt') {
+            latestSourceByTarget.set(event.data.defenderId, event.data.attackerId);
+            const attacker = combatants[event.data.attackerId];
+            const defender = combatants[event.data.defenderId];
+            if (attacker) attacker.damageDealt = (attacker.damageDealt ?? 0) + event.data.damageDealt;
+            if (defender) defender.damageTaken = (defender.damageTaken ?? 0) + event.data.damageDealt;
+        }
 
         if (event.type === 'CriticalWoundResolved') {
             const target = combatants[event.data.combatantId];

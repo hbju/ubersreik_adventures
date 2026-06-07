@@ -25,6 +25,8 @@ import {
   updateTrackDisplayName
 } from './audioManager'
 import { CampaignState, ChatMessage, AudioLibrary, Playlist } from '@wfrp/shared'
+import type { FightLabStore } from '../../src/fight-lab/types'
+import { fightLabFilePath, loadFightLabStoreAt, saveFightLabStoreAt } from './fightLabStore'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -202,6 +204,14 @@ ipcMain.handle('get-initial-data', async () => {
     console.error('Error loading initial data:', error);
     throw error;
   }
+});
+
+ipcMain.handle('get-fight-lab-store', async () => {
+  return loadFightLabStoreAt(fightLabFilePath(app.getPath('userData')));
+});
+
+ipcMain.handle('save-fight-lab-store', async (_event, store: FightLabStore) => {
+  return saveFightLabStoreAt(fightLabFilePath(app.getPath('userData')), store);
 });
 
 /**

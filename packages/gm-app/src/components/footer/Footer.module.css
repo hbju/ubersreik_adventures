@@ -123,3 +123,13 @@
   background: var(--color-leather-light);
   color: var(--color-gold);
 }
+
+.fightLabMark {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid currentColor;
+  font-size: 10px;
+  line-height: 1;
+}

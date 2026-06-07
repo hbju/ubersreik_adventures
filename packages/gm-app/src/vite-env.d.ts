@@ -18,6 +18,8 @@ interface IpcRendererApi {
     // Campaign Data Persistence API
     getInitialData: () => Promise<any>;
     saveData: (data: any) => void;
+    getFightLabStore: () => Promise<import('./fight-lab/types').FightLabStore>;
+    saveFightLabStore: (data: import('./fight-lab/types').FightLabStore) => Promise<import('./fight-lab/types').FightLabStore>;
     onDataUpdated: (callback: (value: any) => void) => () => void;
     onMapPingReceived: (callback: (value: any) => void) => () => void;
     

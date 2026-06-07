@@ -64,6 +64,14 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
         return ipcRenderer.send('save-data', data)
     },
 
+    getFightLabStore() {
+        return ipcRenderer.invoke('get-fight-lab-store')
+    },
+
+    saveFightLabStore(data: any) {
+        return ipcRenderer.invoke('save-fight-lab-store', data)
+    },
+
     /**
      * Listen for data updates from the main process
      * @param callback Function to call when data is updated

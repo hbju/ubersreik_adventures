@@ -7,6 +7,7 @@ export * from './engine';
 export * from './extended-tests';
 export * from './fight-runner';
 export * from './heuristic-controller';
+export * from './metric-aggregation';
 export * from './modifiers';
 export * from './qualities';
 export * from './proficiency';

@@ -27,6 +27,7 @@ import { TimelineManager } from './components/timeline';
 import { DramatisPersonae } from './components/lore/DramatisPersonae';
 import { LoreEditor } from './components/lore/LoreEditor';
 import NPCGeneratorWizard from './components/generator/NPCGeneratorWizard';
+import FightLab from './components/fightLab/FightLab';
 
 import {
     DiscoveredLocationsList, 
@@ -151,6 +152,7 @@ function App() {
     const [showTimelineManager, setShowTimelineManager] = useState(false);
     const [showChat, setShowChat] = useState(false);
     const [showLibraryManager, setShowLibraryManager] = useState(false);
+    const [showFightLab, setShowFightLab] = useState(false);
     const [showDramatisPersonae, setShowDramatisPersonae] = useState(false);
     const [loreEditorCharacter, setLoreEditorCharacter] = useState<Character | null>(null);
     const [leftSidebarMode, setLeftSidebarMode] = useState<'roster' | 'audio'>('roster');
@@ -1387,29 +1389,30 @@ function App() {
             ...character
         };
 
-        if (Object.keys(updatedCharacter.inventory.weapons).includes(itemId)) {
-            if (updatedCharacter.inventory.weapons[itemId] > 1) {
-                updatedCharacter.inventory.weapons[itemId] -= 1;
+        const removeFromInventory = (inventorySection: Record<string, number>, equippedSection: Record<string, boolean> | undefined) => {
+            if (Object.keys(inventorySection).includes(itemId)) {
+                if (inventorySection[itemId] > 1) {
+                    inventorySection[itemId] -= 1;
+                }
+                else {
+                    delete inventorySection[itemId];
+                }
+                if (equippedSection && equippedSection[itemId]) {
+                    delete equippedSection[itemId];
+                }
+                return true;
             }
-            else {
-                delete updatedCharacter.inventory.weapons[itemId];
-            }
+            return false;
         }
-        else if (Object.keys(updatedCharacter.inventory.armor).includes(itemId)) {
-            if (updatedCharacter.inventory.armor[itemId] > 1) {
-                updatedCharacter.inventory.armor[itemId] -= 1;
-            }
-            else {
-                delete updatedCharacter.inventory.armor[itemId];
-            }
+
+        if (removeFromInventory(updatedCharacter.inventory.weapons, updatedCharacter.inventory.equippedWeapons)){
+
         }
-        else if (Object.keys(updatedCharacter.inventory.items).includes(itemId)) {
-            if (updatedCharacter.inventory.items[itemId] > 1) {
-                updatedCharacter.inventory.items[itemId] -= 1;
-            }
-            else {
-                delete updatedCharacter.inventory.items[itemId];
-            }
+        else if (removeFromInventory(updatedCharacter.inventory.armor, updatedCharacter.inventory.equippedArmor)) {
+
+        }
+        else if (removeFromInventory(updatedCharacter.inventory.items, updatedCharacter.inventory.equippedItems)) {
+
         }
         else {
             console.error("Item not found in inventory: " + itemId);
@@ -1472,10 +1475,19 @@ function App() {
                 onShowDramatisPersonae={() => setShowDramatisPersonae(true)}
                 onShowChat={() => setShowChat(!showChat)}
                 onShowGameLog={() => setShowGameLog(true)}
+                onShowFightLab={() => setShowFightLab(true)}
             />
 
             { showGameLog && (
                 <GameLog entries={logEntries} onClose={() => setShowGameLog(false)} />
+            )}
+
+            {showFightLab && (
+                <FightLab
+                    characters={characters}
+                    templates={allTemplates}
+                    onClose={() => setShowFightLab(false)}
+                />
             )}
 
             {/* Left Sidebar with Tab Toggle */}

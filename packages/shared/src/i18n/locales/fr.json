@@ -413,6 +413,7 @@
                 "draw": "Match nul",
                 "rounds": "Rounds",
                 "survived": "A survecu",
+                "incapacitated": "Neutralise",
                 "finalWounds": "Blessures finales",
                 "died": "Mort",
                 "critsDealt": "Blessures critiques infligees",
@@ -422,6 +423,40 @@
                 "fortuneSpent": "Fortune depensee",
                 "advantageGenerated": "Avantage genere",
                 "advantageSpent": "Avantage depense"
+            },
+            "metrics": {
+                "report": "Rapport de simulation",
+                "sideOutcome": "Resultat du camp",
+                "winRate": "Taux de victoire",
+                "lossRate": "Taux de defaite",
+                "drawRate": "Taux de match nul",
+                "rounds": "Distribution des rounds",
+                "combatant": "Mesures du combattant",
+                "survivalRate": "Taux de survie",
+                "deathRate": "Taux de mortalite",
+                "finalWoundsAmongSurvivors": "Blessures finales des survivants",
+                "critsDealt": "Blessures critiques infligees",
+                "critsTaken": "Blessures critiques subies",
+                "conditionsInflicted": "Etats infliges",
+                "fateSpent": "Destin moyen depense",
+                "fateBurnRate": "Combats avec Destin depense",
+                "fortuneSpent": "Fortune moyenne depensee",
+                "advantageGenerated": "Avantage moyen genere",
+                "damageDealt": "Degats moyens infliges",
+                "damageTaken": "Degats moyens subis",
+                "sideRisk": "Risque du camp",
+                "partyDefeatedRate": "Groupe vaincu",
+                "atLeastOneDeathRate": "Au moins un mort",
+                "allDeadRate": "Tous les combattants morts",
+                "decisiveness": "Caractere decisif",
+                "averageWinningSideSurvivors": "Survivants moyens du camp vainqueur",
+                "roundsByOutcome": "Rounds par resultat",
+                "comparison": {
+                    "report": "Comparaison des rapports",
+                    "winRate": "Difference du taux de victoire",
+                    "partyDefeatedRate": "Difference du taux de defaite du groupe",
+                    "survivalRate": "Difference du taux de survie"
+                }
             },
             "validation": {
                 "missingSides": "La rencontre doit definir les deux camps.",
@@ -611,7 +646,96 @@
         "commerce": "Commerce",
         "tools": "Outils",
         "world": "Monde",
-        "notebook": "Carnet"
+        "notebook": "Carnet",
+        "fightLab": "Laboratoire de combat"
+    },
+    "fightLab": {
+        "title": "Laboratoire de combat",
+        "workspace": "Espace du laboratoire de combat",
+        "scenarioName": "Nom du scenario",
+        "unsaved": "Non enregistre",
+        "save": "Enregistrer le scenario",
+        "library": "Bibliotheque de scenarios",
+        "newScenario": "Nouveau scenario",
+        "loading": "Chargement des scenarios...",
+        "emptyLibrary": "Aucun scenario enregistre.",
+        "duplicate": "Dupliquer",
+        "delete": "Supprimer",
+        "edit": "Modifier",
+        "remove": "Retirer",
+        "combatants": "combattants",
+        "addCombatant": "Ajouter un combattant",
+        "sidePosition": "Position du camp",
+        "profile": "Profil",
+        "profileAuto": "Choix automatique",
+        "cover": "Couvert",
+        "offset": "Decalage",
+        "none": "Aucun",
+        "initialAdvantage": "Avantage initial",
+        "rules": "Regles",
+        "batch": "Lot",
+        "suddenDeath": "Mort subite",
+        "shootingIntoMelee": "Tir dans une melee",
+        "maxRounds": "Rounds maximum",
+        "tacticalDominantSide": "Camp tactiquement dominant",
+        "iterations": "Iterations",
+        "masterSeed": "Graine maitresse",
+        "randomizeSeed": "Nouvelle graine",
+        "lockSeed": "Verrouiller la graine",
+        "unlockSeed": "Deverrouiller la graine",
+        "tab": {
+            "configurator": "Configurer",
+            "run": "Lancer",
+            "dashboard": "Tableau de bord",
+            "replay": "Rejouer",
+            "compare": "Comparer"
+        },
+        "placeholder": {
+            "run": "Espace reserve a l'Epic 7b",
+            "dashboard": "Tableau de bord reserve a l'Epic 7b",
+            "replay": "Espace de rejeu reserve a l'Epic 7c",
+            "compare": "Espace de comparaison reserve a l'Epic 7d"
+        },
+        "side": {
+            "ally": "Allie",
+            "adversary": "Adversaire"
+        },
+        "source": {
+            "title": "Ajouter un combattant",
+            "templates": "Modeles",
+            "library": "Bibliotheque de personnages",
+            "campaign": "Campagne actuelle",
+            "search": "Rechercher une source...",
+            "partyMember": "Groupe actif"
+        },
+        "validation": {
+            "valid": "La configuration de la rencontre est valide",
+            "invalid": "La configuration de la rencontre demande votre attention"
+        },
+        "warning": {
+            "unskilledWeapon": "{{weapon}} n'est pas maitrisee ; ses Qualites seront inactives.",
+            "unusableWeapon": "{{weapon}} ne peut pas etre utilisee avec cet entrainement."
+        },
+        "profileName": {
+            "berserker": "Berserker",
+            "duellist": "Duelliste",
+            "skirmisher": "Escarmoucheur",
+            "marksman": "Tireur",
+            "brute": "Brute"
+        },
+        "coverName": {
+            "none": "Aucun",
+            "soft": "Leger",
+            "medium": "Moyen",
+            "hard": "Lourd"
+        },
+        "advantage": {
+            "surprise": "Surprise",
+            "terrain": "Terrain",
+            "threat": "Menace",
+            "manoeuvrability": "Manoeuvrabilite",
+            "outnumbering": "Surnombre (automatique)"
+        }
     },
     "lore": {
         "dramatisPersonae": "Dramatis Personae",
