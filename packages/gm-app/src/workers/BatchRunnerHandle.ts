@@ -1,12 +1,12 @@
 import type {
     BatchProgress,
-    BatchResult,
     EncounterConfig,
     FightSeed,
 } from '@wfrp/shared';
 import type {
     BatchWorkerRequest,
     BatchWorkerResponse,
+    BatchWorkerResult,
 } from './fight-batch.protocol';
 
 export interface BatchWorkerLike {
@@ -18,7 +18,7 @@ export interface BatchWorkerLike {
 
 export type BatchWorkerFactory = () => BatchWorkerLike;
 export type BatchProgressListener = (progress: BatchProgress) => void;
-export type BatchCompleteListener = (result: BatchResult) => void;
+export type BatchCompleteListener = (result: BatchWorkerResult) => void;
 export type BatchErrorListener = (error: Error) => void;
 
 export class BatchRunnerHandle {
@@ -84,7 +84,7 @@ export class BatchRunnerHandle {
             return;
         }
         if (message.type === 'complete') {
-            for (const listener of this.completeListeners) listener(message.result);
+            for (const listener of this.completeListeners) listener(message.payload);
             this.disposeWorker();
             return;
         }
@@ -104,10 +104,13 @@ export class BatchRunnerHandle {
 }
 
 function defaultWorkerFactory(): BatchWorkerLike {
+    const injectedFactory = (globalThis as typeof globalThis & {
+        __fightLabWorkerFactory?: BatchWorkerFactory;
+    }).__fightLabWorkerFactory;
+    if (injectedFactory) return injectedFactory();
     return new Worker(new URL('./fight-batch.worker.ts', import.meta.url), { type: 'module' }) as unknown as BatchWorkerLike;
 }
 
 function toError(value: unknown): Error {
     return value instanceof Error ? value : new Error(String(value));
 }
-

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
     PlayerCharacterSheet,
     useGameData,
@@ -16,8 +16,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ItemSelectorModal } from '../ItemSelectorModal';
 import { TalentSelectorModal } from '../TalentSelectorModal';
+import { BatchRunnerHandle } from '../../workers';
+import { ResultsDashboard, RunControls } from './FightLabResults';
 import {
     addCharacterToScenario,
+    cacheScenarioReport,
     cloneScenario,
     createEmptyScenario,
     deepClone,
@@ -30,6 +33,15 @@ import {
     updateSidePosition,
     validationView,
 } from '../../fight-lab/model';
+import {
+    completeRunState,
+    failRunState,
+    IDLE_RUN_STATE,
+    progressRunState,
+    replayHandoffForFailure,
+    startRunState,
+    type ReplayHandoff,
+} from '../../fight-lab/run-state';
 import { loadFightLabStore, saveFightLabStore } from '../../fight-lab/persistence';
 import {
     EMPTY_FIGHT_LAB_STORE,
@@ -70,6 +82,25 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
     const [showItemSelector, setShowItemSelector] = useState(false);
     const [showTalentSelector, setShowTalentSelector] = useState(false);
     const [loaded, setLoaded] = useState(false);
+    const [runState, setRunState] = useState(IDLE_RUN_STATE);
+    const [replayHandoff, setReplayHandoff] = useState<ReplayHandoff | null>(null);
+    const runnerRef = useRef<BatchRunnerHandle | undefined>(undefined);
+    const timerRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
+    const scenarioRef = useRef(scenario);
+    const storeRef = useRef(store);
+
+    useEffect(() => {
+        scenarioRef.current = scenario;
+    }, [scenario]);
+
+    useEffect(() => {
+        storeRef.current = store;
+    }, [store]);
+
+    useEffect(() => () => {
+        runnerRef.current?.dispose();
+        if (timerRef.current) clearInterval(timerRef.current);
+    }, []);
 
     useEffect(() => {
         loadFightLabStore().then(loadedStore => {
@@ -87,6 +118,10 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
 
     const validation = useMemo(() => validationView(scenario.config), [scenario.config]);
     const dirty = savedSnapshot !== JSON.stringify(scenario);
+    const activeReport = runState.report ?? scenario.cachedReport?.report;
+    const activeFailures = runState.result?.failures ?? scenario.cachedReport?.failures ?? [];
+    const activePartial = runState.result?.cancelled ?? scenario.cachedReport?.partial ?? false;
+    const activeMasterSeed = runState.result?.masterSeed ?? scenario.cachedReport?.masterSeed;
     const currentEditorMember = editor
         ? scenario.config.sides[editor.side].find(member => member.id === editor.combatantId)
         : undefined;
@@ -97,6 +132,14 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
     const commitStore = async (nextStore: FightLabStore) => {
         setStore(nextStore);
         await saveFightLabStore(nextStore);
+    };
+
+    const changeScenario: React.Dispatch<React.SetStateAction<FightLabScenario>> = update => {
+        setRunState(IDLE_RUN_STATE);
+        setReplayHandoff(null);
+        setScenario(current => typeof update === 'function'
+            ? update(current)
+            : update);
     };
 
     const saveScenario = async () => {
@@ -112,16 +155,22 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
     };
 
     const newScenario = () => {
+        runnerRef.current?.dispose();
         const next = createEmptyScenario();
         setScenario(next);
         setSavedSnapshot('');
+        setRunState(IDLE_RUN_STATE);
+        setReplayHandoff(null);
         setTab('configurator');
     };
 
     const loadScenario = (selected: FightLabScenario) => {
+        runnerRef.current?.dispose();
         const snapshot = deepClone(selected);
         setScenario(snapshot);
         setSavedSnapshot(JSON.stringify(snapshot));
+        setRunState(IDLE_RUN_STATE);
+        setReplayHandoff(null);
         setTab('configurator');
         void commitStore({ ...store, selectedScenarioId: selected.id });
     };
@@ -151,12 +200,73 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
             const next = fallback ? deepClone(fallback) : createEmptyScenario();
             setScenario(next);
             setSavedSnapshot(fallback ? JSON.stringify(fallback) : '');
+            setRunState(IDLE_RUN_STATE);
+            setReplayHandoff(null);
         }
+    };
+
+    const startRun = () => {
+        if (!validation.valid || runState.status === 'running') return;
+        runnerRef.current?.dispose();
+        if (timerRef.current) clearInterval(timerRef.current);
+
+        const handle = new BatchRunnerHandle();
+        const startedAt = Date.now();
+        runnerRef.current = handle;
+        setReplayHandoff(null);
+        setRunState(startRunState(startedAt, scenario.batch.iterations));
+        setTab('run');
+
+        handle.onProgress(progress => {
+            setRunState(current => progressRunState(current, progress, Date.now()));
+        });
+        handle.onComplete(payload => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            setRunState(current => completeRunState(current, payload, Date.now()));
+
+            const currentScenario = scenarioRef.current;
+            const cached = cacheScenarioReport(currentScenario, {
+                report: payload.report,
+                masterSeed: payload.result.masterSeed,
+                iterations: currentScenario.batch.iterations,
+                failures: payload.result.failures,
+                partial: payload.result.cancelled,
+                completedAt: new Date().toISOString(),
+            });
+            const currentStore = storeRef.current;
+            const exists = currentStore.scenarios.some(candidate => candidate.id === cached.id);
+            const scenarios = exists
+                ? currentStore.scenarios.map(candidate => candidate.id === cached.id ? cached : candidate)
+                : [...currentStore.scenarios, cached];
+            const nextStore = { ...currentStore, scenarios, selectedScenarioId: cached.id };
+            scenarioRef.current = cached;
+            storeRef.current = nextStore;
+            setScenario(cached);
+            setSavedSnapshot(JSON.stringify(cached));
+            setStore(nextStore);
+            void saveFightLabStore(nextStore);
+            setTab('dashboard');
+        });
+        handle.onError(error => {
+            if (timerRef.current) clearInterval(timerRef.current);
+            setRunState(current => failRunState(current, error, Date.now()));
+        });
+        handle.start(deepClone(scenario.config), scenario.batch.masterSeed, scenario.batch.iterations);
+
+        timerRef.current = setInterval(() => {
+            setRunState(current => current.status === 'running' && current.progress
+                ? progressRunState(current, current.progress, Date.now())
+                : current);
+        }, 250);
+    };
+
+    const cancelRun = () => {
+        runnerRef.current?.cancel();
     };
 
     const addSourceCharacter = (character: Character) => {
         if (!sourceSide) return;
-        setScenario(current => addCharacterToScenario(current, character, sourceSide));
+        changeScenario(current => addCharacterToScenario(current, character, sourceSide));
         setSourceSide(null);
         setSourceSearch('');
     };
@@ -168,7 +278,7 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
 
     const updateCharacter = (updates: Partial<Character>) => {
         if (!editor || !currentEditorCharacter) return;
-        setScenario(current => updateCombatant(current, editor.side, editor.combatantId, {
+        changeScenario(current => updateCombatant(current, editor.side, editor.combatantId, {
             character: { ...currentEditorCharacter, ...deepClone(updates) },
         }));
     };
@@ -274,10 +384,43 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
                             scenario={scenario}
                             validation={validation}
                             weapons={weapons}
-                            onChange={setScenario}
+                            onChange={changeScenario}
                             onAdd={setSourceSide}
                             onEdit={(side, combatantId) => setEditor({ side, combatantId })}
                         />
+                    ) : tab === 'run' ? (
+                        <RunControls
+                            status={runState.status}
+                            progress={runState.progress}
+                            elapsedMs={runState.elapsedMs}
+                            etaMs={runState.etaMs}
+                            valid={validation.valid}
+                            hasReport={!!activeReport}
+                            error={runState.error}
+                            onRun={startRun}
+                            onCancel={cancelRun}
+                            onViewResults={() => setTab('dashboard')}
+                        />
+                    ) : tab === 'dashboard' ? (
+                        <ResultsDashboard
+                            report={activeReport}
+                            partial={activePartial}
+                            iterations={scenario.cachedReport?.iterations ?? scenario.batch.iterations}
+                            masterSeed={activeMasterSeed}
+                            failures={activeFailures}
+                            cached={!runState.report && !!scenario.cachedReport}
+                            onRun={startRun}
+                            onReplayFailure={failure => {
+                                setReplayHandoff(replayHandoffForFailure(failure));
+                                setTab('replay');
+                            }}
+                        />
+                    ) : tab === 'replay' && replayHandoff ? (
+                        <div className={styles.replayHandoff}>
+                            <span>{t('fightLab.replay.handoff')}</span>
+                            <strong>#{replayHandoff.index}</strong>
+                            <code>{String(replayHandoff.seed)}</code>
+                        </div>
                     ) : (
                         <div className={styles.placeholder}>
                             <span>{t(`fightLab.placeholder.${tab}`)}</span>

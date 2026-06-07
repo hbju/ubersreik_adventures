@@ -1,4 +1,5 @@
 import {
+    aggregateBatchResult,
     runBatch,
     type BatchResult,
     type EncounterConfig,
@@ -53,7 +54,16 @@ export function installBatchWorkerHost(
                     if (!disposed) scope.postMessage({ type: 'progress', requestId, progress });
                 },
             });
-            if (!disposed) scope.postMessage({ type: 'complete', requestId, result });
+            if (!disposed) {
+                scope.postMessage({
+                    type: 'complete',
+                    requestId,
+                    payload: {
+                        result,
+                        report: aggregateBatchResult(result),
+                    },
+                });
+            }
         } catch (error) {
             if (!disposed) {
                 scope.postMessage({

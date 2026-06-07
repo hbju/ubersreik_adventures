@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Character, Weapon } from '@wfrp/shared';
 import type {
-    BatchResult,
     EncounterConfig,
 } from '@wfrp/shared';
 import {
@@ -11,6 +10,7 @@ import {
     type BatchWorkerLike,
     type BatchWorkerRequest,
     type BatchWorkerResponse,
+    type BatchWorkerResult,
 } from '../workers';
 
 const sword: Weapon = {
@@ -30,14 +30,15 @@ describe('fight batch worker integration', () => {
         const bridge = linkedWorker();
         const handle = new BatchRunnerHandle(() => bridge.client);
         const progressCounts: number[] = [];
-        const completed = new Promise<BatchResult>((resolve, reject) => {
+        const completed = new Promise<BatchWorkerResult>((resolve, reject) => {
             handle.onProgress(progress => progressCounts.push(progress.completedCount));
             handle.onComplete(resolve);
             handle.onError(reject);
         });
 
         handle.start(encounter(), 'worker-seed', 3);
-        const result = await completed;
+        const payload = await completed;
+        const result = payload.result;
 
         expect(progressCounts[0]).toBe(0);
         expect(progressCounts.at(-1)).toBe(3);
@@ -45,12 +46,14 @@ describe('fight batch worker integration', () => {
         expect(result.outcomes).toHaveLength(3);
         expect(result.failures).toEqual([]);
         expect(result.masterSeed).toBe('worker-seed');
+        expect(payload.report.successfulCount).toBe(3);
+        expect(payload.report.completedCount).toBe(3);
     });
 
     it('delivers a clean partial result after cancellation', async () => {
         const bridge = linkedWorker();
         const handle = new BatchRunnerHandle(() => bridge.client);
-        const completed = new Promise<BatchResult>((resolve, reject) => {
+        const completed = new Promise<BatchWorkerResult>((resolve, reject) => {
             handle.onProgress(progress => {
                 if (progress.completedCount >= 2) handle.cancel();
             });
@@ -59,11 +62,13 @@ describe('fight batch worker integration', () => {
         });
 
         handle.start(encounter(), 'worker-cancel', 20);
-        const result = await completed;
+        const payload = await completed;
+        const result = payload.result;
 
         expect(result.cancelled).toBe(true);
         expect(result.completedCount).toBeGreaterThanOrEqual(2);
         expect(result.completedCount).toBeLessThan(20);
+        expect(payload.report.successfulCount).toBe(result.outcomes.length);
     });
 });
 

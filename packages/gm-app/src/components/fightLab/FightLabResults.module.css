@@ -1,0 +1,394 @@
+.runWorkspace,
+.dashboard {
+    display: grid;
+    gap: 16px;
+    padding: 18px;
+    color: #e8e5dd;
+}
+
+.runHeader,
+.dashboardHeader,
+.sectionHeading,
+.progressLabels {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.runHeader h2,
+.dashboardHeader h2,
+.sectionHeading h3,
+.metricPanel h4 {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    color: #f1ede4;
+    font-family: Arial, sans-serif;
+    text-transform: none;
+    text-shadow: none;
+    letter-spacing: 0;
+}
+
+.runHeader h2,
+.dashboardHeader h2 {
+    font-size: 20px;
+}
+
+.sectionHeading h3 {
+    font-size: 14px;
+}
+
+.runHeader p,
+.dashboardHeader p {
+    margin: 5px 0 0;
+    color: #939b9f;
+    font-size: 12px;
+}
+
+.runActions,
+.badges {
+    display: flex;
+    gap: 7px;
+}
+
+.runButton {
+    border-color: #b58428 !important;
+    background: #b58428 !important;
+    color: #151719 !important;
+    font-weight: 700;
+}
+
+.cancelButton {
+    border-color: #b85255 !important;
+    background: #7f3436 !important;
+}
+
+.progressPanel,
+.metricPanel,
+.chartPanel,
+.roundsSection,
+.dashboard > section {
+    min-width: 0;
+}
+
+.progressPanel {
+    padding: 16px;
+    border: 1px solid #3d4448;
+    background: #1d2123;
+}
+
+.progressTrack {
+    height: 10px;
+    margin: 12px 0;
+    overflow: hidden;
+    border: 1px solid #485055;
+    background: #101315;
+}
+
+.progressTrack span {
+    display: block;
+    height: 100%;
+    background: #d0a343;
+    transition: width 0.15s linear;
+}
+
+.progressStats {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.progressStats > div,
+.numberStat {
+    display: grid;
+    gap: 3px;
+    padding: 9px;
+    background: #242a2d;
+}
+
+.progressStats span,
+.numberStat span {
+    color: #949ca0;
+    font-size: 10px;
+}
+
+.progressStats strong,
+.numberStat strong {
+    font-size: 15px;
+}
+
+.noticeError,
+.noticeWarning {
+    display: grid;
+    gap: 3px;
+    padding: 10px 12px;
+    border-left: 3px solid #c65a5c;
+    background: #342224;
+    color: #efb2b2;
+    font-size: 12px;
+}
+
+.noticeWarning {
+    border-left-color: #d0a343;
+    background: #332d20;
+    color: #efd38e;
+}
+
+.emptyState {
+    min-height: 260px;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 8px;
+    color: #929a9e;
+    text-align: center;
+}
+
+.badges {
+    margin-bottom: 6px;
+}
+
+.partialBadge,
+.cachedBadge {
+    padding: 3px 6px;
+    border: 1px solid #d0a343;
+    color: #e9ca7b;
+    font-size: 10px;
+    text-transform: uppercase;
+}
+
+.cachedBadge {
+    border-color: #638fa8;
+    color: #99c4dc;
+}
+
+.outcomeGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 0.8fr)) minmax(280px, 1.4fr);
+    gap: 12px;
+    margin-top: 9px;
+}
+
+.riskGrid,
+.roundsGrid,
+.decisivenessGrid {
+    display: grid;
+    gap: 12px;
+    margin-top: 9px;
+}
+
+.riskGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.roundsGrid {
+    grid-template-columns: minmax(320px, 2fr) minmax(240px, 1fr);
+}
+
+.decisivenessGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.metricPanel,
+.chartPanel {
+    padding: 12px;
+    border: 1px solid #363d40;
+    background: #1d2123;
+}
+
+.metricPanel h4 {
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.rateLine,
+.rateProminent {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px 8px;
+    padding: 7px 0;
+    border-top: 1px solid #303639;
+}
+
+.rateLine span,
+.rateProminent span {
+    color: #a8b0b4;
+    font-size: 11px;
+}
+
+.rateLine small,
+.rateProminent small {
+    grid-column: 1 / -1;
+    color: #7f888c;
+    font-size: 9px;
+}
+
+.rateProminent strong {
+    color: #f1c968;
+    font-size: 21px;
+}
+
+.distributionStats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.tableWrap {
+    margin-top: 9px;
+    overflow-x: auto;
+    border: 1px solid #363d40;
+}
+
+.combatantTable {
+    width: 100%;
+    min-width: 1180px;
+    border-collapse: collapse;
+    font-size: 11px;
+}
+
+.combatantTable th {
+    position: sticky;
+    top: 0;
+    padding: 8px;
+    background: #252b2e;
+    color: #b8c0c4;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.combatantTable td {
+    padding: 9px 8px;
+    border-top: 1px solid #303639;
+    vertical-align: top;
+}
+
+.combatantTable td:first-child {
+    min-width: 150px;
+}
+
+.combatantTable small {
+    display: block;
+    margin-top: 2px;
+    color: #7f888c;
+}
+
+.sortButton {
+    border: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    color: inherit !important;
+}
+
+.miniRate,
+.miniRateCompact {
+    display: grid;
+    grid-template-columns: 65px auto;
+    align-items: center;
+    gap: 6px;
+}
+
+.miniRateCompact {
+    grid-template-columns: 48px auto;
+    margin-top: 4px;
+}
+
+.miniRate > span,
+.miniRateCompact > span {
+    height: 5px;
+    overflow: hidden;
+    background: #111416;
+}
+
+.miniRate i,
+.miniRateCompact i {
+    display: block;
+    height: 100%;
+    background: #69a5c5;
+}
+
+.failureList {
+    display: grid;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.failureRow {
+    display: grid !important;
+    grid-template-columns: 55px minmax(160px, 0.8fr) minmax(200px, 1.4fr) auto;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+}
+
+.failureRow code {
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.failureRow strong {
+    color: #e1ba5b;
+}
+
+.muted {
+    color: #858e92;
+    font-size: 12px;
+}
+
+@media (max-width: 1000px) {
+    .outcomeGrid,
+    .roundsGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .outcomeGrid .chartPanel,
+    .roundsGrid .chartPanel {
+        grid-column: 1 / -1;
+    }
+
+    .progressStats,
+    .decisivenessGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .runWorkspace,
+    .dashboard {
+        padding: 12px;
+    }
+
+    .runHeader,
+    .dashboardHeader {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .outcomeGrid,
+    .riskGrid,
+    .roundsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .outcomeGrid .chartPanel,
+    .roundsGrid .chartPanel {
+        grid-column: auto;
+    }
+
+    .progressStats,
+    .decisivenessGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .failureRow {
+        grid-template-columns: 45px minmax(0, 1fr) auto;
+    }
+
+    .failureRow > span:nth-child(3) {
+        grid-column: 1 / -1;
+        grid-row: 2;
+    }
+}

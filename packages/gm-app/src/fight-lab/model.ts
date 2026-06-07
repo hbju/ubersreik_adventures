@@ -12,6 +12,7 @@ import {
     type Weapon,
 } from '@wfrp/shared';
 import type {
+    FightLabCachedReport,
     FightLabLayout,
     FightLabProfileSelection,
     FightLabScenario,
@@ -341,6 +342,17 @@ export function validationView(config: EncounterConfig): EncounterValidationView
                 ? { key: error }
                 : { key: error.slice(0, separator), detail: error.slice(separator + 1) };
         }),
+    };
+}
+
+export function cacheScenarioReport(
+    scenario: FightLabScenario,
+    cachedReport: FightLabCachedReport
+): FightLabScenario {
+    return {
+        ...scenario,
+        cachedReport: deepClone(cachedReport),
+        updatedAt: new Date().toISOString(),
     };
 }
 

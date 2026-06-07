@@ -3,6 +3,7 @@ import type {
     BatchResult,
     EncounterConfig,
     FightSeed,
+    MetricReport,
 } from '@wfrp/shared';
 
 export interface BatchWorkerStartMessage {
@@ -29,7 +30,12 @@ export interface BatchWorkerProgressMessage {
 export interface BatchWorkerCompleteMessage {
     type: 'complete';
     requestId: string;
+    payload: BatchWorkerResult;
+}
+
+export interface BatchWorkerResult {
     result: BatchResult;
+    report: MetricReport;
 }
 
 export interface BatchWorkerErrorMessage {
@@ -42,4 +48,3 @@ export type BatchWorkerResponse =
     | BatchWorkerProgressMessage
     | BatchWorkerCompleteMessage
     | BatchWorkerErrorMessage;
-

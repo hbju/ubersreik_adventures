@@ -472,6 +472,27 @@
     font-size: 14px;
 }
 
+.replayHandoff {
+    min-height: 100%;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 10px;
+    color: #aeb5b8;
+}
+
+.replayHandoff strong {
+    color: #f0c865;
+    font-size: 28px;
+}
+
+.replayHandoff code {
+    max-width: min(560px, 85vw);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .modalBackdrop,
 .sheetBackdrop {
     position: fixed;

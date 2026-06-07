@@ -3,12 +3,15 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+    aggregateBatchResult,
     validateEncounterConfig,
+    type BatchResult,
     type Character,
     type Weapon,
 } from '@wfrp/shared';
 import {
     addCharacterToScenario,
+    cacheScenarioReport,
     createEmptyScenario,
     proficiencyWarnings,
     updateCombatant,
@@ -55,7 +58,24 @@ describe('Fight Lab sandbox', () => {
     it('round-trips self-contained scenarios through fight-lab.json', () => {
         const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'fight-lab-'));
         const filePath = fightLabFilePath(tempDir);
-        const scenario = addCharacterToScenario(createEmptyScenario('Saved encounter'), character('hero', ['test-sword'], true), 'ally');
+        let scenario = addCharacterToScenario(createEmptyScenario('Saved encounter'), character('hero', ['test-sword'], true), 'ally');
+        const batch: BatchResult = {
+            outcomes: [],
+            failures: [{ index: 7, seed: 'broken-seed', error: 'fixture failure' }],
+            completedCount: 1,
+            masterSeed: 'master-seed',
+            range: [0, 1],
+            config: scenario.config,
+            cancelled: true,
+        };
+        scenario = cacheScenarioReport(scenario, {
+            report: aggregateBatchResult(batch),
+            masterSeed: batch.masterSeed,
+            iterations: 10,
+            failures: batch.failures,
+            partial: true,
+            completedAt: new Date(0).toISOString(),
+        });
         const store = { version: 1 as const, scenarios: [scenario], selectedScenarioId: scenario.id };
 
         saveFightLabStoreAt(filePath, store);
@@ -65,6 +85,7 @@ describe('Fight Lab sandbox', () => {
         expect(fs.existsSync(path.join(tempDir, 'campaign-state.json'))).toBe(false);
         expect(loaded).toEqual(store);
         expect((loaded.scenarios[0].config.sides.ally[0].character as Character).name).toBe('hero');
+        expect(loaded.scenarios[0].cachedReport).toEqual(scenario.cachedReport);
     });
 
     it('reports lost Qualities and unusable ranged weapons from the shared proficiency resolver', () => {

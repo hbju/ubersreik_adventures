@@ -1,5 +1,7 @@
 import type {
+    BatchFailure,
     EncounterConfig,
+    FightSeed,
     HeuristicProfileId,
     MetricReport,
     SideId,
@@ -22,9 +24,18 @@ export interface FightLabScenario {
     config: EncounterConfig;
     batch: FightLabBatchParams;
     layout: FightLabLayout;
-    cachedReport?: MetricReport;
+    cachedReport?: FightLabCachedReport;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface FightLabCachedReport {
+    report: MetricReport;
+    masterSeed: FightSeed;
+    iterations: number;
+    failures: BatchFailure[];
+    partial: boolean;
+    completedAt: string;
 }
 
 export interface FightLabStore {

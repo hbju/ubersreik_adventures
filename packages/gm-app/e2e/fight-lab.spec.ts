@@ -12,6 +12,170 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
             campaignSaveCalls: 0,
         };
         (window as any).__fightLabTest = state;
+        (window as any).__fightLabWorkerFactory = () => {
+            let terminated = false;
+            let cancelled = false;
+            const worker = {
+                onmessage: null as ((event: { data: unknown }) => void) | null,
+                onerror: null as ((event: { message?: string; error?: unknown }) => void) | null,
+                postMessage(message: any) {
+                    if (message.type === 'cancel') {
+                        cancelled = true;
+                        return;
+                    }
+                    const requestId = message.requestId;
+                    setTimeout(() => {
+                        if (terminated) return;
+                        worker.onmessage?.({
+                            data: {
+                                type: 'progress',
+                                requestId,
+                                progress: {
+                                    completedCount: 5,
+                                    totalCount: message.iterations,
+                                    successfulCount: 5,
+                                    failureCount: 0,
+                                    cancelled: false,
+                                    winRates: { ally: 0.6, adversary: 0.2, draw: 0.2 },
+                                },
+                            },
+                        });
+                    }, 30);
+                    setTimeout(() => {
+                        if (terminated) return;
+                        const failure = { index: 7, seed: 'failure-seed-7', error: 'Fixture fight failed' };
+                        worker.onmessage?.({
+                            data: {
+                                type: 'complete',
+                                requestId,
+                                payload: {
+                                    result: {
+                                        outcomes: [],
+                                        failures: [failure],
+                                        completedCount: cancelled ? 5 : message.iterations,
+                                        masterSeed: message.masterSeed,
+                                        range: [0, message.iterations],
+                                        config: message.config,
+                                        cancelled,
+                                    },
+                                    report: metricReport(failure, cancelled),
+                                },
+                            },
+                        });
+                    }, 1_200);
+                },
+                terminate() {
+                    terminated = true;
+                },
+            };
+            return worker;
+        };
+
+        function metricReport(failure: { index: number; seed: string; error: string }, partial: boolean) {
+            const sampleSize = partial ? 5 : 19;
+            const rate = (count: number) => {
+                const value = count / sampleSize;
+                return {
+                    i18nKey: '',
+                    count,
+                    sampleSize,
+                    rate: value,
+                    ci: {
+                        lower: Math.max(0, value - 0.12),
+                        upper: Math.min(1, value + 0.12),
+                        halfWidth: 0.12,
+                        confidence: 0.95,
+                    },
+                };
+            };
+            const average = (value: number) => ({
+                i18nKey: '',
+                total: value * sampleSize,
+                average: value,
+                sampleSize,
+            });
+            const distribution = (values: number[]) => ({
+                i18nKey: '',
+                count: sampleSize,
+                mean: values[2],
+                median: values[2],
+                percentiles: {
+                    p10: values[0],
+                    p25: values[1],
+                    p50: values[2],
+                    p75: values[3],
+                    p90: values[4],
+                },
+                min: values[0],
+                max: values[4],
+                histogram: [
+                    { min: values[0], maxExclusive: values[1], count: 3 },
+                    { min: values[1], maxExclusive: values[3], count: 11 },
+                    { min: values[3], maxExclusive: values[4] + 1, count: 5 },
+                ],
+            });
+            const sideOutcome = (wins: number, losses: number, draws: number) => ({
+                i18nKey: '',
+                winRate: rate(wins),
+                lossRate: rate(losses),
+                drawRate: rate(draws),
+            });
+            const risk = (defeated: number, deaths: number, allDead: number) => ({
+                i18nKey: '',
+                partyDefeatedRate: rate(defeated),
+                atLeastOneDeathRate: rate(deaths),
+                allDeadRate: rate(allDead),
+            });
+            const combatant = (id: string, name: string, side: 'ally' | 'adversary', survived: number) => ({
+                i18nKey: '',
+                id,
+                name,
+                side,
+                survivalRate: rate(survived),
+                deathRate: rate(sampleSize - survived),
+                finalWoundsAmongSurvivors: distribution([1, 3, 5, 7, 10]),
+                critsDealt: average(0.7),
+                critsTaken: average(0.4),
+                conditionsInflicted: average(0.6),
+                fateSpent: average(0.2),
+                fateBurnRate: rate(4),
+                fortuneSpent: average(0.8),
+                advantageGenerated: average(3.2),
+                damageDealt: average(8.6),
+                damageTaken: average(5.1),
+            });
+            return {
+                i18nKey: '',
+                completedCount: sampleSize + 1,
+                successfulCount: sampleSize,
+                failureCount: 1,
+                failures: [failure],
+                sufficientSample: false,
+                sufficientNHalfWidth: 0.05,
+                sideOutcomes: {
+                    ally: sideOutcome(11, 6, 2),
+                    adversary: sideOutcome(6, 11, 2),
+                },
+                rounds: distribution([2, 3, 4, 6, 8]),
+                combatants: {
+                    hero: combatant('hero', 'Campaign Hero', 'ally', 16),
+                    dummy: combatant('dummy', 'Training Dummy', 'adversary', 7),
+                },
+                sideRisk: {
+                    ally: risk(6, 5, 2),
+                    adversary: risk(11, 9, 6),
+                },
+                decisiveness: {
+                    i18nKey: '',
+                    averageWinningSideSurvivors: average(1.6),
+                    roundsByOutcome: {
+                        ally: distribution([2, 3, 4, 5, 7]),
+                        adversary: distribution([2, 4, 5, 6, 8]),
+                        draw: distribution([4, 5, 6, 7, 8]),
+                    },
+                },
+            };
+        }
         (window as any).ipcRenderer = new Proxy({
             getInitialData: async () => campaign,
             saveData: () => { state.campaignSaveCalls += 1; },
@@ -79,6 +243,28 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
     await expect(page.getByRole('heading', { name: 'Fight Lab' })).toBeVisible();
     await expect(lab.getByRole('button', { name: /Add combatant/ }).first()).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath('fight-lab-mobile.png'), fullPage: true });
+
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await lab.getByRole('button', { name: 'Run', exact: true }).click();
+    await lab.getByRole('button', { name: 'Run simulation' }).click();
+    const progressbar = lab.getByRole('progressbar');
+    await expect(progressbar).toBeVisible();
+    await expect(progressbar).toHaveAttribute('aria-valuenow', '5');
+    await expect(lab.getByRole('heading', { name: 'Results Dashboard' })).toBeVisible();
+    await expect(lab.getByText(/95% CI/).first()).toBeVisible();
+    await expect(lab.getByText('The current sample is inconclusive.')).toBeVisible();
+    await expect(lab.getByRole('button', { name: /failure-seed-7/ })).toBeVisible();
+    await page.screenshot({ path: testInfo.outputPath('fight-lab-dashboard.png'), fullPage: true });
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(lab.getByRole('heading', { name: 'Results Dashboard' })).toBeVisible();
+    await expect(lab.getByText(/95% CI/).first()).toBeVisible();
+    await page.screenshot({ path: testInfo.outputPath('fight-lab-dashboard-mobile.png'), fullPage: true });
+
+    await lab.getByRole('button', { name: /failure-seed-7/ }).click();
+    await expect(lab.getByText('Replay handoff ready')).toBeVisible();
+    await expect(lab.getByText('#7')).toBeVisible();
+    await expect(lab.getByText('failure-seed-7')).toBeVisible();
 
     const finalCampaignWrites = await page.evaluate(() => (window as any).__fightLabTest.campaignSaveCalls);
     expect(finalCampaignWrites).toBe(baselineCampaignWrites);
