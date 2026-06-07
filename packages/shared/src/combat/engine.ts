@@ -40,7 +40,7 @@ import type {
 
 export function createCombatantFromCharacter(
     character: Character,
-    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions' | 'conditionInstances' | 'weaponLoadout' | 'weaponAmmo' | 'ammunition'>> = {}
+    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'cover' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions' | 'conditionInstances' | 'weaponLoadout' | 'weaponAmmo' | 'ammunition'>> = {}
 ): Combatant {
     const currentWounds = options.currentWounds ?? character.status.wounds.current;
     const maxWounds = options.maxWounds ?? character.status.wounds.max;
@@ -55,6 +55,7 @@ export function createCombatantFromCharacter(
         currentWounds,
         maxWounds,
         position: options.position ?? 0,
+        cover: options.cover,
         movementBudget: options.movementBudget ?? createMovementBudget(character.movement),
         engagementIds: options.engagementIds ?? [],
         budget: options.budget ?? { actions: 1, moves: 1, reactions: 1 },
@@ -75,7 +76,7 @@ export function createCombatantFromCharacter(
 
 export function createCombatState(
     combatants: Combatant[],
-    options: { armor?: Armor[]; talents?: CombatState['talents']; weapons?: CombatState['weapons']; advantagePools?: CombatState['advantagePools']; tacticalDominantSide?: CombatState['tacticalDominantSide']; turnFlags?: Partial<CombatState['turnFlags']>; engagements?: CombatState['engagements']; round?: number; ammoPolicy?: CombatState['ammoPolicy'] } = {}
+    options: { armor?: Armor[]; talents?: CombatState['talents']; weapons?: CombatState['weapons']; advantagePools?: CombatState['advantagePools']; tacticalDominantSide?: CombatState['tacticalDominantSide']; turnFlags?: Partial<CombatState['turnFlags']>; engagements?: CombatState['engagements']; round?: number; ammoPolicy?: CombatState['ammoPolicy']; rules?: CombatState['rules'] } = {}
 ): CombatState {
     return {
         combatants: Object.fromEntries(combatants.map(combatant => [combatant.id, combatant])),
@@ -94,6 +95,7 @@ export function createCombatState(
         },
         engagements: options.engagements ?? {},
         ammoPolicy: options.ammoPolicy,
+        rules: options.rules,
     };
 }
 
@@ -1207,7 +1209,10 @@ function normalizeHooks(hooks: Partial<MeleeResolutionHooks> | undefined, rng: R
         critApModifiers: context => (qualityHooks.critApModifiers?.(context) ?? 0) + (hooks?.critApModifiers?.(context) ?? 0),
         onCritEffects: context => mergeHookResult(context, qualityHooks.onCritEffects, talentHooks.onCritEffects, hooks?.onCritEffects),
         fumbleTriggers: context => !!qualityHooks.fumbleTriggers?.(context) || !!hooks?.fumbleTriggers?.(context),
-        critResolver: hooks?.critResolver ?? ((context: CritResolverContext) => criticalRoll(context, { rng })),
+        critResolver: hooks?.critResolver ?? ((context: CritResolverContext) => criticalRoll(context, {
+            rng,
+            suddenDeath: context.state.rules?.suddenDeath,
+        })),
     };
 }
 

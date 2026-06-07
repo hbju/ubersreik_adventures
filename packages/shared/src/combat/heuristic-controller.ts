@@ -297,6 +297,7 @@ export class HeuristicController implements CombatantController {
             attackerId: context.actor.id,
             defenderId: targetId!,
             attacker: rollInput(context, context.actor, rangedSkillId(weapon), weapon?.id),
+            cover: targetId ? context.state.combatants[targetId]?.cover ?? 'none' : 'none',
             grantAdvantage: additionalEffortTestModifier !== undefined
         };
         return { ...base, action };

@@ -401,6 +401,39 @@
                 "shieldsman": { "push": "Utiliser Shieldsman pour repousser.", "damage": "Utiliser Shieldsman pour blesser." }
             }
         },
+        "encounter": {
+            "outcome": {
+                "winner": "Vainqueur",
+                "draw": "Match nul",
+                "rounds": "Rounds",
+                "survived": "A survecu",
+                "finalWounds": "Blessures finales",
+                "died": "Mort",
+                "critsDealt": "Blessures critiques infligees",
+                "critsTaken": "Blessures critiques subies",
+                "conditionsInflicted": "Etats infliges",
+                "fateSpent": "Destin depense",
+                "fortuneSpent": "Fortune depensee",
+                "advantageGenerated": "Avantage genere",
+                "advantageSpent": "Avantage depense"
+            },
+            "validation": {
+                "missingSides": "La rencontre doit definir les deux camps.",
+                "emptySide": "Chaque camp doit contenir au moins un combattant.",
+                "missingCombatantId": "Chaque combattant doit avoir un identifiant.",
+                "duplicateCombatantId": "Les identifiants des combattants doivent etre uniques.",
+                "missingCharacter": "Chaque combattant doit referencer un personnage ou un modele.",
+                "invalidPosition": "La position doit etre un nombre fini.",
+                "unknownProfile": "Le profil de comportement selectionne est indisponible.",
+                "unknownWeapon": "La configuration reference une arme inconnue.",
+                "weaponNotOwned": "Le combattant ne possede pas l'arme selectionnee.",
+                "unknownSkill": "Le modele reference une competence inconnue.",
+                "invalidMovement": "Le Mouvement doit etre superieur a zero.",
+                "invalidWounds": "Le maximum de Blessures doit etre superieur a zero.",
+                "invalidMaxRounds": "Le nombre maximal de rounds doit etre un entier positif.",
+                "invalidAdvantage": "Les valeurs initiales d'Avantage doivent utiliser un camp valide et une valeur positive."
+            }
+        },
         "talent": {
             "reaction": {
                 "registered": "{{combatantId}} enregistre {{talentId}} pour {{window}}."

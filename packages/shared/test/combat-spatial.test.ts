@@ -71,8 +71,8 @@ describe('combat spatial model', () => {
 
     it('maps distance bands at threshold boundaries', () => {
         expect(bandFor(0)).toBe('Engaged');
-        expect(bandFor(1.5)).toBe('Engaged');
-        expect(bandFor(1.51)).toBe('Short');
+        expect(bandFor(2)).toBe('Engaged');
+        expect(bandFor(2.01)).toBe('Short');
         expect(bandFor(6)).toBe('Short');
         expect(bandFor(6.01)).toBe('Medium');
         expect(bandFor(20)).toBe('Medium');
@@ -82,15 +82,15 @@ describe('combat spatial model', () => {
     it('answers can-reach with walk versus run budgets', () => {
         const mover = createCombatantFromCharacter(makeCharacter('mover', 'Mover', { movement: 4 }), { position: 0 });
         const walkableTarget = createCombatantFromCharacter(makeCharacter('near', 'Near'), { position: 9.5 });
-        const runOnlyTarget = createCombatantFromCharacter(makeCharacter('far', 'Far'), { position: 10 });
+        const runOnlyTarget = createCombatantFromCharacter(makeCharacter('far', 'Far'), { position: 11 });
         const noActionMover = { ...mover, budget: { ...mover.budget, actions: 0 } };
 
-        expect(distanceBetween(mover, runOnlyTarget)).toBe(10);
-        expect(movementToReach(mover, walkableTarget)).toBe(8);
+        expect(distanceBetween(mover, runOnlyTarget)).toBe(11);
+        expect(movementToReach(mover, walkableTarget)).toBe(7.5);
         expect(canReach(mover, walkableTarget)).toBe(true);
         expect(canReach(mover, runOnlyTarget)).toBe(false);
-        expect(canReach(mover, runOnlyTarget, { running: true })).toBe(true);
-        expect(canReach(noActionMover, runOnlyTarget, { running: true })).toBe(false);
+        expect(canReach(mover, runOnlyTarget, { sprinting: true })).toBe(true);
+        expect(canReach(noActionMover, runOnlyTarget, { sprinting: true })).toBe(false);
     });
 
     it('applies walk, run, and charge movement budgets with action spending', () => {
@@ -110,7 +110,7 @@ describe('combat spatial model', () => {
         const runState = createState([
             combatant('runner', 'Runner', { movement: 4, position: 0 }),
         ]);
-        const ran = applyMove(runState, 'runner', 12, 'run');
+        const ran = applyMove(runState, 'runner', 12, 'sprint');
         expect(ran.events[0]).toMatchObject({ data: { actionSpent: true, remainingMovement: 4 } });
         expect(ran.state.combatants.runner.budget).toMatchObject({ actions: 0, moves: 0 });
 
@@ -121,9 +121,9 @@ describe('combat spatial model', () => {
         const charged = applyMove(chargeState, 'charger', { combatantId: 'target' }, 'charge');
         expect(charged.events[0]).toMatchObject({
             type: 'MovedEvent',
-            data: { to: 8.5, distance: 8.5, actionSpent: true, remainingMovement: 7.5 },
+            data: { to: 8, distance: 8, actionSpent: false, remainingMovement: 8 },
         });
-        expect(charged.state.combatants.charger.budget).toMatchObject({ actions: 0, moves: 0 });
+        expect(charged.state.combatants.charger.budget).toMatchObject({ actions: 1, moves: 0 });
     });
 
     it('keeps engagement symmetric and counts outnumbering in 1-to-N and N-to-N groups', () => {
@@ -224,7 +224,7 @@ describe('combat spatial model', () => {
         const second = runScenario();
 
         expect(second).toEqual(first);
-        expect(first.state.combatants.p1.position).toBe(8.5);
+        expect(first.state.combatants.p1.position).toBe(8);
         expect(first.state.combatants.p1.engagementIds).toEqual(['e1']);
         expect(first.state.combatants.e1.engagementIds).toEqual(['p1']);
     });

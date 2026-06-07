@@ -34,6 +34,7 @@ export interface Combatant {
     currentWounds: number;
     maxWounds: number;
     position: number;
+    cover?: CoverLevel;
     movementBudget: MovementBudget;
     engagementIds: string[];
     budget: CombatantBudget;
@@ -103,10 +104,16 @@ export interface CombatState {
     turnFlags: CombatTurnFlags;
     engagements: Record<string, CombatEngagement>;
     ammoPolicy?: AmmoPolicy;
+    rules?: CombatRules;
 }
 
 export interface AmmoPolicy {
     finiteAmmo?: boolean;
+}
+
+export interface CombatRules {
+    suddenDeath?: boolean;
+    shootingIntoMelee?: boolean;
 }
 
 export interface ExtendedTestProgress {

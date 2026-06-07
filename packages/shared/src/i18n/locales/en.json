@@ -474,6 +474,39 @@
                 "shieldsman": { "push": "Use Shieldsman to push.", "damage": "Use Shieldsman to damage." }
             }
         },
+        "encounter": {
+            "outcome": {
+                "winner": "Winner",
+                "draw": "Draw",
+                "rounds": "Rounds",
+                "survived": "Survived",
+                "finalWounds": "Final Wounds",
+                "died": "Died",
+                "critsDealt": "Critical Wounds Dealt",
+                "critsTaken": "Critical Wounds Taken",
+                "conditionsInflicted": "Conditions Inflicted",
+                "fateSpent": "Fate Spent",
+                "fortuneSpent": "Fortune Spent",
+                "advantageGenerated": "Advantage Generated",
+                "advantageSpent": "Advantage Spent"
+            },
+            "validation": {
+                "missingSides": "The encounter must define both sides.",
+                "emptySide": "Each side must contain at least one combatant.",
+                "missingCombatantId": "Each combatant must have an ID.",
+                "duplicateCombatantId": "Combatant IDs must be unique.",
+                "missingCharacter": "Each combatant must reference a Character or CharacterTemplate.",
+                "invalidPosition": "Combatant position must be a finite number.",
+                "unknownProfile": "The selected behavior profile is not available.",
+                "unknownWeapon": "The build references an unknown weapon.",
+                "weaponNotOwned": "The selected weapon is not owned by the combatant.",
+                "unknownSkill": "The template references an unknown skill.",
+                "invalidMovement": "Movement must be greater than zero.",
+                "invalidWounds": "Maximum Wounds must be greater than zero.",
+                "invalidMaxRounds": "The maximum round count must be a positive integer.",
+                "invalidAdvantage": "Initial Advantage inputs must use a valid side and non-negative value."
+            }
+        },
         "talent": {
             "reaction": {
                 "registered": "{{combatantId}} registers {{talentId}} for {{window}}."

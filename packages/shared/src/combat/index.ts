@@ -4,6 +4,7 @@ export * from './audit';
 export * from './critical';
 export * from './engine';
 export * from './extended-tests';
+export * from './fight-runner';
 export * from './heuristic-controller';
 export * from './modifiers';
 export * from './qualities';

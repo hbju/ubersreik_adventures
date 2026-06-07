@@ -82,7 +82,7 @@ describe('turn engine 5a', () => {
         expect(engine.state.combatants[actorId].budget.actions).toBe(2);
         expect(legalDecisions(engine.state, engine.state.combatants[actorId]).filter(decision => decision.kind === 'spendAdvantage')).toHaveLength(0);
 
-        engine = applyDecision(engine, { kind: 'move', actorId, mode: 'run', target: 1 });
+        engine = applyDecision(engine, { kind: 'move', actorId, mode: 'sprint', target: 1 });
         expect(engine.state.combatants[actorId].budget.actions).toBe(1);
 
         const furiousActor = combatant('furious', 'ally', ['sword'], 0, { talents: { 'furious-assault': 1 } });

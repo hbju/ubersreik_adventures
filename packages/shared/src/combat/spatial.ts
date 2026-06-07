@@ -104,13 +104,13 @@ export function movementToReach(
 export function canReach(
     combatant: Combatant,
     target: Combatant | number,
-    options: { running?: boolean; thresholds?: RangeBandThresholds } = {}
+    options: { sprinting?: boolean; thresholds?: RangeBandThresholds } = {}
 ): boolean {
     if (combatant.budget.moves <= 0) return false;
-    if (options.running && combatant.budget.actions <= 0) return false;
+    if (options.sprinting && combatant.budget.actions <= 0) return false;
 
     const allowance = getWalkRun(combatant);
-    const modeAllowance = options.running ? allowance.run : allowance.walk;
+    const modeAllowance = options.sprinting ? allowance.run : allowance.walk;
     const remainingAllowance = Math.min(modeAllowance, combatant.movementBudget.remaining);
     return movementToReach(combatant, target, options) <= remainingAllowance;
 }

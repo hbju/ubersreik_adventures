@@ -297,3 +297,73 @@ Three small decisions, defaulted:
 - A combat runs both stepwise and to completion, deterministically by seed, via a scripted controller — correct round structure, action economy, initiative with overrides, full ordered end-of-round orchestration, and termination/cap.
 - `legalDecisions` enumerates exactly the legal options under all gates; state is forkable for MCTS.
 - Same seed + same scripted decisions → identical fight.
+
+---
+
+## PBI 5b — Reaction Window & Interrupts
+
+**User story:** As the engine, I need eligible combatants offered their reactive options at defined trigger points, so Ripostes, Reaction Strikes, Step Asides, and Fate/Fortune interceptions resolve correctly mid-action.
+
+**Why now:** 5a gave us the loop and the `choose` protocol; reactions are the off-turn decision points that complete combat correctness — especially the survivability interceptions the sim depends on.
+
+### Tasks — Trigger points & offer mechanism (`@wfrp/shared`)
+- [ ] Define the reaction triggers in resolution: attacked-in-melee (the defence anchor), charged, test-rolled, test-failed, won-Dodge-defence, won-defensive-Melee, scored-a-defensive-crit, damage-about-to-apply, would-die.
+- [ ] At each trigger, enumerate the *eligible* reactions for the relevant combatant (gated by talent/resource/weapon/state) and route through `controller.choose` (reusing 5a). Offer in **initiative order** when multiple combatants/reactions are eligible; reactions are forkable decision nodes drawing any randomness from the seeded RNG.
+
+### Tasks — Wire the reactions (effects exist in 3f/3g; 5b connects triggers)
+- [ ] **Riposte:** Fast-weapon melee defence → deal damage to the attacker (the defender-damage path).
+- [ ] **Reaction Strike:** on being Charged → Initiative test → free attack *before* the charge attack resolves (once per charger).
+- [ ] **Step Aside:** on winning a Dodge → move 2 yards + disengage, no free attack (updates position/engagement).
+- [ ] **Reactive Advantage-spend exceptions:** Shieldsman (shield defence), Reversal (won defensive Melee), Slash's extra Bleeding (defensive crit) — spend from the pool reactively per the confirmed exception.
+- [ ] **Fate interceptions:** How Did That Miss? (negate incoming damage) and Die Another Day (negate death) via the 3f hooks; both available against reaction-dealt damage too.
+- [ ] **Fortune interceptions:** Reroll (failed test) and +1 SL (any test) via the 3f reroll hook; fire on any test by that combatant, on or off turn.
+
+### Tasks — Loop prevention & edge rules
+- [ ] Attack-triggered reactions fire only off deliberate Attack/Charge actions, never off reaction damage; interceptions apply to any damage/death; hard recursion-depth cap as a safety net.
+- [ ] Additional Effort (Advantage) is *not* offered on a reactive defence; the reactive-spend talents/qualities are.
+
+### Tasks — Tests / i18n
+- [ ] Vitest: Riposte fires only with a Fast weapon and damages the attacker; Reaction Strike precedes the charge, gated on the Initiative test and once-per-charger; Step Aside repositions + disengages on a Dodge win; How Did That Miss? negates damage (incl. against Riposte damage) and decrements Fate; Die Another Day negates a lethal result; Fortune reroll/+1 SL on both an off-turn defence and an on-turn attack; Shieldsman/Reversal/Slash spend pool Advantage *reactively*; Additional Effort *not* offered on a defence; **loop prevention** (Riposte damage doesn't trigger a counter-Riposte; attacker may still Fate-save it; depth cap holds); deterministic initiative-order offers when multiple are eligible; whole-fight determinism preserved.
+- [ ] en/fr keys for reaction/interception events.
+
+### Acceptance criteria
+- Every v1 reaction fires at the correct trigger through the shared protocol, gated by resources/eligibility; interceptions negate damage/death correctly; loop prevention and the edge interactions behave per the confirmed rules.
+- Reaction offers are deterministic and forkable; same seed + same decisions → identical fight.
+
+---
+
+## PBI 5c — Heuristic Controller & Behavior Profiles
+
+**User story:** As the simulator, I need a heuristic controller that makes reasonable, profile-driven, deterministic decisions at every decision point, so automated fights play plausibly and the Monte-Carlo runner has a default brain.
+
+**Why now:** 5a/5b expose every choice through `choose`; swapping the Manual/stub answers for competent heuristics is the last thing between us and automated sims.
+
+### Tasks — Controller skeleton (`@wfrp/shared`)
+- [ ] `HeuristicController` implementing `choose(decisionContext)` for all three decision kinds (turn-level, resolution-level, reaction), pure over `(state, profile, seededRng)`.
+- [ ] Profile model as data (weights/thresholds); load the five profiles.
+- [ ] Structured decision logging: `{ chosen, reasonCode, rejectedAlternatives }` attached to the event stream (locale-agnostic, renderable later).
+
+### Tasks — Policy modules (composable, profile-weighted)
+- [ ] **Competence floor** (shared by all profiles): always make a defence choice when attacked, never pass/waste an Action with a useful option available, never pick a dominated option, spend Fate to avoid death unless the risk threshold says otherwise.
+- [ ] **Target selection:** focus-fire / threat / nearest, profile-weighted.
+- [ ] **Action selection** over `legalDecisions`: profile priority ordering (Berserker → Charge/all-out; Duellist → attack but Defend when pressed; Skirmisher → disengage/kite when Engaged; Marksman → shoot, reposition to keep range; Brute → sensible greedy).
+- [ ] **Movement/positioning:** close vs hold vs kite by profile, loadout (melee/ranged), and range band.
+- [ ] **Defence-skill choice:** parry / dodge / shield by profile + available loadout.
+- [ ] **Advantage-spend policy:** Additional Effort on a likely-decisive test, Batter/Trick to set up, Additional Action when the pool is flush, Flee from Harm to escape — aggression-weighted.
+- [ ] **Resource policy:** Fate-to-avoid-death and Fortune reroll/+1 SL on consequential tests, per the risk threshold.
+- [ ] **Reaction policy:** fire free reactions (Riposte, Reaction Strike) when beneficial; Step Aside per positioning need; reactive spends per profile.
+- [ ] **Sub-decision policies:** In-fighting mode, Dual Wielder second target, Shieldsman mode, Trip/Slash spend, Reversal toggle, group/AoE target pick.
+
+### Tasks — Profiles
+- [ ] Define Berserker / Duellist / Skirmisher / Marksman / Brute as parameter sets; document each profile's intended behaviour.
+
+### Tasks — Tests / i18n
+- [ ] Vitest: each profile produces its characteristic play (Berserker charges + all-out; Skirmisher disengages/kites when Engaged; Marksman keeps range; Duellist defends/ripostes); the **competence floor** holds across all profiles (always defends, never wastes a turn, Fate-saves at death); deterministic given seed (same seed + profiles → identical decisions); focus-fire targeting; resource policy fires at the right thresholds; logging captures chosen + reason + alternatives; a Heuristic-driven fight runs to termination unaided.
+- [ ] Decision reason-codes registered with en/fr labels for later rendering.
+
+### Acceptance criteria
+- `HeuristicController` answers every decision point with reasonable, profile-distinct, deterministic, logged decisions; the five profiles play recognizably differently above a shared competence floor.
+- It drives a full fight to termination unaided and is the default controller for Epic 6; the Manual controller remains for override.
+- Same seed + profiles → identical fight.
+
+---

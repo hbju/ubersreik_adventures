@@ -1,8 +1,8 @@
 import { applyEndOfRoundConditionEffects, combatantCapabilities } from '../utils/conditions';
 import { calculateCharacteristicValue } from '../utils/skills';
-import { consumeAdditionalEffortBuff, reallocateEndOfRound, resetAdditionalEffortBuff, seedInitialAdvantage, spendAdvantage } from './advantage';
+import { consumeAdditionalEffortBuff, reallocateEndOfRound, resetAdditionalEffortBuff, seedInitialAdvantage, spendAdvantage, type InitialAdvantageConfig } from './advantage';
 import { isGrapplingEngagement, resolveCombatAction, resolveEffectiveWeapon } from './actions';
-import { decayEngagementsEndOfRound, determineSurprise, resolveMeleeAttack, resolveRangedAttack, resolveReloadAction } from './engine';
+import { decayEngagementsEndOfRound, determineSurprise, resolveMeleeAttack, resolveRangedAttack, resolveRangedIntoMeleeAttack, resolveReloadAction } from './engine';
 import { applyMove, REACH_ENGAGEMENT_DISTANCE, WeaponReach, type MoveTarget } from './spatial';
 import { resolveWeaponUse } from './proficiency';
 import { hasQuality, qualityRating } from './qualities';
@@ -109,6 +109,7 @@ export interface TurnEngineOptions {
     surprisedIds?: string[];
     unsurprisedIds?: string[];
     surprisedSide?: SideId;
+    initialAdvantage?: Omit<InitialAdvantageConfig, 'state' | 'outnumbering'>;
 }
 
 export interface TurnEngineState {
@@ -287,9 +288,8 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             let result = applyMove(engine.state, decision.actorId, target, decision.mode ?? 'walk', engine.rng);
             if (decision.mode === 'charge' && controller) {
                 const action = decision.action as MeleeAttackAction | undefined;
-                if (!action) return { state: engine.state, events: [decisionRejected(decision, 'missingAction')] };
-
                 result = threadChargeReactions({ ...engine, state: result.state }, decision, result, controller);
+                if (!action) return result;
 
                 let prepared = withFateInterceptionChoice({ ...engine, state: result.state, events: [...result.events] }, controller, action.defenderId, action);
                 prepared = { ...prepared, events: [...engine.events, ...prepared.events] };
@@ -337,7 +337,11 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             const action = decision.action as RangedAttackAction | undefined;
             if (!action) return { state: engine.state, events: [decisionRejected(decision, 'missingAction')] };
             const prepared = withFateInterceptionChoice(engine, controller, action.defenderId, action);
-            const result = resolveRangedAttack(prepared.state, prepared.action as RangedAttackAction, engine.rng);
+            const rangedAction = prepared.action as RangedAttackAction;
+            const target = prepared.state.combatants[rangedAction.defenderId];
+            const result = prepared.state.rules?.shootingIntoMelee && target?.engagementIds.length
+                ? resolveRangedIntoMeleeAttack(prepared.state, { ...rangedAction, enabled: true }, engine.rng)
+                : resolveRangedAttack(prepared.state, rangedAction, engine.rng);
             return result.events.some(event => event.type === 'RangedShotRejected')
                 ? result
                 : spendTurnAction(result.state, decision.actorId, [...prepared.events, ...result.events]);
@@ -987,7 +991,7 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
             ...engine.state,
             combatants: Object.fromEntries(Object.values(determineSurprise(Object.values(engine.state.combatants), options)).map(combatant => [combatant.id, combatant])),
         };
-        state = { ...state, advantagePools: seedInitialAdvantage({ state }) };
+        state = { ...state, advantagePools: seedInitialAdvantage({ state, ...options.initialAdvantage }) };
         const start = turnEvent('CombatStarted', 'combat.turn.started', { round: state.round });
         return { ...engine, state, phase: 'roundStart', events: engine.events.concat(start) };
     }
@@ -1015,7 +1019,17 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
     if (engine.phase === 'roundEnd') {
         let result = applyEndOfRound(engine.state, engine.rng);
         const terminated = termination(result.state, engine.maxRounds);
-        if (terminated) return { ...engine, state: result.state, events: result.events, ...terminated };
+        if (terminated) {
+            return {
+                ...engine,
+                state: result.state,
+                events: [...engine.events, ...result.events, turnEvent('CombatEnded', 'combat.turn.ended', {
+                    outcome: terminated.outcome,
+                    reason: terminated.terminalReason,
+                })],
+                ...terminated,
+            };
+        }
         return {
             ...engine,
             state: result.state,
@@ -1043,7 +1057,16 @@ function finishTurn(engine: TurnEngineState): TurnEngineState {
     const nextId = nextEngine.initiativeOrder.slice(nextIndex).find(id => isActive(nextEngine.state.combatants[id]));
     const events = [...nextEngine.events, turnEvent('TurnEnded', 'combat.turn.endedActor', { round: nextEngine.round, combatantId: endedId })];
     const terminated = sideDownTermination(nextEngine.state);
-    if (terminated) return { ...nextEngine, events, ...terminated };
+    if (terminated) {
+        return {
+            ...nextEngine,
+            events: [...events, turnEvent('CombatEnded', 'combat.turn.ended', {
+                outcome: terminated.outcome,
+                reason: terminated.terminalReason,
+            })],
+            ...terminated,
+        };
+    }
     if (!nextId) {
         return { ...nextEngine, phase: 'roundEnd', activeCombatantId: undefined, turnIndex: nextIndex, events };
     }
