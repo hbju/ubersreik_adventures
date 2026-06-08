@@ -367,3 +367,168 @@ Three small decisions, defaulted:
 - Same seed + profiles → identical fight.
 
 ---
+
+## Epic 6 — Monte-Carlo Runner
+
+Three sub-PBIs, dependency-ordered:
+
+- **6a — Encounter Config + Deterministic Single-Fight Runner + Replay:** the config model, run one fight from `(config, seed)` to a compact outcome, regenerate a full replay on demand. *The foundation.*
+- **6b — Batch Runner + Web Worker + Progress:** master-seed → per-iteration seeds, run N fights off-thread, stream progress, collect raw outcomes. *Depends on 6a.*
+- **6c — Metric Aggregation:** raw outcomes → the full metric suite (rates + CIs, distributions/percentiles, per-combatant survival/wounds/deaths, resource spend, TPK). *Depends on 6b.*
+
+## PBI 6a — Encounter Config, Single-Fight Runner & Replay
+
+**User story:** As the simulator, I need to run one fully-specified fight deterministically from a config and a seed — and regenerate its full replay on demand — so the batch runner and the replay viewer both have a single reliable primitive.
+
+**Why first:** the batch (6b) is just "6a in a loop with derived seeds," and the replay viewer (Epic 7) is "6a's replay." Both stand on this.
+
+### Tasks — Config model (`@wfrp/shared`)
+- [ ] Define `EncounterConfig`: the two sides and their combatants (built from `Character` / `CharacterTemplate`), per-combatant **profile** (with the auto-pick fallback), initial-Advantage inputs (surprise / terrain / threat / manoeuvrability; outnumbering auto-computed), per-combatant cover flag, and toggles (Sudden Death, shooting-into-melee, max-round cap, `tacticalDominantSide`).
+- [ ] Validate a config (legal builds, ≥1 combatant per side, resolvable profiles) with clear errors.
+
+### Tasks — Single-fight runner
+- [ ] `runFight(config, seed) → FightOutcome`: build `CombatState` from the config, seed the RNG, instantiate controllers (default Heuristic-by-profile; **controller is pluggable** so MCTS/Manual can slot in), run the 5a loop to termination, return a **compact** outcome.
+- [ ] `FightOutcome`: winner/draw, rounds, and per-combatant `{ survived, finalWounds, died, critsDealt/Taken, conditionsInflicted, fate/fortuneSpent, advantageGenerated }` + side resource totals — small enough to keep N of them in memory.
+
+### Tasks — Replay
+- [ ] `replayFight(config, seed) → FightReplay`: re-run the identical seed capturing the **full event stream** for step-through, guaranteed to match `runFight`'s outcome.
+
+### Tasks — Tests / i18n
+- [ ] Vitest: `(config, seed)` → identical `FightOutcome` on repeat; `replayFight` reproduces the same outcome and a complete event log; outcome fields correctly reflect a hand-checked fight; controller injection (swap Heuristic for a scripted controller) works; config validation rejects bad builds; a few representative encounters (1v1, 3v2, ranged-vs-melee) terminate validly.
+- [ ] en/fr keys for outcome/summary fields and config-validation errors.
+
+### Acceptance criteria
+- One fight runs deterministically from a config + seed to a compact outcome; its full replay regenerates on demand and matches; controllers are pluggable.
+- Same `(config, seed)` → identical outcome and identical replay.
+
+---
+
+## PBI 6b — Batch Runner, Web Worker & Progress
+
+**User story:** As the simulator, I need to run N fights off the main thread with live progress and cancellation, deterministically and pool-ready, so thousands of iterations don't freeze the UI and always reproduce.
+
+**Why now:** 6a gives a deterministic single fight; this is "6a across a derived-seed range, off-thread."
+
+### Tasks — Pure batch logic (`@wfrp/shared`)
+- [ ] `deriveFightSeed(masterSeed, index)` — deterministic, well-distributed, **per-index** (not a stream).
+- [ ] `runBatch(config, masterSeed, range, { onProgress, isCancelled }) → BatchResult`: iterate the index range, derive each seed, call 6a's `runFight`, collect the compact `FightOutcome` + its seed/index; throttle `onProgress`; honour `isCancelled` (stop cleanly, return partial); wrap each fight so a throw is captured as `{index, seed, error}` and the batch continues.
+- [ ] `BatchResult`: `outcomes[]` (each with its seed/index), `failures[]`, `completedCount`, `masterSeed`, config reference.
+- [ ] Express iteration as a **range** `[a, b)` so a future worker-pool can shard it with no change in results.
+
+### Tasks — Worker host & main-thread handle (gm-app sandbox)
+- [ ] A Web Worker that imports `runBatch`, runs `[0, N)`, posts throttled progress (count + running win-rate) and the final `BatchResult`, and responds to a cancel message.
+- [ ] A main-thread `BatchRunnerHandle`: `start(config, masterSeed, N)` spawns the worker; exposes `onProgress` / `onComplete` / `onError` / `cancel()`.
+
+### Tasks — Tests / i18n
+- [ ] Vitest (no worker needed — test `runBatch` directly): same `(config, masterSeed, N)` → identical `outcomes`; seeds deterministic and distinct per index; cancellation returns partial; a deliberately-throwing fight is captured with its seed and the batch continues; running win-rate matches the final tally; **range-sharding** (`[0,N)` vs `[0,k)+[k,N)` merged) yields identical results — the pool-readiness proof.
+- [ ] A light integration check that the worker host streams progress and returns a `BatchResult` for a small N.
+- [ ] en/fr keys for progress and batch-failure events.
+
+### Acceptance criteria
+- N fights run off-thread with throttled progress and clean cancellation; results are deterministic and order-independent (pool-ready); failing fights are captured with replayable seeds without aborting the batch.
+- The compact outcomes + seeds feed 6c (aggregation) and 6a (replay).
+
+---
+
+## PBI 6c — Metric Aggregation
+
+**User story:** As the simulator, I need the batch outcomes aggregated into a rigorous report — rates with CIs, distributions, per-combatant breakdowns, and wipe/death risk — so I can make trustworthy balance and build decisions.
+
+**Why now:** 6b delivers raw `FightOutcome`s; this is the interpretation layer, and the last engine-side piece before the UI.
+
+### Tasks — Outcome & rounds (`@wfrp/shared`)
+- [ ] Win / loss / draw rate per side with **Wilson** CIs; report `completedCount`, `failures`, and a sufficient-N flag (CI half-width threshold).
+- [ ] Rounds distribution: mean, median, percentiles (p10/25/50/75/90), min/max, and a binned histogram.
+
+### Tasks — Per-combatant breakdown
+- [ ] Survival rate (CI) and death rate; final wounds **among survivors** (mean/median/percentiles); crits dealt/taken and conditions inflicted; **Fate spent** (avg + % of fights Fate was burned — the key "had to burn Fate to live" danger signal), Fortune spent, Advantage generated; damage dealt/taken where tracked.
+
+### Tasks — Risk & decisiveness
+- [ ] Per-side **party-defeated %**, **P(≥1 death)**, **P(all dead)** with CIs (the player-side TPK headline).
+- [ ] Decisiveness: avg survivors on the winning side; rounds split by outcome (do wins resolve faster than losses?).
+
+### Tasks — Comparison & significance
+- [ ] `compareReports(a, b)`: deltas in win-rate / party-defeated / survival, each with a **two-proportion significance test** (significant at 95%? CI overlap) — powering build-optimization and balance A/Bs.
+
+### Tasks — Tests / i18n
+- [ ] Vitest against **hand-computed fixtures**: win-rate + Wilson CI on a known sample; percentiles/histogram on a known distribution; per-combatant rates; party-defeated/death metrics; Fate-burn %; CI correctness at the extremes (all-wins, all-losses) and small N; `compareReports` flagging significance on clearly-different vs. clearly-same samples; determinism (same `BatchResult` → same report); failures correctly excluded from rates.
+- [ ] en/fr keys/labels for every metric, ready for Epic 7 rendering.
+
+### Acceptance criteria
+- The report exposes the full suite — rates + CIs, rounds/wounds distributions, per-combatant survival/wounds/deaths/resources, and wipe/death risk — all validated against hand-checked fixtures and computed deterministically.
+- `compareReports` correctly flags significant differences; every metric carries an i18n key.
+
+---
+
+## PBI 7a — Fight Lab Shell + Encounter/Build Configurator
+
+**User story:** As the GM, I need a sandbox section where I can assemble an encounter from templates, library characters, or my live party, tweak any combatant freely, and save it — without ever touching the campaign — so I can set up the question the simulator answers.
+
+**Why first:** every other Epic 7 panel (run, dashboard, replay, compare) operates on the `EncounterConfig` this produces; nothing runs until you can build one.
+
+### Tasks — Fight Lab shell (gm-app)
+- [ ] New GM-only **"Fight Lab"** top-level section + nav entry (alongside Character / Map / Calendar), isolated from live play.
+- [ ] Shell layout: a scenario-library sidebar + main workspace, with the configurator (7a) and seams/placeholders for run + dashboard (7b), replay (7c), and compare (7d).
+
+### Tasks — Sandbox persistence (gm-app main + IPC)
+- [ ] Dedicated sandbox store at `fight-lab.json` in userData, **separate from `campaign-state.json`**; IPC get/save.
+- [ ] Scenario model (named `EncounterConfig` + slot for a cached report); CRUD via the library sidebar (save / load / duplicate / delete); scenarios stored as **self-contained snapshots**.
+
+### Tasks — Combatant sourcing (level c)
+- [ ] Source pickers reusing `CharacterRoster` / `TemplateManager`: from the `CharacterTemplate` library, the `Character` library, and a **read-only pull from current campaign state** (party + selected NPCs).
+- [ ] On add, deep-clone the source into an editable **sandbox combatant** decoupled from its origin.
+
+### Tasks — Ephemeral combatant editor
+- [ ] Edit the sandbox clone — characteristics, skills, status (wounds / Fate / Fortune / Resilience), equipped weapons/armour/items, talents, and the behaviour **profile** (with auto-pick fallback) — reusing `CharacterSheet` in an editable sandbox mode; never writes back to campaign/templates.
+- [ ] Inline **proficiency warnings** via the appendix resolver: flag unskilled weapons (Qualities lost) and unusable ranged weapons, so confusing sim results are caught at setup.
+
+### Tasks — Encounter config builder
+- [ ] Two sides (Ally / Adversary) with add/remove rosters.
+- [ ] Initial-Advantage inputs (surprise side, terrain, threat, manoeuvrability; outnumbering auto from rosters), per-combatant cover, starting positions (per-side distance on the 1D track + optional offsets), toggles (Sudden Death, shooting-into-melee, max-round cap, `tacticalDominantSide`), batch params (N, master seed with randomize/lock).
+- [ ] Live validation via 6a's config validator with inline errors.
+
+### Tasks — i18n / Tests
+- [ ] en/fr for all Fight Lab strings.
+- [ ] Vitest: the builder emits a config that passes 6a validation; sandbox edits don't mutate the source template/character; scenario save/load round-trips a self-contained config; proficiency warnings fire correctly.
+- [ ] Playwright: assemble an encounter (library + campaign pull), tweak a combatant, save and reload it; assert no write to `campaign-state.json`.
+
+### Acceptance criteria
+- A GM-only Fight Lab exists, isolated from live play; you can assemble an encounter from templates, library characters, and a read-only campaign pull, tweak any combatant ephemerally (including profile), set advantage/cover/positions/toggles/N/seed, and get a valid `EncounterConfig`.
+- Scenarios save/load as self-contained snapshots in the sandbox store; no sandbox action ever mutates the live campaign.
+
+---
+
+## PBI 7b — Run Controls, Live Progress & Results Dashboard
+
+**User story:** As the GM, I need to run a scenario, watch live progress, and read a statistically clear dashboard, so I can judge whether an encounter is balanced or deadly.
+
+**Why now:** 7a produces the config; this turns it into answers — the core configure→run→read loop.
+
+### Tasks — Run controls & progress (gm-app)
+- [ ] Run / cancel / re-run wired to `BatchRunnerHandle` (6b): `start(config, masterSeed, N)`; state machine idle → running → complete / cancelled / error; Run disabled while running, Cancel shown.
+- [ ] Live progress: bar (done / N), running win-rate, elapsed + ETA; throttled per 6b.
+- [ ] Worker runs 6c aggregation as its final step → returns `{ report, BatchResult }`; main thread retains the `BatchResult` for the session.
+- [ ] Cancellation → aggregate the completed subset into a **partial report**, badged as partial (wider CIs).
+
+### Tasks — Results dashboard (render 6c report)
+- [ ] Headline: win / loss / draw per side with **CIs** and the **sufficient-N flag** (warn + suggest a higher N when inconclusive).
+- [ ] Risk headline: party-defeated %, P(≥1 death), P(all dead), with CIs.
+- [ ] Rounds: histogram + mean/median/percentiles.
+- [ ] Per-combatant table (sortable): survival/death rate, survivor wounds (mean/median/percentiles), crits dealt/taken, conditions, **Fate spent (+ % of fights Fate was burned)**, Fortune spent, Advantage generated — inline mini-bars plus a couple of headline charts (recharts/chart.js).
+- [ ] Decisiveness: avg survivors on the winning side, rounds split by outcome. Empty / loading / error states.
+
+### Tasks — Failures & persistence
+- [ ] Failing-seeds panel from `BatchResult.failures` (`{index, seed, error}`); each row → one-click **replay handoff** to 7c (seam/stub until 7c lands).
+- [ ] On completion, cache `{report, masterSeed, N, failures}` into the current scenario (sandbox store); restore it when the scenario is loaded.
+
+### Tasks — i18n / Tests
+- [ ] en/fr for run/progress/dashboard labels (reuse 6c's metric keys).
+- [ ] Vitest: run→progress→complete drives the handle correctly; cancel yields a partial report flagged as such; the report-cache round-trips with the scenario; the failure handoff passes the right index/seed.
+- [ ] Playwright: run a saved scenario end-to-end, watch progress, read the dashboard incl. CIs and the sufficient-N warning; click a failure → assert the correct seed is handed off.
+
+### Acceptance criteria
+- From a saved scenario you can run N fights off-thread, watch live progress (running win-rate + ETA), cancel to a flagged partial result, and read a dashboard with win/risk rates + CIs, rounds/wounds distributions, and a per-combatant breakdown.
+- Failing fights are listed and one click hands the exact seed to the replay viewer; the report caches with the scenario and restores on reload.
+
+---
+
