@@ -2,7 +2,7 @@ import type {
     BatchProgress,
     EncounterConfig,
     FightSeed,
-} from '@wfrp/shared';
+} from '@wfrp/shared/combat';
 import type {
     BatchWorkerRequest,
     BatchWorkerResponse,

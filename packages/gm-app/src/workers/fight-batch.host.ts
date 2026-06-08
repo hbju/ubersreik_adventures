@@ -5,7 +5,7 @@ import {
     type EncounterConfig,
     type FightSeed,
     type RunBatchOptions,
-} from '@wfrp/shared';
+} from '@wfrp/shared/combat';
 import type {
     BatchWorkerRequest,
     BatchWorkerResponse,

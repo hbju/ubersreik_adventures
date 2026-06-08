@@ -3,10 +3,11 @@ import path from 'node:path'
 
 export default defineConfig({
   resolve: {
-    alias: {
-      '@wfrp/shared': path.join(__dirname, '../shared/src/index.ts'),
-      '@': path.join(__dirname, 'src'),
-    },
+    alias: [
+      { find: '@wfrp/shared/combat', replacement: path.join(__dirname, '../shared/src/combat/index.ts') },
+      { find: '@wfrp/shared', replacement: path.join(__dirname, '../shared/src/index.ts') },
+      { find: '@', replacement: path.join(__dirname, 'src') },
+    ],
   },
   test: {
     root: __dirname,

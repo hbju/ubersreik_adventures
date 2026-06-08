@@ -15,10 +15,11 @@ export default defineConfig(({ command }) => {
 
   return {
     resolve: {
-      alias: {
-        '@': path.join(__dirname, 'src'),
-        '@wfrp/shared': path.join(__dirname, '../shared/src/index.ts'),
-      },
+      alias: [
+        { find: '@', replacement: path.join(__dirname, 'src') },
+        { find: '@wfrp/shared/combat', replacement: path.join(__dirname, '../shared/src/combat/index.ts') },
+        { find: '@wfrp/shared', replacement: path.join(__dirname, '../shared/src/index.ts') },
+      ],
     },
     plugins: [
       react(),
@@ -35,9 +36,10 @@ export default defineConfig(({ command }) => {
           },
           vite: {
             resolve: {
-              alias: {
-                '@wfrp/shared': path.join(__dirname, '../shared/src/index.ts'),
-              },
+              alias: [
+                { find: '@wfrp/shared/combat', replacement: path.join(__dirname, '../shared/src/combat/index.ts') },
+                { find: '@wfrp/shared', replacement: path.join(__dirname, '../shared/src/index.ts') },
+              ],
             },
             build: {
               sourcemap,
@@ -56,9 +58,10 @@ export default defineConfig(({ command }) => {
           input: 'electron/preload/index.ts',
           vite: {
             resolve: {
-              alias: {
-                '@wfrp/shared': path.join(__dirname, '../shared/src/index.ts'),
-              },
+              alias: [
+                { find: '@wfrp/shared/combat', replacement: path.join(__dirname, '../shared/src/combat/index.ts') },
+                { find: '@wfrp/shared', replacement: path.join(__dirname, '../shared/src/index.ts') },
+              ],
             },
             build: {
               sourcemap: sourcemap ? 'inline' : undefined, // #332

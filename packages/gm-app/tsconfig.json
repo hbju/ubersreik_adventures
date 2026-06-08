@@ -20,7 +20,8 @@
       "@/*": [
         "src/*"
       ],
-      "@wfrp/shared": ["../shared/src/index.ts"]
+      "@wfrp/shared": ["../shared/src/index.ts"],
+      "@wfrp/shared/combat": ["../shared/src/combat/index.ts"]
     },
   },
   "include": ["src", "electron", "../shared/src"],

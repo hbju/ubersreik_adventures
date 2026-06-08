@@ -4,7 +4,7 @@ import type {
     EncounterConfig,
     FightSeed,
     MetricReport,
-} from '@wfrp/shared';
+} from '@wfrp/shared/combat';
 
 export interface BatchWorkerStartMessage {
     type: 'start';

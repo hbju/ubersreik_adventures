@@ -9,6 +9,11 @@
       "types": "./src/index.d.ts",
       "import": "./src/index.ts",
       "default": "./src/index.ts"
+    },
+    "./combat": {
+      "types": "./src/combat/index.ts",
+      "import": "./src/combat/index.ts",
+      "default": "./src/combat/index.ts"
     }
   },
   "scripts": {
