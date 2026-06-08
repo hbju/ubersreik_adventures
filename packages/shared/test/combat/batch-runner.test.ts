@@ -3,6 +3,8 @@ import type { Character, Weapon } from '../../src/types/wfrp.types';
 import {
     deriveFightSeed,
     runBatch,
+    selectReplayOutcome,
+    type BatchResult,
     type BatchFightRunner,
     type BatchProgress,
     type EncounterConfig,
@@ -117,7 +119,65 @@ describe('Epic 6b batch runner', () => {
         expect([...left.failures, ...right.failures]).toEqual(whole.failures);
         expect(left.completedCount + right.completedCount).toBe(whole.completedCount);
     });
+
+    it('selects deterministic representative fights by outcome and risk', () => {
+        const config = encounter();
+        const result: BatchResult = {
+            outcomes: [
+                indexedOutcome(0, fakeOutcome('s0', 'ally'), 2),
+                indexedOutcome(1, fakeOutcome('s1', 'ally'), 6),
+                indexedOutcome(2, fakeOutcome('s2', 'ally'), 4),
+                indexedOutcome(3, fakeOutcome('s3', 'draw'), 8),
+                indexedOutcome(4, fakeOutcome('s4', 'adversary'), 5, true),
+                indexedOutcome(5, fakeOutcome('s5', 'adversary'), 9),
+            ],
+            failures: [],
+            completedCount: 6,
+            masterSeed: 'selection',
+            range: [0, 6],
+            config,
+            cancelled: false,
+        };
+
+        expect(selectReplayOutcome(result, 'allyWin')?.index).toBe(2);
+        expect(selectReplayOutcome(result, 'adversaryWin')?.index).toBe(4);
+        expect(selectReplayOutcome(result, 'draw')?.index).toBe(3);
+        expect(selectReplayOutcome(result, 'tpk')?.index).toBe(4);
+        expect(selectReplayOutcome(result, 'longest')?.index).toBe(5);
+    });
 });
+
+function indexedOutcome(
+    index: number,
+    outcome: FightOutcome,
+    rounds: number,
+    allyDied = false
+) {
+    return {
+        index,
+        seed: outcome.seed,
+        outcome: {
+            ...outcome,
+            rounds,
+            combatants: {
+                ally: {
+                    id: 'ally',
+                    name: 'ally',
+                    side: 'ally' as const,
+                    survived: !allyDied,
+                    finalWounds: allyDied ? 0 : 4,
+                    died: allyDied,
+                    critsDealt: 0,
+                    critsTaken: 0,
+                    conditionsInflicted: 0,
+                    fateSpent: 0,
+                    fortuneSpent: 0,
+                    advantageGenerated: 0,
+                },
+            },
+        },
+    };
+}
 
 function fakeOutcome(seed: number | string, winner: FightOutcome['winner']): FightOutcome {
     return {

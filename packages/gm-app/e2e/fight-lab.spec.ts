@@ -50,7 +50,11 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
                                 requestId,
                                 payload: {
                                     result: {
-                                        outcomes: [],
+                                        outcomes: [
+                                            indexedOutcome(0, `${message.masterSeed}:0:fixture`, 'ally', 3, message.config),
+                                            indexedOutcome(1, `${message.masterSeed}:1:fixture`, 'draw', 6, message.config),
+                                            indexedOutcome(2, `${message.masterSeed}:2:fixture`, 'adversary', 4, message.config, true),
+                                        ],
                                         failures: [failure],
                                         completedCount: cancelled ? 5 : message.iterations,
                                         masterSeed: message.masterSeed,
@@ -176,6 +180,49 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
                 },
             };
         }
+
+        function indexedOutcome(
+            index: number,
+            seed: string,
+            winner: 'ally' | 'adversary' | 'draw',
+            rounds: number,
+            config: any,
+            allyDied = false
+        ) {
+            const combatants = Object.fromEntries(
+                [...config.sides.ally.map((member: any) => ({ member, side: 'ally' })),
+                    ...config.sides.adversary.map((member: any) => ({ member, side: 'adversary' }))]
+                    .map(({ member, side }: any) => [member.id, {
+                        id: member.id,
+                        name: member.character.name,
+                        side,
+                        survived: side !== 'ally' || !allyDied,
+                        finalWounds: side === 'ally' && allyDied ? 0 : 5,
+                        died: side === 'ally' && allyDied,
+                        critsDealt: 0,
+                        critsTaken: 0,
+                        conditionsInflicted: 0,
+                        fateSpent: 0,
+                        fortuneSpent: 0,
+                        advantageGenerated: 0,
+                    }])
+            );
+            return {
+                index,
+                seed,
+                outcome: {
+                    seed,
+                    winner,
+                    rounds,
+                    terminalReason: winner === 'draw' ? 'maxRounds' : 'sideDown',
+                    combatants,
+                    sideResources: {
+                        ally: { fateSpent: 0, fortuneSpent: 0, advantageGenerated: 0, advantageSpent: 0 },
+                        adversary: { fateSpent: 0, fortuneSpent: 0, advantageGenerated: 0, advantageSpent: 0 },
+                    },
+                },
+            };
+        }
         (window as any).ipcRenderer = new Proxy({
             getInitialData: async () => campaign,
             saveData: () => { state.campaignSaveCalls += 1; },
@@ -227,6 +274,7 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
     await firstAlly.getByLabel('Profile').selectOption('duellist');
     await firstAlly.getByLabel('Cover').selectOption('medium');
     await firstAlly.getByLabel('Offset').fill('3');
+    await page.getByLabel('Maximum rounds').fill('3');
 
     await page.getByLabel('Scenario name').fill('Bridge Ambush');
     await page.getByRole('button', { name: 'Save scenario' }).click();
@@ -262,9 +310,29 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
     await page.screenshot({ path: testInfo.outputPath('fight-lab-dashboard-mobile.png'), fullPage: true });
 
     await lab.getByRole('button', { name: /failure-seed-7/ }).click();
-    await expect(lab.getByText('Replay handoff ready')).toBeVisible();
-    await expect(lab.getByText('#7')).toBeVisible();
-    await expect(lab.getByText('failure-seed-7')).toBeVisible();
+    await expect(lab.getByRole('heading', { name: 'Fight Replay' })).toBeVisible();
+    await expect(lab.getByLabel('1D Battlefield')).toBeVisible();
+    await expect(lab.getByRole('heading', { name: 'Combatant State' })).toBeVisible();
+    await expect(lab.getByRole('heading', { name: 'Event Narration' })).toBeVisible();
+    await expect(lab.getByText(/Seed failure-seed-7/)).toBeVisible();
+    await lab.getByLabel('1D Battlefield').screenshot({ path: testInfo.outputPath('fight-lab-battlefield.png') });
+
+    const frameLabel = lab.getByText(/Frame \d+ \/ \d+ \/ Round \d+/);
+    await expect(frameLabel).toContainText('Frame 1');
+    await lab.getByTitle('Next step').click();
+    await expect(frameLabel).toContainText('Frame 2');
+    await lab.getByTitle('Previous step').click();
+    await expect(frameLabel).toContainText('Frame 1');
+    await lab.getByTitle('Next round').click();
+    await expect(frameLabel).toContainText('Round 1');
+    await lab.getByTitle('Next step').click();
+    await expect(lab.getByRole('heading', { name: 'AI Decision' })).toBeVisible();
+    await expect(lab.getByText('Chosen')).toBeVisible();
+    await expect(lab.getByText('Rejected', { exact: true })).toBeVisible();
+
+    await lab.getByRole('button', { name: 'Replay a draw' }).click();
+    await expect(lab.getByText(/Seed .*:1:/)).toBeVisible();
+    await page.screenshot({ path: testInfo.outputPath('fight-lab-replay.png'), fullPage: true });
 
     const finalCampaignWrites = await page.evaluate(() => (window as any).__fightLabTest.campaignSaveCalls);
     expect(finalCampaignWrites).toBe(baselineCampaignWrites);

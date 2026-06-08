@@ -1,5 +1,5 @@
 import { Combatant, Character, ConditionInstance } from '../types/wfrp.types';
-import { calculateCharacteristicBonus } from './skills';
+import { calculateCharacteristicBonus, calculateCharacteristicValue, calculateSkillValue } from './skills';
 import { calculateSuccessLevel, rolld100, rollDice } from './mechanics';
 import { mathRandomRng, type Rng } from '../combat/rng';
 import { applyReloadInterruptGuardToCombatant } from '../combat/reload-interrupts';
@@ -126,12 +126,12 @@ const TEST_REMOVAL_DIFFICULTY: Partial<Record<TestRemovalConditionId, number>> =
   condition_broken: 0,
 };
 const TEST_REMOVAL_TYPE: Partial<Record<TestRemovalConditionId, NonNullable<ConditionCheckResult['testType']>>> = {
-  condition_bleeding: 'Heal',
-  condition_stunned: 'Endurance',
-  condition_poisoned: 'Endurance',
-  condition_ablaze: 'Athletics',
-  condition_entangled: 'Strength',
-  condition_broken: 'Cool',
+  condition_bleeding: 'heal',
+  condition_stunned: 'endurance',
+  condition_poisoned: 'endurance',
+  condition_ablaze: 'athletics',
+  condition_entangled: 'strength',
+  condition_broken: 'cool',
 };
 
 export interface ConditionEffect {
@@ -142,7 +142,7 @@ export interface ConditionEffect {
 
 export interface ConditionCheckResult {
   needsTest: boolean;
-  testType?: 'Athletics' | 'Cool' | 'Endurance' | 'Strength' | 'Heal';
+  testType?: 'athletics' | 'cool' | 'endurance' | 'strength' | 'heal';
   testDifficulty?: number; // Modifier to test (+20, +0, -10, etc.)
   automaticEffect?: {
     type: 'damage' | 'remove' | 'death_check' | 'gain_condition';
@@ -217,7 +217,7 @@ export function checkConditionEffects(
     case 'condition_ablaze':
       return {
         needsTest: true,
-        testType: 'Athletics',
+        testType: 'athletics',
         testDifficulty: 0, // Varies by circumstances (mentioned in description)
         automaticEffect: {
           type: 'damage',
@@ -231,7 +231,7 @@ export function checkConditionEffects(
     case 'condition_bleeding':
       return {
         needsTest: true,
-        testType: 'Heal',
+        testType: 'heal',
         testDifficulty: 0,
         automaticEffect: {
           type: 'damage',
@@ -262,7 +262,7 @@ export function checkConditionEffects(
     case 'condition_broken':
       return {
         needsTest: true,
-        testType: 'Cool',
+        testType: 'cool',
         testDifficulty: 0, // Varies by circumstances (+20 to -30)
         penalties: {
           allTests: -10 // For non-running/hiding tests
@@ -289,7 +289,7 @@ export function checkConditionEffects(
     case 'condition_entangled':
       return {
         needsTest: true,
-        testType: 'Strength',
+        testType: 'strength',
         testDifficulty: 0, // Opposed test vs source
         penalties: {
           movementTests: -10
@@ -312,7 +312,7 @@ export function checkConditionEffects(
     case 'condition_poisoned':
       return {
         needsTest: true,
-        testType: 'Endurance',
+        testType: 'endurance',
         testDifficulty: 0, // Varies by poison
         automaticEffect: {
           type: 'damage',
@@ -342,7 +342,7 @@ export function checkConditionEffects(
     case 'condition_stunned':
       return {
         needsTest: true,
-        testType: 'Endurance',
+        testType: 'endurance',
         testDifficulty: 0, // Challenging (+0)
         penalties: {
           allTests: -10
@@ -520,6 +520,25 @@ export function applyConditionRemovalTest<TCombatant extends ConditionSubject>(
   return removeConditionStacks(combatant, conditionId, stacksToRemove);
 }
 
+export function resolveConditionPendingTest<TCombatant extends ConditionSubject>(
+  combatant: TCombatant,
+  pendingTest: ConditionApplicationResult<TCombatant>['pendingTests'][number],
+  rng: Rng
+): ConditionApplicationResult<TCombatant> {
+  const { conditionId, testType, difficulty, reason } = pendingTest;
+  const roll = rolld100(rng);
+  if (!combatant.character) {
+    throw new Error('Cannot resolve condition pending test without character');
+  }
+  const targetNumber = testType === 'strength' ? 
+    calculateCharacteristicValue(combatant.character.characteristics.s) : 
+    calculateSkillValue(combatant.character.skills.find(s => s.id === testType)!, combatant.character);
+
+  const successLevel = calculateSuccessLevel(roll, targetNumber + (difficulty ?? 0));
+  const testOutcome: ConditionTestOutcome = { roll, targetNumber, successLevel };
+  return applyConditionRemovalTest(combatant, conditionId as TestRemovalConditionId, testOutcome);
+}
+
 export function applyEndOfTurnConditionEffects<TCombatant extends ConditionSubject>(
   combatant: TCombatant,
   options: EndOfTurnConditionOptions = {}
@@ -532,7 +551,7 @@ export function applyEndOfTurnConditionEffects<TCombatant extends ConditionSubje
     const result = emptyConditionResult(combatant);
     result.pendingTests.push({
       conditionId: 'condition_bleeding',
-      testType: 'Endurance',
+      testType: 'endurance',
       difficulty: 0,
       reason: 'endOfTurn',
     });
@@ -643,7 +662,7 @@ export function applyEndOfRoundConditionEffects<TCombatant extends ConditionSubj
       if (!options.poisonedUnconsciousEnduranceTest) {
         result.pendingTests.push({
           conditionId: 'condition_poisoned',
-          testType: 'Endurance',
+          testType: 'endurance',
           difficulty: TEST_REMOVAL_DIFFICULTY.condition_poisoned,
           reason: 'unconsciousPoisoned',
         });

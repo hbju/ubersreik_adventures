@@ -782,7 +782,77 @@
             "emptyBody": "Lancez ce scenario pour remplir le tableau de bord."
         },
         "replay": {
-            "handoff": "Transmission au rejeu prete"
+            "handoff": "Transmission au rejeu prete",
+            "title": "Rejeu du combat",
+            "description": "Chargez une graine ou choisissez un combat representatif du lot actuel.",
+            "summary": "Graine {{seed}} / {{winner}} / {{rounds}} rounds",
+            "seed": "Graine du rejeu",
+            "seedPlaceholder": "Saisir une graine de combat",
+            "load": "Charger le rejeu",
+            "representative": "Combat representatif",
+            "sessionRequired": "Lancez un lot dans cette session pour choisir un resultat.",
+            "selectionUnavailable": "Aucun combat du lot actuel ne correspond a ce resultat.",
+            "selection": {
+                "draw": "Rejouer un nul",
+                "allyWin": "Victoire alliee typique",
+                "adversaryWin": "Victoire adverse typique",
+                "tpk": "TPK du groupe",
+                "longest": "Combat le plus long"
+            },
+            "outcome": {
+                "ally": "Victoire alliee",
+                "adversary": "Victoire adverse",
+                "draw": "Match nul"
+            },
+            "emptyTitle": "Choisissez un combat a examiner",
+            "emptyBody": "Le rejeu affichera le champ de bataille, les evenements et le raisonnement de l'IA image par image.",
+            "error": "Le rejeu n'a pas pu etre genere : {{error}}",
+            "previousRound": "Round precedent",
+            "previousStep": "Etape precedente",
+            "play": "Lire",
+            "pause": "Pause",
+            "nextStep": "Etape suivante",
+            "nextRound": "Round suivant",
+            "frame": "Image {{current}} / {{total}} / Round {{round}}",
+            "speed": "Vitesse",
+            "scrubber": "Chronologie du rejeu",
+            "marker": {
+                "death": "Mort au round {{round}}",
+                "critical": "Blessure critique au round {{round}}",
+                "fate": "Destin depense au round {{round}}",
+                "deathLabel": "Mort",
+                "criticalLabel": "Critique",
+                "fateLabel": "Destin"
+            },
+            "battlefield": "Champ de bataille 1D",
+            "advantage": "Avantage : Allies {{ally}} / Adversaires {{adversary}}",
+            "yards": "yards",
+            "range": {
+                "pointBlank": "Bout portant",
+                "short": "Courte",
+                "normal": "Normale",
+                "long": "Longue",
+                "extreme": "Extreme"
+            },
+            "combatants": "Etat des combattants",
+            "position": "Position",
+            "noCurrentAction": "Aucune action sur cette image",
+            "noConditions": "Aucun Etat",
+            "status": {
+                "ready": "Pret",
+                "active": "Actif",
+                "unconscious": "Inconscient",
+                "removed": "Retire",
+                "dead": "Mort"
+            },
+            "narration": "Recit des evenements",
+            "noEvents": "Aucun evenement sur cette image.",
+            "eventFallback": "{{type}} se resout.",
+            "reasoning": "Decision de l'IA",
+            "noRationale": "Aucune decision de l'IA sur cette image.",
+            "chosen": "Choisi",
+            "rejected": "Rejete",
+            "none": "Aucun"
         }
     },
     "lore": {

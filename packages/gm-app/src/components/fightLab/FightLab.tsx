@@ -18,6 +18,7 @@ import { ItemSelectorModal } from '../ItemSelectorModal';
 import { TalentSelectorModal } from '../TalentSelectorModal';
 import { BatchRunnerHandle } from '../../workers';
 import { ResultsDashboard, RunControls } from './FightLabResults';
+import { FightReplayViewer } from './FightReplayViewer';
 import {
     addCharacterToScenario,
     cacheScenarioReport,
@@ -415,12 +416,12 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
                                 setTab('replay');
                             }}
                         />
-                    ) : tab === 'replay' && replayHandoff ? (
-                        <div className={styles.replayHandoff}>
-                            <span>{t('fightLab.replay.handoff')}</span>
-                            <strong>#{replayHandoff.index}</strong>
-                            <code>{String(replayHandoff.seed)}</code>
-                        </div>
+                    ) : tab === 'replay' ? (
+                        <FightReplayViewer
+                            config={scenario.config}
+                            batchResult={runState.result}
+                            handoff={replayHandoff}
+                        />
                     ) : (
                         <div className={styles.placeholder}>
                             <span>{t(`fightLab.placeholder.${tab}`)}</span>

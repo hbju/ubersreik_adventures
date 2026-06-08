@@ -38,6 +38,13 @@ describe('Epic 6a fight runner', () => {
         expect(first.events[0]?.type).toBe('CombatStarted');
         expect(first.events.some(event => event.type === 'RoundStarted')).toBe(true);
         expect(first.events.at(-1)?.type).toBe('CombatEnded');
+        expect(first.frames[0]).toMatchObject({ index: 0, kind: 'initial', round: 0 });
+        expect(first.frames.at(-1)?.phase).toBe('complete');
+        for (const combatant of Object.values(first.outcome.combatants)) {
+            expect(first.frames.at(-1)?.state.combatants[combatant.id].currentWounds)
+                .toBe(combatant.finalWounds);
+        }
+        expect(first.frames.some(frame => frame.rationales.length > 0)).toBe(true);
     });
 
     it('reduces a hand-checked scripted fight into compact combatant metrics', () => {

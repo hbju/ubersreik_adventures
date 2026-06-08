@@ -1,4 +1,4 @@
-import { applyEndOfRoundConditionEffects, combatantCapabilities } from '../utils/conditions';
+import { applyEndOfRoundConditionEffects, combatantCapabilities, resolveConditionPendingTest } from '../utils/conditions';
 import { calculateCharacteristicValue } from '../utils/skills';
 import { consumeAdditionalEffortBuff, reallocateEndOfRound, resetAdditionalEffortBuff, seedInitialAdvantage, spendAdvantage, type InitialAdvantageConfig } from './advantage';
 import { isGrapplingEngagement, resolveCombatAction, resolveEffectiveWeapon } from './actions';
@@ -127,6 +127,15 @@ export interface TurnEngineState {
     events: CombatEvent[];
 }
 
+export interface TurnEngineStep {
+    kind: 'automatic' | 'decision';
+    engine: TurnEngineState;
+    events: CombatEvent[];
+    decision?: CombatDecision;
+}
+
+export type TurnEngineObserver = (step: TurnEngineStep) => void;
+
 export class ScriptedController implements CombatantController {
     private index = 0;
 
@@ -209,13 +218,19 @@ export function applyDecision(engine: TurnEngineState, decision: CombatDecision,
 export function runCombatToCompletion(
     state: CombatState,
     controllers: Record<string, CombatantController> | CombatantController,
-    options: TurnEngineOptions = {}
+    options: TurnEngineOptions = {},
+    observer?: TurnEngineObserver
 ): TurnEngineState {
     let engine = createTurnEngine(state, options);
     let guard = 0;
     const maxRounds = options.maxRounds ?? 50;
     while (engine.phase !== 'complete' && guard++ < maxRounds * Math.max(1, Object.keys(state.combatants).length) * 20) {
+        const automaticEventCount = engine.events.length;
         engine = advanceToNextDecision(engine, options);
+        const automaticEvents = engine.events.slice(automaticEventCount);
+        if (automaticEvents.length > 0) {
+            observer?.({ kind: 'automatic', engine, events: automaticEvents });
+        }
         if (engine.phase === 'complete' || !engine.activeCombatantId) break;
         const actor = engine.state.combatants[engine.activeCombatantId];
         const controller = controllerFor(controllers, actor.id);
@@ -227,9 +242,23 @@ export function runCombatToCompletion(
             legalDecisions: legalDecisions(engine.state, actor),
             rng: engine.rng,
         }) ?? { kind: 'endTurn', actorId: actor.id };
+        const decisionEventCount = engine.events.length;
         engine = applyDecision(engine, decision, controller);
+        observer?.({
+            kind: 'decision',
+            engine,
+            events: engine.events.slice(decisionEventCount),
+            decision,
+        });
     }
-    return engine.phase === 'complete' ? engine : complete(engine, 'draw', 'maxRounds');
+    if (engine.phase === 'complete') return engine;
+    const completed = complete(engine, 'draw', 'maxRounds');
+    observer?.({
+        kind: 'automatic',
+        engine: completed,
+        events: completed.events.slice(engine.events.length),
+    });
+    return completed;
 }
 
 export function legalDecisions(state: CombatState, combatant: Combatant): LegalDecision[] {
@@ -1089,6 +1118,11 @@ function applyEndOfRound(state: CombatState, rng: Rng): CombatEngineResult {
         events.push(...condition.events as unknown as CombatEvent[]);
         if (condition.dead) {
             currentState = replaceCombatant(currentState, { ...currentState.combatants[combatant.id], dead: true } as Combatant);
+        }
+        for (const pendingTest of condition.pendingTests) {
+            const resolved = resolveConditionPendingTest(condition.combatant, pendingTest, rng);
+            currentState = replaceCombatant(currentState, resolved.combatant as Combatant);
+            events.push(...resolved.events as unknown as CombatEvent[]);
         }
     }
 

@@ -45,6 +45,8 @@ export interface BatchResult {
     cancelled: boolean;
 }
 
+export type ReplaySelectionKind = 'draw' | 'allyWin' | 'adversaryWin' | 'tpk' | 'longest';
+
 export type BatchFightRunner = (
     config: EncounterConfig,
     seed: FightSeed,
@@ -147,6 +149,34 @@ export async function runBatch(
         config,
         cancelled,
     };
+}
+
+export function selectReplayOutcome(
+    batch: BatchResult,
+    kind: ReplaySelectionKind
+): IndexedFightOutcome | undefined {
+    if (kind === 'longest') {
+        return [...batch.outcomes].sort((a, b) =>
+            b.outcome.rounds - a.outcome.rounds || a.index - b.index
+        )[0];
+    }
+    if (kind === 'tpk') {
+        const allyIds = batch.config.sides.ally.map(member => member.id);
+        return batch.outcomes
+            .filter(entry => allyIds.length > 0 && allyIds.every(id => entry.outcome.combatants[id]?.died))
+            .sort((a, b) => a.index - b.index)[0];
+    }
+
+    const winner = kind === 'draw' ? 'draw' : kind === 'allyWin' ? 'ally' : 'adversary';
+    const candidates = batch.outcomes
+        .filter(entry => entry.outcome.winner === winner)
+        .sort((a, b) => a.outcome.rounds - b.outcome.rounds || a.index - b.index);
+    if (candidates.length === 0) return undefined;
+    const medianRounds = candidates[Math.floor((candidates.length - 1) / 2)].outcome.rounds;
+    return [...candidates].sort((a, b) =>
+        Math.abs(a.outcome.rounds - medianRounds) - Math.abs(b.outcome.rounds - medianRounds)
+        || a.index - b.index
+    )[0];
 }
 
 function validateRange(range: BatchRange): BatchRange {

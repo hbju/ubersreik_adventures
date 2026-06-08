@@ -781,7 +781,77 @@
             "emptyBody": "Run this scenario to populate the dashboard."
         },
         "replay": {
-            "handoff": "Replay handoff ready"
+            "handoff": "Replay handoff ready",
+            "title": "Fight Replay",
+            "description": "Load a seed or choose a representative fight from the current batch.",
+            "summary": "Seed {{seed}} / {{winner}} / {{rounds}} rounds",
+            "seed": "Replay seed",
+            "seedPlaceholder": "Enter a fight seed",
+            "load": "Load replay",
+            "representative": "Representative fight",
+            "sessionRequired": "Run a batch in this session to enable outcome-based picks.",
+            "selectionUnavailable": "No fight in the current batch matches that outcome.",
+            "selection": {
+                "draw": "Replay a draw",
+                "allyWin": "Typical Ally win",
+                "adversaryWin": "Typical Adversary win",
+                "tpk": "Player-side TPK",
+                "longest": "Longest fight"
+            },
+            "outcome": {
+                "ally": "Ally victory",
+                "adversary": "Adversary victory",
+                "draw": "Draw"
+            },
+            "emptyTitle": "Choose a fight to inspect",
+            "emptyBody": "The replay will show battlefield state, narration, and AI reasoning frame by frame.",
+            "error": "Replay could not be generated: {{error}}",
+            "previousRound": "Previous round",
+            "previousStep": "Previous step",
+            "play": "Play",
+            "pause": "Pause",
+            "nextStep": "Next step",
+            "nextRound": "Next round",
+            "frame": "Frame {{current}} / {{total}} / Round {{round}}",
+            "speed": "Speed",
+            "scrubber": "Replay timeline",
+            "marker": {
+                "death": "Death in round {{round}}",
+                "critical": "Critical Wound in round {{round}}",
+                "fate": "Fate spent in round {{round}}",
+                "deathLabel": "Death",
+                "criticalLabel": "Critical",
+                "fateLabel": "Fate"
+            },
+            "battlefield": "1D Battlefield",
+            "advantage": "Advantage: Ally {{ally}} / Adversary {{adversary}}",
+            "yards": "yards",
+            "range": {
+                "pointBlank": "Point Blank",
+                "short": "Short",
+                "normal": "Normal",
+                "long": "Long",
+                "extreme": "Extreme"
+            },
+            "combatants": "Combatant State",
+            "position": "Position",
+            "noCurrentAction": "No action in this frame",
+            "noConditions": "No Conditions",
+            "status": {
+                "ready": "Ready",
+                "active": "Active",
+                "unconscious": "Unconscious",
+                "removed": "Removed",
+                "dead": "Dead"
+            },
+            "narration": "Event Narration",
+            "noEvents": "No events in this frame.",
+            "eventFallback": "{{type}} resolves.",
+            "reasoning": "AI Decision",
+            "noRationale": "No AI decision was made in this frame.",
+            "chosen": "Chosen",
+            "rejected": "Rejected",
+            "none": "None"
         }
     },
     "lore": {

@@ -23,7 +23,9 @@ import { createSeededRng, type Rng } from './rng';
 import {
     runCombatToCompletion,
     type CombatantController,
+    type CombatDecision,
     type TurnEngineOptions,
+    type TurnEngineStep,
     type TurnEngineState,
 } from './turn-engine';
 import type {
@@ -128,6 +130,78 @@ export interface FightReplay {
     seed: FightSeed;
     outcome: FightOutcome;
     events: CombatEvent[];
+    frames: FightReplayFrame[];
+}
+
+export interface FightReplayFrame {
+    index: number;
+    kind: 'initial' | TurnEngineStep['kind'];
+    round: number;
+    phase: TurnEngineState['phase'];
+    activeCombatantId?: string;
+    state: FightReplayState;
+    events: CombatEvent[];
+    decision?: FightReplayDecision;
+    rationales: FightReplayRationale[];
+    markers: FightReplayMarkers;
+}
+
+export interface FightReplayState {
+    combatants: Record<string, FightReplayCombatant>;
+    advantagePools: Record<SideId, number>;
+    engagements: FightReplayEngagement[];
+}
+
+export interface FightReplayCombatant {
+    id: string;
+    name: string;
+    side: SideId;
+    position: number;
+    currentWounds: number;
+    maxWounds: number;
+    conditions: string[];
+    fate: { current: number; max: number };
+    fortune: { current: number; max: number };
+    status: 'ready' | 'active' | 'unconscious' | 'removed' | 'dead';
+    currentAction?: string;
+    engagementIds: string[];
+    rangeBands?: FightReplayRangeBands;
+}
+
+export interface FightReplayRangeBands {
+    pointBlank: number;
+    short: number;
+    normal: number;
+    long: number;
+    extreme: number;
+}
+
+export interface FightReplayEngagement {
+    aId: string;
+    bId: string;
+    infighting: boolean;
+    grappling: boolean;
+}
+
+export interface FightReplayDecision {
+    actorId: string;
+    kind: string;
+    targetId?: string;
+    chosen?: string;
+}
+
+export interface FightReplayRationale {
+    actorId: string;
+    level: 'turn' | 'resolution';
+    chosen: string;
+    reasonCode: string;
+    rejectedAlternatives: string[];
+}
+
+export interface FightReplayMarkers {
+    death: boolean;
+    critical: boolean;
+    fateSpent: boolean;
 }
 
 export interface FightControllerFactoryContext {
@@ -225,11 +299,25 @@ export function runFight(config: EncounterConfig, seed: FightSeed, options: Figh
 }
 
 export function replayFight(config: EncounterConfig, seed: FightSeed, options: FightRunnerOptions = {}): FightReplay {
-    const result = runPreparedFight(config, seed, options);
+    const validation = validateEncounterConfig(config);
+    if (!validation.valid) throw new EncounterConfigValidationError(validation.errors);
+
+    const prepared = prepareEncounter(config, seed, options);
+    const frames: FightReplayFrame[] = [
+        replayFrame(0, 'initial', createInitialEngine(prepared), [], undefined),
+    ];
+    const engine = runCombatToCompletion(
+        prepared.state,
+        prepared.controllers,
+        prepared.turnOptions,
+        step => frames.push(replayFrame(frames.length, step.kind, step.engine, step.events, step.decision))
+    );
+    const outcome = summarizeFight(engine, seed);
     return {
         seed,
-        outcome: result.outcome,
-        events: [...result.engine.events],
+        outcome,
+        events: [...engine.events],
+        frames,
     };
 }
 
@@ -303,6 +391,126 @@ function prepareEncounter(config: EncounterConfig, seed: FightSeed, options: Fig
             initialAdvantage: config.initialAdvantage as Omit<InitialAdvantageConfig, 'state' | 'outnumbering'>,
         },
     };
+}
+
+function createInitialEngine(prepared: PreparedEncounter): TurnEngineState {
+    return {
+        state: prepared.state,
+        phase: 'setup',
+        round: prepared.state.round,
+        initiativeOrder: [],
+        turnIndex: 0,
+        maxRounds: prepared.turnOptions.maxRounds ?? 50,
+        rng: createSeededRng(prepared.turnOptions.seed ?? 'replay'),
+        seed: prepared.turnOptions.seed,
+        events: [],
+    };
+}
+
+function replayFrame(
+    index: number,
+    kind: FightReplayFrame['kind'],
+    engine: TurnEngineState,
+    events: CombatEvent[],
+    decision?: CombatDecision
+): FightReplayFrame {
+    const rationales = events
+        .filter((event): event is Extract<CombatEvent, { type: 'DecisionLogged' }> => event.type === 'DecisionLogged')
+        .map(event => ({ ...event.data }));
+    const actionLabel = decision?.decisionLog?.chosen ?? decision?.kind;
+    return {
+        index,
+        kind,
+        round: engine.round,
+        phase: engine.phase,
+        activeCombatantId: engine.activeCombatantId,
+        state: replayState(engine.state, engine.activeCombatantId, decision?.actorId, actionLabel),
+        events: structuredCloneSafe(events),
+        decision: decision ? {
+            actorId: decision.actorId,
+            kind: decision.kind,
+            targetId: decision.targetId,
+            chosen: decision.decisionLog?.chosen,
+        } : undefined,
+        rationales,
+        markers: {
+            death: events.some(event => event.type === 'CombatantDied'),
+            critical: events.some(event => event.type === 'CriticalWoundResolved'),
+            fateSpent: events.some(event => event.type === 'ResourceSpent' && event.data.resource === 'fate'),
+        },
+    };
+}
+
+function replayState(
+    state: CombatState,
+    activeCombatantId?: string,
+    decisionActorId?: string,
+    actionLabel?: string
+): FightReplayState {
+    return {
+        combatants: Object.fromEntries(Object.values(state.combatants).map(combatant => [
+            combatant.id,
+            {
+                id: combatant.id,
+                name: combatant.name,
+                side: combatant.side,
+                position: combatant.position,
+                currentWounds: combatant.currentWounds,
+                maxWounds: combatant.maxWounds,
+                conditions: [...combatant.conditions],
+                fate: resourceSnapshot(combatant.resources.fate),
+                fortune: resourceSnapshot(combatant.resources.fortune),
+                status: replayCombatantStatus(combatant, activeCombatantId),
+                currentAction: combatant.id === decisionActorId ? actionLabel : undefined,
+                engagementIds: [...combatant.engagementIds],
+                rangeBands: replayRangeBands(state, combatant),
+            } satisfies FightReplayCombatant,
+        ])),
+        advantagePools: { ...state.advantagePools },
+        engagements: Object.values(state.engagements).map(engagement => ({
+            aId: engagement.aId,
+            bId: engagement.bId,
+            infighting: !!engagement.infightingMode,
+            grappling: !!engagement.grappling,
+        })),
+    };
+}
+
+function replayCombatantStatus(
+    combatant: Combatant,
+    activeCombatantId?: string
+): FightReplayCombatant['status'] {
+    if ((combatant as Combatant & { dead?: boolean }).dead) return 'dead';
+    if (combatant.removedFromEncounter) return 'removed';
+    if (combatant.conditions.includes('condition_unconscious') || combatant.currentWounds <= 0) return 'unconscious';
+    if (combatant.id === activeCombatantId) return 'active';
+    return 'ready';
+}
+
+function replayRangeBands(state: CombatState, combatant: Combatant): FightReplayRangeBands | undefined {
+    const weaponId = combatant.weaponLoadout?.primaryWeaponId;
+    const weapon = state.weapons.find(candidate => candidate.id === weaponId);
+    if (!weapon || !isRangedWeaponGroup(weapon.group)) return undefined;
+    const strengthRange = Math.max(1, Math.floor(combatant.character.characteristics.s.initial / 10) * 3);
+    const normal = weapon.group.toLowerCase().includes('throw')
+        ? strengthRange
+        : Math.max(1, Number(String(weapon.reach ?? '').match(/\d+/)?.[0] ?? 1));
+    return {
+        pointBlank: normal / 10,
+        short: normal / 2,
+        normal,
+        long: normal * 2,
+        extreme: normal * 3,
+    };
+}
+
+function isRangedWeaponGroup(group: string): boolean {
+    return ['bow', 'crossbow', 'blackpowder', 'engineering', 'explosive', 'throw', 'sling']
+        .some(value => group.toLowerCase().includes(value));
+}
+
+function resourceSnapshot(resource: Combatant['resources']['fate']): { current: number; max: number } {
+    return { current: resource?.current ?? 0, max: resource?.max ?? 0 };
 }
 
 function summarizeFight(engine: TurnEngineState, seed: FightSeed): FightOutcome {
