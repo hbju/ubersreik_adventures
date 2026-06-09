@@ -2,7 +2,7 @@ import { applyEndOfRoundConditionEffects, combatantCapabilities, resolveConditio
 import { calculateCharacteristicValue } from '../utils/skills';
 import { consumeAdditionalEffortBuff, reallocateEndOfRound, resetAdditionalEffortBuff, seedInitialAdvantage, spendAdvantage, type InitialAdvantageConfig } from './advantage';
 import { isGrapplingEngagement, resolveCombatAction, resolveEffectiveWeapon } from './actions';
-import { decayEngagementsEndOfRound, determineSurprise, resolveMeleeAttack, resolveRangedAttack, resolveRangedIntoMeleeAttack, resolveReloadAction } from './engine';
+import { decayEngagementsEndOfRound, determineSurprise, rangeBandForDistance, rangedWeaponRange, resolveMeleeAttack, resolveRangedAttack, resolveRangedIntoMeleeAttack, resolveReloadAction } from './engine';
 import { applyMove, REACH_ENGAGEMENT_DISTANCE, WeaponReach, type MoveTarget } from './spatial';
 import { resolveWeaponUse } from './proficiency';
 import { hasQuality, qualityRating } from './qualities';
@@ -139,7 +139,7 @@ export type TurnEngineObserver = (step: TurnEngineStep) => void;
 export class ScriptedController implements CombatantController {
     private index = 0;
 
-    constructor(private readonly decisions: Array<CombatDecision | ((context: DecisionContext) => CombatDecision | undefined)>) {}
+    constructor(private readonly decisions: Array<CombatDecision | ((context: DecisionContext) => CombatDecision | undefined)>) { }
 
     choose(context: DecisionContext): CombatDecision | undefined {
         const next = this.decisions[this.index++];
@@ -335,8 +335,8 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
         legal: (state, actor) => {
             const actorReach = REACH_ENGAGEMENT_DISTANCE[(state.weapons.filter(weapon => weapon.id === (actor.weaponLoadout?.primaryWeaponId ?? ''))?.[0]?.reach as WeaponReach) ?? "Short"];
             return actionBudgetReady(actor)
-            ? enemyIds(state, actor).filter(id => Math.abs(state.combatants[id].position - actor.position) <= actorReach).map(targetId => ({ kind: 'meleeAttack', actorId: actor.id, targetId, targetIds: [targetId] }))
-            : []
+                ? enemyIds(state, actor).filter(id => Math.abs(state.combatants[id].position - actor.position) <= actorReach).map(targetId => ({ kind: 'meleeAttack', actorId: actor.id, targetId, targetIds: [targetId] }))
+                : []
         },
         dispatch: (engine, decision, controller) => {
             const action = decision.action as MeleeAttackAction | undefined;
@@ -351,9 +351,10 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
     {
         kind: 'rangedAttack',
         legal: (state, actor) => {
-            if (!actionBudgetReady(actor) || !canUseRangedWeapon(state, actor)) return [];
+            if (!actionBudgetReady(actor) || !canUseRangedWeapon(state, actor) || !enemyInRange(state, actor)) return [];
             const weapon = equippedWeapon(state, actor);
-            return enemyIds(state, actor).map(targetId => ({
+            if (!weapon) return [];
+            return enemyIds(state, actor).filter(targetId => isInRange(actor, state.combatants[targetId], weapon)).map(targetId => ({
                 kind: 'rangedAttack',
                 actorId: actor.id,
                 targetId,
@@ -407,7 +408,7 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
     ...targetedCombatActionEntries(['infighting', 'disengageDodge', 'grappleInitiate', 'grappleMaintain', 'grappleBreak', 'attackWithBoth', 'beatBlade', 'disarm', 'feint', 'distractOpponent']),
     {
         kind: 'shieldsman',
-        legal: (state, actor) => hasTalent(actor, 'shieldsman') && state.advantagePools[actor.side] >= 2
+        legal: (state, actor) => hasTalent(actor, 'shieldsman') && state.advantagePools[actor.side] >= 2 && !state.turnFlags.shieldsmanUsedThisTurnIds.includes(actor.id)
             ? enemyIds(state, actor).map(targetId => ({ kind: 'shieldsman', actorId: actor.id, targetId, targetIds: [targetId], parameterDomains: { shieldsmanMode: ['push', 'damage'] } }))
             : [],
         dispatch: (engine, decision, controller) => {
@@ -421,7 +422,7 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
     },
     {
         kind: 'reversal',
-        legal: (_state, actor) => hasTalent(actor, 'reversal')
+        legal: (_state, actor) => hasTalent(actor, 'reversal') && !actor.reversalActive
             ? [{ kind: 'reversal', actorId: actor.id, parameterDomains: { reversalActive: [true, false] } }]
             : [],
         dispatch: (engine, decision, controller) => {
@@ -1076,7 +1077,7 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
 
 function finishTurn(engine: TurnEngineState): TurnEngineState {
 
-    
+
     const result = resetAdditionalEffortBuff(engine.state, engine.activeCombatantId!);
     const currentState = result.state;
     const nextEngine = { ...engine, state: currentState, events: [...engine.events, ...result.events] };
@@ -1268,7 +1269,7 @@ function complete(engine: TurnEngineState, outcome: 'ally' | 'adversary' | 'draw
         phase: 'complete',
         outcome,
         terminalReason: reason,
-        events: [ ...engine.events, turnEvent('CombatEnded', 'combat.turn.ended', { outcome, reason })],
+        events: [...engine.events, turnEvent('CombatEnded', 'combat.turn.ended', { outcome, reason })],
     };
 }
 
@@ -1291,6 +1292,22 @@ function canUseRangedWeapon(state: CombatState, combatant: Combatant): boolean {
     if (!weapon) return false;
     if (combatant.engagementIds.length > 0 && !hasQuality(weapon, 'pistol')) return false;
     return resolveWeaponUse(combatant, weapon).usable && !reloadBlocked(combatant, weapon.id);
+}
+
+function isInRange(other: Combatant, combatant: Combatant, weapon: Weapon): boolean {
+    const distance = Math.abs(other.position - combatant.position);
+    const weaponRange = rangedWeaponRange(weapon);
+    const rangeBand = rangeBandForDistance(distance, weaponRange);
+    return rangeBand !== 'outOfRange';
+}
+
+function enemyInRange(state: CombatState, combatant: Combatant): boolean {
+    const weapon = equippedWeapon(state, combatant);
+    if (!weapon) return false;
+
+    return Object.values(state.combatants)
+        .filter(other => other.side !== combatant.side && isActive(other))
+        .some(other => isInRange(other, combatant, weapon))
 }
 
 function canReload(state: CombatState, combatant: Combatant): boolean {

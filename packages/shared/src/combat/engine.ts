@@ -1478,7 +1478,7 @@ function resolveRangedHitLocation(attacker: Combatant, roll: number, chosenLocat
     return getHitLocation(roll);
 }
 
-function rangedWeaponRange(weapon: { reach?: string }): number {
+export function rangedWeaponRange(weapon: { reach?: string }): number {
     const parsed = numericReach(weapon.reach);
     return parsed > 0 ? parsed : 1;
 }

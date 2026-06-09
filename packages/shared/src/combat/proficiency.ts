@@ -35,7 +35,7 @@ export function resolveWeaponUse(combatant: Combatant, weapon: Weapon): WeaponUs
             extraFlaws: !skilled && group === 'flail' ? ['Dangerous'] : [],
             usable: true,
             parryOffHandExempt: isParryWeapon(weapon),
-        };
+        }; 
     }
 
     const rangedSkill = findSkill(combatant.character, `ranged_${group}`);
