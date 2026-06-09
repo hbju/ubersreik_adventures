@@ -1,0 +1,13 @@
+{
+  "config": {
+    "sides": {
+      "ally": [],
+      "adversary": []
+    }
+  },
+  "seed": "harness-smoke",
+  "expectedOutcome": {
+    "error": "combat.encounter.validation.emptySide:ally; combat.encounter.validation.emptySide:adversary"
+  },
+  "engineVersion": "1.0.1"
+}

@@ -23,6 +23,7 @@ export interface FightLabRunState {
 export interface ReplayHandoff {
     index: number;
     seed: FightSeed;
+    error?: string;
 }
 
 export const IDLE_RUN_STATE: FightLabRunState = {
@@ -98,7 +99,7 @@ export function failRunState(
 }
 
 export function replayHandoffForFailure(failure: BatchFailure): ReplayHandoff {
-    return { index: failure.index, seed: failure.seed };
+    return { index: failure.index, seed: failure.seed, error: failure.error };
 }
 
 export function suggestedIterations(report: MetricReport, currentIterations: number): number {

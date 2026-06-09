@@ -60,6 +60,7 @@ describe('Fight Lab run state', () => {
         })).toEqual({
             index: 13,
             seed: 'master:13:deadbeef',
+            error: 'boom',
         });
     });
 

@@ -781,6 +781,10 @@
             "emptyTitle": "Aucun rapport",
             "emptyBody": "Lancez ce scenario pour remplir le tableau de bord."
         },
+        "export": {
+            "action": "Exporter le combat pour le debogage",
+            "representative": "Exporter un combat representatif"
+        },
         "replay": {
             "handoff": "Transmission au rejeu prete",
             "title": "Rejeu du combat",

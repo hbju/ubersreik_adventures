@@ -12,8 +12,10 @@ import {
 import type {
     BatchFailure,
     BatchProgress,
+    BatchResult,
     MetricReport,
     RateMetric,
+    ReplaySelectionKind,
     SideId,
 } from '@wfrp/shared';
 import { useTranslation } from 'react-i18next';
@@ -117,9 +119,12 @@ interface DashboardProps {
     iterations: number;
     masterSeed?: string | number;
     failures: BatchFailure[];
+    batchResult?: BatchResult;
     cached: boolean;
     onRun: () => void;
     onReplayFailure: (failure: BatchFailure) => void;
+    onExportFailure: (failure: BatchFailure) => void;
+    onExportOutcome: (kind: ReplaySelectionKind) => void;
 }
 
 type SortKey = 'name' | 'survival' | 'death' | 'wounds' | 'fateBurn' | 'damage';
@@ -130,9 +135,12 @@ export const ResultsDashboard: React.FC<DashboardProps> = ({
     iterations,
     masterSeed,
     failures,
+    batchResult,
     cached,
     onRun,
     onReplayFailure,
+    onExportFailure,
+    onExportOutcome,
 }) => {
     const { t } = useTranslation();
     const [sort, setSort] = useState<{ key: SortKey; direction: 1 | -1 }>({ key: 'survival', direction: -1 });
@@ -225,6 +233,18 @@ export const ResultsDashboard: React.FC<DashboardProps> = ({
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
+                </div>
+                <div className={styles.exportActions}>
+                    <strong>{t('fightLab.export.representative')}</strong>
+                    {(['draw', 'allyWin', 'adversaryWin', 'tpk', 'longest'] as ReplaySelectionKind[]).map(kind => (
+                        <button
+                            key={kind}
+                            disabled={!batchResult}
+                            onClick={() => onExportOutcome(kind)}
+                        >
+                            {t(`fightLab.replay.selection.${kind}`)}
+                        </button>
+                    ))}
                 </div>
             </section>
 
@@ -346,16 +366,23 @@ export const ResultsDashboard: React.FC<DashboardProps> = ({
                 ) : (
                     <div className={styles.failureList}>
                         {failures.map(failure => (
-                            <button
+                            <div
                                 key={`${failure.index}-${String(failure.seed)}`}
                                 className={styles.failureRow}
-                                onClick={() => onReplayFailure(failure)}
                             >
-                                <span>#{failure.index}</span>
-                                <code>{String(failure.seed)}</code>
-                                <span>{failure.error}</span>
-                                <strong>{t('fightLab.dashboard.replay')}</strong>
-                            </button>
+                                <button
+                                    className={styles.failureReplay}
+                                    onClick={() => onReplayFailure(failure)}
+                                >
+                                    <span>#{failure.index}</span>
+                                    <code>{String(failure.seed)}</code>
+                                    <span>{failure.error}</span>
+                                    <strong>{t('fightLab.dashboard.replay')}</strong>
+                                </button>
+                                <button onClick={() => onExportFailure(failure)}>
+                                    {t('fightLab.export.action')}
+                                </button>
+                            </div>
                         ))}
                     </div>
                 )}

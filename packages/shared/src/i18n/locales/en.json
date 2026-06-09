@@ -780,6 +780,10 @@
             "emptyTitle": "No report yet",
             "emptyBody": "Run this scenario to populate the dashboard."
         },
+        "export": {
+            "action": "Export fight for debugging",
+            "representative": "Export representative fight"
+        },
         "replay": {
             "handoff": "Replay handoff ready",
             "title": "Fight Replay",

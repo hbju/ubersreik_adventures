@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
     PlayerCharacterSheet,
+    selectReplayOutcome,
     useGameData,
     type Armor,
     type Character,
@@ -45,6 +46,7 @@ import {
     type ReplayHandoff,
 } from '../../fight-lab/run-state';
 import { loadFightLabStore, saveFightLabStore } from '../../fight-lab/persistence';
+import { exportFightForDebugging } from '../../fight-lab/debug-export';
 import {
     EMPTY_FIGHT_LAB_STORE,
     type FightLabScenario,
@@ -410,11 +412,31 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
                             iterations={scenario.cachedReport?.iterations ?? scenario.batch.iterations}
                             masterSeed={activeMasterSeed}
                             failures={activeFailures}
+                            batchResult={runState.result}
                             cached={!runState.report && !!scenario.cachedReport}
                             onRun={startRun}
                             onReplayFailure={failure => {
                                 setReplayHandoff(replayHandoffForFailure(failure));
                                 setTab('replay');
+                            }}
+                            onExportFailure={failure => {
+                                exportFightForDebugging({
+                                    config: scenario.config,
+                                    seed: failure.seed,
+                                    index: failure.index,
+                                    expectedOutcome: { error: failure.error },
+                                }, scenario.name);
+                            }}
+                            onExportOutcome={kind => {
+                                if (!runState.result) return;
+                                const selected = selectReplayOutcome(runState.result, kind);
+                                if (!selected) return;
+                                exportFightForDebugging({
+                                    config: runState.result.config,
+                                    seed: selected.seed,
+                                    index: selected.index,
+                                    expectedOutcome: selected.outcome,
+                                }, scenario.name);
                             }}
                         />
                     ) : tab === 'replay' ? (
@@ -422,6 +444,7 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
                             config={scenario.config}
                             batchResult={runState.result}
                             handoff={replayHandoff}
+                            scenarioName={scenario.name}
                         />
                     ) : tab === 'compare' ? (
                         <FightLabComparison

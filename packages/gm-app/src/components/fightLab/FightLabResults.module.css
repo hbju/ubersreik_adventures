@@ -315,6 +315,13 @@
 }
 
 .failureRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+}
+
+.failureReplay {
     display: grid !important;
     grid-template-columns: 55px minmax(160px, 0.8fr) minmax(200px, 1.4fr) auto;
     align-items: center;
@@ -322,15 +329,29 @@
     text-align: left;
 }
 
-.failureRow code {
+.failureReplay code {
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.failureRow strong {
+.failureReplay strong {
     color: #e1ba5b;
+}
+
+.exportActions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.exportActions strong {
+    margin-right: 4px;
+    color: #aeb6b9;
+    font-size: 11px;
 }
 
 .muted {
@@ -384,10 +405,14 @@
     }
 
     .failureRow {
+        grid-template-columns: 1fr;
+    }
+
+    .failureReplay {
         grid-template-columns: 45px minmax(0, 1fr) auto;
     }
 
-    .failureRow > span:nth-child(3) {
+    .failureReplay > span:nth-child(3) {
         grid-column: 1 / -1;
         grid-row: 2;
     }

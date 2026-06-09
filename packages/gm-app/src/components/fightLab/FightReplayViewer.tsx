@@ -13,12 +13,14 @@ import {
 } from '@wfrp/shared';
 import { useTranslation } from 'react-i18next';
 import type { ReplayHandoff } from '../../fight-lab/run-state';
+import { exportFightForDebugging } from '../../fight-lab/debug-export';
 import styles from './FightReplayViewer.module.css';
 
 interface FightReplayViewerProps {
     config: EncounterConfig;
     batchResult?: BatchResult;
     handoff?: ReplayHandoff | null;
+    scenarioName: string;
 }
 
 const SELECTIONS: ReplaySelectionKind[] = ['draw', 'allyWin', 'adversaryWin', 'tpk', 'longest'];
@@ -27,6 +29,7 @@ export const FightReplayViewer: React.FC<FightReplayViewerProps> = ({
     config,
     batchResult,
     handoff,
+    scenarioName,
 }) => {
     const { t } = useTranslation();
     const [replay, setReplay] = useState<FightReplay>();
@@ -35,24 +38,31 @@ export const FightReplayViewer: React.FC<FightReplayViewerProps> = ({
     const [speed, setSpeed] = useState(1);
     const [error, setError] = useState<string>();
     const [seedInput, setSeedInput] = useState('');
+    const [selectedIndex, setSelectedIndex] = useState<number>();
+    const [selectedError, setSelectedError] = useState<string>();
 
-    const loadReplay = (seed: FightSeed) => {
+    const loadReplay = (seed: FightSeed, index?: number, expectedError?: string) => {
         setPlaying(false);
         setError(undefined);
+        setSelectedIndex(index);
+        setSelectedError(expectedError);
+        setSeedInput(String(seed));
         try {
             const next = replayFight(config, seed);
             setReplay(next);
             setFrameIndex(0);
-            setSeedInput(String(seed));
+            setSelectedError(undefined);
         } catch (cause) {
             setReplay(undefined);
-            setError(cause instanceof Error ? cause.message : String(cause));
+            const message = cause instanceof Error ? cause.message : String(cause);
+            setError(message);
+            setSelectedError(expectedError ?? message);
         }
     };
 
     useEffect(() => {
-        if (handoff) loadReplay(handoff.seed);
-    }, [handoff?.index, handoff?.seed]);
+        if (handoff) loadReplay(handoff.seed, handoff.index, handoff.error);
+    }, [handoff?.index, handoff?.seed, handoff?.error]);
 
     useEffect(() => {
         if (!playing || !replay) return;
@@ -77,7 +87,18 @@ export const FightReplayViewer: React.FC<FightReplayViewerProps> = ({
             setError(t('fightLab.replay.selectionUnavailable'));
             return;
         }
-        loadReplay(deriveFightSeed(batchResult.masterSeed, selected.index));
+        loadReplay(deriveFightSeed(batchResult.masterSeed, selected.index), selected.index);
+    };
+    const exportReplay = () => {
+        if (!seedInput.trim()) return;
+        const expectedOutcome = replay?.outcome ?? (selectedError ? { error: selectedError } : undefined);
+        if (!expectedOutcome) return;
+        exportFightForDebugging({
+            config,
+            seed: replay?.seed ?? seedInput,
+            index: selectedIndex,
+            expectedOutcome,
+        }, scenarioName);
     };
 
     return (
@@ -103,6 +124,9 @@ export const FightReplayViewer: React.FC<FightReplayViewerProps> = ({
                     />
                     <button onClick={() => loadReplay(seedInput)} disabled={!seedInput.trim()}>
                         {t('fightLab.replay.load')}
+                    </button>
+                    <button onClick={exportReplay} disabled={!replay && !selectedError}>
+                        {t('fightLab.export.action')}
                     </button>
                 </div>
             </header>

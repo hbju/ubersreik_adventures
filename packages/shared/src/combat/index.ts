@@ -5,6 +5,7 @@ export * from './batch-runner';
 export * from './critical';
 export * from './engine';
 export * from './extended-tests';
+export * from './fight-debug';
 export * from './fight-runner';
 export * from './heuristic-controller';
 export * from './metric-aggregation';
