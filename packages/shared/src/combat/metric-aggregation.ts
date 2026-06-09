@@ -26,6 +26,8 @@ export interface AverageMetric {
     total: number;
     average: number;
     sampleSize: number;
+    standardDeviation: number;
+    ci: ConfidenceInterval;
 }
 
 export interface DistributionPercentiles {
@@ -51,6 +53,8 @@ export interface NumericDistribution {
     min: number;
     max: number;
     histogram: HistogramBin[];
+    standardDeviation: number;
+    ci: ConfidenceInterval;
 }
 
 export interface SideOutcomeMetrics {
@@ -126,7 +130,10 @@ export interface ProportionComparison {
 export interface ReportComparison {
     i18nKey: string;
     winRate: Record<SideId, ProportionComparison>;
+    lossRate: Record<SideId, ProportionComparison>;
+    drawRate: Record<SideId, ProportionComparison>;
     partyDefeatedRate: Record<SideId, ProportionComparison>;
+    allDeadRate: Record<SideId, ProportionComparison>;
     survivalRate: Record<string, ProportionComparison>;
 }
 
@@ -228,10 +235,13 @@ export function numericDistribution(
             min: 0,
             max: 0,
             histogram: [],
+            standardDeviation: 0,
+            ci: emptyMeanInterval(),
         };
     }
     const mean = sorted.reduce((sum, value) => sum + value, 0) / sorted.length;
     const histogram = makeHistogram(sorted, positiveBinSize(binSize));
+    const standardDeviation = sampleStandardDeviation(sorted, mean);
     return {
         count: sorted.length,
         mean,
@@ -246,6 +256,8 @@ export function numericDistribution(
         min: sorted[0],
         max: sorted[sorted.length - 1],
         histogram,
+        standardDeviation,
+        ci: meanInterval(mean, standardDeviation, sorted.length),
     };
 }
 
@@ -254,12 +266,28 @@ export function compareReports(a: MetricReport, b: MetricReport): ReportComparis
         side,
         compareProportions('combat.encounter.metrics.comparison.winRate', a.sideOutcomes[side].winRate, b.sideOutcomes[side].winRate),
     ])) as Record<SideId, ProportionComparison>;
+    const lossRate = Object.fromEntries(SIDES.map(side => [
+        side,
+        compareProportions('combat.encounter.metrics.comparison.lossRate', a.sideOutcomes[side].lossRate, b.sideOutcomes[side].lossRate),
+    ])) as Record<SideId, ProportionComparison>;
+    const drawRate = Object.fromEntries(SIDES.map(side => [
+        side,
+        compareProportions('combat.encounter.metrics.comparison.drawRate', a.sideOutcomes[side].drawRate, b.sideOutcomes[side].drawRate),
+    ])) as Record<SideId, ProportionComparison>;
     const partyDefeatedRate = Object.fromEntries(SIDES.map(side => [
         side,
         compareProportions(
             'combat.encounter.metrics.comparison.partyDefeatedRate',
             a.sideRisk[side].partyDefeatedRate,
             b.sideRisk[side].partyDefeatedRate
+        ),
+    ])) as Record<SideId, ProportionComparison>;
+    const allDeadRate = Object.fromEntries(SIDES.map(side => [
+        side,
+        compareProportions(
+            'combat.encounter.metrics.comparison.allDeadRate',
+            a.sideRisk[side].allDeadRate,
+            b.sideRisk[side].allDeadRate
         ),
     ])) as Record<SideId, ProportionComparison>;
     const ids = [...new Set([...Object.keys(a.combatants), ...Object.keys(b.combatants)])].sort();
@@ -273,7 +301,10 @@ export function compareReports(a: MetricReport, b: MetricReport): ReportComparis
     return {
         i18nKey: 'combat.encounter.metrics.comparison.report',
         winRate,
+        lossRate,
+        drawRate,
         partyDefeatedRate,
+        allDeadRate,
         survivalRate,
     };
 }
@@ -368,7 +399,16 @@ function rateMetric(i18nKey: string, count: number, sampleSize: number): RateMet
 
 function averageMetric(i18nKey: string, values: number[]): AverageMetric {
     const total = values.reduce((sum, value) => sum + value, 0);
-    return { i18nKey, total, average: values.length > 0 ? total / values.length : 0, sampleSize: values.length };
+    const average = values.length > 0 ? total / values.length : 0;
+    const standardDeviation = sampleStandardDeviation(values, average);
+    return {
+        i18nKey,
+        total,
+        average,
+        sampleSize: values.length,
+        standardDeviation,
+        ci: meanInterval(average, standardDeviation, values.length),
+    };
 }
 
 function distributionMetric(i18nKey: string, values: number[], binSize: number): NumericDistribution {
@@ -386,6 +426,27 @@ function percentile(sorted: number[], probability: number): number {
     if (lower === upper) return sorted[lower];
     const weight = rank - lower;
     return sorted[lower] + (sorted[upper] - sorted[lower]) * weight;
+}
+
+function sampleStandardDeviation(values: number[], mean: number): number {
+    if (values.length <= 1) return 0;
+    const variance = values.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / (values.length - 1);
+    return Math.sqrt(variance);
+}
+
+function meanInterval(mean: number, standardDeviation: number, sampleSize: number): ConfidenceInterval {
+    if (sampleSize <= 0) return emptyMeanInterval();
+    const halfWidth = sampleSize > 1 ? Z_95 * standardDeviation / Math.sqrt(sampleSize) : 0;
+    return {
+        lower: mean - halfWidth,
+        upper: mean + halfWidth,
+        halfWidth,
+        confidence: 0.95,
+    };
+}
+
+function emptyMeanInterval(): ConfidenceInterval {
+    return { lower: 0, upper: 0, halfWidth: 0, confidence: 0.95 };
 }
 
 function makeHistogram(sorted: number[], binSize: number): HistogramBin[] {

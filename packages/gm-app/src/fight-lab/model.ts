@@ -106,7 +106,6 @@ export function addCharacterToScenario(
             ...scenario.layout,
             offsets: { ...scenario.layout.offsets, [combatantId]: offset },
         },
-        cachedReport: undefined,
         updatedAt: new Date().toISOString(),
     };
 }
@@ -347,13 +346,34 @@ export function validationView(config: EncounterConfig): EncounterValidationView
 
 export function cacheScenarioReport(
     scenario: FightLabScenario,
-    cachedReport: FightLabCachedReport
+    cachedReport: Omit<FightLabCachedReport, 'configFingerprint'> & { configFingerprint?: string }
 ): FightLabScenario {
     return {
         ...scenario,
-        cachedReport: deepClone(cachedReport),
+        cachedReport: deepClone({
+            ...cachedReport,
+            configFingerprint: cachedReport.configFingerprint ?? configFingerprint(scenario.config),
+        }),
         updatedAt: new Date().toISOString(),
     };
+}
+
+export function configFingerprint(config: EncounterConfig): string {
+    const serialized = stableSerialize(config);
+    let hashA = 0x811c9dc5;
+    let hashB = 0x9e3779b9;
+    for (let index = 0; index < serialized.length; index += 1) {
+        const code = serialized.charCodeAt(index);
+        hashA = Math.imul(hashA ^ code, 0x01000193);
+        hashB = Math.imul(hashB ^ code, 0x85ebca6b);
+        hashB ^= hashB >>> 13;
+    }
+    return `cfg-v1-${(hashA >>> 0).toString(16).padStart(8, '0')}${(hashB >>> 0).toString(16).padStart(8, '0')}`;
+}
+
+export function isCachedReportStale(scenario: FightLabScenario): boolean {
+    return !!scenario.cachedReport
+        && scenario.cachedReport.configFingerprint !== configFingerprint(scenario.config);
 }
 
 export function randomSeed(): string {
@@ -370,9 +390,18 @@ export function deepClone<T>(value: T): T {
 function touchScenario(scenario: FightLabScenario): FightLabScenario {
     return {
         ...scenario,
-        cachedReport: undefined,
         updatedAt: new Date().toISOString(),
     };
+}
+
+function stableSerialize(value: unknown): string {
+    if (value === null || typeof value !== 'object') return JSON.stringify(value);
+    if (Array.isArray(value)) return `[${value.map(stableSerialize).join(',')}]`;
+    return `{${Object.entries(value as Record<string, unknown>)
+        .filter(([, entry]) => entry !== undefined)
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([key, entry]) => `${JSON.stringify(key)}:${stableSerialize(entry)}`)
+        .join(',')}}`;
 }
 
 function uniqueCombatantId(config: EncounterConfig, preferred: string): string {

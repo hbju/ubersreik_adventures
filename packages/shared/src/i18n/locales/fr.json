@@ -853,6 +853,33 @@
             "chosen": "Choisi",
             "rejected": "Rejete",
             "none": "Aucun"
+        },
+        "compare": {
+            "title": "Comparaison de scenarios",
+            "description": "Compare les rapports en cache et distingue les changements durables du bruit d'echantillonnage.",
+            "emptyTitle": "Deux rapports sont necessaires",
+            "emptyBody": "Lancez et mettez en cache au moins deux scenarios avant de les comparer.",
+            "scenarioA": "Scenario A",
+            "scenarioB": "Scenario B",
+            "sameScenario": "Choisissez deux scenarios differents pour une comparaison utile.",
+            "staleTitle": "Un ou plusieurs rapports sont obsoletes.",
+            "staleBody": "La configuration du scenario a change apres la generation du rapport. Relancez-le avant de faire confiance a la comparaison.",
+            "rerunScenario": "Ouvrir {{name}} pour relancer",
+            "lowNTitle": "Comparaison a faible echantillon",
+            "lowNBody": "Au moins un rapport possede de larges intervalles de confiance. Considerez les ecarts comme non concluants avant davantage de combats.",
+            "significant": "Significatif a 95 %",
+            "notSignificant": "Non significatif",
+            "ciHint": "Indice par IC continu",
+            "ciOverlap": "Les IC se chevauchent",
+            "ciSeparate": "Les IC ne se chevauchent pas",
+            "metric": "Metrique",
+            "delta": "Ecart",
+            "signal": "Signal statistique",
+            "outcomesFor": "Resultats et risque : {{side}}",
+            "continuous": "Rounds et decisivite",
+            "continuousMethod": "Les lignes continues utilisent des intervalles de confiance approximatifs a 95 % sur la moyenne. Leur chevauchement reste un indice ; un test t ou Mann-Whitney formel demeure une extension 6c v1.1.",
+            "combatants": "Comparaison par combattant",
+            "rostersDiffer": "Les groupes different par camp ou identite. Les ecarts individuels sont masques ; les metriques par camp restent comparables."
         }
     },
     "lore": {

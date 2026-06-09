@@ -86,6 +86,7 @@ describe('Fight Lab sandbox', () => {
         expect(loaded).toEqual(store);
         expect((loaded.scenarios[0].config.sides.ally[0].character as Character).name).toBe('hero');
         expect(loaded.scenarios[0].cachedReport).toEqual(scenario.cachedReport);
+        expect(loaded.scenarios[0].cachedReport?.configFingerprint).toMatch(/^cfg-v1-[0-9a-f]{16}$/);
     });
 
     it('reports lost Qualities and unusable ranged weapons from the shared proficiency resolver', () => {

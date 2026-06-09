@@ -852,6 +852,33 @@
             "chosen": "Chosen",
             "rejected": "Rejected",
             "none": "None"
+        },
+        "compare": {
+            "title": "Scenario Comparison",
+            "description": "Compare cached encounter reports and separate durable changes from sampling noise.",
+            "emptyTitle": "Two reports are required",
+            "emptyBody": "Run and cache at least two scenarios before opening a comparison.",
+            "scenarioA": "Scenario A",
+            "scenarioB": "Scenario B",
+            "sameScenario": "Choose two different scenarios for a meaningful comparison.",
+            "staleTitle": "One or more reports are stale.",
+            "staleBody": "The scenario configuration changed after its report was generated. Re-run it before trusting the comparison.",
+            "rerunScenario": "Open {{name}} to re-run",
+            "lowNTitle": "Low-sample comparison",
+            "lowNBody": "At least one report has wide confidence intervals. Treat all deltas as inconclusive until more fights are run.",
+            "significant": "Significant at 95%",
+            "notSignificant": "Not significant",
+            "ciHint": "Continuous CI hint",
+            "ciOverlap": "CIs overlap",
+            "ciSeparate": "CIs do not overlap",
+            "metric": "Metric",
+            "delta": "Delta",
+            "signal": "Statistical signal",
+            "outcomesFor": "{{side}} outcomes and risk",
+            "continuous": "Rounds and Decisiveness",
+            "continuousMethod": "Continuous rows use approximate 95% mean confidence intervals. CI overlap is a rough hint; a formal t-test or Mann-Whitney test remains a 6c v1.1 extension.",
+            "combatants": "Per-combatant Comparison",
+            "rostersDiffer": "Rosters differ by side or identity. Per-combatant deltas are hidden; side-level metrics remain comparable."
         }
     },
     "lore": {

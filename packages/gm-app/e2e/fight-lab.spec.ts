@@ -62,7 +62,7 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
                                         config: message.config,
                                         cancelled,
                                     },
-                                    report: metricReport(failure, cancelled),
+                                    report: metricReport(failure, cancelled, message.config),
                                 },
                             },
                         });
@@ -75,8 +75,13 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
             return worker;
         };
 
-        function metricReport(failure: { index: number; seed: string; error: string }, partial: boolean) {
-            const sampleSize = partial ? 5 : 19;
+        function metricReport(
+            failure: { index: number; seed: string; error: string },
+            partial: boolean,
+            config: any
+        ) {
+            const sampleSize = partial ? 5 : 400;
+            const tweaked = config.toggles?.maxRounds === 4;
             const rate = (count: number) => {
                 const value = count / sampleSize;
                 return {
@@ -154,16 +159,16 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
                 successfulCount: sampleSize,
                 failureCount: 1,
                 failures: [failure],
-                sufficientSample: false,
+                sufficientSample: tweaked,
                 sufficientNHalfWidth: 0.05,
                 sideOutcomes: {
-                    ally: sideOutcome(11, 6, 2),
-                    adversary: sideOutcome(6, 11, 2),
+                    ally: sideOutcome(tweaked ? 80 : 320, tweaked ? 280 : 40, 40),
+                    adversary: sideOutcome(tweaked ? 280 : 40, tweaked ? 80 : 320, 40),
                 },
                 rounds: distribution([2, 3, 4, 6, 8]),
                 combatants: {
-                    hero: combatant('hero', 'Campaign Hero', 'ally', 16),
-                    dummy: combatant('dummy', 'Training Dummy', 'adversary', 7),
+                    hero: combatant('hero', 'Campaign Hero', 'ally', tweaked ? 120 : 360),
+                    dummy: combatant('dummy', 'Training Dummy', 'adversary', tweaked ? 330 : 80),
                 },
                 sideRisk: {
                     ally: risk(6, 5, 2),
@@ -333,6 +338,32 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
     await lab.getByRole('button', { name: 'Replay a draw' }).click();
     await expect(lab.getByText(/Seed .*:1:/)).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath('fight-lab-replay.png'), fullPage: true });
+
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await lab.getByRole('button', { name: 'Configure', exact: true }).click();
+    await library.getByTitle('Duplicate').click();
+    await page.getByLabel('Scenario name').fill('Bridge Ambush Tweaked');
+    await page.getByLabel('Maximum rounds').fill('4');
+    await page.getByRole('button', { name: 'Save scenario' }).click();
+    await lab.getByRole('button', { name: 'Run', exact: true }).click();
+    await lab.getByRole('button', { name: 'Run simulation' }).click();
+    await expect(lab.getByRole('heading', { name: 'Results Dashboard' })).toBeVisible();
+
+    await lab.getByRole('button', { name: 'Compare', exact: true }).click();
+    await expect(lab.getByRole('heading', { name: 'Scenario Comparison' })).toBeVisible();
+    await expect(lab.getByLabel('Scenario A')).toHaveValue(/.+/);
+    await expect(lab.getByLabel('Scenario B')).toHaveValue(/.+/);
+    const winRateRow = lab.getByRole('row').filter({ hasText: 'Win Rate' }).first();
+    await expect(winRateRow).toHaveAttribute('data-signal', 'significant');
+    await expect(winRateRow.getByText('Significant at 95%')).toBeVisible();
+    const drawRateRow = lab.getByRole('row').filter({ hasText: 'Draw Rate' }).first();
+    await expect(drawRateRow).toHaveAttribute('data-signal', 'noise');
+    await expect(drawRateRow.getByText('Not significant')).toBeVisible();
+    await page.screenshot({ path: testInfo.outputPath('fight-lab-comparison.png'), fullPage: true });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await expect(lab.getByLabel('Scenario Comparison')).toBeVisible();
+    await expect(winRateRow).toHaveAttribute('data-signal', 'significant');
+    await page.screenshot({ path: testInfo.outputPath('fight-lab-comparison-mobile.png'), fullPage: true });
 
     const finalCampaignWrites = await page.evaluate(() => (window as any).__fightLabTest.campaignSaveCalls);
     expect(finalCampaignWrites).toBe(baselineCampaignWrites);

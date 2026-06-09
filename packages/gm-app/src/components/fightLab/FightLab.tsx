@@ -19,6 +19,7 @@ import { TalentSelectorModal } from '../TalentSelectorModal';
 import { BatchRunnerHandle } from '../../workers';
 import { ResultsDashboard, RunControls } from './FightLabResults';
 import { FightReplayViewer } from './FightReplayViewer';
+import { FightLabComparison } from './FightLabComparison';
 import {
     addCharacterToScenario,
     cacheScenarioReport,
@@ -422,11 +423,16 @@ export const FightLab: React.FC<FightLabProps> = ({ characters, templates, onClo
                             batchResult={runState.result}
                             handoff={replayHandoff}
                         />
-                    ) : (
-                        <div className={styles.placeholder}>
-                            <span>{t(`fightLab.placeholder.${tab}`)}</span>
-                        </div>
-                    )}
+                    ) : tab === 'compare' ? (
+                        <FightLabComparison
+                            scenarios={store.scenarios}
+                            currentScenarioId={scenario.id}
+                            onRerun={selected => {
+                                loadScenario(selected);
+                                setTab('run');
+                            }}
+                        />
+                    ) : null}
                 </main>
             </div>
 
@@ -860,7 +866,7 @@ function matchesSearch(value: string, search: string): boolean {
 }
 
 function touch(scenario: FightLabScenario): FightLabScenario {
-    return { ...scenario, cachedReport: undefined, updatedAt: new Date().toISOString() };
+    return { ...scenario, updatedAt: new Date().toISOString() };
 }
 
 export default FightLab;

@@ -4,6 +4,7 @@
     z-index: 1004;
     display: grid;
     grid-template-rows: 72px 44px minmax(0, 1fr);
+    overflow: hidden;
     background: #171a1c;
     color: #e8e5dd;
     font-family: Arial, sans-serif;
@@ -31,6 +32,7 @@
 
 .header {
     display: flex;
+    min-width: 0;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
@@ -150,6 +152,7 @@
 .body {
     display: grid;
     grid-template-columns: 260px minmax(0, 1fr);
+    min-width: 0;
     min-height: 0;
 }
 
@@ -592,6 +595,7 @@
     }
 
     .library {
+        min-width: 0;
         padding: 8px 12px;
         border-right: 0;
         border-bottom: 1px solid #3d4245;
@@ -603,6 +607,7 @@
 
     .scenarioList {
         display: flex;
+        max-width: 100%;
         max-height: none;
         overflow-x: auto;
     }
@@ -617,7 +622,10 @@
 
     .titleBlock {
         display: grid;
+        flex: 1 1 auto;
         grid-template-columns: 38px minmax(0, 1fr);
+        width: 100%;
+        box-sizing: border-box;
         padding-right: 128px;
         gap: 8px;
     }

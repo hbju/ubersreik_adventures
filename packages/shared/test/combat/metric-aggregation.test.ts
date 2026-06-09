@@ -32,6 +32,8 @@ describe('metric aggregation', () => {
         expect(report.sideOutcomes.ally.winRate.ci.lower).toBeCloseTo(0.1500, 3);
         expect(report.sideOutcomes.ally.winRate.ci.upper).toBeCloseTo(0.8500, 3);
         expect(report.rounds).toMatchObject({ count: 4, mean: 2.5, median: 2.5, min: 1, max: 4 });
+        expect(report.rounds.standardDeviation).toBeCloseTo(1.291, 3);
+        expect(report.rounds.ci).toMatchObject({ confidence: 0.95 });
         expect(report.rounds.percentiles).toEqual({ p10: 1.3, p25: 1.75, p50: 2.5, p75: 3.25, p90: 3.7 });
         expect(report.rounds.histogram.map(bin => bin.count)).toEqual([1, 1, 1, 1]);
         expect(report.sufficientSample).toBe(false);
@@ -61,6 +63,7 @@ describe('metric aggregation', () => {
         expect(hero.finalWoundsAmongSurvivors).toMatchObject({ count: 1, mean: 8, median: 8 });
         expect(hero.critsDealt).toMatchObject({ total: 2, average: 1 });
         expect(hero.fateSpent).toMatchObject({ total: 1, average: 0.5 });
+        expect(hero.fateSpent.ci).toMatchObject({ confidence: 0.95 });
         expect(hero.fateBurnRate.rate).toBe(0.5);
         expect(hero.damageDealt).toMatchObject({ total: 17, average: 8.5 });
         expect(hero.damageTaken).toMatchObject({ total: 24, average: 12 });
@@ -107,6 +110,9 @@ describe('metric aggregation', () => {
         const same = compareReports(allAlly, aggregateBatchResult(batch(repeatedOutcomes(100, 'ally', true))));
 
         expect(different.winRate.ally).toMatchObject({ delta: -1, significant95: true, ciOverlap: false });
+        expect(different.lossRate.ally.significant95).toBe(true);
+        expect(different.drawRate.ally.significant95).toBe(false);
+        expect(different.allDeadRate.ally.significant95).toBe(true);
         expect(different.survivalRate.hero.significant95).toBe(true);
         expect(same.winRate.ally).toMatchObject({ delta: 0, significant95: false, ciOverlap: true });
     });

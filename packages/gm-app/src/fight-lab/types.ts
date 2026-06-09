@@ -31,6 +31,7 @@ export interface FightLabScenario {
 
 export interface FightLabCachedReport {
     report: MetricReport;
+    configFingerprint: string;
     masterSeed: FightSeed;
     iterations: number;
     failures: BatchFailure[];

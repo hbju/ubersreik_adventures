@@ -159,12 +159,12 @@ describe('condition effects engine', () => {
 
         expect(pending.pendingTests).toContainEqual(expect.objectContaining({
             conditionId: 'condition_poisoned',
-            testType: 'Endurance',
+            testType: 'endurance',
             reason: 'unconsciousPoisoned',
         }));
         expect(pending.pendingTests).toContainEqual(expect.objectContaining({
             conditionId: 'condition_poisoned',
-            testType: 'Endurance',
+            testType: 'endurance',
             reason: 'endOfRound',
         }));
     });

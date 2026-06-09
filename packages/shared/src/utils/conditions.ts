@@ -530,9 +530,17 @@ export function resolveConditionPendingTest<TCombatant extends ConditionSubject>
   if (!combatant.character) {
     throw new Error('Cannot resolve condition pending test without character');
   }
-  const targetNumber = testType === 'strength' ? 
-    calculateCharacteristicValue(combatant.character.characteristics.s) : 
-    calculateSkillValue(combatant.character.skills.find(s => s.id === testType)!, combatant.character);
+  const skill = combatant.character.skills.find(candidate => candidate.id === testType);
+  const fallbackCharacteristic = {
+    athletics: 'ag',
+    cool: 'wp',
+    endurance: 't',
+    heal: 'int',
+    strength: 's',
+  }[testType] as keyof typeof combatant.character.characteristics;
+  const targetNumber = skill
+    ? calculateSkillValue(skill, combatant.character)
+    : calculateCharacteristicValue(combatant.character.characteristics[fallbackCharacteristic]);
 
   const successLevel = calculateSuccessLevel(roll, targetNumber + (difficulty ?? 0));
   const testOutcome: ConditionTestOutcome = { roll, targetNumber, successLevel };
