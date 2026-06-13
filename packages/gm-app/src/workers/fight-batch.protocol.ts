@@ -1,50 +1,59 @@
 import type {
     BatchProgress,
     BatchResult,
-    EncounterConfig,
-    FightSeed,
     MetricReport,
+    WorkerTask,
+    WorkerTaskProgress,
 } from '@wfrp/shared/combat';
 
-export interface BatchWorkerStartMessage {
-    type: 'start';
-    requestId: string;
-    config: EncounterConfig;
-    masterSeed: FightSeed;
-    iterations: number;
+export interface PoolWorkerExecuteMessage<TTask extends WorkerTask = WorkerTask> {
+    type: 'execute';
+    runId: string;
+    task: TTask;
 }
 
-export interface BatchWorkerCancelMessage {
+export interface PoolWorkerCancelMessage {
     type: 'cancel';
-    requestId: string;
+    runId: string;
+    taskId?: string;
 }
 
-export type BatchWorkerRequest = BatchWorkerStartMessage | BatchWorkerCancelMessage;
+export type PoolWorkerRequest<TTask extends WorkerTask = WorkerTask> =
+    | PoolWorkerExecuteMessage<TTask>
+    | PoolWorkerCancelMessage;
 
-export interface BatchWorkerProgressMessage {
+export interface PoolWorkerProgressMessage<TProgress = unknown> {
     type: 'progress';
-    requestId: string;
-    progress: BatchProgress;
+    runId: string;
+    progress: WorkerTaskProgress<TProgress>;
 }
 
-export interface BatchWorkerCompleteMessage {
+export interface PoolWorkerCompleteMessage<TResult = unknown> {
     type: 'complete';
-    requestId: string;
-    payload: BatchWorkerResult;
+    runId: string;
+    taskId: string;
+    result: TResult;
 }
+
+export interface PoolWorkerErrorMessage {
+    type: 'error';
+    runId: string;
+    taskId: string;
+    error: string;
+}
+
+export type PoolWorkerResponse<TResult = unknown, TProgress = unknown> =
+    | PoolWorkerProgressMessage<TProgress>
+    | PoolWorkerCompleteMessage<TResult>
+    | PoolWorkerErrorMessage;
 
 export interface BatchWorkerResult {
     result: BatchResult;
     report: MetricReport;
 }
 
-export interface BatchWorkerErrorMessage {
-    type: 'error';
-    requestId: string;
-    error: string;
-}
+export type BatchPoolProgress = BatchProgress;
 
-export type BatchWorkerResponse =
-    | BatchWorkerProgressMessage
-    | BatchWorkerCompleteMessage
-    | BatchWorkerErrorMessage;
+// Compatibility aliases for callers that provide worker-like test doubles.
+export type BatchWorkerRequest = PoolWorkerRequest;
+export type BatchWorkerResponse = PoolWorkerResponse;

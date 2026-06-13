@@ -12,6 +12,7 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
             campaignSaveCalls: 0,
         };
         (window as any).__fightLabTest = state;
+        (window as any).__fightLabWorkerCount = 1;
         (window as any).__fightLabWorkerFactory = () => {
             let terminated = false;
             let cancelled = false;
@@ -23,20 +24,27 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
                         cancelled = true;
                         return;
                     }
-                    const requestId = message.requestId;
+                    const { runId, task } = message;
+                    const { config, masterSeed, range } = task.payload;
+                    const totalCount = range[1] - range[0];
                     setTimeout(() => {
                         if (terminated) return;
                         worker.onmessage?.({
                             data: {
                                 type: 'progress',
-                                requestId,
+                                runId,
                                 progress: {
-                                    completedCount: 5,
-                                    totalCount: message.iterations,
-                                    successfulCount: 5,
-                                    failureCount: 0,
-                                    cancelled: false,
-                                    winRates: { ally: 0.6, adversary: 0.2, draw: 0.2 },
+                                    taskId: task.id,
+                                    completedCount: Math.min(5, totalCount),
+                                    totalCount,
+                                    detail: {
+                                        completedCount: Math.min(5, totalCount),
+                                        totalCount,
+                                        successfulCount: Math.min(5, totalCount),
+                                        failureCount: 0,
+                                        cancelled: false,
+                                        winRates: { ally: 0.6, adversary: 0.2, draw: 0.2 },
+                                    },
                                 },
                             },
                         });
@@ -44,25 +52,38 @@ test('assembles, edits, saves, and reloads a sandbox encounter without campaign 
                     setTimeout(() => {
                         if (terminated) return;
                         const failure = { index: 7, seed: 'failure-seed-7', error: 'Fixture fight failed' };
+                        const includesFailure = range[0] <= 7 && 7 < range[1];
+                        const outcomes = [];
+                        for (let index = range[0]; index < range[1]; index += 1) {
+                            if (index === 7) continue;
+                            const allyCutoff = config.toggles?.maxRounds === 4 ? 2 : 8;
+                            const winner = index % 10 < allyCutoff
+                                ? 'ally'
+                                : index % 10 === 9 ? 'draw' : 'adversary';
+                            outcomes.push(indexedOutcome(
+                                index,
+                                `${masterSeed}:${index}:fixture`,
+                                winner,
+                                2 + index % 7,
+                                config,
+                                winner === 'adversary'
+                            ));
+                        }
                         worker.onmessage?.({
                             data: {
                                 type: 'complete',
-                                requestId,
-                                payload: {
+                                runId,
+                                taskId: task.id,
+                                result: {
                                     result: {
-                                        outcomes: [
-                                            indexedOutcome(0, `${message.masterSeed}:0:fixture`, 'ally', 3, message.config),
-                                            indexedOutcome(1, `${message.masterSeed}:1:fixture`, 'draw', 6, message.config),
-                                            indexedOutcome(2, `${message.masterSeed}:2:fixture`, 'adversary', 4, message.config, true),
-                                        ],
-                                        failures: [failure],
-                                        completedCount: cancelled ? 5 : message.iterations,
-                                        masterSeed: message.masterSeed,
-                                        range: [0, message.iterations],
-                                        config: message.config,
+                                        outcomes,
+                                        failures: includesFailure ? [failure] : [],
+                                        completedCount: cancelled ? Math.min(5, totalCount) : totalCount,
+                                        masterSeed,
+                                        range,
+                                        config,
                                         cancelled,
                                     },
-                                    report: metricReport(failure, cancelled, message.config),
                                 },
                             },
                         });
