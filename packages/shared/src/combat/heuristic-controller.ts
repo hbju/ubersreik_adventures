@@ -1,5 +1,6 @@
 import { calculateCharacteristicValue } from '../utils/skills';
 import { hasQuality } from './qualities';
+import { REACH_ENGAGEMENT_DISTANCE, type WeaponReach } from './spatial';
 import type { Rng } from './rng';
 import type {
     Combatant,
@@ -19,6 +20,22 @@ import { resolveWeaponUse } from './proficiency';
 import { activeFearStates, isActivelyAfraidOf } from './psychology';
 import { additionalEffortTestModifier } from './advantage';
 
+/**
+ * Scored-policy heuristic.
+ *
+ * Every legal turn decision is passed through `scoreDecision`, which returns a
+ * profile-weighted utility; the controller picks the argmax (deterministic
+ * tiebreak on the decision label). Profiles are pure weight vectors that *tune*
+ * the shared evaluation rather than *select* which hardcoded branch fires, so
+ * every profile considers every legal decision kind.
+ *
+ * Hard overrides sit on top of scoring: fear-respecting movement filter, the
+ * Broken retreat, and "augmenting" advantage spends (which precede the turn's
+ * main action and so are chosen in a priority step, not the argmax).
+ *
+ * `scoreDecision` is intentionally the seed of the flat-MC / MCTS leaf
+ * evaluation policy — keep it pure over (state, actor, decision, profile).
+ */
 export type HeuristicProfileId = 'berserker' | 'duellist' | 'skirmisher' | 'marksman' | 'brute';
 
 export interface HeuristicProfile {
@@ -187,80 +204,210 @@ export class HeuristicController implements CombatantController {
         const useful = fearRespecting.length > 0 ? fearRespecting : broadlyUseful;
         if (useful.length === 0) return withLog(legal[0], 'competence.noUsefulOption', legal);
 
+        // Hard override: a Broken combatant flees/cowers and does not act tactically.
         if (actor.conditions.includes('condition_broken')) {
             const retreat = bestRetreatDecision(context.state, actor, useful);
             if (retreat) return withLog(retreat, 'psychology.broken.retreat', legal);
             return withLog(legal.find(decision => decision.kind === 'endTurn') ?? legal[0], 'psychology.broken.noRetreat', legal);
         }
 
-        const spend = this.chooseAdvantageSpend(context, useful);
-        if (spend) return withLog(spend, `advantage.${spend.advantageAction}`, legal);
+        // Augmenting advantage spends precede the main action (they grant extra
+        // actions/bonuses), so they are chosen in a priority step rather than the argmax.
+        const augment = this.chooseAugmentSpend(context, useful);
+        if (augment) return withLog(augment, augment.advantageAction ? `advantage.${augment.advantageAction}` : 'advantage.spend', legal);
 
-        if (this.profile.id === 'skirmisher' && actor.engagementIds.length > 0) {
-            const disengage = useful.find(decision => decision.kind === 'disengageDodge');
-            if (disengage) return withLog(withRequest(disengage), 'profile.skirmisher.disengage', legal);
-            const flee = useful.find(decision => decision.kind === 'spendAdvantage' && decision.advantageAction === 'fleeFromHarm');
-            if (flee) return withLog(flee, 'profile.skirmisher.fleeFromHarm', legal);
+        // Unified scoring across every remaining legal decision.
+        const scored = useful
+            .map(decision => ({ decision, ...this.scoreDecision(context, decision) }))
+            .sort((a, b) => b.score - a.score || decisionLabel(a.decision).localeCompare(decisionLabel(b.decision)));
+        const best = scored[0];
+
+        // Nothing is worth doing: end the turn rather than waste it on a negative-value action.
+        if (!best || best.score <= 0) {
+            const endTurn = legal.find(decision => decision.kind === 'endTurn');
+            return withLog(endTurn ?? useful[0], endTurn ? 'action.endTurn' : 'competence.firstUsefulOption', legal);
         }
 
-        if (this.profile.id === 'marksman') {
-            const ranged = useful.filter(decision => decision.kind === 'rangedAttack');
-            if (ranged.length > 0) return withLog(this.materializeRanged(context, ranged), 'profile.marksman.shoot', legal);
-            const reload = useful.find(decision => decision.kind === 'reload');
-            if (reload) return withLog(withReloadRoll(context, reload), 'profile.marksman.reload', legal);
-            const move = useful.find(decision => decision.kind === 'move' && decision.mode !== 'charge');
-            if (move) return withLog(move, 'profile.marksman.keepRange', legal);
-        }
-
-        if (this.profile.id === 'berserker') {
-            const charge = useful.filter(decision => decision.kind === 'move' && decision.mode === 'charge');
-            if (charge.length > 0) return withLog(this.materializeCharge(context, charge), 'profile.berserker.charge', legal);
-            if (!useful.some(decision => decision.kind === 'meleeAttack')) {
-                const bestTarget = this.bestTargetId(context.state, context.actor, candidateTargets(useful.filter(decision => decision.kind === 'move' && decision.mode !== 'charge')));
-                if (bestTarget) {
-                    const move = useful.filter(decision => decision.kind === 'move' && typeof decision.target === 'number').sort((a, b) => {
-                        const distanceA = Math.abs((a.target as number) - context.state.combatants[bestTarget].position);
-                        const distanceB = Math.abs((b.target as number) - context.state.combatants[bestTarget].position);
-                        return distanceA - distanceB;
-                    })[0];
-                    if (move) return withLog(move, 'profile.berserker.closeIn', legal);
-                }
-            }
-        }
-
-        if (this.profile.id === 'duellist' && woundedRatio(actor) <= this.profile.defendWhenWounded) {
-            const defend = useful.find(decision => decision.kind === 'defend');
-            if (defend) return withLog(withRequest(defend), 'profile.duellist.defendWhenPressed', legal);
-        }
-
-        const melee = useful.filter(decision => decision.kind === 'meleeAttack');
-        if (melee.length > 0) return withLog(this.materializeMelee(context, melee), this.profile.id === 'duellist' ? 'profile.duellist.attack' : 'action.attackBestTarget', legal);
-
-        const ranged = useful.filter(decision => decision.kind === 'rangedAttack');
-        if (ranged.length > 0) return withLog(this.materializeRanged(context, ranged), 'action.rangedBestTarget', legal);
-
-        const action = useful.find(decision => decision.kind !== 'move' && decision.kind !== 'spendAdvantage');
-        if (action) return withLog(withRequest(action), 'competence.firstUsefulOption', legal);
-        
-        return actor.engagementIds.filter(id => isActive(context.state.combatants[id])).length > 0
-            ? withLog(legal.find(decision => decision.kind === 'endTurn') ?? legal[0], 'action.endTurn', legal)
-            : withLog(useful[0], 'competence.firstUsefulOption', legal);
+        return withLog(this.materialize(context, best.decision), best.reason, legal);
     }
 
-    private chooseAdvantageSpend(context: DecisionContext, legal: LegalDecision[]): LegalDecision | undefined {
-        const pool = context.state.advantagePools[context.actor.side];
-        if (pool >= 4 && this.profile.aggression >= 0.55) {
-            const additional = legal.find(decision => decision.kind === 'spendAdvantage' && decision.advantageAction === 'additionalAction');
+    /**
+     * Profile-weighted utility for a single legal decision. All decision kinds are
+     * scored so every profile considers every option; preconditions that make an
+     * action pointless return a negative score (so it loses to ending the turn).
+     */
+    private scoreDecision(context: DecisionContext, decision: LegalDecision): { score: number; reason: string } {
+        const { state, actor } = context;
+        const p = this.profile;
+        const engaged = actor.engagementIds.some(id => isActive(state.combatants[id]));
+        // Kiters do not want to stand and trade blows while pinned.
+        const engagedMelee = engaged ? 1 - 0.6 * p.kite : 1;
+        const tScore = (candidate: LegalDecision) => {
+            const target = candidate.targetId ? state.combatants[candidate.targetId] : undefined;
+            return target ? targetScore(state, actor, target, p) : 0;
+        };
+
+        switch (decision.kind) {
+            case 'meleeAttack':
+                return { score: (120 * (0.5 + p.aggression) + tScore(decision)) * engagedMelee, reason: 'action.attackBestTarget' };
+            case 'attackWithBoth':
+                return { score: (120 * (0.5 + p.aggression) + tScore(decision) + 12 * p.aggression) * engagedMelee, reason: 'action.dualWield' };
+            case 'rangedAttack':
+                return { score: 110 * (0.4 + p.rangePreference) + tScore(decision), reason: 'action.rangedBestTarget' };
+            case 'move':
+                return { score: this.scoreMove(context, decision), reason: decision.mode === 'charge' ? 'profile.charge' : 'move.reposition' };
+            case 'defend': {
+                if (!engaged) return { score: 6 * p.defendWhenWounded, reason: 'action.defend' };
+                const wr = woundedRatio(actor);
+                if (wr <= p.defendWhenWounded) return { score: 190 + 60 * (1 - wr), reason: 'defence.whenPressed' };
+                return { score: 45 * p.defendWhenWounded * (0.5 + (1 - wr)), reason: 'action.defend' };
+            }
+            case 'disengageDodge': {
+                if (actor.engagementIds.length === 0) return { score: -1, reason: 'action.disengage' };
+                const wr = woundedRatio(actor);
+                const want = Math.max(p.kite, wr <= p.defendWhenWounded ? 0.9 : 0);
+                return { score: want >= 0.6 ? 150 * want : 55 * want, reason: 'profile.disengage' };
+            }
+            case 'aim':
+                return { score: actor.aimedRangedAttack ? -1 : 28 * p.rangePreference, reason: 'action.aim' };
+            case 'reload':
+                return { score: 95 * (0.3 + p.rangePreference), reason: 'action.reload' };
+            case 'firstAid': {
+                const ally = mostWoundedAlly(state, actor);
+                if (!ally) return { score: -1, reason: 'action.firstAid' };
+                return { score: 70 * (1 - woundedRatio(ally)) * (1 - 0.5 * p.aggression), reason: 'support.firstAid' };
+            }
+            case 'assess':
+                return { score: 8 + 8 * p.threatFocus, reason: 'action.assess' };
+            case 'infighting':
+                return { score: engaged ? 22 * p.aggression * engagedMelee : -1, reason: 'action.infighting' };
+            case 'feint':
+                return { score: engaged ? 38 * p.threatFocus * (1 - 0.6 * p.aggression) : -1, reason: 'action.feint' };
+            case 'disarm':
+            case 'beatBlade':
+            case 'distractOpponent':
+                return { score: engaged ? 30 * p.threatFocus * (1 - 0.6 * p.aggression) : -1, reason: `action.${decision.kind}` };
+            case 'grappleInitiate':
+                return { score: 14 * p.aggression - 12, reason: 'action.grapple' };
+            case 'grappleMaintain':
+                return { score: 42 * p.aggression, reason: 'action.grappleMaintain' };
+            case 'grappleBreak':
+                return { score: 42 * Math.max(p.kite, 1 - woundedRatio(actor)), reason: 'action.grappleBreak' };
+            case 'spendAdvantage':
+                // Augmenting spends are handled in chooseAugmentSpend; only the
+                // "leave combat" spend competes with the main action here.
+                return decision.advantageAction === 'fleeFromHarm' && engaged && p.kite >= 0.6
+                    ? { score: 120 * p.kite, reason: 'advantage.fleeFromHarm' }
+                    : { score: -1, reason: 'advantage.deferred' };
+            case 'shieldsman':
+                return { score: engaged ? 26 * p.reactionAggression : -1, reason: 'action.shieldsman' };
+            case 'reversal':
+                return { score: 24 * p.reactionAggression, reason: 'action.reversal' };
+            case 'sprint':
+                return { score: -1, reason: 'action.sprint' };
+            case 'endTurn':
+            case 'wait':
+                return { score: 0, reason: decision.kind === 'wait' ? 'action.wait' : 'action.endTurn' };
+            default:
+                return { score: 1, reason: 'competence.firstUsefulOption' };
+        }
+    }
+
+    private scoreMove(context: DecisionContext, decision: LegalDecision): number {
+        const { state, actor } = context;
+        const p = this.profile;
+        if (decision.mode === 'charge') {
+            const target = decision.targetId ? state.combatants[decision.targetId] : undefined;
+            return 115 * (0.5 + p.aggression) + (target ? targetScore(state, actor, target, p) : 0);
+        }
+        const resultPos = typeof decision.target === 'number'
+            ? decision.target
+            : decision.target && 'combatantId' in decision.target
+                ? state.combatants[decision.target.combatantId]?.position
+                : undefined;
+        if (resultPos === undefined) return -1;
+        const enemies = Object.values(state.combatants).filter(combatant => combatant.side !== actor.side && isActive(combatant));
+        if (enemies.length === 0) return 0;
+        const bestId = this.bestTargetId(state, actor, enemies.map(enemy => enemy.id));
+        const best = bestId ? state.combatants[bestId] : enemies[0];
+        const reach = reachOf(state, actor);
+        const distBefore = Math.abs(actor.position - best.position);
+        const distAfter = Math.abs(resultPos - best.position);
+        const closing = distBefore - distAfter;
+        const nearestBefore = Math.min(...enemies.map(enemy => Math.abs(actor.position - enemy.position)));
+        const nearestAfter = Math.min(...enemies.map(enemy => Math.abs(resultPos - enemy.position)));
+        // Aggressors reward closing (and a bump for entering reach); kiters reward opening distance.
+        const closeValue = closing * (1 - p.rangePreference) * (0.6 + p.aggression) * 2.5;
+        const reachBonus = distAfter <= reach && distBefore > reach && p.aggression >= 0.4 ? 60 : 0;
+        const retreatValue = (nearestAfter - nearestBefore) * p.kite * 2;
+        return 5 + closeValue + reachBonus + retreatValue;
+    }
+
+    /**
+     * Augmenting advantage spends taken *before* the turn's main action. Pool
+     * depletion bounds repetition; turn-flag guards prevent re-spending one-shot
+     * tempo boosts. `fleeFromHarm` is deliberately excluded here (scored instead).
+     */
+    private chooseAugmentSpend(context: DecisionContext, legal: LegalDecision[]): LegalDecision | undefined {
+        const { state, actor } = context;
+        const p = this.profile;
+        const pool = state.advantagePools[actor.side];
+        const engaged = actor.engagementIds.length > 0;
+        const find = (action: string) => legal.find(decision => decision.kind === 'spendAdvantage' && decision.advantageAction === action);
+
+        if (pool >= 4 && p.aggression >= 0.55 && !state.turnFlags.additionalActionCombatantIds.includes(actor.id)) {
+            const additional = find('additionalAction');
             if (additional) return additional;
         }
-        if (this.profile.kite >= 0.7 && context.actor.engagementIds.length > 0) {
-            const flee = legal.find(decision => decision.kind === 'spendAdvantage' && decision.advantageAction === 'fleeFromHarm');
-            if (flee) return flee;
+        if (pool >= 1 && p.aggression >= 0.7 && actor.budget.moves > 0 && !state.turnFlags.talentExtraAttackCombatantIds.includes(actor.id)) {
+            const furious = find('furiousAssault');
+            if (furious) return furious;
         }
-        if (pool >= 2 && context.actor.budget.actions > 0 && this.profile.aggression >= 0.85) {
-            return legal.find(decision => decision.kind === 'spendAdvantage' && decision.advantageAction === 'additionalEffort');
+        if (pool >= 2 && actor.budget.actions > 0 && p.aggression >= 0.85) {
+            const effort = find('additionalEffort');
+            if (effort) return effort;
+        }
+        if (pool >= 1 && engaged && p.aggression >= 0.6) {
+            const batter = find('batter');
+            if (batter) return batter;
+        }
+        if (pool >= 2 && engaged && p.threatFocus >= 0.6) {
+            const trick = find('trick');
+            if (trick) return trick;
         }
         return undefined;
+    }
+
+    private materialize(context: DecisionContext, decision: LegalDecision): CombatDecision {
+        switch (decision.kind) {
+            case 'meleeAttack':
+                return this.materializeMelee(context, [decision]);
+            case 'rangedAttack':
+                return this.materializeRanged(context, [decision]);
+            case 'reload':
+                return withReloadRoll(context, decision);
+            case 'move':
+                return decision.mode === 'charge' ? this.materializeCharge(context, [decision]) : decision;
+            case 'assess':
+            case 'defend':
+            case 'aim':
+            case 'sprint':
+            case 'firstAid':
+            case 'infighting':
+            case 'disengageDodge':
+            case 'grappleInitiate':
+            case 'grappleMaintain':
+            case 'grappleBreak':
+            case 'attackWithBoth':
+            case 'beatBlade':
+            case 'disarm':
+            case 'feint':
+            case 'distractOpponent':
+                return withRequest(decision);
+            default:
+                // spendAdvantage, shieldsman, reversal, endTurn, wait — dispatched as-is.
+                return decision;
+        }
     }
 
     private materializeMelee(context: DecisionContext, legal: LegalDecision[]): CombatDecision {
@@ -443,6 +590,17 @@ function targetThreat(target: Combatant): number {
 
 function woundedRatio(combatant: Combatant): number {
     return combatant.maxWounds > 0 ? combatant.currentWounds / combatant.maxWounds : 0;
+}
+
+function mostWoundedAlly(state: CombatState, actor: Combatant): Combatant | undefined {
+    return Object.values(state.combatants)
+        .filter(combatant => combatant.side === actor.side && combatant.id !== actor.id && isActive(combatant) && woundedRatio(combatant) < 0.5)
+        .sort((a, b) => woundedRatio(a) - woundedRatio(b))[0];
+}
+
+function reachOf(state: CombatState, actor: Combatant): number {
+    const weapon = state.weapons.find(candidate => candidate.id === (actor.weaponLoadout?.primaryWeaponId ?? ''));
+    return REACH_ENGAGEMENT_DISTANCE[(weapon?.reach as WeaponReach) ?? 'Short'];
 }
 
 function primaryWeapon(state: CombatState, combatant: Combatant | undefined) {
