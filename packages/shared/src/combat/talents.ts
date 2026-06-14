@@ -232,9 +232,7 @@ export const combatTalentAuditIds = [
 
 export const deferredCombatTalentIds = [
     'battle-rage',
-    'fearless',
     'frenzy',
-    'frightening',
     'hatred',
     'menacing',
 ] as const;
@@ -860,6 +858,9 @@ function classifyTalent(talent: Talent): TalentCoverageClassification {
         'advantageCostReduction',
         'conditionLossIgnore',
         'conditionGainReaction',
+        'fearRating',
+        'terrorRating',
+        'psychologyImmunity',
         'offHandPenaltyReduction',
         'armourPointIgnore',
         'woundsBonus',

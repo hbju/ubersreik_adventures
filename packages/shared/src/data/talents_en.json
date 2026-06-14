@@ -1915,11 +1915,9 @@
     },
     {
         "id": "fearless",
-        "name": "Fearless (Enemy)",
-        "description": "You are either brave enough or crazy enough that fear of certain enemies has become a distant memory. With a single Average (+20%) Cool Test, you may ignore any Intimidate, Fear, or Terror effects from the specified enemy when encountered. Typical enemies include Beastmen, Greenskins, Outlaws, Vampires, Watchmen, and Witches.",
-        "tests": [
-            "Cool to oppose your Enemy’s Intimidate, Fear, and Terror"
-        ],
+        "name": "Fearless",
+        "description": "You are immune to Fear. When exposed to Terror, resolve it as Fear at the same Rating instead of making the one-shot Terror Test.",
+        "tests": [],
         "max_ranks": "wp",
         "careers": {
             "Beadle": "3 (Intruders)",
@@ -1959,20 +1957,11 @@
         ],
         "effects": [
             {
-                "type": "PASSIVE",
-                "value": "Roll Cool (+20%) to oppose Intimidate, Fear, and Terror from specified enemy",
-                "appliesTo": [
-                    "cool"
-                ],
-                "condition": "from specified enemy"
-            },
-            {
-                "type": "SL_BONUS_ON_SUCCESS",
-                "value": 1,
-                "appliesTo": [
-                    "cool"
-                ],
-                "condition": "to oppose your Enemy’s Intimidate, Fear, and Terror"
+                "kind": "psychologyImmunity",
+                "params": {
+                    "fear": "immune",
+                    "terror": "downgradeToFear"
+                }
             }
         ]
     },
@@ -2208,7 +2197,7 @@
     {
         "id": "frightening",
         "name": "Frightening",
-        "description": "Anyone sane thinks twice before approaching you. If you wish, you have a Fear Rating of 1 (see page 190). Add +1 to this number per extra time you have this Talent.",
+        "description": "You cause Fear with a Rating equal to your ranks in this Talent. Enemies must complete an Extended Cool Test against that Rating.",
         "tests": [],
         "max_ranks": "s",
         "careers": {
@@ -2279,6 +2268,21 @@
                     "melee"
                 ],
                 "condition": "when making extra attacks"
+            }
+        ]
+    },
+    {
+        "id": "terrifying",
+        "name": "Terrifying",
+        "description": "Your presence inspires devastating terror. You have a Terror Rating equal to your ranks in this Talent. After the first Terror Test, you cause Fear at the same Rating.",
+        "tests": [],
+        "max_ranks": "s",
+        "careers": {},
+        "racial": [],
+        "effects": [
+            {
+                "kind": "terrorRating",
+                "value": "1 per rank"
             }
         ]
     },

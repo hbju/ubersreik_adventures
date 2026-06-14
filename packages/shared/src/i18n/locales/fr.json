@@ -123,7 +123,30 @@
                 "engaged": "{{combatantName}} ne peut pas se déplacer en étant engagé. Utilisez Désengagement d'abord.",
                 "noMove": "{{combatantName}} n'a plus de mouvement disponible ce tour.",
                 "noAction": "{{combatantName}} n'a plus d'action disponible pour le mouvement {{mode}}.",
-                "insufficientBudget": "{{combatantName}} ne peut pas se déplacer de {{distance}} yards avec le mouvement {{mode}}."
+                "insufficientBudget": "{{combatantName}} ne peut pas se déplacer de {{distance}} yards avec le mouvement {{mode}}.",
+                "fearApproach": "{{combatantName}} ne parvient pas à s'approcher volontairement de la source de sa Peur."
+            }
+        },
+        "psychology": {
+            "fear": {
+                "exposure": {
+                    "active": "{{combatantId}} est exposé à la Peur {{rating}} provoquée par {{sourceId}}.",
+                    "immune": "{{combatantId}} est immunisé à la Peur provoquée par {{sourceId}}."
+                },
+                "test": "{{combatantId}} teste son Sang-froid contre la Peur de {{sourceId}} ({{accumulatedSL}}/{{targetSL}} DR)."
+            },
+            "terror": {
+                "exposure": {
+                    "active": "{{combatantId}} est exposé à la Terreur {{rating}} provoquée par {{sourceId}}.",
+                    "downgraded": "{{combatantId}} réduit la Terreur de {{sourceId}} à une Peur {{rating}}."
+                },
+                "test": "{{combatantId}} teste son Sang-froid contre la Terreur de {{sourceId}} et gagne {{brokenApplied}} états Brisé."
+            },
+            "fearApproach": {
+                "test": "{{combatantId}} teste son Sang-froid pour s'approcher de {{sourceId}}."
+            },
+            "sourceApproach": {
+                "test": "{{combatantId}} teste son Sang-froid lorsque {{sourceId}} s'approche."
             }
         },
         "engagement": {

@@ -196,7 +196,30 @@
                 "engaged": "{{combatantName}} cannot move while engaged. Use Disengage first.",
                 "noMove": "{{combatantName}} has no movement remaining this turn.",
                 "noAction": "{{combatantName}} has no action available for {{mode}} movement.",
-                "insufficientBudget": "{{combatantName}} cannot move {{distance}} yards with {{mode}} movement."
+                "insufficientBudget": "{{combatantName}} cannot move {{distance}} yards with {{mode}} movement.",
+                "fearApproach": "{{combatantName}} cannot force themselves closer to the source of their Fear."
+            }
+        },
+        "psychology": {
+            "fear": {
+                "exposure": {
+                    "active": "{{combatantId}} is exposed to Fear {{rating}} from {{sourceId}}.",
+                    "immune": "{{combatantId}} is immune to Fear from {{sourceId}}."
+                },
+                "test": "{{combatantId}} tests Cool against Fear from {{sourceId}} ({{accumulatedSL}}/{{targetSL}} SL)."
+            },
+            "terror": {
+                "exposure": {
+                    "active": "{{combatantId}} is exposed to Terror {{rating}} from {{sourceId}}.",
+                    "downgraded": "{{combatantId}} downgrades Terror from {{sourceId}} to Fear {{rating}}."
+                },
+                "test": "{{combatantId}} tests Cool against Terror from {{sourceId}} and gains {{brokenApplied}} Broken."
+            },
+            "fearApproach": {
+                "test": "{{combatantId}} tests Cool to approach {{sourceId}}."
+            },
+            "sourceApproach": {
+                "test": "{{combatantId}} tests Cool as {{sourceId}} approaches."
             }
         },
         "engagement": {

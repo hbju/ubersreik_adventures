@@ -373,21 +373,16 @@
     },
     {
         "id": "fearless",
-        "name": "Fearless (Enemy)",
-        "description": "You are either brave enough or crazy enough that fear of certain enemies has become a distant memory. With a single Average (+20%) Cool Test, you may ignore any Intimidate, Fear, or Terror effects from the specified enemy when encountered. Typical enemies include Beastmen, Greenskins, Outlaws, Vampires, Watchmen, and Witches.",
-        "tests": [
-            "Cool to oppose your Enemy’s Intimidate, Fear, and Terror"
-        ],
+        "name": "Fearless",
+        "description": "You are immune to Fear. When exposed to Terror, resolve it as Fear at the same Rating instead of making the one-shot Terror Test.",
+        "tests": [],
         "max_ranks": "wp",
         "effects": [
             {
-                "kind": "ruleNote",
-                "when": "specifiedEnemy",
-                "appliesTo": [
-                    "cool"
-                ],
+                "kind": "psychologyImmunity",
                 "params": {
-                    "note": "Roll Cool (+20%) to oppose Intimidate, Fear, and Terror from specified enemy"
+                    "fear": "immune",
+                    "terror": "downgradeToFear"
                 }
             }
         ]
@@ -530,6 +525,19 @@
                     "action": "extraAttack"
                 },
                 "value": "Make an extra attack after hitting in Melee at cost of one Advantage or Move"
+            }
+        ]
+    },
+    {
+        "id": "terrifying",
+        "name": "Terrifying",
+        "description": "Your presence inspires devastating terror. You have a Terror Rating equal to your ranks in this Talent. After the first Terror Test, you cause Fear at the same Rating.",
+        "tests": [],
+        "max_ranks": "s",
+        "effects": [
+            {
+                "kind": "terrorRating",
+                "value": "1 per rank"
             }
         ]
     },

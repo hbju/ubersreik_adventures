@@ -99,7 +99,8 @@ describe('combat talent effects', () => {
         const coverage = catalogueCombatTalentCoverage(combatTalents);
         expect(coverage.find(row => row.id === 'shieldsman')).toMatchObject({ classification: 'activated-or-reaction' });
         expect(coverage.find(row => row.id === 'furious-assault')).toMatchObject({ classification: 'deferred-action-economy' });
-        expect(coverage.find(row => row.id === 'fearless')).toMatchObject({ classification: 'deferred-psychology' });
+        expect(coverage.find(row => row.id === 'fearless')).toMatchObject({ classification: 'typed-wired' });
+        expect(coverage.find(row => row.id === 'frightening')).toMatchObject({ classification: 'typed-wired' });
         expect(distinctCombatTalentConditions).toContain('defending with a shield');
         expect(talentActivationRegistry.shieldsman[0].policy).toBe('never');
     });

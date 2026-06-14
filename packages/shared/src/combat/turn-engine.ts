@@ -5,6 +5,7 @@ import { isGrapplingEngagement, resolveCombatAction, resolveEffectiveWeapon } fr
 import { decayEngagementsEndOfRound, determineSurprise, rangeBandForDistance, rangedWeaponRange, resolveMeleeAttack, resolveRangedAttack, resolveRangedIntoMeleeAttack, resolveReloadAction } from './engine';
 import { applyMove, REACH_ENGAGEMENT_DISTANCE, WeaponReach, type MoveTarget } from './spatial';
 import { resolveWeaponUse } from './proficiency';
+import { resolvePsychologyExposures, resolvePsychologyRoundStart } from './psychology';
 import { hasQuality, qualityRating } from './qualities';
 import { eligibleReactions, reactionOfferEvent, resolveReactionDecision, type ReactionDecision } from './reactions';
 import { spendFate } from './resources';
@@ -187,28 +188,37 @@ export function advanceToNextDecision(engine: TurnEngineState, options: TurnEngi
 
 export function applyDecision(engine: TurnEngineState, decision: CombatDecision, controller?: CombatantController): TurnEngineState {
     if (engine.phase !== 'awaitingDecision' || !engine.activeCombatantId) return engine;
-    if (decision.actorId !== engine.activeCombatantId) {
-        return withEvents(engine, [turnEvent('TurnDecisionRejected', 'combat.turn.rejected.wrongActor', { actorId: decision.actorId, activeCombatantId: engine.activeCombatantId, reason: 'wrongActor' })]);
+    const exposure = resolvePsychologyExposures(engine.state, engine.rng);
+    const currentEngine = exposure.state === engine.state ? engine : { ...engine, state: exposure.state };
+    if (decision.actorId !== currentEngine.activeCombatantId) {
+        return withEvents(currentEngine, [
+            ...exposure.events,
+            turnEvent('TurnDecisionRejected', 'combat.turn.rejected.wrongActor', { actorId: decision.actorId, activeCombatantId: currentEngine.activeCombatantId, reason: 'wrongActor' }),
+        ]);
     }
 
-    const actor = engine.state.combatants[decision.actorId];
-    const legal = legalDecisions(engine.state, actor);
+    const actor = currentEngine.state.combatants[decision.actorId];
+    const legal = legalDecisions(currentEngine.state, actor);
     if (!legal.some(candidate => matchesLegalDecision(candidate, decision))) {
-        return withEvents(engine, [turnEvent('TurnDecisionRejected', 'combat.turn.rejected.illegal', { actorId: decision.actorId, reason: 'illegal', decision: decision.kind })]);
+        return withEvents(currentEngine, [
+            ...exposure.events,
+            turnEvent('TurnDecisionRejected', 'combat.turn.rejected.illegal', { actorId: decision.actorId, reason: 'illegal', decision: decision.kind }),
+        ]);
     }
 
     const entry = ACTION_CATALOGUE.find(candidate => candidate.kind === decision.kind);
-    if (!entry) return rejectDecision(engine, decision, 'missingHandler');
-    let result = entry.dispatch(engine, decision, controller);
-    result = threadDeferredResolutionDecisions(engine, decision, result, controller);
-    result = threadDamageInterceptions({ ...engine, state: result.state }, decision, result, controller);
-    result = threadDeathInterceptions({ ...engine, state: result.state }, decision, result, controller);
+    if (!entry) return rejectDecision(currentEngine, decision, 'missingHandler');
+    let result = entry.dispatch(currentEngine, decision, controller);
+    result = threadDeferredResolutionDecisions(currentEngine, decision, result, controller);
+    result = threadDamageInterceptions({ ...currentEngine, state: result.state }, decision, result, controller);
+    result = threadDeathInterceptions({ ...currentEngine, state: result.state }, decision, result, controller);
     result = appendDecisionLog(result, decision, 'turn');
+    result = { ...result, events: [...exposure.events, ...result.events] };
 
     const next = {
-        ...engine,
+        ...currentEngine,
         state: result.state,
-        events: [...engine.events, ...result.events],
+        events: [...currentEngine.events, ...result.events],
     };
     return shouldEndTurn(next, decision.actorId, decision.kind)
         ? finishTurn(next)
@@ -1028,7 +1038,9 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
 
     if (engine.phase === 'roundStart') {
         const round = engine.round + 1;
-        const state = resetRoundState({ ...engine.state, round });
+        const resetState = resetRoundState({ ...engine.state, round });
+        const psychology = resolvePsychologyRoundStart(resetState, engine.rng);
+        const state = psychology.state;
         const order = initiativeOrderFor(state, engine.rng);
         return {
             ...engine,
@@ -1041,6 +1053,7 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
             events: [
                 ...engine.events,
                 turnEvent('RoundStarted', 'combat.turn.roundStarted', { round }),
+                ...psychology.events,
                 turnEvent('TurnStarted', 'combat.turn.startedActor', { round, combatantId: order[0] }),
             ],
         };

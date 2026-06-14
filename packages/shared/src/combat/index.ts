@@ -12,6 +12,7 @@ export * from './metric-aggregation';
 export * from './modifiers';
 export * from './qualities';
 export * from './proficiency';
+export * from './psychology';
 export * from './reload-interrupts';
 export * from './reactions';
 export * from './resources';

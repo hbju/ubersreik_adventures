@@ -10,6 +10,7 @@ import { collectMeleePreRollModifiers, collectRangedPreRollModifiers, resolveMod
 import { applyBlackpowderTargetEffect, armourPointsAtLocation, createQualityHooks, defenderTargetModifierFromQualities, hasQuality, qualityRating } from './qualities';
 import { applyReloadInterruptGuard } from './reload-interrupts';
 import { resolveWeaponUse, weaponForUse } from './proficiency';
+import { fearPreRollModifiers, psychologyState } from './psychology';
 import { tryInterceptDamageWithFate } from './resources';
 import { mathRandomRng, type Rng } from './rng';
 import { createMovementBudget } from './spatial';
@@ -40,7 +41,7 @@ import type {
 
 export function createCombatantFromCharacter(
     character: Character,
-    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'cover' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions' | 'conditionInstances' | 'weaponLoadout' | 'weaponAmmo' | 'ammunition'>> = {}
+    options: Partial<Pick<Combatant, 'id' | 'side' | 'currentWounds' | 'maxWounds' | 'position' | 'cover' | 'movementBudget' | 'engagementIds' | 'budget' | 'conditions' | 'conditionInstances' | 'weaponLoadout' | 'weaponAmmo' | 'ammunition' | 'causesFear' | 'causesTerror' | 'psychology'>> = {}
 ): Combatant {
     const currentWounds = options.currentWounds ?? character.status.wounds.current;
     const maxWounds = options.maxWounds ?? character.status.wounds.max;
@@ -71,7 +72,18 @@ export function createCombatantFromCharacter(
         weaponLoadout: options.weaponLoadout,
         weaponAmmo: options.weaponAmmo,
         ammunition: options.ammunition,
+        causesFear: options.causesFear ?? talentRating(character, 'frightening'),
+        causesTerror: options.causesTerror ?? talentRating(character, 'terrifying'),
+        psychology: options.psychology ?? {
+            ...psychologyState(),
+            immuneToFear: (character.talents?.fearless ?? 0) > 0,
+        },
     };
+}
+
+function talentRating(character: Character, talentId: string): { rating: number } | undefined {
+    const rating = character.talents?.[talentId] ?? 0;
+    return rating > 0 ? { rating } : undefined;
 }
 
 export function createCombatState(
@@ -1195,6 +1207,7 @@ function normalizeHooks(hooks: Partial<MeleeResolutionHooks> | undefined, rng: R
     const talentHooks = createTalentHooks();
     return {
         preRollModifiers: context => [
+            ...fearPreRollModifiers(context),
             ...(qualityHooks.preRollModifiers?.(context) ?? []),
             ...(talentHooks.preRollModifiers?.(context) ?? []),
             ...(hooks?.preRollModifiers?.(context) ?? []),

@@ -16,6 +16,7 @@ import type {
     LegalDecision,
 } from './turn-engine';
 import { resolveWeaponUse } from './proficiency';
+import { activeFearStates, isActivelyAfraidOf } from './psychology';
 import { additionalEffortTestModifier } from './advantage';
 
 export type HeuristicProfileId = 'berserker' | 'duellist' | 'skirmisher' | 'marksman' | 'brute';
@@ -181,8 +182,16 @@ export class HeuristicController implements CombatantController {
 
     private chooseTurn(context: DecisionContext, legal: LegalDecision[]): CombatDecision {
         const actor = context.actor;
-        const useful = legal.filter(decision => decision.kind !== 'wait' && decision.kind !== 'endTurn');
+        const broadlyUseful = legal.filter(decision => decision.kind !== 'wait' && decision.kind !== 'endTurn');
+        const fearRespecting = broadlyUseful.filter(decision => !approachesFearedSource(context.state, actor, decision));
+        const useful = fearRespecting.length > 0 ? fearRespecting : broadlyUseful;
         if (useful.length === 0) return withLog(legal[0], 'competence.noUsefulOption', legal);
+
+        if (actor.conditions.includes('condition_broken')) {
+            const retreat = bestRetreatDecision(context.state, actor, useful);
+            if (retreat) return withLog(retreat, 'psychology.broken.retreat', legal);
+            return withLog(legal.find(decision => decision.kind === 'endTurn') ?? legal[0], 'psychology.broken.noRetreat', legal);
+        }
 
         const spend = this.chooseAdvantageSpend(context, useful);
         if (spend) return withLog(spend, `advantage.${spend.advantageAction}`, legal);
@@ -233,7 +242,9 @@ export class HeuristicController implements CombatantController {
         const action = useful.find(decision => decision.kind !== 'move' && decision.kind !== 'spendAdvantage');
         if (action) return withLog(withRequest(action), 'competence.firstUsefulOption', legal);
         
-        return actor.engagementIds.filter(id => isActive(context.state.combatants[id])).length > 0 ? withLog(legal.find(decision => decision.kind === 'endTurn') ?? legal[0], 'action.endTurn', legal) : withLog(legal[0], 'competence.firstUsefulOption', legal);
+        return actor.engagementIds.filter(id => isActive(context.state.combatants[id])).length > 0
+            ? withLog(legal.find(decision => decision.kind === 'endTurn') ?? legal[0], 'action.endTurn', legal)
+            : withLog(useful[0], 'competence.firstUsefulOption', legal);
     }
 
     private chooseAdvantageSpend(context: DecisionContext, legal: LegalDecision[]): LegalDecision | undefined {
@@ -386,7 +397,41 @@ function targetScore(state: CombatState, actor: Combatant, target: Combatant, pr
         + nearest * (1 - profile.rangePreference) * 30
         + (target.currentWounds <= 3 ? 25 : 0)
         + (actor.engagementIds.includes(target.id) ? 15 : 0)
-        + (state.tacticalDominantSide === target.side ? 5 : 0);
+        + (state.tacticalDominantSide === target.side ? 5 : 0)
+        - (isActivelyAfraidOf(actor, target.id) ? 35 : 0);
+}
+
+function approachesFearedSource(state: CombatState, actor: Combatant, decision: LegalDecision): boolean {
+    if (decision.kind !== 'move') return false;
+    const destination = typeof decision.target === 'number'
+        ? decision.target
+        : decision.target && 'combatantId' in decision.target
+            ? state.combatants[decision.target.combatantId]?.position
+            : undefined;
+    if (destination === undefined) return false;
+    return activeFearStates(actor).some(fear => {
+        const source = state.combatants[fear.sourceId];
+        return source && Math.abs(destination - source.position) < Math.abs(actor.position - source.position);
+    });
+}
+
+function bestRetreatDecision(
+    state: CombatState,
+    actor: Combatant,
+    legal: LegalDecision[]
+): LegalDecision | undefined {
+    const enemies = Object.values(state.combatants).filter(combatant =>
+        combatant.side !== actor.side && isActive(combatant)
+    );
+    return legal
+        .filter(decision => decision.kind === 'move' && typeof decision.target === 'number')
+        .map(decision => ({
+            decision,
+            distance: enemies.length > 0
+                ? Math.min(...enemies.map(enemy => Math.abs((decision.target as number) - enemy.position)))
+                : 0,
+        }))
+        .sort((a, b) => b.distance - a.distance)[0]?.decision;
 }
 
 function targetThreat(target: Combatant): number {

@@ -121,6 +121,8 @@ export type TalentEffectKind =
     'conditionLossIgnore' |
     'conditionGainReaction' |
     'fearRating' |
+    'terrorRating' |
+    'psychologyImmunity' |
     'autoPassFirstTest' |
     'damageCalculationModifier' |
     'advantageBonus' |

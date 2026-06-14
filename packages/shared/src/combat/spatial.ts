@@ -1,6 +1,7 @@
 import type { Weapon } from '../types/wfrp.types';
 import { mathRandomRng, type Rng } from './rng';
 import type { CombatEngineResult, CombatState, Combatant, MovementMode, MovementBudget } from './types';
+import { resolveSourceApproachFear, resolveVoluntaryFearApproach } from './psychology';
 
 export type RangeBand = 'Engaged' | 'Short' | 'Medium' | 'Long';
 
@@ -127,9 +128,12 @@ export function applyMove(
     const to = resolveMoveTargetPosition(state, combatant, target, options.thresholds ?? DEFAULT_RANGE_THRESHOLDS);
     const distance = Math.abs(to - combatant.position);
     const actionSpent = mode === 'sprint';
-    const reject = (reason: 'engaged' | 'noMove' | 'noAction' | 'insufficientBudget'): CombatEngineResult => ({
+    const reject = (
+        reason: 'engaged' | 'noMove' | 'noAction' | 'insufficientBudget' | 'fearApproach',
+        priorEvents: CombatEngineResult['events'] = []
+    ): CombatEngineResult => ({
         state,
-        events: [{
+        events: [...priorEvents, {
             type: 'MoveRejectedEvent',
             i18nKey: `combat.movement.rejected.${reason}`,
             data: {
@@ -150,6 +154,8 @@ export function applyMove(
     const allowance = getWalkRun(combatant);
     const maxDistance = Math.min(mode === 'walk' ? allowance.walk : allowance.run, combatant.movementBudget.remaining);
     if (distance > maxDistance) return reject('insufficientBudget');
+    const approach = resolveVoluntaryFearApproach(state, combatant.id, to, _rng);
+    if (!approach.allowed) return reject('fearApproach', approach.events);
 
     const chargedIntoMelee = mode === 'charge'
         && typeof target === 'object'
@@ -213,7 +219,8 @@ export function applyMove(
         });
     }
 
-    return { state: movedState, events };
+    const approachResult = resolveSourceApproachFear(state, movedState, combatant.id, _rng);
+    return { state: approachResult.state, events: [...events, ...approachResult.events] };
 }
 
 export function engage(state: CombatState, aId: string, bId: string): CombatEngineResult {

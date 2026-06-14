@@ -54,6 +54,37 @@ export interface Combatant {
     reversalActive?: boolean;
     dualWieldDefensivePenalty?: boolean;
     disarmedWeaponIds?: string[];
+    causesFear?: PsychologySourceRating;
+    causesTerror?: PsychologySourceRating;
+    psychology?: CombatantPsychologyState;
+}
+
+export interface PsychologySourceRating {
+    rating: number;
+}
+
+export interface FearSourceState {
+    sourceId: string;
+    rating: number;
+    accumulatedSL: number;
+    status: 'active' | 'immune';
+    lastTestRound?: number;
+    downgradedFromTerror?: boolean;
+}
+
+export interface TerrorSourceState {
+    sourceId: string;
+    rating: number;
+    tested: boolean;
+    successLevel?: number;
+    brokenApplied?: number;
+}
+
+export interface CombatantPsychologyState {
+    fears: Record<string, FearSourceState>;
+    terrors: Record<string, TerrorSourceState>;
+    immuneToAllPsychology?: boolean;
+    immuneToFear?: boolean;
 }
 
 export interface FeintBuff {
@@ -278,6 +309,7 @@ export type ModifierSourceType =
     | 'talent'
     | 'quality'
     | 'additionalEffort'
+    | 'psychology'
     | 'manual';
 
 export type RangedRangeBand = 'pointBlank' | 'short' | 'normal' | 'long' | 'extreme' | 'outOfRange';
@@ -769,7 +801,28 @@ export type MoveRejectedEvent = CombatEventBase<'MoveRejectedEvent', {
     from: number;
     to: number;
     distance: number;
-    reason: 'engaged' | 'noMove' | 'noAction' | 'insufficientBudget';
+    reason: 'engaged' | 'noMove' | 'noAction' | 'insufficientBudget' | 'fearApproach';
+}>;
+
+export type PsychologyExposureEvent = CombatEventBase<'PsychologyExposure', {
+    combatantId: string;
+    sourceId: string;
+    psychology: 'fear' | 'terror';
+    rating: number;
+    outcome: 'active' | 'immune' | 'downgraded';
+}>;
+
+export type PsychologyTestEvent = CombatEventBase<'PsychologyTestResolved', {
+    combatantId: string;
+    sourceId: string;
+    psychology: 'fear' | 'terror' | 'fearApproach' | 'sourceApproach';
+    roll: number;
+    targetNumber: number;
+    successLevel: number;
+    accumulatedSL?: number;
+    targetSL?: number;
+    completed?: boolean;
+    brokenApplied?: number;
 }>;
 
 export type EngagedEvent = CombatEventBase<'EngagedEvent', {
@@ -904,6 +957,8 @@ export type CombatEvent =
     | MeleeHookPhaseEvent
     | MovedEvent
     | MoveRejectedEvent
+    | PsychologyExposureEvent
+    | PsychologyTestEvent
     | EngagedEvent
     | DisengagedEvent
     | FortuneSpendRejectedEvent
