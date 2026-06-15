@@ -220,6 +220,22 @@
             },
             "sourceApproach": {
                 "test": "{{combatantId}} tests Cool as {{sourceId}} approaches."
+            },
+            "frenzy": {
+                "entered": "{{combatantId}} enters Frenzy.",
+                "exited": "{{combatantId}} leaves Frenzy and gains 1 Fatigued.",
+                "actions": {
+                    "frenzyEnter": "Enter Frenzy",
+                    "frenzyExit": "End Frenzy"
+                },
+                "enter": {
+                    "success": "{{combatantId}} enters Frenzy.",
+                    "failure": "{{combatantId}} fails to enter Frenzy."
+                },
+                "exit": {
+                    "success": "{{combatantId}} controls their Battle Rage and ends Frenzy.",
+                    "failure": "{{combatantId}} remains Frenzied."
+                }
             }
         },
         "engagement": {

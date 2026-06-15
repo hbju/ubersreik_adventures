@@ -76,7 +76,8 @@ export function createCombatantFromCharacter(
         causesTerror: options.causesTerror ?? talentRating(character, 'terrifying'),
         psychology: options.psychology ?? {
             ...psychologyState(),
-            immuneToFear: (character.talents?.fearless ?? 0) > 0,
+            immuneToFear: (character.talents?.fearless ?? 0) > 0
+                || (character.talents?.flagellant ?? 0) > 0,
         },
     };
 }
@@ -101,6 +102,7 @@ export function createCombatState(
         turnFlags: {
             additionalActionCombatantIds: options.turnFlags?.additionalActionCombatantIds ?? [],
             chargedCombatantIds: options.turnFlags?.chargedCombatantIds ?? [],
+            frenzyFreeAttackCombatantIds: options.turnFlags?.frenzyFreeAttackCombatantIds ?? [],
             talentExtraAttackCombatantIds: options.turnFlags?.talentExtraAttackCombatantIds ?? [],
             shieldsmanUsedThisTurnIds: options.turnFlags?.shieldsmanUsedThisTurnIds ?? [],
             reactionStrikeChargerPairs: options.turnFlags?.reactionStrikeChargerPairs ?? [],

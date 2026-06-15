@@ -231,8 +231,6 @@ export const combatTalentAuditIds = [
 ] as const;
 
 export const deferredCombatTalentIds = [
-    'battle-rage',
-    'frenzy',
     'hatred',
     'menacing',
 ] as const;
@@ -259,7 +257,8 @@ export const talentConditionPredicates: Record<string, TalentPredicate> = {
     duringcombatrounds: context => context.state.round > 0,
     'during combat rounds': context => context.state.round > 0,
     surprise: context => context.combatant.conditions.includes('condition_surprised') || !!context.opponent?.conditions.includes('condition_surprised'),
-    frenzied: context => context.combatant.conditions.includes('condition_frenzied'),
+    frenzied: context => context.combatant.psychology?.frenzy?.active === true
+        || context.combatant.conditions.includes('condition_frenzied'),
     beatblade: context => context.testId === 'beat_blade' || context.action?.isExtraAttack === true,
     'beat blade': context => context.testId === 'beat_blade' || context.action?.isExtraAttack === true,
     disarming: context => context.testId === 'disarm',
@@ -648,7 +647,12 @@ function talentDamageModifier(context: DamageModifierContext): number {
         ? Math.max(0, calculateCharacteristicBonus(context.defender.character.characteristics.t) - calculateCharacteristicBonus(context.attacker.character.characteristics.s))
         : 0;
 
-    return damageBonus + slayerStrengthBonus - damageReduction;
+    const frenzyStrengthBonus = context.attacker.psychology?.frenzy?.active
+        && context.action.attacker.skillId.toLowerCase().startsWith('melee')
+        ? 1
+        : 0;
+
+    return damageBonus + slayerStrengthBonus + frenzyStrengthBonus - damageReduction;
 }
 
 export function createReloadTalentHooks(): Partial<ReloadResolutionHooks> {

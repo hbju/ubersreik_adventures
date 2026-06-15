@@ -25,6 +25,106 @@ export function psychologyState(): NonNullable<Combatant['psychology']> {
     return { fears: {}, terrors: {} };
 }
 
+export function isFrenzied(combatant: Combatant | undefined): boolean {
+    return combatant?.psychology?.frenzy?.active === true;
+}
+
+export function canEnterFrenzy(combatant: Combatant): boolean {
+    return (combatant.character.talents?.frenzy ?? 0) > 0;
+}
+
+export function enterFrenzy(
+    state: CombatState,
+    combatantId: string,
+    source: 'willpower' | 'flagellant'
+): CombatEngineResult {
+    const combatant = state.combatants[combatantId];
+    if (!combatant || isFrenzied(combatant)) return { state, events: [] };
+    const psychology = clonePsychology(combatant);
+    psychology.frenzy = {
+        active: true,
+        enteredRound: state.round,
+        entrySource: source,
+    };
+    psychology.immuneToAllPsychology = true;
+    return {
+        state: replaceCombatant(state, { ...combatant, psychology }),
+        events: [{
+            type: 'FrenzyStateChanged',
+            i18nKey: 'combat.psychology.frenzy.entered',
+            data: {
+                combatantId,
+                active: true,
+                reason: source,
+                fatiguedApplied: 0,
+            },
+        }],
+    };
+}
+
+export function exitFrenzy(
+    state: CombatState,
+    combatantId: string,
+    reason: 'battleRage' | 'noActiveEnemies' | 'incapacitated'
+): CombatEngineResult {
+    const combatant = state.combatants[combatantId];
+    if (!combatant || !isFrenzied(combatant)) return { state, events: [] };
+    const psychology = clonePsychology(combatant);
+    psychology.frenzy = { ...psychology.frenzy!, active: false };
+    psychology.immuneToAllPsychology = false;
+    return {
+        state: replaceCombatant(state, {
+            ...combatant,
+            psychology,
+            conditions: [...combatant.conditions, 'condition_fatigued'],
+        }),
+        events: [{
+            type: 'FrenzyStateChanged',
+            i18nKey: 'combat.psychology.frenzy.exited',
+            data: {
+                combatantId,
+                active: false,
+                reason,
+                fatiguedApplied: 1,
+            },
+        }],
+    };
+}
+
+export function resolveFrenzyExits(state: CombatState): CombatEngineResult {
+    let currentState = state;
+    const events: CombatEvent[] = [];
+    for (const combatantId of Object.keys(state.combatants).sort()) {
+        const combatant = currentState.combatants[combatantId];
+        if (!isFrenzied(combatant)) continue;
+        const incapacitated = combatant.conditions.includes('condition_stunned')
+            || combatant.conditions.includes('condition_unconscious');
+        const hasActiveEnemy = Object.values(currentState.combatants).some(other =>
+            other.side !== combatant.side && !other.dead && isPsychologyParticipant(other)
+        );
+        if (!incapacitated && hasActiveEnemy) continue;
+        const result = exitFrenzy(
+            currentState,
+            combatantId,
+            incapacitated ? 'incapacitated' : 'noActiveEnemies'
+        );
+        currentState = result.state;
+        events.push(...result.events);
+    }
+    return { state: currentState, events };
+}
+
+export function markFrenzyFreeMeleeUsed(state: CombatState, combatantId: string): CombatState {
+    const combatant = state.combatants[combatantId];
+    if (!combatant?.psychology?.frenzy) return state;
+    const psychology = clonePsychology(combatant);
+    psychology.frenzy = {
+        ...psychology.frenzy!,
+        freeMeleeTestUsedRound: state.round,
+    };
+    return replaceCombatant(state, { ...combatant, psychology });
+}
+
 export function resolvePsychologyRoundStart(
     state: CombatState,
     rng: Rng,
@@ -177,6 +277,7 @@ export function resolveVoluntaryFearApproach(
 ): { allowed: boolean; events: CombatEvent[] } {
     const combatant = state.combatants[combatantId];
     if (!combatant) return { allowed: false, events: [] };
+    if (psychologyImmune(combatant)) return { allowed: true, events: [] };
     const approached = activeFearStates(combatant)
         .filter(fear => {
             const source = state.combatants[fear.sourceId];
@@ -226,10 +327,12 @@ export function resolveSourceApproachFear(
 }
 
 export function isActivelyAfraidOf(combatant: Combatant, sourceId: string): boolean {
-    return combatant.psychology?.fears[sourceId]?.status === 'active';
+    return !psychologyImmune(combatant)
+        && combatant.psychology?.fears[sourceId]?.status === 'active';
 }
 
 export function activeFearStates(combatant: Combatant): FearSourceState[] {
+    if (psychologyImmune(combatant)) return [];
     return Object.values(combatant.psychology?.fears ?? {}).filter(fear => fear.status === 'active');
 }
 
@@ -252,7 +355,8 @@ export function resolveCoolTest(combatant: Combatant, rng: Rng, modifier = 0): P
 }
 
 function psychologyImmune(combatant: Combatant): boolean {
-    return combatant.psychology?.immuneToAllPsychology === true;
+    return isFrenzied(combatant)
+        || combatant.psychology?.immuneToAllPsychology === true;
 }
 
 function fearImmune(combatant: Combatant): boolean {

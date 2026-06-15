@@ -5,7 +5,17 @@ import { isGrapplingEngagement, resolveCombatAction, resolveEffectiveWeapon } fr
 import { decayEngagementsEndOfRound, determineSurprise, rangeBandForDistance, rangedWeaponRange, resolveMeleeAttack, resolveRangedAttack, resolveRangedIntoMeleeAttack, resolveReloadAction } from './engine';
 import { applyMove, REACH_ENGAGEMENT_DISTANCE, WeaponReach, type MoveTarget } from './spatial';
 import { resolveWeaponUse } from './proficiency';
-import { resolvePsychologyExposures, resolvePsychologyRoundStart } from './psychology';
+import {
+    canEnterFrenzy,
+    enterFrenzy,
+    exitFrenzy,
+    isFrenzied,
+    markFrenzyFreeMeleeUsed,
+    resolveCoolTest,
+    resolveFrenzyExits,
+    resolvePsychologyExposures,
+    resolvePsychologyRoundStart,
+} from './psychology';
 import { hasQuality, qualityRating } from './qualities';
 import { eligibleReactions, reactionOfferEvent, resolveReactionDecision, type ReactionDecision } from './reactions';
 import { spendFate } from './resources';
@@ -27,10 +37,12 @@ import type {
 } from './types';
 import { accumulatedCriticalDeathCheck } from './critical';
 import type { Weapon } from '../types/wfrp.types';
-import { rolld100 } from '../utils/mechanics';
+import { calculateSuccessLevel, rolld100 } from '../utils/mechanics';
 
 export type TurnEnginePhase = 'setup' | 'roundStart' | 'awaitingDecision' | 'roundEnd' | 'complete';
 export type CombatDecisionKind =
+    | 'frenzyEnter'
+    | 'frenzyExit'
     | 'meleeAttack'
     | 'rangedAttack'
     | 'reload'
@@ -188,8 +200,13 @@ export function advanceToNextDecision(engine: TurnEngineState, options: TurnEngi
 
 export function applyDecision(engine: TurnEngineState, decision: CombatDecision, controller?: CombatantController): TurnEngineState {
     if (engine.phase !== 'awaitingDecision' || !engine.activeCombatantId) return engine;
-    const exposure = resolvePsychologyExposures(engine.state, engine.rng);
-    const currentEngine = exposure.state === engine.state ? engine : { ...engine, state: exposure.state };
+    const frenzyExit = resolveFrenzyExits(engine.state);
+    const exposure = resolvePsychologyExposures(frenzyExit.state, engine.rng);
+    const currentEngine = {
+        ...engine,
+        state: exposure.state,
+        events: [...engine.events, ...frenzyExit.events],
+    };
     if (decision.actorId !== currentEngine.activeCombatantId) {
         return withEvents(currentEngine, [
             ...exposure.events,
@@ -212,6 +229,11 @@ export function applyDecision(engine: TurnEngineState, decision: CombatDecision,
     result = threadDeferredResolutionDecisions(currentEngine, decision, result, controller);
     result = threadDamageInterceptions({ ...currentEngine, state: result.state }, decision, result, controller);
     result = threadDeathInterceptions({ ...currentEngine, state: result.state }, decision, result, controller);
+    const reconciled = resolveFrenzyExits(result.state);
+    result = {
+        state: reconciled.state,
+        events: [...result.events, ...reconciled.events],
+    };
     result = appendDecisionLog(result, decision, 'turn');
     result = { ...result, events: [...exposure.events, ...result.events] };
 
@@ -273,7 +295,8 @@ export function runCombatToCompletion(
 
 export function legalDecisions(state: CombatState, combatant: Combatant): LegalDecision[] {
     if (!isActive(combatant)) return [{ kind: 'wait', actorId: combatant.id, reason: 'incapacitated' }];
-    return ACTION_CATALOGUE.flatMap(entry => entry.legal(state, combatant));
+    const legal = ACTION_CATALOGUE.flatMap(entry => entry.legal(state, combatant));
+    return isFrenzied(combatant) ? frenzyLegalDecisions(state, combatant, legal) : legal;
 }
 
 export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
@@ -286,6 +309,85 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
         kind: 'wait',
         legal: (_state, actor) => [{ kind: 'wait', actorId: actor.id }],
         dispatch: engine => ({ state: engine.state, events: [] }),
+    },
+    {
+        kind: 'frenzyEnter',
+        legal: (state, actor) => canEnterFrenzy(actor)
+            && !isFrenzied(actor)
+            && actionBudgetReady(actor)
+            && enemyIds(state, actor).length > 0
+            ? [{ kind: 'frenzyEnter', actorId: actor.id }]
+            : [],
+        dispatch: (engine, decision) => {
+            const actor = engine.state.combatants[decision.actorId];
+            const automatic = hasTalent(actor, 'flagellant');
+            const targetNumber = decision.targetNumber
+                ?? calculateCharacteristicValue(actor.character.characteristics.wp);
+            const roll = automatic ? undefined : decision.rollResult ?? rolld100(engine.rng);
+            const successLevel = roll === undefined
+                ? undefined
+                : Math.round(calculateSuccessLevel(roll, targetNumber));
+            const success = automatic || (successLevel ?? -1) >= 0;
+            let result: CombatEngineResult = { state: engine.state, events: [] };
+            if (success) {
+                result = enterFrenzy(engine.state, actor.id, automatic ? 'flagellant' : 'willpower');
+            }
+            result.events.unshift({
+                type: 'FrenzyTestResolved',
+                i18nKey: success
+                    ? 'combat.psychology.frenzy.enter.success'
+                    : 'combat.psychology.frenzy.enter.failure',
+                data: {
+                    combatantId: actor.id,
+                    action: 'enter',
+                    roll,
+                    targetNumber: automatic ? undefined : targetNumber,
+                    successLevel,
+                    automatic,
+                    success,
+                },
+            });
+            return spendTurnAction(result.state, actor.id, result.events);
+        },
+    },
+    {
+        kind: 'frenzyExit',
+        legal: (_state, actor) => isFrenzied(actor)
+            && hasTalent(actor, 'battle-rage')
+            && actionBudgetReady(actor)
+            ? [{ kind: 'frenzyExit', actorId: actor.id }]
+            : [],
+        dispatch: (engine, decision) => {
+            const actor = engine.state.combatants[decision.actorId];
+            const test = decision.rollResult === undefined && decision.targetNumber === undefined
+                ? resolveCoolTest(actor, engine.rng)
+                : {
+                    roll: decision.rollResult ?? rolld100(engine.rng),
+                    targetNumber: decision.targetNumber ?? calculateCharacteristicValue(actor.character.characteristics.wp),
+                    successLevel: 0,
+                };
+            if (decision.rollResult !== undefined || decision.targetNumber !== undefined) {
+                test.successLevel = Math.round(calculateSuccessLevel(test.roll, test.targetNumber));
+            }
+            const success = test.successLevel >= 0;
+            let result = success
+                ? exitFrenzy(engine.state, actor.id, 'battleRage')
+                : { state: engine.state, events: [] };
+            result.events.unshift({
+                type: 'FrenzyTestResolved',
+                i18nKey: success
+                    ? 'combat.psychology.frenzy.exit.success'
+                    : 'combat.psychology.frenzy.exit.failure',
+                data: {
+                    combatantId: actor.id,
+                    action: 'exit',
+                    ...test,
+                    automatic: false,
+                    success,
+                },
+            });
+            return spendTurnAction(result.state, actor.id, result.events);
+        },
     },
     {
         kind: 'move',
@@ -345,7 +447,7 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
         kind: 'meleeAttack',
         legal: (state, actor) => {
             const actorReach = REACH_ENGAGEMENT_DISTANCE[(state.weapons.filter(weapon => weapon.id === (actor.weaponLoadout?.primaryWeaponId ?? ''))?.[0]?.reach as WeaponReach) ?? "Short"];
-            return actionBudgetReady(actor)
+            return meleeBudgetReady(state, actor)
                 ? enemyIds(state, actor).filter(id => Math.abs(state.combatants[id].position - actor.position) <= actorReach).map(targetId => ({ kind: 'meleeAttack', actorId: actor.id, targetId, targetIds: [targetId] }))
                 : []
         },
@@ -356,7 +458,9 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             let result = resolveMeleeAttack(prepared.state, prepared.action, engine.rng);
             result = { state: result.state, events: [...prepared.events, ...result.events] };
             result = threadAttackReactions({ ...engine, state: result.state }, decision, result, controller);
-            return spendTurnAction(result.state, decision.actorId, result.events);
+            return engine.state.combatants[decision.actorId].budget.actions > 0
+                ? spendTurnAction(result.state, decision.actorId, result.events)
+                : consumeFrenzyFreeMelee(result.state, decision.actorId, result.events);
         },
     },
     {
@@ -1013,6 +1117,100 @@ function actionBudgetReady(actor: Combatant): boolean {
     return actor.budget.actions > 0 && capabilities.canAct;
 }
 
+function meleeBudgetReady(state: CombatState, actor: Combatant): boolean {
+    const capabilities = combatantCapabilities(actor);
+    return capabilities.canAct
+        && (actor.budget.actions > 0 || frenzyFreeMeleeAvailable(state, actor));
+}
+
+function frenzyFreeMeleeAvailable(state: CombatState, actor: Combatant): boolean {
+    const usedIds = state.turnFlags.frenzyFreeAttackCombatantIds ?? [];
+    return isFrenzied(actor)
+        && actor.psychology?.frenzy?.freeMeleeTestUsedRound !== state.round
+        && !usedIds.includes(actor.id);
+}
+
+function consumeFrenzyFreeMelee(state: CombatState, actorId: string, events: CombatEvent[]): CombatEngineResult {
+    const marked = markFrenzyFreeMeleeUsed(state, actorId);
+    const usedIds = marked.turnFlags.frenzyFreeAttackCombatantIds ?? [];
+    return {
+        state: {
+            ...marked,
+            turnFlags: {
+                ...marked.turnFlags,
+                frenzyFreeAttackCombatantIds: [
+                    ...new Set([...usedIds, actorId]),
+                ],
+            },
+        },
+        events,
+    };
+}
+
+function frenzyLegalDecisions(
+    state: CombatState,
+    actor: Combatant,
+    legal: LegalDecision[]
+): LegalDecision[] {
+    const nearest = nearestEnemy(state, actor);
+    if (!nearest) {
+        return legal.filter(decision => decision.kind === 'endTurn' || decision.kind === 'frenzyExit');
+    }
+
+    const meleeKinds = new Set<CombatDecisionKind>([
+        'meleeAttack',
+        'attackWithBoth',
+        'beatBlade',
+        'disarm',
+        'feint',
+        'infighting',
+    ]);
+    const constrained = legal.filter(decision =>
+        (decision.kind === 'frenzyExit')
+        || (meleeKinds.has(decision.kind) && decision.targetId === nearest.id)
+    );
+
+    const reach = meleeReach(state, actor);
+    const distance = Math.abs(nearest.position - actor.position);
+    if (actor.budget.moves > 0 && combatantCapabilities(actor).canMove && distance > reach) {
+        const allowance = Math.min(actor.movementBudget.run, actor.movementBudget.remaining);
+        const distanceToClose = Math.max(0, distance - reach);
+        const movement = Math.min(allowance, distanceToClose);
+        if (movement > 0) {
+            const direction = Math.sign(nearest.position - actor.position);
+            constrained.push({
+                kind: 'move',
+                actorId: actor.id,
+                mode: 'run',
+                target: actor.position + direction * movement,
+                destination: actor.position + direction * movement,
+                targetId: nearest.id,
+                targetIds: [nearest.id],
+                reason: 'frenzyCloseNearest',
+            });
+        }
+    }
+    return constrained.length > 0
+        ? constrained
+        : legal.filter(decision => decision.kind === 'endTurn');
+}
+
+function nearestEnemy(state: CombatState, actor: Combatant): Combatant | undefined {
+    return enemyIds(state, actor)
+        .map(id => state.combatants[id])
+        .sort((a, b) =>
+            Math.abs(a.position - actor.position) - Math.abs(b.position - actor.position)
+            || a.id.localeCompare(b.id)
+        )[0];
+}
+
+function meleeReach(state: CombatState, actor: Combatant): number {
+    const weapon = state.weapons.find(candidate =>
+        candidate.id === (actor.weaponLoadout?.primaryWeaponId ?? '')
+    );
+    return REACH_ENGAGEMENT_DISTANCE[(weapon?.reach as WeaponReach) ?? 'Short'];
+}
+
 function combatActionBudgetReady(actor: Combatant, kind: CombatActionKind): boolean {
     const capabilities = combatantCapabilities(actor);
     if (!capabilities.canAct) return false;
@@ -1096,7 +1294,8 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
     if (engine.phase === 'roundStart') {
         const round = engine.round + 1;
         const resetState = resetRoundState({ ...engine.state, round });
-        const psychology = resolvePsychologyRoundStart(resetState, engine.rng);
+        const frenzyExit = resolveFrenzyExits(resetState);
+        const psychology = resolvePsychologyRoundStart(frenzyExit.state, engine.rng);
         const state = psychology.state;
         // Initiative is rolled once at the start of combat and kept for the encounter;
         // later rounds reuse the established order, skipping combatants no longer active.
@@ -1114,6 +1313,7 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
             events: [
                 ...engine.events,
                 turnEvent('RoundStarted', 'combat.turn.roundStarted', { round }),
+                ...frenzyExit.events,
                 ...psychology.events,
                 ...(firstActiveId ? [turnEvent('TurnStarted', 'combat.turn.startedActor', { round, combatantId: firstActiveId })] : []),
             ],
@@ -1215,6 +1415,10 @@ function applyEndOfRound(state: CombatState, rng: Rng): CombatEngineResult {
         events.push(...death.events);
     }
 
+    const frenzyExit = resolveFrenzyExits(currentState);
+    currentState = frenzyExit.state;
+    events.push(...frenzyExit.events);
+
     events.push(turnEvent('RoundSequenceResolved', 'combat.turn.roundSequenceResolved', { round: state.round, sequence: 'conditions>advantage>engagements>death>removal' }));
     return { state: currentState, events };
 }
@@ -1262,6 +1466,7 @@ function resetRoundState(state: CombatState): CombatState {
         turnFlags: {
             additionalActionCombatantIds: [],
             chargedCombatantIds: [],
+            frenzyFreeAttackCombatantIds: [],
             talentExtraAttackCombatantIds: [],
             shieldsmanUsedThisTurnIds: [],
             reactionStrikeChargerPairs: [],
@@ -1320,7 +1525,10 @@ function applyFuriousAssault(state: CombatState, actorId: string): CombatEngineR
 function shouldEndTurn(engine: TurnEngineState, actorId: string, decisionKind: CombatDecisionKind): boolean {
     if (decisionKind === 'endTurn' || decisionKind === 'wait') return true;
     const actor = engine.state.combatants[actorId];
-    return !actor || actor.budget.actions <= 0 && actor.budget.moves <= 0;
+    if (!actor) return true;
+    const freeMeleeAvailable = frenzyFreeMeleeAvailable(engine.state, actor)
+        && legalDecisions(engine.state, actor).some(decision => decision.kind === 'meleeAttack');
+    return actor.budget.actions <= 0 && actor.budget.moves <= 0 && !freeMeleeAvailable;
 }
 
 function termination(state: CombatState, maxRounds: number): Pick<TurnEngineState, 'phase' | 'outcome' | 'terminalReason'> | undefined {

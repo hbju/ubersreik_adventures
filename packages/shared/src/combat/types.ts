@@ -81,9 +81,17 @@ export interface TerrorSourceState {
     brokenApplied?: number;
 }
 
+export interface FrenzyState {
+    active: boolean;
+    enteredRound?: number;
+    freeMeleeTestUsedRound?: number;
+    entrySource?: 'willpower' | 'flagellant';
+}
+
 export interface CombatantPsychologyState {
     fears: Record<string, FearSourceState>;
     terrors: Record<string, TerrorSourceState>;
+    frenzy?: FrenzyState;
     immuneToAllPsychology?: boolean;
     immuneToFear?: boolean;
 }
@@ -101,6 +109,7 @@ export interface AdditionalEffortBuff {
 export interface CombatTurnFlags {
     additionalActionCombatantIds: string[];
     chargedCombatantIds: string[];
+    frenzyFreeAttackCombatantIds: string[];
     talentExtraAttackCombatantIds: string[];
     shieldsmanUsedThisTurnIds: string[];
     reactionStrikeChargerPairs: string[];
@@ -237,6 +246,8 @@ export type CombatActionKind =
     | 'move'
     | 'run'
     | 'charge'
+    | 'frenzyEnter'
+    | 'frenzyExit'
     | 'aim'
     | 'reload'
     | 'assess'
@@ -826,6 +837,23 @@ export type PsychologyTestEvent = CombatEventBase<'PsychologyTestResolved', {
     brokenApplied?: number;
 }>;
 
+export type FrenzyTestEvent = CombatEventBase<'FrenzyTestResolved', {
+    combatantId: string;
+    action: 'enter' | 'exit';
+    roll?: number;
+    targetNumber?: number;
+    successLevel?: number;
+    automatic: boolean;
+    success: boolean;
+}>;
+
+export type FrenzyStateChangedEvent = CombatEventBase<'FrenzyStateChanged', {
+    combatantId: string;
+    active: boolean;
+    reason: 'willpower' | 'flagellant' | 'battleRage' | 'noActiveEnemies' | 'incapacitated';
+    fatiguedApplied: number;
+}>;
+
 export type EngagedEvent = CombatEventBase<'EngagedEvent', {
     aId: string;
     bId: string;
@@ -960,6 +988,8 @@ export type CombatEvent =
     | MoveRejectedEvent
     | PsychologyExposureEvent
     | PsychologyTestEvent
+    | FrenzyTestEvent
+    | FrenzyStateChangedEvent
     | EngagedEvent
     | DisengagedEvent
     | FortuneSpendRejectedEvent

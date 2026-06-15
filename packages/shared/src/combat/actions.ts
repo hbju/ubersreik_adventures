@@ -28,6 +28,8 @@ export const COMBAT_ACTION_DEFINITIONS: Record<CombatActionKind, CombatActionDef
     move: { kind: 'move', cost: 'move', generatesAdvantage: false },
     run: { kind: 'run', cost: 'action', generatesAdvantage: false },
     charge: { kind: 'charge', cost: 'action', generatesAdvantage: false },
+    frenzyEnter: { kind: 'frenzyEnter', cost: 'action', generatesAdvantage: false },
+    frenzyExit: { kind: 'frenzyExit', cost: 'action', generatesAdvantage: false },
     aim: { kind: 'aim', cost: 'action', generatesAdvantage: false },
     reload: { kind: 'reload', cost: 'action', generatesAdvantage: false },
     assess: { kind: 'assess', cost: 'action', generatesAdvantage: false },
