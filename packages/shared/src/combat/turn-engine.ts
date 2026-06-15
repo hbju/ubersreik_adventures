@@ -234,7 +234,7 @@ export function runCombatToCompletion(
     let engine = createTurnEngine(state, options);
     let guard = 0;
     const maxRounds = options.maxRounds ?? 50;
-    while (engine.phase !== 'complete' && guard++ < maxRounds * Math.max(1, Object.keys(state.combatants).length) * 20) {
+    while (engine.phase !== 'complete' && guard++ < maxRounds * Math.max(1, Object.keys(state.combatants).length)) {
         const automaticEventCount = engine.events.length;
         engine = advanceToNextDecision(engine, options);
         const automaticEvents = engine.events.slice(automaticEventCount);
@@ -296,7 +296,8 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             const run = actor.movementBudget.run;
             let destinations: { mode: MovementMode; target: number | { combatantId: string } }[] = [];
             for (const mode of ['walk', 'run'] as MovementMode[]) {
-                for (const i of [...Array(mode === 'walk' ? 2 * walk + 1 : 2 * run + 1).keys()].map(i => -walk + i).filter(i => i !== 0)) {
+                const reach = mode === 'walk' ? walk : run;
+                for (const i of [...Array(reach + 1).keys()].map(i => -reach + i).filter(i => i !== 0)) {
                     destinations.push({ mode, target: actor.position + i });
                 }
             }
@@ -414,7 +415,12 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             return spendAdvantage(engine.state, engine.state.combatants[decision.actorId].side, decision.advantageAction, { actorId: decision.actorId, targetId: decision.targetId }, engine.rng);
         },
     },
-    ...combatActionEntries(['assess', 'defend', 'aim', 'sprint', 'firstAid']),
+    ...combatActionEntries(['assess', 'defend', 'aim', 'sprint'], {
+        defend: (state, actor) => ({ skillId: defensiveSkillFor(state, actor) }),
+    }),
+    ...allyTargetedCombatActionEntries(['firstAid'], {
+        firstAid: () => ({ skillId: 'heal' }),
+    }),
     ...targetedCombatActionEntries(['infighting', 'disengageDodge', 'grappleInitiate', 'grappleMaintain', 'grappleBreak', 'attackWithBoth', 'beatBlade', 'disarm', 'feint', 'distractOpponent']),
     {
         kind: 'shieldsman',
@@ -445,12 +451,63 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
     },
 ];
 
-function combatActionEntries(kinds: CombatActionKind[]): ActionCatalogueEntry[] {
+type CombatActionEnricher = (state: CombatState, actor: Combatant) => Partial<CombatActionRequest>;
+
+function combatActionEntries(
+    kinds: CombatActionKind[],
+    enrich: Partial<Record<CombatActionKind, CombatActionEnricher>> = {}
+): ActionCatalogueEntry[] {
     return kinds.map(kind => ({
         kind: kind as CombatDecisionKind,
-        legal: (_state, actor) => actionBudgetReady(actor) ? [{ kind: kind as CombatDecisionKind, actorId: actor.id, request: { kind, actorId: actor.id } }] : [],
+        legal: (state, actor) => {
+            if (!actionBudgetReady(actor)) return [];
+            const extra = enrich[kind]?.(state, actor) ?? {};
+            return [{ kind: kind as CombatDecisionKind, actorId: actor.id, request: { kind, actorId: actor.id, ...extra } }];
+        },
         dispatch: (engine, decision) => resolveCombatAction(engine.state, requestForDecision(kind, decision), engine.rng),
     }));
+}
+
+function allyTargetedCombatActionEntries(
+    kinds: CombatActionKind[],
+    enrich: Partial<Record<CombatActionKind, CombatActionEnricher>> = {}
+): ActionCatalogueEntry[] {
+    return kinds.map(kind => ({
+        kind: kind as CombatDecisionKind,
+        legal: (state, actor) => {
+            if (!combatActionBudgetReady(actor, kind)) return [];
+            if (!combatActionTalentReady(actor, kind)) return [];
+            if (!actor.character.skills.some(s => s.id === 'heal')) return [];
+            const extra = enrich[kind]?.(state, actor) ?? {};
+            return allyIds(state, actor).map(targetId => ({
+                kind: kind as CombatDecisionKind,
+                actorId: actor.id,
+                targetId,
+                targetIds: [targetId],
+                request: { kind, actorId: actor.id, targetId, ...extra },
+            }));
+        },
+        dispatch: (engine, decision, controller) => {
+            const request = requestForDecision(kind, withThreadedSubDecision(engine, decision, controller));
+            return resolveCombatAction(engine.state, request, engine.rng);
+        },
+    }));
+}
+
+/** The skill a Defend/On-Guard bonus attaches to: the equipped melee weapon's skill, else Dodge. */
+function defensiveSkillFor(state: CombatState, actor: Combatant): string {
+    const weapon = equippedWeapon(state, actor);
+    if (weapon) {
+        const use = resolveWeaponUse(actor, weapon);
+        if (use.usable && use.test.type === 'skill' && use.test.skillId.startsWith('melee')) return use.test.skillId;
+    }
+    return 'dodge';
+}
+
+function allyIds(state: CombatState, actor: Combatant): string[] {
+    return Object.values(state.combatants)
+        .filter(other => other.id !== actor.id && other.side === actor.side && isActive(other))
+        .map(other => other.id);
 }
 
 function targetedCombatActionEntries(kinds: CombatActionKind[]): ActionCatalogueEntry[] {
@@ -758,7 +815,7 @@ function threadDeathInterceptions(engine: TurnEngineState, parent: CombatDecisio
 
         const spent = spendFate(state, combatantId, 'dieAnotherDay', { policy: 'always' });
         const surviving = spent.state.combatants[combatantId];
-        const { dead: _dead, ...withoutDead } = surviving as Combatant & { dead?: boolean };
+        const { dead: _dead, ...withoutDead } = surviving;
         state = {
             ...spent.state,
             combatants: {
@@ -986,7 +1043,7 @@ function advantageSpendDecisions(state: CombatState, actor: Combatant): LegalDec
     if (pool >= 1) {
         decisions.push(
             { kind: 'spendAdvantage', actorId: actor.id, advantageAction: 'additionalEffort', reason: 'additionalEffort' },
-            ...enemyIds(state, actor).map(targetId => ({ kind: 'spendAdvantage' as const, actorId: actor.id, targetId, targetIds: [targetId], advantageAction: 'batter' as const, reason: 'batter' })),
+            ...enemyIds(state, actor).filter(targetId => !state.combatants[targetId]?.conditions.includes('condition_prone')).map(targetId => ({ kind: 'spendAdvantage' as const, actorId: actor.id, targetId, targetIds: [targetId], advantageAction: 'batter' as const, reason: 'batter' })),
             ...enemyIds(state, actor).map(targetId => ({ kind: 'spendAdvantage' as const, actorId: actor.id, targetId, targetIds: [targetId], advantageAction: 'trick' as const, reason: 'trick' })),
         );
     }
@@ -1041,20 +1098,24 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
         const resetState = resetRoundState({ ...engine.state, round });
         const psychology = resolvePsychologyRoundStart(resetState, engine.rng);
         const state = psychology.state;
-        const order = initiativeOrderFor(state, engine.rng);
+        // Initiative is rolled once at the start of combat and kept for the encounter;
+        // later rounds reuse the established order, skipping combatants no longer active.
+        const order = engine.initiativeOrder.length > 0 ? engine.initiativeOrder : initiativeOrderFor(state, engine.rng);
+        const firstActiveIndex = order.findIndex(id => isActive(state.combatants[id]));
+        const firstActiveId = firstActiveIndex >= 0 ? order[firstActiveIndex] : undefined;
         return {
             ...engine,
             state,
             round,
             initiativeOrder: order,
-            turnIndex: 0,
-            phase: order.length === 0 ? 'complete' : 'awaitingDecision',
-            activeCombatantId: order[0],
+            turnIndex: firstActiveIndex >= 0 ? firstActiveIndex : 0,
+            phase: firstActiveId ? 'awaitingDecision' : 'complete',
+            activeCombatantId: firstActiveId,
             events: [
                 ...engine.events,
                 turnEvent('RoundStarted', 'combat.turn.roundStarted', { round }),
                 ...psychology.events,
-                turnEvent('TurnStarted', 'combat.turn.startedActor', { round, combatantId: order[0] }),
+                ...(firstActiveId ? [turnEvent('TurnStarted', 'combat.turn.startedActor', { round, combatantId: firstActiveId })] : []),
             ],
         };
     }
@@ -1131,7 +1192,7 @@ function applyEndOfRound(state: CombatState, rng: Rng): CombatEngineResult {
         currentState = replaceCombatant(currentState, condition.combatant as Combatant);
         events.push(...condition.events as unknown as CombatEvent[]);
         if (condition.dead) {
-            currentState = replaceCombatant(currentState, { ...currentState.combatants[combatant.id], dead: true } as Combatant);
+            currentState = replaceCombatant(currentState, { ...currentState.combatants[combatant.id], dead: true });
         }
         for (const pendingTest of condition.pendingTests) {
             const resolved = resolveConditionPendingTest(condition.combatant, pendingTest, rng);
@@ -1346,8 +1407,8 @@ function equippedWeaponHas(state: CombatState, combatant: Combatant, qualityId: 
     return !!weapon && hasQuality(weapon, qualityId);
 }
 
-function isActive(combatant: Combatant | undefined): boolean {
-    return !!combatant && combatant.currentWounds > 0 && !combatant.removedFromEncounter && !(combatant as any).dead && !combatant.conditions.includes('condition_unconscious');
+export function isActive(combatant: Combatant | undefined): boolean {
+    return !!combatant && combatant.currentWounds > 0 && !combatant.removedFromEncounter && !combatant.dead && !combatant.conditions.includes('condition_unconscious');
 }
 
 function controllerFor(controllers: Record<string, CombatantController> | CombatantController, actorId: string): CombatantController | undefined {
@@ -1369,7 +1430,7 @@ function replaceCombatant(state: CombatState, combatant: Combatant): CombatState
 }
 
 function structuredCloneSafe<T>(value: T): T {
-    return JSON.parse(JSON.stringify(value));
+    return typeof structuredClone === 'function' ? structuredClone(value) : JSON.parse(JSON.stringify(value));
 }
 
 function turnEvent(type: string, i18nKey: string, data: Record<string, unknown>): CombatEvent {

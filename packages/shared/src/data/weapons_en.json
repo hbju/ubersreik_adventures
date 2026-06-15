@@ -961,9 +961,9 @@
     "availability": "scarce"
   },
   {
-    "id": "weapon_skaven-ranged_warplock_pistol",
+    "id": "weapon_skavenranged_warplock_pistol",
     "name": "Warplock Pistol",
-    "group": "skaven-ranged",
+    "group": "skavenranged",
     "price": "0",
     "enc": 1,
     "reach": "30",
@@ -979,9 +979,9 @@
     "availability": "none"
   },
   {
-    "id": "weapon_skaven-ranged_warpmusket",
+    "id": "weapon_skavenranged_warpmusket",
     "name": "Warpmusket",
-    "group": "skaven-ranged",
+    "group": "skavenranged",
     "price": "0",
     "enc": 1,
     "reach": "40",
@@ -996,9 +996,9 @@
     "availability": "common"
   },
   {
-    "id": "weapon_skaven-ranged_warplock_jezzail",
+    "id": "weapon_skavenranged_warplock_jezzail",
     "name": "Warplock Jezzail",
-    "group": "skaven-ranged",
+    "group": "skavenranged",
     "price": "0",
     "enc": 4,
     "reach": "100",

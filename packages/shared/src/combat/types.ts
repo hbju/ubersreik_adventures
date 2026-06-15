@@ -48,6 +48,7 @@ export interface Combatant {
     aimedRangedAttack?: boolean;
     initiativeOverride?: boolean;
     removedFromEncounter?: boolean;
+    dead?: boolean;
     cannotGenerateAdvantageUntilRound?: number;
     feintBuffs?: FeintBuff[];
     additionalEffortBuff?: AdditionalEffortBuff;

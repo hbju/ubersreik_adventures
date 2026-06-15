@@ -183,10 +183,6 @@ export function applyMove(
                 ? [...new Set([...state.turnFlags.chargedCombatantIds, combatant.id])]
                 : state.turnFlags.chargedCombatantIds,
         },
-        advantagePools: chargedIntoMelee ? {
-            ...state.advantagePools,
-            [combatant.side]: state.advantagePools[combatant.side] + 1,
-        } : state.advantagePools,
     }, [updatedCombatant]);
     const events: CombatEngineResult['events'] = [{
             type: 'MovedEvent',

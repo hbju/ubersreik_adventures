@@ -27,7 +27,7 @@ export const COMBAT_ACTION_DEFINITIONS: Record<CombatActionKind, CombatActionDef
     attack: { kind: 'attack', cost: 'action', generatesAdvantage: true },
     move: { kind: 'move', cost: 'move', generatesAdvantage: false },
     run: { kind: 'run', cost: 'action', generatesAdvantage: false },
-    charge: { kind: 'charge', cost: 'action', generatesAdvantage: true },
+    charge: { kind: 'charge', cost: 'action', generatesAdvantage: false },
     aim: { kind: 'aim', cost: 'action', generatesAdvantage: false },
     reload: { kind: 'reload', cost: 'action', generatesAdvantage: false },
     assess: { kind: 'assess', cost: 'action', generatesAdvantage: false },
@@ -326,7 +326,6 @@ function resolveInfighting(state: CombatState, request: CombatActionRequest, rng
     const actor = getCombatant(state, request.actorId);
     if (!request.targetId) return rejectAction(state, 'infighting', request.actorId, 'missingTarget');
     if (actor.budget.actions <= 0) return rejectAction(state, 'infighting', request.actorId, 'noAction');
-    if (!isEngagedWith(state, actor.id, request.targetId)) return rejectAction(state, 'infighting', request.actorId, 'notEngaged');
 
     const opponent = getCombatant(state, request.targetId);
     const actorTarget = request.targetNumber ?? skillTarget(actor, request.skillId ?? 'melee_basic');

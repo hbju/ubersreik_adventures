@@ -113,7 +113,7 @@ function isMeleeWeapon(weapon: Weapon): boolean {
 }
 
 function isRangedGroup(group: string): boolean {
-    return ['blackpowder', 'bow', 'crossbow', 'engineering', 'entangling', 'explosive', 'sling', 'throwing'].includes(group);
+    return ['blackpowder', 'bow', 'crossbow', 'engineering', 'entangling', 'explosive', 'sling', 'throwing', 'skavenranged'].includes(group);
 }
 
 function isParryWeapon(weapon: Weapon): boolean {
