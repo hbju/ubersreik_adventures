@@ -187,7 +187,7 @@ function resolveAssess(state: CombatState, request: CombatActionRequest, rng: Rn
 
     const additionalEffortModifier = additionalEffortTestModifier(state, actor.id);
 
-    const skillId = request.skillId ?? 'observe';
+    const skillId = request.skillId ?? 'leadership';
     const targetNumber = (request.targetNumber ?? skillTarget(actor, skillId)) + additionalEffortModifier;
     const rollResult = request.rollResult ?? rolld100(rng);
     const successLevel = Math.round(calculateSuccessLevel(rollResult, targetNumber));
