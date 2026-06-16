@@ -5,7 +5,17 @@ import { isGrapplingEngagement, resolveCombatAction, resolveEffectiveWeapon } fr
 import { decayEngagementsEndOfRound, determineSurprise, rangeBandForDistance, rangedWeaponRange, resolveMeleeAttack, resolveRangedAttack, resolveRangedIntoMeleeAttack, resolveReloadAction } from './engine';
 import { applyMove, REACH_ENGAGEMENT_DISTANCE, WeaponReach, type MoveTarget } from './spatial';
 import { resolveWeaponUse } from './proficiency';
-import { resolvePsychologyExposures, resolvePsychologyRoundStart } from './psychology';
+import {
+    canEnterFrenzy,
+    enterFrenzy,
+    exitFrenzy,
+    isFrenzied,
+    markFrenzyFreeMeleeUsed,
+    resolveCoolTest,
+    resolveFrenzyExits,
+    resolvePsychologyExposures,
+    resolvePsychologyRoundStart,
+} from './psychology';
 import { hasQuality, qualityRating } from './qualities';
 import { eligibleReactions, reactionOfferEvent, resolveReactionDecision, type ReactionDecision } from './reactions';
 import { spendFate } from './resources';
@@ -27,10 +37,12 @@ import type {
 } from './types';
 import { accumulatedCriticalDeathCheck } from './critical';
 import type { Weapon } from '../types/wfrp.types';
-import { rolld100 } from '../utils/mechanics';
+import { calculateSuccessLevel, rolld100 } from '../utils/mechanics';
 
 export type TurnEnginePhase = 'setup' | 'roundStart' | 'awaitingDecision' | 'roundEnd' | 'complete';
 export type CombatDecisionKind =
+    | 'frenzyEnter'
+    | 'frenzyExit'
     | 'meleeAttack'
     | 'rangedAttack'
     | 'reload'
@@ -188,8 +200,13 @@ export function advanceToNextDecision(engine: TurnEngineState, options: TurnEngi
 
 export function applyDecision(engine: TurnEngineState, decision: CombatDecision, controller?: CombatantController): TurnEngineState {
     if (engine.phase !== 'awaitingDecision' || !engine.activeCombatantId) return engine;
-    const exposure = resolvePsychologyExposures(engine.state, engine.rng);
-    const currentEngine = exposure.state === engine.state ? engine : { ...engine, state: exposure.state };
+    const frenzyExit = resolveFrenzyExits(engine.state);
+    const exposure = resolvePsychologyExposures(frenzyExit.state, engine.rng);
+    const currentEngine = {
+        ...engine,
+        state: exposure.state,
+        events: [...engine.events, ...frenzyExit.events],
+    };
     if (decision.actorId !== currentEngine.activeCombatantId) {
         return withEvents(currentEngine, [
             ...exposure.events,
@@ -212,6 +229,11 @@ export function applyDecision(engine: TurnEngineState, decision: CombatDecision,
     result = threadDeferredResolutionDecisions(currentEngine, decision, result, controller);
     result = threadDamageInterceptions({ ...currentEngine, state: result.state }, decision, result, controller);
     result = threadDeathInterceptions({ ...currentEngine, state: result.state }, decision, result, controller);
+    const reconciled = resolveFrenzyExits(result.state);
+    result = {
+        state: reconciled.state,
+        events: [...result.events, ...reconciled.events],
+    };
     result = appendDecisionLog(result, decision, 'turn');
     result = { ...result, events: [...exposure.events, ...result.events] };
 
@@ -234,7 +256,7 @@ export function runCombatToCompletion(
     let engine = createTurnEngine(state, options);
     let guard = 0;
     const maxRounds = options.maxRounds ?? 50;
-    while (engine.phase !== 'complete' && guard++ < maxRounds * Math.max(1, Object.keys(state.combatants).length) * 20) {
+    while (engine.phase !== 'complete' && guard++ < maxRounds * Math.max(1, Object.keys(state.combatants).length)) {
         const automaticEventCount = engine.events.length;
         engine = advanceToNextDecision(engine, options);
         const automaticEvents = engine.events.slice(automaticEventCount);
@@ -273,7 +295,8 @@ export function runCombatToCompletion(
 
 export function legalDecisions(state: CombatState, combatant: Combatant): LegalDecision[] {
     if (!isActive(combatant)) return [{ kind: 'wait', actorId: combatant.id, reason: 'incapacitated' }];
-    return ACTION_CATALOGUE.flatMap(entry => entry.legal(state, combatant));
+    const legal = ACTION_CATALOGUE.flatMap(entry => entry.legal(state, combatant));
+    return isFrenzied(combatant) ? frenzyLegalDecisions(state, combatant, legal) : legal;
 }
 
 export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
@@ -288,6 +311,85 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
         dispatch: engine => ({ state: engine.state, events: [] }),
     },
     {
+        kind: 'frenzyEnter',
+        legal: (state, actor) => canEnterFrenzy(actor)
+            && !isFrenzied(actor)
+            && actionBudgetReady(actor)
+            && enemyIds(state, actor).length > 0
+            ? [{ kind: 'frenzyEnter', actorId: actor.id }]
+            : [],
+        dispatch: (engine, decision) => {
+            const actor = engine.state.combatants[decision.actorId];
+            const automatic = hasTalent(actor, 'flagellant');
+            const targetNumber = decision.targetNumber
+                ?? calculateCharacteristicValue(actor.character.characteristics.wp);
+            const roll = automatic ? undefined : decision.rollResult ?? rolld100(engine.rng);
+            const successLevel = roll === undefined
+                ? undefined
+                : Math.round(calculateSuccessLevel(roll, targetNumber));
+            const success = automatic || (successLevel ?? -1) >= 0;
+            let result: CombatEngineResult = { state: engine.state, events: [] };
+            if (success) {
+                result = enterFrenzy(engine.state, actor.id, automatic ? 'flagellant' : 'willpower');
+            }
+            result.events.unshift({
+                type: 'FrenzyTestResolved',
+                i18nKey: success
+                    ? 'combat.psychology.frenzy.enter.success'
+                    : 'combat.psychology.frenzy.enter.failure',
+                data: {
+                    combatantId: actor.id,
+                    action: 'enter',
+                    roll,
+                    targetNumber: automatic ? undefined : targetNumber,
+                    successLevel,
+                    automatic,
+                    success,
+                },
+            });
+            return spendTurnAction(result.state, actor.id, result.events);
+        },
+    },
+    {
+        kind: 'frenzyExit',
+        legal: (_state, actor) => isFrenzied(actor)
+            && hasTalent(actor, 'battle-rage')
+            && actionBudgetReady(actor)
+            ? [{ kind: 'frenzyExit', actorId: actor.id }]
+            : [],
+        dispatch: (engine, decision) => {
+            const actor = engine.state.combatants[decision.actorId];
+            const test = decision.rollResult === undefined && decision.targetNumber === undefined
+                ? resolveCoolTest(actor, engine.rng)
+                : {
+                    roll: decision.rollResult ?? rolld100(engine.rng),
+                    targetNumber: decision.targetNumber ?? calculateCharacteristicValue(actor.character.characteristics.wp),
+                    successLevel: 0,
+                };
+            if (decision.rollResult !== undefined || decision.targetNumber !== undefined) {
+                test.successLevel = Math.round(calculateSuccessLevel(test.roll, test.targetNumber));
+            }
+            const success = test.successLevel >= 0;
+            let result = success
+                ? exitFrenzy(engine.state, actor.id, 'battleRage')
+                : { state: engine.state, events: [] };
+            result.events.unshift({
+                type: 'FrenzyTestResolved',
+                i18nKey: success
+                    ? 'combat.psychology.frenzy.exit.success'
+                    : 'combat.psychology.frenzy.exit.failure',
+                data: {
+                    combatantId: actor.id,
+                    action: 'exit',
+                    ...test,
+                    automatic: false,
+                    success,
+                },
+            });
+            return spendTurnAction(result.state, actor.id, result.events);
+        },
+    },
+    {
         kind: 'move',
         legal: (state, actor) => {
             const capabilities = combatantCapabilities(actor);
@@ -296,7 +398,8 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             const run = actor.movementBudget.run;
             let destinations: { mode: MovementMode; target: number | { combatantId: string } }[] = [];
             for (const mode of ['walk', 'run'] as MovementMode[]) {
-                for (const i of [...Array(mode === 'walk' ? 2 * walk + 1 : 2 * run + 1).keys()].map(i => -walk + i).filter(i => i !== 0)) {
+                const reach = mode === 'walk' ? walk : run;
+                for (const i of [...Array(reach + 1).keys()].map(i => -reach + i).filter(i => i !== 0)) {
                     destinations.push({ mode, target: actor.position + i });
                 }
             }
@@ -344,7 +447,7 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
         kind: 'meleeAttack',
         legal: (state, actor) => {
             const actorReach = REACH_ENGAGEMENT_DISTANCE[(state.weapons.filter(weapon => weapon.id === (actor.weaponLoadout?.primaryWeaponId ?? ''))?.[0]?.reach as WeaponReach) ?? "Short"];
-            return actionBudgetReady(actor)
+            return meleeBudgetReady(state, actor)
                 ? enemyIds(state, actor).filter(id => Math.abs(state.combatants[id].position - actor.position) <= actorReach).map(targetId => ({ kind: 'meleeAttack', actorId: actor.id, targetId, targetIds: [targetId] }))
                 : []
         },
@@ -355,7 +458,9 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             let result = resolveMeleeAttack(prepared.state, prepared.action, engine.rng);
             result = { state: result.state, events: [...prepared.events, ...result.events] };
             result = threadAttackReactions({ ...engine, state: result.state }, decision, result, controller);
-            return spendTurnAction(result.state, decision.actorId, result.events);
+            return engine.state.combatants[decision.actorId].budget.actions > 0
+                ? spendTurnAction(result.state, decision.actorId, result.events)
+                : consumeFrenzyFreeMelee(result.state, decision.actorId, result.events);
         },
     },
     {
@@ -414,7 +519,12 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             return spendAdvantage(engine.state, engine.state.combatants[decision.actorId].side, decision.advantageAction, { actorId: decision.actorId, targetId: decision.targetId }, engine.rng);
         },
     },
-    ...combatActionEntries(['assess', 'defend', 'aim', 'sprint', 'firstAid']),
+    ...combatActionEntries(['assess', 'defend', 'aim', 'sprint'], {
+        defend: (state, actor) => ({ skillId: defensiveSkillFor(state, actor) }),
+    }),
+    ...allyTargetedCombatActionEntries(['firstAid'], {
+        firstAid: () => ({ skillId: 'heal' }),
+    }),
     ...targetedCombatActionEntries(['infighting', 'disengageDodge', 'grappleInitiate', 'grappleMaintain', 'grappleBreak', 'attackWithBoth', 'beatBlade', 'disarm', 'feint', 'distractOpponent']),
     {
         kind: 'shieldsman',
@@ -445,12 +555,63 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
     },
 ];
 
-function combatActionEntries(kinds: CombatActionKind[]): ActionCatalogueEntry[] {
+type CombatActionEnricher = (state: CombatState, actor: Combatant) => Partial<CombatActionRequest>;
+
+function combatActionEntries(
+    kinds: CombatActionKind[],
+    enrich: Partial<Record<CombatActionKind, CombatActionEnricher>> = {}
+): ActionCatalogueEntry[] {
     return kinds.map(kind => ({
         kind: kind as CombatDecisionKind,
-        legal: (_state, actor) => actionBudgetReady(actor) ? [{ kind: kind as CombatDecisionKind, actorId: actor.id, request: { kind, actorId: actor.id } }] : [],
+        legal: (state, actor) => {
+            if (!actionBudgetReady(actor)) return [];
+            const extra = enrich[kind]?.(state, actor) ?? {};
+            return [{ kind: kind as CombatDecisionKind, actorId: actor.id, request: { kind, actorId: actor.id, ...extra } }];
+        },
         dispatch: (engine, decision) => resolveCombatAction(engine.state, requestForDecision(kind, decision), engine.rng),
     }));
+}
+
+function allyTargetedCombatActionEntries(
+    kinds: CombatActionKind[],
+    enrich: Partial<Record<CombatActionKind, CombatActionEnricher>> = {}
+): ActionCatalogueEntry[] {
+    return kinds.map(kind => ({
+        kind: kind as CombatDecisionKind,
+        legal: (state, actor) => {
+            if (!combatActionBudgetReady(actor, kind)) return [];
+            if (!combatActionTalentReady(actor, kind)) return [];
+            if (!actor.character.skills.some(s => s.id === 'heal')) return [];
+            const extra = enrich[kind]?.(state, actor) ?? {};
+            return allyIds(state, actor).map(targetId => ({
+                kind: kind as CombatDecisionKind,
+                actorId: actor.id,
+                targetId,
+                targetIds: [targetId],
+                request: { kind, actorId: actor.id, targetId, ...extra },
+            }));
+        },
+        dispatch: (engine, decision, controller) => {
+            const request = requestForDecision(kind, withThreadedSubDecision(engine, decision, controller));
+            return resolveCombatAction(engine.state, request, engine.rng);
+        },
+    }));
+}
+
+/** The skill a Defend/On-Guard bonus attaches to: the equipped melee weapon's skill, else Dodge. */
+function defensiveSkillFor(state: CombatState, actor: Combatant): string {
+    const weapon = equippedWeapon(state, actor);
+    if (weapon) {
+        const use = resolveWeaponUse(actor, weapon);
+        if (use.usable && use.test.type === 'skill' && use.test.skillId.startsWith('melee')) return use.test.skillId;
+    }
+    return 'dodge';
+}
+
+function allyIds(state: CombatState, actor: Combatant): string[] {
+    return Object.values(state.combatants)
+        .filter(other => other.id !== actor.id && other.side === actor.side && isActive(other))
+        .map(other => other.id);
 }
 
 function targetedCombatActionEntries(kinds: CombatActionKind[]): ActionCatalogueEntry[] {
@@ -758,7 +919,7 @@ function threadDeathInterceptions(engine: TurnEngineState, parent: CombatDecisio
 
         const spent = spendFate(state, combatantId, 'dieAnotherDay', { policy: 'always' });
         const surviving = spent.state.combatants[combatantId];
-        const { dead: _dead, ...withoutDead } = surviving as Combatant & { dead?: boolean };
+        const { dead: _dead, ...withoutDead } = surviving;
         state = {
             ...spent.state,
             combatants: {
@@ -956,6 +1117,100 @@ function actionBudgetReady(actor: Combatant): boolean {
     return actor.budget.actions > 0 && capabilities.canAct;
 }
 
+function meleeBudgetReady(state: CombatState, actor: Combatant): boolean {
+    const capabilities = combatantCapabilities(actor);
+    return capabilities.canAct
+        && (actor.budget.actions > 0 || frenzyFreeMeleeAvailable(state, actor));
+}
+
+function frenzyFreeMeleeAvailable(state: CombatState, actor: Combatant): boolean {
+    const usedIds = state.turnFlags.frenzyFreeAttackCombatantIds ?? [];
+    return isFrenzied(actor)
+        && actor.psychology?.frenzy?.freeMeleeTestUsedRound !== state.round
+        && !usedIds.includes(actor.id);
+}
+
+function consumeFrenzyFreeMelee(state: CombatState, actorId: string, events: CombatEvent[]): CombatEngineResult {
+    const marked = markFrenzyFreeMeleeUsed(state, actorId);
+    const usedIds = marked.turnFlags.frenzyFreeAttackCombatantIds ?? [];
+    return {
+        state: {
+            ...marked,
+            turnFlags: {
+                ...marked.turnFlags,
+                frenzyFreeAttackCombatantIds: [
+                    ...new Set([...usedIds, actorId]),
+                ],
+            },
+        },
+        events,
+    };
+}
+
+function frenzyLegalDecisions(
+    state: CombatState,
+    actor: Combatant,
+    legal: LegalDecision[]
+): LegalDecision[] {
+    const nearest = nearestEnemy(state, actor);
+    if (!nearest) {
+        return legal.filter(decision => decision.kind === 'endTurn' || decision.kind === 'frenzyExit');
+    }
+
+    const meleeKinds = new Set<CombatDecisionKind>([
+        'meleeAttack',
+        'attackWithBoth',
+        'beatBlade',
+        'disarm',
+        'feint',
+        'infighting',
+    ]);
+    const constrained = legal.filter(decision =>
+        (decision.kind === 'frenzyExit')
+        || (meleeKinds.has(decision.kind) && decision.targetId === nearest.id)
+    );
+
+    const reach = meleeReach(state, actor);
+    const distance = Math.abs(nearest.position - actor.position);
+    if (actor.budget.moves > 0 && combatantCapabilities(actor).canMove && distance > reach) {
+        const allowance = Math.min(actor.movementBudget.run, actor.movementBudget.remaining);
+        const distanceToClose = Math.max(0, distance - reach);
+        const movement = Math.min(allowance, distanceToClose);
+        if (movement > 0) {
+            const direction = Math.sign(nearest.position - actor.position);
+            constrained.push({
+                kind: 'move',
+                actorId: actor.id,
+                mode: 'run',
+                target: actor.position + direction * movement,
+                destination: actor.position + direction * movement,
+                targetId: nearest.id,
+                targetIds: [nearest.id],
+                reason: 'frenzyCloseNearest',
+            });
+        }
+    }
+    return constrained.length > 0
+        ? constrained
+        : legal.filter(decision => decision.kind === 'endTurn');
+}
+
+function nearestEnemy(state: CombatState, actor: Combatant): Combatant | undefined {
+    return enemyIds(state, actor)
+        .map(id => state.combatants[id])
+        .sort((a, b) =>
+            Math.abs(a.position - actor.position) - Math.abs(b.position - actor.position)
+            || a.id.localeCompare(b.id)
+        )[0];
+}
+
+function meleeReach(state: CombatState, actor: Combatant): number {
+    const weapon = state.weapons.find(candidate =>
+        candidate.id === (actor.weaponLoadout?.primaryWeaponId ?? '')
+    );
+    return REACH_ENGAGEMENT_DISTANCE[(weapon?.reach as WeaponReach) ?? 'Short'];
+}
+
 function combatActionBudgetReady(actor: Combatant, kind: CombatActionKind): boolean {
     const capabilities = combatantCapabilities(actor);
     if (!capabilities.canAct) return false;
@@ -986,7 +1241,7 @@ function advantageSpendDecisions(state: CombatState, actor: Combatant): LegalDec
     if (pool >= 1) {
         decisions.push(
             { kind: 'spendAdvantage', actorId: actor.id, advantageAction: 'additionalEffort', reason: 'additionalEffort' },
-            ...enemyIds(state, actor).map(targetId => ({ kind: 'spendAdvantage' as const, actorId: actor.id, targetId, targetIds: [targetId], advantageAction: 'batter' as const, reason: 'batter' })),
+            ...enemyIds(state, actor).filter(targetId => !state.combatants[targetId]?.conditions.includes('condition_prone')).map(targetId => ({ kind: 'spendAdvantage' as const, actorId: actor.id, targetId, targetIds: [targetId], advantageAction: 'batter' as const, reason: 'batter' })),
             ...enemyIds(state, actor).map(targetId => ({ kind: 'spendAdvantage' as const, actorId: actor.id, targetId, targetIds: [targetId], advantageAction: 'trick' as const, reason: 'trick' })),
         );
     }
@@ -1039,22 +1294,28 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
     if (engine.phase === 'roundStart') {
         const round = engine.round + 1;
         const resetState = resetRoundState({ ...engine.state, round });
-        const psychology = resolvePsychologyRoundStart(resetState, engine.rng);
+        const frenzyExit = resolveFrenzyExits(resetState);
+        const psychology = resolvePsychologyRoundStart(frenzyExit.state, engine.rng);
         const state = psychology.state;
-        const order = initiativeOrderFor(state, engine.rng);
+        // Initiative is rolled once at the start of combat and kept for the encounter;
+        // later rounds reuse the established order, skipping combatants no longer active.
+        const order = engine.initiativeOrder.length > 0 ? engine.initiativeOrder : initiativeOrderFor(state, engine.rng);
+        const firstActiveIndex = order.findIndex(id => isActive(state.combatants[id]));
+        const firstActiveId = firstActiveIndex >= 0 ? order[firstActiveIndex] : undefined;
         return {
             ...engine,
             state,
             round,
             initiativeOrder: order,
-            turnIndex: 0,
-            phase: order.length === 0 ? 'complete' : 'awaitingDecision',
-            activeCombatantId: order[0],
+            turnIndex: firstActiveIndex >= 0 ? firstActiveIndex : 0,
+            phase: firstActiveId ? 'awaitingDecision' : 'complete',
+            activeCombatantId: firstActiveId,
             events: [
                 ...engine.events,
                 turnEvent('RoundStarted', 'combat.turn.roundStarted', { round }),
+                ...frenzyExit.events,
                 ...psychology.events,
-                turnEvent('TurnStarted', 'combat.turn.startedActor', { round, combatantId: order[0] }),
+                ...(firstActiveId ? [turnEvent('TurnStarted', 'combat.turn.startedActor', { round, combatantId: firstActiveId })] : []),
             ],
         };
     }
@@ -1131,7 +1392,7 @@ function applyEndOfRound(state: CombatState, rng: Rng): CombatEngineResult {
         currentState = replaceCombatant(currentState, condition.combatant as Combatant);
         events.push(...condition.events as unknown as CombatEvent[]);
         if (condition.dead) {
-            currentState = replaceCombatant(currentState, { ...currentState.combatants[combatant.id], dead: true } as Combatant);
+            currentState = replaceCombatant(currentState, { ...currentState.combatants[combatant.id], dead: true });
         }
         for (const pendingTest of condition.pendingTests) {
             const resolved = resolveConditionPendingTest(condition.combatant, pendingTest, rng);
@@ -1153,6 +1414,10 @@ function applyEndOfRound(state: CombatState, rng: Rng): CombatEngineResult {
         currentState = death.state;
         events.push(...death.events);
     }
+
+    const frenzyExit = resolveFrenzyExits(currentState);
+    currentState = frenzyExit.state;
+    events.push(...frenzyExit.events);
 
     events.push(turnEvent('RoundSequenceResolved', 'combat.turn.roundSequenceResolved', { round: state.round, sequence: 'conditions>advantage>engagements>death>removal' }));
     return { state: currentState, events };
@@ -1201,6 +1466,7 @@ function resetRoundState(state: CombatState): CombatState {
         turnFlags: {
             additionalActionCombatantIds: [],
             chargedCombatantIds: [],
+            frenzyFreeAttackCombatantIds: [],
             talentExtraAttackCombatantIds: [],
             shieldsmanUsedThisTurnIds: [],
             reactionStrikeChargerPairs: [],
@@ -1259,7 +1525,10 @@ function applyFuriousAssault(state: CombatState, actorId: string): CombatEngineR
 function shouldEndTurn(engine: TurnEngineState, actorId: string, decisionKind: CombatDecisionKind): boolean {
     if (decisionKind === 'endTurn' || decisionKind === 'wait') return true;
     const actor = engine.state.combatants[actorId];
-    return !actor || actor.budget.actions <= 0 && actor.budget.moves <= 0;
+    if (!actor) return true;
+    const freeMeleeAvailable = frenzyFreeMeleeAvailable(engine.state, actor)
+        && legalDecisions(engine.state, actor).some(decision => decision.kind === 'meleeAttack');
+    return actor.budget.actions <= 0 && actor.budget.moves <= 0 && !freeMeleeAvailable;
 }
 
 function termination(state: CombatState, maxRounds: number): Pick<TurnEngineState, 'phase' | 'outcome' | 'terminalReason'> | undefined {
@@ -1346,8 +1615,8 @@ function equippedWeaponHas(state: CombatState, combatant: Combatant, qualityId: 
     return !!weapon && hasQuality(weapon, qualityId);
 }
 
-function isActive(combatant: Combatant | undefined): boolean {
-    return !!combatant && combatant.currentWounds > 0 && !combatant.removedFromEncounter && !(combatant as any).dead && !combatant.conditions.includes('condition_unconscious');
+export function isActive(combatant: Combatant | undefined): boolean {
+    return !!combatant && combatant.currentWounds > 0 && !combatant.removedFromEncounter && !combatant.dead && !combatant.conditions.includes('condition_unconscious');
 }
 
 function controllerFor(controllers: Record<string, CombatantController> | CombatantController, actorId: string): CombatantController | undefined {
@@ -1369,7 +1638,7 @@ function replaceCombatant(state: CombatState, combatant: Combatant): CombatState
 }
 
 function structuredCloneSafe<T>(value: T): T {
-    return JSON.parse(JSON.stringify(value));
+    return typeof structuredClone === 'function' ? structuredClone(value) : JSON.parse(JSON.stringify(value));
 }
 
 function turnEvent(type: string, i18nKey: string, data: Record<string, unknown>): CombatEvent {

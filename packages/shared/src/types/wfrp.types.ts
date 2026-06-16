@@ -123,6 +123,9 @@ export type TalentEffectKind =
     'fearRating' |
     'terrorRating' |
     'psychologyImmunity' |
+    'frenzyCapability' |
+    'frenzyControl' |
+    'frenzyTrigger' |
     'autoPassFirstTest' |
     'damageCalculationModifier' |
     'advantageBonus' |

@@ -147,6 +147,22 @@
             },
             "sourceApproach": {
                 "test": "{{combatantId}} teste son Sang-froid lorsque {{sourceId}} s'approche."
+            },
+            "frenzy": {
+                "entered": "{{combatantId}} entre en Frénésie.",
+                "exited": "{{combatantId}} quitte la Frénésie et gagne 1 état Exténué.",
+                "actions": {
+                    "frenzyEnter": "Entrer en Frénésie",
+                    "frenzyExit": "Mettre fin à la Frénésie"
+                },
+                "enter": {
+                    "success": "{{combatantId}} entre en Frénésie.",
+                    "failure": "{{combatantId}} ne parvient pas à entrer en Frénésie."
+                },
+                "exit": {
+                    "success": "{{combatantId}} maîtrise sa Rage de bataille et met fin à sa Frénésie.",
+                    "failure": "{{combatantId}} reste en Frénésie."
+                }
             }
         },
         "engagement": {

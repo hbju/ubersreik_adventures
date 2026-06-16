@@ -56,15 +56,25 @@
         "max_ranks": "wp",
         "effects": [
             {
-                "kind": "ruleNote",
-                "trigger": "onConditionLoss",
+                "kind": "frenzyControl",
+                "trigger": "economy",
+                "when": "frenzied",
+                "appliesTo": [
+                    "frenzy"
+                ],
+                "params": {
+                    "action": "frenzyExit",
+                    "test": "cool"
+                }
+            },
+            {
+                "kind": "slBonus",
+                "trigger": "onSuccess",
                 "when": "frenzied",
                 "appliesTo": [
                     "melee"
                 ],
-                "params": {
-                    "note": "End Frenzy with successful Cool Test"
-                }
+                "value": 1
             }
         ]
     },
@@ -438,13 +448,23 @@
         "max_ranks": "t",
         "effects": [
             {
-                "kind": "ruleNote",
+                "kind": "frenzyTrigger",
                 "when": "dailyFlagellation",
                 "appliesTo": [
                     "frenzy"
                 ],
                 "params": {
-                    "note": "Enter Frenzy without testing"
+                    "automaticEntry": true,
+                    "requiresFrenzyTalent": true
+                }
+            },
+            {
+                "kind": "psychologyImmunity",
+                "appliesTo": [
+                    "fear"
+                ],
+                "params": {
+                    "scope": "fear"
                 }
             }
         ]
@@ -476,10 +496,11 @@
         "max_ranks": "1",
         "effects": [
             {
-                "kind": "activation",
+                "kind": "frenzyCapability",
                 "trigger": "economy",
                 "params": {
-                    "action": "frenzy"
+                    "action": "frenzyEnter",
+                    "test": "willpower"
                 },
                 "value": "Enter Frenzy",
                 "appliesTo": [

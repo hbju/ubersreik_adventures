@@ -361,8 +361,8 @@
     },
     {
         "id": "battle-rage",
-        "name": "Battle Rage",
-        "description": "You are better able to control your Frenzy in combat. You can end your Frenzy with a successful Cool Test at the end of the round.",
+        "name": "Rage de bataille",
+        "description": "Vous controlez mieux votre Frénésie. Vous gagnez +1 DR aux Tests de Mêlée réussis pendant la Frénésie et pouvez y mettre fin avec un Test de Sang-froid réussi.",
         "tests": [
             "Melee Tests when Frenzied"
         ],
@@ -2077,7 +2077,7 @@
     {
         "id": "flagellant",
         "name": "Flagellant",
-        "description": "You have dedicated your pain to the service of your God. Each day, you must spend half a bell praying as you maintain a number of Wounds suffered equal to your level in Flagellant. Until you next sleep, if you have the Frenzy Talent you may enter Frenzy immediately without testing. The Frenzy Talent is added to the Talent list of any career you are in. Should you fail to flagellate yourself on any given day, or allow your castigated flesh to be healed, you may not spend any Resilience or Resolve until you flagellate yourself again.",
+        "description": "Après votre flagellation quotidienne, si vous possédez le Talent Frénésie, vous pouvez entrer en Frénésie sans Test de Force Mentale. Vous êtes immunisé à la Peur.",
         "tests": [
             "Any for resisting the Ruinous Powers"
         ],
@@ -2174,8 +2174,8 @@
     },
     {
         "id": "frenzy",
-        "name": "Frenzy",
-        "description": "You can Frenzy as described on page 190.",
+        "name": "Frénésie",
+        "description": "Par une Action en présence d'un ennemi visible, réussissez un Test de Force Mentale pour entrer en Frénésie. Vous devez alors vous rapprocher de l'ennemi visible le plus proche et l'attaquer, gagnez un Test de Mêlée gratuit par round et +1 Bonus de Force, et êtes immunisé à la Psychologie.",
         "tests": [],
         "max_ranks": "1",
         "careers": {

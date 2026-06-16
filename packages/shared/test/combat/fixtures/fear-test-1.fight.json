@@ -1,0 +1,1661 @@
+{
+  "config": {
+    "sides": {
+      "ally": [
+        {
+          "id": "38b21af4-7fa1-4fc3-bc94-72f640258d57",
+          "character": {
+            "id": "38b21af4-7fa1-4fc3-bc94-72f640258d57:sandbox",
+            "name": "Ludwig Riemann",
+            "species": "Human",
+            "class": "",
+            "currentCareerId": "spy",
+            "currentCareerLevelId": "spy",
+            "userId": null,
+            "tags": [],
+            "locationId": null,
+            "xp": {
+              "current": 18,
+              "spent": 100
+            },
+            "careerHistory": [
+              {
+                "level": 1,
+                "xpSpent": 30,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1764514016970",
+                "careerName": "Spy",
+                "advancementId": "wp",
+                "careerLevelId": "informer",
+                "advancementName": "WP",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 100,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1767106053951",
+                "careerName": "Spy",
+                "advancementId": "gregarious",
+                "careerLevelId": "informer",
+                "advancementName": "Gregarious",
+                "advancementType": "talent"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350680471",
+                "careerName": "Spy",
+                "advancementId": "fel",
+                "careerLevelId": "informer",
+                "advancementName": "FEL",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350680660",
+                "careerName": "Spy",
+                "advancementId": "fel",
+                "careerLevelId": "informer",
+                "advancementName": "FEL",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350680918",
+                "careerName": "Spy",
+                "advancementId": "fel",
+                "careerLevelId": "informer",
+                "advancementName": "FEL",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350681071",
+                "careerName": "Spy",
+                "advancementId": "fel",
+                "careerLevelId": "informer",
+                "advancementName": "FEL",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350681694",
+                "careerName": "Spy",
+                "advancementId": "fel",
+                "careerLevelId": "informer",
+                "advancementName": "FEL",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350683015",
+                "careerName": "Spy",
+                "advancementId": "ag",
+                "careerLevelId": "informer",
+                "advancementName": "AG",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350683229",
+                "careerName": "Spy",
+                "advancementId": "ag",
+                "careerLevelId": "informer",
+                "advancementName": "AG",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350683409",
+                "careerName": "Spy",
+                "advancementId": "ag",
+                "careerLevelId": "informer",
+                "advancementName": "AG",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350683633",
+                "careerName": "Spy",
+                "advancementId": "ag",
+                "careerLevelId": "informer",
+                "advancementName": "AG",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 25,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350684736",
+                "careerName": "Spy",
+                "advancementId": "ag",
+                "careerLevelId": "informer",
+                "advancementName": "AG",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350689792",
+                "careerName": "Spy",
+                "advancementId": "cool",
+                "careerLevelId": "informer",
+                "advancementName": "Cool",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350690359",
+                "careerName": "Spy",
+                "advancementId": "cool",
+                "careerLevelId": "informer",
+                "advancementName": "Cool",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350698883",
+                "careerName": "Spy",
+                "advancementId": "haggle",
+                "careerLevelId": "informer",
+                "advancementName": "Haggle",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350699808",
+                "careerName": "Spy",
+                "advancementId": "haggle",
+                "careerLevelId": "informer",
+                "advancementName": "Haggle",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350701156",
+                "careerName": "Spy",
+                "advancementId": "gamble",
+                "careerLevelId": "informer",
+                "advancementName": "Gamble",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350701442",
+                "careerName": "Spy",
+                "advancementId": "gamble",
+                "careerLevelId": "informer",
+                "advancementName": "Gamble",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350702525",
+                "careerName": "Spy",
+                "advancementId": "gamble",
+                "careerLevelId": "informer",
+                "advancementName": "Gamble",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1771350703717",
+                "careerName": "Spy",
+                "advancementId": "gamble",
+                "careerLevelId": "informer",
+                "advancementName": "Gamble",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1774114584520",
+                "careerName": "Spy",
+                "advancementId": "gamble",
+                "careerLevelId": "informer",
+                "advancementName": "Gamble",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1774114644756",
+                "careerName": "Spy",
+                "advancementId": "perception",
+                "careerLevelId": "informer",
+                "advancementName": "Perception",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1774114645153",
+                "careerName": "Spy",
+                "advancementId": "perception",
+                "careerLevelId": "informer",
+                "advancementName": "Perception",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1774114645440",
+                "careerName": "Spy",
+                "advancementId": "perception",
+                "careerLevelId": "informer",
+                "advancementName": "Perception",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1774114645680",
+                "careerName": "Spy",
+                "advancementId": "perception",
+                "careerLevelId": "informer",
+                "advancementName": "Perception",
+                "advancementType": "skill"
+              },
+              {
+                "level": 1,
+                "xpSpent": 10,
+                "careerId": "spy",
+                "levelName": "Informer",
+                "timestamp": "1774114646118",
+                "careerName": "Spy",
+                "advancementId": "perception",
+                "careerLevelId": "informer",
+                "advancementName": "Perception",
+                "advancementType": "skill"
+              },
+              {
+                "level": 2,
+                "xpSpent": 100,
+                "careerId": "spy",
+                "levelName": "Spy",
+                "timestamp": "2026-03-21T17:39:10.898Z",
+                "careerName": "Spy",
+                "advancementId": "career_change",
+                "careerLevelId": "spy",
+                "advancementName": "Career Change: Spy - Spy",
+                "advancementType": "characteristic"
+              },
+              {
+                "level": 2,
+                "xpSpent": 100,
+                "careerId": "spy",
+                "levelName": "Spy",
+                "timestamp": "1776271480390",
+                "careerName": "Spy",
+                "advancementId": "read-write",
+                "careerLevelId": "spy",
+                "advancementName": "Read/Write",
+                "advancementType": "talent"
+              },
+              {
+                "level": 2,
+                "xpSpent": 100,
+                "careerId": "spy",
+                "levelName": "Spy",
+                "timestamp": "1776271521791",
+                "careerName": "Spy",
+                "advancementId": "lip-reading",
+                "careerLevelId": "spy",
+                "advancementName": "Lip Reading",
+                "advancementType": "talent"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 15,
+                "advancementType": "skill",
+                "advancementId": "melee",
+                "advancementName": "Melee (Basic)",
+                "timestamp": "1778602992709"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 15,
+                "advancementType": "skill",
+                "advancementId": "melee",
+                "advancementName": "Melee (Basic)",
+                "timestamp": "1778602993357"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 15,
+                "advancementType": "skill",
+                "advancementId": "melee",
+                "advancementName": "Melee (Basic)",
+                "timestamp": "1778602993557"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 15,
+                "advancementType": "skill",
+                "advancementId": "melee",
+                "advancementName": "Melee (Basic)",
+                "timestamp": "1778602993818"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 15,
+                "advancementType": "skill",
+                "advancementId": "melee",
+                "advancementName": "Melee (Basic)",
+                "timestamp": "1778603014646"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 20,
+                "advancementType": "skill",
+                "advancementId": "melee",
+                "advancementName": "Melee (Basic)",
+                "timestamp": "1778603015745"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 20,
+                "advancementType": "skill",
+                "advancementId": "melee",
+                "advancementName": "Melee (Basic)",
+                "timestamp": "1778603016121"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 20,
+                "advancementType": "skill",
+                "advancementId": "melee",
+                "advancementName": "Melee (Basic)",
+                "timestamp": "1778603017498"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 20,
+                "advancementType": "skill",
+                "advancementId": "melee",
+                "advancementName": "Melee (Basic)",
+                "timestamp": "1778603018451"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 25,
+                "advancementType": "characteristic",
+                "advancementId": "ws",
+                "advancementName": "WS",
+                "timestamp": "1781443061290"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 25,
+                "advancementType": "characteristic",
+                "advancementId": "ws",
+                "advancementName": "WS",
+                "timestamp": "1781443062643"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 25,
+                "advancementType": "characteristic",
+                "advancementId": "ws",
+                "advancementName": "WS",
+                "timestamp": "1781443064605"
+              },
+              {
+                "careerId": "spy",
+                "careerLevelId": "spy",
+                "careerName": "Spy",
+                "levelName": "Spy",
+                "level": 2,
+                "xpSpent": 25,
+                "advancementType": "characteristic",
+                "advancementId": "ws",
+                "advancementName": "WS",
+                "timestamp": "1781443064898"
+              }
+            ],
+            "unlockedCharacteristicIds": [
+              "ag",
+              "fel",
+              "wp",
+              "ws"
+            ],
+            "unlockedSkillIds": [
+              "bribery",
+              "charm",
+              "cool",
+              "gamble",
+              "gossip",
+              "haggle",
+              "perception",
+              "stealth_any",
+              "climb",
+              "entertain_act",
+              "intuition",
+              "melee",
+              "secret-signs_any",
+              "sleight-of-hand"
+            ],
+            "unlockedTalentIds": [
+              "etiquette_any",
+              "lip-reading",
+              "read-write",
+              "secret-identity"
+            ],
+            "details": {
+              "age": "",
+              "eyes": "",
+              "hair": "",
+              "height": "",
+              "partyName": "Ludwig, Silas & Co",
+              "longTermAmbition": "M'acquitter de ma dette",
+              "shortTermAmbition": "Donner des infos sur la resistance à Elsa « La Couture » Gruber",
+              "partyLongTermAmbition": "Retrouver Hönigshaschen et Kürbis",
+              "partyShortTermAmbition": "approfondir nos connaissances de la situation "
+            },
+            "movement": 4,
+            "characteristics": {
+              "i": {
+                "initial": 33,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "s": {
+                "initial": 27,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "t": {
+                "initial": 30,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "ag": {
+                "initial": 34,
+                "talents": 0,
+                "advances": 5,
+                "modifier": 0
+              },
+              "bs": {
+                "initial": 26,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "wp": {
+                "initial": 34,
+                "talents": 0,
+                "advances": 6,
+                "modifier": 0
+              },
+              "ws": {
+                "initial": 35,
+                "talents": 5,
+                "advances": 4,
+                "modifier": 0
+              },
+              "dex": {
+                "initial": 29,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "fel": {
+                "initial": 37,
+                "talents": 5,
+                "advances": 5,
+                "modifier": 0
+              },
+              "int": {
+                "initial": 31,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              }
+            },
+            "skills": [
+              {
+                "id": "art",
+                "name": "Art",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "dex"
+              },
+              {
+                "id": "athletics",
+                "name": "Athletics",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ag"
+              },
+              {
+                "id": "bribery",
+                "name": "Bribery",
+                "talents": 0,
+                "advances": 10,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "charm",
+                "name": "Charm",
+                "talents": 0,
+                "advances": 15,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "charm-animal",
+                "name": "Charm Animal",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "wp"
+              },
+              {
+                "id": "climb",
+                "name": "Climb",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "s"
+              },
+              {
+                "id": "consume-alcohol",
+                "name": "Consume Alcohol",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "t"
+              },
+              {
+                "id": "cool",
+                "name": "Cool",
+                "talents": 0,
+                "advances": 5,
+                "modifier": 0,
+                "characteristic": "wp"
+              },
+              {
+                "id": "dodge",
+                "name": "Dodge",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ag"
+              },
+              {
+                "id": "drive",
+                "name": "Drive",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "dex"
+              },
+              {
+                "id": "endurance",
+                "name": "Endurance",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "t"
+              },
+              {
+                "id": "entertain",
+                "name": "Entertain",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "evaluate",
+                "name": "Evaluate",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "int"
+              },
+              {
+                "id": "gamble",
+                "name": "Gamble",
+                "talents": 0,
+                "advances": 5,
+                "modifier": 0,
+                "characteristic": "int"
+              },
+              {
+                "id": "gossip",
+                "name": "Gossip",
+                "talents": 0,
+                "advances": 15,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "haggle",
+                "name": "Haggle",
+                "talents": 0,
+                "advances": 5,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "intimidate",
+                "name": "Intimidate",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "s"
+              },
+              {
+                "id": "intuition",
+                "name": "Intuition",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "i"
+              },
+              {
+                "id": "leadership",
+                "name": "Leadership",
+                "talents": 0,
+                "advances": 3,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "melee",
+                "name": "Melee (Basic)",
+                "talents": 0,
+                "advances": 14,
+                "modifier": 0,
+                "characteristic": "ws"
+              },
+              {
+                "id": "navigation",
+                "name": "Navigation",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "i"
+              },
+              {
+                "id": "outdoor-survival",
+                "name": "Outdoor Survival",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "int"
+              },
+              {
+                "id": "perception",
+                "name": "Perception",
+                "talents": 0,
+                "advances": 5,
+                "modifier": 0,
+                "characteristic": "i"
+              },
+              {
+                "id": "ranged",
+                "name": "Ranged",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "bs"
+              },
+              {
+                "id": "ride",
+                "name": "Ride",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ag"
+              },
+              {
+                "id": "stealth_any",
+                "name": "Stealth (Any)",
+                "talents": 0,
+                "advances": 10,
+                "modifier": 0,
+                "characteristic": "ag"
+              },
+              {
+                "id": "entertain_act",
+                "name": "Entertain (Act)",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "secret-signs_any",
+                "name": "Secret Signs (Any)",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "int"
+              },
+              {
+                "id": "sleight-of-hand",
+                "name": "Sleight of Hand",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "dex"
+              },
+              {
+                "id": "stealth",
+                "name": "Discrétion",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ag"
+              }
+            ],
+            "status": {
+              "fate": {
+                "max": 3,
+                "current": 0
+              },
+              "wounds": {
+                "current": 10,
+                "max": 10
+              },
+              "fortune": {
+                "max": 3,
+                "current": 0
+              },
+              "resolve": {
+                "max": 3,
+                "current": 2
+              },
+              "corruption": {
+                "max": 6,
+                "current": 3
+              },
+              "resilience": {
+                "max": 3,
+                "current": 3
+              }
+            },
+            "conditions": [],
+            "talents": {
+              "suave": 1,
+              "doomed": 1,
+              "blather": 1,
+              "attractive": 1,
+              "gregarious": 1,
+              "read-write": 1,
+              "lip-reading": 1,
+              "orientation": 1,
+              "warrior-born": 1
+            },
+            "inventory": {
+              "armor": {
+                "armour_leather_jack": 1,
+                "armour_leather_leggings": 1,
+                "armour_leather_skullcap": 1
+              },
+              "items": {
+                "item_comb": 1,
+                "item_clothing": 2,
+                "item_ear_pick": 1,
+                "item_courtly_garb": 1,
+                "item_charcoal_stick": 1
+              },
+              "weapons": {
+                "weapon_basic_club": 1,
+                "weapon_basic_dagger": 1,
+                "weapon_basic_axe": 1
+              },
+              "equippedWeapons": {
+                "weapon_basic_club": false,
+                "weapon_basic_dagger": false,
+                "weapon_basic_axe": true
+              },
+              "equippedArmor": {
+                "armour_leather_jack": true,
+                "armour_leather_leggings": true,
+                "armour_leather_skullcap": true
+              }
+            },
+            "currency": {
+              "bp": 12,
+              "gc": 0,
+              "ss": 0
+            },
+            "reputations": [
+              {
+                "value": 0,
+                "factionId": "fa60d41e-f662-4ccb-ba41-93a19539d574",
+                "knowledgeLevel": "known"
+              },
+              {
+                "notes": "",
+                "value": 0,
+                "factionId": "e08b36d7-e1b2-4d42-92a8-d953b148fcc1",
+                "knowledgeLevel": "known"
+              },
+              {
+                "value": 40,
+                "factionId": "40832915-6947-428d-b84e-77ffa1cd0946",
+                "knowledgeLevel": "known"
+              },
+              {
+                "value": -10,
+                "factionId": "d920dd51-ce5e-45d4-a220-1b8cefc79795",
+                "knowledgeLevel": "known"
+              },
+              {
+                "value": 30,
+                "factionId": "474e8cee-7e7d-4e9e-9447-70ca6600d94a",
+                "knowledgeLevel": "known"
+              },
+              {
+                "value": 10,
+                "factionId": "e1a69019-26c7-4002-9caf-490322247007",
+                "knowledgeLevel": "known"
+              },
+              {
+                "value": 0,
+                "factionId": "3b39aaa5-c89f-4474-907b-bdd9bc89b71a",
+                "knowledgeLevel": "rumored"
+              },
+              {
+                "value": 10,
+                "factionId": "6e1e76e6-f070-4572-9e2b-10c9f3f94f9b",
+                "knowledgeLevel": "known"
+              },
+              {
+                "value": 10,
+                "factionId": "f8f42b14-1d48-4c05-93d3-d06d16b94fa0",
+                "knowledgeLevel": "known"
+              },
+              {
+                "value": 0,
+                "factionId": "7b260211-5fe0-4ee4-9c58-a56173a4c833",
+                "knowledgeLevel": "known"
+              },
+              {
+                "value": 0,
+                "factionId": "3419d08e-941c-4b1c-80e4-bfe51bcb0d53",
+                "knowledgeLevel": "known"
+              },
+              {
+                "value": 10,
+                "factionId": "86925bcf-4ca6-4eb0-b233-e97d5089b8d0",
+                "knowledgeLevel": "known"
+              }
+            ],
+            "lore": {
+              "voice": "",
+              "gmNotes": "",
+              "ambitions": {
+                "long": "",
+                "short": ""
+              },
+              "biography": "",
+              "appearance": "",
+              "background": [
+                {
+                  "id": "knowledge_1767095305574_pdrbamtgi",
+                  "topic": "Origin",
+                  "content": "Dernier né d’une famille paysanne d’un petit hameau de la baronnie de Graustadt, j’ai très tôt senti que la vie à la ferme n’avait rien à m’offrir. L’horizon étroit des champs, les saisons qui se répètent et l’absence de perspectives m’étouffaient. Aussi ai-je saisi l’occasion lorsqu’un batelier de passage, membre de la Compagnie des Bateliers d’Ubersreik, m’a assuré qu’on y trouvait du travail pour quiconque avait des bras solides. Il parlait d’opportunités et de salaires honnêtes ; j’ai choisi de le suivre.\n\nÀ Ubersreik, j’ai rapidement obtenu un poste de débardeur sur les quais. Le travail était harassant, bien plus rude que le labeur de la ferme, et la fatigue permanente me fit presque regretter la vie que j’avais voulu fuir. Heureusement, il y avait l’alcool et la camaraderie pour supporter les journées. Je me suis mis à dépenser tout mon salaire dans la boisson, d’abord dans des tavernes fréquentables comme Le Bras du Docker, puis dans des tripots plus douteux tels que Le Marteau Tordu, où j’ai découvert les plaisirs tarifés.\n\nC’est dans ces lieux que ma vie a pris un tournant funeste. Un soir où je n’avais plus un sou pour boire, j’ai eu l’idée lumineuse de m’asseoir à une table de jeu. Après avoir longuement observé les joueurs, j’étais persuadé de pouvoir les plumer. Et contre toute attente, j’ai gagné.\n\nCe fut là ma première grande erreur. Car je suis revenu à la table le lendemain, puis tous les jours qui suivirent. J’étais doué, presque naturellement. Je jouais honnêtement la plupart du temps, ne trichant que lorsque la situation l’exigeait, mais surtout, j’avais une chance insolente.\n\nC’est à cette époque que j’ai rencontré Vesper Grünwald, une prostituée des bas-fonds, dont je suis tombé amoureux. Elle a commencé à m’aider dans mes parties : nous avions mis au point un système de signaux pour qu’elle me révèle discrètement la main de mes adversaires. Feignant son rôle d’entremetteuse, elle glissait derrière eux, observait leurs cartes et venait ensuite se pencher sur mon épaule pour m’en souffler la teneur.\n\nAvec cette combine, nous partagions les gains moitié-moitié. Je pouvais presque abandonner le débardage tant le jeu nous rapportait mais jamais assez pour satisfaire Vesper. Elle rêvait de robes de luxe, d’atours achetés chez Luigi & Salvatore, et pour entretenir ces goûts, elle continuait d’exercer son métier. Je ne peux nier que la jalousie me rongeait, même si je me répétais que ce qu’elle vivait avec ses clients n’avait rien de commun avec l’histoire d’amour que, pensais-je, nous partagions.\n\nUn jour, nous avons décidé de tenter un « gros coup ». Plutôt que de miser nos maigres économies et d’en tirer des gains modestes, pourquoi ne pas emprunter une forte somme, jouer à une table de hauts-roulants et décrocher le pactole ? J’ai contracté un prêt conséquent auprès d’un individu peu recommandable du Dunkelfeucht.\n\nJe me suis alors assis à une table prestigieuse, face à des joueurs aguerris. Parmi eux se trouvait Hieronymus, un petit marchand halfling sur le point de se faire dépouiller. Il tenta un tapis ; je le suivis aussitôt. Vesper, déjà derrière lui à l’œuvre, m’envoyait nos signaux habituels. L’heure de la révélation arriva.\n\nEt ce ne furent pas les cartes qu’elle m’avait annoncées.\n\nJe suis resté figé, incapable de comprendre immédiatement. Vesper a souri. Pas pour moi. Et elle est partie avec le halfling, sans un regard en arrière.\n\nLe reste est simple. Je me suis caché, comme se cachent les rats lorsqu’ils savent que les chats arrivent. Les hommes du créancier m’ont retrouvé. Ils m’ont battu jusqu’à ce que je n’aie plus que deux dents solides pour prier. Puis ils m’ont fait une offre : vivre, mais à leur service.\n\nPas pour mes talents au jeu. Pour ma discrétion. Pour ma capacité à m’insinuer dans les lieux où les honnêtes gens n’ont pas envie d’aller. Pour devenir leurs yeux et leurs oreilles. Leur espion.",
+                  "createdAt": "2025-12-30T11:48:25.574Z",
+                  "updatedAt": "2025-12-30T11:48:29.935Z",
+                  "visibility": [
+                    "user-1764271673324-xnps9qjii"
+                  ]
+                }
+              ],
+              "mannerisms": "",
+              "playerNotes": "Sylas médecin\nThulcydion elf chasseur de prime\nIngrid : chasseuse de prime-> Thulcydion \n\nGunther : guilde des rats \nBoutique Esque verrerie\nPoint de contacte auptès des garde taupe\n\nRudy Klumpenglug\n\n17 fevrier\nVieille Mathilde disparu\nAuberge de la maison Dupont une autre sorcière\nUn mage Nain Dorgen \nHelara elfes\n\nLes Gens :\nUn Jungfreud éloigné Enrich, mentionne la cause\nUne Riche veuve \n\n\nEnrich parle ave Guidot le marchand \nQuerelle à l'éEpreux d'Etain \n\nCerevis, jeu de boisson\nSylvie Kruetzamme gérante de la Taverne membre des croix \nBoite au lettre morte dépot de loki\n \nProchain markstag, cercle de Poésie d'Yseult. \nMarqué au fer rouge. \n\nSigmar domaine des Rattiers/ Magnus. \n\nMelina\n\nSergent Pfeifer\nCarte quartier nord nord\nArtifices \nsac à grain probablement une couverture sceau\n\nFemme Genefis Archère rencontré dans les égouts \nAutre Elf Ogre, \n\nErin \n\nOtto avait parié contre les aventuriers \n\nVon  Dabeurnick puissant d'Ubersreik.\nCuno le Keke avec une blonde \nVon Brunner Ashs\nOnceuponatime\nSylvie, tenancière du marteau tordu, a pris les paris\nHaut prêtre de Sigmar\n\n12 May\nPeter défi le Chien Loup\nLes autres le réprimandent\n\nUn nain contre un ours\nLa garde contre Felix wright \n\nCuno, Yseult, Johana et Einrich.  On discute avec Giordano.\n\nLe combat est reporté à la veille de Sigmarstag\nWillem studtel propose un contrat de combattant de fosse. \n\nQuartiers de Magnustore et des Artisan\nChapelle d'Ulrich \n\nElsa gère le réseau  d'information du Baron. Revenu après le déboutage des Jungvreud avec Otto et Warner. Réunifie les gang rivaux.  \nOtto gère les bras du réseau \nWarner gère le fleuve, la contrebande et la logistique\nAnton Grimeski sans doute à la solde des Jungfreud\n\nAttaque contre le clan Lowhaffen à la cage doré. \n\nAsfang/ Reikard : est un Changepeau\nEntouré d'une troupe d'ulrichien belliciste",
+              "motivationKey": "freedom",
+              "relationships": [
+                {
+                  "id": "rel_1771279979741_61bjvga3k_inv",
+                  "type": "rival",
+                  "description": "",
+                  "targetCharacterId": "9389e0b6-6d7f-4c68-b85e-8856e2193683"
+                }
+              ]
+            },
+            "isMinion": false,
+            "actionBar": [
+              {
+                "id": "weapon_basic_dagger",
+                "type": "weapon",
+                "label": "Dague",
+                "slotIndex": 0
+              },
+              {
+                "id": "weapon_basic_club",
+                "type": "weapon",
+                "label": "Massue",
+                "slotIndex": 1
+              },
+              {
+                "id": "melee",
+                "type": "skill",
+                "label": "Melee (Basic)",
+                "slotIndex": 2
+              },
+              {
+                "id": "stealth_any",
+                "type": "skill",
+                "label": "Stealth (Any)",
+                "slotIndex": 3
+              },
+              {
+                "id": "charm",
+                "type": "skill",
+                "label": "Charm",
+                "slotIndex": 4
+              },
+              {
+                "id": "bribery",
+                "type": "skill",
+                "label": "Bribery",
+                "slotIndex": 5
+              },
+              {
+                "id": "perception",
+                "type": "skill",
+                "label": "Perception",
+                "slotIndex": 6
+              }
+            ]
+          },
+          "position": 0,
+          "cover": "none",
+          "primaryWeaponId": "weapon_basic_club",
+          "secondaryWeaponId": "weapon_basic_dagger"
+        }
+      ],
+      "adversary": [
+        {
+          "id": "c50902b0-44d0-4841-96df-ef14e19bf366",
+          "character": {
+            "id": "c50902b0-44d0-4841-96df-ef14e19bf366:sandbox",
+            "name": "Emilia Lochland",
+            "species": "Human",
+            "class": "Rogue",
+            "currentCareerId": "witch",
+            "currentCareerLevelId": "witch",
+            "userId": null,
+            "tags": [
+              "rivals"
+            ],
+            "locationId": null,
+            "xp": {
+              "current": 0,
+              "spent": 0
+            },
+            "careerHistory": [],
+            "unlockedCharacteristicIds": [
+              "ws",
+              "t",
+              "wp",
+              "i"
+            ],
+            "unlockedSkillIds": [
+              "channelling",
+              "cool",
+              "endurance",
+              "gossip",
+              "intimidate",
+              "language_magick",
+              "sleight-of-hand",
+              "stealth_rural",
+              "charm-animal",
+              "dodge",
+              "intuition",
+              "melee_polearm",
+              "perception",
+              "trade_herbalist"
+            ],
+            "unlockedTalentIds": [
+              "arcane-magic_witchery",
+              "attractive",
+              "sixth-sense",
+              "witch"
+            ],
+            "details": {
+              "age": "",
+              "eyes": "",
+              "hair": "",
+              "height": "",
+              "partyName": "",
+              "longTermAmbition": "",
+              "shortTermAmbition": "Se faire prendre comme apprentie par Christoph Engel",
+              "partyLongTermAmbition": "",
+              "partyShortTermAmbition": ""
+            },
+            "movement": 4,
+            "characteristics": {
+              "i": {
+                "initial": 29,
+                "talents": 0,
+                "advances": 5,
+                "modifier": 0
+              },
+              "s": {
+                "initial": 32,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "t": {
+                "initial": 30,
+                "talents": 0,
+                "advances": 10,
+                "modifier": 0
+              },
+              "ag": {
+                "initial": 23,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "bs": {
+                "initial": 32,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "wp": {
+                "initial": 40,
+                "talents": 0,
+                "advances": 15,
+                "modifier": 0
+              },
+              "ws": {
+                "initial": 33,
+                "talents": 0,
+                "advances": 8,
+                "modifier": 0
+              },
+              "dex": {
+                "initial": 35,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "fel": {
+                "initial": 34,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              },
+              "int": {
+                "initial": 37,
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0
+              }
+            },
+            "skills": [
+              {
+                "id": "art",
+                "name": "Art",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "dex"
+              },
+              {
+                "id": "athletics",
+                "name": "Athletics",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ag"
+              },
+              {
+                "id": "bribery",
+                "name": "Bribery",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "charm",
+                "name": "Charm",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "charm-animal",
+                "name": "Charm Animal",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "wp"
+              },
+              {
+                "id": "climb",
+                "name": "Climb",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "s"
+              },
+              {
+                "id": "consume-alcohol",
+                "name": "Consume Alcohol",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "t"
+              },
+              {
+                "id": "cool",
+                "name": "Cool",
+                "talents": 0,
+                "advances": 10,
+                "modifier": 0,
+                "characteristic": "wp"
+              },
+              {
+                "id": "dodge",
+                "name": "Dodge",
+                "talents": 0,
+                "advances": 5,
+                "modifier": 0,
+                "characteristic": "ag"
+              },
+              {
+                "id": "drive",
+                "name": "Drive",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "dex"
+              },
+              {
+                "id": "endurance",
+                "name": "Endurance",
+                "talents": 0,
+                "advances": 9,
+                "modifier": 0,
+                "characteristic": "t"
+              },
+              {
+                "id": "entertain",
+                "name": "Entertain",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "evaluate",
+                "name": "Evaluate",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "int"
+              },
+              {
+                "id": "gamble",
+                "name": "Gamble",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "int"
+              },
+              {
+                "id": "gossip",
+                "name": "Gossip",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "haggle",
+                "name": "Haggle",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "intimidate",
+                "name": "Intimidate",
+                "talents": 0,
+                "advances": 11,
+                "modifier": 0,
+                "characteristic": "s"
+              },
+              {
+                "id": "intuition",
+                "name": "Intuition",
+                "talents": 0,
+                "advances": 8,
+                "modifier": 0,
+                "characteristic": "i"
+              },
+              {
+                "id": "leadership",
+                "name": "Leadership",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "fel"
+              },
+              {
+                "id": "melee",
+                "name": "Melee (Basic)",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ws"
+              },
+              {
+                "id": "navigation",
+                "name": "Navigation",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "i"
+              },
+              {
+                "id": "outdoor-survival",
+                "name": "Outdoor Survival",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "int"
+              },
+              {
+                "id": "perception",
+                "name": "Perception",
+                "talents": 0,
+                "advances": 7,
+                "modifier": 0,
+                "characteristic": "i"
+              },
+              {
+                "id": "ranged",
+                "name": "Ranged",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "bs"
+              },
+              {
+                "id": "ride",
+                "name": "Ride",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ag"
+              },
+              {
+                "id": "stealth_urban",
+                "name": "Stealth (Urban)",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ag"
+              },
+              {
+                "id": "channelling",
+                "name": "Channelling",
+                "talents": 0,
+                "advances": 5,
+                "modifier": 0,
+                "characteristic": "wp"
+              },
+              {
+                "id": "language_magick",
+                "name": "Language (Magick)",
+                "talents": 0,
+                "advances": 15,
+                "modifier": 0,
+                "characteristic": "int"
+              },
+              {
+                "id": "sleight-of-hand",
+                "name": "Sleight of Hand",
+                "talents": 0,
+                "advances": 6,
+                "modifier": 0,
+                "characteristic": "dex"
+              },
+              {
+                "id": "stealth_rural",
+                "name": "Stealth (Rural)",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ag"
+              },
+              {
+                "id": "melee_polearm",
+                "name": "Melee (Polearm)",
+                "talents": 0,
+                "advances": 9,
+                "modifier": 0,
+                "characteristic": "ws"
+              },
+              {
+                "id": "trade_herbalist",
+                "name": "Trade (Herbalist)",
+                "talents": 0,
+                "advances": 5,
+                "modifier": 0,
+                "characteristic": "dex"
+              },
+              {
+                "id": "stealth",
+                "name": "Discrétion",
+                "talents": 0,
+                "advances": 0,
+                "modifier": 0,
+                "characteristic": "ag"
+              }
+            ],
+            "status": {
+              "fate": {
+                "max": 3,
+                "current": 0
+              },
+              "wounds": {
+                "max": 16,
+                "current": 16
+              },
+              "fortune": {
+                "max": 3,
+                "current": 0
+              },
+              "resolve": {
+                "max": 3,
+                "current": 3
+              },
+              "corruption": {
+                "max": 9,
+                "current": 0
+              },
+              "resilience": {
+                "max": 3,
+                "current": 3
+              }
+            },
+            "conditions": [],
+            "talents": {
+              "drilled": 1,
+              "menacing": 1,
+              "petty-magic": 1,
+              "arcane-magic": 1,
+              "instinctive-diction": 2,
+              "frightening": 1
+            },
+            "inventory": {
+              "armor": {
+                "armour_leather_jack": 1,
+                "armour_leather_leggings": 1,
+                "armour_leather_skullcap": 1
+              },
+              "items": {},
+              "weapons": {
+                "weapon_polearm_quarterstaff": 1
+              },
+              "equippedArmor": {
+                "armour_leather_jack": true,
+                "armour_leather_leggings": true,
+                "armour_leather_skullcap": true
+              },
+              "equippedWeapons": {
+                "weapon_polearm_quarterstaff": true
+              }
+            },
+            "currency": {
+              "bp": 12,
+              "gc": 0,
+              "ss": 5
+            },
+            "reputations": [],
+            "lore": {
+              "voice": "",
+              "gmNotes": "",
+              "imageUrl": "C:\\Users\\milou\\AppData\\Roaming\\@wfrp\\gm-app\\images\\characters\\c50902b0-44d0-4841-96df-ef14e19bf366.png",
+              "ambitions": {
+                "long": "Apporter du savoir du Vieux Monde à Albion",
+                "short": "Se faire prendre comme apprentie par Christoph Engel"
+              },
+              "biography": "",
+              "appearance": "",
+              "background": [],
+              "mannerisms": "",
+              "playerNotes": "",
+              "motivationKey": "knowledge",
+              "relationships": [
+                {
+                  "id": "rel_1771093593303_krq4n3aee_inv",
+                  "type": "ally",
+                  "description": "",
+                  "targetCharacterId": "48f6aafc-c7b5-4c93-83da-79ae58d0b197"
+                },
+                {
+                  "id": "rel_1771093625172_18tfp0pna",
+                  "type": "ally",
+                  "description": "",
+                  "targetCharacterId": "600a5200-243f-43ba-a656-102e34bcc5f5"
+                },
+                {
+                  "id": "rel_1771093629541_6f39sznue",
+                  "type": "ally",
+                  "description": "",
+                  "targetCharacterId": "067ec163-a2a3-4064-9e50-1b7b258363e9"
+                },
+                {
+                  "id": "rel_1771093672701_qgaaptejg",
+                  "type": "rival",
+                  "description": "Leur en veut de l'avoir tabassée dans les égoûts",
+                  "targetCharacterId": "38b21af4-7fa1-4fc3-bc94-72f640258d57"
+                },
+                {
+                  "id": "rel_1771093698946_oz6mp0vd0",
+                  "type": "rival",
+                  "description": "Leur en veut de l'avoir tabassée dans les égoûts",
+                  "targetCharacterId": "f2649677-be0a-436f-8abe-e44f2f90a1d4"
+                }
+              ]
+            },
+            "isMinion": false,
+            "actionBar": null
+          },
+          "position": 10,
+          "cover": "none",
+          "primaryWeaponId": "weapon_polearm_quarterstaff"
+        }
+      ]
+    },
+    "initialAdvantage": {},
+    "toggles": {
+      "suddenDeath": false,
+      "shootingIntoMelee": false,
+      "maxRounds": 50
+    }
+  },
+  "seed": "f8703701-ede7-446d-8953-23c4c9ec6654:1:4403480c",
+  "index": 1,
+  "expectedOutcome": {
+    "seed": "f8703701-ede7-446d-8953-23c4c9ec6654:1:4403480c",
+    "winner": "adversary",
+    "rounds": 2,
+    "terminalReason": "sideDown",
+    "combatants": {
+      "38b21af4-7fa1-4fc3-bc94-72f640258d57": {
+        "id": "38b21af4-7fa1-4fc3-bc94-72f640258d57",
+        "name": "Ludwig Riemann",
+        "side": "ally",
+        "survived": true,
+        "incapacitated": true,
+        "finalWounds": 0,
+        "died": false,
+        "critsDealt": 0,
+        "critsTaken": 1,
+        "conditionsInflicted": 0,
+        "fateSpent": 0,
+        "fortuneSpent": 0,
+        "advantageGenerated": 3,
+        "damageDealt": 3,
+        "damageTaken": 12
+      },
+      "c50902b0-44d0-4841-96df-ef14e19bf366": {
+        "id": "c50902b0-44d0-4841-96df-ef14e19bf366",
+        "name": "Emilia Lochland",
+        "side": "adversary",
+        "survived": true,
+        "incapacitated": false,
+        "finalWounds": 13,
+        "died": false,
+        "critsDealt": 1,
+        "critsTaken": 0,
+        "conditionsInflicted": 13,
+        "fateSpent": 0,
+        "fortuneSpent": 0,
+        "advantageGenerated": 18,
+        "damageDealt": 12,
+        "damageTaken": 3
+      }
+    },
+    "sideResources": {
+      "ally": {
+        "fateSpent": 0,
+        "fortuneSpent": 0,
+        "advantageGenerated": 3,
+        "advantageSpent": 2
+      },
+      "adversary": {
+        "fateSpent": 0,
+        "fortuneSpent": 0,
+        "advantageGenerated": 18,
+        "advantageSpent": 16
+      }
+    }
+  },
+  "engineVersion": "1.0.1"
+}

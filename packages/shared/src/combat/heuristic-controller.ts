@@ -17,7 +17,7 @@ import type {
     LegalDecision,
 } from './turn-engine';
 import { resolveWeaponUse } from './proficiency';
-import { activeFearStates, isActivelyAfraidOf } from './psychology';
+import { activeFearStates, isActivelyAfraidOf, isFrenzied } from './psychology';
 import { additionalEffortTestModifier } from './advantage';
 
 /**
@@ -205,7 +205,7 @@ export class HeuristicController implements CombatantController {
         if (useful.length === 0) return withLog(legal[0], 'competence.noUsefulOption', legal);
 
         // Hard override: a Broken combatant flees/cowers and does not act tactically.
-        if (actor.conditions.includes('condition_broken')) {
+        if (actor.conditions.includes('condition_broken') && !isFrenzied(actor)) {
             const retreat = bestRetreatDecision(context.state, actor, useful);
             if (retreat) return withLog(retreat, 'psychology.broken.retreat', legal);
             return withLog(legal.find(decision => decision.kind === 'endTurn') ?? legal[0], 'psychology.broken.noRetreat', legal);
@@ -248,6 +248,16 @@ export class HeuristicController implements CombatantController {
         };
 
         switch (decision.kind) {
+            case 'frenzyEnter':
+                return {
+                    score: 300 * p.aggression - 120 * p.rangePreference,
+                    reason: 'psychology.frenzy.enter',
+                };
+            case 'frenzyExit':
+                return {
+                    score: 20 * (1 - p.aggression),
+                    reason: 'psychology.frenzy.exit',
+                };
             case 'meleeAttack':
                 return { score: (120 * (0.5 + p.aggression) + tScore(decision)) * engagedMelee, reason: 'action.attackBestTarget' };
             case 'attackWithBoth':
@@ -336,11 +346,18 @@ export class HeuristicController implements CombatantController {
         const closing = distBefore - distAfter;
         const nearestBefore = Math.min(...enemies.map(enemy => Math.abs(actor.position - enemy.position)));
         const nearestAfter = Math.min(...enemies.map(enemy => Math.abs(resultPos - enemy.position)));
+        const fearRetreatValue = activeFearStates(actor).reduce((total, fear) => {
+            const source = state.combatants[fear.sourceId];
+            if (!source) return total;
+            const before = Math.abs(actor.position - source.position);
+            const after = Math.abs(resultPos - source.position);
+            return total + Math.max(0, after - before) * 20;
+        }, 0);
         // Aggressors reward closing (and a bump for entering reach); kiters reward opening distance.
         const closeValue = closing * (1 - p.rangePreference) * (0.6 + p.aggression) * 2.5;
         const reachBonus = distAfter <= reach && distBefore > reach && p.aggression >= 0.4 ? 60 : 0;
         const retreatValue = (nearestAfter - nearestBefore) * p.kite * 2;
-        return 5 + closeValue + reachBonus + retreatValue;
+        return 5 + closeValue + reachBonus + retreatValue + fearRetreatValue;
     }
 
     /**
