@@ -1,5 +1,5 @@
 import { calculateSuccessLevel, rolld100 } from '../utils/mechanics';
-import { calculateCharacteristicValue } from '../utils/skills';
+import { calculateCharacteristicBonus, calculateCharacteristicValue } from '../utils/skills';
 import type { Rng } from './rng';
 import type {
     CombatEngineResult,
@@ -9,6 +9,7 @@ import type {
     FearSourceState,
     MeleeHookContext,
     ModifierSource,
+    ResolvedOpposedRoll,
 } from './types';
 
 export interface PsychologyExposureOptions {
@@ -214,16 +215,159 @@ export function resolvePsychologyExposure(
 
     const fearRating = source.causesFear?.rating ?? source.causesTerror?.rating;
     if (fearRating && !psychology.fears[source.id]) {
-        const rating = normalizedRating(fearRating);
-        psychology.fears[source.id] = fearless
-            ? { ...activeFear(source.id, rating), status: 'immune' }
-            : activeFear(source.id, rating);
-        events.push(exposureEvent(target.id, source.id, 'fear', rating, fearless ? 'immune' : 'active'));
+        const registered = registerFearOnCombatant(state, target, source.id, fearRating);
+        return registered.events.length > 0
+            ? registered
+            : { state, events: [] };
     }
 
     return events.length > 0
         ? { state: replaceCombatant(state, { ...target, psychology }), events }
         : { state, events: [] };
+}
+
+export function registerFearFromSource(
+    state: CombatState,
+    combatantId: string,
+    sourceId: string,
+    rating = 1,
+    options: { fromIntimidate?: boolean } = {}
+): CombatEngineResult {
+    const target = state.combatants[combatantId];
+    const source = state.combatants[sourceId];
+    if (!target || !source || target.side === source.side) return { state, events: [] };
+    return registerFearOnCombatant(state, target, sourceId, rating, options);
+}
+
+export function resolveIntimidateAction(
+    state: CombatState,
+    actorId: string,
+    primaryTargetId: string | undefined,
+    rng: Rng,
+    overrides: { rollResult?: number; targetNumber?: number; opponentRollResult?: number; opponentTargetNumber?: number } = {}
+): CombatEngineResult {
+    const actor = state.combatants[actorId];
+    const primaryTarget = primaryTargetId ? state.combatants[primaryTargetId] : undefined;
+    if (!actor || !primaryTarget || actor.side === primaryTarget.side) return { state, events: [] };
+
+    const actorRoll = resolveSkillRoll(actor, 'intimidate', state, rng, overrides.rollResult, overrides.targetNumber);
+    const menacing = talentRank(actor, 'menacing');
+    const modifiedActorRoll = withSlModifier(actorRoll, menacing);
+    const targetRoll = resolveSkillRoll(primaryTarget, 'cool', state, rng, overrides.opponentRollResult, overrides.opponentTargetNumber);
+    const success = opposedWins(modifiedActorRoll, targetRoll);
+    const sl = Math.max(0, modifiedActorRoll.roundedSuccessLevel - targetRoll.roundedSuccessLevel);
+    const capacity = success ? Math.max(0, calculateCharacteristicBonus(actor.character.characteristics.s) + sl) : 0;
+
+    let currentState = state;
+    const events: CombatEvent[] = [];
+    const affectedTargetIds: string[] = [];
+
+    if (success && capacity > 0) {
+        for (const targetId of intimidateTargets(state, actor, primaryTarget.id, capacity)) {
+            const result = registerFearFromSource(currentState, targetId, actor.id, 1, { fromIntimidate: true });
+            currentState = result.state;
+            events.push(...result.events.map(event => event.type === 'PsychologyExposure'
+                ? { ...event, i18nKey: 'combat.psychology.intimidate.fearApplied' }
+                : event));
+            if (isActivelyAfraidOf(currentState.combatants[targetId], actor.id)) {
+                affectedTargetIds.push(targetId);
+            }
+        }
+    }
+
+    events.unshift({
+        type: 'IntimidateTestResolved',
+        i18nKey: success ? 'combat.psychology.intimidate.success' : 'combat.psychology.intimidate.failure',
+        data: {
+            actorId,
+            targetId: primaryTarget.id,
+            actorRoll: modifiedActorRoll,
+            targetRoll,
+            outcome: success ? 'success' : 'failure',
+            affectedTargetIds,
+            capacity,
+        },
+    });
+
+    return { state: currentState, events };
+}
+
+export function resolveLeadershipAction(
+    state: CombatState,
+    actorId: string,
+    rng: Rng,
+    overrides: { rollResult?: number; targetNumber?: number } = {}
+): CombatEngineResult {
+    const actor = state.combatants[actorId];
+    if (!actor) return { state, events: [] };
+
+    const roll = resolveSkillRoll(actor, 'leadership', state, rng, overrides.rollResult, overrides.targetNumber);
+    const warLeader = talentRank(actor, 'war-leader');
+    const commandingPresence = talentRank(actor, 'commanding-presence');
+    const successLevel = roll.roundedSuccessLevel + (roll.roundedSuccessLevel >= 0 ? warLeader : 0);
+    const success = successLevel >= 0;
+    const bonus = 10 + (commandingPresence * 10);
+    const expiresEndOfRound = state.round + 1;
+    const affectedAllyIds = success
+        ? nearestAllies(state, actor, Math.max(0, calculateCharacteristicBonus(actor.character.characteristics.fel) + successLevel))
+        : [];
+
+    let currentState = state;
+    const events: CombatEvent[] = [];
+    for (const allyId of affectedAllyIds) {
+        const ally = currentState.combatants[allyId];
+        const psychology = clonePsychology(ally);
+        const existing = psychology.psychologyTestBonus;
+        psychology.psychologyTestBonus = !existing || bonus >= existing.value || expiresEndOfRound >= existing.expiresEndOfRound
+            ? { value: bonus, expiresEndOfRound, sourceId: actor.id }
+            : existing;
+        currentState = replaceCombatant(currentState, { ...ally, psychology });
+        events.push({
+            type: 'PsychologyBonusApplied',
+            i18nKey: 'combat.psychology.leadership.bonusApplied',
+            data: {
+                combatantId: ally.id,
+                sourceId: actor.id,
+                value: psychology.psychologyTestBonus.value,
+                expiresEndOfRound: psychology.psychologyTestBonus.expiresEndOfRound,
+            },
+        });
+    }
+
+    events.unshift({
+        type: 'LeadershipTestResolved',
+        i18nKey: success ? 'combat.psychology.leadership.success' : 'combat.psychology.leadership.failure',
+        data: {
+            actorId,
+            roll: roll.rollResult,
+            targetNumber: roll.targetNumber,
+            successLevel,
+            outcome: success ? 'success' : 'failure',
+            affectedAllyIds,
+            bonus,
+            expiresEndOfRound,
+        },
+    });
+
+    return { state: currentState, events };
+}
+
+export function expirePsychologyBonuses(state: CombatState): CombatEngineResult {
+    let currentState = state;
+    const events: CombatEvent[] = [];
+    for (const combatant of Object.values(state.combatants)) {
+        const bonus = combatant.psychology?.psychologyTestBonus;
+        if (!bonus || bonus.expiresEndOfRound > state.round) continue;
+        const psychology = clonePsychology(combatant);
+        delete psychology.psychologyTestBonus;
+        currentState = replaceCombatant(currentState, { ...currentState.combatants[combatant.id], psychology });
+        events.push({
+            type: 'PsychologyBonusExpired',
+            i18nKey: 'combat.psychology.leadership.bonusExpired',
+            data: { combatantId: combatant.id, sourceId: bonus.sourceId },
+        });
+    }
+    return { state: currentState, events };
 }
 
 export function resolveFearExtendedTests(
@@ -240,7 +384,7 @@ export function resolveFearExtendedTests(
         if (fear.status !== 'active' || fear.lastTestRound === state.round) continue;
         const source = state.combatants[fear.sourceId];
         if (!isPsychologyParticipant(source)) continue;
-        const test = resolveCoolTest(target, rng);
+        const test = resolveCoolTest(target, rng, 0, state.round);
         fear.accumulatedSL = Math.max(0, fear.accumulatedSL + test.successLevel);
         fear.lastTestRound = state.round;
         if (fear.accumulatedSL >= fear.rating) fear.status = 'immune';
@@ -287,7 +431,7 @@ export function resolveVoluntaryFearApproach(
     const events: CombatEvent[] = [];
 
     for (const fear of approached) {
-        const test = resolveCoolTest(combatant, rng);
+        const test = resolveCoolTest(combatant, rng, 0, state.round);
         events.push(testEvent(combatant.id, fear.sourceId, 'fearApproach', test));
         if (test.successLevel < 0) return { allowed: false, events };
     }
@@ -313,7 +457,7 @@ export function resolveSourceApproachFear(
         const previousDistance = Math.abs(target.position - sourceBefore.position);
         const nextDistance = Math.abs(target.position - sourceAfter.position);
         if (nextDistance >= previousDistance) continue;
-        const test = resolveCoolTest(target, rng);
+        const test = resolveCoolTest(target, rng, 0, stateAfterMove.round);
         const brokenApplied = test.successLevel < 0 ? 1 : 0;
         events.push(testEvent(target.id, sourceId, 'sourceApproach', test, { brokenApplied }));
         if (brokenApplied > 0) {
@@ -336,21 +480,36 @@ export function activeFearStates(combatant: Combatant): FearSourceState[] {
     return Object.values(combatant.psychology?.fears ?? {}).filter(fear => fear.status === 'active');
 }
 
-export function resolveCoolTest(combatant: Combatant, rng: Rng, modifier = 0): PsychologyTestResult {
-    const skill = combatant.character.skills.find(candidate =>
-        candidate.id.toLowerCase() === 'cool' || candidate.name.toLowerCase() === 'cool'
-    );
-    const wp = calculateCharacteristicValue(combatant.character.characteristics.wp);
-    const targetNumber = wp
-        + (skill?.advances ?? 0)
-        + (skill?.talents ?? 0)
-        + (skill?.modifier ?? 0)
-        + modifier;
+export function resolveCoolTest(combatant: Combatant, rng: Rng, modifier = 0, round?: number): PsychologyTestResult {
+    const targetNumber = skillTarget(combatant, 'cool')
+        + modifier
+        + activePsychologyTestBonus(combatant, round);
     const roll = rolld100(rng);
     return {
         roll,
         targetNumber,
         successLevel: Math.round(calculateSuccessLevel(roll, targetNumber)),
+    };
+}
+
+function registerFearOnCombatant(
+    state: CombatState,
+    target: Combatant,
+    sourceId: string,
+    ratingValue: number,
+    options: { fromIntimidate?: boolean } = {}
+): CombatEngineResult {
+    if (psychologyImmune(target)) return { state, events: [] };
+    const psychology = clonePsychology(target);
+    if (psychology.fears[sourceId]) return { state, events: [] };
+    const rating = normalizedRating(ratingValue);
+    const fearless = fearImmune(target) || (options.fromIntimidate === true && hasTalent(target, 'iron-will'));
+    psychology.fears[sourceId] = fearless
+        ? { ...activeFear(sourceId, rating), status: 'immune' }
+        : activeFear(sourceId, rating);
+    return {
+        state: replaceCombatant(state, { ...target, psychology }),
+        events: [exposureEvent(target.id, sourceId, 'fear', rating, fearless ? 'immune' : 'active')],
     };
 }
 
@@ -362,6 +521,107 @@ function psychologyImmune(combatant: Combatant): boolean {
 function fearImmune(combatant: Combatant): boolean {
     return combatant.psychology?.immuneToFear === true
         || (combatant.character.talents?.fearless ?? 0) > 0;
+}
+
+function activePsychologyTestBonus(combatant: Combatant, round?: number): number {
+    const bonus = combatant.psychology?.psychologyTestBonus;
+    if (!bonus) return 0;
+    if (round !== undefined && bonus.expiresEndOfRound < round) return 0;
+    return bonus.value;
+}
+
+function resolveSkillRoll(
+    combatant: Combatant,
+    skillId: string,
+    state: CombatState,
+    rng: Rng,
+    rollOverride?: number,
+    targetOverride?: number
+): ResolvedOpposedRoll {
+    const targetNumber = targetOverride ?? skillTarget(combatant, skillId);
+    const rollResult = rollOverride ?? rolld100(rng);
+    const successLevel = Math.round(calculateSuccessLevel(rollResult, targetNumber));
+    return {
+        skillId,
+        rollResult,
+        targetNumber,
+        successLevel,
+        roundedSuccessLevel: successLevel,
+        usedTalents: skillId === 'intimidate' && talentRank(combatant, 'menacing') > 0
+            ? [{ name: 'Menacing', rank: talentRank(combatant, 'menacing') }]
+            : skillId === 'leadership' && (talentRank(combatant, 'war-leader') > 0 || talentRank(combatant, 'commanding-presence') > 0)
+                ? [
+                    ...(talentRank(combatant, 'war-leader') > 0 ? [{ name: 'War Leader', rank: talentRank(combatant, 'war-leader') }] : []),
+                    ...(talentRank(combatant, 'commanding-presence') > 0 ? [{ name: 'Commanding Presence', rank: talentRank(combatant, 'commanding-presence') }] : []),
+                ]
+                : [],
+    };
+}
+
+function withSlModifier(roll: ResolvedOpposedRoll, modifier: number): ResolvedOpposedRoll {
+    if (modifier === 0) return roll;
+    return {
+        ...roll,
+        successLevel: roll.successLevel + modifier,
+        roundedSuccessLevel: roll.roundedSuccessLevel + modifier,
+    };
+}
+
+function opposedWins(actorRoll: ResolvedOpposedRoll, targetRoll: ResolvedOpposedRoll): boolean {
+    return actorRoll.roundedSuccessLevel > targetRoll.roundedSuccessLevel
+        || (actorRoll.roundedSuccessLevel === targetRoll.roundedSuccessLevel && actorRoll.targetNumber > targetRoll.targetNumber);
+}
+
+function intimidateTargets(state: CombatState, actor: Combatant, primaryTargetId: string, capacity: number): string[] {
+    const candidates = Object.values(state.combatants)
+        .filter(combatant => combatant.side !== actor.side && isPsychologyParticipant(combatant))
+        .sort((a, b) => {
+            if (a.id === primaryTargetId) return -1;
+            if (b.id === primaryTargetId) return 1;
+            return Math.abs(a.position - actor.position) - Math.abs(b.position - actor.position)
+                || a.id.localeCompare(b.id);
+        });
+    return candidates.slice(0, capacity).map(combatant => combatant.id);
+}
+
+function nearestAllies(state: CombatState, actor: Combatant, count: number): string[] {
+    if (count <= 0) return [];
+    return Object.values(state.combatants)
+        .filter(combatant => combatant.id !== actor.id && combatant.side === actor.side && isPsychologyParticipant(combatant))
+        .sort((a, b) => Math.abs(a.position - actor.position) - Math.abs(b.position - actor.position)
+            || a.id.localeCompare(b.id))
+        .slice(0, count)
+        .map(combatant => combatant.id);
+}
+
+function skillTarget(combatant: Combatant, skillId: string): number {
+    const normalized = skillId.toLowerCase();
+    const skill = combatant.character.skills.find(candidate =>
+        candidate.id.toLowerCase() === normalized || candidate.name.toLowerCase() === normalized
+    );
+    if (skill) {
+        return calculateCharacteristicValue(combatant.character.characteristics[skill.characteristic as keyof typeof combatant.character.characteristics])
+            + skill.advances
+            + skill.talents
+            + skill.modifier;
+    }
+    const fallback = normalized === 'cool'
+        ? 'wp'
+        : normalized === 'leadership'
+            ? 'fel'
+            : normalized === 'intimidate'
+                ? 's'
+                : 'ws';
+    return calculateCharacteristicValue(combatant.character.characteristics[fallback]);
+}
+
+function talentRank(combatant: Combatant, talentId: string): number {
+    const compact = talentId.toLowerCase().replace(/[\s_]+/g, '-');
+    return combatant.character.talents?.[talentId] ?? combatant.character.talents?.[compact] ?? 0;
+}
+
+function hasTalent(combatant: Combatant, talentId: string): boolean {
+    return talentRank(combatant, talentId) > 0;
 }
 
 function clonePsychology(combatant: Combatant): NonNullable<Combatant['psychology']> {

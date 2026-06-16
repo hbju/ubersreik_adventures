@@ -1,4 +1,4 @@
-import { calculateCharacteristicValue } from '../utils/skills';
+import { calculateCharacteristicBonus, calculateCharacteristicValue } from '../utils/skills';
 import { hasQuality } from './qualities';
 import { REACH_ENGAGEMENT_DISTANCE, type WeaponReach } from './spatial';
 import type { Rng } from './rng';
@@ -258,6 +258,27 @@ export class HeuristicController implements CombatantController {
                     score: 20 * (1 - p.aggression),
                     reason: 'psychology.frenzy.exit',
                 };
+            case 'intimidate': {
+                const target = decision.targetId ? state.combatants[decision.targetId] : undefined;
+                if (!target || isActivelyAfraidOf(target, actor.id) || isFrenzied(target)) return { score: -1, reason: 'psychology.intimidate' };
+                const cool = skillTarget(target, 'cool');
+                const lowCool = Math.max(0, 60 - cool);
+                const affectedPotential = Math.min(enemyCount(state, actor), Math.max(1, calculateCharacteristicBonus(actor.character.characteristics.s)));
+                return {
+                    score: (42 + lowCool + affectedPotential * 16 + targetThreat(target) * 0.25) * (0.35 + p.threatFocus) * (0.4 + p.aggression),
+                    reason: 'psychology.intimidate',
+                };
+            }
+            case 'leadership': {
+                const allies = allyCount(state, actor);
+                if (allies === 0) return { score: -1, reason: 'psychology.leadership' };
+                const pressure = psychologicalPressure(state, actor);
+                const supportBias = 1 - (p.aggression * 0.55);
+                return {
+                    score: pressure > 0 ? (36 + allies * 14 + pressure * 38) * supportBias : 10 * supportBias,
+                    reason: 'psychology.leadership',
+                };
+            }
             case 'meleeAttack':
                 return { score: (120 * (0.5 + p.aggression) + tScore(decision)) * engagedMelee, reason: 'action.attackBestTarget' };
             case 'attackWithBoth':
@@ -403,6 +424,10 @@ export class HeuristicController implements CombatantController {
                 return this.materializeRanged(context, [decision]);
             case 'reload':
                 return withReloadRoll(context, decision);
+            case 'intimidate':
+                return withIntimidateRoll(context, decision);
+            case 'leadership':
+                return withLeadershipRoll(context, decision);
             case 'move':
                 return decision.mode === 'charge' ? this.materializeCharge(context, [decision]) : decision;
             case 'assess':
@@ -439,7 +464,7 @@ export class HeuristicController implements CombatantController {
                 attackerId: context.actor.id,
                 defenderId: targetId!,
                 attacker: rollInput(context, context.actor, weaponUse ? (weaponUse?.test.type === 'skill' ? weaponUse.test.skillId : weaponUse.test.characteristic) : 'melee_basic', weapon?.id),
-                defender: rollInput(context, defender, 'melee_basic', primaryWeapon(context.state, defender)?.id),
+                defender: defensiveRollInput(context, context.actor, defender),
                 isCharging: context.state.turnFlags.chargedCombatantIds.includes(context.actor.id),
                 grantAdvantage: additionalEffortTestModifier !== undefined
             },
@@ -458,7 +483,7 @@ export class HeuristicController implements CombatantController {
             attackerId: context.actor.id,
             defenderId: targetId!,
             attacker: rollInput(context, context.actor, weaponUse ? (weaponUse?.test.type === 'skill' ? weaponUse.test.skillId : weaponUse.test.characteristic) : 'melee_basic', weapon?.id),
-                defender: rollInput(context, defender, 'melee_basic', primaryWeapon(context.state, defender)?.id),
+                defender: defensiveRollInput(context, context.actor, defender),
                 isCharging: true,
             },
         };
@@ -525,6 +550,34 @@ function withReloadRoll(context: DecisionContext, decision: LegalDecision): Lega
     return { ...decision, action: { ...action, rollResult: d100(context.rng), targetNumber: skillTarget(context.actor, 'ranged_blackpowder') } };
 }
 
+function withIntimidateRoll(context: DecisionContext, decision: LegalDecision): LegalDecision {
+    const target = decision.targetId ? context.state.combatants[decision.targetId] : undefined;
+    return {
+        ...decision,
+        rollResult: d100(context.rng),
+        targetNumber: skillTarget(context.actor, 'intimidate'),
+        request: {
+            kind: 'intimidate',
+            actorId: decision.actorId,
+            targetId: decision.targetId,
+            opponentRollResult: d100(context.rng),
+            opponentTargetNumber: target ? skillTarget(target, 'cool') : 0,
+        },
+    };
+}
+
+function withLeadershipRoll(context: DecisionContext, decision: LegalDecision): LegalDecision {
+    return {
+        ...decision,
+        rollResult: d100(context.rng),
+        targetNumber: skillTarget(context.actor, 'leadership'),
+        request: {
+            kind: 'leadership',
+            actorId: decision.actorId,
+        },
+    };
+}
+
 function rollInput(context: DecisionContext, combatant: Combatant | undefined, skillId: string, weaponId?: string): OpposedRollInput {
     return {
         skillId,
@@ -534,12 +587,43 @@ function rollInput(context: DecisionContext, combatant: Combatant | undefined, s
     };
 }
 
+function defensiveRollInput(context: DecisionContext, attacker: Combatant, defender: Combatant | undefined): OpposedRollInput {
+    if (!defender) return rollInput(context, defender, 'melee_basic');
+    const weapon = primaryWeapon(context.state, defender);
+    if (isActivelyAfraidOf(attacker, defender.id) && skillTarget(defender, 'intimidate') >= skillTarget(defender, 'melee_basic')) {
+        return rollInput(context, defender, 'intimidate');
+    }
+    if (weapon) {
+        const use = resolveWeaponUse(defender, weapon);
+        if (use) {
+            const test = use.test;
+            if (test.type === 'skill') {
+                return rollInput(context, defender, test.skillId, weapon.id);
+            }
+            if (test.type === 'characteristic') {
+                return rollInput(context, defender, test.characteristic, weapon.id);
+            }
+        }
+    }
+    return rollInput(context, defender, 'melee_basic', weapon?.id);
+}
+
 function skillTarget(combatant: Combatant, skillId: string): number {
     const skill = combatant.character.skills.find(candidate => candidate.id === skillId || candidate.name.toLowerCase() === skillId.toLowerCase());
     if (skill) {
         return calculateCharacteristicValue(combatant.character.characteristics[skill.characteristic as keyof typeof combatant.character.characteristics]) + skill.advances + skill.talents + skill.modifier;
     }
-    const key = skillId.includes('ranged') ? 'bs' : skillId === 'dodge' ? 'ag' : 'ws';
+    const key = skillId.includes('ranged')
+        ? 'bs'
+        : skillId === 'dodge'
+            ? 'ag'
+            : skillId === 'cool'
+                ? 'wp'
+                : skillId === 'leadership'
+                    ? 'fel'
+                    : skillId === 'intimidate'
+                        ? 's'
+                        : 'ws';
     return calculateCharacteristicValue(combatant.character.characteristics[key]);
 }
 
@@ -563,6 +647,23 @@ function targetScore(state: CombatState, actor: Combatant, target: Combatant, pr
         + (actor.engagementIds.includes(target.id) ? 15 : 0)
         + (state.tacticalDominantSide === target.side ? 5 : 0)
         - (isActivelyAfraidOf(actor, target.id) ? 35 : 0);
+}
+
+function enemyCount(state: CombatState, actor: Combatant): number {
+    return Object.values(state.combatants).filter(combatant => combatant.side !== actor.side && isActive(combatant)).length;
+}
+
+function allyCount(state: CombatState, actor: Combatant): number {
+    return Object.values(state.combatants).filter(combatant => combatant.id !== actor.id && combatant.side === actor.side && isActive(combatant)).length;
+}
+
+function psychologicalPressure(state: CombatState, actor: Combatant): number {
+    const allies = Object.values(state.combatants).filter(combatant => combatant.side === actor.side && isActive(combatant));
+    const enemies = Object.values(state.combatants).filter(combatant => combatant.side !== actor.side && isActive(combatant));
+    const fearSources = enemies.filter(enemy => !!enemy.causesFear?.rating || !!enemy.causesTerror?.rating).length;
+    const alreadyAfraid = allies.reduce((total, ally) => total + activeFearStates(ally).length, 0);
+    const broken = allies.filter(ally => ally.conditions.includes('condition_broken')).length;
+    return fearSources + alreadyAfraid + broken;
 }
 
 function approachesFearedSource(state: CombatState, actor: Combatant, decision: LegalDecision): boolean {

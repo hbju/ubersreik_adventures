@@ -163,6 +163,17 @@
                     "success": "{{combatantId}} maîtrise sa Rage de bataille et met fin à sa Frénésie.",
                     "failure": "{{combatantId}} reste en Frénésie."
                 }
+            },
+            "intimidate": {
+                "success": "{{actorId}} intimide {{targetId}}.",
+                "failure": "{{actorId}} ne parvient pas a intimider {{targetId}}.",
+                "fearApplied": "{{combatantId}} craint {{sourceId}} apres une Intimidation."
+            },
+            "leadership": {
+                "success": "{{actorId}} raffermit ses allies proches.",
+                "failure": "{{actorId}} ne parvient pas a raffermir ses allies proches.",
+                "bonusApplied": "{{combatantId}} gagne +{{value}} aux tests de Psychologie jusqu'a la fin du round {{expiresEndOfRound}}.",
+                "bonusExpired": "Le bonus de Psychologie de Commandement de {{combatantId}} expire."
             }
         },
         "engagement": {

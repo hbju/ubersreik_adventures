@@ -8,11 +8,14 @@ import { resolveWeaponUse } from './proficiency';
 import {
     canEnterFrenzy,
     enterFrenzy,
+    expirePsychologyBonuses,
     exitFrenzy,
     isFrenzied,
     markFrenzyFreeMeleeUsed,
     resolveCoolTest,
     resolveFrenzyExits,
+    resolveIntimidateAction,
+    resolveLeadershipAction,
     resolvePsychologyExposures,
     resolvePsychologyRoundStart,
 } from './psychology';
@@ -43,6 +46,8 @@ export type TurnEnginePhase = 'setup' | 'roundStart' | 'awaitingDecision' | 'rou
 export type CombatDecisionKind =
     | 'frenzyEnter'
     | 'frenzyExit'
+    | 'intimidate'
+    | 'leadership'
     | 'meleeAttack'
     | 'rangedAttack'
     | 'reload'
@@ -387,6 +392,42 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
                 },
             });
             return spendTurnAction(result.state, actor.id, result.events);
+        },
+    },
+    {
+        kind: 'intimidate',
+        legal: (state, actor) => actionBudgetReady(actor)
+            ? enemyIds(state, actor).map(targetId => ({
+                kind: 'intimidate',
+                actorId: actor.id,
+                targetId,
+                targetIds: [targetId],
+                request: { kind: 'intimidate', actorId: actor.id, targetId },
+            }))
+            : [],
+        dispatch: (engine, decision) => {
+            const targetId = decision.targetId ?? decision.request?.targetId;
+            if (!targetId) return { state: engine.state, events: [decisionRejected(decision, 'missingTarget')] };
+            const result = resolveIntimidateAction(engine.state, decision.actorId, targetId, engine.rng, {
+                rollResult: decision.rollResult ?? decision.request?.rollResult,
+                targetNumber: decision.targetNumber ?? decision.request?.targetNumber,
+                opponentRollResult: decision.request?.opponentRollResult,
+                opponentTargetNumber: decision.request?.opponentTargetNumber,
+            });
+            return spendTurnAction(result.state, decision.actorId, result.events);
+        },
+    },
+    {
+        kind: 'leadership',
+        legal: (state, actor) => actionBudgetReady(actor) && allyIds(state, actor).length > 0
+            ? [{ kind: 'leadership', actorId: actor.id, request: { kind: 'leadership', actorId: actor.id } }]
+            : [],
+        dispatch: (engine, decision) => {
+            const result = resolveLeadershipAction(engine.state, decision.actorId, engine.rng, {
+                rollResult: decision.rollResult ?? decision.request?.rollResult,
+                targetNumber: decision.targetNumber ?? decision.request?.targetNumber,
+            });
+            return spendTurnAction(result.state, decision.actorId, result.events);
         },
     },
     {
@@ -1418,6 +1459,10 @@ function applyEndOfRound(state: CombatState, rng: Rng): CombatEngineResult {
     const frenzyExit = resolveFrenzyExits(currentState);
     currentState = frenzyExit.state;
     events.push(...frenzyExit.events);
+
+    const psychologyBonusExpiry = expirePsychologyBonuses(currentState);
+    currentState = psychologyBonusExpiry.state;
+    events.push(...psychologyBonusExpiry.events);
 
     events.push(turnEvent('RoundSequenceResolved', 'combat.turn.roundSequenceResolved', { round: state.round, sequence: 'conditions>advantage>engagements>death>removal' }));
     return { state: currentState, events };

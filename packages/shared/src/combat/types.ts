@@ -88,12 +88,19 @@ export interface FrenzyState {
     entrySource?: 'willpower' | 'flagellant';
 }
 
+export interface PsychologyTestBonusState {
+    value: number;
+    expiresEndOfRound: number;
+    sourceId?: string;
+}
+
 export interface CombatantPsychologyState {
     fears: Record<string, FearSourceState>;
     terrors: Record<string, TerrorSourceState>;
     frenzy?: FrenzyState;
     immuneToAllPsychology?: boolean;
     immuneToFear?: boolean;
+    psychologyTestBonus?: PsychologyTestBonusState;
 }
 
 export interface FeintBuff {
@@ -248,6 +255,8 @@ export type CombatActionKind =
     | 'charge'
     | 'frenzyEnter'
     | 'frenzyExit'
+    | 'intimidate'
+    | 'leadership'
     | 'aim'
     | 'reload'
     | 'assess'
@@ -837,6 +846,39 @@ export type PsychologyTestEvent = CombatEventBase<'PsychologyTestResolved', {
     brokenApplied?: number;
 }>;
 
+export type IntimidateTestEvent = CombatEventBase<'IntimidateTestResolved', {
+    actorId: string;
+    targetId: string;
+    actorRoll: ResolvedOpposedRoll;
+    targetRoll: ResolvedOpposedRoll;
+    outcome: 'success' | 'failure';
+    affectedTargetIds: string[];
+    capacity: number;
+}>;
+
+export type LeadershipTestEvent = CombatEventBase<'LeadershipTestResolved', {
+    actorId: string;
+    roll: number;
+    targetNumber: number;
+    successLevel: number;
+    outcome: 'success' | 'failure';
+    affectedAllyIds: string[];
+    bonus: number;
+    expiresEndOfRound: number;
+}>;
+
+export type PsychologyBonusAppliedEvent = CombatEventBase<'PsychologyBonusApplied', {
+    combatantId: string;
+    sourceId: string;
+    value: number;
+    expiresEndOfRound: number;
+}>;
+
+export type PsychologyBonusExpiredEvent = CombatEventBase<'PsychologyBonusExpired', {
+    combatantId: string;
+    sourceId?: string;
+}>;
+
 export type FrenzyTestEvent = CombatEventBase<'FrenzyTestResolved', {
     combatantId: string;
     action: 'enter' | 'exit';
@@ -988,6 +1030,10 @@ export type CombatEvent =
     | MoveRejectedEvent
     | PsychologyExposureEvent
     | PsychologyTestEvent
+    | IntimidateTestEvent
+    | LeadershipTestEvent
+    | PsychologyBonusAppliedEvent
+    | PsychologyBonusExpiredEvent
     | FrenzyTestEvent
     | FrenzyStateChangedEvent
     | EngagedEvent

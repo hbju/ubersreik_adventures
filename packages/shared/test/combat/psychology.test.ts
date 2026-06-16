@@ -8,9 +8,12 @@ import {
     createCombatantFromCharacter,
     createTurnEngine,
     createSeededRng,
+    expirePsychologyBonuses,
     fearPreRollModifiers,
     isActivelyAfraidOf,
     resolveMeleeAttack,
+    resolveIntimidateAction,
+    resolveLeadershipAction,
     resolvePsychologyExposure,
     resolvePsychologyRoundStart,
     HeuristicController,
@@ -256,6 +259,219 @@ describe('PSY-a Fear and Terror', () => {
     });
 });
 
+describe('PSY-d Intimidate and Leadership', () => {
+    it('applies Fear 1 from Intimidate to the primary and nearest enemies on an opposed win', () => {
+        const actor = combatant('actor', 'ally');
+        const primary = combatant('primary', 'adversary');
+        const near = { ...combatant('near', 'adversary'), position: 8 };
+        const far = { ...combatant('far', 'adversary'), position: 30 };
+        const state = createCombatState([actor, primary, near, far], { round: 1 });
+
+        const result = resolveIntimidateAction(state, 'actor', 'primary', sequenceRng(), {
+            rollResult: 11,
+            targetNumber: 30,
+            opponentRollResult: 91,
+            opponentTargetNumber: 40,
+        });
+
+        expect(result.events[0]).toMatchObject({
+            type: 'IntimidateTestResolved',
+            data: expect.objectContaining({ outcome: 'success' }),
+        });
+        expect(result.state.combatants.primary.psychology?.fears.actor).toMatchObject({ rating: 1, status: 'active' });
+        expect(result.state.combatants.near.psychology?.fears.actor).toMatchObject({ rating: 1, status: 'active' });
+        expect(result.state.combatants.far.psychology?.fears.actor).toMatchObject({ rating: 1, status: 'active' });
+    });
+
+    it('does not apply Intimidate Fear on a loss and respects Fearless and frenzy immunity', () => {
+        const actor = combatant('actor', 'ally');
+        const normal = combatant('normal', 'adversary');
+        const fearless = combatant('fearless', 'adversary', { fearless: 1 });
+        const frenzied = {
+            ...combatant('frenzied', 'adversary'),
+            psychology: {
+                fears: {},
+                terrors: {},
+                frenzy: { active: true },
+                immuneToAllPsychology: true,
+            },
+        };
+        const state = createCombatState([actor, normal, fearless, frenzied], { round: 1 });
+
+        const loss = resolveIntimidateAction(state, 'actor', 'normal', sequenceRng(), {
+            rollResult: 91,
+            targetNumber: 30,
+            opponentRollResult: 11,
+            opponentTargetNumber: 40,
+        });
+        expect(loss.state.combatants.normal.psychology?.fears.actor).toBeUndefined();
+
+        const win = resolveIntimidateAction(state, 'actor', 'normal', sequenceRng(), {
+            rollResult: 11,
+            targetNumber: 30,
+            opponentRollResult: 91,
+            opponentTargetNumber: 40,
+        });
+        expect(win.state.combatants.normal.psychology?.fears.actor?.status).toBe('active');
+        expect(win.state.combatants.fearless.psychology?.fears.actor?.status).toBe('immune');
+        expect(win.state.combatants.frenzied.psychology?.fears.actor).toBeUndefined();
+    });
+
+    it('lets a defender use Intimidate only when the attacker fears them', () => {
+        const fearful = activeFearState();
+        const defender = withSkillAdvances(fearful.combatants.source, 'intimidate', 30);
+        const fearfulState = {
+            ...fearful,
+            combatants: { ...fearful.combatants, source: defender },
+        };
+        const substitution = resolveMeleeAttack(fearfulState, {
+            attackerId: 'target',
+            defenderId: 'source',
+            attacker: { skillId: 'melee_basic', targetNumber: 40, rollResult: 51 },
+            defender: { skillId: 'melee_basic', targetNumber: 40, rollResult: 31 },
+        });
+        expect(substitution.events.find(event => event.type === 'AttackResolved')?.data.defenderRoll.skillId).toBe('intimidate');
+
+        const calmState = {
+            ...fearfulState,
+            combatants: {
+                ...fearfulState.combatants,
+                target: { ...fearfulState.combatants.target, psychology: { fears: {}, terrors: {} } },
+            },
+        };
+        const noSubstitution = resolveMeleeAttack(calmState, {
+            attackerId: 'target',
+            defenderId: 'source',
+            attacker: { skillId: 'melee_basic', targetNumber: 40, rollResult: 51 },
+            defender: { skillId: 'melee_basic', targetNumber: 40, rollResult: 31 },
+        });
+        expect(noSubstitution.events.find(event => event.type === 'AttackResolved')?.data.defenderRoll.skillId).toBe('melee_basic');
+    });
+
+    it('Menacing adds SL to Intimidate', () => {
+        const actor = combatant('actor', 'ally', { menacing: 2 });
+        const target = combatant('target', 'adversary');
+        const result = resolveIntimidateAction(createCombatState([actor, target], { round: 1 }), 'actor', 'target', sequenceRng(), {
+            rollResult: 41,
+            targetNumber: 30,
+            opponentRollResult: 41,
+            opponentTargetNumber: 40,
+        });
+
+        const event = result.events[0];
+        expect(event).toMatchObject({
+            type: 'IntimidateTestResolved',
+            data: expect.objectContaining({
+                outcome: 'success',
+                actorRoll: expect.objectContaining({ roundedSuccessLevel: 1 }),
+            }),
+        });
+        expect(result.state.combatants.target.psychology?.fears.actor?.status).toBe('active');
+    });
+
+    it('Leadership grants +10 Psychology to exactly FelB plus SL nearest allies and expires at end of next round', () => {
+        const leader = combatant('leader', 'ally');
+        const allies = [0, 1, 2, 3, 4].map(index => ({
+            ...combatant(`ally${index}`, 'ally'),
+            position: index + 1,
+        }));
+        const state = createCombatState([leader, ...allies], { round: 1 });
+
+        const result = resolveLeadershipAction(state, 'leader', sequenceRng(), {
+            rollResult: 21,
+            targetNumber: 30,
+        });
+
+        expect(result.events[0]).toMatchObject({
+            type: 'LeadershipTestResolved',
+            data: expect.objectContaining({
+                outcome: 'success',
+                affectedAllyIds: ['ally0', 'ally1', 'ally2', 'ally3'],
+                bonus: 10,
+                expiresEndOfRound: 2,
+            }),
+        });
+        expect(result.state.combatants.ally0.psychology?.psychologyTestBonus).toMatchObject({ value: 10, expiresEndOfRound: 2 });
+        expect(result.state.combatants.ally3.psychology?.psychologyTestBonus).toMatchObject({ value: 10, expiresEndOfRound: 2 });
+        expect(result.state.combatants.ally4.psychology?.psychologyTestBonus).toBeUndefined();
+
+        const withEnemy = {
+            ...result.state,
+            round: 2,
+            combatants: {
+                ...result.state.combatants,
+                source: { ...combatant('source', 'adversary'), causesFear: { rating: 1 } },
+            },
+        };
+        const fear = resolvePsychologyRoundStart(withEnemy, sequenceRng(41, 41, 41, 41, 41));
+        const ally0FearTest = fear.events.find(event =>
+            event.type === 'PsychologyTestResolved'
+            && event.data.combatantId === 'ally0'
+            && event.data.psychology === 'fear'
+        );
+        expect(ally0FearTest?.data.targetNumber).toBe(50);
+
+        const expired = expirePsychologyBonuses({ ...result.state, round: 2 });
+        expect(expired.state.combatants.ally0.psychology?.psychologyTestBonus).toBeUndefined();
+    });
+
+    it('War Leader extends Leadership count and Commanding Presence increases the bonus magnitude', () => {
+        const leader = combatant('leader', 'ally', { 'war-leader': 1, 'commanding-presence': 1 });
+        const allies = [0, 1, 2, 3].map(index => ({ ...combatant(`ally${index}`, 'ally'), position: index + 1 }));
+        const result = resolveLeadershipAction(createCombatState([leader, ...allies], { round: 1 }), 'leader', sequenceRng(), {
+            rollResult: 31,
+            targetNumber: 30,
+        });
+
+        expect(result.events[0]).toMatchObject({
+            type: 'LeadershipTestResolved',
+            data: expect.objectContaining({
+                outcome: 'success',
+                affectedAllyIds: ['ally0', 'ally1', 'ally2', 'ally3'],
+                bonus: 20,
+            }),
+        });
+        expect(result.state.combatants.ally0.psychology?.psychologyTestBonus?.value).toBe(20);
+    });
+
+    it('scores Intimidate and Leadership in the heuristic when pressure makes them useful', () => {
+        const actor = combatant('actor', 'ally');
+        const lowCool = combatant('lowCool', 'adversary', {}, 20);
+        const intimidateState = createCombatState([actor, lowCool], { round: 1 });
+        const brute = new HeuristicController();
+        const intimidate = brute.choose({
+            level: 'turn',
+            engine: createTurnEngine(intimidateState, { seed: 'intimidate-ai' }),
+            state: intimidateState,
+            actor,
+            rng: createSeededRng('intimidate-ai'),
+            legalDecisions: [
+                { kind: 'intimidate', actorId: actor.id, targetId: 'lowCool' },
+                { kind: 'endTurn', actorId: actor.id },
+            ],
+        });
+        expect(intimidate?.kind).toBe('intimidate');
+
+        const leader = combatant('leader', 'ally');
+        const ally = combatant('ally', 'ally');
+        const fearSource = { ...combatant('fearSource', 'adversary'), causesFear: { rating: 2 } };
+        const leadershipState = createCombatState([leader, ally, fearSource], { round: 1 });
+        const support = new HeuristicController({ profile: 'marksman' });
+        const leadership = support.choose({
+            level: 'turn',
+            engine: createTurnEngine(leadershipState, { seed: 'leadership-ai' }),
+            state: leadershipState,
+            actor: leader,
+            rng: createSeededRng('leadership-ai'),
+            legalDecisions: [
+                { kind: 'leadership', actorId: leader.id },
+                { kind: 'endTurn', actorId: leader.id },
+            ],
+        });
+        expect(leadership?.kind).toBe('leadership');
+    });
+});
+
 function fearState(rating: number): CombatState {
     return createCombatState([
         combatant('target', 'ally'),
@@ -343,6 +559,8 @@ function character(id: string, talents: Record<string, number>, willpower: numbe
         },
         skills: [
             { id: 'cool', name: 'Cool', characteristic: 'wp', advances: 0, talents: 0, modifier: 0 },
+            { id: 'intimidate', name: 'Intimidate', characteristic: 's', advances: 0, talents: 0, modifier: 0 },
+            { id: 'leadership', name: 'Leadership', characteristic: 'fel', advances: 0, talents: 0, modifier: 0 },
             { id: 'melee_basic', name: 'Melee (Basic)', characteristic: 'ws', advances: 0, talents: 0, modifier: 0 },
         ],
         status: {
@@ -364,5 +582,15 @@ function character(id: string, talents: Record<string, number>, willpower: numbe
         },
         currency: { gc: 0, ss: 0, bp: 0 },
         reputations: [],
+    };
+}
+
+function withSkillAdvances<T extends ReturnType<typeof combatant>>(combatant: T, skillId: string, advances: number): T {
+    return {
+        ...combatant,
+        character: {
+            ...combatant.character,
+            skills: combatant.character.skills.map(skill => skill.id === skillId ? { ...skill, advances } : skill),
+        },
     };
 }

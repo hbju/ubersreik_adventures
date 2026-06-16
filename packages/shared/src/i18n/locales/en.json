@@ -236,6 +236,17 @@
                     "success": "{{combatantId}} controls their Battle Rage and ends Frenzy.",
                     "failure": "{{combatantId}} remains Frenzied."
                 }
+            },
+            "intimidate": {
+                "success": "{{actorId}} intimidates {{targetId}}.",
+                "failure": "{{actorId}} fails to intimidate {{targetId}}.",
+                "fearApplied": "{{combatantId}} fears {{sourceId}} after being intimidated."
+            },
+            "leadership": {
+                "success": "{{actorId}} steadies nearby allies.",
+                "failure": "{{actorId}} fails to steady nearby allies.",
+                "bonusApplied": "{{combatantId}} gains +{{value}} to Psychology tests until the end of round {{expiresEndOfRound}}.",
+                "bonusExpired": "{{combatantId}}'s Leadership psychology bonus expires."
             }
         },
         "engagement": {
