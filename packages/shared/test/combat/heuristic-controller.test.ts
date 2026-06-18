@@ -43,7 +43,7 @@ describe('heuristic controller 5c', () => {
         });
 
         expect(decision).toMatchObject({ kind: 'move', mode: 'charge' });
-        expect(decision?.decisionLog?.reasonCode).toBe('profile.berserker.charge');
+        expect(decision?.decisionLog?.reasonCode).toBe('profile.charge');
     });
 
     it('Skirmisher disengages when pinned', () => {
@@ -66,7 +66,7 @@ describe('heuristic controller 5c', () => {
         });
 
         expect(decision).toMatchObject({ kind: 'disengageDodge' });
-        expect(decision?.decisionLog?.reasonCode).toBe('profile.skirmisher.disengage');
+        expect(decision?.decisionLog?.reasonCode).toBe('profile.disengage');
     });
 
     it('Marksman shoots at range and materializes a ranged action', () => {
@@ -90,7 +90,7 @@ describe('heuristic controller 5c', () => {
 
         expect(decision).toMatchObject({ kind: 'rangedAttack', targetId: 'enemy' });
         expect((decision?.action as any)?.attacker.skillId).toBe('ranged_bow');
-        expect(decision?.decisionLog?.reasonCode).toBe('profile.marksman.shoot');
+        expect(decision?.decisionLog?.reasonCode).toBe('action.rangedBestTarget');
     });
 
     it('Duellist defends when pressed and ripostes at the reaction window', () => {

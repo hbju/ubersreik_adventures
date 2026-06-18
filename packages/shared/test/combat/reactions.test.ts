@@ -9,6 +9,7 @@ import {
     mathRandomRng,
     resolveReactionDecision,
     ScriptedController,
+    type CombatantController,
     type CombatDecision,
 } from '../../src/combat';
 
@@ -92,6 +93,105 @@ describe('reaction windows and interrupts 5b', () => {
         expect(resolved.state.combatants.dodger.engagementIds).toEqual([]);
         expect(resolved.state.combatants.dodger.budget.actions).toBe(1);
         expect(resolved.events).toContainEqual(expect.objectContaining({ type: 'DisengagedEvent', data: expect.objectContaining({ actionSpent: false }) }));
+    });
+
+    it('asks the defender controller to choose the opposed defence skill', () => {
+        const calls: string[] = [];
+        const state = createCombatState([
+            combatant('attacker', 'ally', ['sword'], 0, { engagementIds: ['defender'] }),
+            combatant('defender', 'adversary', ['rapier'], 1, { engagementIds: ['attacker'] }),
+        ], { weapons: [sword, rapier] });
+        const engine = preparedEngine(state, 'attacker', ['attacker', 'defender']);
+        const controllers: Record<string, CombatantController> = {
+            attacker: { choose: context => { calls.push(`attacker:${context.reason}`); return undefined; } },
+            defender: {
+                choose: context => {
+                    calls.push(`defender:${context.reason}`);
+                    if (context.reason === 'defenceSkill') {
+                        return { kind: 'meleeAttack', actorId: 'defender', defenceSkill: 'dodge' } as CombatDecision;
+                    }
+                    return undefined;
+                },
+            },
+        };
+
+        const resolved = applyDecision(engine, {
+            kind: 'meleeAttack',
+            actorId: 'attacker',
+            action: {
+                attackerId: 'attacker',
+                defenderId: 'defender',
+                attacker: { skillId: 'melee_basic', targetNumber: 45, rollResult: 65, weaponId: 'sword' },
+                defender: { skillId: 'melee_basic', targetNumber: 0, rollResult: 10 },
+            },
+        }, controllers);
+
+        const attack = resolved.events.find(event => event.type === 'AttackResolved');
+        expect(calls).toContain('defender:defenceSkill');
+        expect(calls).not.toContain('attacker:defenceSkill');
+        expect(attack?.data.defenderRoll.skillId).toBe('dodge');
+        expect(attack?.data.defenderRoll.targetNumber).toBe(55);
+    });
+
+    it('asks the charged target controller, not the charger controller, for charge reactions', () => {
+        const calls: string[] = [];
+        const state = createCombatState([
+            combatant('charger', 'ally', ['sword'], 0, { wounds: 12 }),
+            combatant('guard', 'adversary', ['sword'], 4, { talents: { 'reaction-strike': 1 } }),
+        ], { weapons: [sword] });
+        const engine = preparedEngine(state, 'charger', ['charger', 'guard']);
+        const controllers: Record<string, CombatantController> = {
+            charger: { choose: context => { calls.push(`charger:${context.reason}`); return undefined; } },
+            guard: {
+                choose: context => {
+                    calls.push(`guard:${context.reason}`);
+                    if (context.reason === 'reaction:charged') {
+                        return { kind: 'reaction', actorId: 'guard', targetId: 'charger', trigger: 'charged', reaction: 'reactionStrike', rollResult: 1, targetNumber: 50 } as CombatDecision;
+                    }
+                    return undefined;
+                },
+            },
+        };
+
+        const charged = applyDecision(engine, { kind: 'move', actorId: 'charger', mode: 'charge', target: { combatantId: 'guard' } }, controllers);
+
+        expect(calls).toContain('guard:reaction:charged');
+        expect(calls).not.toContain('charger:reaction:charged');
+        expect(charged.events).toContainEqual(expect.objectContaining({
+            type: 'ReactionResolved',
+            data: expect.objectContaining({ actorId: 'guard', reaction: 'reactionStrike', chosen: true }),
+        }));
+    });
+
+    it('asks the defender controller for Fate damage interception', () => {
+        const calls: string[] = [];
+        const state = createCombatState([
+            combatant('attacker', 'ally', ['sword'], 0),
+            combatant('fated', 'adversary', ['sword'], 1, { wounds: 6, fate: 1 }),
+        ], { weapons: [sword] });
+        const engine = preparedEngine(state, 'attacker', ['attacker', 'fated']);
+        const controllers: Record<string, CombatantController> = {
+            attacker: { choose: context => { calls.push(`attacker:${context.reason}`); return undefined; } },
+            fated: {
+                choose: context => {
+                    calls.push(`fated:${context.reason}`);
+                    if (context.reason === 'reaction:damage-about-to-apply') {
+                        return { kind: 'reaction', actorId: 'fated', targetId: 'attacker', trigger: 'damage-about-to-apply', reaction: 'howDidThatMiss' } as CombatDecision;
+                    }
+                    return undefined;
+                },
+            },
+        };
+
+        const resolved = applyDecision(engine, melee('attacker', 'fated', 5, 95, 'sword', 'sword'), controllers);
+
+        expect(calls).toContain('fated:reaction:damage-about-to-apply');
+        expect(calls).not.toContain('attacker:reaction:damage-about-to-apply');
+        expect(resolved.state.combatants.fated.currentWounds).toBe(6);
+        expect(resolved.events).toContainEqual(expect.objectContaining({
+            type: 'FateInterceptionEvent',
+            data: expect.objectContaining({ combatantId: 'fated', intercepted: 'damage' }),
+        }));
     });
 
     it('How Did That Miss? negates incoming damage and spends Fate through the reaction window', () => {

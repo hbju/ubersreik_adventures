@@ -26,7 +26,7 @@ const ALWAYS_ACTIVE_FLAWS = new Set([
 
 export function resolveWeaponUse(combatant: Combatant, weapon: Weapon): WeaponUseResolution {
     const group = normalizedGroup(weapon.group);
-    const meleeSkill = findSkill(combatant.character, group === 'basic' ? 'melee' : `melee_${group}`);
+    const meleeSkill = findSkill(combatant.character, group === 'basic' ? 'melee' : `melee_${group}`) ?? findSkill(combatant.character, `melee_${group}`);
     if (isMeleeWeapon(weapon)) {
         const skilled = !!meleeSkill && meleeSkill.advances > 0;
         return {

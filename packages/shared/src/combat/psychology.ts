@@ -1,5 +1,5 @@
 import { calculateSuccessLevel, rolld100 } from '../utils/mechanics';
-import { calculateCharacteristicBonus, calculateCharacteristicValue } from '../utils/skills';
+import { calculateCharacteristicBonus, skillTarget } from '../utils/skills';
 import type { Rng } from './rng';
 import type {
     CombatEngineResult,
@@ -592,27 +592,6 @@ function nearestAllies(state: CombatState, actor: Combatant, count: number): str
             || a.id.localeCompare(b.id))
         .slice(0, count)
         .map(combatant => combatant.id);
-}
-
-function skillTarget(combatant: Combatant, skillId: string): number {
-    const normalized = skillId.toLowerCase();
-    const skill = combatant.character.skills.find(candidate =>
-        candidate.id.toLowerCase() === normalized || candidate.name.toLowerCase() === normalized
-    );
-    if (skill) {
-        return calculateCharacteristicValue(combatant.character.characteristics[skill.characteristic as keyof typeof combatant.character.characteristics])
-            + skill.advances
-            + skill.talents
-            + skill.modifier;
-    }
-    const fallback = normalized === 'cool'
-        ? 'wp'
-        : normalized === 'leadership'
-            ? 'fel'
-            : normalized === 'intimidate'
-                ? 's'
-                : 'ws';
-    return calculateCharacteristicValue(combatant.character.characteristics[fallback]);
 }
 
 function talentRank(combatant: Combatant, talentId: string): number {

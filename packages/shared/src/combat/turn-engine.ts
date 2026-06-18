@@ -1,5 +1,5 @@
 import { applyEndOfRoundConditionEffects, combatantCapabilities, resolveConditionPendingTest } from '../utils/conditions';
-import { calculateCharacteristicValue } from '../utils/skills';
+import { calculateCharacteristicValue, skillTarget } from '../utils/skills';
 import { consumeAdditionalEffortBuff, reallocateEndOfRound, resetAdditionalEffortBuff, seedInitialAdvantage, spendAdvantage, type InitialAdvantageConfig } from './advantage';
 import { isGrapplingEngagement, resolveCombatAction, resolveEffectiveWeapon } from './actions';
 import { decayEngagementsEndOfRound, determineSurprise, rangeBandForDistance, rangedWeaponRange, resolveMeleeAttack, resolveRangedAttack, resolveRangedIntoMeleeAttack, resolveReloadAction } from './engine';
@@ -18,6 +18,7 @@ import {
     resolveLeadershipAction,
     resolvePsychologyExposures,
     resolvePsychologyRoundStart,
+    isActivelyAfraidOf,
 } from './psychology';
 import { hasQuality, qualityRating } from './qualities';
 import { eligibleReactions, reactionOfferEvent, resolveReactionDecision, type ReactionDecision } from './reactions';
@@ -34,6 +35,7 @@ import type {
     DecisionLogEntry,
     MeleeAttackAction,
     MovementMode,
+    OpposedRollInput,
     RangedAttackAction,
     ReloadAction,
     SideId,
@@ -95,6 +97,7 @@ export interface CombatDecision {
     trigger?: ReactionDecision['trigger'];
     rollResult?: number;
     targetNumber?: number;
+    defenceSkill?: string;
     decisionLog?: DecisionLogEntry;
     parameterDomains?: Record<string, unknown>;
 }
@@ -119,6 +122,15 @@ export interface DecisionContext {
 
 export interface CombatantController {
     choose(context: DecisionContext): CombatDecision | undefined;
+}
+
+export type ControllerResolver = (actorId: string) => CombatantController | undefined;
+
+function toResolver(c?: CombatantController | Record<string, CombatantController> | ControllerResolver): ControllerResolver {
+    if (!c) return () => undefined;
+    if (typeof c === 'function') return c;
+    if (isController(c)) return () => c;
+    return id => (c as Record<string, CombatantController>)[id];
 }
 
 export interface TurnEngineOptions {
@@ -168,7 +180,7 @@ export class ScriptedController implements CombatantController {
 export interface ActionCatalogueEntry {
     kind: CombatDecisionKind;
     legal(state: CombatState, actor: Combatant): LegalDecision[];
-    dispatch(engine: TurnEngineState, decision: CombatDecision, controller?: CombatantController): CombatEngineResult;
+    dispatch(engine: TurnEngineState, decision: CombatDecision, resolve?: ControllerResolver): CombatEngineResult;
 }
 
 export function createTurnEngine(state: CombatState, options: TurnEngineOptions = {}): TurnEngineState {
@@ -203,7 +215,11 @@ export function advanceToNextDecision(engine: TurnEngineState, options: TurnEngi
     return current;
 }
 
-export function applyDecision(engine: TurnEngineState, decision: CombatDecision, controller?: CombatantController): TurnEngineState {
+export function applyDecision(
+    engine: TurnEngineState,
+    decision: CombatDecision,
+    controllers?: CombatantController | Record<string, CombatantController> | ControllerResolver
+): TurnEngineState {
     if (engine.phase !== 'awaitingDecision' || !engine.activeCombatantId) return engine;
     const frenzyExit = resolveFrenzyExits(engine.state);
     const exposure = resolvePsychologyExposures(frenzyExit.state, engine.rng);
@@ -230,10 +246,11 @@ export function applyDecision(engine: TurnEngineState, decision: CombatDecision,
 
     const entry = ACTION_CATALOGUE.find(candidate => candidate.kind === decision.kind);
     if (!entry) return rejectDecision(currentEngine, decision, 'missingHandler');
-    let result = entry.dispatch(currentEngine, decision, controller);
-    result = threadDeferredResolutionDecisions(currentEngine, decision, result, controller);
-    result = threadDamageInterceptions({ ...currentEngine, state: result.state }, decision, result, controller);
-    result = threadDeathInterceptions({ ...currentEngine, state: result.state }, decision, result, controller);
+    const resolve = toResolver(controllers);
+    let result = entry.dispatch(currentEngine, decision, resolve);
+    result = threadDeferredResolutionDecisions(currentEngine, decision, result, resolve);
+    result = threadDamageInterceptions({ ...currentEngine, state: result.state }, decision, result, resolve);
+    result = threadDeathInterceptions({ ...currentEngine, state: result.state }, decision, result, resolve);
     const reconciled = resolveFrenzyExits(result.state);
     result = {
         state: reconciled.state,
@@ -254,7 +271,7 @@ export function applyDecision(engine: TurnEngineState, decision: CombatDecision,
 
 export function runCombatToCompletion(
     state: CombatState,
-    controllers: Record<string, CombatantController> | CombatantController,
+    controllers: Record<string, CombatantController> | CombatantController | ControllerResolver,
     options: TurnEngineOptions = {},
     observer?: TurnEngineObserver
 ): TurnEngineState {
@@ -270,7 +287,8 @@ export function runCombatToCompletion(
         }
         if (engine.phase === 'complete' || !engine.activeCombatantId) break;
         const actor = engine.state.combatants[engine.activeCombatantId];
-        const controller = controllerFor(controllers, actor.id);
+        const resolve = toResolver(controllers);
+        const controller = resolve(actor.id);
         const decision = controller?.choose({
             level: 'turn',
             engine,
@@ -280,7 +298,7 @@ export function runCombatToCompletion(
             rng: engine.rng,
         }) ?? { kind: 'endTurn', actorId: actor.id };
         const decisionEventCount = engine.events.length;
-        engine = applyDecision(engine, decision, controller);
+        engine = applyDecision(engine, decision, controllers);
         observer?.({
             kind: 'decision',
             engine,
@@ -465,20 +483,21 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
                 parameterDomains: { modes: ['walk', 'run', 'charge'] },
             }));
         },
-        dispatch: (engine, decision, controller) => {
+        dispatch: (engine, decision, resolve) => {
             const target = decision.target ?? decision.destination;
             if (target === undefined) return { state: engine.state, events: [decisionRejected(decision, 'missingTarget')] };
             let result = applyMove(engine.state, decision.actorId, target, decision.mode ?? 'walk', engine.rng);
-            if (decision.mode === 'charge' && controller) {
+            if (decision.mode === 'charge') {
                 const action = decision.action as MeleeAttackAction | undefined;
-                result = threadChargeReactions({ ...engine, state: result.state }, decision, result, controller);
+                result = threadChargeReactions({ ...engine, state: result.state }, decision, result, resolve);
                 if (!action) return result;
 
-                let prepared = withFateInterceptionChoice({ ...engine, state: result.state, events: [...result.events] }, controller, action.defenderId, action);
+                const defence = withDefenceSkillChoice({ ...engine, state: result.state }, action, resolve);
+                let prepared = withFateInterceptionChoice({ ...engine, state: defence.state, events: [...result.events, ...defence.events] }, resolve, action.defenderId, defence.action);
                 prepared = { ...prepared, events: [...engine.events, ...prepared.events] };
                 result = resolveMeleeAttack(prepared.state, prepared.action, engine.rng);
                 result = { state: result.state, events: [...prepared.events, ...result.events] };
-                result = threadAttackReactions({ ...engine, state: result.state }, decision, result, controller);
+                result = threadAttackReactions({ ...engine, state: result.state }, decision, result, resolve);
                 return spendTurnAction(result.state, decision.actorId, result.events);
             }
             return result;
@@ -492,13 +511,14 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
                 ? enemyIds(state, actor).filter(id => Math.abs(state.combatants[id].position - actor.position) <= actorReach).map(targetId => ({ kind: 'meleeAttack', actorId: actor.id, targetId, targetIds: [targetId] }))
                 : []
         },
-        dispatch: (engine, decision, controller) => {
+        dispatch: (engine, decision, resolve) => {
             const action = decision.action as MeleeAttackAction | undefined;
             if (!action) return { state: engine.state, events: [decisionRejected(decision, 'missingAction')] };
-            const prepared = withFateInterceptionChoice(engine, controller, action.defenderId, action);
+            const defence = withDefenceSkillChoice(engine, action, resolve);
+            const prepared = withFateInterceptionChoice({ ...engine, state: defence.state }, resolve, action.defenderId, defence.action);
             let result = resolveMeleeAttack(prepared.state, prepared.action, engine.rng);
-            result = { state: result.state, events: [...prepared.events, ...result.events] };
-            result = threadAttackReactions({ ...engine, state: result.state }, decision, result, controller);
+            result = { state: result.state, events: [...defence.events, ...prepared.events, ...result.events] };
+            result = threadAttackReactions({ ...engine, state: result.state }, decision, result, resolve);
             return engine.state.combatants[decision.actorId].budget.actions > 0
                 ? spendTurnAction(result.state, decision.actorId, result.events)
                 : consumeFrenzyFreeMelee(result.state, decision.actorId, result.events);
@@ -519,10 +539,10 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
                 weaponIds: weapon ? [weapon.id] : [],
             }));
         },
-        dispatch: (engine, decision, controller) => {
+        dispatch: (engine, decision, resolver) => {
             const action = decision.action as RangedAttackAction | undefined;
             if (!action) return { state: engine.state, events: [decisionRejected(decision, 'missingAction')] };
-            const prepared = withFateInterceptionChoice(engine, controller, action.defenderId, action);
+            const prepared = withFateInterceptionChoice(engine, resolver, action.defenderId, action);
             const rangedAction = prepared.action as RangedAttackAction;
             const target = prepared.state.combatants[rangedAction.defenderId];
             const result = prepared.state.rules?.shootingIntoMelee && target?.engagementIds.length
@@ -572,7 +592,8 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
         legal: (state, actor) => hasTalent(actor, 'shieldsman') && state.advantagePools[actor.side] >= 2 && !state.turnFlags.shieldsmanUsedThisTurnIds.includes(actor.id)
             ? enemyIds(state, actor).map(targetId => ({ kind: 'shieldsman', actorId: actor.id, targetId, targetIds: [targetId], parameterDomains: { shieldsmanMode: ['push', 'damage'] } }))
             : [],
-        dispatch: (engine, decision, controller) => {
+        dispatch: (engine, decision, resolver) => {
+            const controller = resolver?.(decision.actorId);
             const mode = decision.shieldsmanMode ?? chooseResolution(engine, controller, decision.actorId, 'shieldsmanMode', [
                 { kind: 'shieldsman', actorId: decision.actorId, targetId: decision.targetId, shieldsmanMode: 'push' },
                 { kind: 'shieldsman', actorId: decision.actorId, targetId: decision.targetId, shieldsmanMode: 'damage' },
@@ -586,7 +607,8 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
         legal: (_state, actor) => hasTalent(actor, 'reversal') && !actor.reversalActive
             ? [{ kind: 'reversal', actorId: actor.id, parameterDomains: { reversalActive: [true, false] } }]
             : [],
-        dispatch: (engine, decision, controller) => {
+        dispatch: (engine, decision, resolver) => {
+            const controller = resolver?.(decision.actorId);
             const active = decision.reversalActive ?? chooseResolution(engine, controller, decision.actorId, 'reversalToggle', [
                 { kind: 'reversal', actorId: decision.actorId, reversalActive: true },
                 { kind: 'reversal', actorId: decision.actorId, reversalActive: false },
@@ -632,7 +654,8 @@ function allyTargetedCombatActionEntries(
                 request: { kind, actorId: actor.id, targetId, ...extra },
             }));
         },
-        dispatch: (engine, decision, controller) => {
+        dispatch: (engine, decision, resolver) => {
+            const controller = resolver?.(decision.actorId);
             const request = requestForDecision(kind, withThreadedSubDecision(engine, decision, controller));
             return resolveCombatAction(engine.state, request, engine.rng);
         },
@@ -677,7 +700,8 @@ function targetedCombatActionEntries(kinds: CombatActionKind[]): ActionCatalogue
                 request: { kind, actorId: actor.id, targetId },
             }));
         },
-        dispatch: (engine, decision, controller) => {
+        dispatch: (engine, decision, resolver) => {
+            const controller = resolver?.(decision.actorId);
             const request = requestForDecision(kind, withThreadedSubDecision(engine, decision, controller));
             return resolveCombatAction(engine.state, request, engine.rng);
         },
@@ -727,7 +751,82 @@ function withThreadedSubDecision(engine: TurnEngineState, decision: CombatDecisi
     return decision;
 }
 
-function threadDeferredResolutionDecisions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, controller?: CombatantController): CombatEngineResult {
+function withDefenceSkillChoice(
+    engine: TurnEngineState,
+    action: MeleeAttackAction,
+    resolver?: ControllerResolver
+): { state: CombatState; action: MeleeAttackAction; events: CombatEvent[] } {
+    const attacker = engine.state.combatants[action.attackerId];
+    const defender = engine.state.combatants[action.defenderId];
+    if (!attacker || !defender) return { state: engine.state, action, events: [] };
+
+    const options = defenceSkillOptions(engine.state, attacker, defender);
+    if (options.length === 0) return { state: engine.state, action, events: [] };
+
+    const controller = resolver?.(defender.id);
+    const explicitSkill = action.defender?.skillId;
+    const explicitDefenderRoll = !!action.defender && action.defender.targetNumber > 0;
+    const chosen = options.length > 1 && controller && !explicitDefenderRoll
+        ? chooseResolution(engine, controller, defender.id, 'defenceSkill', options.map(skill => ({
+            kind: 'meleeAttack',
+            actorId: defender.id,
+            targetId: attacker.id,
+            defenceSkill: skill,
+        })), { kind: 'meleeAttack', actorId: defender.id, targetId: attacker.id })?.defenceSkill ?? options[0]
+        : explicitSkill && options.includes(explicitSkill)
+            ? explicitSkill
+            : options[0];
+
+    const events: CombatEvent[] = options.length > 1 && !explicitDefenderRoll
+        ? [turnEvent('ResolutionDecisionRequested', 'combat.turn.resolutionDecision', {
+            actorId: defender.id,
+            reason: 'defenceSkill',
+            chosen,
+            options,
+        })]
+        : [];
+    return {
+        state: engine.state,
+        action: {
+            ...action,
+            defender: buildDefenderRoll(engine.state, defender, chosen, action.defender),
+        },
+        events,
+    };
+}
+
+function defenceSkillOptions(state: CombatState, attacker: Combatant, defender: Combatant): string[] {
+    const options: string[] = [];
+    const weapon = equippedWeapon(state, defender);
+    if (weapon) {
+        const use = resolveWeaponUse(defender, weapon);
+        if (use.usable && use.test.type === 'skill' && use.test.skillId.startsWith('melee')) {
+            options.push(use.test.skillId);
+        }
+    }
+    options.push('dodge');
+    if (isActivelyAfraidOf(attacker, defender.id)) options.push('intimidate');
+    return [...new Set(options)];
+}
+
+function buildDefenderRoll(
+    state: CombatState,
+    defender: Combatant,
+    skillId: string,
+    existing?: OpposedRollInput
+): OpposedRollInput {
+    const weapon = skillId.startsWith('melee') ? equippedWeapon(state, defender) : undefined;
+    return {
+        ...existing,
+        skillId,
+        targetNumber: existing?.targetNumber && existing.targetNumber > 0 ? existing.targetNumber : skillTarget(defender, skillId),
+        rollResult: existing?.rollResult,
+        weaponId: weapon?.id,
+    };
+}
+
+function threadDeferredResolutionDecisions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, resolver?: ControllerResolver): CombatEngineResult {
+    const controller = resolver?.(parent.actorId);
     if (!controller) return result;
     const deferred = result.events.filter(event => event.type === 'QualityEffectApplied' && (event as any).data?.activation?.policy === 'never');
     if (deferred.length === 0) return result;
@@ -758,8 +857,7 @@ function threadDeferredResolutionDecisions(engine: TurnEngineState, parent: Comb
     return { state, events };
 }
 
-function threadAttackReactions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, controller?: CombatantController): CombatEngineResult {
-    if (!controller) return result;
+function threadAttackReactions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, resolver?: ControllerResolver): CombatEngineResult {
     const attackEvent = result.events.find((event): event is Extract<CombatEvent, { type: 'AttackResolved' }> => event.type === 'AttackResolved');
     if (!attackEvent) return result;
 
@@ -795,7 +893,8 @@ function threadAttackReactions(engine: TurnEngineState, parent: CombatDecision, 
         if (choices.length === 0) continue;
         events.push(...choices.map(choice => reactionOfferEvent(choice, initiativeIndex(engine, choice.actorId))));
         const actor = state.combatants[window.actorId];
-        const choice = controller.choose({
+        const controller = resolver?.(window.actorId);
+        const choice = controller?.choose({
             level: 'resolution',
             reason: `reaction:${window.trigger}`,
             engine: { ...engine, state },
@@ -833,7 +932,7 @@ function threadAttackReactions(engine: TurnEngineState, parent: CombatDecision, 
     return { state, events };
 }
 
-function threadChargeReactions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, controller: CombatantController): CombatEngineResult {
+function threadChargeReactions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, resolver?: ControllerResolver): CombatEngineResult {
     const target = parent.target ?? parent.destination;
     const chargedId = typeof target === 'object' && target && 'combatantId' in target ? target.combatantId : parent.targetId;
     if (!chargedId) return result;
@@ -848,7 +947,8 @@ function threadChargeReactions(engine: TurnEngineState, parent: CombatDecision, 
     if (choices.length === 0) return result;
     events.push(...choices.map(choice => reactionOfferEvent(choice, initiativeIndex(engine, choice.actorId))));
     const actor = state.combatants[chargedId];
-    const choice = controller.choose({
+    const controller = resolver?.(chargedId);
+    const choice = controller?.choose({
         level: 'resolution',
         reason: 'reaction:charged',
         engine: { ...engine, state },
@@ -884,13 +984,14 @@ function threadChargeReactions(engine: TurnEngineState, parent: CombatDecision, 
 
 function withFateInterceptionChoice<TAction extends MeleeAttackAction | RangedAttackAction>(
     engine: TurnEngineState,
-    controller: CombatantController | undefined,
+    resolver: ControllerResolver | undefined,
     defenderId: string,
     action: TAction
 ): { state: CombatState; action: TAction; events: CombatEvent[] } {
-    if (!controller) return { state: engine.state, action, events: [] };
     const defender = engine.state.combatants[defenderId];
     if (!defender || (defender.resources.fate?.current ?? 0) <= 0) return { state: engine.state, action, events: [] };
+    const controller = resolver?.(defenderId);
+    if (!controller) return { state: engine.state, action, events: [] };
     const choice: ReactionDecision = { kind: 'reaction', actorId: defenderId, targetId: action.attackerId, trigger: 'damage-about-to-apply', reaction: 'howDidThatMiss' };
     const events = [reactionOfferEvent(choice, initiativeIndex(engine, defenderId))];
     const selected = controller.choose({
@@ -921,8 +1022,7 @@ function withFateInterceptionChoice<TAction extends MeleeAttackAction | RangedAt
     };
 }
 
-function threadDeathInterceptions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, controller?: CombatantController): CombatEngineResult {
-    if (!controller) return result;
+function threadDeathInterceptions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, resolver?: ControllerResolver): CombatEngineResult {
     const deaths = result.events.filter((event): event is Extract<CombatEvent, { type: 'CombatantDied' }> => event.type === 'CombatantDied');
     if (deaths.length === 0) return result;
 
@@ -932,6 +1032,8 @@ function threadDeathInterceptions(engine: TurnEngineState, parent: CombatDecisio
         const combatantId = death.data.combatantId;
         const actor = state.combatants[combatantId];
         if (!actor || (actor.resources.fate?.current ?? 0) <= 0) continue;
+        const controller = resolver?.(combatantId);
+        if (!controller) continue;
         const choice: ReactionDecision = { kind: 'reaction', actorId: combatantId, trigger: 'would-die', reaction: 'dieAnotherDay' };
         events.push(reactionOfferEvent(choice, initiativeIndex(engine, combatantId)));
         const selected = controller.choose({
@@ -1006,8 +1108,7 @@ function threadDeathInterceptions(engine: TurnEngineState, parent: CombatDecisio
     return { state, events };
 }
 
-function threadDamageInterceptions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, controller?: CombatantController): CombatEngineResult {
-    if (!controller) return result;
+function threadDamageInterceptions(engine: TurnEngineState, parent: CombatDecision, result: CombatEngineResult, resolver?: ControllerResolver): CombatEngineResult {
     if (result.events.some(event => event.type === 'FateInterceptionEvent' && (event as any).data?.intercepted === 'damage')) return result;
     const damageEvents = result.events.filter((event): event is Extract<CombatEvent, { type: 'DamageDealt' }> => event.type === 'DamageDealt' && event.data.damageDealt > 0);
     if (damageEvents.length === 0) return result;
@@ -1018,6 +1119,8 @@ function threadDamageInterceptions(engine: TurnEngineState, parent: CombatDecisi
         const defenderId = damage.data.defenderId;
         const defender = state.combatants[defenderId];
         if (!defender || (defender.resources.fate?.current ?? 0) <= 0) continue;
+        const controller = resolver?.(defenderId);
+        if (!controller) continue;
         const choice: ReactionDecision = { kind: 'reaction', actorId: defenderId, targetId: damage.data.attackerId, trigger: 'damage-about-to-apply', reaction: 'howDidThatMiss' };
         events.push(reactionOfferEvent(choice, initiativeIndex(engine, defenderId)));
         const selected = controller.choose({
@@ -1662,10 +1765,6 @@ function equippedWeaponHas(state: CombatState, combatant: Combatant, qualityId: 
 
 export function isActive(combatant: Combatant | undefined): boolean {
     return !!combatant && combatant.currentWounds > 0 && !combatant.removedFromEncounter && !combatant.dead && !combatant.conditions.includes('condition_unconscious');
-}
-
-function controllerFor(controllers: Record<string, CombatantController> | CombatantController, actorId: string): CombatantController | undefined {
-    return isController(controllers) ? controllers : controllers[actorId];
 }
 
 function isController(value: Record<string, CombatantController> | CombatantController): value is CombatantController {

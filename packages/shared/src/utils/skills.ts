@@ -16,6 +16,30 @@ export function calculateCharacteristicBonus(characteristic: Characteristic): nu
     return Math.floor(value / 10);
 }
 
+export function skillTarget(character: Character, skillId: string): number;
+export function skillTarget(combatant: { character: Character }, skillId: string): number;
+export function skillTarget(subject: Character | { character: Character }, skillId: string): number {
+    const character = 'character' in subject ? subject.character : subject;
+    const normalized = skillId.toLowerCase();
+    const skill = character.skills.find(candidate =>
+        candidate.id.toLowerCase() === normalized || candidate.name.toLowerCase() === normalized
+    );
+    if (skill) return calculateSkillValue(skill, character);
+
+    const characteristicId = normalized.includes('ranged')
+        ? 'bs'
+        : normalized === 'dodge'
+            ? 'ag'
+            : normalized === 'cool'
+                ? 'wp'
+                : normalized === 'leadership'
+                    ? 'fel'
+                    : normalized === 'intimidate'
+                        ? 's'
+                        : 'ws';
+    return calculateCharacteristicValue(character.characteristics[characteristicId]);
+}
+
 export function getGroupedSkill(skillId: string, skillsData: SkillCharDefinition[]): Skill | null {
     // skill id will be in format 'skill-id_group', where skill-id is the base skill id, and _group is the group suffix. For example, melee_basic should map to {id: 'melee_basic', name: 'Melee (Basic)', characteristic: 'ws', ...} as the base skill 'melee' with group 'basic'.
     const baseSkillId = skillId.split('_')[0];

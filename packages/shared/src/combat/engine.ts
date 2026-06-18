@@ -1,7 +1,7 @@
 import type { Armor, Character, Weapon } from '../types/wfrp.types';
 import { attackerModifiersFor, conditionsRemovedAfterAttack, opposedTestCollapseFor } from '../utils/conditions';
 import { calculateSuccessLevel, getHitLocation, rolld100 } from '../utils/mechanics';
-import { calculateCharacteristicBonus } from '../utils/skills';
+import { calculateCharacteristicBonus, skillTarget } from '../utils/skills';
 import { additionalEffortTestModifier, consumeAdditionalEffortBuff, createAdvantagePools, grantAdvantage } from './advantage';
 import { defensiveBonusForSkill, resolveEffectiveWeapon } from './actions';
 import { criticalRoll } from './critical';
@@ -1570,15 +1570,6 @@ function rejectRangedShot(
             data: { attackerId, defenderId, reason, rangeBand, distance, weaponId },
         }],
     };
-}
-
-function skillTarget(combatant: Combatant, skillId: string): number {
-    const skill = combatant.character.skills.find(candidate => candidate.id === skillId || candidate.name.toLowerCase() === skillId.toLowerCase());
-    if (skill) {
-        const characteristic = combatant.character.characteristics[skill.characteristic as keyof typeof combatant.character.characteristics];
-        return characteristicValue(characteristic) + skill.advances + skill.talents + skill.modifier;
-    }
-    return characteristicValue(combatant.character.characteristics.ag);
 }
 
 function talentRank(combatant: Combatant, talentId: string): number {

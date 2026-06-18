@@ -1,4 +1,4 @@
-import { calculateCharacteristicBonus, calculateCharacteristicValue } from '../utils/skills';
+import { calculateCharacteristicBonus, calculateCharacteristicValue, skillTarget } from '../utils/skills';
 import { hasQuality } from './qualities';
 import { REACH_ENGAGEMENT_DISTANCE, type WeaponReach } from './spatial';
 import type { Rng } from './rng';
@@ -164,6 +164,16 @@ export class HeuristicController implements CombatantController {
         if (reason === 'reversalToggle') {
             const chosen = legal.find(decision => decision.reversalActive !== false) ?? legal[0];
             return withLog(chosen, 'subdecision.reversal.on', legal);
+        }
+
+        if (reason === 'defenceSkill') {
+            const intimidate = legal.find(decision => decision.defenceSkill === 'intimidate');
+            if (intimidate && skillTarget(context.actor, 'intimidate') >= skillTarget(context.actor, 'melee_basic')) {
+                return withLog(intimidate, 'defence.intimidate', legal);
+            }
+            const dodge = legal.find(decision => decision.defenceSkill === 'dodge');
+            if (dodge && this.profile.kite >= 0.6) return withLog(dodge, 'defence.dodge', legal);
+            return withLog(legal.find(decision => decision.defenceSkill?.startsWith('melee')) ?? legal[0], 'defence.melee', legal);
         }
 
         if (reason === 'infightingMode') {
@@ -455,7 +465,6 @@ export class HeuristicController implements CombatantController {
     private materializeMelee(context: DecisionContext, legal: LegalDecision[]): CombatDecision {
         const targetId = this.bestTargetId(context.state, context.actor, candidateTargets(legal)) ?? legal[0].targetId;
         const base = legal.find(decision => decision.targetId === targetId) ?? legal[0];
-        const defender = targetId ? context.state.combatants[targetId] : undefined;
         const weapon = primaryWeapon(context.state, context.actor);
         const weaponUse = weapon ? resolveWeaponUse(context.actor, weapon) : undefined;
         return {
@@ -464,7 +473,7 @@ export class HeuristicController implements CombatantController {
                 attackerId: context.actor.id,
                 defenderId: targetId!,
                 attacker: rollInput(context, context.actor, weaponUse ? (weaponUse?.test.type === 'skill' ? weaponUse.test.skillId : weaponUse.test.characteristic) : 'melee_basic', weapon?.id),
-                defender: defensiveRollInput(context, context.actor, defender),
+                defender: { skillId: 'melee_basic', targetNumber: 0 },
                 isCharging: context.state.turnFlags.chargedCombatantIds.includes(context.actor.id),
                 grantAdvantage: additionalEffortTestModifier !== undefined
             },
@@ -474,7 +483,6 @@ export class HeuristicController implements CombatantController {
     private materializeCharge(context: DecisionContext, legal: LegalDecision[]): CombatDecision {
         const targetId = this.bestTargetId(context.state, context.actor, candidateTargets(legal)) ?? legal[0].targetId;
         const base = legal.find(decision => decision.targetId === targetId) ?? legal[0];
-        const defender = targetId ? context.state.combatants[targetId] : undefined;
         const weapon = primaryWeapon(context.state, context.actor);
         const weaponUse = weapon ? resolveWeaponUse(context.actor, weapon) : undefined;
         return {
@@ -483,7 +491,7 @@ export class HeuristicController implements CombatantController {
             attackerId: context.actor.id,
             defenderId: targetId!,
             attacker: rollInput(context, context.actor, weaponUse ? (weaponUse?.test.type === 'skill' ? weaponUse.test.skillId : weaponUse.test.characteristic) : 'melee_basic', weapon?.id),
-                defender: defensiveRollInput(context, context.actor, defender),
+                defender: { skillId: 'melee_basic', targetNumber: 0 },
                 isCharging: true,
             },
         };
@@ -585,46 +593,6 @@ function rollInput(context: DecisionContext, combatant: Combatant | undefined, s
         rollResult: d100(context.rng),
         weaponId,
     };
-}
-
-function defensiveRollInput(context: DecisionContext, attacker: Combatant, defender: Combatant | undefined): OpposedRollInput {
-    if (!defender) return rollInput(context, defender, 'melee_basic');
-    const weapon = primaryWeapon(context.state, defender);
-    if (isActivelyAfraidOf(attacker, defender.id) && skillTarget(defender, 'intimidate') >= skillTarget(defender, 'melee_basic')) {
-        return rollInput(context, defender, 'intimidate');
-    }
-    if (weapon) {
-        const use = resolveWeaponUse(defender, weapon);
-        if (use) {
-            const test = use.test;
-            if (test.type === 'skill') {
-                return rollInput(context, defender, test.skillId, weapon.id);
-            }
-            if (test.type === 'characteristic') {
-                return rollInput(context, defender, test.characteristic, weapon.id);
-            }
-        }
-    }
-    return rollInput(context, defender, 'melee_basic', weapon?.id);
-}
-
-function skillTarget(combatant: Combatant, skillId: string): number {
-    const skill = combatant.character.skills.find(candidate => candidate.id === skillId || candidate.name.toLowerCase() === skillId.toLowerCase());
-    if (skill) {
-        return calculateCharacteristicValue(combatant.character.characteristics[skill.characteristic as keyof typeof combatant.character.characteristics]) + skill.advances + skill.talents + skill.modifier;
-    }
-    const key = skillId.includes('ranged')
-        ? 'bs'
-        : skillId === 'dodge'
-            ? 'ag'
-            : skillId === 'cool'
-                ? 'wp'
-                : skillId === 'leadership'
-                    ? 'fel'
-                    : skillId === 'intimidate'
-                        ? 's'
-                        : 'ws';
-    return calculateCharacteristicValue(combatant.character.characteristics[key]);
 }
 
 function d100(rng: Rng): number {

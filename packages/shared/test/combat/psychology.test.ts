@@ -322,13 +322,35 @@ describe('PSY-d Intimidate and Leadership', () => {
         const defender = withSkillAdvances(fearful.combatants.source, 'intimidate', 30);
         const fearfulState = {
             ...fearful,
-            combatants: { ...fearful.combatants, source: defender },
+            combatants: {
+                ...fearful.combatants,
+                source: { ...defender, position: 1 },
+            },
         };
-        const substitution = resolveMeleeAttack(fearfulState, {
+        const engine = {
+            ...createTurnEngine(fearfulState, { seed: 'defence-intimidate' }),
+            state: fearfulState,
+            phase: 'awaitingDecision' as const,
+            activeCombatantId: 'target',
+            initiativeOrder: ['target', 'source'],
+            turnIndex: 0,
+        };
+        const substitution = applyDecision(engine, {
+            kind: 'meleeAttack',
+            actorId: 'target',
+            targetId: 'source',
+            action: {
             attackerId: 'target',
             defenderId: 'source',
             attacker: { skillId: 'melee_basic', targetNumber: 40, rollResult: 51 },
-            defender: { skillId: 'melee_basic', targetNumber: 40, rollResult: 31 },
+                defender: { skillId: 'melee_basic', targetNumber: 0, rollResult: 31 },
+            },
+        }, {
+            source: {
+                choose: context => context.reason === 'defenceSkill'
+                    ? { kind: 'meleeAttack', actorId: 'source', defenceSkill: 'intimidate' }
+                    : undefined,
+            },
         });
         expect(substitution.events.find(event => event.type === 'AttackResolved')?.data.defenderRoll.skillId).toBe('intimidate');
 
@@ -337,15 +359,31 @@ describe('PSY-d Intimidate and Leadership', () => {
             combatants: {
                 ...fearfulState.combatants,
                 target: { ...fearfulState.combatants.target, psychology: { fears: {}, terrors: {} } },
+                source: { ...fearfulState.combatants.source, causesFear: undefined },
             },
         };
-        const noSubstitution = resolveMeleeAttack(calmState, {
+        const calmEngine = {
+            ...engine,
+            state: calmState,
+        };
+        const noSubstitution = applyDecision(calmEngine, {
+            kind: 'meleeAttack',
+            actorId: 'target',
+            targetId: 'source',
+            action: {
             attackerId: 'target',
             defenderId: 'source',
             attacker: { skillId: 'melee_basic', targetNumber: 40, rollResult: 51 },
-            defender: { skillId: 'melee_basic', targetNumber: 40, rollResult: 31 },
+                defender: { skillId: 'melee_basic', targetNumber: 0, rollResult: 31 },
+            },
+        }, {
+            source: {
+                choose: context => context.reason === 'defenceSkill'
+                    ? { kind: 'meleeAttack', actorId: 'source', defenceSkill: 'intimidate' }
+                    : undefined,
+            },
         });
-        expect(noSubstitution.events.find(event => event.type === 'AttackResolved')?.data.defenderRoll.skillId).toBe('melee_basic');
+        expect(noSubstitution.events.find(event => event.type === 'AttackResolved')?.data.defenderRoll.skillId).not.toBe('intimidate');
     });
 
     it('Menacing adds SL to Intimidate', () => {
