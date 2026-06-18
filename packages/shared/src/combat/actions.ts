@@ -121,7 +121,7 @@ export function clearDefensiveBonusAtTurnStart(state: CombatState, combatantId: 
 export function defensiveBonusForSkill(combatant: Combatant, skillId: string, round: number): number {
     const bonus = combatant.defensiveBonus;
     if (!bonus) return 0;
-    if (bonus.activeUntilRound <= round) return 0;
+    if (bonus.activeUntilRound < round) return 0;
     if (bonus.skillId.toLowerCase() !== skillId.toLowerCase()) return 0;
     return bonus.bonus;
 }

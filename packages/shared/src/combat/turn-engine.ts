@@ -458,7 +458,7 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
             let destinations: { mode: MovementMode; target: number | { combatantId: string } }[] = [];
             for (const mode of ['walk', 'run'] as MovementMode[]) {
                 const reach = mode === 'walk' ? walk : run;
-                for (const i of [...Array(reach + 1).keys()].map(i => -reach + i).filter(i => i !== 0)) {
+                for (const i of [...Array(reach + 1).keys()].map(i => -reach + i).filter(i => i !== 0 && Math.abs(actor.position + i) <= 100)) {
                     destinations.push({ mode, target: actor.position + i });
                 }
             }
