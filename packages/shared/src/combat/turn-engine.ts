@@ -19,6 +19,9 @@ import {
     resolvePsychologyExposures,
     resolvePsychologyRoundStart,
     isActivelyAfraidOf,
+    resolveEndOfRoundBrokenRally,
+    resolveEndOfTurnBrokenRally,
+    resolveFleeFromFieldCheck,
 } from './psychology';
 import { hasQuality, qualityRating } from './qualities';
 import { eligibleReactions, reactionOfferEvent, resolveReactionDecision, type ReactionDecision } from './reactions';
@@ -453,8 +456,10 @@ export const ACTION_CATALOGUE: ActionCatalogueEntry[] = [
         legal: (state, actor) => {
             const capabilities = combatantCapabilities(actor);
             if (actor.budget.moves <= 0 || !capabilities.canMove) return [];
-            const walk = actor.movementBudget.walk;
-            const run = actor.movementBudget.run;
+            // Flee! talent: +1 M per rank while Broken (WFRP4e p.165)
+            const fleeTalentRank = capabilities.mustFlee ? (actor.character.talents?.['flee'] ?? 0) : 0;
+            const walk = actor.movementBudget.walk + fleeTalentRank;
+            const run = actor.movementBudget.run + fleeTalentRank * 2;
             let destinations: { mode: MovementMode; target: number | { combatantId: string } }[] = [];
             for (const mode of ['walk', 'run'] as MovementMode[]) {
                 const reach = mode === 'walk' ? walk : run;
@@ -1494,13 +1499,35 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
 }
 
 function finishTurn(engine: TurnEngineState): TurnEngineState {
-
-
     const result = resetAdditionalEffortBuff(engine.state, engine.activeCombatantId!);
-    const currentState = result.state;
-    const nextEngine = { ...engine, state: currentState, events: [...engine.events, ...result.events] };
+    let currentState = result.state;
+    let extraEvents: CombatEvent[] = [...result.events];
 
-    const endedId = nextEngine.activeCombatantId!;
+    const endedId = engine.activeCombatantId!;
+
+    // Stout-Hearted: end-of-turn Cool Test to shed Broken (in addition to end-of-round)
+    const endedCombatant = currentState.combatants[endedId];
+    if (endedCombatant
+        && endedCombatant.conditions.includes('condition_broken')
+        && hasTalent(endedCombatant, 'stout-hearted')
+        && endedCombatant.engagementIds.length === 0
+    ) {
+        const stoutRally = resolveEndOfTurnBrokenRally(currentState, endedId, engine.rng);
+        currentState = stoutRally.state;
+        extraEvents.push(...stoutRally.events);
+    }
+
+    // Flee-field check: Broken + unengaged + far enough from all enemies → removedFromEncounter
+    for (const combatantId of Object.keys(currentState.combatants)) {
+        const fleeCheck = resolveFleeFromFieldCheck(currentState, combatantId);
+        if (fleeCheck.events.length > 0) {
+            currentState = fleeCheck.state;
+            extraEvents.push(...fleeCheck.events);
+        }
+    }
+
+    const nextEngine = { ...engine, state: currentState, events: [...engine.events, ...extraEvents] };
+
     const nextIndex = nextEngine.turnIndex + 1;
     const nextId = nextEngine.initiativeOrder.slice(nextIndex).find(id => isActive(nextEngine.state.combatants[id]));
     const events = [...nextEngine.events, turnEvent('TurnEnded', 'combat.turn.endedActor', { round: nextEngine.round, combatantId: endedId })];
@@ -1539,9 +1566,16 @@ function applyEndOfRound(state: CombatState, rng: Rng): CombatEngineResult {
             currentState = replaceCombatant(currentState, { ...currentState.combatants[combatant.id], dead: true });
         }
         for (const pendingTest of condition.pendingTests) {
-            const resolved = resolveConditionPendingTest(condition.combatant, pendingTest, rng);
-            currentState = replaceCombatant(currentState, resolved.combatant as Combatant);
-            events.push(...resolved.events as unknown as CombatEvent[]);
+            if (pendingTest.conditionId === 'condition_broken') {
+                // Use resolveCoolTest path so Leadership's psychologyTestBonus applies
+                const rally = resolveEndOfRoundBrokenRally(currentState, combatant.id, rng);
+                currentState = rally.state;
+                events.push(...rally.events);
+            } else {
+                const resolved = resolveConditionPendingTest(condition.combatant, pendingTest, rng);
+                currentState = replaceCombatant(currentState, resolved.combatant as Combatant);
+                events.push(...resolved.events as unknown as CombatEvent[]);
+            }
         }
     }
 

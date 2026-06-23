@@ -913,7 +913,27 @@ export type DisengagedEvent = CombatEventBase<'DisengagedEvent', {
 
 export type CombatantRemovedFromEncounterEvent = CombatEventBase<'CombatantRemovedFromEncounter', {
     combatantId: string;
-    reason: 'dieAnotherDay';
+    reason: 'dieAnotherDay' | 'fled';
+}>;
+
+export type RallyTestEvent = CombatEventBase<'RallyTestResolved', {
+    combatantId: string;
+    trigger: 'endOfRound' | 'endOfTurn';
+    roll: number;
+    targetNumber: number;
+    successLevel: number;
+    stacksRemoved: number;
+    fullyRecovered: boolean;
+    fatiguedApplied: boolean;
+    engagedBlocked: boolean;
+}>;
+
+export type FleeFromFieldEvent = CombatEventBase<'FleedFromField', {
+    combatantId: string;
+    combatantName: string;
+    side: SideId;
+    position: number;
+    nearestEnemyDistance: number;
 }>;
 
 export type TalentEffectAppliedEvent = CombatEventBase<'TalentEffectApplied', {
@@ -1052,6 +1072,8 @@ export type CombatEvent =
     | LodgedAmmunitionRecordedEvent
     | BlowToBackAttackEvent
     | CombatantRemovedFromEncounterEvent
+    | RallyTestEvent
+    | FleeFromFieldEvent
     | TalentEffectAppliedEvent
     | TalentActivationRejectedEvent
     | TalentReactionRegisteredEvent

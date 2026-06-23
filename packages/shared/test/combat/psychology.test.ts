@@ -16,6 +16,11 @@ import {
     resolveLeadershipAction,
     resolvePsychologyExposure,
     resolvePsychologyRoundStart,
+    resolveEndOfRoundBrokenRally,
+    resolveEndOfTurnBrokenRally,
+    resolveFleeFromFieldCheck,
+    runCombatToCompletion,
+    legalDecisions,
     HeuristicController,
     type CombatState,
     type Rng,
@@ -507,6 +512,204 @@ describe('PSY-d Intimidate and Leadership', () => {
             ],
         });
         expect(leadership?.kind).toBe('leadership');
+    });
+});
+
+describe('PSY-e Broken behaviour, rally, and rout termination', () => {
+    it('the heuristic retreats instead of attacking when Broken with 2+ stacks', () => {
+        const state = activeFearState();
+        const actor = {
+            ...state.combatants.target,
+            conditions: ['condition_broken', 'condition_broken'],
+        };
+        const brokenState = {
+            ...state,
+            combatants: { ...state.combatants, target: actor },
+        };
+        const controller = new HeuristicController();
+        const decision = controller.choose({
+            level: 'turn',
+            engine: createTurnEngine(brokenState, { seed: 'broken2-ai' }),
+            state: brokenState,
+            actor,
+            rng: createSeededRng('broken2-ai'),
+            legalDecisions: [
+                { kind: 'meleeAttack', actorId: actor.id, targetId: 'source' },
+                { kind: 'move', actorId: actor.id, mode: 'run', target: -8 },
+                { kind: 'endTurn', actorId: actor.id },
+            ],
+        });
+        expect(decision).toMatchObject({ kind: 'move', target: -8 });
+    });
+
+    it('the heuristic cowers (endTurn, no offensive action) when Broken and cornered', () => {
+        const state = activeFearState();
+        const actor = {
+            ...state.combatants.target,
+            conditions: ['condition_broken'],
+        };
+        const brokenState = {
+            ...state,
+            combatants: { ...state.combatants, target: actor },
+        };
+        const controller = new HeuristicController();
+        const decision = controller.choose({
+            level: 'turn',
+            engine: createTurnEngine(brokenState, { seed: 'cower-ai' }),
+            state: brokenState,
+            actor,
+            rng: createSeededRng('cower-ai'),
+            legalDecisions: [
+                { kind: 'meleeAttack', actorId: actor.id, targetId: 'source' },
+                { kind: 'endTurn', actorId: actor.id },
+            ],
+        });
+        expect(decision?.kind).toBe('endTurn');
+    });
+
+    it('end-of-round Cool Test removes Broken stacks on success and applies Fatigued on full recovery', () => {
+        const actor = combatant('actor', 'ally');
+        const brokenActor = {
+            ...actor,
+            conditions: ['condition_broken', 'condition_broken'],
+        };
+        const state = createCombatState([brokenActor, combatant('enemy', 'adversary')], { round: 1 });
+        const result = resolveEndOfRoundBrokenRally(state, 'actor', sequenceRng(11));
+
+        expect(result.events.some(e => e.type === 'RallyTestResolved')).toBe(true);
+        const rally = result.events.find(e => e.type === 'RallyTestResolved');
+        expect(rally?.data.stacksRemoved).toBeGreaterThan(0);
+    });
+
+    it('end-of-round Cool Test fails on a bad roll and leaves Broken stacks unchanged', () => {
+        const actor = combatant('actor', 'ally');
+        const brokenActor = {
+            ...actor,
+            conditions: ['condition_broken', 'condition_broken'],
+        };
+        const state = createCombatState([brokenActor, combatant('enemy', 'adversary')], { round: 1 });
+        const result = resolveEndOfRoundBrokenRally(state, 'actor', sequenceRng(91));
+
+        const rally = result.events.find(e => e.type === 'RallyTestResolved');
+        expect(rally?.data.stacksRemoved).toBe(0);
+        expect(result.state.combatants.actor.conditions.filter(c => c === 'condition_broken')).toHaveLength(2);
+    });
+
+    it('end-of-round rally is blocked while Engaged and emits engagedBlocked event', () => {
+        const actor = { ...combatant('actor', 'ally'), conditions: ['condition_broken'], engagementIds: ['enemy'] };
+        const state = createCombatState([actor, combatant('enemy', 'adversary')], { round: 1 });
+        const result = resolveEndOfRoundBrokenRally(state, 'actor', sequenceRng(11));
+
+        const rally = result.events.find(e => e.type === 'RallyTestResolved');
+        expect(rally?.data.engagedBlocked).toBe(true);
+        expect(rally?.data.stacksRemoved).toBe(0);
+        expect(result.state.combatants.actor.conditions).toContain('condition_broken');
+    });
+
+    it("Leadership's +10 psychology bonus measurably improves the rally Cool Test", () => {
+        const actor = {
+            ...combatant('actor', 'ally'),
+            conditions: ['condition_broken'],
+            psychology: {
+                fears: {},
+                terrors: {},
+                psychologyTestBonus: { value: 10, expiresEndOfRound: 5, sourceId: 'leader' },
+            },
+        };
+        const state = createCombatState([actor, combatant('enemy', 'adversary')], { round: 1 });
+        const result = resolveEndOfRoundBrokenRally(state, 'actor', sequenceRng(42));
+
+        const rally = result.events.find(e => e.type === 'RallyTestResolved');
+        // Cool = 40; with +10 bonus target becomes 50; roll of 42 succeeds (SL ≥ 0)
+        expect(rally?.data.targetNumber).toBe(50);
+        expect(rally?.data.stacksRemoved).toBeGreaterThan(0);
+    });
+
+    it('Stout-Hearted triggers an extra end-of-turn Cool Test to remove Broken', () => {
+        const actor = {
+            ...combatant('actor', 'ally', { 'stout-hearted': 1 }),
+            conditions: ['condition_broken'],
+        };
+        const enemy = combatant('enemy', 'adversary');
+        const state = createCombatState([actor, enemy], { round: 1 });
+        const result = resolveEndOfTurnBrokenRally(state, 'actor', sequenceRng(11));
+
+        expect(result.events.find(e => e.type === 'RallyTestResolved')).toBeTruthy();
+    });
+
+    it('Flee! talent adds extra legal move destinations when Broken', () => {
+        const enemy = { ...combatant('enemy', 'adversary'), position: 10 };
+        const normalActor = { ...combatant('normal', 'ally'), conditions: ['condition_broken'], position: 0 };
+        const fleeActor = { ...combatant('flee', 'ally', { flee: 1 }), conditions: ['condition_broken'], position: 0, id: 'flee' };
+
+        const normalState = createCombatState([normalActor, enemy], { round: 1 });
+        const fleeState = createCombatState([fleeActor, enemy], { round: 1 });
+
+        const normalMoves = legalDecisions(normalState, normalActor).filter(d => d.kind === 'move');
+        const fleeMoves = legalDecisions(fleeState, fleeActor).filter(d => d.kind === 'move');
+
+        expect(fleeMoves.length).toBeGreaterThan(normalMoves.length);
+    });
+
+    it('a Broken unengaged combatant far from all enemies is marked as fled and excluded from sideDown', () => {
+        const brokenFar = {
+            ...combatant('broken', 'ally'),
+            conditions: ['condition_broken'],
+            position: 30,
+            engagementIds: [],
+        };
+        const enemy = { ...combatant('enemy', 'adversary'), position: 0 };
+        const state = createCombatState([brokenFar, enemy], { round: 1 });
+
+        const result = resolveFleeFromFieldCheck(state, 'broken');
+
+        expect(result.events.find(e => e.type === 'FleedFromField')).toBeTruthy();
+        expect(result.events.find(e => e.type === 'CombatantRemovedFromEncounter')).toBeTruthy();
+        const removed = result.events.find(e => e.type === 'CombatantRemovedFromEncounter');
+        expect(removed?.data.reason).toBe('fled');
+        expect(result.state.combatants.broken.removedFromEncounter).toBe(true);
+    });
+
+    it('flee-field does NOT fire when the combatant is too close to enemies', () => {
+        const brokenClose = {
+            ...combatant('broken', 'ally'),
+            conditions: ['condition_broken'],
+            position: 5,
+            engagementIds: [],
+        };
+        const enemy = { ...combatant('enemy', 'adversary'), position: 0 };
+        const state = createCombatState([brokenClose, enemy], { round: 1 });
+
+        const result = resolveFleeFromFieldCheck(state, 'broken');
+        expect(result.events).toHaveLength(0);
+        expect(result.state.combatants.broken.removedFromEncounter).toBeFalsy();
+    });
+
+    it('a fully fled side triggers sideDownTermination as a win for the other side', () => {
+        const fleeingAlly = {
+            ...combatant('ally', 'ally'),
+            conditions: ['condition_broken'],
+            position: 50,
+            engagementIds: [],
+        };
+        const enemy = { ...combatant('enemy', 'adversary'), position: 0 };
+        const state = createCombatState([fleeingAlly, enemy], { round: 1 });
+
+        const engine = runCombatToCompletion(
+            state,
+            new HeuristicController({ profile: 'berserker' }),
+            { seed: 'rout-test', maxRounds: 20 }
+        );
+
+        expect(engine.outcome).toBe('adversary');
+    });
+
+    it('is deterministic under a seeded RNG', () => {
+        const actor = { ...combatant('actor', 'ally'), conditions: ['condition_broken'] };
+        const state = createCombatState([actor, combatant('enemy', 'adversary')], { round: 1 });
+        const first = resolveEndOfRoundBrokenRally(state, 'actor', createSeededRng('psy-e-det'));
+        const second = resolveEndOfRoundBrokenRally(state, 'actor', createSeededRng('psy-e-det'));
+        expect(first).toEqual(second);
     });
 });
 

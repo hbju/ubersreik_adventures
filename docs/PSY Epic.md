@@ -123,3 +123,41 @@ Now PSY-a, properly:
 
 ---
 
+## PBI PSY-e — Broken Behaviour, Rally & Routed-Side Termination
+
+**User story:** As the simulator, I need Broken combatants to actually break — flee or cower, possibly recover, and let a shattered side rout — so fights end the way real WFRP fights end, by morale as well as by blades.
+
+**Why now:** it closes the psychology epic, turns every Fear/Terror/Intimidate result into real behaviour, and adds the rout exit that makes encounters decisive (and re-bases your aggregates).
+
+### Tasks — Broken behaviour (engine + heuristic)
+- [ ] Replace the stub Broken override with rule-accurate handling: """You are terrified, defeated, panicked, or otherwise convinced you are going to die. On your turn, your Move and Action must be used to run away as fast as possible until you are in a good hiding place beyond the sight of any enemy; then you can use your Action on a Skill that allows you to hide more effectively. You also receive a penalty of –10 to all Tests not involving running and hiding. You cannot Test to rally from being Broken if you are Engaged with an enemy. If you are unengaged, at the end of each Round, you may attempt a Cool Test to remove a Broken Condition, with each SL removing an extra Broken Condition, and the Difficulty determined by the circumstances you currently find yourself: it is much easier to rally when hiding behind a barrel down an alleyway far from danger (Average +20) than it is when three steps from a slavering Daemon screaming for your blood (Very Hard –30).\n\nIf you spend a full Round in hiding out of line-of-sight of any enemy, you remove 1 Broken Condition. Once all Broken Conditions are removed, gain 1 Fatigued Condition."""
+- [ ] Ensure the AI never takes offensive actions while forced to flee; competence-floor Fate-save still applies and doesn't fight the compulsion.
+
+### Tasks — Rally / recovery (engine)
+- [ ] End-of-turn **Cool test** (works while fleeing) that removes Broken on success *(count per your rules; default 1, more on high SL)*; **`psychologyTestBonus` from Leadership applies**.
+- [ ] Flag: optional deliberate Rally action for the 1-Broken case.
+
+### Tasks — Resistance & flee talents (game-data + hooks)
+- [ ] **Iron Will / Unshakable** — reduce Broken gained / improve recovery (hook into the gain-Broken and Rally paths; reuses PSY-a's resistance gate).
+- [ ] **Stout-Hearted** — bonus to Cool tests to resist Fear and remove Broken.
+- [ ] **Flee!** — extra Movement while fleeing (wire into the flee movement).
+- [ ] All per your psychology-talent data.
+
+### Tasks — Rout / flee-the-field termination (engine)
+- [ ] A fleeing Broken combatant past the flee threshold is marked **`removedFromEncounter`** ("fled").
+- [ ] Confirm `isActive` (now single-source from the engine) excludes fled combatants so **`sideDownTermination`** counts a fully dead/unconscious/fled side as defeated — fights end by **rout**, not only kills. **Re-baseline saved reports.**
+
+### Tasks — Precedence resolver (engine)
+- [ ] Consolidate psychology precedence into one resolver: Frenzy (immune to all psychology) > Fear/Terror; Fearless (immune to Fear); apply `psychologyTestBonus`. Leave clearly-marked slots for Animosity/Hatred so deferred PSY-c drops in without scattering checks.
+
+### Tasks — Tests / i18n
+- [ ] Vitest: 2+ Broken → flees the source at full move; cornered → cowers (no offensive action emitted); 1 Broken → acts under penalty; end-of-turn recovery removes Broken and Leadership's +10 measurably helps; Iron Will/Unshakable reduce Broken; Stout-Hearted boosts resist/recovery; Flee! adds flee distance; a fully-Broken side that flees the field is removed → termination fires as a win, not a draw; precedence: frenzied ignores Fear, Fearless ignores Fear; deterministic under seed.
+- [ ] en/fr for flee/cower, recovery, rout/fled events, and the talents.
+
+### Acceptance criteria
+- Broken combatants flee the Fear source (or cower if cornered); an end-of-turn Cool test (boosted by Leadership) sheds Broken; resistance/flee talents modify gain/recovery/flight per their data.
+- A side fully dead, unconscious, or fled counts as defeated, so fights end by rout — measurably reducing draws (re-baseline reports).
+- Psychology precedence resolves in one place; all transitions deterministic under seed.
+
+---
+

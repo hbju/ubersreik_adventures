@@ -1,5 +1,6 @@
 import { calculateSuccessLevel, rolld100 } from '../utils/mechanics';
 import { calculateCharacteristicBonus, skillTarget } from '../utils/skills';
+import { applyConditionRemovalTest } from '../utils/conditions';
 import type { Rng } from './rng';
 import type {
     CombatEngineResult,
@@ -10,7 +11,10 @@ import type {
     MeleeHookContext,
     ModifierSource,
     ResolvedOpposedRoll,
+    SideId,
 } from './types';
+
+const FLEE_FIELD_THRESHOLD = 15;
 
 export interface PsychologyExposureOptions {
     terrorTestModifier?: number | ((source: Combatant, target: Combatant) => number);
@@ -489,6 +493,186 @@ export function resolveCoolTest(combatant: Combatant, rng: Rng, modifier = 0, ro
         roll,
         targetNumber,
         successLevel: Math.round(calculateSuccessLevel(roll, targetNumber)),
+    };
+}
+
+/**
+ * Precedence resolver for all psychology checks (PSY-e).
+ * Order: Frenzy (immune to all) > Fearless (immune to Fear) > normal.
+ * Slots for PSY-c Animosity/Hatred immunity are left as labelled no-ops.
+ */
+export interface PsychologyPrecedence {
+    immuneToAllPsychology: boolean;
+    immuneToFear: boolean;
+    // PSY-c slot: immuneToFearFromHatedGroup (deferred)
+    psychologyTestBonus: number;
+}
+
+export function resolvePsychologyPrecedence(combatant: Combatant, round?: number): PsychologyPrecedence {
+    return {
+        immuneToAllPsychology: isFrenzied(combatant) || combatant.psychology?.immuneToAllPsychology === true,
+        immuneToFear: combatant.psychology?.immuneToFear === true || (combatant.character.talents?.fearless ?? 0) > 0,
+        // PSY-c: add immuneToFearFromHatedGroup here when Animosity/Hatred lands
+        psychologyTestBonus: activePsychologyTestBonus(combatant, round),
+    };
+}
+
+/**
+ * End-of-round Broken rally: Cool Test (with Leadership bonus) to shed Broken stacks.
+ * Blocked while Engaged. Fatigued applied on full recovery (via conditions system).
+ */
+export function resolveEndOfRoundBrokenRally(
+    state: CombatState,
+    combatantId: string,
+    rng: Rng
+): CombatEngineResult {
+    return resolveBrokenRallyTest(state, combatantId, rng, 'endOfRound');
+}
+
+/**
+ * End-of-turn Broken rally for Stout-Hearted talent.
+ * Same mechanics as end-of-round but fires at the end of the combatant's own turn.
+ */
+export function resolveEndOfTurnBrokenRally(
+    state: CombatState,
+    combatantId: string,
+    rng: Rng
+): CombatEngineResult {
+    return resolveBrokenRallyTest(state, combatantId, rng, 'endOfTurn');
+}
+
+/**
+ * Flee-field check: a Broken combatant who is unengaged and more than FLEE_FIELD_THRESHOLD
+ * away from every active enemy is marked removedFromEncounter ('fled').
+ * sideDownTermination already excludes these via isActive().
+ */
+export function resolveFleeFromFieldCheck(
+    state: CombatState,
+    combatantId: string
+): CombatEngineResult {
+    const combatant = state.combatants[combatantId];
+    if (!combatant || !combatant.conditions.includes('condition_broken')) return { state, events: [] };
+    if (combatant.removedFromEncounter || combatant.dead) return { state, events: [] };
+    if (combatant.engagementIds.length > 0) return { state, events: [] };
+
+    const activeEnemies = Object.values(state.combatants).filter(other =>
+        other.side !== combatant.side && isPsychologyParticipant(other)
+    );
+    if (activeEnemies.length === 0) return { state, events: [] };
+
+    const nearestDistance = Math.min(...activeEnemies.map(enemy => Math.abs(combatant.position - enemy.position)));
+    if (nearestDistance < FLEE_FIELD_THRESHOLD) return { state, events: [] };
+
+    const updatedCombatant: Combatant = { ...combatant, removedFromEncounter: true };
+    return {
+        state: replaceCombatant(state, updatedCombatant),
+        events: [
+            {
+                type: 'FleedFromField',
+                i18nKey: 'combat.psychology.broken.fleedFromField',
+                data: {
+                    combatantId,
+                    combatantName: combatant.name,
+                    side: combatant.side as SideId,
+                    position: combatant.position,
+                    nearestEnemyDistance: nearestDistance,
+                },
+            },
+            {
+                type: 'CombatantRemovedFromEncounter',
+                i18nKey: 'combat.psychology.broken.removed',
+                data: { combatantId, reason: 'fled' },
+            },
+        ],
+    };
+}
+
+function resolveBrokenRallyTest(
+    state: CombatState,
+    combatantId: string,
+    rng: Rng,
+    trigger: 'endOfRound' | 'endOfTurn'
+): CombatEngineResult {
+    const combatant = state.combatants[combatantId];
+    if (!combatant || !combatant.conditions.includes('condition_broken')) return { state, events: [] };
+
+    // Cannot rally while Engaged (WFRP4e core rule)
+    const engagedBlocked = combatant.engagementIds.length > 0;
+    if (engagedBlocked) {
+        return {
+            state,
+            events: [{
+                type: 'RallyTestResolved',
+                i18nKey: 'combat.psychology.broken.rally.blocked',
+                data: {
+                    combatantId,
+                    trigger,
+                    roll: 0,
+                    targetNumber: 0,
+                    successLevel: 0,
+                    stacksRemoved: 0,
+                    fullyRecovered: false,
+                    fatiguedApplied: false,
+                    engagedBlocked: true,
+                },
+            }],
+        };
+    }
+
+    const test = resolveCoolTest(combatant, rng, 0, state.round);
+    const brokenCountBefore = combatant.conditions.filter(c => c === 'condition_broken').length;
+
+    if (test.successLevel < 0) {
+        return {
+            state,
+            events: [{
+                type: 'RallyTestResolved',
+                i18nKey: 'combat.psychology.broken.rally.failure',
+                data: {
+                    combatantId,
+                    trigger,
+                    ...test,
+                    stacksRemoved: 0,
+                    fullyRecovered: false,
+                    fatiguedApplied: false,
+                    engagedBlocked: false,
+                },
+            }],
+        };
+    }
+
+    const removalResult = applyConditionRemovalTest(
+        combatant,
+        'condition_broken',
+        { roll: test.roll, targetNumber: test.targetNumber, successLevel: test.successLevel }
+    );
+    const updatedCombatant = removalResult.combatant as Combatant;
+    const brokenCountAfter = updatedCombatant.conditions.filter(c => c === 'condition_broken').length;
+    const stacksRemoved = brokenCountBefore - brokenCountAfter;
+    const fullyRecovered = brokenCountAfter === 0;
+    const fatiguedApplied = fullyRecovered && !combatant.conditions.includes('condition_fatigued')
+        && updatedCombatant.conditions.includes('condition_fatigued');
+
+    const events: CombatEvent[] = [
+        {
+            type: 'RallyTestResolved',
+            i18nKey: 'combat.psychology.broken.rally.success',
+            data: {
+                combatantId,
+                trigger,
+                ...test,
+                stacksRemoved,
+                fullyRecovered,
+                fatiguedApplied,
+                engagedBlocked: false,
+            },
+        },
+        ...removalResult.events as unknown as CombatEvent[],
+    ];
+
+    return {
+        state: replaceCombatant(state, updatedCombatant),
+        events,
     };
 }
 
