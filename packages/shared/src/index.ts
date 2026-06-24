@@ -176,6 +176,12 @@ export {
 	type Rng,
 	type SideId,
 	type SpendAdvantageParams,
+	NeedDecision,
+	RemotePlayerController,
+	stepWithRemoteControllers,
+	type DecisionRequest,
+	type FightStateView,
+	type ReplayStepResult,
 } from './combat';
 export * from './utils/advancement';
 export * from './utils/generator';

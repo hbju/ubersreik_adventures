@@ -6,10 +6,8 @@
 
 ## Pointers (don't re-derive — read these)
 
-- **Full prior transcript:** `/mnt/transcripts/2026-06-17-08-29-42-wfrp-vtt-engine-psychology.txt` (engine work, Psychology epic, all earlier PBI text + code). Read incrementally; it's large.
-- **Transcript catalog:** `journal.txt` in the same directory.
-- **Prior output artifacts** (reference, don't reproduce): `/mnt/user-data/outputs/fight_sim_v2_backlog.md`, `epic3_recap.md`, `pbi3_test_battery.md`. Note: the patched `turn-engine.ts` / `heuristic-controller.ts` in outputs are **superseded** — Milou has since re-implemented on top of them (PSY-a/b/d + the defence-skill refactor).
-- Project recaps live in the repo under `docs/epics/`.
+- **Full prior transcript:** `/docs/Fight Simulator Sprint.md` (engine work, all earlier PBI text). Read incrementally; it's large.
+- **Last epic transcript:** `/docs/PSY Epic.md` (psychology work, PBI text).
 
 ## Project orientation (brief)
 
@@ -25,15 +23,11 @@ Solo dev (Milou, technical, fast-moving) building **"Ubersreik Adventures,"** a 
 
 ## Roadmap (where this epic sits)
 
-Decided order: Worker-pool (done) → **Psychology** → **Live-play infrastructure (← current)** → **flat Monte Carlo controller** → MCTS → 2D battlefield, with a golden-fight regression corpus to land first. Key reframing: *"NPC automation" is just controller-swapping* — once live-play infra exists with a pluggable controller, automation = choosing which controller (Manual → Heuristic → flat-MC → MCTS) drives a combatant. **Live-play is being built first specifically so the eventual flat-MC can be A/B'd against human play on the identical engine/encounter.**
+Decided order: Worker-pool (done) → Psychology (done) → **Live-play infrastructure (← current)** → **flat Monte Carlo controller** → MCTS → 2D battlefield, with a golden-fight regression corpus to land first. Key reframing: *"NPC automation" is just controller-swapping* — once live-play infra exists with a pluggable controller, automation = choosing which controller (Manual → Heuristic → flat-MC → MCTS) drives a combatant. **Live-play is being built first specifically so the eventual flat-MC can be A/B'd against human play on the identical engine/encounter.**
 
-## Just closed (this session)
+## Just closed
 
-- **Defence-skill ownership refactor — DONE by Milou himself.** The defender now chooses its own defence skill (Melee / Dodge / Intimidate) via its *own* controller through a resolution-level sub-decision, instead of the attacker's controller guessing it. This generalised controller plumbing to the `ControllerResolver` and (intended) also fixed the latent wrong-owner bug in reaction / Fate-interception windows. Full design is in the transcript tail; **no action needed.**
-
-## Outstanding loose end (don't lose this)
-
-- **PSY-e is NOT implemented.** Milou confirmed: PSY-a (Fear/Terror), PSY-b (Frenzy), PSY-d (Intimidate/Leadership) are in; **PSY-c is deferred** (group-targeted psychology — Hatred/Animosity/Prejudice); **PSY-e remains TODO** — Broken behaviour, Rally, and **routed-side termination** (`removedFromEncounter`/"fled" so `sideDownTermination` fires by rout). PSY-e is the expected fix for the chronic *"too many draws"* smell. We jumped to live-play at Milou's direction; circle back to PSY-e afterward (or whenever he chooses).
+- **Defence-skill ownership refactor — DONE** The defender now chooses its own defence skill (Melee / Dodge / Intimidate) via its *own* controller through a resolution-level sub-decision, instead of the attacker's controller guessing it. This generalised controller plumbing to the `ControllerResolver` and (intended) also fixed the latent wrong-owner bug in reaction / Fate-interception windows. Full design is in the transcript tail; **no action needed.**
 
 ---
 
@@ -47,7 +41,7 @@ Goal: a `RemotePlayerController` for the PCs that drops into the same `Controlle
 
 - **(a) Async-ify** — `choose` returns `Promise`, add async `applyDecision`. Clean protocol but threads `await` through every internal `thread*`/`chooseResolution` and creates a second resolution path that can drift from the batch one.
 - **(b) Generators** — turn resolution as `function*` that yields a decision-request and resumes on `.next(decision)`. Most correct suspension, most invasive to `applyDecision`.
-- **(c) Replay-to-resume — RECOMMENDED.** Leave `applyDecision` and the batch loop **byte-for-byte unchanged**. The live orchestrator runs `applyDecision` with a resolver whose remote controllers **throw a typed `NeedDecision(requestId, context)`** the first time asked for a not-yet-known decision. Orchestrator catches it → emits `REQUEST_DECISION` → awaits `DECISION_RESPONSE` → caches by `requestId` → **re-runs `applyDecision` from the same pre-state**, which (pure + seeded) reproduces the identical path and advances one decision further before the next throw. N remote decisions/turn = N replays; the human is the bottleneck so CPU cost is noise; engine internals never change. Reuses the determinism built for MCTS; less new code than (a).
+- **(c) Replay-to-resume** Leave `applyDecision` and the batch loop **byte-for-byte unchanged**. The live orchestrator runs `applyDecision` with a resolver whose remote controllers **throw a typed `NeedDecision(requestId, context)`** the first time asked for a not-yet-known decision. Orchestrator catches it → emits `REQUEST_DECISION` → awaits `DECISION_RESPONSE` → caches by `requestId` → **re-runs `applyDecision` from the same pre-state**, which (pure + seeded) reproduces the identical path and advances one decision further before the next throw. N remote decisions/turn = N replays; the human is the bottleneck so CPU cost is noise; engine internals never change. Reuses the determinism built for MCTS; less new code than (a).
 
 **GATING QUESTION for Milou (decides (c) vs fallback (b)):** does full re-execution of `applyDecision` from a given pre-state with the same decisions produce **byte-identical** results — same rolls, same event order — with **no `Date.now()`, no stray `Math.random()`, and no rng draw whose value depends on insertion/iteration order** anywhere in the resolution path? **If yes → (c). If any hidden nondeterminism → (b).** Everything below assumes (c) pending his answer.
 

@@ -2,6 +2,8 @@ import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, Journa
 import { ChatMessage } from './chat.types';
 import { GameDate, TimelineEvent } from '../data/calendar';
 import { Notebook } from './notebook.types';
+import type { DecisionRequest } from '../combat/remote-player-controller';
+import type { CombatDecision } from '../combat/turn-engine';
 
 interface BaseMessage<T extends string, P> {
     type: T;
@@ -112,7 +114,10 @@ export type NotebookSyncMessage = BaseMessage<'NOTEBOOK_SYNC', {
     notebook: Notebook;
 }>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage | ChatMessageBroadcast | ChatHistoryMessage | MapSwitchMessage | ActiveMapUpdateMessage | CalendarSyncMessage | NotebookSyncMessage;
+// Live-play: server sends a decision request to the specific player whose turn it is
+export type RequestDecisionMessage = BaseMessage<'REQUEST_DECISION', DecisionRequest>;
+
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage | ChatMessageBroadcast | ChatHistoryMessage | MapSwitchMessage | ActiveMapUpdateMessage | CalendarSyncMessage | NotebookSyncMessage | RequestDecisionMessage;
 
 // == Roll Queue Types ==
 
@@ -273,4 +278,10 @@ export type NotebookUpdateMessage = BaseMessage<'NOTEBOOK_UPDATE', {
     notebook: Notebook;
 }>;
 
-export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage | TokenMoveMessage | MapAddPinMessage | MapRemovePinMessage | MapPingRequestMessage | ChatSendMessage | MapSwitchRequestMessage | SetSpawnPointMessage | RollWithIntentMessage | NotebookUpdateMessage;
+// Live-play: player responds to a REQUEST_DECISION with their chosen action
+export type DecisionResponseMessage = BaseMessage<'DECISION_RESPONSE', {
+    requestId: string;
+    decision: CombatDecision;
+}>;
+
+export type ClientToServerMessage = LoginRequestMessage | LogoutMessage | TestResultMessage | CharacterCreateMessage |CharacterUpdateMessage | RequestPurchaseMessage | OpposedTestResultMessage | ConditionTestResultMessage | CareerChangeRequestMessage | PlayerUpdateCharacterMessage | ShopPurchaseRequestMessage | ShopEvaluateRequestMessage | QuestUpdateMessage | QuestDeleteMessage | TokenMoveMessage | MapAddPinMessage | MapRemovePinMessage | MapPingRequestMessage | ChatSendMessage | MapSwitchRequestMessage | SetSpawnPointMessage | RollWithIntentMessage | NotebookUpdateMessage | DecisionResponseMessage;
