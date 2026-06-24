@@ -11,7 +11,7 @@ export interface ReplayStepResult {
 
 // Advance the engine by one decision step, handling remote human players via replay-to-resume.
 //
-// Usage pattern (LP-b will wrap this in the socket loop):
+// Usage pattern :
 //   1. Call stepWithRemoteControllers(engine, remoteActorIds, heuristicResolver, cache, onRequest)
 //   2. If result.pendingRequest is set: send REQUEST_DECISION to the player; when
 //      DECISION_RESPONSE arrives, do cache.set(pendingRequest.requestId, decision) and
