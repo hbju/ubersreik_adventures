@@ -25,6 +25,7 @@ interface FooterProps {
     onShowChat: () => void,
     onShowGameLog: () => void,
     onShowFightLab: () => void,
+    onShowLiveFight: () => void,
 }
 
 interface DropUpMenuProps {
@@ -139,6 +140,7 @@ export const Footer: React.FC<FooterProps> = ({
     onShowChat,
     onShowGameLog,
     onShowFightLab,
+    onShowLiveFight,
 }) => {
     const { t } = useTranslation();
     const { openViewer } = useCodex();
@@ -231,6 +233,14 @@ export const Footer: React.FC<FooterProps> = ({
             >
                 <span className={styles.fightLabMark} aria-hidden="true">FL</span>
                 {t('menu.fightLab', 'Fight Lab')}
+            </button>
+
+            <button
+                className={styles.categoryButton}
+                onClick={onShowLiveFight}
+                title={t('menu.liveFight', 'Live Fight')}
+            >
+                ⚔ {t('menu.liveFight', 'Live Fight')}
             </button>
 
             <LanguageSwitcher />

@@ -86,3 +86,35 @@ export class RemotePlayerController implements CombatantController {
     }
 }
 
+// Probe controller used by gatherPsychologyRequests to discover all round-start psychology
+// Fortune-reroll opportunities without blocking. For psychology:fortune decisions it records
+// the request and returns a sentinel 'wait' (so the engine keeps running), then throws
+// NeedDecision for any other decision type (stopping the probe).
+export class PsychologyProbeController implements CombatantController {
+    private readonly callCounts = new Map<string, number>();
+    readonly discovered: DecisionRequest[] = [];
+
+    constructor(private readonly probeCache: Map<string, CombatDecision>) {}
+
+    choose(context: DecisionContext): CombatDecision | undefined {
+        const key = stableKey(context);
+        const count = this.callCounts.get(key) ?? 0;
+        this.callCounts.set(key, count + 1);
+        const requestId = `${key}:${count}`;
+
+        if (this.probeCache.has(requestId)) return this.probeCache.get(requestId)!;
+
+        if (context.level === 'resolution' && context.reason?.startsWith('psychology:')) {
+            const req = buildRequest(requestId, context);
+            this.discovered.push(req);
+            const sentinel: CombatDecision = { kind: 'wait', actorId: context.actor.id };
+            this.probeCache.set(requestId, sentinel);
+            return sentinel;
+        }
+
+        // Non-psychology decision: stop probing, the caller catches this throw
+        const req = buildRequest(requestId, context);
+        throw new NeedDecision(requestId, context, req);
+    }
+}
+

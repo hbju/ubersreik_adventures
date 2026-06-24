@@ -28,6 +28,8 @@ import { DramatisPersonae } from './components/lore/DramatisPersonae';
 import { LoreEditor } from './components/lore/LoreEditor';
 import NPCGeneratorWizard from './components/generator/NPCGeneratorWizard';
 import FightLab from './components/fightLab/FightLab';
+import { LiveFightPanel } from './components/LiveFightPanel';
+import { useLiveFight } from './hooks/useLiveFight';
 
 import {
     DiscoveredLocationsList, 
@@ -153,6 +155,7 @@ function App() {
     const [showChat, setShowChat] = useState(false);
     const [showLibraryManager, setShowLibraryManager] = useState(false);
     const [showFightLab, setShowFightLab] = useState(false);
+    const [showLiveFight, setShowLiveFight] = useState(false);
     const [showDramatisPersonae, setShowDramatisPersonae] = useState(false);
     const [loreEditorCharacter, setLoreEditorCharacter] = useState<Character | null>(null);
     const [leftSidebarMode, setLeftSidebarMode] = useState<'roster' | 'audio'>('roster');
@@ -214,6 +217,8 @@ function App() {
     const [showTalentSelector, setShowTalentSelector] = useState<string | null>(null);
 
     const [browsingShopId, setBrowsingShopId] = useState<string | null>(null);
+
+    const liveFight = useLiveFight({ characters });
 
     // Merge default shop definitions with custom ones
     // Custom definitions override defaults with the same ID
@@ -1001,6 +1006,10 @@ function App() {
 
         const cleanupMessageListener = window.ipcRenderer.onPlayerMessageReceived((message: ClientToServerMessage) => {
             console.log("Received message from player:", message);
+            if (message.type === 'DECISION_RESPONSE') {
+                liveFight.handleDecisionResponse(message.payload.requestId, message.payload.decision);
+                return;
+            }
             if (message.type === 'TEST_RESULT') {
                 const { characterId, testName, targetNumber, rollResult, successLevel, fortuneSpent, corruptionGained } = message.payload;
                 const outcome = successLevel >= 0
@@ -1476,6 +1485,7 @@ function App() {
                 onShowChat={() => setShowChat(!showChat)}
                 onShowGameLog={() => setShowGameLog(true)}
                 onShowFightLab={() => setShowFightLab(true)}
+                onShowLiveFight={() => setShowLiveFight(true)}
             />
 
             { showGameLog && (
@@ -1487,6 +1497,13 @@ function App() {
                     characters={characters}
                     templates={allTemplates}
                     onClose={() => setShowFightLab(false)}
+                />
+            )}
+
+            {showLiveFight && (
+                <LiveFightPanel
+                    {...liveFight}
+                    onClose={() => setShowLiveFight(false)}
                 />
             )}
 

@@ -1,0 +1,140 @@
+import React from 'react';
+import type { LiveFightHook } from '../hooks/useLiveFight';
+import { DEV_FIGHT_FIXTURE } from '../hooks/useLiveFight';
+
+interface LiveFightPanelProps extends LiveFightHook {
+    onClose: () => void;
+}
+
+export function LiveFightPanel({
+    liveFightEngine,
+    pendingPsychRequests,
+    pendingMainRequest,
+    startFight,
+    handleDecisionResponse,
+    stopFight,
+    onClose,
+}: LiveFightPanelProps) {
+    const engine = liveFightEngine;
+    const outcome = engine?.outcome;
+    const phase = engine?.phase;
+    const round = engine?.round;
+
+    const forceEndTurn = () => {
+        if (!pendingMainRequest) return;
+        handleDecisionResponse(pendingMainRequest.requestId, {
+            kind: 'endTurn',
+            actorId: pendingMainRequest.actorId,
+        });
+    };
+
+    const forcePsychWait = (req: typeof pendingPsychRequests[0]) => {
+        handleDecisionResponse(req.requestId, { kind: 'wait', actorId: req.actorId });
+    };
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-start justify-center pt-16 z-50">
+            <div className="bg-gray-900 text-white rounded-lg shadow-2xl w-[480px] max-h-[80vh] overflow-y-auto p-5">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-lg font-bold text-amber-400">⚔ Live Fight</h2>
+                    <button onClick={onClose} className="text-gray-400 hover:text-white text-xl">✕</button>
+                </div>
+
+                {/* Idle state */}
+                {!engine && (
+                    <div className="space-y-3">
+                        <p className="text-gray-400 text-sm">No fight in progress.</p>
+                        <button
+                            onClick={() => startFight(DEV_FIGHT_FIXTURE.combatState, DEV_FIGHT_FIXTURE.remoteActorIds, DEV_FIGHT_FIXTURE.seed)}
+                            className="bg-amber-600 hover:bg-amber-500 text-white px-4 py-2 rounded text-sm font-medium"
+                        >
+                            ▶ Start Dev Fixture
+                        </button>
+                    </div>
+                )}
+
+                {/* Fight in progress */}
+                {engine && phase !== 'complete' && (
+                    <div className="space-y-4">
+                        {/* Status bar */}
+                        <div className="flex gap-3 text-sm">
+                            <span className="bg-gray-700 px-2 py-1 rounded">Round {round}</span>
+                            <span className="bg-gray-700 px-2 py-1 rounded capitalize">{phase}</span>
+                        </div>
+
+                        {/* Psychology fan-out */}
+                        {pendingPsychRequests.length > 0 && (
+                            <div className="border border-yellow-600 rounded p-3 space-y-2">
+                                <p className="text-yellow-400 text-sm font-semibold">Psychology decisions needed:</p>
+                                {pendingPsychRequests.map(req => (
+                                    <div key={req.requestId} className="flex items-center justify-between text-sm">
+                                        <span className="text-gray-300">
+                                            {req.characterName} — Fortune reroll? <span className="text-gray-500">(round {req.round})</span>
+                                        </span>
+                                        <button
+                                            onClick={() => forcePsychWait(req)}
+                                            className="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded"
+                                            title="GM Override: decline the reroll"
+                                        >
+                                            Force Wait
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Main turn decision */}
+                        {pendingMainRequest && (
+                            <div className="border border-blue-600 rounded p-3 space-y-2">
+                                <p className="text-blue-400 text-sm font-semibold">
+                                    Awaiting decision from <span className="text-white">{pendingMainRequest.characterName}</span>
+                                </p>
+                                <p className="text-gray-400 text-xs">
+                                    Turn {pendingMainRequest.turnIndex + 1} — {pendingMainRequest.legalDecisions.length} legal actions
+                                </p>
+                                <button
+                                    onClick={forceEndTurn}
+                                    className="text-xs bg-red-800 hover:bg-red-700 text-white px-3 py-1 rounded"
+                                    title="GM Override: force end turn"
+                                >
+                                    Force End Turn
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Waiting for NPC */}
+                        {!pendingMainRequest && pendingPsychRequests.length === 0 && (
+                            <p className="text-gray-500 text-sm">NPC resolving…</p>
+                        )}
+
+                        <button
+                            onClick={stopFight}
+                            className="text-xs text-gray-500 hover:text-red-400 underline"
+                        >
+                            Abort fight
+                        </button>
+                    </div>
+                )}
+
+                {/* Fight complete */}
+                {engine && phase === 'complete' && (
+                    <div className="space-y-3">
+                        <div className={`text-center py-3 rounded text-lg font-bold ${
+                            outcome === 'ally' ? 'bg-green-800 text-green-200' :
+                            outcome === 'adversary' ? 'bg-red-900 text-red-200' :
+                            'bg-gray-700 text-gray-200'
+                        }`}>
+                            {outcome === 'ally' ? '🏆 Victory' : outcome === 'adversary' ? '💀 Defeat' : '⚖ Draw'}
+                        </div>
+                        <button
+                            onClick={stopFight}
+                            className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded text-sm w-full"
+                        >
+                            Close
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

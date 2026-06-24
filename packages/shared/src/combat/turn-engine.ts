@@ -25,7 +25,7 @@ import {
 } from './psychology';
 import { hasQuality, qualityRating } from './qualities';
 import { eligibleReactions, reactionOfferEvent, resolveReactionDecision, type ReactionDecision } from './reactions';
-import { spendFate } from './resources';
+import { spendFate, spendFortune } from './resources';
 import { createSeededRng, mathRandomRng, type Rng } from './rng';
 import { resolveShieldsmanActivation, toggleReversal } from './talent-actions';
 import type {
@@ -77,7 +77,8 @@ export type CombatDecisionKind =
     | 'reversal'
     | 'reaction'
     | 'endTurn'
-    | 'wait';
+    | 'wait'
+    | 'fortuneReroll';
 
 export interface CombatDecision {
     kind: CombatDecisionKind;
@@ -207,13 +208,14 @@ export function cloneTurnEngine(engine: TurnEngineState): TurnEngineState {
         state: structuredCloneSafe(engine.state),
         events: [...engine.events],
         initiativeOrder: [...engine.initiativeOrder],
+        rng: engine.rng.clone?.() ?? engine.rng,
     };
 }
 
-export function advanceToNextDecision(engine: TurnEngineState, options: TurnEngineOptions = {}): TurnEngineState {
+export function advanceToNextDecision(engine: TurnEngineState, options: TurnEngineOptions = {}, resolver?: ControllerResolver): TurnEngineState {
     let current: TurnEngineState = engine;
     while (current.phase !== 'awaitingDecision' && current.phase !== 'complete') {
-        current = stepAutomatic(current, options);
+        current = stepAutomatic(current, options, resolver);
     }
     return current;
 }
@@ -1429,7 +1431,114 @@ function decisionRejected(decision: CombatDecision, reason: string): CombatEvent
     return turnEvent('TurnDecisionRejected', 'combat.turn.rejected.illegal', { actorId: decision.actorId, reason, decision: decision.kind });
 }
 
-function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): TurnEngineState {
+// Offers a Fortune-reroll to each remote combatant who just failed a Terror test.
+// Called in the roundStart block after resolvePsychologyRoundStart so the full TurnEngineState
+// is available as context. Returns an updated CombatEngineResult (state + supplementary events).
+function offerPsychologyFortuneRerolls(
+    engineRef: TurnEngineState,
+    psychResult: CombatEngineResult,
+    rng: Rng,
+    resolver: ControllerResolver,
+): CombatEngineResult {
+    let currentState = psychResult.state;
+    const events: CombatEvent[] = [...psychResult.events];
+
+    for (const event of psychResult.events) {
+        if (event.type !== 'PsychologyTestResolved') continue;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const d = (event as any).data as {
+            combatantId: string; sourceId: string; psychology: string;
+            roll: number; targetNumber: number; successLevel: number; brokenApplied?: number;
+        };
+        if (d.psychology !== 'terror' || !d.brokenApplied || d.brokenApplied <= 0) continue;
+
+        const combatant = currentState.combatants[d.combatantId];
+        if (!combatant || (combatant.resources.fortune?.current ?? 0) <= 0) continue;
+
+        const controller = resolver(combatant.id);
+        if (!controller) continue;
+
+        const decision = controller.choose({
+            level: 'resolution',
+            reason: 'psychology:fortune',
+            engine: engineRef,
+            state: currentState,
+            actor: combatant,
+            legalDecisions: [
+                { kind: 'fortuneReroll', actorId: combatant.id },
+                { kind: 'wait', actorId: combatant.id },
+            ],
+            rng,
+        });
+
+        if (decision?.kind !== 'fortuneReroll') continue;
+
+        // Spend 1 Fortune (policy: 'always' — we already checked current > 0)
+        const fortuneResult = spendFortune(currentState, combatant.id, 'reroll', { policy: 'always' }, rng);
+        currentState = fortuneResult.state;
+        events.push(...fortuneResult.events);
+
+        const postFortune = currentState.combatants[d.combatantId];
+
+        // Remove the broken stacks that were applied by the original failure
+        let toRemove = d.brokenApplied;
+        const cleanedConditions = postFortune.conditions.filter(
+            c => (c === 'condition_broken' && toRemove-- > 0) ? false : true,
+        );
+
+        // Derive terror rating from stored psychology state
+        const rating = postFortune.psychology?.terrors[d.sourceId]?.rating ?? 1;
+        const modifier = -10 * rating;
+
+        // Reroll with the same modifier as the original terror test
+        const retest = resolveCoolTest(postFortune, rng, modifier);
+        const newBrokenApplied = retest.successLevel < 0
+            ? rating + Math.abs(Math.round(retest.successLevel))
+            : 0;
+
+        const newConditions = newBrokenApplied > 0
+            ? [...cleanedConditions, ...Array(newBrokenApplied).fill('condition_broken')]
+            : cleanedConditions;
+
+        const updatedPsychology = postFortune.psychology ? {
+            ...postFortune.psychology,
+            terrors: {
+                ...postFortune.psychology.terrors,
+                [d.sourceId]: {
+                    ...postFortune.psychology.terrors[d.sourceId],
+                    successLevel: retest.successLevel,
+                    brokenApplied: newBrokenApplied,
+                },
+            },
+        } : postFortune.psychology;
+
+        currentState = {
+            ...currentState,
+            combatants: {
+                ...currentState.combatants,
+                [d.combatantId]: { ...postFortune, conditions: newConditions, psychology: updatedPsychology },
+            },
+        };
+
+        events.push({
+            type: 'PsychologyTestResolved',
+            i18nKey: 'combat.psychology.terror.fortuneReroll',
+            data: {
+                combatantId: d.combatantId,
+                sourceId: d.sourceId,
+                psychology: 'terror' as const,
+                roll: retest.roll,
+                targetNumber: retest.targetNumber,
+                successLevel: retest.successLevel,
+                brokenApplied: newBrokenApplied,
+            },
+        });
+    }
+
+    return { state: currentState, events };
+}
+
+function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions, resolver?: ControllerResolver): TurnEngineState {
     if (engine.phase === 'setup') {
         let state = {
             ...engine.state,
@@ -1445,7 +1554,9 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
         const resetState = resetRoundState({ ...engine.state, round });
         const frenzyExit = resolveFrenzyExits(resetState);
         const psychology = resolvePsychologyRoundStart(frenzyExit.state, engine.rng);
-        const state = psychology.state;
+        // Offer Fortune-rerolls to remote players who failed Terror tests (parallel fan-out in LP-b orchestrator)
+        const roundStartResult = resolver ? offerPsychologyFortuneRerolls(engine, psychology, engine.rng, resolver) : psychology;
+        const state = roundStartResult.state;
         // Initiative is rolled once at the start of combat and kept for the encounter;
         // later rounds reuse the established order, skipping combatants no longer active.
         const order = engine.initiativeOrder.length > 0 ? engine.initiativeOrder : initiativeOrderFor(state, engine.rng);
@@ -1463,7 +1574,7 @@ function stepAutomatic(engine: TurnEngineState, options: TurnEngineOptions): Tur
                 ...engine.events,
                 turnEvent('RoundStarted', 'combat.turn.roundStarted', { round }),
                 ...frenzyExit.events,
-                ...psychology.events,
+                ...roundStartResult.events,
                 ...(firstActiveId ? [turnEvent('TurnStarted', 'combat.turn.startedActor', { round, combatantId: firstActiveId })] : []),
             ],
         };
