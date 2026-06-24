@@ -173,9 +173,9 @@ export const ResultsDashboard: React.FC<DashboardProps> = ({
     }
 
     const outcomeData = [
-        { name: t('fightLab.side.ally'), value: report.sideOutcomes.ally.winRate.rate * 100, fill: '#67a4c4' },
-        { name: t('fightLab.side.adversary'), value: report.sideOutcomes.adversary.winRate.rate * 100, fill: '#c66d70' },
-        { name: t('combat.encounter.metrics.drawRate'), value: report.sideOutcomes.ally.drawRate.rate * 100, fill: '#a5a9aa' },
+        { name: t('fightLab.side.ally'), value: report.sideOutcomes.ally.winRate.rate * 100, fill: '#6f9ba8' },
+        { name: t('fightLab.side.adversary'), value: report.sideOutcomes.adversary.winRate.rate * 100, fill: '#b54a42' },
+        { name: t('combat.encounter.metrics.drawRate'), value: report.sideOutcomes.ally.drawRate.rate * 100, fill: '#bfb6a3' },
     ];
     const roundsData = report.rounds.histogram.map(bin => ({
         round: `${bin.min}-${bin.maxExclusive}`,
@@ -225,10 +225,14 @@ export const ResultsDashboard: React.FC<DashboardProps> = ({
                     <div className={styles.chartPanel}>
                         <ResponsiveContainer width="100%" height={190}>
                             <BarChart data={outcomeData} margin={{ top: 10, right: 8, left: -16, bottom: 0 }}>
-                                <CartesianGrid stroke="#343b3f" vertical={false} />
-                                <XAxis dataKey="name" stroke="#aeb5b8" tick={{ fontSize: 11 }} />
-                                <YAxis domain={[0, 100]} stroke="#aeb5b8" tick={{ fontSize: 10 }} />
-                                <Tooltip formatter={value => `${Number(value ?? 0).toFixed(1)}%`} />
+                                <CartesianGrid stroke="rgba(191, 182, 163, 0.18)" vertical={false} />
+                                <XAxis dataKey="name" stroke="#bfb6a3" tick={{ fontSize: 11 }} />
+                                <YAxis domain={[0, 100]} stroke="#bfb6a3" tick={{ fontSize: 10 }} />
+                                <Tooltip
+                                    formatter={value => `${Number(value ?? 0).toFixed(1)}%`}
+                                    contentStyle={{ background: '#211e1a', border: '1px solid #565044', color: '#e7dec9' }}
+                                    labelStyle={{ color: '#c9a24b' }}
+                                />
                                 <Bar dataKey="value" isAnimationActive={false} />
                             </BarChart>
                         </ResponsiveContainer>
@@ -272,11 +276,14 @@ export const ResultsDashboard: React.FC<DashboardProps> = ({
                     <div className={styles.chartPanel}>
                         <ResponsiveContainer width="100%" height={220}>
                             <BarChart data={roundsData} margin={{ top: 12, right: 8, left: -12, bottom: 0 }}>
-                                <CartesianGrid stroke="#343b3f" vertical={false} />
-                                <XAxis dataKey="round" stroke="#aeb5b8" tick={{ fontSize: 10 }} />
-                                <YAxis allowDecimals={false} stroke="#aeb5b8" tick={{ fontSize: 10 }} />
-                                <Tooltip />
-                                <Bar dataKey="fights" fill="#d0a343" isAnimationActive={false} />
+                                <CartesianGrid stroke="rgba(191, 182, 163, 0.18)" vertical={false} />
+                                <XAxis dataKey="round" stroke="#bfb6a3" tick={{ fontSize: 10 }} />
+                                <YAxis allowDecimals={false} stroke="#bfb6a3" tick={{ fontSize: 10 }} />
+                                <Tooltip
+                                    contentStyle={{ background: '#211e1a', border: '1px solid #565044', color: '#e7dec9' }}
+                                    labelStyle={{ color: '#c9a24b' }}
+                                />
+                                <Bar dataKey="fights" fill="#c9a24b" isAnimationActive={false} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>

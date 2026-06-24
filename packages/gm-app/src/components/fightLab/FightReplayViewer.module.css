@@ -1,8 +1,24 @@
 .viewer {
+    --fl-iron: #211e1a;
+    --fl-iron-deep: #151311;
+    --fl-panel: #2a2d2b;
+    --fl-panel-cold: #30373a;
+    --fl-rule: #565044;
+    --fl-rule-soft: rgba(191, 182, 163, 0.18);
+    --fl-bone: #bfb6a3;
+    --fl-tallow: #e7dec9;
+    --fl-ash: #8f958c;
+    --fl-gold: #c9a24b;
+    --fl-oxblood: #7a2520;
+    --fl-oxblood-bright: #b54a42;
+    --fl-verdigris: #5c7363;
+    --fl-ally: #6f9ba8;
+
     display: grid;
     gap: 14px;
     padding: 18px;
-    color: #e8e5dd;
+    color: var(--fl-tallow);
+    font-variant-numeric: tabular-nums;
 }
 
 .header,
@@ -22,10 +38,10 @@
     margin: 0;
     border: 0;
     padding: 0;
-    color: #f1ede4;
-    font-family: Arial, sans-serif;
-    letter-spacing: 0;
-    text-transform: none;
+    color: var(--fl-tallow);
+    font-family: var(--font-heading), Georgia, serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     text-shadow: none;
 }
 
@@ -41,7 +57,7 @@
 .header p,
 .entryPanel small {
     margin: 4px 0 0;
-    color: #8f989c;
+    color: var(--fl-ash);
     font-size: 11px;
 }
 
@@ -66,19 +82,23 @@
 .reasoning {
     min-width: 0;
     padding: 12px;
-    border: 1px solid #383f43;
-    background: #191d1f;
+    border: 1px solid var(--fl-rule-soft);
+    background:
+        linear-gradient(180deg, rgba(231, 222, 201, 0.035), transparent 72px),
+        var(--fl-panel);
 }
 
 .entryPanel {
     justify-content: flex-start;
     flex-wrap: wrap;
+    border-top: 3px solid var(--fl-gold);
 }
 
 .entryPanel > span {
-    color: #aeb6b9;
+    color: var(--fl-bone);
     font-size: 11px;
     font-weight: 700;
+    text-transform: uppercase;
 }
 
 .controls {
@@ -91,7 +111,7 @@
     align-items: center;
     justify-self: end;
     gap: 7px;
-    color: #9ba3a7;
+    color: var(--fl-bone);
     font-size: 11px;
 }
 
@@ -125,7 +145,7 @@
     height: 7px;
     padding: 0;
     border: 0;
-    border-radius: 50%;
+    border-radius: 1px;
     transform: translateX(-50%);
 }
 
@@ -138,39 +158,39 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    color: #90999d;
+    color: var(--fl-ash);
     font-size: 9px;
 }
 
 .markerLegend span::before {
     width: 7px;
     height: 7px;
-    border-radius: 50%;
+    border-radius: 1px;
     background: currentColor;
     content: '';
 }
 
 .markers .death {
-    color: #d66868 !important;
-    background: #d66868 !important;
+    color: var(--fl-oxblood-bright) !important;
+    background: var(--fl-oxblood-bright) !important;
 }
 
 .markers .critical {
-    color: #d6a440 !important;
-    background: #d6a440 !important;
+    color: var(--fl-gold) !important;
+    background: var(--fl-gold) !important;
 }
 
 .markers .fate {
-    color: #72a9ca !important;
-    background: #72a9ca !important;
+    color: var(--fl-ally) !important;
+    background: var(--fl-ally) !important;
 }
 
-.markerLegend .death { color: #d66868 !important; }
-.markerLegend .critical { color: #d6a440 !important; }
-.markerLegend .fate { color: #72a9ca !important; }
+.markerLegend .death { color: var(--fl-oxblood-bright) !important; }
+.markerLegend .critical { color: var(--fl-gold) !important; }
+.markerLegend .fate { color: var(--fl-ally) !important; }
 
 .battlefield > header span {
-    color: #aeb6b9;
+    color: var(--fl-bone);
     font-size: 10px;
 }
 
@@ -179,10 +199,11 @@
     height: 245px;
     margin-top: 10px;
     overflow: hidden;
-    border: 1px solid #30373a;
+    border: 1px solid var(--fl-rule);
     background:
-        linear-gradient(to right, transparent 9.8%, #303638 10%, transparent 10.2%) 0 0 / 10% 100%,
-        #121618;
+        linear-gradient(to right, transparent 9.8%, rgba(191, 182, 163, 0.16) 10%, transparent 10.2%) 0 0 / 10% 100%,
+        linear-gradient(to bottom, rgba(92, 115, 99, 0.09), transparent 45%, rgba(122, 37, 32, 0.09)),
+        #151713;
 }
 
 .trackLine {
@@ -191,14 +212,14 @@
     right: 12px;
     left: 12px;
     height: 2px;
-    background: #586064;
+    background: var(--fl-rule);
 }
 
 .axisStart,
 .axisEnd {
     position: absolute;
     bottom: 8px;
-    color: #737d81;
+    color: var(--fl-ash);
     font-size: 9px;
 }
 
@@ -228,23 +249,23 @@
     opacity: 0.2;
 }
 
-.extreme { color: #7d8588; }
+.extreme { color: #9c9a8d; }
 .long { color: #bd8c44; }
-.normal { color: #65a5c5; }
-.short { color: #77b88a; }
-.pointBlank { color: #d56e70; }
+.normal { color: var(--fl-ally); }
+.short { color: #83a078; }
+.pointBlank { color: var(--fl-oxblood-bright); }
 
 .engagementLink,
 .grappleLink {
     position: absolute;
     z-index: 1;
     height: 3px;
-    border-top: 2px dashed #d0a343;
+    border-top: 2px dashed var(--fl-gold);
 }
 
 .grappleLink {
     border-top-style: solid;
-    border-top-color: #d76c6f;
+    border-top-color: var(--fl-oxblood-bright);
 }
 
 .token {
@@ -262,28 +283,30 @@
     height: 34px;
     place-items: center;
     border: 2px solid currentColor;
-    border-radius: 50%;
-    background: #202629;
+    border-radius: 2px;
+    background:
+        linear-gradient(180deg, rgba(231, 222, 201, 0.06), transparent),
+        #20231f;
     font-size: 11px;
 }
 
 .token > span {
     max-width: 92px;
     overflow: hidden;
-    color: #d9dcdd;
+    color: var(--fl-tallow);
     font-size: 9px;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .token > small {
-    color: #8c969a;
+    color: var(--fl-ash);
     font-size: 8px;
 }
 
-.token.ally { color: #71afd0; }
-.token.adversary { color: #cf7476; }
-.token.active > strong { box-shadow: 0 0 0 3px #d0a343; }
+.token.ally { color: var(--fl-ally); }
+.token.adversary { color: var(--fl-oxblood-bright); }
+.token.active > strong { box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.88); }
 .token.dead,
 .token.unconscious,
 .token.removed { opacity: 0.45; }
@@ -307,16 +330,17 @@
 .combatantPanel {
     min-width: 0;
     padding: 10px;
-    border-left: 3px solid #71afd0;
-    background: #22282b;
+    border: 1px solid rgba(191, 182, 163, 0.12);
+    border-left: 3px solid var(--fl-ally);
+    background: #232522;
 }
 
 .combatantPanel.adversary {
-    border-left-color: #cf7476;
+    border-left-color: var(--fl-oxblood-bright);
 }
 
 .combatantPanel header span {
-    color: #90999d;
+    color: var(--fl-ash);
     font-size: 9px;
     text-transform: uppercase;
 }
@@ -325,25 +349,25 @@
     height: 6px;
     margin: 8px 0;
     overflow: hidden;
-    background: #111416;
+    background: #11100e;
 }
 
 .wounds span {
     display: block;
     height: 100%;
-    background: #b94f52;
+    background: linear-gradient(90deg, var(--fl-oxblood), var(--fl-oxblood-bright));
 }
 
 .panelStats {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 4px 9px;
-    color: #929b9f;
+    color: var(--fl-ash);
     font-size: 9px;
 }
 
 .panelStats strong {
-    color: #e4e1da;
+    color: var(--fl-tallow);
 }
 
 .combatantPanel p {
@@ -361,8 +385,9 @@
 
 .conditions span {
     padding: 2px 5px;
-    border: 1px solid #626a6e;
-    color: #bdc3c5;
+    border: 1px solid var(--fl-rule);
+    background: rgba(231, 222, 201, 0.04);
+    color: var(--fl-bone);
     font-size: 8px;
     text-transform: capitalize;
 }
@@ -370,7 +395,7 @@
 .conditions small,
 .narration > p,
 .reasoning > p {
-    color: #818b8f;
+    color: var(--fl-ash);
     font-size: 10px;
 }
 
@@ -387,7 +412,8 @@
 .narration li,
 .reasoning article {
     padding: 8px;
-    background: #22282b;
+    border: 1px solid rgba(191, 182, 163, 0.1);
+    background: #232522;
 }
 
 .narration li {
@@ -402,7 +428,7 @@
 
 .narration small,
 .reasoning header span {
-    color: #788286;
+    color: var(--fl-ash);
     font-size: 8px;
 }
 
@@ -428,7 +454,7 @@
 }
 
 .reasoning dt {
-    color: #7f898d;
+    color: var(--fl-ash);
 }
 
 .reasoning dd {
@@ -441,14 +467,15 @@
     display: grid;
     place-content: center;
     gap: 6px;
-    color: #8a9498;
+    color: var(--fl-ash);
     text-align: center;
 }
 
 .error {
     padding: 10px;
-    border-left: 3px solid #c45d60;
-    background: #352326;
+    border: 1px solid rgba(122, 37, 32, 0.6);
+    border-left: 4px solid var(--fl-oxblood-bright);
+    background: rgba(54, 25, 24, 0.9);
     color: #efb1b2;
     font-size: 11px;
 }

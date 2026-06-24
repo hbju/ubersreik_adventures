@@ -1,9 +1,25 @@
 .runWorkspace,
 .dashboard {
+    --fl-iron: #211e1a;
+    --fl-iron-deep: #151311;
+    --fl-panel: #2a2d2b;
+    --fl-panel-cold: #30373a;
+    --fl-rule: #565044;
+    --fl-rule-soft: rgba(191, 182, 163, 0.18);
+    --fl-bone: #bfb6a3;
+    --fl-tallow: #e7dec9;
+    --fl-ash: #8f958c;
+    --fl-gold: #c9a24b;
+    --fl-oxblood: #7a2520;
+    --fl-oxblood-bright: #b54a42;
+    --fl-verdigris: #5c7363;
+    --fl-ally: #6f9ba8;
+
     display: grid;
     gap: 16px;
     padding: 18px;
-    color: #e8e5dd;
+    color: var(--fl-tallow);
+    font-variant-numeric: tabular-nums;
 }
 
 .runHeader,
@@ -23,11 +39,11 @@
     margin: 0;
     border: 0;
     padding: 0;
-    color: #f1ede4;
-    font-family: Arial, sans-serif;
-    text-transform: none;
+    color: var(--fl-tallow);
+    font-family: var(--font-heading), Georgia, serif;
+    text-transform: uppercase;
     text-shadow: none;
-    letter-spacing: 0;
+    letter-spacing: 0.04em;
 }
 
 .runHeader h2,
@@ -42,7 +58,7 @@
 .runHeader p,
 .dashboardHeader p {
     margin: 5px 0 0;
-    color: #939b9f;
+    color: var(--fl-ash);
     font-size: 12px;
 }
 
@@ -53,15 +69,16 @@
 }
 
 .runButton {
-    border-color: #b58428 !important;
-    background: #b58428 !important;
-    color: #151719 !important;
+    border-color: #d3ad58 !important;
+    background: linear-gradient(180deg, #d8b75f, #a97d2e) !important;
+    color: #1c1712 !important;
     font-weight: 700;
 }
 
 .cancelButton {
-    border-color: #b85255 !important;
-    background: #7f3436 !important;
+    border-color: #b65b54 !important;
+    background: linear-gradient(180deg, #934039, #64231f) !important;
+    color: var(--fl-tallow) !important;
 }
 
 .progressPanel,
@@ -74,22 +91,25 @@
 
 .progressPanel {
     padding: 16px;
-    border: 1px solid #3d4448;
-    background: #1d2123;
+    border: 1px solid var(--fl-rule-soft);
+    border-top: 3px solid var(--fl-gold);
+    background:
+        linear-gradient(180deg, rgba(201, 162, 75, 0.06), transparent 80px),
+        var(--fl-panel);
 }
 
 .progressTrack {
     height: 10px;
     margin: 12px 0;
     overflow: hidden;
-    border: 1px solid #485055;
-    background: #101315;
+    border: 1px solid var(--fl-rule);
+    background: #11100e;
 }
 
 .progressTrack span {
     display: block;
     height: 100%;
-    background: #d0a343;
+    background: linear-gradient(90deg, var(--fl-gold), #ead078);
     transition: width 0.15s linear;
 }
 
@@ -104,13 +124,15 @@
     display: grid;
     gap: 3px;
     padding: 9px;
-    background: #242a2d;
+    border: 1px solid rgba(191, 182, 163, 0.1);
+    background: #232522;
 }
 
 .progressStats span,
 .numberStat span {
-    color: #949ca0;
+    color: var(--fl-ash);
     font-size: 10px;
+    text-transform: uppercase;
 }
 
 .progressStats strong,
@@ -123,15 +145,17 @@
     display: grid;
     gap: 3px;
     padding: 10px 12px;
-    border-left: 3px solid #c65a5c;
-    background: #342224;
+    border: 1px solid rgba(122, 37, 32, 0.6);
+    border-left: 4px solid var(--fl-oxblood-bright);
+    background: rgba(54, 25, 24, 0.9);
     color: #efb2b2;
     font-size: 12px;
 }
 
 .noticeWarning {
-    border-left-color: #d0a343;
-    background: #332d20;
+    border-color: rgba(201, 162, 75, 0.42);
+    border-left-color: var(--fl-gold);
+    background: rgba(59, 47, 25, 0.88);
     color: #efd38e;
 }
 
@@ -141,7 +165,7 @@
     place-content: center;
     justify-items: center;
     gap: 8px;
-    color: #929a9e;
+    color: var(--fl-ash);
     text-align: center;
 }
 
@@ -152,15 +176,15 @@
 .partialBadge,
 .cachedBadge {
     padding: 3px 6px;
-    border: 1px solid #d0a343;
+    border: 1px solid var(--fl-gold);
     color: #e9ca7b;
     font-size: 10px;
     text-transform: uppercase;
 }
 
 .cachedBadge {
-    border-color: #638fa8;
-    color: #99c4dc;
+    border-color: var(--fl-ally);
+    color: #a9cad2;
 }
 
 .outcomeGrid {
@@ -193,8 +217,10 @@
 .metricPanel,
 .chartPanel {
     padding: 12px;
-    border: 1px solid #363d40;
-    background: #1d2123;
+    border: 1px solid var(--fl-rule-soft);
+    background:
+        linear-gradient(180deg, rgba(231, 222, 201, 0.035), transparent 64px),
+        var(--fl-panel);
 }
 
 .metricPanel h4 {
@@ -208,19 +234,19 @@
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 2px 8px;
     padding: 7px 0;
-    border-top: 1px solid #303639;
+    border-top: 1px solid var(--fl-rule-soft);
 }
 
 .rateLine span,
 .rateProminent span {
-    color: #a8b0b4;
+    color: var(--fl-bone);
     font-size: 11px;
 }
 
 .rateLine small,
 .rateProminent small {
     grid-column: 1 / -1;
-    color: #7f888c;
+    color: var(--fl-ash);
     font-size: 9px;
 }
 
@@ -238,7 +264,8 @@
 .tableWrap {
     margin-top: 9px;
     overflow-x: auto;
-    border: 1px solid #363d40;
+    border: 1px solid var(--fl-rule-soft);
+    background: #181714;
 }
 
 .combatantTable {
@@ -252,15 +279,16 @@
     position: sticky;
     top: 0;
     padding: 8px;
-    background: #252b2e;
-    color: #b8c0c4;
+    background: #282720;
+    color: var(--fl-bone);
     text-align: left;
     white-space: nowrap;
+    text-transform: uppercase;
 }
 
 .combatantTable td {
     padding: 9px 8px;
-    border-top: 1px solid #303639;
+    border-top: 1px solid var(--fl-rule-soft);
     vertical-align: top;
 }
 
@@ -271,7 +299,7 @@
 .combatantTable small {
     display: block;
     margin-top: 2px;
-    color: #7f888c;
+    color: var(--fl-ash);
 }
 
 .sortButton {
@@ -298,14 +326,14 @@
 .miniRateCompact > span {
     height: 5px;
     overflow: hidden;
-    background: #111416;
+    background: #11100e;
 }
 
 .miniRate i,
 .miniRateCompact i {
     display: block;
     height: 100%;
-    background: #69a5c5;
+    background: var(--fl-ally);
 }
 
 .failureList {
@@ -350,12 +378,12 @@
 
 .exportActions strong {
     margin-right: 4px;
-    color: #aeb6b9;
+    color: var(--fl-bone);
     font-size: 11px;
 }
 
 .muted {
-    color: #858e92;
+    color: var(--fl-ash);
     font-size: 12px;
 }
 
