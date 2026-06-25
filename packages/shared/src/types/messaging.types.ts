@@ -2,8 +2,8 @@ import { Character, Currency, Item, Weapon, Armor, Combatant, Advantages, Journa
 import { ChatMessage } from './chat.types';
 import { GameDate, TimelineEvent } from '../data/calendar';
 import { Notebook } from './notebook.types';
-import type { DecisionRequest } from '../combat/remote-player-controller';
-import type { CombatDecision } from '../combat/turn-engine';
+import type { DecisionRequest, FightStateView } from '../combat/remote-player-controller';
+import type { CombatDecision, TurnEnginePhase } from '../combat/turn-engine';
 
 interface BaseMessage<T extends string, P> {
     type: T;
@@ -117,7 +117,17 @@ export type NotebookSyncMessage = BaseMessage<'NOTEBOOK_SYNC', {
 // Live-play: server sends a decision request to the specific player whose turn it is
 export type RequestDecisionMessage = BaseMessage<'REQUEST_DECISION', DecisionRequest>;
 
-export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage | ChatMessageBroadcast | ChatHistoryMessage | MapSwitchMessage | ActiveMapUpdateMessage | CalendarSyncMessage | NotebookSyncMessage | RequestDecisionMessage;
+// Live-play: broadcast to all players after each committed engine step (null = fight ended)
+export type FightStateUpdateMessage = {
+    type: 'FIGHT_STATE_UPDATE';
+    payload: {
+        stateView: FightStateView;
+        activeCombatantId: string | null;
+        phase: TurnEnginePhase;
+    } | null;
+};
+
+export type ServerToClientMessage = LoginSuccessMessage | LoginFailureMessage | AssignCharacterMessage | RequestTestMessage | CharacterUpdateMessage | UpdateShopInventoryMessage | PurchaseResponseMessage | UpdateInitiativeTrackerMessage | RequestOpposedTestMessage | RequestConditionTestMessage | JournalUpdateMessage | MapStateUpdateMessage | MapPingMessage | CareerChangeResponseMessage | FactionUpdateMessage | ShopStateUpdateMessage | ShopItemRevealedMessage | ShopPurchaseResponseMessage | QuestSyncMessage | MapTokensUpdateMessage | UserPinsUpdateMessage | ChatMessageBroadcast | ChatHistoryMessage | MapSwitchMessage | ActiveMapUpdateMessage | CalendarSyncMessage | NotebookSyncMessage | RequestDecisionMessage | FightStateUpdateMessage;
 
 // == Roll Queue Types ==
 

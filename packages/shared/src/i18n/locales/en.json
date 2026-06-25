@@ -1262,5 +1262,59 @@
             "toggleAtmosphere": "Atmosphere Panel",
             "toggleTimeline": "Timeline"
         }
+    },
+    "fight": {
+        "tab": "Fight",
+        "round": "Round {{n}}",
+        "yourTurn": "{{name}}'s Turn",
+        "phase": {
+            "awaitingDecision": "Awaiting decision",
+            "roundStart": "Round start",
+            "roundEnd": "Round end",
+            "complete": "Fight over",
+            "setup": "Setting up"
+        },
+        "awaiting": "Awaiting {{name}}'s decision…",
+        "npcResolving": "Resolving NPC turn…",
+        "pickTarget": "Select target",
+        "pickWeapon": "Select weapon",
+        "confirmAttack": "Confirm Attack",
+        "decision": {
+            "endTurn": "End Turn",
+            "meleeAttack": "Melee Attack",
+            "rangedAttack": "Ranged Attack",
+            "attackWithBoth": "Attack with Both",
+            "move": "Move",
+            "sprint": "Sprint",
+            "assess": "Assess",
+            "aim": "Aim",
+            "firstAid": "First Aid",
+            "reload": "Reload",
+            "defend": "Defend",
+            "spendAdvantage": "Spend Advantage",
+            "frenzyEnter": "Enter Frenzy",
+            "frenzyExit": "Exit Frenzy",
+            "intimidate": "Intimidate",
+            "leadership": "Leadership",
+            "disengageDodge": "Disengage",
+            "grappleInitiate": "Initiate Grapple",
+            "grappleMaintain": "Maintain Grapple",
+            "grappleBreak": "Break Grapple",
+            "infighting": "Infighting",
+            "disarm": "Disarm",
+            "feint": "Feint",
+            "distractOpponent": "Distract",
+            "beatBlade": "Beat Blade",
+            "shieldsman": "Shieldsman",
+            "reversal": "Reversal",
+            "reaction": "Reaction",
+            "fortuneReroll": "Fortune Reroll",
+            "wait": "Wait"
+        },
+        "psychology": {
+            "title": "Terror Test Failed",
+            "reroll": "Spend 1 Fortune to Reroll ({{n}} remaining)",
+            "decline": "Accept Result"
+        }
     }
 }

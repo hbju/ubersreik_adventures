@@ -1305,5 +1305,60 @@
             "toggleQuestJournal": "Journal de Quêtes",
             "toggleAtmosphere": "Panneau Ambiance",
             "toggleTimeline": "Chronologie"
-        }    }
+        }
+    },
+    "fight": {
+        "tab": "Combat",
+        "round": "Round {{n}}",
+        "yourTurn": "Tour de {{name}}",
+        "phase": {
+            "awaitingDecision": "En attente",
+            "roundStart": "Début de round",
+            "roundEnd": "Fin de round",
+            "complete": "Combat terminé",
+            "setup": "Initialisation"
+        },
+        "awaiting": "En attente de la décision de {{name}}…",
+        "npcResolving": "Résolution du tour PNJ…",
+        "pickTarget": "Choisir une cible",
+        "pickWeapon": "Choisir une arme",
+        "confirmAttack": "Confirmer l'attaque",
+        "decision": {
+            "endTurn": "Fin de tour",
+            "meleeAttack": "Attaque au corps à corps",
+            "rangedAttack": "Attaque à distance",
+            "attackWithBoth": "Attaque double",
+            "move": "Déplacement",
+            "sprint": "Sprint",
+            "assess": "Évaluer",
+            "aim": "Viser",
+            "firstAid": "Premiers secours",
+            "reload": "Recharger",
+            "defend": "Défendre",
+            "spendAdvantage": "Dépenser Avantage",
+            "frenzyEnter": "Entrer en frénésie",
+            "frenzyExit": "Sortir de frénésie",
+            "intimidate": "Intimider",
+            "leadership": "Leadership",
+            "disengageDodge": "Se dégager",
+            "grappleInitiate": "Initier une lutte",
+            "grappleMaintain": "Maintenir la lutte",
+            "grappleBreak": "Rompre la lutte",
+            "infighting": "Corps à corps serré",
+            "disarm": "Désarmer",
+            "feint": "Feinte",
+            "distractOpponent": "Distraire",
+            "beatBlade": "Parer la lame",
+            "shieldsman": "Bouclier",
+            "reversal": "Retournement",
+            "reaction": "Réaction",
+            "fortuneReroll": "Relance de Fortune",
+            "wait": "Attendre"
+        },
+        "psychology": {
+            "title": "Test de Terreur échoué",
+            "reroll": "Dépenser 1 Fortune pour relancer ({{n}} restant)",
+            "decline": "Accepter le résultat"
+        }
+    }
 }

@@ -58,6 +58,7 @@ import { ActionBar } from './components/actionbar';
 import { Quest, QuestUpdateMessage, QuestDeleteMessage, CodexProvider, CommandPalette, CodexViewer, CodexPopupModal, useCodex, useKeyboardShortcuts, ShortcutsHelpOverlay, ShortcutsSettings } from '@wfrp/shared';
 import type { CodexDataSources, ShortcutAction } from '@wfrp/shared';
 import { PlayerTimeline } from './components/timeline/PlayerTimeline';
+import { PlayerFightScreen } from './components/fight/PlayerFightScreen';
 
 /** Small wrapper so we can call useCodex inside CodexProvider */
 const CodexNavButton: React.FC = () => {
@@ -91,7 +92,7 @@ const PlayerApp: React.FC = () => {
         talents, skills, careers, conditions, qualities: qualities ?? [],
     }), [talents, skills, careers, conditions, qualities]);
 
-    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, notebook, connect, disconnect, sendMessage } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, notebook, fightState, pendingDecision, connect, disconnect, sendMessage, submitDecision } = useSocket();
 
     const currentMapData = React.useMemo(() => {
         return maps[activeMapId] || mapData;
@@ -115,7 +116,7 @@ const PlayerApp: React.FC = () => {
     const [createCharacterWizardOpen, setCreateCharacterWizardOpen] = useState(false);
     const [isTalentModalOpen, setIsTalentModalOpen] = useState(false);
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
-    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'quests' | 'map' | 'reputation' | 'calendar' | 'notebook'>('character');
+    const [currentView, setCurrentView] = useState<'character' | 'journal' | 'quests' | 'map' | 'reputation' | 'calendar' | 'notebook' | 'fight'>('character');
     const [isCareerChangeModalOpen, setIsCareerChangeModalOpen] = useState(false);
     const [canChangeCareer, setCanChangeCareer] = useState(false);
     const [mapViewState, setMapViewState] = useState({ scale: 0.3, offsetX: 126, offsetY: -26 });
@@ -125,6 +126,21 @@ const PlayerApp: React.FC = () => {
     const [showChat, setShowChat] = useState(false);
 
     const chatSenderName = character?.name || username || 'Player';
+
+    // Derive the player's actor ID from their character ID
+    const myActorId = character && fightState
+        ? Object.keys(fightState.stateView.combatants).find(id => id === character.id) ?? null
+        : null;
+
+    // Auto-activate fight tab when a fight starts; return to character tab when it ends
+    useEffect(() => {
+        if (fightState) {
+            setCurrentView('fight');
+        } else if (currentView === 'fight') {
+            setCurrentView('character');
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fightState]);
 
     // --- Keyboard Shortcuts ---
     const shortcutActions: ShortcutAction[] = React.useMemo(() => [
@@ -790,6 +806,25 @@ const PlayerApp: React.FC = () => {
                             📅 Calendar
                         </button>
                     )}
+                    {fightState && (
+                        <button
+                            onClick={() => setCurrentView('fight')}
+                            style={{
+                                padding: '10px 20px',
+                                background: currentView === 'fight' ? '#3d1f00' : '#2c1810',
+                                color: '#b54a42',
+                                border: currentView === 'fight' ? '2px solid #b54a42' : '2px solid #7a2520',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                fontSize: '0.75rem',
+                                minWidth: '10%',
+                                animation: pendingDecision?.actorId === myActorId ? 'pulse 1s ease-in-out infinite' : undefined,
+                            }}
+                        >
+                            ⚔ Fight
+                        </button>
+                    )}
                     <button
                         onClick={() => setShowChat(!showChat)}
                         style={{
@@ -1042,6 +1077,19 @@ const PlayerApp: React.FC = () => {
                         notebook={notebook}
                         editable={true}
                         onChange={handleNotebookChange}
+                    />
+                </div>
+            )}
+
+            {/* Fight View */}
+            {currentView === 'fight' && fightState && (
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1010, paddingLeft: '130px' }}>
+                    <PlayerFightScreen
+                        fightState={fightState}
+                        pendingDecision={pendingDecision}
+                        myActorId={myActorId}
+                        character={character}
+                        onSubmitDecision={submitDecision}
                     />
                 </div>
             )}

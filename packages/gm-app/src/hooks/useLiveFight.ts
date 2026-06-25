@@ -10,6 +10,7 @@ import {
     type CombatState,
     type ControllerResolver,
     type DecisionRequest,
+    type FightStateView,
     type TurnEngineState,
 } from '@wfrp/shared';
 import type { Character, Weapon } from '@wfrp/shared';
@@ -136,6 +137,27 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         [],
     );
 
+    const broadcastFightState = useCallback((engine: TurnEngineState | null) => {
+        if (!engine) {
+            window.ipcRenderer.sendToAllPlayers({ type: 'FIGHT_STATE_UPDATE', payload: null });
+            return;
+        }
+        const stateView: FightStateView = {
+            combatants: engine.state.combatants,
+            advantagePools: engine.state.advantagePools,
+            engagements: engine.state.engagements,
+            round: engine.round,
+        };
+        window.ipcRenderer.sendToAllPlayers({
+            type: 'FIGHT_STATE_UPDATE',
+            payload: {
+                stateView,
+                activeCombatantId: engine.activeCombatantId ?? null,
+                phase: engine.phase,
+            },
+        });
+    }, []);
+
     const step = useCallback(() => {
         const engine = engineRef.current;
         if (!engine || engine.phase === 'complete') return;
@@ -170,12 +192,13 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         engineRef.current = result.state;
         setLiveFightEngine(result.state);
         setPendingMainRequest(null);
+        broadcastFightState(result.state);
 
         if (result.state.phase !== 'complete') {
             // Loop for NPC-only turns (heuristic fires immediately, no suspension)
             step();
         }
-    }, [heuristicResolver, sendDecisionRequest]);
+    }, [heuristicResolver, sendDecisionRequest, broadcastFightState]);
 
     const startFight = useCallback((combatState: CombatState, remoteActorIds: Set<string>, seed = 'lp-b') => {
         const engine = createTurnEngine(combatState, { seed });
@@ -188,9 +211,10 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         setLiveFightEngine(engine);
         setPendingPsychRequests([]);
         setPendingMainRequest(null);
+        broadcastFightState(engine);
 
         step();
-    }, [step]);
+    }, [step, broadcastFightState]);
 
     const handleDecisionResponse = useCallback((requestId: string, decision: CombatDecision) => {
         decisionCacheRef.current.set(requestId, decision);
@@ -225,7 +249,8 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         setLiveFightEngine(null);
         setPendingPsychRequests([]);
         setPendingMainRequest(null);
-    }, []);
+        broadcastFightState(null);
+    }, [broadcastFightState]);
 
     return { liveFightEngine, pendingPsychRequests, pendingMainRequest, startFight, handleDecisionResponse, stopFight };
 }

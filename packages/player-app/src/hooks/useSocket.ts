@@ -1,7 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin, ChatMessage, LocationTerritory, GameDate, TimelineEvent, Notebook } from '@wfrp/shared';
+import { ServerToClientMessage, ClientToServerMessage, Character, Combatant, Advantages, JournalEntry, MapPinState, LoginRequestMessage, Faction, ShopState, ShopInventoryItem, Quest, UserMapPin, ChatMessage, LocationTerritory, GameDate, TimelineEvent, Notebook, type CombatDecision, type DecisionRequest, type FightStateView, type TurnEnginePhase } from '@wfrp/shared';
 import { MapToken } from '@wfrp/shared/src/types/wfrp.types';
+
+interface FightState {
+    stateView: FightStateView;
+    activeCombatantId: string | null;
+    phase: TurnEnginePhase;
+}
 
 interface OpposedTestRequest {
     testId: string;
@@ -53,7 +59,8 @@ export const useSocket = () => {
     const [calendarEvents, setCalendarEvents] = useState<TimelineEvent[]>([]);
     const [calendarWeather, setCalendarWeather] = useState<string | undefined>(undefined);
     const [notebook, setNotebook] = useState<Notebook>({ pages: [] });
-
+    const [fightState, setFightState] = useState<FightState | null>(null);
+    const [pendingDecision, setPendingDecision] = useState<DecisionRequest | null>(null);
 
     const connect = useCallback((ipAddress: string, username: string, password: string) => {
         if (socket?.connected) return;
@@ -304,6 +311,17 @@ export const useSocket = () => {
                 setIsMapTransitioning(true);
                 setActiveMapId(message.payload.mapId);
             }
+
+            if (message.type === 'FIGHT_STATE_UPDATE') {
+                console.log('[CLIENT] Fight state update received:', message.payload);
+                setFightState(message.payload);
+                if (!message.payload) setPendingDecision(null);
+            }
+
+            if (message.type === 'REQUEST_DECISION') {
+                console.log('[CLIENT] Decision request received:', message.payload.requestId);
+                setPendingDecision(message.payload);
+            }
         });
 
         setSocket(newSocket);
@@ -315,6 +333,11 @@ export const useSocket = () => {
             socket.emit('player-message', message);
         }
     }, [socket]);
+
+    const submitDecision = useCallback((requestId: string, decision: CombatDecision) => {
+        sendMessage({ type: 'DECISION_RESPONSE', payload: { requestId, decision } });
+        setPendingDecision(null);
+    }, [sendMessage]);
 
     const disconnect = useCallback(() => {
         socket?.disconnect();
@@ -360,8 +383,11 @@ export const useSocket = () => {
         calendarEvents,
         calendarWeather,
         notebook,
+        fightState,
+        pendingDecision,
         connect,
         disconnect,
-        sendMessage
+        sendMessage,
+        submitDecision,
     };
 };
