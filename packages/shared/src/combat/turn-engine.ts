@@ -695,10 +695,15 @@ function targetedCombatActionEntries(kinds: CombatActionKind[]): ActionCatalogue
                 if (!actor.engagementIds.some(id => isGrapplingEngagement(state, actor.id, id))) return [];
             }
 
+            if (kind === 'attackWithBoth' && !hasTalent(actor, 'dual-wielder')) return [];
+
+            const reach = meleeReach(state, actor);
             const targets = kind === 'disengageDodge'
                 ? actor.engagementIds.filter(id => isActive(state.combatants[id]))
                 : enemyIds(state, actor);
-            const effectiveTargets = targets.length > 0 ? targets : [undefined];
+            const inRangeTargets = targets.filter(id => Math.abs(state.combatants[id].position - actor.position) <= reach);
+
+            const effectiveTargets = inRangeTargets.length > 0 ? inRangeTargets : [];
             return effectiveTargets.map(targetId => ({
                 kind: kind as CombatDecisionKind,
                 actorId: actor.id,

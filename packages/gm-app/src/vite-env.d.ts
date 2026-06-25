@@ -13,6 +13,7 @@ interface IpcRendererApi {
     sendToPlayer: (userId: string, message: any) => void;
     sendToAllPlayers: (message: any) => void;
     onPlayerMessageReceived: (callback: (value: any) => void) => () => void;
+    onPlayerAuthenticated: (callback: (data: { userId: string }) => void) => () => void;
     assignCharacterToPlayer: (characterId: string, socketId: string) => void;
     
     // Campaign Data Persistence API

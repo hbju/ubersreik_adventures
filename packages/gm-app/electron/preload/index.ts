@@ -45,6 +45,13 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
             ipcRenderer.removeListener('player-message-received', listener)
         }
     },
+    onPlayerAuthenticated(callback: (data: { userId: string }) => void) {
+        const listener = (_event: any, value: { userId: string }) => callback(value);
+        ipcRenderer.on('player-authenticated', listener)
+        return () => {
+            ipcRenderer.removeListener('player-authenticated', listener)
+        }
+    },
 
     // ==================== Campaign Data Persistence API ====================
 

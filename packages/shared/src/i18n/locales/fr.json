@@ -1360,5 +1360,20 @@
             "reroll": "Dépenser 1 Fortune pour relancer ({{n}} restant)",
             "decline": "Accepter le résultat"
         }
+    },
+    "liveFight": {
+        "title": "Combat en Direct",
+        "setup": {
+            "title": "Assigner les camps et lancer le combat depuis la rencontre en cours.",
+            "name": "Nom",
+            "wounds": "Blessures",
+            "side": "Camp",
+            "ally": "Allié",
+            "adversary": "Adv.",
+            "initialDistance": "Distance initiale",
+            "start": "▶ Lancer le Combat",
+            "noEncounter": "Aucun combattant dans le traceur d'initiative. Ajoutez des combattants d'abord.",
+            "devFixture": "Dev : utiliser le scénario test (Ernst vs Squelette-1)"
+        }
     }
 }

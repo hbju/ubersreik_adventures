@@ -211,6 +211,7 @@ export function startWebSocketServer(mainWindow: BrowserWindow) {
                 console.log(`[AUTH] Login successful: ${username} (character: ${character?.name || 'none'}, color: ${playerColor})`);
 
                 sendInitialStateToPlayer(socket, user.id, character?.id);
+                mainWindow.webContents.send('player-authenticated', { userId: user.id });
 
                 const displayName = character?.name || user.username;
                 const systemMessage: ChatMessage = {

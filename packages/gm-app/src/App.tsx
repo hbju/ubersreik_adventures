@@ -1004,6 +1004,10 @@ function App() {
         };
         const cleanupStatusListener = window.ipcRenderer.onServerStatusUpdate(listener);
 
+        const cleanupAuthListener = window.ipcRenderer.onPlayerAuthenticated(({ userId }) => {
+            liveFight.handlePlayerReconnect(userId);
+        });
+
         const cleanupMessageListener = window.ipcRenderer.onPlayerMessageReceived((message: ClientToServerMessage) => {
             console.log("Received message from player:", message);
             if (message.type === 'DECISION_RESPONSE') {
@@ -1268,6 +1272,7 @@ function App() {
 
         return () => {
             cleanupStatusListener();
+            cleanupAuthListener();
             cleanupMessageListener();
         };
     }, []);
@@ -1504,6 +1509,8 @@ function App() {
                 <LiveFightPanel
                     {...liveFight}
                     onClose={() => setShowLiveFight(false)}
+                    combatants={combatants}
+                    characters={characters}
                 />
             )}
 

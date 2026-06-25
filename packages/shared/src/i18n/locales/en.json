@@ -1316,5 +1316,20 @@
             "reroll": "Spend 1 Fortune to Reroll ({{n}} remaining)",
             "decline": "Accept Result"
         }
+    },
+    "liveFight": {
+        "title": "Live Fight",
+        "setup": {
+            "title": "Assign sides and start the live fight from the current encounter.",
+            "name": "Name",
+            "wounds": "Wounds",
+            "side": "Side",
+            "ally": "Ally",
+            "adversary": "Adv.",
+            "initialDistance": "Initial distance",
+            "start": "▶ Start Live Fight",
+            "noEncounter": "No combatants in the initiative tracker. Add combatants first.",
+            "devFixture": "Dev: use fixture (Ernst vs Skeleton-1)"
+        }
     }
 }

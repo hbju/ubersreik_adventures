@@ -97,6 +97,7 @@ export interface LiveFightHook {
     pendingMainRequest: DecisionRequest | null;
     startFight: (combatState: CombatState, remoteActorIds: Set<string>, seed?: string) => void;
     handleDecisionResponse: (requestId: string, decision: CombatDecision) => void;
+    handlePlayerReconnect: (userId: string) => void;
     stopFight: () => void;
 }
 
@@ -116,11 +117,19 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
     const remoteActorIdsRef = useRef<Set<string>>(new Set());
     const pendingPsychCountdownRef = useRef<Set<string>>(new Set());
     const pendingMainRequestIdRef = useRef<string | null>(null);
+    // Tracks last REQUEST_DECISION sent per actorId so it can be re-sent on reconnect
+    const lastSentRequestsRef = useRef<Map<string, DecisionRequest>>(new Map());
 
     // Map character id → userId for routing REQUEST_DECISION to the right player socket
     const actorIdToUserId = useCallback((actorId: string): string | null => {
         const char = characters.find(c => c.id === actorId);
         return char?.userId ?? null;
+    }, [characters]);
+
+    // Reverse map: userId → character id (actorId)
+    const userIdToActorId = useCallback((userId: string): string | null => {
+        const char = characters.find(c => c.userId === userId);
+        return char?.id ?? null;
     }, [characters]);
 
     const sendDecisionRequest = useCallback((req: DecisionRequest) => {
@@ -130,6 +139,7 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
             return;
         }
         window.ipcRenderer.sendToPlayer(userId, { type: 'REQUEST_DECISION', payload: req });
+        lastSentRequestsRef.current.set(req.actorId, req);
     }, [actorIdToUserId]);
 
     const heuristicResolver: ControllerResolver = useCallback(
@@ -158,7 +168,7 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         });
     }, []);
 
-    const step = useCallback(() => {
+    const step = useCallback((i: number) => { 
         const engine = engineRef.current;
         if (!engine || engine.phase === 'complete') return;
 
@@ -194,9 +204,9 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         setPendingMainRequest(null);
         broadcastFightState(result.state);
 
-        if (result.state.phase !== 'complete') {
+        if (result.state.phase !== 'complete' && i < 1000) {
             // Loop for NPC-only turns (heuristic fires immediately, no suspension)
-            step();
+            step(i + 1);
         }
     }, [heuristicResolver, sendDecisionRequest, broadcastFightState]);
 
@@ -213,7 +223,7 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         setPendingMainRequest(null);
         broadcastFightState(engine);
 
-        step();
+        step(0);
     }, [step, broadcastFightState]);
 
     const handleDecisionResponse = useCallback((requestId: string, decision: CombatDecision) => {
@@ -222,22 +232,41 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         // Is it a psychology response?
         if (pendingPsychCountdownRef.current.has(requestId)) {
             pendingPsychCountdownRef.current.delete(requestId);
-            setPendingPsychRequests(prev => prev.filter(r => r.requestId !== requestId));
+            setPendingPsychRequests(prev => {
+                const fulfilled = prev.find(r => r.requestId === requestId);
+                if (fulfilled) lastSentRequestsRef.current.delete(fulfilled.actorId);
+                return prev.filter(r => r.requestId !== requestId);
+            });
 
             if (pendingPsychCountdownRef.current.size === 0) {
                 // All psychology responses received — proceed to main step
-                step();
+                step(0);
             }
             return;
         }
 
         // Main-turn response
         if (requestId === pendingMainRequestIdRef.current) {
+            const activeRequest = Array.from(lastSentRequestsRef.current.values())
+                .find(r => r.requestId === requestId);
+            if (activeRequest) lastSentRequestsRef.current.delete(activeRequest.actorId);
             pendingMainRequestIdRef.current = null;
             setPendingMainRequest(null);
-            step();
+            step(0);
         }
     }, [step]);
+
+    const handlePlayerReconnect = useCallback((userId: string) => {
+        const engine = engineRef.current;
+        if (!engine) return;
+        broadcastFightState(engine);
+        const actorId = userIdToActorId(userId);
+        if (!actorId) return;
+        const pendingReq = lastSentRequestsRef.current.get(actorId);
+        if (pendingReq && !decisionCacheRef.current.has(pendingReq.requestId)) {
+            window.ipcRenderer.sendToPlayer(userId, { type: 'REQUEST_DECISION', payload: pendingReq });
+        }
+    }, [broadcastFightState, userIdToActorId]);
 
     const stopFight = useCallback(() => {
         engineRef.current = null;
@@ -245,6 +274,7 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         remoteActorIdsRef.current = new Set();
         pendingPsychCountdownRef.current = new Set();
         pendingMainRequestIdRef.current = null;
+        lastSentRequestsRef.current = new Map();
 
         setLiveFightEngine(null);
         setPendingPsychRequests([]);
@@ -252,5 +282,5 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         broadcastFightState(null);
     }, [broadcastFightState]);
 
-    return { liveFightEngine, pendingPsychRequests, pendingMainRequest, startFight, handleDecisionResponse, stopFight };
+    return { liveFightEngine, pendingPsychRequests, pendingMainRequest, startFight, handleDecisionResponse, handlePlayerReconnect, stopFight };
 }

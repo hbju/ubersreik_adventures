@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { Combatant, Character, SideId } from '@wfrp/shared';
 import type { LiveFightHook } from '../hooks/useLiveFight';
 import { DEV_FIGHT_FIXTURE } from '../hooks/useLiveFight';
+import { buildCombatStateFromTracker } from '../utils/fightSeeding';
 
 interface LiveFightPanelProps extends LiveFightHook {
     onClose: () => void;
+    combatants: Combatant[];
+    characters: Character[];
 }
 
 export function LiveFightPanel({
@@ -14,12 +19,31 @@ export function LiveFightPanel({
     handleDecisionResponse,
     stopFight,
     onClose,
+    combatants,
+    characters,
 }: LiveFightPanelProps) {
+    const { t } = useTranslation();
     const engine = liveFightEngine;
     const outcome = engine?.outcome;
     const phase = engine?.phase;
     const round = engine?.round;
 
+    // --- Setup state ---
+    const defaultSideMap = useMemo<Record<string, SideId>>(
+        () => Object.fromEntries(combatants.map(c => [c.id, c.isPlayer ? 'ally' : 'adversary'])),
+        [combatants],
+    );
+    const [sideMap, setSideMap] = useState<Record<string, SideId>>(defaultSideMap);
+    const [initialDistance, setInitialDistance] = useState(20);
+
+    // Reset setup state when the fight ends (engine goes from active → null)
+    useEffect(() => {
+        if (!engine) {
+            setSideMap(defaultSideMap);
+        }
+    }, [engine, defaultSideMap]);
+
+    // --- GM overrides ---
     const forceEndTurn = () => {
         if (!pendingMainRequest) return;
         handleDecisionResponse(pendingMainRequest.requestId, {
@@ -32,24 +56,113 @@ export function LiveFightPanel({
         handleDecisionResponse(req.requestId, { kind: 'wait', actorId: req.actorId });
     };
 
+    const handleStartFromEncounter = () => {
+        const { combatState, remoteActorIds } = buildCombatStateFromTracker(
+            combatants, characters, sideMap, initialDistance,
+        );
+        startFight(combatState, remoteActorIds);
+    };
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-start justify-center pt-16 z-50">
-            <div className="bg-gray-900 text-white rounded-lg shadow-2xl w-[480px] max-h-[80vh] overflow-y-auto p-5">
+            <div className="bg-gray-900 text-white rounded-lg shadow-2xl w-[520px] max-h-[80vh] overflow-y-auto p-5">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-bold text-amber-400">⚔ Live Fight</h2>
+                    <h2 className="text-lg font-bold text-amber-400">⚔ {t('liveFight.title')}</h2>
                     <button onClick={onClose} className="text-gray-400 hover:text-white text-xl">✕</button>
                 </div>
 
-                {/* Idle state */}
+                {/* Setup view — no fight running */}
                 {!engine && (
-                    <div className="space-y-3">
-                        <p className="text-gray-400 text-sm">No fight in progress.</p>
-                        <button
-                            onClick={() => startFight(DEV_FIGHT_FIXTURE.combatState, DEV_FIGHT_FIXTURE.remoteActorIds, DEV_FIGHT_FIXTURE.seed)}
-                            className="bg-amber-600 hover:bg-amber-500 text-white px-4 py-2 rounded text-sm font-medium"
-                        >
-                            ▶ Start Dev Fixture
-                        </button>
+                    <div className="space-y-4">
+                        {combatants.length > 0 ? (
+                            <>
+                                <p className="text-gray-400 text-sm">{t('liveFight.setup.title')}</p>
+
+                                {/* Combatant side assignment */}
+                                <div className="border border-gray-700 rounded overflow-hidden">
+                                    <table className="w-full text-sm">
+                                        <thead>
+                                            <tr className="bg-gray-800 text-gray-400 text-xs uppercase">
+                                                <th className="text-left px-3 py-2">{t('liveFight.setup.name')}</th>
+                                                <th className="text-left px-3 py-2">{t('liveFight.setup.wounds')}</th>
+                                                <th className="text-left px-3 py-2">{t('liveFight.setup.side')}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {combatants.map(c => (
+                                                <tr key={c.id} className="border-t border-gray-800">
+                                                    <td className="px-3 py-2 text-white">{c.name}</td>
+                                                    <td className="px-3 py-2 text-gray-400">
+                                                        {c.currentWounds}/{c.maxWounds}
+                                                    </td>
+                                                    <td className="px-3 py-2">
+                                                        <div className="flex gap-1">
+                                                            <button
+                                                                onClick={() => setSideMap(m => ({ ...m, [c.id]: 'ally' }))}
+                                                                className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                                                    sideMap[c.id] === 'ally'
+                                                                        ? 'bg-blue-600 text-white'
+                                                                        : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                                                                }`}
+                                                            >
+                                                                {t('liveFight.setup.ally')}
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setSideMap(m => ({ ...m, [c.id]: 'adversary' }))}
+                                                                className={`px-2 py-0.5 rounded text-xs font-medium ${
+                                                                    sideMap[c.id] === 'adversary'
+                                                                        ? 'bg-red-700 text-white'
+                                                                        : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                                                                }`}
+                                                            >
+                                                                {t('liveFight.setup.adversary')}
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Initial distance */}
+                                <div className="flex items-center gap-3">
+                                    <label className="text-sm text-gray-400 whitespace-nowrap">
+                                        {t('liveFight.setup.initialDistance')}
+                                    </label>
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        max={100}
+                                        value={initialDistance}
+                                        onChange={e => setInitialDistance(Math.max(0, Number(e.target.value)))}
+                                        className="w-20 bg-gray-800 border border-gray-600 rounded px-2 py-1 text-white text-sm"
+                                    />
+                                    <span className="text-gray-500 text-sm">yd</span>
+                                </div>
+
+                                <button
+                                    onClick={handleStartFromEncounter}
+                                    className="w-full bg-amber-600 hover:bg-amber-500 text-white px-4 py-2 rounded text-sm font-semibold"
+                                >
+                                    {t('liveFight.setup.start')}
+                                </button>
+                            </>
+                        ) : (
+                            <p className="text-gray-500 text-sm italic">
+                                {t('liveFight.setup.noEncounter')}
+                            </p>
+                        )}
+
+                        {/* Dev fixture */}
+                        <div className="border-t border-gray-800 pt-3">
+                            <button
+                                onClick={() => startFight(DEV_FIGHT_FIXTURE.combatState, DEV_FIGHT_FIXTURE.remoteActorIds, DEV_FIGHT_FIXTURE.seed)}
+                                className="text-xs text-gray-500 hover:text-gray-300 underline"
+                            >
+                                {t('liveFight.setup.devFixture')}
+                            </button>
+                        </div>
                     </div>
                 )}
 
