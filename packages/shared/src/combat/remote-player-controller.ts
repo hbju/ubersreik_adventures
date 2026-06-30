@@ -8,6 +8,7 @@ export type FightStateView = Pick<CombatState, 'combatants' | 'advantagePools' |
 export interface DecisionRequest {
     requestId: string;
     actorId: string;
+    characterId: string;
     characterName: string;
     round: number;
     turnIndex: number;
@@ -47,6 +48,7 @@ function buildRequest(requestId: string, context: DecisionContext): DecisionRequ
     return {
         requestId,
         actorId: context.actor.id,
+        characterId: actor.character.id,
         characterName: actor.name,
         round: context.engine.round,
         turnIndex: context.engine.turnIndex,

@@ -37,7 +37,7 @@ export function buildCombatStateFromTracker(
     const combatState = createCombatState(engineCombatants);
 
     const remoteActorIds = new Set(
-        trackerCombatants
+        engineCombatants
             .filter(tc => tc.isPlayer)
             .map(tc => tc.id),
     );

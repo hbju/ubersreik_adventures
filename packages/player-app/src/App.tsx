@@ -85,14 +85,14 @@ const CodexNavButton: React.FC = () => {
 
 
 const PlayerApp: React.FC = () => {
-    const { skills, talents, careers, items, weapons, armor, conditions, qualities, shops: shopDefinitions, mapData, maps, mapsList } = useGameData();
+    const { skills, talents, careers, conditions, qualities, mapData, maps } = useGameData();
 
     // Codex data sources
     const codexDataSources: CodexDataSources = React.useMemo(() => ({
         talents, skills, careers, conditions, qualities: qualities ?? [],
     }), [talents, skills, careers, conditions, qualities]);
 
-    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, shops, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, notebook, fightState, pendingDecision, connect, disconnect, sendMessage, submitDecision } = useSocket();
+    const { isConnected, isAuthenticated, authError, username, userId, playerColor, character, shopItems, combatants, currentTurnId, currentAdvantage, opposedTestRequest, setOpposedTestRequest, conditionTestRequest, setConditionTestRequest, journalEntries, mapPinStates, mapPing, factions, locationTerritories, quests, tokens, userPins, chatMessages, setChatMessages, activeMapId, isMapTransitioning, setIsMapTransitioning, calendarDate, calendarEvents, calendarWeather, notebook, fightState, pendingDecision, connect, disconnect, sendMessage, submitDecision } = useSocket();
 
     const currentMapData = React.useMemo(() => {
         return maps[activeMapId] || mapData;
@@ -129,7 +129,7 @@ const PlayerApp: React.FC = () => {
 
     // Derive the player's actor ID from their character ID
     const myActorId = character && fightState
-        ? Object.keys(fightState.stateView.combatants).find(id => id === character.id) ?? null
+        ? Object.values(fightState.stateView.combatants).find(combatant => combatant.character.id === character.id)?.id ?? null
         : null;
 
     // Auto-activate fight tab when a fight starts; return to character tab when it ends

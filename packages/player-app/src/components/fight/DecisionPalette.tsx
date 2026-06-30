@@ -184,7 +184,8 @@ export const DecisionPalette: React.FC<DecisionPaletteProps> = ({ decision, char
 
             {[...grouped.entries()].map(([kind, decisions]) => {
                 const isTargeted = TARGETED_ACTIONS.includes(kind);
-                const isSimple = SIMPLE_ACTIONS.includes(kind) || (!isTargeted);
+                const isMovement = kind === 'move';
+                const isSimple = SIMPLE_ACTIONS.includes(kind) || (!isTargeted && !isMovement);
 
                 return (
                     <div key={kind} className={styles.actionGroup}>
@@ -199,7 +200,18 @@ export const DecisionPalette: React.FC<DecisionPaletteProps> = ({ decision, char
                                     onSubmit={onSubmit}
                                 />
                             ))
-                            : decisions.map((ld, i) => (
+                            : isMovement 
+                            ? decisions.map((ld, i) => (
+                                <button
+                                    key={i}
+                                    className={styles.actionBtn}
+                                    onClick={() => onSubmit(ld)}
+                                >
+                                    {labelForKind(kind, t) + (ld.targetId ? ` → ${stateView.combatants[ld.targetId]?.name ?? ld.targetId}` : ld.destination ? ` → ${ld.destination}` : '')}
+                                </button>
+                            ))
+                            :
+                            decisions.map((ld, i) => (
                                 <button
                                     key={i}
                                     className={styles.actionBtn}

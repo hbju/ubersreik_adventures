@@ -121,26 +121,26 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
     const lastSentRequestsRef = useRef<Map<string, DecisionRequest>>(new Map());
 
     // Map character id → userId for routing REQUEST_DECISION to the right player socket
-    const actorIdToUserId = useCallback((actorId: string): string | null => {
-        const char = characters.find(c => c.id === actorId);
+    const characterIdToUserId = useCallback((characterId: string): string | null => {
+        const char = characters.find(c => c.id === characterId);
         return char?.userId ?? null;
     }, [characters]);
 
-    // Reverse map: userId → character id (actorId)
-    const userIdToActorId = useCallback((userId: string): string | null => {
+    // Reverse map: userId → character id
+    const userIdToCharacterId = useCallback((userId: string): string | null => {
         const char = characters.find(c => c.userId === userId);
         return char?.id ?? null;
     }, [characters]);
 
     const sendDecisionRequest = useCallback((req: DecisionRequest) => {
-        const userId = actorIdToUserId(req.actorId);
+        const userId = characterIdToUserId(req.characterId);
         if (!userId) {
-            console.warn(`[LiveFight] No userId for actorId ${req.actorId} — cannot send REQUEST_DECISION`);
+            console.warn(`[LiveFight] No userId for characterId ${req.characterId} — cannot send REQUEST_DECISION`);
             return;
         }
         window.ipcRenderer.sendToPlayer(userId, { type: 'REQUEST_DECISION', payload: req });
         lastSentRequestsRef.current.set(req.actorId, req);
-    }, [actorIdToUserId]);
+    }, [characterIdToUserId]);
 
     const heuristicResolver: ControllerResolver = useCallback(
         () => heuristicControllerFor(),
@@ -260,13 +260,13 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         const engine = engineRef.current;
         if (!engine) return;
         broadcastFightState(engine);
-        const actorId = userIdToActorId(userId);
-        if (!actorId) return;
-        const pendingReq = lastSentRequestsRef.current.get(actorId);
+        const characterId = userIdToCharacterId(userId);
+        if (!characterId) return;
+        const pendingReq = lastSentRequestsRef.current.get(characterId);
         if (pendingReq && !decisionCacheRef.current.has(pendingReq.requestId)) {
             window.ipcRenderer.sendToPlayer(userId, { type: 'REQUEST_DECISION', payload: pendingReq });
         }
-    }, [broadcastFightState, userIdToActorId]);
+    }, [broadcastFightState, userIdToCharacterId]);
 
     const stopFight = useCallback(() => {
         engineRef.current = null;
