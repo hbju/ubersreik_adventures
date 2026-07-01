@@ -202,6 +202,7 @@ export function useLiveFight({ characters }: UseLiveFightOptions): LiveFightHook
         engineRef.current = result.state;
         setLiveFightEngine(result.state);
         setPendingMainRequest(null);
+        decisionCacheRef.current = new Map(); // clear cache for next turn
         broadcastFightState(result.state);
 
         if (result.state.phase !== 'complete' && i < 1000) {

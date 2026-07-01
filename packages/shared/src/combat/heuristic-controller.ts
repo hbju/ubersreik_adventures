@@ -1,14 +1,9 @@
 import { calculateCharacteristicBonus, calculateCharacteristicValue, skillTarget } from '../utils/skills';
-import { hasQuality } from './qualities';
 import { REACH_ENGAGEMENT_DISTANCE, type WeaponReach } from './spatial';
-import type { Rng } from './rng';
 import type {
     Combatant,
     CombatState,
     DecisionLogEntry,
-    MeleeAttackAction,
-    OpposedRollInput,
-    RangedAttackAction,
 } from './types';
 import type {
     CombatantController,
@@ -16,10 +11,8 @@ import type {
     DecisionContext,
     LegalDecision,
 } from './turn-engine';
-import { resolveWeaponUse } from './proficiency';
+import { materializeDecision } from './controller-helper';
 import { activeFearStates, isActivelyAfraidOf, isFrenzied } from './psychology';
-import { additionalEffortTestModifier } from './advantage';
-
 /**
  * Scored-policy heuristic.
  *
@@ -427,88 +420,7 @@ export class HeuristicController implements CombatantController {
     }
 
     private materialize(context: DecisionContext, decision: LegalDecision): CombatDecision {
-        switch (decision.kind) {
-            case 'meleeAttack':
-                return this.materializeMelee(context, [decision]);
-            case 'rangedAttack':
-                return this.materializeRanged(context, [decision]);
-            case 'reload':
-                return withReloadRoll(context, decision);
-            case 'intimidate':
-                return withIntimidateRoll(context, decision);
-            case 'leadership':
-                return withLeadershipRoll(context, decision);
-            case 'move':
-                return decision.mode === 'charge' ? this.materializeCharge(context, [decision]) : decision;
-            case 'assess':
-            case 'defend':
-            case 'aim':
-            case 'sprint':
-            case 'firstAid':
-            case 'infighting':
-            case 'disengageDodge':
-            case 'grappleInitiate':
-            case 'grappleMaintain':
-            case 'grappleBreak':
-            case 'attackWithBoth':
-            case 'beatBlade':
-            case 'disarm':
-            case 'feint':
-            case 'distractOpponent':
-                return withRequest(decision);
-            default:
-                // spendAdvantage, shieldsman, reversal, endTurn, wait — dispatched as-is.
-                return decision;
-        }
-    }
-
-    private materializeMelee(context: DecisionContext, legal: LegalDecision[]): CombatDecision {
-        const targetId = this.bestTargetId(context.state, context.actor, candidateTargets(legal)) ?? legal[0].targetId;
-        const base = legal.find(decision => decision.targetId === targetId) ?? legal[0];
-        const weapon = primaryWeapon(context.state, context.actor);
-        const weaponUse = weapon ? resolveWeaponUse(context.actor, weapon) : undefined;
-        return {
-            ...base,
-            action: {
-                attackerId: context.actor.id,
-                defenderId: targetId!,
-                attacker: rollInput(context, context.actor, weaponUse ? (weaponUse?.test.type === 'skill' ? weaponUse.test.skillId : weaponUse.test.characteristic) : 'melee_basic', weapon?.id),
-                defender: { skillId: 'melee_basic', targetNumber: 0 },
-                isCharging: context.state.turnFlags.chargedCombatantIds.includes(context.actor.id),
-                grantAdvantage: additionalEffortTestModifier !== undefined
-            },
-        };
-    }
-
-    private materializeCharge(context: DecisionContext, legal: LegalDecision[]): CombatDecision {
-        const targetId = this.bestTargetId(context.state, context.actor, candidateTargets(legal)) ?? legal[0].targetId;
-        const base = legal.find(decision => decision.targetId === targetId) ?? legal[0];
-        const weapon = primaryWeapon(context.state, context.actor);
-        const weaponUse = weapon ? resolveWeaponUse(context.actor, weapon) : undefined;
-        return {
-            ...base,
-            action: {
-            attackerId: context.actor.id,
-            defenderId: targetId!,
-            attacker: rollInput(context, context.actor, weaponUse ? (weaponUse?.test.type === 'skill' ? weaponUse.test.skillId : weaponUse.test.characteristic) : 'melee_basic', weapon?.id),
-                defender: { skillId: 'melee_basic', targetNumber: 0 },
-                isCharging: true,
-            },
-        };
-    }
-
-    private materializeRanged(context: DecisionContext, legal: LegalDecision[]): CombatDecision {
-        const targetId = this.bestTargetId(context.state, context.actor, candidateTargets(legal)) ?? legal[0].targetId;
-        const base = legal.find(decision => decision.targetId === targetId) ?? legal[0];
-        const weapon = primaryWeapon(context.state, context.actor);
-        const action: RangedAttackAction = {
-            attackerId: context.actor.id,
-            defenderId: targetId!,
-            attacker: rollInput(context, context.actor, rangedSkillId(weapon), weapon?.id),
-            cover: targetId ? context.state.combatants[targetId]?.cover ?? 'none' : 'none',
-            grantAdvantage: additionalEffortTestModifier !== undefined
-        };
-        return { ...base, action };
+        return materializeDecision(context, decision);
     }
 
     private bestTargetId(state: CombatState, actor: Combatant, candidateIds: string[]): string | undefined {
@@ -547,60 +459,6 @@ function reasonCodeForReaction(decision: CombatDecision, reason: string, profile
     if (decision.reaction === 'fortuneReroll') return 'resource.fortuneReroll';
     if (decision.reaction === 'fortunePlusOneSl') return 'resource.fortunePlusOneSl';
     return `reaction.${decision.reaction ?? 'firstLegal'}`;
-}
-
-function withRequest(decision: LegalDecision): LegalDecision {
-    return decision.request ? decision : { ...decision, request: { kind: decision.kind as any, actorId: decision.actorId, targetId: decision.targetId } };
-}
-
-function withReloadRoll(context: DecisionContext, decision: LegalDecision): LegalDecision {
-    const action = decision.action && 'weaponId' in decision.action ? decision.action : { actorId: decision.actorId, weaponId: decision.weaponId! };
-    return { ...decision, action: { ...action, rollResult: d100(context.rng), targetNumber: skillTarget(context.actor, 'ranged_blackpowder') } };
-}
-
-function withIntimidateRoll(context: DecisionContext, decision: LegalDecision): LegalDecision {
-    const target = decision.targetId ? context.state.combatants[decision.targetId] : undefined;
-    return {
-        ...decision,
-        rollResult: d100(context.rng),
-        targetNumber: skillTarget(context.actor, 'intimidate'),
-        request: {
-            kind: 'intimidate',
-            actorId: decision.actorId,
-            targetId: decision.targetId,
-            opponentRollResult: d100(context.rng),
-            opponentTargetNumber: target ? skillTarget(target, 'cool') : 0,
-        },
-    };
-}
-
-function withLeadershipRoll(context: DecisionContext, decision: LegalDecision): LegalDecision {
-    return {
-        ...decision,
-        rollResult: d100(context.rng),
-        targetNumber: skillTarget(context.actor, 'leadership'),
-        request: {
-            kind: 'leadership',
-            actorId: decision.actorId,
-        },
-    };
-}
-
-function rollInput(context: DecisionContext, combatant: Combatant | undefined, skillId: string, weaponId?: string): OpposedRollInput {
-    return {
-        skillId,
-        targetNumber: combatant ? skillTarget(combatant, skillId) : 0,
-        rollResult: d100(context.rng),
-        weaponId,
-    };
-}
-
-function d100(rng: Rng): number {
-    return Math.floor(rng.next() * 100) + 1;
-}
-
-function candidateTargets(legal: LegalDecision[]): string[] {
-    return legal.flatMap(decision => decision.targetId ? [decision.targetId] : decision.targetIds ?? []);
 }
 
 function targetScore(state: CombatState, actor: Combatant, target: Combatant, profile: HeuristicProfile): number {
@@ -687,21 +545,6 @@ function mostWoundedAlly(state: CombatState, actor: Combatant): Combatant | unde
 function reachOf(state: CombatState, actor: Combatant): number {
     const weapon = state.weapons.find(candidate => candidate.id === (actor.weaponLoadout?.primaryWeaponId ?? ''));
     return REACH_ENGAGEMENT_DISTANCE[(weapon?.reach as WeaponReach) ?? 'Short'];
-}
-
-function primaryWeapon(state: CombatState, combatant: Combatant | undefined) {
-    if (!combatant) return undefined;
-    const weaponId = combatant.weaponLoadout?.primaryWeaponId
-        ?? Object.entries(combatant.character.inventory.equippedWeapons || {}).find(([, equipped]) => equipped)?.[0];
-    return weaponId ? state.weapons.find(weapon => weapon.id === weaponId) : undefined;
-}
-
-function rangedSkillId(weapon: ReturnType<typeof primaryWeapon>): string {
-    if (!weapon) return 'ranged_bow';
-    if (hasQuality(weapon, 'blackpowder') || weapon.group.toLowerCase().includes('blackpowder')) return 'ranged_blackpowder';
-    if (weapon.group.toLowerCase().includes('crossbow')) return 'ranged_crossbow';
-    if (weapon.group.toLowerCase().includes('throw')) return 'ranged_throwing';
-    return 'ranged_bow';
 }
 
 function consequentialTest(context: DecisionContext): boolean {

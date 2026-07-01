@@ -194,9 +194,7 @@ Entertain: The animal is trained to entertain others. It adds a +10
 
 bonus to appropriate Entertain, Perform, or Play Tests.
 
-Fetch: The animal is trained to fetch. This is normal reserved for 
-
-Dogs and similar.
+Fetch: The animal is trained to fetch. This is normal reserved for Dogs and similar.
 
 Guard: The animal is trained to stay in one place or prowl around 
 

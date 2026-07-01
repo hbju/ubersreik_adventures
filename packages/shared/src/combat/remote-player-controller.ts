@@ -1,5 +1,6 @@
 import type { Combatant, CombatState } from './types';
 import type { CombatantController, CombatDecision, DecisionContext, LegalDecision, TurnEngineState } from './turn-engine';
+import { materializeDecision } from './controller-helper';
 
 // Minimal serialisable board snapshot sent to the player UI — expanded in LP-c.
 export type FightStateView = Pick<CombatState, 'combatants' | 'advantagePools' | 'engagements'> & { round: number };
@@ -80,7 +81,7 @@ export class RemotePlayerController implements CombatantController {
         this.callCounts.set(key, count + 1);
         const requestId = `${key}:${count}`;
 
-        if (this.cache.has(requestId)) return this.cache.get(requestId)!;
+        if (this.cache.has(requestId)) return materializeDecision(context, this.cache.get(requestId)!);
 
         const request = buildRequest(requestId, context);
         this.onRequest(request);
