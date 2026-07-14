@@ -33,10 +33,6 @@ export function loadCampaignData(): CampaignState {
             const fileContent = fs.readFileSync(filePath, 'utf-8');
             campaignData = JSON.parse(fileContent) as CampaignState;
             console.log('Campaign data loaded from:', filePath);
-
-            // Run migrations
-            campaignData = migratePlayerNotebooks(campaignData);
-            saveCampaignData(campaignData);
         } else {
             // Initialize with default data if file doesn't exist
             campaignData = {
@@ -162,58 +158,4 @@ export function getCampaignData(): CampaignState | null {
 export function clearCampaignCache(): void {
     console.log('Clearing campaign data cache');
     campaignData = null;
-}
-
-const NOTEBOOK_MIGRATION_VERSION = '1.1.0';
-
-/**
- * Migrate legacy playerNotes from Character.lore into playerNotebooks.
- * Idempotent: only runs once when version < NOTEBOOK_MIGRATION_VERSION.
- * Creates a first notebook page from the player's existing notes text.
- */
-export function migratePlayerNotebooks(data: CampaignState): CampaignState {
-    // Skip if already migrated
-    if (data.version >= NOTEBOOK_MIGRATION_VERSION && data.playerNotebooks) {
-        return data;
-    }
-
-    if (!data.playerNotebooks) {
-        data.playerNotebooks = {};
-    }
-
-    // For each user that has a character with playerNotes, seed their notebook
-    for (const user of data.users || []) {
-        // Skip if notebook already exists for this user
-        if (data.playerNotebooks[user.id] && data.playerNotebooks[user.id].pages.length > 0) {
-            continue;
-        }
-
-        const character = data.characters.find(c => c.id === user.characterId);
-        if (!character) continue;
-
-        const playerNotes = (character as any).lore?.playerNotes;
-        if (!playerNotes || typeof playerNotes !== 'string' || playerNotes.trim() === '') {
-            continue;
-        }
-
-        const now = new Date().toISOString();
-        const notebook: Notebook = {
-            pages: [{
-                id: `page-migrated-${user.id}`,
-                title: 'My Notes',
-                content: playerNotes,
-                order: 0,
-                createdAt: now,
-                updatedAt: now,
-            }],
-        };
-
-        data.playerNotebooks[user.id] = notebook;
-        console.log(`[MIGRATION] Migrated playerNotes to notebook for user ${user.id} (${user.username})`);
-    }
-
-    // Bump version
-    data.version = NOTEBOOK_MIGRATION_VERSION;
-
-    return data;
 }
