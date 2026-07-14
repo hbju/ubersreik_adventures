@@ -937,6 +937,10 @@ function App() {
                 setUserPins(data.userPins);
             }
 
+            if (data.playerNotebooks) {
+                setPlayerNotebooks(data.playerNotebooks);
+            }
+
             setSaving(true);
         }).catch((error: any) => {
             console.error('Failed to load initial data:', error);
