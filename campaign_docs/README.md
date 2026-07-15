@@ -21,5 +21,5 @@ ubersreik-campaign/
 ## Files YOU need to add manually
 1. Any scenario PDFs you want Claude to reference (Blood & Snow, A Heart of Glass...)
 
-## First conversation opener (copy-paste into Claude Code)
-> Read CLAUDE.md, then campaign/CAMPAIGN_STATE.md, campaign/DRAMATIS_PERSONAE.md, campaign/WEEK2_CALENDAR.md and campaign/HANDOFF.md. Then ask me the open questions from HANDOFF.md so we can plan Session 14.
+## First conversation opener (copy-paste into CODEX)
+> Read campaign_docs/.codex/AGENTS.md, then campaign_docs/campaign/CAMPAIGN_STATE.md, campaign_docs/campaign/DRAMATIS_PERSONAE.md, campaign_docs/campaign/WEEK2_CALENDAR.md and campaign_docs/campaign/HANDOFF.md. Then ask me the open questions from HANDOFF.md so we can plan Session 15.

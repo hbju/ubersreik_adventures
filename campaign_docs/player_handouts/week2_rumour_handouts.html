@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rumeurs d’Ubersreik — six pièces à révéler</title>
+  <style>
+    @page { size: A4; margin: 0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #211e1a; color: #211e1a; font-family: Georgia, 'Times New Roman', serif; }
+    .sheet {
+      width: 210mm; height: 297mm; margin: 14px auto; padding: 8mm;
+      display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 1fr); gap: 5mm;
+      background: #d7ccb3;
+    }
+    .slip {
+      position: relative; overflow: hidden; padding: 6mm; background: #eee5d0;
+      border: 1px dashed #6d6250;
+    }
+    .slip::after { content: attr(data-handout); position: absolute; right: 3mm; bottom: 2mm; font: 7pt Arial, sans-serif; color: #776b57; }
+    .eyebrow { font: 700 7pt Arial, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #5c7363; text-align: center; }
+    h1 { margin: 2mm 0 3mm; text-align: center; font-size: 15pt; line-height: 1.05; text-transform: uppercase; }
+    h2 { margin: 1mm 0 2mm; text-align: center; font-size: 11pt; text-transform: uppercase; }
+    p { margin: 0 0 2mm; font-size: 8.5pt; line-height: 1.28; text-align: justify; }
+    .small { font-size: 7.3pt; }
+    .rule { border: 0; border-top: 2px solid #211e1a; border-bottom: 1px solid #211e1a; height: 2mm; margin: 2mm 0; }
+    .stamp { display: inline-block; border: 3px double #7a2520; color: #7a2520; padding: 1.5mm 3mm; font: 900 9pt Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; transform: rotate(-4deg); }
+    .signature { margin-top: 3mm; text-align: right; font-style: italic; }
+    .serial { font: 700 8pt 'Courier New', monospace; letter-spacing: .12em; }
+    .ticket { border: 3px double #211e1a; background: #e7dec9; }
+    .ticket h1 { font-size: 19pt; letter-spacing: .04em; }
+    .ticket .cast { text-align: center; font-style: italic; }
+    .notice { border: 2px solid #211e1a; }
+    .notice h1 { border-top: 3px solid; border-bottom: 3px solid; padding: 2mm 0; }
+    .reward { border: 3px double #7a2520; }
+    .reward h1 { color: #7a2520; font-size: 18pt; }
+    .chit { background: #e4dec9; border: 2px solid #5c7363; }
+    .chit .crest { text-align: center; font-size: 22pt; color: #5c7363; }
+    .chit .fields { border-top: 1px solid; border-bottom: 1px solid; padding: 2mm 0; margin: 2mm 0; font: 8pt Arial, sans-serif; line-height: 1.7; }
+    .ledger { background: #e8e1cf; border: 1px solid #3a3f44; }
+    table { width: 100%; border-collapse: collapse; margin-top: 2mm; font: 7.3pt Arial, sans-serif; }
+    th, td { border: 1px solid #65605a; padding: 1.2mm; text-align: left; }
+    th { background: #d3cbb8; text-transform: uppercase; }
+    @media print { body { background: none; } .sheet { margin: 0; } }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <section class="slip notice" data-handout="H1">
+      <div class="eyebrow">Maîtres Meuniers de la Vallée de la Dame</div>
+      <h1>Avis sur les chitties du grenier</h1>
+      <p>En raison de <b>contrefaçons criminelles</b>, aucun jeton d’argile ne sera honoré s’il ne porte pas le motif du jour et l’empreinte fraîche du kiosque de l’Old Granary.</p>
+      <p>Les porteurs de faux jetons seront remis au Guet. Les plaintes concernant le poids des miches doivent être adressées par écrit, avec deux témoins de guilde.</p>
+      <p class="signature">— Ruprecht Adelmann, représentant</p>
+      <span class="stamp">Motif changé</span>
+    </section>
+
+    <section class="slip ticket" data-handout="H2">
+      <div class="eyebrow">Theatre Variété — représentations quotidiennes</div>
+      <h1>Le Duc et le Collecteur de Crottin</h1>
+      <p class="cast">Une nouvelle farce des Mootland Minstrels</p>
+      <hr class="rule">
+      <p style="text-align:center"><b>Voyez un grand administrateur taxer l’air, la pluie, les jurons et les chevaux !</b></p>
+      <p style="text-align:center">Riez lorsqu’il découvre enfin le seul formulaire qu’Altdorf ne peut remplir.</p>
+      <h2>Deux fois par soir</h2>
+      <p class="small" style="text-align:center">Places populaires : 4 sous • Fonctionnaires impériaux : tarif civique complet</p>
+    </section>
+
+    <section class="slip notice" data-handout="H3">
+      <div class="eyebrow">Guilde des Médecins d’Ubersreik</div>
+      <h1>Protection du public</h1>
+      <p>Il est rappelé qu’un barbier-chirurgien n’est autorisé ni à diagnostiquer une maladie, ni à pratiquer les actes réservés aux médecins licenciés dans l’enceinte de la ville.</p>
+      <p><b>Un shilling</b> sera versé pour toute preuve vérifiable d’une infraction récente.</p>
+      <p class="small">Les témoignages doivent être déposés à la réception de la Guilde. Les dénonciations anonymes ne seront payées qu’après condamnation.</p>
+      <p class="signature">Doktor Otto Krupp, Guildmaster</p>
+    </section>
+
+    <section class="slip reward" data-handout="H4">
+      <div class="eyebrow">Avis discret — ne pas afficher près du Guet</div>
+      <h1>Où est Felix Scite ?</h1>
+      <p>L’ancien champion de l’Éperon d’Étain n’a pas quitté Ubersreik de son plein gré. Toute information concernant une charrette fermée, un entrepôt sans fenêtres ou des combats privés sera récompensée.</p>
+      <p><b>N’intervenez pas seul.</b> Ne prévenez pas les propriétaires du lieu.</p>
+      <p style="text-align:center"><span class="stamp">Discrétion exigée</span></p>
+      <p class="small" style="text-align:center">Réponse au Marteau Tordu. Demander Silvi.</p>
+    </section>
+
+    <section class="slip chit" data-handout="H5">
+      <div class="crest">K</div>
+      <div class="eyebrow">Fonds civique Karstadt — secours de Magnustag</div>
+      <h1>Bon pour pain et combustible</h1>
+      <div class="fields">
+        PORTEUR : _______________________________<br>
+        QUARTIER : ______________________________<br>
+        FOYER : ______ adultes &nbsp; ______ enfants
+      </div>
+      <p>Ce bon donne droit à deux miches, un sac de charbon et une avance sans intérêt de cinq sous auprès d’un comptoir participant.</p>
+      <p class="small">Aucun serment politique n’est exigé. Les noms seront conservés afin d’empêcher les doubles demandes et d’organiser les secours futurs.</p>
+      <p class="signature">Pour la Maison de commerce Karstadt — J. Specht</p>
+    </section>
+
+    <section class="slip ledger" data-handout="H6">
+      <div class="eyebrow">Copie anonyme — registre de la Douane</div>
+      <h1>Un tarif, deux attentes</h1>
+      <table>
+        <thead><tr><th>Origine</th><th>Chargement</th><th>Attente</th><th>Frais</th></tr></thead>
+        <tbody>
+          <tr><td>Altdorf</td><td>Réquisition</td><td>12 min</td><td>—</td></tr>
+          <tr><td>Ubersreik</td><td>Farine</td><td>4 h</td><td>3 s.</td></tr>
+          <tr><td>Altdorf</td><td>Effets d’officier</td><td>7 min</td><td>—</td></tr>
+          <tr><td>Ubersreik</td><td>Outils</td><td>1 j.</td><td>5 s.</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:3mm"><b>Question :</b> si la loi est la même, pourquoi nos marchandises vieillissent-elles seules sur le quai ?</p>
+      <p class="small">Copié de mémoire. Les noms du commis et des marchands ont été retirés pour leur sécurité.</p>
+    </section>
+  </main>
+</body>
+</html>

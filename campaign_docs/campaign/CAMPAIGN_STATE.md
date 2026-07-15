@@ -1,6 +1,6 @@
-# CAMPAIGN STATE — as of end of Session 14 planning
+# CAMPAIGN STATE — as of end of Session 14
 **In-game date: night of Konistag 10th Sigmarzeit (Magnustag), mid-escape from the sewers.**
-**Next session (14): finish Magnustag night → downtime ellipse → resume Wellentag 13th Sigmarzeit.**
+**Next session (15): finish Magnustag night → downtime ellipse → resume Wellentag 13th Sigmarzeit.**
 **Doomsday clock: K&H detonate the Watch Barracks on SIGMARTAG 18th.**
 
 ---
@@ -98,7 +98,7 @@ Emming's Temple sermon (Kürbis observing Pfeffer). Melina recruited Thucydion/L
 
 ## 6. DOWNTIME (11th–12th) — planned content
 
-- Endurance tests vs Ratte Fever for all four sewer PCs; symptoms develop on failure.
+- Endurance tests vs Ratte Fever for all three sewer PCs; symptoms develop on failure.
 - Endeavors per Core Rulebook, narrated loosely by players.
 - **Thucydion**: Engel meeting via Cordelia's tunnel (Engel cares only when the warpstone/device is described; offers knowledge, not swords). Possibly the Circle's Marktag bout.
 - **Silas**: Doktor Theodosia Grat introduction (Physicians' Guild; treats the Festering Wound well; lends a book; Bronze Fever injection on follow-up).

@@ -1,72 +1,157 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
-  <title id="title">Les Magnussewers — carte de progression du MJ</title>
-  <desc id="desc">Carte point-crawl stylisée des égouts nord d'Ubersreik, avec huit lieux reliés par des conduits.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" role="img" aria-labelledby="title desc">
+  <title id="title">Les égouts d’Ubersreik — schéma opérationnel du MJ</title>
+  <desc id="desc">Carte schématique de l’ensemble des égouts d’Ubersreik. Les Magnussewers et le camp skaven sont au nord du Teufel. Les Sigmarsewers et l’entrée de la Guilde des Attrapeurs de Rats sont au sud.</desc>
   <defs>
-    <filter id="paper" x="-10%" y="-10%" width="120%" height="120%">
+    <filter id="paper" x="-8%" y="-8%" width="116%" height="116%">
       <feTurbulence baseFrequency=".018" numOctaves="4" seed="19" result="noise"/>
       <feColorMatrix in="noise" type="saturate" values="0" result="grey"/>
       <feBlend in="SourceGraphic" in2="grey" mode="multiply"/>
     </filter>
-    <filter id="rough" x="-10%" y="-10%" width="120%" height="120%">
+    <filter id="rough" x="-8%" y="-8%" width="116%" height="116%">
       <feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="2" seed="7" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
-    <pattern id="brick" width="64" height="32" patternUnits="userSpaceOnUse">
-      <path d="M0 0H64M0 16H64M0 32H64M32 0V16M16 16V32" fill="none" stroke="#6f6656" stroke-opacity=".16" stroke-width="2"/>
+    <pattern id="ledger" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M0 0H56M0 28H56M0 56H56M0 0V56M28 0V56M56 0V56" fill="none" stroke="#6f6656" stroke-opacity=".07" stroke-width="1"/>
+    </pattern>
+    <pattern id="water" width="80" height="30" patternUnits="userSpaceOnUse">
+      <path d="M0 10C18 2 30 18 48 10S70 2 88 10M-20 25C-2 17 10 33 28 25S50 17 68 25" fill="none" stroke="#b6c4bf" stroke-opacity=".32" stroke-width="3"/>
     </pattern>
     <style>
-      .route{fill:none;stroke:#171512;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;filter:url(#rough)}
-      .known{stroke:#171512}.hidden{stroke:#6b1d18;stroke-dasharray:22 15}.flooded{stroke:#254e57;stroke-dasharray:7 14}
-      .node{fill:#15130f;stroke:#d4c6a5;stroke-width:5}.danger{fill:#7c211b}.safe{fill:#315447}.unknown{fill:#c29a43}
-      .label{font-family:Georgia,serif;font-size:25px;font-weight:700;fill:#1e1a14;paint-order:stroke;stroke:#d8cbaa;stroke-width:7px;stroke-linejoin:round}
-      .small{font-family:Georgia,serif;font-size:18px;font-style:italic;fill:#3d3429}
-      .key{font-family:Arial,sans-serif;font-size:18px;fill:#2a241d}
+      .wall{fill:none;stroke:#736956;stroke-width:4;stroke-dasharray:14 10;opacity:.75}
+      .street{fill:none;stroke:#766c5b;stroke-width:3;opacity:.25}
+      .major{fill:none;stroke:#171512;stroke-width:11;stroke-linecap:round;stroke-linejoin:round;filter:url(#rough)}
+      .minor{fill:none;stroke:#3f3a32;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;opacity:.72}
+      .hidden{fill:none;stroke:#7c211b;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:22 15;filter:url(#rough)}
+      .flooded{fill:none;stroke:#315d66;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 14}
+      .transfer{fill:none;stroke:#c29a43;stroke-width:7;stroke-linecap:round;stroke-dasharray:8 12}
+      .node{fill:#171512;stroke:#e0d5b8;stroke-width:5}
+      .danger{fill:#7c211b}.safe{fill:#315447}.unknown{fill:#c29a43}.manhole{fill:#171512;stroke:#d8cbaa;stroke-width:3}
+      .title{font-family:Georgia,serif;font-size:34px;font-weight:700;letter-spacing:1px;fill:#211e1a}
+      .region{font-family:Arial,sans-serif;font-size:25px;font-weight:700;letter-spacing:2px;fill:#211e1a}
+      .district{font-family:Arial,sans-serif;font-size:17px;font-weight:700;letter-spacing:1.5px;fill:#655b4b;opacity:.8}
+      .label{font-family:Georgia,serif;font-size:21px;font-weight:700;fill:#211e1a;paint-order:stroke;stroke:#ded2b3;stroke-width:6px;stroke-linejoin:round}
+      .label-small{font-family:Georgia,serif;font-size:18px;font-weight:700;fill:#211e1a;paint-order:stroke;stroke:#ded2b3;stroke-width:5px;stroke-linejoin:round}
+      .note{font-family:Georgia,serif;font-size:17px;font-style:italic;fill:#40382d}
+      .key{font-family:Arial,sans-serif;font-size:16px;fill:#2a241d}
+      .key-strong{font-family:Arial,sans-serif;font-size:17px;font-weight:700;fill:#5c0011}
     </style>
   </defs>
-  <rect width="1400" height="900" fill="#b6aa89"/>
-  <rect x="28" y="26" width="1344" height="848" rx="22" fill="#d8cbaa" stroke="#564d3e" stroke-width="5" filter="url(#paper)"/>
-  <rect x="50" y="50" width="1300" height="800" fill="url(#brick)"/>
-  <path d="M70 130 C250 70 410 155 585 95 S960 65 1330 150" fill="none" stroke="#65777a" stroke-width="80" opacity=".32"/>
-  <text x="85" y="92" class="small">Sous la rive nord du Teufel — conduits anciens, niveaux approximatifs</text>
 
-  <!-- primary traversable network -->
-  <path class="route known" d="M145 670 C245 680 275 590 360 575 S515 625 600 565"/>
-  <path class="route known" d="M360 575 C355 465 435 430 505 365"/>
-  <path class="route known" d="M505 365 C620 305 700 385 785 330"/>
-  <path class="route known" d="M600 565 C705 605 790 555 880 530"/>
-  <path class="route known" d="M880 530 C965 485 1040 455 1135 480"/>
-  <path class="route known" d="M785 330 C885 285 970 330 1060 285"/>
-  <path class="route known" d="M1060 285 C1135 305 1195 355 1235 420"/>
-  <path class="route hidden" d="M1135 480 C1165 405 1170 335 1060 285"/>
-  <path class="route hidden" d="M880 530 C900 655 1050 705 1195 665"/>
-  <path class="route flooded" d="M600 565 C575 705 690 760 820 735 S1050 730 1195 665"/>
+  <rect width="1600" height="1100" fill="#a89c7d"/>
+  <rect x="24" y="22" width="1552" height="1056" rx="20" fill="#d8cbaa" stroke="#51493b" stroke-width="5"/>
+  <rect x="44" y="42" width="1512" height="1016" fill="url(#ledger)"/>
 
-  <!-- minor dead ends -->
-  <path class="route" style="stroke-width:6;opacity:.55" d="M360 575C300 500 265 455 205 450M505 365C470 285 505 235 565 205M785 330C760 245 820 205 885 185M1135 480C1245 510 1290 565 1280 625"/>
-
-  <!-- nodes -->
-  <circle class="node safe" cx="145" cy="670" r="23"/><text class="label" x="75" y="725">1. Porte de la Guilde</text>
-  <circle class="node" cx="360" cy="575" r="23"/><text class="label" x="205" y="545">2. Carrefour des os</text>
-  <circle class="node danger" cx="505" cy="365" r="23"/><text class="label" x="430" y="420">3. Tanière du troll</text>
-  <circle class="node safe" cx="600" cy="565" r="23"/><text class="label" x="500" y="625">4. Refuge effondré</text>
-  <circle class="node danger" cx="785" cy="330" r="23"/><text class="label" x="670" y="285">5. Ancien repaire</text>
-  <circle class="node unknown" cx="880" cy="530" r="23"/><text class="label" x="760" y="585">6. Geôles</text>
-  <circle class="node danger" cx="1060" cy="285" r="25"/><text class="label" x="915" y="240">7. Atelier du Technomage</text>
-  <circle class="node danger" cx="1135" cy="480" r="27"/><text class="label" x="1040" y="545">8. Sape des Casernes</text>
-  <circle class="node safe" cx="1195" cy="665" r="23"/><text class="label" x="1075" y="720">9. Déversoir du Teufel</text>
-
-  <!-- key and operational notes -->
-  <g transform="translate(76 150)">
-    <rect width="350" height="215" rx="8" fill="#e4d8b9" fill-opacity=".92" stroke="#554b3a" stroke-width="3"/>
-    <text x="22" y="36" class="label" style="font-size:23px;stroke-width:5px">LÉGENDE DU MJ</text>
-    <line x1="25" y1="70" x2="105" y2="70" stroke="#171512" stroke-width="8" stroke-linecap="round"/><text x="125" y="77" class="key">Conduit praticable</text>
-    <line x1="25" y1="108" x2="105" y2="108" stroke="#6b1d18" stroke-width="8" stroke-dasharray="18 10" stroke-linecap="round"/><text x="125" y="115" class="key">Passage skaven secret</text>
-    <line x1="25" y1="146" x2="105" y2="146" stroke="#254e57" stroke-width="8" stroke-dasharray="5 10" stroke-linecap="round"/><text x="125" y="153" class="key">Conduit noyé</text>
-    <circle class="node danger" cx="48" cy="184" r="13"/><text x="78" y="191" class="key">Menace active</text>
-    <circle class="node safe" cx="220" cy="184" r="13"/><text x="250" y="191" class="key">Issue / refuge</text>
+  <!-- Municipal frame and schematic street grain -->
+  <path class="wall" d="M72 192C210 78 474 64 716 86C974 44 1274 70 1518 184L1500 438C1280 468 1090 466 815 474C540 466 318 466 88 438Z"/>
+  <path class="wall" d="M86 666C296 624 480 630 790 634C1058 632 1282 628 1506 672L1490 1017C1222 1050 1030 1026 796 1035C542 1022 332 1051 96 1008Z"/>
+  <g aria-hidden="true">
+    <path class="street" d="M160 160L250 450M330 110L410 458M530 88L566 462M736 82L734 470M944 82L914 466M1148 92L1082 462M1360 126L1256 460"/>
+    <path class="street" d="M88 248C390 190 650 230 838 190S1252 170 1510 246M82 346C344 294 638 342 846 302S1266 292 1514 350"/>
+    <path class="street" d="M154 680L220 1006M360 650L398 1034M580 640L592 1030M810 638L808 1032M1034 640L1012 1028M1250 650L1200 1026M1430 684L1368 1008"/>
+    <path class="street" d="M90 750C362 706 596 754 796 710S1248 704 1502 758M92 864C370 812 594 866 812 824S1244 816 1496 866M98 970C346 936 574 974 802 938S1260 936 1490 976"/>
   </g>
-  <g transform="translate(70 774)">
-    <text class="small"><tspan x="0" dy="0">Chaque liaison : 10–20 min • Navigation Moyenne (+20) si connue, Intermédiaire (+0) sinon.</tspan><tspan x="0" dy="27">Sur échec : temps, bruit ou rencontre — jamais un cul-de-sac sans choix.</tspan></text>
+
+  <text x="76" y="86" class="title">LES ÉGOUTS D’UBERSREIK</text>
+  <text x="78" y="116" class="note">Relevé composite des Attrapeurs de Rats — distances et niveaux approximatifs</text>
+  <text x="1180" y="86" text-anchor="middle" class="region">MAGNUSSEWERS — RIVE NORD</text>
+  <text x="800" y="1030" text-anchor="middle" class="region">SIGMARSEWERS — RIVE SUD</text>
+  <text x="210" y="176" class="district">DUNKELFEUCHT</text>
+  <text x="665" y="176" class="district">QUARTIER DES ARTISANS</text>
+  <text x="1220" y="176" class="district">MORGENSEITE</text>
+  <text x="245" y="1000" class="district">PRECINCT</text>
+  <text x="1040" y="1000" class="district">QUARTIER DES MARCHANDS</text>
+
+  <!-- Magnussewers: compact northern network occupied by the Skaven -->
+  <path class="major" d="M155 430C248 432 280 370 372 370S520 410 612 365"/>
+  <path class="major" d="M372 370C382 286 452 266 526 238"/>
+  <path class="major" d="M526 238C632 196 702 274 790 236"/>
+  <path class="major" d="M612 365C724 420 824 370 938 338"/>
+  <path class="major" d="M790 236C892 194 984 242 1086 200"/>
+  <path class="major" d="M938 338C1036 296 1130 310 1228 346"/>
+  <path class="hidden" d="M1086 200C1176 210 1232 258 1228 346"/>
+  <path class="hidden" d="M938 338C1000 414 1134 434 1290 410"/>
+  <path class="flooded" d="M612 365C650 452 784 470 906 430S1150 426 1290 410"/>
+  <path class="minor" d="M372 370C300 318 244 276 174 282M526 238C500 176 536 140 610 126M790 236C776 164 830 138 900 132M938 338C910 274 922 230 962 190M1228 346C1328 364 1390 404 1440 446"/>
+
+  <circle class="node safe" cx="155" cy="430" r="20"/>
+  <text class="label" x="86" y="402">M1. Déversoir du Teufel</text>
+  <circle class="node" cx="372" cy="370" r="20"/>
+  <text class="label-small" x="280" y="420">M2. Carrefour des os</text>
+  <circle class="node danger" cx="526" cy="238" r="20"/>
+  <text class="label-small" x="418" y="215">M3. Tanière du troll</text>
+  <circle class="node safe" cx="612" cy="365" r="20"/>
+  <text class="label-small" x="516" y="414">M4. Refuge effondré</text>
+  <circle class="node danger" cx="790" cy="236" r="21"/>
+  <text class="label-small" x="690" y="205">M5. Ancien repaire</text>
+  <circle class="node unknown" cx="938" cy="338" r="21"/>
+  <text class="label" x="892" y="386">M6. Geôles</text>
+  <circle class="node danger" cx="1086" cy="200" r="23"/>
+  <text class="label" x="972" y="166">M7. Atelier du Technomage</text>
+  <circle class="node danger" cx="1228" cy="346" r="24"/>
+  <text class="label" x="1176" y="397">M8. Sape des Casernes</text>
+  <circle class="node safe" cx="1290" cy="410" r="20"/>
+  <text class="label-small" x="1270" y="454">M9. Magnusschleuse</text>
+  <g transform="translate(1274 210)">
+    <text x="112" y="27" text-anchor="middle" class="key-strong" style="paint-order:stroke;stroke:#ded2b3;stroke-width:5px">CASERNES DU GUET</text>
+    <text x="112" y="51" text-anchor="middle" class="key" style="paint-order:stroke;stroke:#ded2b3;stroke-width:5px">cible de la sape skaven</text>
   </g>
-  <text x="1130" y="820" class="small">Carte non remise aux joueurs</text>
+
+  <!-- The Teufel is an operational boundary, not a sewer corridor -->
+  <path d="M44 486C278 454 524 480 792 466C1050 452 1300 472 1556 492L1556 626C1288 602 1050 622 792 610C520 598 286 626 44 596Z" fill="#435d63" opacity=".92"/>
+  <path d="M44 486C278 454 524 480 792 466C1050 452 1300 472 1556 492L1556 626C1288 602 1050 622 792 610C520 598 286 626 44 596Z" fill="url(#water)"/>
+  <text x="800" y="552" text-anchor="middle" style="font-family:Georgia,serif;font-size:31px;font-weight:700;letter-spacing:6px;fill:#e7dec9">LE TEUFEL</text>
+  <text x="800" y="580" text-anchor="middle" style="font-family:Arial,sans-serif;font-size:16px;letter-spacing:1px;fill:#d8e1dc">AUCUNE CONNEXION SOUTERRAINE DIRECTE CONNUE</text>
+  <path d="M790 470L790 612" stroke="#b7aa8b" stroke-width="22"/>
+  <path d="M790 470L790 612" stroke="#51493b" stroke-width="4" stroke-dasharray="12 8"/>
+  <text x="820" y="520" class="key" style="fill:#f1e7cd;paint-order:stroke;stroke:#435d63;stroke-width:4px">Pont d’Ubersreik</text>
+  <path class="transfer" d="M1290 430C1438 450 1482 494 1482 550S1440 646 1360 680"/>
+  <text x="1360" y="518" class="label-small" style="fill:#f4df9b;stroke:#435d63">Transfert par la rive</text>
+  <text x="1360" y="542" class="note" style="fill:#f3ead5;stroke:none">sortie, marche ou barque</text>
+
+  <!-- Sigmarsewers: broad southern municipal network -->
+  <path class="major" d="M132 700C288 676 420 690 548 704S736 716 832 684S1044 666 1174 690S1370 692 1480 670"/>
+  <path class="major" d="M132 700C160 782 236 812 338 822S534 830 650 800"/>
+  <path class="major" d="M338 822C408 904 530 930 652 898S814 846 832 684"/>
+  <path class="major" d="M548 704C520 768 558 812 650 800"/>
+  <path class="major" d="M650 800C750 782 858 808 956 782S1104 720 1174 690"/>
+  <path class="major" d="M956 782C1018 846 1124 874 1238 846S1404 742 1480 670"/>
+  <path class="major" d="M1174 690C1148 754 1166 808 1238 846"/>
+  <path class="minor" d="M214 690C198 748 202 788 236 812M338 822L330 956M430 696C424 754 446 796 488 820M548 704L550 930M650 800L682 986M742 704C728 780 746 834 790 872M832 684L840 968M956 782L950 982M1060 688C1034 752 1040 816 1072 856M1174 690L1160 968M1238 846L1272 986M1340 686C1330 754 1354 806 1400 838"/>
+  <path class="flooded" d="M832 684C868 748 910 770 956 782"/>
+
+  <circle class="manhole" cx="214" cy="690" r="14"/><circle class="manhole" cx="338" cy="822" r="14"/>
+  <circle class="manhole" cx="548" cy="704" r="14"/><circle class="manhole" cx="650" cy="800" r="14"/>
+  <circle class="manhole" cx="832" cy="684" r="14"/><circle class="manhole" cx="956" cy="782" r="14"/>
+  <circle class="manhole" cx="1174" cy="690" r="14"/><circle class="manhole" cx="1238" cy="846" r="14"/>
+  <circle class="node safe" cx="1480" cy="670" r="20"/>
+  <text class="label-small" x="1330" y="650">S1. Sigmarschleuse</text>
+  <circle class="node" cx="832" cy="684" r="20"/>
+  <text class="label-small" x="724" y="656">S2. Collecteur du Pont</text>
+  <circle class="node" cx="956" cy="782" r="20"/>
+  <text class="label-small" x="790" y="832">S3. Carrefour du Grossweg</text>
+  <path class="major" d="M956 782C1020 802 1070 826 1110 866"/>
+  <circle class="node safe" cx="1110" cy="866" r="25"/>
+  <text class="label" x="1008" y="918">S4. Porte de la Guilde</text>
+  <path d="M1110 840L1110 770" stroke="#315447" stroke-width="7" stroke-dasharray="8 8"/>
+  <g transform="translate(1022 706)">
+    <text x="132" y="26" text-anchor="middle" class="key-strong" style="fill:#315447;paint-order:stroke;stroke:#ded2b3;stroke-width:5px">GUILDE DES ATTRAPEURS</text>
+    <text x="132" y="49" text-anchor="middle" class="key" style="paint-order:stroke;stroke:#ded2b3;stroke-width:5px">Grossweg — Quartier des Marchands</text>
+  </g>
+
+  <!-- Key: civic ledger rather than a fantasy ornament -->
+  <g transform="translate(74 694)">
+    <rect width="310" height="286" rx="7" fill="#e7dec9" fill-opacity=".95" stroke="#51493b" stroke-width="3"/>
+    <text x="20" y="34" class="region" style="font-size:20px;letter-spacing:1px">LÉGENDE DU MJ</text>
+    <line x1="24" y1="68" x2="96" y2="68" stroke="#171512" stroke-width="9" stroke-linecap="round"/><text x="116" y="74" class="key">Collecteur majeur</text>
+    <line x1="24" y1="103" x2="96" y2="103" stroke="#3f3a32" stroke-width="5" stroke-linecap="round"/><text x="116" y="109" class="key">Conduit secondaire</text>
+    <line x1="24" y1="138" x2="96" y2="138" stroke="#7c211b" stroke-width="8" stroke-dasharray="18 10" stroke-linecap="round"/><text x="116" y="144" class="key">Passage skaven</text>
+    <line x1="24" y1="173" x2="96" y2="173" stroke="#315d66" stroke-width="8" stroke-dasharray="5 10" stroke-linecap="round"/><text x="116" y="179" class="key">Conduit noyé</text>
+    <circle class="manhole" cx="48" cy="210" r="12"/><text x="74" y="216" class="key">Regard / bouche d’égout</text>
+    <circle class="node danger" cx="48" cy="250" r="13"/><text x="74" y="256" class="key">Menace active</text>
+    <circle class="node safe" cx="216" cy="250" r="13"/><text x="242" y="256" class="key">Issue sûre</text>
+  </g>
+
+  <text x="418" y="1061" class="note">Liaison majeure : 10–20 min • Navigation Moyenne (+20) si connue, Intermédiaire (+0) sinon.</text>
+  <text x="1518" y="1061" text-anchor="end" class="note">Réservé au MJ</text>
 </svg>
