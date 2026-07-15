@@ -317,7 +317,7 @@ c.push(bul('Musique', 'The Warrens ; The Vagabond ; The Hamlet ; The Tower of Mi
 
 c.push(pageBreak());
 c.push(h1('ANNEXE — GUNNAR POUR LE JOUEUR INVITÉ'));
-c.push(body('Gunnar Brederman est un Slayer nain de rang 3. Il a vaincu l’ours du Tin Spur sans trouver sa mort et porte encore les traces du combat. Il respecte Thucydion malgré son elfité, est l’ami improbable de l’Ogre Ekkehard et a promis de rejoindre gratuitement l’expédition des PJs. Il arrive trop tard pour le premier sauvetage, mais considère sa promesse toujours valable.'));
+c.push(body('Gunnar Brederson est un Slayer nain de rang 3. Il a vaincu l’ours du Tin Spur sans trouver sa mort et porte encore les traces du combat. Il respecte Thucydion malgré son elfité, est l’ami improbable de l’Ogre Ekkehard et a promis de rejoindre gratuitement l’expédition des PJs. Il arrive trop tard pour le premier sauvetage, mais considère sa promesse toujours valable.'));
 c.push(h2('Ce que Gunnar sait'));
 c.push(bul('Les PJs', 'Ils ont combattu les Bâtards du Reik et survécu. Thucydion a du courage mais doit travailler sa garde gauche.'));
 c.push(bul('La mission', 'Des créatures organisées tiennent les Magnussewers. Wahlund et ses hommes viennent d’en être sauvés. Une prochaine descente doit être préparée.'));
