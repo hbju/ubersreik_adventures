@@ -1,0 +1,8 @@
+Last session was really nice ! 
+
+We began with the escape from the sewers. Ludwig stayed behind to getthe head of the Rat Ogre, while the others began to flee. It was a bit too nice of me : he actually had a few bad rolls (for the Athletics one to escape), and I should have punished im accordingly, especially since he was the one who wanted to go back to get the head. But I let it slide, and he managed to escape with the rest of the party. Only Thucydion, who tried to go back and also ddid have a bad Athletics roll, got his shield caught in a sewer pipe and had to leave it behind. All in all, they all managed to escape pretty much unscathed. 
+
+After that, they left the Rat Catchers to go back to their Guild and went back to the Inn to get some rest. Silas had a really bad sleep after not being able to tend properly to his wounds, while the others slept well (none of the PCs contracted the Ratte Fever). They regrouped in the morning at the Red Moon, where they met with Gunnar. Silas and Ludwig quickly went to the Physician's Guild to get Silas' gut wound treated. The scene was not played as I had hoped, mainly because I warned him that the physicians don't like barber surgeons, and he was a bit too cautious. Thus, he was not able to speak properly with Theodosia, and the scene we planned didn't really happen. He just talked a bit with her and went on his way after she patched him up. We can still keep her for later in case we need. In the end, this was a lengthy scene that did not really add much to the story. I should have also played Theodosia a bit more talkative, surprised of such wounds inflicted upon Silas and how he could still be standing. 
+
+After that, they went to the Crooked Hammer to give Silvi the Rat Ogre's head. 
+
