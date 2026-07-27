@@ -27,7 +27,7 @@ When the GM invokes a skill, follow its workflow exactly. The skills enforce the
 - Respect player agency: consequences for absence are a core design principle ("Rough Night at the Three Feathers" format — plots resolve with or without PCs, absence has real costs, never soften this).
 - The GM plays with 5 players, sessions run ~18h–22h30. Guest players sometimes join and are given NPCs to play.
 - Tone: grimdark but human. Violence has weight. NPCs are people. Otto's cruelty is described by implication (closed doors, averted eyes), never graphically.
-- The GM's table language is French. **Read-aloud text, dialogue, and player-facing props are written in French. GM-facing structural text can be in English or French** (recent guides have been fully French — continue that).
+- The GM's table language is English. **Read-aloud text, dialogue, and player-facing props are written in English. GM-facing structural text can be in English** (recent guides have been fully French — stop that and write them out in English, the GM will translate them by himself).
 
 ## Document conventions (GM guides)
 

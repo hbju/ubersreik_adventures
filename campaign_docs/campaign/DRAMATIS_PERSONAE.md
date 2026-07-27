@@ -1,11 +1,11 @@
 # DRAMATIS PERSONAE — Ubersreik Campaign
-Status current as of end of Magnustag (Konistag 10th). ✝ = dead. Original catalog in the master summary doc; this file supersedes it where they conflict.
+Status current as of end of Session 15 (Wellentag 13th morning). ✝ = dead. Original catalog in the master summary doc; this file supersedes it where they conflict.
 
 ## THE MASKED BANDITS (K&H)
 - **Kürbis** — huge masked man. Truly: Gerhard, Ludendorf Carnival survivor. Scouted Pfeffer/Barracks during Magnustag.
 - **Honighäschen** — knife-wielding masked woman. Truly: Lotte, the other survivor. Target: Captain Pfeffer, Sigmartag 18th.
 - **Sgt. Rudi Klumpenklug** — corrupt Watch sergeant, blackmailed inside man. Now tailed by Cpl. Dietrich Wendt on Pfeffer's quiet order. Nervous, deteriorating.
-- **Günther Burkharrt** — rat catcher, unwitting supply runner (grain from Werner/the Baron). Genuinely likes the PCs; asked their help for Wahlund. Doesn't know about the Skaven.
+- **Günther Burkharrt** — rat catcher, unwitting supply runner (grain from Werner/the Baron to the Skavens). Genuinely likes the PCs; asked their help for Wahlund. Doesn't know about the Skaven. **Confronted by the PCs about the traitor — denied all knowledge, insists he's just Werner's blind courier. Left in Wahlund's custody; his fate is Wahlund's to decide (unresolved).**
 
 ## SKAVEN
 - **Warlock Engineer** — infusing stolen fireworks with warpstone; building the device; lair seen by PCs.
@@ -19,15 +19,15 @@ Status current as of end of Magnustag (Konistag 10th). ✝ = dead. Original cata
 - **Elsa 'The Stitch' Gruber** — lieutenant; runs Ludwig (branded him); wants intel from the Poetry Circle.
 - **Rolf Vane** — Silas's brother; Lowhaven mole inside the gang. Warned the Lowhavens about the Cage (tipped by Kaspar innocently). Went down trying to shield Bella. Mole rumours now brewing in the Dunkelfeucht. Silas suspects nothing YET.
 
-## THE LOWHAVEN CLAN
-- **Mercy Lowhaven** — matriarch, now in mourning and fury. Bounty incoming on Bella's killer (identity unknown to her — it's Kaspar).
+## THE LOWHAVEN CLAN (mostly Halflings — "the Halflings" is underworld shorthand for the clan)
+- **Mercy Lowhaven** — matriarch, now in mourning and fury. **Has identified Kaspar as Bella's killer and put a 20 GC bounty on his head — Kaspar doesn't know yet.**
 - **Bella Lowhaven ✝** — killed by Kaspar at the Cage (throat slit after a solo duel).
 - **Martin Violetta** — Cage manager; beaten, alive, broken.
 - **Helmut Gris** — butcher, defector from the Baron.
 - Hog Pit warehouse crew — 4 guards holding **Felix Scite** for the illegal pit-fight ring (now existential for the clan).
 
 ## THE CROSSES (RANALDANS)
-- **Silvi Kreutzhame** — High Priestess; allied-ish with PCs; pretty much their patron; financing the sewer expedition; wants CONCRETE PROOF of the Skaven; suspicious of the Circle of Unmarred Flesh; failed to recover Felix; organize the Tin Spur fights with the Esteemed Company.
+- **Silvi Kreutzhame** — High Priestess; allied-ish with PCs; pretty much their patron; financing the sewer expedition; **now convinced the Skaven are real (Gunnar's dwarven testimony + the Rat Ogre's head), seeking dwarven confirmation over the coming days; GM intends her digging to draw serious pushback from powerful people trying to keep the threat covered up (not yet started)**; suspicious of the Circle of Unmarred Flesh; failed to recover Felix; organize the Tin Spur fights with the Esteemed Company.
 - **Hieronymus** — Halfling gambler-priest; Ludwig's nemesis (with Vespère ruined him). Dormant.
 - **Old Hamm** — Crooked Hammer bartender, ex-soldier.
 
@@ -42,7 +42,7 @@ Status current as of end of Magnustag (Konistag 10th). ✝ = dead. Original cata
 ## THE WATCH
 - **Capt. Andrea Pfeffer** — K&H's target. Dismissed the PCs (jailed L&S briefly) but assigned Wendt to Rudi. Publicly criticized post-Magnustag.
 - **Cpl. Dietrich Wendt** — reliable, discreet; building the Rudi file.
-- **Cpl. Tylo Vielfrass** — charismatic, brave in public; violent, alcoholic, cruel underneath; leads the Circle of Unmarred Flesh; known to the Baron's thugs as a gleeful thug-beater. (Future: murder victim, A Heart of Glass.)
+- **Cpl. Tylo Vielfrass** — charismatic, brave in public; violent, alcoholic, cruel underneath; leads the Circle of Unmarred Flesh; known to the Baron's thugs as a gleeful thug-beater. (Future: murder victim, A Heart of Glass.) **Struck up friendly conversation with Thucydion and Pieter at the Tin Spur during the downtime, extending a standing invite to the Hog Pit fights, including Wellentag 13th's bout — first real contact between either PC and the Circle.**
 - **Sgt. Orban Geldrecht** — Vielfrass's shadow; secretly in love with him (Vielfrass too self-absorbed to notice).
 
 ## ZEALOTS
@@ -56,7 +56,7 @@ Status current as of end of Magnustag (Konistag 10th). ✝ = dead. Original cata
 - Irma Brantl — naive priestess, unwitting supplier.
 
 ## MAGIC & THE WIZARD'S WAY
-- **Christoph Engel** — Grey Wizard; casually annihilated the zealot assault (using the spell Pit of Tarnus) without showing himself; agreed (via Cordelia) to meet Thucydion during downtime through the shop-to-tower tunnel. Cares about the city's undercurrents; will care INTENSELY about warpstone.
+- **Christoph Engel** — Grey Wizard; casually annihilated the zealot assault (using the spell Pit of Tarnus) without showing himself; **met with Thucydion (Session 15) — told him about the Skaven device/bomb, worried by it but limited in what he can offer directly (the zealot skirmish drew unwanted attention to him); promised to think of something before the party's next sewer expedition (GM to plan what).** Cares about the city's undercurrents; will care INTENSELY about warpstone.
 - **Cordelia** — apothecary, ex-Jade apprentice, Engel's protégée; facilitated the meeting; rattled by the assault.
 - **Alexander** — rescued apprentice, at Cordelia's.
 - **Heske Glazer** — Karstadt agent; sheltered by Karstadts via Specht since Bezahltag.
@@ -65,7 +65,7 @@ Status current as of end of Magnustag (Konistag 10th). ✝ = dead. Original cata
 - **Wilhelm Shütteln** — Esteemed Company director; contracted Pieter & Thucydion (3 bouts; Eisfange on the 16th; 2 GC advance).
 - **Reikhardt Gestaltenstark** — champion; Child of Ulric (werewolf); locket "With love, your mother, Magdelena"; unapproachable; knows Kretschmer suspects him.
 - **Eisfange** — the enormous white wolfhound, arena star; demolished three brutes on Bezahltag 9th; Pieter's cursed challenge targets him (bout scheduled the 16th). In reality, is Reikhardt Gestaltenstark in wolf form.
-- **Gunnar Brederson** — Dwarf Slayer, rank 3 / Giant Slayer; formerly a Karak Ranger and cartographer near Karak Azgaraz. Took the Slayer Oath after breaking his sworn watch at the Passage of Three Chains and fleeing the Stone Troll Mâche-Granit to save his own life, leaving two returning companions to die; he confessed but will not discuss the shame, and persistent questions risk his wrath. Later hunted down and killed Mâche-Granit, surviving the collapsing mine bridge, which raised him beyond Troll Slayer. At the Tin Spur he killed the bear but was denied his doom; shared its best haunch with Ekkehard and became the Ogre's unlikely friend. Grim, terse, unexpectedly patient with animals; cordial with Thucydion despite elf-ness; JOINED the sewer expedition unpaid (meeting set for the 11th) because a promise is a sacred debt and a worthy danger must be faced with preparation.
+- **Gunnar Brederson** — Dwarf Slayer, rank 3 / Giant Slayer; formerly a Karak Ranger and cartographer near Karak Azgaraz. Took the Slayer Oath after breaking his sworn watch at the Passage of Three Chains and fleeing the Stone Troll Mâche-Granit to save his own life, leaving two returning companions to die; he confessed but will not discuss the shame, and persistent questions risk his wrath. Later hunted down and killed Mâche-Granit, surviving the collapsing mine bridge, which raised him beyond Troll Slayer. At the Tin Spur he killed the bear but was denied his doom; shared its best haunch with Ekkehard and became the Ogre's unlikely friend. Grim, terse, unexpectedly patient with animals; cordial with Thucydion despite elf-ness; JOINED the sewer expedition unpaid; kept the rendezvous at the Red Moon on the 11th, met the rest of the party, and vouched for the Skaven's existence to Silvi (his dwarven word convinced her) — because a promise is a sacred debt and a worthy danger must be faced with preparation.
 - **Ekkehard** — resident OGRE (changed from mutant), jovial-terrifying, Gunnar's friend, food = loyalty.
 - **Felix Scite** — ex-champion; drugged & kidnapped by Lowhavens; captive at the Hog Pit warehouse; Silvi's recovery attempt will fail; rescue = open PC hook.
 - **Klaus 'Dents-de-Loup' Wenner** — cocky young Averlander; beat Thucydion in sparring, celebrated with the watchmen.
@@ -74,18 +74,18 @@ Status current as of end of Magnustag (Konistag 10th). ✝ = dead. Original cata
 - **Denvater Holst Kretschmer** — Ulrican High Priest; gave the PCs the Gestaltenstark quest (prove/drive him off WITHOUT exposing the curse); reward: rare skills/talents, possible Cult initiation; awaiting a report.
 
 ## RAT CATCHERS GUILD / STROMFELS CELL
-- **Guildmaster Wahlund** — High Priest of Stromfels (proscribed); hunting Grey Seer Rasknitt (destroyed his cult); captured, tortured, RESCUED by PCs; owes them everything; debrief pending (reveal depth = GM decision). Hidden shrine by the Guild's sewergate (wave + shark-fin symbol, also in his tattoos).
+- **Guildmaster Wahlund** — High Priest of Stromfels (proscribed); hunting Grey Seer Rasknitt (destroyed his cult); captured, tortured, RESCUED by PCs; owes them everything. **Has now revealed himself and his Rasknitt history to the PCs — but told them a cover story that he's from a cult of Manann in the North, keeping his true (proscribed) Stromfels faith secret. The PCs currently believe "Manann."** Hidden shrine by the Guild's sewergate (wave + shark-fin symbol, also in his tattoos). **Now holding Günther — his call on what to do with him (unresolved).** **He and his men have agreed to join the PCs for the sewer expedition against the Skaven, repaying the rescue; if the PCs don't show at the planned rendezvous, he'll attempt it himself with Melina and Gunnar.**
 - **Anders de Geer / Mårten Stormdal** — rescued, broken arm / unconscious.
 - **Rickard Blomberg** — escaped the ambush, guided the rescue, smashed by the Rat Ogre (alive).
-- **Melina Heilbronn** — veteran Sewer Jack; direct, formidable; fought in the rescue; respects the PCs now.
+- **Melina Heilbronn** — veteran Sewer Jack; direct, formidable; fought in the rescue; respects the PCs now. **Agreed to join Wahlund's group in the sewer expedition alongside the PCs.**
 - Reineke Rattenfanger, Fritz Vogelman, Thormo Hakenbein — local members.
 
 ## OTHER
 - **Franz Lohner** — Red Moon owner; PCs' patron; HIS MISSION lands Aubentag 14th ("old enemies" hook, content TBD).
 - **Ottokar Stiegler** — Herald publisher; Hellin Karstadt's secret creature; interviewed the fighters; witnessed Magnustag; Herald #2 due Wellentag 13th; possible Karstadt introduction for the PCs.
 - **Johanna Stiegler** — Kaspar's childhood sweetheart; father entangled with the Seven Veils; grateful to Pieter; using Kuno for Resistance connections to help her father.
-- **Friedrich von Happe** — Seven Veils astrologer; Order of the Unblinking Eye (Slaanesh); charming, patient; hooks in Johanna's father.
-- **Doktor Theodosia Grat** — TO INTRODUCE: Physicians' Guild; brilliant Altdorf graduate, Tilean Fellowship; secret Nurgle worshipper (shrine in office cupboard); injects patients with Bronze Fever "to observe"; designed as Silas's alluring mentor/love-interest trap.
+- **Friedrich von Happe** — Seven Veils astrologer; Order of the Unblinking Eye (Slaanesh); charming, patient; hooks in Johanna's father. **Invited Ludwig to a Festag-night party looking for Manticore lore; Ludwig failed to properly impress the info-holder (Charm), may have received bogus/planted intel (a chimera description) and/or a lent book — likely probing whether Ludwig is Unblinking Eye recruit material; Ludwig has no idea.**
+- **Doktor Theodosia Grat** — INTRODUCED (Session 15): patched Silas's gut wound at the Physicians' Guild, but the deeper scene didn't land — Silas stayed too cautious/professional, no rapport built, no injection or book lent yet. Shelved for a later opening; next time, play her more talkative — privately fascinated/alarmed by the severity of what he's survived, curious how he's still standing. Physicians' Guild; brilliant Altdorf graduate, Tilean Fellowship; secret Nurgle worshipper (shrine in office cupboard); injects patients with Bronze Fever "to observe"; designed as Silas's alluring mentor/love-interest trap.
 - **Giordano Impiegato** — Tilean lawyer, Bastards of the Reik; KNOWS Skaven (Miragliano); offers lore + the Bastards' swords for 20 GC (Crosses to negotiate).
 - **Leif Vilsson** — grudge settled, broken ribs, stoic respect. **Emilia Lochland** — cursed Pieter, satisfied, gone. **Gaenefys Feyhand** — bow recovered; cool professional respect for Thucydion.
 - **Emmanuelle Nacht** — the Emperor's grey eminence, true ambassador (few know). **Jendrick von Dabernick** — official emissary, criticized post-Magnustag, writing to Altdorf.
