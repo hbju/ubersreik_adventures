@@ -28,17 +28,16 @@ the way he listens to everything: pleased, careful, giving nothing away for free
 This morning, Wellentag 13th, crossing out of the Dunkelfeucht toward the Red Moon, he caught up with
 you alone — that easy, unhurried way he has that always feels accidental and never is.
 
-He wants Felix Scite dead. Quietly, tonight if you can manage it. The Lowhavens have him drugged and
-fighting in some warehouse out by the Hog Pens, rebuilding themselves on his name, and Otto would very
-much like that name to stop being useful to them before it is. He didn't order you to do it. He never
-orders you. He just made sure you understood he'd notice either way.
+He wants Felix Scite, former champion of the Tin Spur, dead. Quietly, tonight if you can manage it. 
+The Lowhavens have him drugged and fighting in some warehouse out by the Hog Pens, rebuilding themselves 
+on his name, and Otto would very much like that name to stop being useful to them before it is. 
 
 **What you picked up around the gang, these two days:**
-- *"Mercy's not paying for a head yet. She's paying for a name — whoever opened Bella's throat at the
+- *"Mercy's not paying for a head yet. She wants a name - whoever opened Bella's throat at the
   Cage. A crown for a witness, five for a certainty. Ask around in a week and see if the price hasn't
   changed."*
 - *"Otto wasn't the only one caught flat-footed before the Cage went down. Someone tipped the
-  Lowhavens close enough to matter. Nobody's betting on his name yet — just on how many teeth he's
+  Lowhavens close enough to matter. Nobody's betting on his name yet - just on how many teeth he's
   got left once somebody works it out."*
 - *"There's a real draw fighting out past the pens these nights — somebody good, kept quiet, kept
   drugged. Whatever's left of Bella's crew, they're not going down without one more show."*
