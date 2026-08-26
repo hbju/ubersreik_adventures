@@ -89,6 +89,14 @@ way some men talk about wine. Before you quite noticed how, he'd invited you to 
 kind the Herald never hears about," out past the Hog Pens. Tonight, if you're free, he said. He made
 it sound like a favor.
 
+La première journée n'a rien donné, tout comme pour Kaspar : Ingrid est tout simplement introuvable aux endroits où ses connaissances auraient cherché.
+
+Le lendemain, vous avez accepté une autre mission : un petit fournisseur d'articles maritimes nerveux, nommé **Wenzel Ottenreich**, vous a accosté à l'auberge de la Lune Rouge, inquiet au sujet d'un acte de propriété. Son père, un vieillard obstiné et méfiant, n'avait jamais fait confiance aux notaires ; il s'était fait enterrer avec l'acte original de l'entrepôt familial plutôt que de le faire enregistrer officiellement. Aujourd'hui, quelqu'un — Wenzel ignore qui, si ce n'est que cette personne est patiente et que son offre diminue sans cesse — fait pression pour imposer une vente avant qu'il ne puisse produire le document. Il vous a versé le peu d'argent qu'il possédait et vous a supplié de récupérer l'acte avant la fin de la semaine.
+
+Vous vous êtes rendu au Jardin de Morr à la tombée de la nuit. Pour atteindre la concession familiale, il a fallu passer outre la vigilance d'un gardien qui prenait son travail bien plus au sérieux que ne le justifiait son salaire, et éviter un autre individu déjà accroupi près de la tombe, une pelle à la main. Vous n'avez jamais vu clairement son visage ; il a pris la fuite plutôt que de discuter, vous laissant avec des articulations endolories et une manche déchirée pour toute récompense. L'acte se trouvait exactement là où la paranoïa du vieil homme l'avait placé. Vous y avez aussi découvert de superbes brassards en plaques, enterrés avec lui pour des raisons qu'aucun survivant ne peut expliquer ; Wenzel vous a dit de les garder, car seul le document l'intéressait.
+
+Alors que vous attendiez l'obscurité totale pour agir, vous avez aperçu une silhouette qui ne vous quitte plus l'esprit depuis : une femme encapuchonnée, agenouillée devant une tombe plus récente — parmi les pierres tombales les plus récentes — et déposant un petit objet sur le tertre. Avant même que vous ne puissiez vous approcher suffisamment pour en avoir le cœur net, elle vous a entendu ou senti, et a disparu dans la brume en direction de la route de Morgenseite. Vous n'avez pas vu son visage. Ce n'était pas nécessaire. Sa façon de se mouvoir va vous hanter encore un certain temps. Ce soir-là, alors que vous passiez au Tin Spur pour consulter le programme des combats avant de vous rendre à Eisfange, un caporal du Guet — le caporal Vielfrass, avec qui vous n'aviez jamais échangé plus qu'un signe de tête — s'est assis à vos côtés comme un vieil ami et s'est mis à parler de combats avec la passion que certains réservent au vin. Sans même que vous vous en rendiez compte, il vous a convié à « un vrai combat, du genre de ceux dont le *Herald* n'entend jamais parler », du côté des enclos à cochons. Ce soir, si vous étiez libre. Il présentait la chose comme une faveur.
+
 **What you picked up along the way:**
 - *"There's a plot in Morr's Garden the diggers won't touch twice. Fill it in the morning, find it
   hollow again by dusk. The man underneath used to collect taxes, so even the ground wants nothing
@@ -203,20 +211,20 @@ a doctor's private curiosity in her eyes — search "Victorian apothecary study 
 
 ### Player-facing note
 
-Two quiet days, by your standards — which is its own kind of unease.
+  Two quiet days, by your standards — which is its own kind of unease.
 
-The Physicians' Guild finally looked at the gut wound properly. Doktor Theodosia Grat did the work
-herself — quick, precise, better hands than you're used to trusting near a wound that isn't your own.
-She asked more questions than the job required. You answered fewer than she asked. She didn't push,
-which you noticed, and which you're still deciding how to feel about.
+  The Physicians' Guild finally looked at the gut wound properly. Doktor Theodosia Grat did the work
+  herself — quick, precise, better hands than you're used to trusting near a wound that isn't your own.
+  She asked more questions than the job required. You answered fewer than she asked. She didn't push,
+  which you noticed, and which you're still deciding how to feel about.
 
-The rest of the time went to Cordelia, picking up what scraps of the apothecary trade she had patience
-to teach between customers. It wasn't much — an afternoon, maybe two — but you left knowing three new
-names for things that can kill a man slowly, which feels like exactly the kind of education you
-should be collecting right now.
+  The rest of the time went to Cordelia, picking up what scraps of the apothecary trade she had patience
+  to teach between customers. It wasn't much — an afternoon, maybe two — but you left knowing three new
+  names for things that can kill a man slowly, which feels like exactly the kind of education you
+  should be collecting right now.
 
-You haven't seen Rolf since the Cage. When you asked after him at a tavern the gang frequents, the
-answer came half a second too slow, and nobody quite met your eyes.
+  You haven't seen Rolf since the Cage. When you asked after him at a tavern the gang frequents, the
+  answer came half a second too slow, and nobody quite met your eyes.
 
 **What you picked up:**
 - *"The Physicians' Guild is offering a shilling for the name of any barber-surgeon stitching wounds

@@ -1,5 +1,5 @@
 # DRAMATIS PERSONAE — Ubersreik Campaign
-Status current as of end of Session 15 (Wellentag 13th morning). ✝ = dead. Original catalog in the master summary doc; this file supersedes it where they conflict.
+Status current as of end of Session 16 (Wellentag 13th late afternoon). ✝ = dead. Original catalog in the master summary doc; this file supersedes it where they conflict.
 
 ## THE MASKED BANDITS (K&H)
 - **Kürbis** — huge masked man. Truly: Gerhard, Ludendorf Carnival survivor. Scouted Pfeffer/Barracks during Magnustag.
@@ -27,7 +27,7 @@ Status current as of end of Session 15 (Wellentag 13th morning). ✝ = dead. Ori
 - Hog Pit warehouse crew — 4 guards holding **Felix Scite** for the illegal pit-fight ring (now existential for the clan).
 
 ## THE CROSSES (RANALDANS)
-- **Silvi Kreutzhame** — High Priestess; allied-ish with PCs; pretty much their patron; financing the sewer expedition; **now convinced the Skaven are real (Gunnar's dwarven testimony + the Rat Ogre's head), seeking dwarven confirmation over the coming days; GM intends her digging to draw serious pushback from powerful people trying to keep the threat covered up (not yet started)**; suspicious of the Circle of Unmarred Flesh; failed to recover Felix; organize the Tin Spur fights with the Esteemed Company.
+- **Silvi Kreutzhame** — High Priestess; allied-ish with PCs; their patron. Believes the Skaven are real but **the pushback has landed**: Temple (blasphemous hysteria), Council (squeezing via Jendrick), dwarven contacts refuse to corroborate (the dwarves of **Khazalgirt** fight Skaven in their own tunnel-hold but won't spend themselves convincing Humans). Can't act openly. Offered PCs 20 GC to rescue Felix Scite from the Hog Pit — indirect sewer-expedition funding. **Ludwig accused her of cowardice and was ejected (heated, no lasting damage; may give her pause).** Failed to recover Felix herself. Suspicious of the Circle of Unmarred Flesh. Organize the Tin Spur fights with the Esteemed Company.
 - **Hieronymus** — Halfling gambler-priest; Ludwig's nemesis (with Vespère ruined him). Dormant.
 - **Old Hamm** — Crooked Hammer bartender, ex-soldier.
 
@@ -81,7 +81,8 @@ Status current as of end of Session 15 (Wellentag 13th morning). ✝ = dead. Ori
 - Reineke Rattenfanger, Fritz Vogelman, Thormo Hakenbein — local members.
 
 ## OTHER
-- **Franz Lohner** — Red Moon owner; PCs' patron; HIS MISSION lands Aubentag 14th ("old enemies" hook, content TBD).
+- **Franz Lohner** — Red Moon owner; PCs' patron; former Grudge-Bearers mercenary. **Proposed "Red Moon Burning"** (Session 16): lure his old enemies to the inn on Aubentag 14th (his birthday), blow it up to fake his death. Needs the PCs for gunpowder, execution, and his escape route. Offers 10 GC + the sword *Saif Al-Janub* (earned defending Sudenburg, 2498 IC). Close to Grodni Surehammer — arrived to vouch for the PCs after the Dawihafen arrest. Enemies: see LOHNER'S ENEMIES below.
+- **Luigi & Salvatore** — gunpowder merchants; stocks rationed since the K&H/Skaven theft; will sell at inflated prices. The PCs visited them looking for gunpowder (Session 16).
 - **Ottokar Stiegler** — Herald publisher; Hellin Karstadt's secret creature; interviewed the fighters; witnessed Magnustag; Herald #2 due Wellentag 13th; possible Karstadt introduction for the PCs.
 - **Johanna Stiegler** — Kaspar's childhood sweetheart; father entangled with the Seven Veils; grateful to Pieter; using Kuno for Resistance connections to help her father.
 - **Friedrich von Happe** — Seven Veils astrologer; Order of the Unblinking Eye (Slaanesh); charming, patient; hooks in Johanna's father. **Invited Ludwig to a Festag-night party looking for Manticore lore; Ludwig failed to properly impress the info-holder (Charm), may have received bogus/planted intel (a chimera description) and/or a lent book — likely probing whether Ludwig is Unblinking Eye recruit material; Ludwig has no idea.**
@@ -91,5 +92,12 @@ Status current as of end of Session 15 (Wellentag 13th morning). ✝ = dead. Ori
 - **Emmanuelle Nacht** — the Emperor's grey eminence, true ambassador (few know). **Jendrick von Dabernick** — official emissary, criticized post-Magnustag, writing to Altdorf.
 - **Ernst Maler** — Burgermeister; freiburg speech; ally-of-convenience to no one.
 - Nobles seen at the Tin Spur lodges: Hellin Karstadt + Josef Specht; Siegfried von Saponatheim; Heinrich von Bruner; Lady Kisaiya von Bruner; Ludmilla (von Bruner) ⚭ Rickard (von Aschaffenberg) — newlyweds across a feud; Duchess Eleanor von Aschaffenberg; Erich von Holzenauer; cult heads Emming (Sigmar), Gutenberg (Verena), Altenblum (Shallya) + Célestine Hoch, Kretschmer (Ulric) + Jacob Möhren.
+- **Grodni Surehammer** — Axe & Hammer tavern owner; de facto leader of the Dawihafen; close to Franz Lohner; stern, no-nonsense. Arrested Ludwig, Silas, and Pieter after Ludwig's lies about the gunpowder. Offered gunpowder in exchange for a major future favor (undefined, TBD — probably next campaign).
 - **Stinkstaff & the Gong-Tongue goblins** — resurfacing in the Morgenseite (post-Magnustag rumours; Ottokar will spin it against nobles/Watch).
 - **Thulgrim** (dwarf thief, dealt with), **Vespère** (Ludwig's ex, Kat House), **Dorgun Silverhand**, **Ulliafor Sunbright** (identity forger), **Wendt** (see Watch).
+
+## LOHNER'S ENEMIES (Red Moon Burning — Aubentag 14th)
+- **Thikad Urgolsson** — Dwarf Slayer; swore the oath after losing his family heirloom — the runeblade *Grudge-Bearer* — in a game of Ranald's Fingers he believes Franz rigged.
+- **Shrinq Shaderipper** — Skaven assassin sent by the Augurs to eliminate Franz, who was a constant thorn during the Grudge-Bearers' Tilean campaigns.
+- **Carmello's crew** — band of seven working for Marchesa Generosa Caramanici of the Border Princes. Lohner introduced the Grudge-Bearers to Lord Carl Svennson (Caramanici's long-time rival). **One member already spotted eavesdropping on the PCs at Luigi & Salvatore's — noted their presence, may follow them.**
+- **Tah-Ra Mentuhr** — Nehekharan wraith awakened by the Grudge-Bearers during their Nehekharan campaign. Seeks to possess Franz in order to infiltrate the mercenary group and assassinate their commander. As a magical entity, **can only be harmed by magical attacks**.

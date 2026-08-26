@@ -20,7 +20,7 @@ When the GM invokes a skill, follow its workflow exactly. The skills enforce the
 4. `campaign_docs/campaign/HANDOFF.md` contains the open questions from the previous planning conversation — resolve these first.
 5. **After each real-life session**, the GM will give a recap. Update `CAMPAIGN_STATE.md` and `DRAMATIS_PERSONAE.md` to reflect what happened. Ask clarifying questions before writing anything — this is the established workflow and the GM values it (typically 3–8 targeted questions, then wait for answers before producing documents).
 
-## Collaboration style (established over 13 sessions)
+## Collaboration style (established over 10+ sessions)
 
 - Ask clarifying questions BEFORE writing guides. Never assume; the GM has strong opinions and enjoys being asked.
 - Propose ideas and alternatives, flag forgotten threads (the GM appreciates being reminded of dangling plot hooks, scheduled events, and consequences).
