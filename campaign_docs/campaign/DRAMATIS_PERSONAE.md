@@ -81,7 +81,7 @@ Status current as of end of Session 16 (Wellentag 13th late afternoon). ✝ = de
 - Reineke Rattenfanger, Fritz Vogelman, Thormo Hakenbein — local members.
 
 ## OTHER
-- **Franz Lohner** — Red Moon owner; PCs' patron; former Grudge-Bearers mercenary. **Proposed "Red Moon Burning"** (Session 16): lure his old enemies to the inn on Aubentag 14th (his birthday), blow it up to fake his death. Needs the PCs for gunpowder, execution, and his escape route. Offers 10 GC + the sword *Saif Al-Janub* (earned defending Sudenburg, 2498 IC). Close to Grodni Surehammer — arrived to vouch for the PCs after the Dawihafen arrest. Enemies: see LOHNER'S ENEMIES below.
+- **Franz Lohner** — Red Moon owner; PCs' patron; former Grudgebringer mercenary. **Proposed "Red Moon Burning"** (Session 16): lure his old enemies to the inn on Aubentag 14th (his birthday), blow it up to fake his death. Needs the PCs for gunpowder, execution, and his escape route. Offers 10 GC + the sword *Saif Al-Janub* (earned defending Sudenburg, 2498 IC). Close to Grodni Surehammer — arrived to vouch for the PCs after the Dawihafen arrest. Enemies: see LOHNER'S ENEMIES below.
 - **Luigi & Salvatore** — gunpowder merchants; stocks rationed since the K&H/Skaven theft; will sell at inflated prices. The PCs visited them looking for gunpowder (Session 16).
 - **Ottokar Stiegler** — Herald publisher; Hellin Karstadt's secret creature; interviewed the fighters; witnessed Magnustag; Herald #2 due Wellentag 13th; possible Karstadt introduction for the PCs.
 - **Johanna Stiegler** — Kaspar's childhood sweetheart; father entangled with the Seven Veils; grateful to Pieter; using Kuno for Resistance connections to help her father.
@@ -97,7 +97,7 @@ Status current as of end of Session 16 (Wellentag 13th late afternoon). ✝ = de
 - **Thulgrim** (dwarf thief, dealt with), **Vespère** (Ludwig's ex, Kat House), **Dorgun Silverhand**, **Ulliafor Sunbright** (identity forger), **Wendt** (see Watch).
 
 ## LOHNER'S ENEMIES (Red Moon Burning — Aubentag 14th)
-- **Thikad Urgolsson** — Dwarf Slayer; swore the oath after losing his family heirloom — the runeblade *Grudge-Bearer* — in a game of Ranald's Fingers he believes Franz rigged.
-- **Shrinq Shaderipper** — Skaven assassin sent by the Augurs to eliminate Franz, who was a constant thorn during the Grudge-Bearers' Tilean campaigns.
-- **Carmello's crew** — band of seven working for Marchesa Generosa Caramanici of the Border Princes. Lohner introduced the Grudge-Bearers to Lord Carl Svennson (Caramanici's long-time rival). **One member already spotted eavesdropping on the PCs at Luigi & Salvatore's — noted their presence, may follow them.**
-- **Tah-Ra Mentuhr** — Nehekharan wraith awakened by the Grudge-Bearers during their Nehekharan campaign. Seeks to possess Franz in order to infiltrate the mercenary group and assassinate their commander. As a magical entity, **can only be harmed by magical attacks**.
+- **Thikad Urgolsson** — Dwarf Slayer; swore the oath after losing his family heirloom — the runeblade *Grudgebringer* — in a game of Ranald's Fingers he believes Franz rigged.
+- **Shrinq Shaderipper** — Skaven assassin sent by the Augurs to eliminate Franz, who was a constant thorn during the Grudgebringers' Tilean campaigns.
+- **Carmello's crew** — band of seven working for Marchesa Generosa Caramanici of the Border Princes. Lohner introduced the Grudgebringers to Lord Carl Svennson (Caramanici's long-time rival). **One member already spotted eavesdropping on the PCs at Luigi & Salvatore's — noted their presence, may follow them.**
+- **Tah-Ra Mentuhr** — Nehekharan wraith awakened by the Grudgebringers during their Nehekharan campaign. Seeks to possess Franz in order to infiltrate the mercenary group and assassinate their commander. As a magical entity, **can only be harmed by magical attacks**.
