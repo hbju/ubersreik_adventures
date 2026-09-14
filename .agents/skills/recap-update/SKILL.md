@@ -1,3 +1,8 @@
+---
+name: recap-update
+description: Update the campaign state after a session, ensuring consistency and accuracy across all files.
+---
+
 # Recap Update Skill
 
 You are updating the campaign state after a completed session. This ritual keeps the files trustworthy.

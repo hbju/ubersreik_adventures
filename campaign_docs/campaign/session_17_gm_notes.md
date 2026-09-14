@@ -1,4 +1,4 @@
-# Session 17 — GM record and unresolved aftermath
+# Session 17 — GM record and established aftermath
 
 ## Source preservation
 
@@ -17,13 +17,13 @@ The original GM recap has been preserved verbatim in `recaps/gm_notes/session_17
 - Carmello's man followed unnoticed; his actual intelligence remains undetermined.
 - Hidden Circle headquarters and Ursula's introduction belong to next-session intentions. Ursula's investigation and presence at Jannik's death are GM knowledge.
 
-## Fire aftermath — proposal only, NOT established campaign history
+## Fire aftermath — CANONIZED FOR SESSION 18
 
-The GM expects the warehouse to be wholly destroyed and probably some spectators to have died. Exact damage, civilian deaths, fire spread and blame remain undecided.
+The warehouse was wholly destroyed. Three adjoining dwellings burned or were rendered unsafe, roughly fifteen households were displaced, four civilians are confirmed dead, and two remain missing. The wider rookery and the Good Wife remain standing. Nobody has publicly identified Kaspar as the fire-setter.
 
 Local grounding: `ubersreik_en.json` describes Wandiene as crowded with unstable houses, improvised hovels and narrow alleys, with little Watch presence. The Good Wife is a familiar local anchor and a Resistance meeting place. Exact warehouse adjacency and the route of any spreading fire should be established before treating neighboring losses as facts.
 
-Recommended scale to discuss: **the warehouse destroyed; three adjoining dwellings burned or rendered unsafe; roughly fifteen households displaced; three to six civilian deaths**, including any spectators, as one total rather than separate additive tolls. These figures are a dramatic proposal, not a simulation or a confirmed toll. Keep the wider rookery and Good Wife standing.
+The death toll remains capable of settling between four and six if either missing person is later found dead. Treat the missing as part of this established incident, not as an additional unrelated toll.
 
 Give the aftermath one short scene, preferably as the party collects Silvi's reward on the 14th: residents at the Good Wife sheltering neighbors, one person searching for a missing relative, a household counting what it saved. Avoid an imposed relief quest; the PCs can help, donate, investigate or continue. If someone explicitly accuses them, first establish how that person learned who started the fire.
 

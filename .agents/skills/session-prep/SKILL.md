@@ -1,3 +1,8 @@
+---
+name: session-prep
+description: Prepare the next session of the Ubersreik campaign, ensuring all files are consistent and up-to-date.
+---
+
 # Session Prep Skill
 
 You are preparing the next session of the Ubersreik WFRP campaign. This is a disciplined workflow refined over 15 sessions.

@@ -20,14 +20,19 @@ Status current as of end of Session 17 (Wellentag 13th, night). ✝ = dead. Orig
 - **Rolf Vane** — Silas's brother; Lowhaven mole inside the gang. Warned the Lowhavens about the Cage (tipped by Kaspar innocently). Went down trying to shield Bella. Mole rumours now brewing in the Dunkelfeucht. Silas suspects nothing YET.
 
 ## THE LOWHAVEN CLAN (mostly Halflings — "the Halflings" is underworld shorthand for the clan)
-- **Mercy Lowhaven** — matriarch, now in mourning and fury. **Has identified Kaspar as Bella's killer and put a 20 GC bounty on his head — the party learned the bounty at Satrioli's in S17. Kaspar was disguised and not recognized; the PCs do not know the shop is clan headquarters.**
-- **Bella Lowhaven ✝** — killed by Kaspar at the Cage (throat slit after a solo duel).
-- **Martin Violetta** — Cage manager; beaten, alive, broken.
-- **Helmut Gris** — butcher, defector from the Baron.
-- **Mab Lowhaven** — Hog Pit pit-mistress; escaped the S17 fire with Oswin. Her business was burning and Felix lost; next response pending.
-- **Oswin 'Spike' Lowhaven** — marksman; escaped with Mab. Pieter befriended him and mentioned Kaspar's name; Oswin made no immediate connection, but this is a future identification risk.
+- **Mercy Lowhaven** — Ubersreik matriarch, now in mourning and fury. **Has identified Kaspar as Bella's killer and put a 20 GC bounty on his head — the party learned the bounty at Satrioli's in S17. Kaspar was disguised and not recognized; the PCs do not know the shop is clan headquarters.** Her children **Hope** and **Fortune Lowhaven** are absent, apprenticing with the Altdorf and Nuln branches respectively.
+- **Bella Lowhaven ✝** — Mercy's niece; killed by Kaspar at the Cage (throat slit after a solo duel). Bella, Mab and Oswin are the children of Mercy's late elder sister Larkspur.
+- **Mab Lowhaven** — Mercy's niece and lieutenant for vice, wagers, pit fights and muscle recruitment. Escaped the S17 fire with Oswin; her business and Felix are lost.
+- **Oswin 'Spike' Lowhaven** — Mercy's nephew and lieutenant for armed security and marksmen. Escaped with Mab. Pieter befriended him and mentioned Kaspar's name; Oswin made no immediate connection, but this is a future identification risk.
+- **Pip 'Shufflepig' Shufflepig** — son of Mercy's younger brother Tobin Lowhaven and Pippa Shufflepig; Bella's cousin and Mercy's favorite nephew. A vain, careless and inept warehouse lieutenant on the Docks, protected beyond his ability.
+- **Prosperity Lowhaven** — distant cousin; lawyer and lieutenant for debt contracts, litigation and blackmail. Keeps away from visible violence.
+- **Sunny Lowhaven** — distant cousin; confidence schemes and access to wealthy households under false names.
+- **Cora 'Crumbs' Lowhaven** — distant cousin; lieutenant for money, supplies and safehouses, probably based above Satrioli's.
+- **Merry Lowhaven / Tolman 'Tolly' Lowhaven / Juniper Lowhaven** — junior relatives: Mab's courier, a nervous young collector, and Prosperity's observant bookkeeping assistant respectively.
+- **Helmut Gris** — human butcher, violent intermediary and lieutenant; defected from the Baron.
+- **Martin Violetta** — former Cage manager; beaten, alive and broken, now more liability than lieutenant.
 - **Bram Heller ✝** — human doorman; killed by Kaspar at the rear exit during the S17 fire.
-- **Elsbeth Kranz ✝** — healer and bookkeeper; fled Felix's cell through the hatch with him, intercepted during the rescue and killed. Other warehouse guards were killed; total casualties and fire damage not finalized.
+- **Elsbeth Kranz ✝** — healer and bookkeeper; fled Felix's cell through the hatch with him, intercepted during the rescue and killed. Other warehouse guards died. The Hog Pit and three neighboring homes were lost or condemned; about fifteen households were displaced, four civilians are confirmed dead and two remain missing.
 
 ## THE CROSSES (RANALDANS)
 - **Silvi Kreutzhame** — High Priestess; allied-ish with PCs; their patron. Believes the Skaven are real but **the pushback has landed**: Temple (blasphemous hysteria), Council (squeezing via Jendrick), dwarven contacts refuse to corroborate (the dwarves of **Khazalgirt** fight Skaven in their own tunnel-hold but won't spend themselves convincing Humans). Can't act openly. Felix returned alive in S17; **owes the PCs 30 GC on Aubentag 14th**, indirect sewer-expedition funding. Kaspar attacked Felix after revealing Otto's order; PCs and Crosses stopped him. Silvi understands his desperation and saw the others intervene: no material immediate relationship damage. Will hide Felix until the **16th's match in Sigmar's honour**, then publicly restore this symbol of Crosses' strength. **Ludwig accused her of cowardice and was ejected (heated, no lasting damage; may give her pause).** Failed to recover Felix herself. Suspicious of the Circle of Unmarred Flesh. Organize the Tin Spur fights with the Esteemed Company.

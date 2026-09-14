@@ -1,3 +1,8 @@
+---
+name: rumors
+description: Generate downtime rumors and gossip for the Ubersreik campaign, organized by faction.
+---
+
 # Rumors Skill
 
 You are generating downtime rumors and gossip for the Ubersreik campaign, organized by faction.
