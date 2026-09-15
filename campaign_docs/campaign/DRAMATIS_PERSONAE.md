@@ -1,5 +1,5 @@
 # DRAMATIS PERSONAE — Ubersreik Campaign
-Status current as of end of Session 16 (Wellentag 13th late afternoon). ✝ = dead. Original catalog in the master summary doc; this file supersedes it where they conflict.
+Status current as of end of Session 17 (Wellentag 13th, night). ✝ = dead. Original catalog in the master summary doc; this file supersedes it where they conflict.
 
 ## THE MASKED BANDITS (K&H)
 - **Kürbis** — huge masked man. Truly: Gerhard, Ludendorf Carnival survivor. Scouted Pfeffer/Barracks during Magnustag.
@@ -14,20 +14,28 @@ Status current as of end of Session 16 (Wellentag 13th late afternoon). ✝ = de
 
 ## THE BARON'S GANG
 - **The Baron** — secretly Katerine Eule, fled Altdorf after her lover was killed by his former best friend. Nobody knows who she is, her face, or even that the infamous Baron is a woman. Quietly backs K&H (grain via Werner).
-- **Otto 'The Hammer' Gault** — lieutenant; took the Gilded Cage; brutal, publicly triumphant, privately jealous of Kaspar's rising star. Ordered/insinuated the post-assault atrocities. Is in charge of the intimidation, rackets, and the gang's public image.
+- **Otto 'The Hammer' Gault** — lieutenant; took the Gilded Cage; brutal, publicly triumphant, privately jealous of Kaspar's rising star. Ordered/insinuated the post-assault atrocities. Is in charge of the intimidation, rackets, and the gang's public image. Ordered Kaspar to kill Felix; Kaspar disclosed this to the party and Silvi and failed to kill Felix in S17. Otto's knowledge is unconfirmed; concealment ends on the 16th.
 - **Werner 'The Eel' Follmer** — lieutenant, river & black market; supplies K&H's grain (secret); quietly consolidating while eyes are on the Cage.
 - **Elsa 'The Stitch' Gruber** — lieutenant; runs Ludwig (branded him); wants intel from the Poetry Circle.
 - **Rolf Vane** — Silas's brother; Lowhaven mole inside the gang. Warned the Lowhavens about the Cage (tipped by Kaspar innocently). Went down trying to shield Bella. Mole rumours now brewing in the Dunkelfeucht. Silas suspects nothing YET.
 
 ## THE LOWHAVEN CLAN (mostly Halflings — "the Halflings" is underworld shorthand for the clan)
-- **Mercy Lowhaven** — matriarch, now in mourning and fury. **Has identified Kaspar as Bella's killer and put a 20 GC bounty on his head — Kaspar doesn't know yet.**
-- **Bella Lowhaven ✝** — killed by Kaspar at the Cage (throat slit after a solo duel).
-- **Martin Violetta** — Cage manager; beaten, alive, broken.
-- **Helmut Gris** — butcher, defector from the Baron.
-- Hog Pit warehouse crew — 4 guards holding **Felix Scite** for the illegal pit-fight ring (now existential for the clan).
+- **Mercy Lowhaven** — Ubersreik matriarch, now in mourning and fury. **Has identified Kaspar as Bella's killer and put a 20 GC bounty on his head — the party learned the bounty at Satrioli's in S17. Kaspar was disguised and not recognized; the PCs do not know the shop is clan headquarters.** Her children **Hope** and **Fortune Lowhaven** are absent, apprenticing with the Altdorf and Nuln branches respectively.
+- **Bella Lowhaven ✝** — Mercy's niece; killed by Kaspar at the Cage (throat slit after a solo duel). Bella, Mab and Oswin are the children of Mercy's late elder sister Larkspur.
+- **Mab Lowhaven** — Mercy's niece and lieutenant for vice, wagers, pit fights and muscle recruitment. Escaped the S17 fire with Oswin; her business and Felix are lost.
+- **Oswin 'Spike' Lowhaven** — Mercy's nephew and lieutenant for armed security and marksmen. Escaped with Mab. Pieter befriended him and mentioned Kaspar's name; Oswin made no immediate connection, but this is a future identification risk.
+- **Pip 'Shufflepig' Shufflepig** — son of Mercy's younger brother Tobin Lowhaven and Pippa Shufflepig; Bella's cousin and Mercy's favorite nephew. A vain, careless and inept warehouse lieutenant on the Docks, protected beyond his ability.
+- **Prosperity Lowhaven** — distant cousin; lawyer and lieutenant for debt contracts, litigation and blackmail. Keeps away from visible violence.
+- **Sunny Lowhaven** — distant cousin; confidence schemes and access to wealthy households under false names.
+- **Cora 'Crumbs' Lowhaven** — distant cousin; lieutenant for money, supplies and safehouses, probably based above Satrioli's.
+- **Merry Lowhaven / Tolman 'Tolly' Lowhaven / Juniper Lowhaven** — junior relatives: Mab's courier, a nervous young collector, and Prosperity's observant bookkeeping assistant respectively.
+- **Helmut Gris** — human butcher, violent intermediary and lieutenant; defected from the Baron.
+- **Martin Violetta** — former Cage manager; beaten, alive and broken, now more liability than lieutenant.
+- **Bram Heller ✝** — human doorman; killed by Kaspar at the rear exit during the S17 fire.
+- **Elsbeth Kranz ✝** — healer and bookkeeper; fled Felix's cell through the hatch with him, intercepted during the rescue and killed. Other warehouse guards died. The Hog Pit and three neighboring homes were lost or condemned; about fifteen households were displaced, four civilians are confirmed dead and two remain missing.
 
 ## THE CROSSES (RANALDANS)
-- **Silvi Kreutzhame** — High Priestess; allied-ish with PCs; their patron. Believes the Skaven are real but **the pushback has landed**: Temple (blasphemous hysteria), Council (squeezing via Jendrick), dwarven contacts refuse to corroborate (the dwarves of **Khazalgirt** fight Skaven in their own tunnel-hold but won't spend themselves convincing Humans). Can't act openly. Offered PCs 20 GC to rescue Felix Scite from the Hog Pit — indirect sewer-expedition funding. **Ludwig accused her of cowardice and was ejected (heated, no lasting damage; may give her pause).** Failed to recover Felix herself. Suspicious of the Circle of Unmarred Flesh. Organize the Tin Spur fights with the Esteemed Company.
+- **Silvi Kreutzhame** — High Priestess; allied-ish with PCs; their patron. Believes the Skaven are real but **the pushback has landed**: Temple (blasphemous hysteria), Council (squeezing via Jendrick), dwarven contacts refuse to corroborate (the dwarves of **Khazalgirt** fight Skaven in their own tunnel-hold but won't spend themselves convincing Humans). Can't act openly. Felix returned alive in S17; **owes the PCs 30 GC on Aubentag 14th**, indirect sewer-expedition funding. Kaspar attacked Felix after revealing Otto's order; PCs and Crosses stopped him. Silvi understands his desperation and saw the others intervene: no material immediate relationship damage. Will hide Felix until the **16th's match in Sigmar's honour**, then publicly restore this symbol of Crosses' strength. **Ludwig accused her of cowardice and was ejected (heated, no lasting damage; may give her pause).** Failed to recover Felix herself. Suspicious of the Circle of Unmarred Flesh. Organize the Tin Spur fights with the Esteemed Company.
 - **Hieronymus** — Halfling gambler-priest; Ludwig's nemesis (with Vespère ruined him). Dormant.
 - **Old Hamm** — Crooked Hammer bartender, ex-soldier.
 
@@ -43,12 +51,13 @@ Status current as of end of Session 16 (Wellentag 13th late afternoon). ✝ = de
 - **Capt. Andrea Pfeffer** — K&H's target. Dismissed the PCs (jailed L&S briefly) but assigned Wendt to Rudi. Publicly criticized post-Magnustag.
 - **Cpl. Dietrich Wendt** — reliable, discreet; building the Rudi file.
 - **Cpl. Tylo Vielfrass** — charismatic, brave in public; violent, alcoholic, cruel underneath; leads the Circle of Unmarred Flesh; known to the Baron's thugs as a gleeful thug-beater. (Future: murder victim, A Heart of Glass.) **Struck up friendly conversation with Thucydion and Pieter at the Tin Spur during the downtime, extending a standing invite to the Hog Pit fights, including Wellentag 13th's bout — first real contact between either PC and the Circle.**
-- **Sgt. Orban Geldrecht** — Vielfrass's shadow; secretly in love with him (Vielfrass too self-absorbed to notice).
+  - S17: repeatedly offered the PCs paid bouts (all refused); witnessed Silas and Thucydion resist the spectacle. Fled the fire with Geldrecht and the idol to a dockside warehouse, followed by Thucydion; left alone about ten minutes later to fetch men for relocation. Circle guards are now being tailed toward their hidden headquarters. The PCs suspect a cult but have identified neither the idol nor Slaanesh.
+- **Sgt. Orban Geldrecht** — Vielfrass's shadow; secretly in love with him (Vielfrass too self-absorbed to notice). **S17 GM-only:** helped save the idol and stayed in the first dockside warehouse to guard it while Vielfrass fetched men; Thucydion does not know this.
 
 ## ZEALOTS
 - **Hannah Baumann** — survived the Pit of Tarnus hanging from the edge; trauma crystallized into deeper fanaticism. Laying low at the Pious Cup; strategy now recruitment + legitimization (anti-Engel narrative).
 - **Ernst Ricker** — priest; survived the Pit (ledge); stirring the Temple with "the Grey Sorcerer murders citizens".
-- **Ursula Marbad** — witch hunter; Nurgle-cult childhood survivor; rusty pistol talisman (executes cult leaders with it); climbed out and FLED; allegiance wavering.
+- **Ursula Marbad** — witch hunter; Nurgle-cult childhood survivor; rusty pistol talisman (executes cult leaders with it); climbed out and FLED; allegiance wavering. **GM hook:** investigating the Circle of Unmarred Flesh; present at the assault on Engel's tower and Jannik's death. Still unknown to the PCs; her introduction near the Circle's hidden headquarters is planned, not played.
 - **Brother Aldric ✝** — buried alive; his arm juts from the ground before the tower (found by Pieter).
 - **Tobias Henkel ✝** — buried alive at the pit's bottom.
 - **Ingrid** — bounty hunter turned convert; fled the Sorcerer's Way after witnessing Christoph Engel power; guilt-bound to Hannah; hiding at the Pious Cup; will show herself to Pieter only in fleeting glimpses.
@@ -67,7 +76,7 @@ Status current as of end of Session 16 (Wellentag 13th late afternoon). ✝ = de
 - **Eisfange** — the enormous white wolfhound, arena star; demolished three brutes on Bezahltag 9th; Pieter's cursed challenge targets him (bout scheduled the 16th). In reality, is Reikhardt Gestaltenstark in wolf form.
 - **Gunnar Brederson** — Dwarf Slayer, rank 3 / Giant Slayer; formerly a Karak Ranger and cartographer near Karak Azgaraz. Took the Slayer Oath after breaking his sworn watch at the Passage of Three Chains and fleeing the Stone Troll Mâche-Granit to save his own life, leaving two returning companions to die; he confessed but will not discuss the shame, and persistent questions risk his wrath. Later hunted down and killed Mâche-Granit, surviving the collapsing mine bridge, which raised him beyond Troll Slayer. At the Tin Spur he killed the bear but was denied his doom; shared its best haunch with Ekkehard and became the Ogre's unlikely friend. Grim, terse, unexpectedly patient with animals; cordial with Thucydion despite elf-ness; JOINED the sewer expedition unpaid; kept the rendezvous at the Red Moon on the 11th, met the rest of the party, and vouched for the Skaven's existence to Silvi (his dwarven word convinced her) — because a promise is a sacred debt and a worthy danger must be faced with preparation.
 - **Ekkehard** — resident OGRE (changed from mutant), jovial-terrifying, Gunnar's friend, food = loyalty.
-- **Felix Scite** — ex-champion; drugged & kidnapped by Lowhavens; captive at the Hog Pit warehouse; Silvi's recovery attempt will fail; rescue = open PC hook.
+- **Felix Scite** — ex-champion; rescued alive in S17 after an unnaturally enthralling final bout. Thucydion's shout briefly broke his trance before his opponent knocked him down. Now under Silvi's protection at the Crooked Hammer; survived Kaspar's desperate assassination attempt. Hidden until **Backertag 16th**, the match honouring Sigmar before Sigmartag. Recovery details not yet established.
 - **Klaus 'Dents-de-Loup' Wenner** — cocky young Averlander; beat Thucydion in sparring, celebrated with the watchmen.
 - **Greta Haldane** — silent veteran resident.
 - **Gerd** — laconic armorer. **Bertold** — the announcer voice of the arena.
@@ -81,7 +90,7 @@ Status current as of end of Session 16 (Wellentag 13th late afternoon). ✝ = de
 - Reineke Rattenfanger, Fritz Vogelman, Thormo Hakenbein — local members.
 
 ## OTHER
-- **Franz Lohner** — Red Moon owner; PCs' patron; former Grudge-Bearers mercenary. **Proposed "Red Moon Burning"** (Session 16): lure his old enemies to the inn on Aubentag 14th (his birthday), blow it up to fake his death. Needs the PCs for gunpowder, execution, and his escape route. Offers 10 GC + the sword *Saif Al-Janub* (earned defending Sudenburg, 2498 IC). Close to Grodni Surehammer — arrived to vouch for the PCs after the Dawihafen arrest. Enemies: see LOHNER'S ENEMIES below.
+- **Franz Lohner** — Red Moon owner; PCs' patron; former Grudgebringer mercenary. **Proposed "Red Moon Burning"** (Session 16): lure his old enemies to the inn on Aubentag 14th (his birthday), blow it up to fake his death. Needs the PCs for gunpowder, execution, and his escape route. Offers 10 GC + the sword *Saif Al-Janub* (earned defending Sudenburg, 2498 IC). Close to Grodni Surehammer — arrived to vouch for the PCs after the Dawihafen arrest. S17: powder delivered; reluctantly allowed Kaspar a portion for Felix's rescue. Enough remains for the 14th's plan. Enemies: see LOHNER'S ENEMIES below.
 - **Luigi & Salvatore** — gunpowder merchants; stocks rationed since the K&H/Skaven theft; will sell at inflated prices. The PCs visited them looking for gunpowder (Session 16).
 - **Ottokar Stiegler** — Herald publisher; Hellin Karstadt's secret creature; interviewed the fighters; witnessed Magnustag; Herald #2 due Wellentag 13th; possible Karstadt introduction for the PCs.
 - **Johanna Stiegler** — Kaspar's childhood sweetheart; father entangled with the Seven Veils; grateful to Pieter; using Kuno for Resistance connections to help her father.
@@ -92,12 +101,12 @@ Status current as of end of Session 16 (Wellentag 13th late afternoon). ✝ = de
 - **Emmanuelle Nacht** — the Emperor's grey eminence, true ambassador (few know). **Jendrick von Dabernick** — official emissary, criticized post-Magnustag, writing to Altdorf.
 - **Ernst Maler** — Burgermeister; freiburg speech; ally-of-convenience to no one.
 - Nobles seen at the Tin Spur lodges: Hellin Karstadt + Josef Specht; Siegfried von Saponatheim; Heinrich von Bruner; Lady Kisaiya von Bruner; Ludmilla (von Bruner) ⚭ Rickard (von Aschaffenberg) — newlyweds across a feud; Duchess Eleanor von Aschaffenberg; Erich von Holzenauer; cult heads Emming (Sigmar), Gutenberg (Verena), Altenblum (Shallya) + Célestine Hoch, Kretschmer (Ulric) + Jacob Möhren.
-- **Grodni Surehammer** — Axe & Hammer tavern owner; de facto leader of the Dawihafen; close to Franz Lohner; stern, no-nonsense. Arrested Ludwig, Silas, and Pieter after Ludwig's lies about the gunpowder. Offered gunpowder in exchange for a major future favor (undefined, TBD — probably next campaign).
+- **Grodni Surehammer** — Axe & Hammer tavern owner; de facto leader of the Dawihafen; close to Franz Lohner; stern, no-nonsense. Arrested Ludwig, Silas, and Pieter after Ludwig's lies about the gunpowder. Ludwig accepted his gunpowder-for-favor deal in S17; powder delivered to the Red Moon. Favor owed, nature undefined, probably next campaign.
 - **Stinkstaff & the Gong-Tongue goblins** — resurfacing in the Morgenseite (post-Magnustag rumours; Ottokar will spin it against nobles/Watch).
 - **Thulgrim** (dwarf thief, dealt with), **Vespère** (Ludwig's ex, Kat House), **Dorgun Silverhand**, **Ulliafor Sunbright** (identity forger), **Wendt** (see Watch).
 
 ## LOHNER'S ENEMIES (Red Moon Burning — Aubentag 14th)
-- **Thikad Urgolsson** — Dwarf Slayer; swore the oath after losing his family heirloom — the runeblade *Grudge-Bearer* — in a game of Ranald's Fingers he believes Franz rigged.
-- **Shrinq Shaderipper** — Skaven assassin sent by the Augurs to eliminate Franz, who was a constant thorn during the Grudge-Bearers' Tilean campaigns.
-- **Carmello's crew** — band of seven working for Marchesa Generosa Caramanici of the Border Princes. Lohner introduced the Grudge-Bearers to Lord Carl Svennson (Caramanici's long-time rival). **One member already spotted eavesdropping on the PCs at Luigi & Salvatore's — noted their presence, may follow them.**
-- **Tah-Ra Mentuhr** — Nehekharan wraith awakened by the Grudge-Bearers during their Nehekharan campaign. Seeks to possess Franz in order to infiltrate the mercenary group and assassinate their commander. As a magical entity, **can only be harmed by magical attacks**.
+- **Thikad Urgolsson** — Dwarf Slayer; swore the oath after losing his family heirloom — the runeblade *Grudgebringer* — in a game of Ranald's Fingers he believes Franz rigged.
+- **Shrinq Shaderipper** — Skaven assassin sent by the Augurs to eliminate Franz, who was a constant thorn during the Grudgebringers' Tilean campaigns.
+- **Carmello's crew** — band of seven working for Marchesa Generosa Caramanici of the Border Princes. Lohner introduced the Grudgebringers to Lord Carl Svennson (Caramanici's long-time rival). **One member followed the PCs unnoticed in S17 after eavesdropping at Luigi & Salvatore's. What he learned, including whether he knows Franz's plan, remains undetermined.**
+- **Tah-Ra Mentuhr** — Nehekharan wraith awakened by the Grudgebringers during their Nehekharan campaign. Seeks to possess Franz in order to infiltrate the mercenary group and assassinate their commander. As a magical entity, **can only be harmed by magical attacks**.
