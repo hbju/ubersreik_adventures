@@ -1,56 +1,43 @@
-# HANDOFF — going into Session 17
+# HANDOFF — going into Session 18
 
-Session 16 ended late afternoon on Wellentag 13th. The Hog Pit fights are about to begin.
-The PCs have two missions stacked: Felix rescue (tonight) and Red Moon Burning (tomorrow).
+Session 17 covers Wellentag 13th evening: Grodni's deal, Carmello's tail, and the Hog Pit rescue.
+Session 18 should open on Aubentag 14th — Red Moon Burning day.
 See CAMPAIGN_STATE.md and DRAMATIS_PERSONAE.md for full context.
 
-## Resolved in Session 16
+## To resolve after Session 17 (update based on what actually happened)
 
-1. **The sewer-expedition delay** worked: the Felix rescue + Red Moon Burning fill the 13th–14th, pushing
-   the sewer expedition further out.
-2. **Otto's kill-Felix order delivered**: Kaspar received it and seems willing to act on it. The Silvi-alive
-   vs Otto-dead dilemma is live at the table.
-3. **Silvi's pushback arc played**: Temple (blasphemous hysteria), Council (squeezing via Jendrick),
-   dwarven contacts refuse to corroborate (Khazalgirt — dwarves fight Skaven routinely but won't help
-   Humans). She can't act openly; the Felix rescue is indirect funding.
-4. **Ludwig vs Silvi**: heated outburst, ejected — no lasting damage. May even give her pause.
-5. **Franz's Red Moon Burning mission proposed**: enemies detailed (Thikad, Shrinq, Carmello's crew,
-   Tah-Ra Mentuhr); execution set for Aubentag 14th. PCs still need to accept Grodni's gunpowder deal.
-6. **Grodni Surehammer introduced**: Dawihafen leader, arrested Ludwig/Silas/Pieter; offered gunpowder
-   for a major future favor (undefined). Franz vouched for the PCs.
-7. **Thucydion barred from Dawihafen**: recognized from Session 6 scuffle.
-8. **Carmello's crew in Ubersreik**: one member eavesdropped at Luigi & Salvatore's.
+1. **Felix's fate**: alive or dead? If dead, who knows? This shapes every thread below.
+2. **Carmello's tail**: did the PCs spot and deal with it? If not, Carmello's crew knows where the gunpowder is — Red Moon Burning loses the element of surprise.
+3. **The Loge**: did any PC enter? Did they encounter Vielfrass? Corruption tests taken?
+4. **Kaspar's identity**: did the Lowhavens learn Kaspar was there? Did a runner escape? Mercy's bounty status.
+5. **The ledger**: was it recovered? If so, who has it — the PCs or Silvi?
+6. **Silvi's payment**: 10 GC (Felix dead), 20 GC (alive, standard), or 30 GC (alive, clean, ledger)?
+7. **Group cohesion**: if Kaspar killed Felix, how did the group react? Is the party still functional?
+8. **Gunpowder stash location**: where did it end up? Red Moon? A Crosses safehouse? Somewhere else?
 
-## Open for Session 17
+## Open for Session 18
 
-1. **The Hog Pit rescue**: the main event. Key variables:
-   - Does Kaspar try to kill Felix? Group reaction? Silvi's reaction if Felix dies?
-   - How loud does it go? Stealth vs combat vs front-door (Vielfrass invite)?
-   - Vielfrass is there — does the Circle of Unmarred Flesh get involved?
-   - The Loge (hidden room, Unmarred Flesh icon, Corruption tests) — do any PCs discover it?
-   - Felix's condition: drugged, psychologically marked by the fights (private craving from Loge exposure).
-   - If rescue succeeds AND Felix is alive → Silvi pays 20 GC (or 30 — GM TBD).
-2. **Carmello's crew perception check**: did the eavesdropper follow the PCs? Does the crew discover
-   the Red Moon Burning plan? Important for the 14th's execution.
-3. **Kaspar's bounty (Mercy, 20 GC)**: still hasn't surfaced. Natural moment: the Hog Pit is Lowhaven
-   territory — word could reach Mercy that Kaspar was there.
-4. **Red Moon Burning (Aubentag 14th)**: if Session 17 covers the rescue quickly, the Red Moon mission
-   could start in the same session. Otherwise Session 18.
-5. **Grodni's favor**: Ludwig likely accepts next session (no real alternative). Favor itself TBD
-   (probably next campaign).
-6. **Silvi's payment amount**: 20 GC or 30 GC? GM leaning toward 30 if mission succeeds cleanly.
-7. **The Starter-Set-style arrest arc**: still not committed. If the Hog Pit goes loud and Vielfrass
-   is present, his invitation gives a ready-made pretext to arrest Thucydion/Pieter. Decide based on
-   how Session 17 actually plays.
+1. **Red Moon Burning (Aubentag 14th)**: the main event. Franz's birthday. Four enemy groups converge on the inn:
+   - Thikad Urgolsson (Slayer, wants Grudge-Bearer)
+   - Shrinq Shaderipper (Skaven assassin, Augurs)
+   - Carmello's crew of 7 (Marchesa Caramanici, Border Princes) — may already be prepared
+   - Tah-Ra Mentuhr (Nehekharan wraith, magical attacks only)
+   - Full prep needed: NPC stats, the inn layout, trap placement, escape routes, timing
+2. **Franz's plan execution**: placement of gunpowder, luring enemies, faking his death, escape route. How much do the PCs help vs observe?
+3. **Saif Al-Janub**: Franz's reward sword. When does he hand it over — before or after?
+4. **Grodni's favor**: accepted (presumably). The undefined debt hangs over Ludwig.
 
-## Still simmering (not Session 17 priorities)
+## Still simmering (not Session 18 priorities unless they surface)
 
 - **Günther's fate** — Wahlund's custody, unresolved.
 - **Engel's promised help** — still owed, for the sewer expedition.
 - **Ludwig's Unblinking Eye thread** — Friedrich's book, simmering.
 - **Pieter's Ingrid tie-in** — Garden of Morr yielded nothing, still TBD.
-- **Poetry Circle (Marktag 15th)** — Isolde's blackpowder task; Falck engages Ryan; Elsa expects report.
-- **Pieter vs Eisfange (Backertag 16th)** — public headline event.
+- **Poetry Circle (Marktag 15th)** — Isolde's blackpowder task; Falck engages Ryan; Elsa expects report. Ludwig's Elsa debrief still pending.
+- **Pieter vs Eisfange (Backertag 16th)** — public headline event. Felix's warning (if alive) connects this to Gestaltenstark.
 - **Who's coordinating the pressure on Silvi** — Emmanuelle Nacht (working theory), not to be revealed yet.
-- **Wahlund's sewer expedition group** — Wahlund, his men, Melina, Gunnar still committed; if PCs keep
-  delaying, this group acts alone.
+- **Wahlund's sewer expedition group** — Wahlund, his men, Melina, Gunnar still committed; if PCs keep delaying, this group acts alone.
+- **Kaspar's bounty (Mercy)** — status depends on Session 17 outcome.
+- **Rolf as mole** — if the Hog Pit went loud and was traced to a leak, the heat on Rolf intensifies.
+- **Circle of Unmarred Flesh** — Vielfrass/Geldrecht thread advanced or dormant depending on Loge discovery.
+- **Felix's private craving** — if alive, a long-burn thread that surfaces through Pieter.
