@@ -1,4 +1,47 @@
-La dernière session a été très sympa, même si relativement calme. On a commencé comme prévu par la fin de la filature de Thucydion du groupe de gardes, qu'il a pu suivre jusqu'à leur entrepôt, dans les docks du nord de la Teufel. Là, il a observé pendant quelques instants, avant d'aller chercher ses camarades. Ils avaient clairement envie de mener un assaut sur l'entrepôt : j'ai donc utilisé Ursula à ce moment-là, pour débarquer et les convaincre de ne pas faire cela. Ca a eu plus ou moins l'effet escompté, même si le joueur de Thucydion a trouvé les arguments de Ursula un peu trop faibles (pour lui, une inquisitrice aurait dû être plus calculatrice, et bien heureuse de trouver des pions faciles à sacrifier comme eux, alors que j'ai essayé d'en faire plutôt une louve solitaire et suspicieuse). Les joueurs sont restés un à un à surveiller l'entrepôt jusqu'à l'aube.
+# Session 18 — Jusqu'à l'aube
 
-Le matin, ils sont partis voir Silvi, qui leur a donné leur bourse. Ils ont également demandé de plus amples informations sur les dessous de la ville. J'ai un peu redonné la situation globale, statique, de Ubersreik, pour témoigner de la confiance que les Croix commencent à porter envers le groupe. Mais les joueurs se sont plaints que ces informations ne sont pas tant intéressantes et ont déjà largement été données dans les sessions précédentes, notamment lors de la soirée à l'Eperon d'Etain. Je leur ai donc dit que Silvi reviendrait vers eux après avoir pu collecter des détails plus intéressants sur ce qui se trame dans les dessous de la ville et au-dessus : toute information auxquelles les Croix ont accès de par leur position unique, à la fois dans les bas-fonds et dans les sphères plus élevées de la société en tant que Culte de Ranald. Il nous faudra donc concocter cela ; mais en même temps, je pense qu'actuellement, Silvi a besoin de ne pas trop donner d'avantages au Baron. En effet, les Lowhavens ont déjà pris de nombreux coups dernièrement, entre la mort de Bella et la récente attaque sur la Fosse aux Cochons, et le Baron risque bien d'aller pour la jugulaire et d'achever les halflings si il en a l'occasion. Silvi préférerait sans doute que les deux gangs continuent de s'affaiblir mutuellement plutôt que le Baron puisse mettre la main seul sur la ville. Je pensais donc à mêler informations véridiques et d'autres trompeuses, que Ludwig s'empressera de relayer à Elsa. Celles-ci pourraient inclure des rumeurs sur des alliances secrètes, des mouvements de troupes, ou des complots imaginaires, afin de semer la confusion et de protéger les intérêts des Lowhavens tout en maintenant l'apparence de neutralité de Silvi.
+Thucydion ne perdit pas les gardes. Au nord du Teufel, dans les Docks, leur piste le conduisit jusqu'à un entrepôt : la chandellerie Kessel. Il observa les lieux quelque temps, puis alla chercher ses compagnons.
 
+Ils songeaient déjà à entrer de force lorsqu'une femme au visage balafré intervint. Leur assaut ferait échouer des mois d'enquête. Et dans un bâtiment rempli de gardes, ils n'avaient guère de chances d'en sortir vivants.
+
+L'envie d'en découdre céda finalement à la patience.
+
+Ils se relayèrent jusqu'à l'aube. L'idole ne quitta pas l'entrepôt. Beaucoup de gardes y passèrent la nuit ; ceux qui en sortaient dissimulaient leurs tabards sous des vêtements civils. Derrière les portes closes, quelque chose continuait de se tenir à l'abri des regards.
+
+## Une dette réglée
+
+Au matin, Silvi leur remit les trente couronnes promises pour Félix.
+
+Les compagnons voulurent aussi en savoir davantage sur les affaires de la ville. La confiance des Croix leur ouvrait quelques portes, mais ce premier tour d'horizon leur apprit peu de choses nouvelles. Silvi promit de revenir vers eux avec des renseignements plus précis, recueillis aussi bien dans les bas-fonds que dans les milieux où les secrets se confient à voix basse.
+
+Pour l'heure, ils avaient leur paiement. Les réponses attendraient encore.
+
+## Sous le Temple
+
+Pieter était parti seul au Temple de Sigmar. Il y rencontra Jacob Möhren et lui parla de Jannik, mort près de la tour du sorcier, ainsi que d'Ingrid, toujours introuvable.
+
+Le prêtre avait ses propres questions : la mort d'Aldric, la disparition de Tobias, et ce qu'Ernst Ricker pouvait en savoir.
+
+Ricker occupait des quartiers dans les soubassements du Temple. Il s'était brouillé avec Ursula Marbad après Magnustag. Lorsque Jacob décrivit le visage marqué de la répurgatrice, Pieter reconnut la femme qui les avait arrêtés dans les Docks.
+
+Il accepta de chercher des réponses. Jacob ne pouvait toutefois lui ouvrir les portes du Temple : sans preuve contre Ricker, il ne voulait provoquer aucun scandale. Lui-même allait partir dans les Montagnes Grises avec ses initiés.
+
+Pieter retrouva les autres et leur rapporta tout ce qu'il avait appris.
+
+## Des passages gardés
+
+Chez les chasseurs de rats, Wahlund renouvela sa promesse. Il descendrait avec eux, accompagné de ses trois compagnons et de Melina.
+
+Restait à décider quand.
+
+Les compagnons l'interrogèrent aussi sur les passages menant sous le Temple de Sigmar. Il en existait bien. Ils étaient gardés, et s'y engager sans précautions serait risqué.
+
+Ils avaient une piste et plusieurs façons de la suivre. Aucun chemin n'était encore choisi.
+
+## La fermeture
+
+En début d'après-midi, ils arrivèrent à la Lune Rouge. Les clients étaient priés de quitter les lieux ; Franz fermait boutique.
+
+Il fallait maintenant préparer la soirée. La poudre était là, mais les charges magiques restaient à obtenir, et bien des détails à régler.
+
+L'auberge se vidait. Cette fois, c'était à eux de décider comment la nuit se terminerait.
