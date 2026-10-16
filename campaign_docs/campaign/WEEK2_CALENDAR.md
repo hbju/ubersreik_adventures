@@ -8,7 +8,7 @@ Final week of the campaign. One anchor event per day. Everything accelerates tow
 | **Festag 12th (done)** | Downtime day 2 — endeavors concluded (Kaspar/Otto pitch, Pieter's graveyard job, Silas/Cordelia, Ludwig/Friedrich's party, Thucydion/Engel meeting) | Ricker's anti-Engel sermons build; Wendt's file grows |
 | **Wellentag 13th (done, through S18)** | Grodni's deal accepted; powder delivered. Felix rescued; Hog Pit destroyed. Kaspar's attack on Felix stopped. Thucydion locates Kessel's Chandlery north of the Teufel; Ursula stops the proposed assault; party watches until dawn. | Mercy's bounty known; Carmello's follower unnoticed. Bram and Elsbeth dead; Mab and Oswin escaped. Three neighboring homes lost/condemned; about fifteen households displaced; four civilians dead and two missing. Idol stays inside during watch; guards hide tabards under civilian clothes. |
 | **Aubentag 14th (early afternoon, S18 endpoint)** | **Silvi's 30 GC received**; fuller intel and Lowhaven dossier deferred. Pieter accepts Jacob's discreet inquiry, without Temple access; Wahlund reconfirms support. **Red Moon Burning tonight**: PCs arrive as patrons are evicted; council and magical charges still pending. Enough ordinary powder stored. | Jacob leaves with initiates for the Grey Mountains, unavailable for the campaign's remainder. Carmello knows of suspicious powder delivery (GM preparation); no new surveillance result. K&H preparations continue; exact charge-positioning progress unconfirmed. |
-| **Marktag 15th** | **Poetry Circle** — Isolde's blackpowder task; Falck engages Ryan | Elsa expects a report after |
+| **Marktag 15th** | **Poetry Circle** — Isolde's blackpowder task; Falck engages Ryan. **Silvi's intelligence / Lowhaven dossier deferred here**, content still to finalize. | Elsa expects a report after. Any Nacht referral depends on Franz's successful escape; no summons scheduled. |
 | **Backertag 16th** | **Pieter vs Eisfange** at the Tin Spur, in Sigmar's honour before Sigmartag. **Silvi reveals Felix; Kaspar's concealment deadline.** | Whole city watching = perfect cover for anyone's move |
 | **Bezahltag 17th** | Eve — last chance to act on everything | K&H charges set; Rudi at breaking point |
 | **Konigstag 18th - SIGMARTAG** | **K&H DETONATE THE WATCH BARRACKS** during Pfeffer's ceremony — unless stopped | Campaign climax |
@@ -28,4 +28,10 @@ Final week of the campaign. One anchor event per day. Everything accelerates tow
 
 - **Sewer expedition**: Wahlund, Anders, Mårten, Rickard and Melina reconfirmed; Gunnar already pledged. No agreed departure or rendezvous. One or two days is the GM's expectation, potentially competing with Poetry Circle (15th) and Eisfange (16th); no missed appointment yet.
 - **Temple inquiry**: Pieter accepted and briefed the party. Jacob provides no Temple access and is leaving with his initiates. Sewer entrances are heavily guarded; no route selected. The Pious Cup is unknown to the PCs.
-- **Silvi's intelligence**: payment complete, but the Lowhaven dossier and useful new intelligence are still to come; timing undecided. Her concern about a Baron monopoly is a GM motivation; any disinformation remains to develop.
+- **Silvi's intelligence**: payment complete, but the Lowhaven dossier and useful new intelligence are still to come; deferred to the 15th. Her concern about a Baron monopoly is a GM motivation; any disinformation remains to develop.
+
+## Session 19 preparation — conditional schedule
+
+- Still Aubentag 14th, early afternoon in played state. Ernst leaves the Temple in late afternoon; no automatic PC observation.
+- Around 21:00 Shrinq enters and Tah-Ra begins manifesting; 21:15 Thikad arrives; around 21:30 Carmello moves and Tah-Ra fully manifests. Surveillance, PC action and alarms can change this sequence.
+- Aftermath through midnight: resolve the actual fire, survivors, authorities and departure. Do not advance the date or record success before play.

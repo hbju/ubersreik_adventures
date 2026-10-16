@@ -134,3 +134,11 @@ Wahlund reaffirmed that he, Anders, Mårten, Rickard and Melina will join the Sk
 7. **Günther / expedition**: custody unchanged. Wahlund, three companions and Melina recommitted; Gunnar still pledged. No fixed rendezvous or departure, perhaps one or two days in GM expectation. Injured allies' recovery, Engel's help and Giordano's fee remain unresolved.
 8. **PC tracking**: all five PCs reunited at the Red Moon. S18 adds 30 GC to party resources; allocation unspecified. No additional wounds, recovery, Fatigued conditions, Corruption or resource changes reported; existing conditions and unknown totals remain. Player attendance was not separately specified.
 9. **Temple / other hooks**: Pieter accepted Jacob's discreet inquiry and informed the party; no Temple access granted. Jacob will be away in the Grey Mountains for the campaign's remainder. Sewer access is heavily guarded; PCs have not chosen that route or a pursuit of Ernst. Pious Cup, Hannah and Ingrid's refuge remain GM-only. Elsa debrief, Poetry Circle 15th, Eisfange 16th and Barracks threat 18th remain active.
+
+## 8. GM PREPARATION CONFIRMED FOR SESSION 19 — NOT YET PLAYED
+
+- **Franz / Nacht — established secret**: Franz Lohner is an agent of Emmanuelle Nacht, explaining part of his access to city intelligence. If he successfully escapes the birthday operation, he will give her the party members' names and recommend them for later work. The PCs do not know this; no recommendation or summons is recorded as completed.
+- **Session scope**: four hours, all five players, no guest; group focus from early afternoon through the birthday's aftermath. Cordelia's magical treatment is intended as a straightforward preparation.
+- **Temple schedule**: Ernst leaves the Temple in late afternoon. No Temple detour is scheduled; PCs learn nothing from an unobserved departure.
+- **Silvi**: briefing and Lowhaven dossier deferred to the 15th. `brainstorming/silvi_intel_15_noncanon.md` contains optional, NON-CANONICAL ideas only; no specific proposed intelligence is established or delivered.
+- **Consequences to resolve in play**: actual departure, false death, enemy survivors, civilian fire damage, Watch and Ottokar response. The current date and all played outcomes above remain at the end of S18.
