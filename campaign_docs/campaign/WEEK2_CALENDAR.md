@@ -23,7 +23,7 @@ Final week of the campaign. One anchor event per day. Everything accelerates tow
 - **Kaspar's deadline — 16th**: Felix rescued; Kaspar tried to kill him at the Crooked Hammer, but fellow PCs and Crosses intervened. No material immediate alliance damage. Otto's knowledge unconfirmed; Kaspar must handle his failed order before Felix's public return.
 - **Fire aftermath (canonized)**: the Hog Pit and three neighboring dwellings were lost or condemned; about fifteen households are displaced; four civilians are confirmed dead and two remain missing. The Good Wife shelters survivors. Ottokar is collecting testimony, but nobody has publicly identified Kaspar as the fire-setter.
 - **Next opening**: c. 22:00 on the 14th, outside the burning Red Moon. Perception test for witnesses who saw the party carry Franz out; bloodstained, smoke-smelling PCs draw Watch attention. Franz must reach the nearby Boatmen's Guild boathouse.
-- **Red Moon aftermath**: third fire in under a week (Heske's shop, the Hog Pit, the Red Moon). Some civilian victims. The fled Carmello goon goes to ground: long-term risk to the false death.
+- **Red Moon aftermath**: third fire in under a week (Heske's shop, the Hog Pit, the Red Moon). City-centre blast: heavy damage, some civilian victims; crowds and the Watch are fighting the fires. The fled Carmello goon goes to ground: long-term risk to the false death.
 - **Kaspar's deal with Silvi** (S17, canon): Felix hidden longer in exchange for a Lowhaven delivered to the Baron's side. GM intends Silvi to renege.
 
 ## Unscheduled commitments (carried through Session 19)

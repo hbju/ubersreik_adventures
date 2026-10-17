@@ -9,9 +9,9 @@ Session 19 ended on **Aubentag 14th Sigmarzeit, c. 22:00**, seconds after the Re
 3. **Friedrich**: Pieter (who met him on Magnustag fetching Johanna's father) asked about ghosts; invited to Friedrich's soirée on **Marktag 15th evening**, same night as the Poetry Circle. Unblinking Eye probing, likely to lose interest in Pieter.
 4. **Kaspar's purchases**: throwing knives and swords with 10 GC from Franz; stashed weapons were mostly destroyed in the blast.
 5. **The fight**: Tah-Ra destroyed for good (Kaspar, Franz, Ludwig); Shrinq killed (Pieter, Thucydion) after a chimney blocked by a cooking pot forced him through the window; Thikad killed by Kaspar; Carmello and five men killed; **one goon fled** having seen Franz near death — he will go to ground (long-term threat to the false death). All bodies burned; no Skaven remains identifiable.
-6. **State**: Kaspar 1/15, Pieter 1/28, Ludwig 1/10, Thucydion 12/23, Silas unhurt, Franz 1 Wound. No Fate/Resolve spent. **Corruption: Ludwig 6/6 (at threshold), Pieter 7/8, Silas 6/7.**
+6. **State**: Kaspar 1/15, Pieter 1/28, Ludwig 1/10, Thucydion 12/23, Silas unhurt, Franz 1 Wound. No Fate/Resolve spent. **Corruption: Ludwig 6/6 (at threshold), Pieter 7/8, Silas 6/7, Thucydion 4/9, Kaspar 2/7.**
 7. **Kaspar–Silvi deal** (S17, now canon): Felix hidden beyond the 16th in exchange for a Lowhaven delivered to the Baron's side. GM intends Silvi to go back on it.
-8. **Collateral**: third fire in under a week (Heske's shop, the Hog Pit, the Red Moon); some civilian victims (numbers TBD). Watch on high alert hunting a "mad arsonist".
+8. **Collateral**: third fire in under a week (Heske's shop, the Hog Pit, the Red Moon); the inn was in the city centre: heavy surrounding damage and some civilian victims; crowds and the Watch are already fighting the fires (many witnesses). Watch on high alert hunting a "mad arsonist".
 
 ## Resume outside the Red Moon
 
@@ -20,7 +20,7 @@ Session 19 ended on **Aubentag 14th Sigmarzeit, c. 22:00**, seconds after the Re
 - Watch patrols swarm the site and question bystanders. PCs in bloodstained clothes reeking of smoke risk being linked to the Red Moon; careful PCs leave a thinner trail.
 - Ottokar likely lurks for a scoop on the fires.
 - On arrival: **10 GC + *Saif al-Janub*** (GM generous even though one goon fled). Successful escape → Franz recommends the party to Emmanuelle Nacht (GM-only; no summons yet).
-- Lost base: where the party sleeps and heals tonight is open.
+- **Lodging**: the Red Moon was the party's base. Kaspar, Ludwig and Silas will likely return to the Dunkelfeucht; **Thucydion and Pieter must find new lodgings**.
 
 ## Marktag 15th (until late afternoon)
 
