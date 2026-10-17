@@ -1,11 +1,47 @@
-La dernière session a été un franc succès. Quelques détails auraient pu être paufinés et/ou mieux préparés, mais de nombreux moments ont été mémorables et ont contribué à l'avancement de l'histoire.
+# Session 19 — Le dernier anniversaire
 
-On a plus ou moins directement commencé avec l'établissement du plan pour la soirée. Franz a pu présenter l'ensemble des ennemis, et a mentionné qu'il faudrait trouver de quoi pouvoir blesser le spectre nehekharien. 
+La Lune Rouge s'était vidée. Autour d'une table, Franz leur présenta ceux qui viendraient le tuer ce soir : un Tueur nain qui ne lui pardonnait pas une partie de dés, un assassin homme-rat, les sept hommes de Carmello venus des Principautés Frontalières, et un spectre surgi des sables de Nehekhara. Celui-là, prévint-il, aucune lame ordinaire ne le toucherait.
 
-J'ai pu leur dessiner un plan plutôt clair de la taverne. Ils ont pu choisir où irait chacun : Pieter et Thucydion à l'étage, avec Pieter dans la chambre de Franz, face à la sortie de la cuisine vers la cour pour vérifier que personne ne tenterait d'entrer par là ; en bas, Kaspar se cacherait dans une des alcôves de la salle principale pour pouvoir mieux défendre Franz, Ludwig s'occuperait de rester dans la cuisine pour allumer la mèche, et Silas serait dehors, passant pour un mendiant, afin de pouvoir surveiller l'extérieur, alerter en case de danger et barrer la porte depuis dehors au besoin. Franz resterait dans la grande salle, faisant mine de prier, en attendant l'arrivée des ennemis.
+Sur un plan de la taverne, chacun choisit sa place. Pieter monterait dans la chambre de Franz, l'œil sur la sortie de la cuisine. Thucydion resterait à l'étage. Kaspar se tapirait dans une alcôve de la grande salle, Ludwig garderait la mèche en cuisine. Silas, en mendiant, surveillerait la rue et barrerait la porte s'il le fallait. Et Franz, au milieu de la salle, ferait mine de prier.
 
-Le groupe s'est alors séparé : Thucydion, Pieter et Kaspar sont partis faire les emplettes rapidement, tandis que Ludwig et Silas ont essayé de préparer la défense de la taverne et de s'assurer que tout serait prêt pour l'arrivée des ennemis. Rapidement, Thucydion a pu consulter Cordelia (il a directement pensé à elle, mais s'attendait à ce qu'elle le renvoie vers une de ses connaissances) qui lui a donné une pincée de poudre argentée pour pouvoir blesser le spectre. Pieter est allé aux Sept Voiles, reparlant ainsi à Friedrich, le propriétaire, et lui demandant s'il avait des informations sur les fantômes. Celui-ci a trouvé cette demande quelque peu étrange, et lui a dit qu'il n'avait pas cela sous la main, mais qu'il pourrait chercher cela et lui communiquer quelque chose s'il venait à une soirée qu'il organise le lendemain soir. Cela pourrait faire un scénario en marge du Cercle de Poésie auquel Ludwig et Silas seront invités. Kaspar, lui, est parti acheter quelques armes : il a pris quelques couteaux de lancer et épées pour ses compagnons. 
+## Les derniers préparatifs
 
-De retour à la Lune Rouge, ils ont pu continuer les préparatifs, cachant des armes ça et là, et se sont ensuite répartis à leur poste. Ils ont pu avant cela échanger un verre et quelques mots ensemble, avec Franz, se resserrant un peu les liens comme cela. 
+Thucydion pensa aussitôt à Cordelia. L'apothicaire ne le renvoya vers personne : elle lui remit une pincée de poudre argentée, sans rien demander en retour. De quoi blesser ce qui n'avait plus de chair.
 
-Globalement, tout s'est passé plus ou moins comme prévu, à l'exception du fait que les PJs avaient mis une marmite dans la cheminée, et que Shrinq n'a donc pas pu emprunter celle-ci. Il a pu passer par la fenêtre de la chambre de Franz à la place, avec un malus de Discrétion. Pieter ne l'a quand même pas entendu. Pendant ce temps, Thikad est arrivé, a commencé à gueuler dehors. Tout s'est plus ou moins déclenché au même moment : le spectre est apparu en même temps que le nain a fait irruption dans la taverne, créant un chaos immédiat. Mais les joueurs étaient préparés à recevoir le spectre, en particulier à cause du fait que j'avais accepté qu'ils puissent l'utiliser à raison d'une charge par arme contre lui, en plus de l'utiliser dans le tonneau de poudre (à moindre efficacité). Kaspar, Franz et Ludwig ont rapidement pu mettre se débarasser de la créature, avant même que Thikad ne fasse de vrais dégâts. Pendant ce temps-là, Shrinq a pris Pieter dans le dos, lui collant un méchant coup de dague. Pieter a réussi à tenir la bête à distance, jusqu'à ce que Thucydion puisse arriver et la charger en même temps, la terrassant rapidement. Carmello et ses hommes en ont profité pour arriver à ce moment-là, et trois gars ont tenu la ligne face à Pieter et Thucydion, pendant que les quatre autres se sont rués en bas pour essayer d'attaquer Franz. Là, les choses se sont quelque peu corsées pour le groupe. Ludwig, ayant allumé la mèche, s'est rué aux côtés de Franz, alors que Kaspar a affronté seul le nain. Les deux se sont amenés à seulement quelques doigts de la mort, et Kaspar a fini par terrasser Thikad, mettant ainsi fin à la menace immédiate. Mais Franz et Ludwig, seuls contre quatre, ont eu bien plus de mal à repousser les assauts. Franz a été quelque peu mis à mal, tandis que Ludwig a été rapidement pris en dépourvu et blessé. Au final, Thucydion est parvenu à s'extraire de ses opposants à l'étage, laissant Pieter se débrouiller contre deux survivants (le troisième s'était déjà fait terrasser), et Kaspar est rapidement revenu pour prêter main-forte. Alors que la mèche continuait de se consumer, 
+Pieter, lui, poussa la porte des Sept Voiles. Friedrich, le propriétaire, trouva étrange qu'on vienne lui parler de fantômes. Il n'avait rien sous la main, dit-il, mais si Pieter venait à la soirée qu'il donnait le lendemain, il aurait peut-être quelque chose à lui apprendre.
+
+Kaspar dépensa l'argent de Franz en couteaux de lancer et en épées. Ludwig et Silas fortifièrent la taverne. On cacha des armes un peu partout.
+
+Avant de rejoindre leurs postes, ils partagèrent un dernier verre avec Franz. Pour un homme qui allait mourir ce soir, il avait l'air presque heureux.
+
+## La nuit tombe
+
+Une marmite bloquait la cheminée. L'homme-rat dut passer par la fenêtre de la chambre — et Pieter, pourtant juste là, ne l'entendit pas venir.
+
+Dehors, le nain hurlait le nom de Franz. Il enfonça la porte au moment précis où l'air de la salle se glaçait : le spectre venait d'apparaître. Mais la poudre de Cordelia brillait sur les lames. Kaspar, Franz et Ludwig le taillèrent en pièces avant que le Tueur ait pu frapper vraiment. Tah-Ra Mentuhr ne reviendrait plus.
+
+À l'étage, une dague s'enfonça dans le dos de Pieter. Il tint la créature à distance, saignant, jusqu'à ce que Thucydion surgisse. À deux, ils l'abattirent.
+
+## Les hommes de Carmello
+
+C'est alors que Carmello lança ses hommes. Trois bloquèrent l'escalier face à Pieter et Thucydion ; quatre dévalèrent vers Franz.
+
+Ludwig alluma la mèche et courut se placer près de lui. Kaspar, seul face au nain, échangea coup pour coup jusqu'au bord de la tombe. C'est le Tueur qui tomba le premier.
+
+En bas, Franz et Ludwig, à deux contre quatre, pliaient. Franz encaissait, Ludwig fut pris de court et blessé. Thucydion s'arracha à ses adversaires et redescendit, laissant Pieter seul face à deux hommes.
+
+La mèche se consumait. Ludwig s'enfuit. Kaspar repoussa un assaillant puis sortit à son tour, à bout de forces. Franz s'effondrait quand Thucydion abattit le dernier homme au-dessus de lui. Un seul des quatre réussit à fuir.
+
+À l'étage, Pieter vint à bout de ses deux adversaires et sauta par la fenêtre dans la cour.
+
+## Le feu
+
+Silas surgit dans la salle. À deux, Thucydion et lui soulevèrent Franz, inconscient, et le traînèrent dehors.
+
+Derrière eux, la Lune Rouge explosa.
+
+Le souffle emporta la taverne, ses secrets, et les corps de ceux qui étaient venus réclamer leur dû. Dans la nuit, les compagnons se comptèrent : tous vivants, mais à peine. Kaspar, Pieter et Ludwig tenaient debout par miracle. Franz ne bougeait plus. Thucydion, lui, avait pensé à ramasser son épée.
+
+Au loin, les cloches se mirent à sonner. Troisième incendie en moins d'une semaine. La Garde allait arriver, et elle chercherait un coupable.
+
+Franz Lohner était officiellement mort. Restait à le faire sortir d'ici vivant.

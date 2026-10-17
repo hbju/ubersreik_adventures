@@ -2,7 +2,7 @@
 
 Ludwig accepta finalement le marché de Grodni : la poudre contre un service à rendre, un jour. La dette n'avait pas encore de visage. Les tonneaux prirent la direction de la Lune Rouge, et les compagnons celle de la Fosse aux Cochons.
 
-Il restait un peu de temps avant les combats. Chez Satrioli, deux hommes gardaient la porte pendant que la patronne réglait ses affaires. Des cris traversaient les murs. Puis Mercy Lowhaven surgit, furieuse : elle voulait Kaspar. Vingt couronnes pour sa tête.
+Il restait un peu de temps avant les combats. Chez Satrioli, deux demi-hommes gardaient la porte pendant que la patronne réglait ses affaires. Des cris traversaient les murs. Puis Mercy Lowhaven surgit, furieuse : elle voulait Kaspar. Vingt couronnes pour sa tête.
 
 Sous sa capuche, le visage barbouillé de terre, Kaspar ne fut pas reconnu. Ils achetèrent des saucisses et repartirent.
 
@@ -10,7 +10,7 @@ Sous sa capuche, le visage barbouillé de terre, Kaspar ne fut pas reconnu. Ils 
 
 Au coucher du soleil, les spectateurs affluaient vers l'entrepôt. Les compagnons entrèrent séparément, se mêlèrent au public, tentèrent quelques paris. Pieter sympathisa avec Oswin et laissa échapper le nom de Kaspar. Rien, sur le moment, ne sembla en découler.
 
-Le caporal et son sergent leur proposèrent de combattre pour quelques pièces. Personne n'accepta. Pieter et Thucydion cherchèrent plutôt à approcher Félix, sans succès.
+Le caporal et son sergent leur proposèrent de combattre pour quelques pièces d'argent. Personne n'accepta. Pieter et Thucydion cherchèrent plutôt à approcher Félix, sans succès.
 
 Cinq combats étaient annoncés. À mesure que la soirée avançait, une étrange fascination gagnait la salle. On regardait trop attentivement. On oubliait trop facilement pourquoi on était venu.
 
@@ -46,7 +46,7 @@ Acculé, Kaspar tenta de le tuer.
 
 Les Croix et ses propres compagnons l'arrêtèrent. Silvi avait vu leur intervention ; elle comprenait aussi la peur qui poussait Kaspar. Elle lui accorda quelques jours. Félix resterait caché jusqu'au match du 16, donné en l'honneur de Sigmar. Ensuite, il faudrait qu'on le revoie.
 
-Trente couronnes les attendaient le lendemain. Pour Kaspar, une autre échéance venait de commencer.
+Trente couronnes les attendaient le lendemain. Pour Kaspar, une autre échéance venait de commencer. Trouver un Lowhaven en échange de cacher Félix plus longtemps. 
 
 ## Dans les Docks
 
