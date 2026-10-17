@@ -205,6 +205,22 @@
     "availability": "rare"
   },
   {
+    "id": "weapon_basic_saif_al-janub",
+    "name": "Saif al-Janub",
+    "group": "basic",
+    "price": "20 GC",
+    "enc": 1,
+    "reach": "Medium",
+    "damage": "+SB+5",
+    "qualities": [
+      "Defensive",
+      "Fine 4",
+      "Unbreakable",
+      "Magical"
+    ],
+    "availability": "exotic"
+  },
+  {
     "id": "weapon_cavalry_hammer",
     "name": "Cavalry Hammer",
     "group": "cavalry",
