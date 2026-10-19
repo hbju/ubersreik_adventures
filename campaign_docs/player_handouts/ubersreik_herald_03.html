@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Le Héraut d'Ubersreik — Édition spéciale</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            background: #282118;
+            color: #18130e;
+            font-family: Georgia, 'Times New Roman', serif
+        }
+
+        .page {
+            width: 210mm;
+            height: 297mm;
+            margin: 16px auto;
+            padding: 5mm 8mm;
+            background: #eee1c5;
+            box-shadow: 0 0 30px #000;
+            background-image: radial-gradient(circle at 20% 10%, #9b7a4920, transparent 38%);
+            overflow: hidden
+        }
+
+        header .top {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #21190f;
+            padding-bottom: 2mm;
+            font-size: 8pt;
+            font-variant: small-caps;
+            letter-spacing: .08em
+        }
+
+        .mast {
+            text-align: center;
+            font-family: 'Old English Text MT', 'UnifrakturCook', serif;
+            font-size: 28pt;
+            line-height: 1;
+            margin: 2mm 0 1mm
+        }
+
+        .submast {
+            margin-bottom: 2.5mm;
+            display: flex;
+            border-top: 2px solid;
+            border-bottom: 2px solid;
+            padding: 1.5mm;
+            justify-content: space-between;
+        }
+
+        .motto {
+            text-align: center;
+            font-size: 7.5pt;
+            text-transform: uppercase;
+            letter-spacing: .2em
+        }
+
+        .note {
+            text-align: center;
+            font-size: 5pt;
+            font-style: italic;
+            margin-top: 1mm;
+            margin-left: -20mm;
+        }
+
+        .headline {
+            text-align: center;
+            font-size: 18pt;
+            line-height: 1.05;
+            text-transform: uppercase;
+            margin: 2.5mm 0 1mm;
+            font-weight: 900
+        }
+
+        .dek {
+            text-align: center;
+            font-style: italic;
+            font-size: 9pt;
+            margin-bottom: 2.5mm
+        }
+
+        .cols {
+            column-count: 3;
+            column-gap: 4.5mm;
+            column-rule: 1px solid #8d7d61;
+            font-size: 7.8pt;
+            line-height: 1.18
+        }
+
+        .article {
+            break-inside: avoid;
+            margin: 0 0 2.3mm
+        }
+
+        .article h2 {
+            font-size: 9.6pt;
+            line-height: 1.1;
+            text-align: center;
+            text-transform: uppercase;
+            margin: 0 0 1mm;
+            border-bottom: 1px solid #685b45;
+            padding-bottom: .7mm
+        }
+
+        .article p {
+            text-align: justify;
+            margin: 0 0 1.1mm;
+            font-size: 8.5pt;
+        }
+
+        .drop:first-letter {
+            float: left;
+            font-size: 28pt;
+            line-height: .75;
+            padding: 1.5mm 1mm 0 0;
+            font-weight: bold
+        }
+
+        .box {
+            border: 2px solid #21190f;
+            padding: 1.8mm;
+            background: #f6edda88
+        }
+
+        .thin {
+            border: 1px solid #786a53;
+            padding: 1.5mm
+        }
+
+        .kicker {
+            text-align: center;
+            font-size: 10.5pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 2mm 0
+        }
+
+        .ad {
+            text-align: center;
+            border: 1px dashed #75654d;
+            padding: 2mm;
+            font-size: 8pt
+        }
+
+        .ad b {
+            font-size: 10pt;
+            text-transform: uppercase
+        }
+
+        .obit {
+            border-top: 3px double;
+            border-bottom: 3px double;
+            padding: 2mm 0
+        }
+
+        .karstadt {
+            border: 3px double #21190f;
+            padding: 1.8mm;
+            background: #f6edda66
+        }
+
+        .karstadt .mark {
+            float: left;
+            margin: 0 2mm 1mm 0;
+            border: 2px solid #21190f;
+            width: 10mm;
+            height: 10mm;
+            display: grid;
+            place-items: center;
+            font: bold 15pt Georgia, serif
+        }
+
+        .karstadt h2 {
+            margin-top: 0;
+            border-bottom: 0;
+        }
+
+        .voice {
+            border-left: 3px solid #685b45;
+            padding-left: 2.5mm;
+            font-size: 7.1pt;
+            line-height: 1.12;
+            margin-bottom: 1.5mm
+        }
+
+        .voice h2 {
+            font-size: 8.7pt
+        }
+
+        .voice p {
+            margin-bottom: .7mm;
+            font-size: 7.1pt;
+        }
+
+        .small {
+            font-size: 7pt;
+            line-height: 1.2
+        }
+
+        .seal {
+            text-align: center;
+            font-size: 15pt;
+            letter-spacing: .35em
+        }
+
+        .footer {
+            margin-top: 1.5mm;
+            border-top: 1px solid;
+            padding-top: 1.5mm;
+            text-align: center;
+            font-size: 7pt;
+            font-style: italic
+        }
+
+        .theatre-ad {
+            margin-top: 1.5mm;
+            border-top: 1px solid #21190f;
+            border-bottom: 1px solid #21190f;
+            padding: 1mm;
+            font-size: 7pt;
+            text-align: center
+        }
+
+        .theatre-ad p {
+            margin: 0 0 .6mm
+        }
+
+        @media print {
+            body {
+                background: none
+            }
+
+            .page {
+                margin: 0;
+                box-shadow: none
+            }
+        }
+        .page {
+            height: auto
+        }
+
+        .cols.lean {
+            column-count: 2;
+            column-gap: 7mm
+        }
+
+        .cols.lean .article p {
+            font-size: 11.5pt;
+            line-height: 1.35
+        }
+
+        .cols.lean .article h2 {
+            font-size: 12pt
+        }
+
+        .cols.lean .drop:first-letter {
+            font-size: 40pt
+        }
+    </style>
+</head>
+<!--
+    NOTE MJ — deux articles sont conditionnels (marqués VARIANTE ci-dessous).
+    Supprimer « Ce que la nuit a vu » si le test de Perception des PJs a réussi (ou s'ils ont caché la lame).
+    Supprimer « Le barbier sans nom » si Silas n'a pas sauvé Jost Brückner.
+-->
+<body>
+    <main class="page">
+        <header>
+            <div class="top"><span>Cinq Pfennigs</span><span>Marktag, 15 Sigmarzeit</span><span>Numéro III — Édition spéciale</span></div>
+            <div class="mast">Le Héraut d'Ubersreik</div>
+            <div class="submast">
+                <div></div>
+                <div class="motto">"La Vérité Mise en Lumière"</div>
+                <div class="note">Imprimé mais non cautionné </br> par les Presses Engbart d'Ubersreik</div>
+            </div>
+        </header>
+        <h1 class="headline">Le feu qui dévore Ubersreik</h1>
+        <div class="dek">Trois incendies en une semaine. Cette fois, ce sont d'honnêtes gens qu'on enterre - et le Guet compte encore les seaux.</div>
+        <section class="cols lean">
+            <article class="article">
+                <p class="drop">Trois incendies en moins d'une semaine. La boutique de Heske Glazer. La Fosse aux Porcs et
+                    les taudis de la Rouquerie de Wandiene, où quatre âmes ont péri et deux manquent encore à l'appel. Et
+                    cette nuit, la Lune Rouge, au cœur même de notre ville, soufflée comme une chandelle.</p>
+            </article>
+
+            <article class="article obit">
+                <h2>Ils avaient payé leurs taxes</h2>
+                <p>Cette fois, le feu n'a pas épargné les honnêtes gens. <b>Dora Brückner</b>, épouse du maître
+                    tonnelier, et deux jeunes apprentis de la guilde ont péri sous les décombres de leur maison. <b>La
+                    veuve Rosshaupt</b>, dentellière respectée, est morte avec sa servante. Un veilleur de nuit a été
+                    écrasé en portant secours.</p>
+                <p><b>Sept morts.</b> Une douzaine de brûlés, que les sœurs de Shallya soignent à même la paille de
+                    leur cour.</p>
+            </article>
+
+            <article class="article">
+                <h2>La Lune Rouge s'éteint</h2>
+                <p>L'aubergiste <b>Franz Lohner</b> aurait péri dans les flammes de son
+                    établissement. Des voisins affirment avoir entendu des cris et des bruits de combat avant
+                    l'explosion. Règlement de comptes ? Folie d'un incendiaire ? Le Guet promet cinq couronnes à qui
+                    l'éclairera.</p>
+            </article>
+
+            <article class="article box">
+                <h2>Où était la capitaine ?</h2>
+                <p>Le Héraut pose la question que tout Ubersreik se pose : où était la capitaine Pfeffer ? Les guildes
+                    ont réclamé hier soir sa démission. Le Conseil, dit-on, prête l'oreille.</p>
+            </article>
+
+            <!-- VARIANTE : supprimer si le test de Perception a réussi (ou si les PJs ont caché la lame) -->
+            <article class="article thin">
+                <h2>Ce que la nuit a vu</h2>
+                <p>Plusieurs témoins rapportent avoir vu, peu après l'explosion, <b>« un grand elfe portant une épée
+                    courbe »</b> et un homme d'une taille peu commune emporter un corps dans les ruelles. Le Héraut
+                    invite ces personnes à se faire connaître.</p>
+            </article>
+        </section>
+        <div class="theatre-ad">
+            <p> Vous savez quelque chose ? <strong>DITES-LE !</strong> Trouvez <strong>OTTOKAR STIEGLER</strong> au
+                sommet du <strong>SPRICHSTUMPF</strong>, ou devant les ruines de la Lune Rouge.</p>
+            <p> Ottokar utilise et recommande les Presses Engbart, situées dans l'allée derrière l'Auberge du Pont.</p>
+        </div>
+        <div class="footer">Le Héraut d'Ubersreik - « Les faits sont têtus ; les puissants davantage. »</div>
+    </main>
+</body>
+
+</html>
+

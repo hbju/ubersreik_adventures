@@ -1,36 +1,54 @@
-# HANDOFF — going into Session 20
+# HANDOFF — going into Session 20 (prep done)
 
-Session 19 ended on **Aubentag 14th Sigmarzeit, c. 22:00**, seconds after the Red Moon exploded. Franz lies unconscious (1 Wound) outside the ruins; Thucydion holds *Saif al-Janub*. Four days remain until the Barracks attack on Sigmartag 18th. Raw GM notes: `recaps/gm_notes/session_19_raw.md`; player recap: `recaps/session_19_recap.md`.
+Session 19 ended on **Aubentag 14th Sigmarzeit, c. 22:00**, seconds after the Red Moon exploded. Session 20 is prepared: guide `campaign_docs/output/Session 20 - Ashes and Accounts.docx` (script `campaign_docs/tools/generate_session_20_guide.mjs`). Scope: 14th 22:00 → Marktag 15th late afternoon (evening bells). 3h30, all five players.
 
-## Established by Session 19
+**Everything below marked "PREP" is planned, not played. Do not copy into CAMPAIGN_STATE until confirmed in the recap.**
 
-1. **Council & posts**: Pieter in Franz's room (watching the kitchen-to-courtyard exit), Thucydion upstairs, Kaspar in a main-hall alcove, Ludwig on the fuse in the kitchen, Silas outside as a beggar, Franz feigning prayer in the main hall.
-2. **Magical charges**: Cordelia gave Thucydion silver powder, free. House ruling: one charge per weapon vs Tah-Ra, plus a weaker charge in the powder barrel.
-3. **Friedrich**: Pieter (who met him on Magnustag fetching Johanna's father) asked about ghosts; invited to Friedrich's soirée on **Marktag 15th evening**, same night as the Poetry Circle. Unblinking Eye probing, likely to lose interest in Pieter.
-4. **Kaspar's purchases**: throwing knives and swords with 10 GC from Franz; stashed weapons were mostly destroyed in the blast.
-5. **The fight**: Tah-Ra destroyed for good (Kaspar, Franz, Ludwig); Shrinq killed (Pieter, Thucydion) after a chimney blocked by a cooking pot forced him through the window; Thikad killed by Kaspar; Carmello and five men killed; **one goon fled** having seen Franz near death — he will go to ground (long-term threat to the false death). All bodies burned; no Skaven remains identifiable.
-6. **State**: Kaspar 1/15, Pieter 1/28, Ludwig 1/10, Thucydion 12/23, Silas unhurt, Franz 1 Wound. No Fate/Resolve spent. **Corruption: Ludwig 6/6 (at threshold), Pieter 7/8, Silas 6/7, Thucydion 4/9, Kaspar 2/7.**
-7. **Kaspar–Silvi deal** (S17, now canon): Felix hidden beyond the 16th in exchange for a Lowhaven delivered to the Baron's side. GM intends Silvi to go back on it.
-8. **Collateral**: third fire in under a week (Heske's shop, the Hog Pit, the Red Moon); the inn was in the city centre: heavy surrounding damage and some civilian victims; crowds and the Watch are already fighting the fires (many witnesses). Watch on high alert hunting a "mad arsonist".
+## GM decisions taken during S20 prep (canon intent)
 
-## Resume outside the Red Moon
+1. **Tone**: escape is a quick scene focused on consequences (screams, the collapsed neighbour house). The 15th establishes a city in mourning. At the Poetry Circle (S21), guests must remark that now even burghers die, not just the poor of the Hog Pit / Wandiene Rookery.
+2. **Healing**: ONLY Silas's Heal tests + one night's natural rest. No priests, no free potions. Pieter enters the Eisfange bout hurt. Intentional.
+3. **Lodging**: players' choice (Tin Spur dormitory or Bridge House Inn suggested; Dunkelfeucht for Kaspar/Ludwig/Silas).
+4. **Ricker** leaves the Temple at the **start of the afternoon** (moved earlier from late afternoon).
+5. **Ursula recast**: calculating manipulator who offers a deal and is willing to help them storm the corrupt watchmen.
+6. **Otto** learns of Kaspar's failure only on the 16th (Felix's public return) unless someone tells him earlier.
+7. **Elsa debrief**: after Silvi's intel at the earliest, probably after the Poetry Circle — undecided.
 
-- **Perception test** at the start: do the PCs spot bystanders who saw them carry Franz out?
-- Franz wakes; escape through the rear yards to the **nearby Boatmen's Guild boathouse** (the raw notes' "northern docks" is superseded).
-- Watch patrols swarm the site and question bystanders. PCs in bloodstained clothes reeking of smoke risk being linked to the Red Moon; careful PCs leave a thinner trail.
-- Ottokar likely lurks for a scoop on the fires.
-- On arrival: **10 GC + *Saif al-Janub*** (GM generous even though one goon fled). Successful escape → Franz recommends the party to Emmanuelle Nacht (GM-only; no summons yet).
-- **Lodging**: the Red Moon was the party's base. Kaspar, Ludwig and Silas will likely return to the Dunkelfeucht; **Thucydion and Pieter must find new lodgings**.
+## PREP content (to confirm after play)
 
-## Marktag 15th (until late afternoon)
+- **Red Moon toll (PREP, validated by GM)**: 7 dead — Dora Brückner (cooper's wife) + apprentices Lutz (14) & Matthes (16); widow Hedwig Rosshaupt (lacemaker) + her servant; a night watchman; (7th = unnamed). A dozen burned, incl. **Jost Brückner (9)** — Silas can try to save him (Hard Heal). Anselm Brückner, cooper, survives with burned hands.
+- **Witnesses**: failed Perception → "a tall elf with a curved sword" in the Herald; 3+ SL failure → Ottokar present.
+- **Franz**: hints at "people far away who like to know who does good work" (Nacht seed, unnamed); leaves by boat.
+- **City events (15th)**: funerals at Morr's Garden; guild petition for **Pfeffer's resignation**; Shallya courtyard overwhelmed; **bread price doubled — someone buys grain in bulk at the quay (= Werner → K&H)**; Grimski exploits the fires; Watch offers 5 GC reward for the "arsonist".
+- **🔴 Public announcement**: on Sigmartag, **Pfeffer reviews the Watch in front of the Barracks**. Key doomsday clue — first public date + place.
+- **Melina**: Wahlund wants to go down **Bezahltag 17th at dawn at the latest**; rat catchers hear digging under the Altmarkt. Rendezvous to be fixed in play. Missing it → expedition leaves without them (future consequence).
+- **Silvi package**:
+  - *True*: Werner's grain buying (she doesn't know why); Lowhavens short of cash, Prosperity negotiating with **Signora Bettina Albertini** (Tilean lender, Marktplatz); guilds vs Pfeffer.
+  - *False for the Baron*: **"relief from Altdorf"** — Hope Lowhaven arrives on the barge *Margarethe*, Bezahltag noon, with "cooks" (truth: a lawyer + 2 servants; checkable at the Boatmen's Guild). **Doctored Lowhaven dossier** — Pip Shufflepig's warehouse (south Teufel quay) presented as clan treasury (false); Cora's real safe house above Satrioli's omitted; Silvi will tip the Watch if the Baron strikes the warehouse.
+  - If Ludwig/Kaspar don't relay: disinformation reaches the Baron on the 17th via Hieronymus ↔ Otto's bookkeeper.
+  - *Kaspar*: Silvi reneges openly (no Lowhaven lieutenant; Felix out on the 16th), then turns him against Otto: Otto said drunk at the Cage "the kid brings me Scite's head or his own" (half true); **Otto keeps a second ledger** hidden from the Baron (true; in his office at the Gilded Cage; bookkeeper **Kurt Pfennig**). Kaspar's options: expose Otto, kill Otto (Silvi's hidden wish), flee.
+- **Engel package** (at Cordelia's, midday): names **warpstone (malepierre)** and its blast effect; gives a **lead coffer + tongs** (wants a fragment), **3 lead talismans** (each ignores one warpstone Corruption gain, single use), **1 vial of grey mist** (one use, ~20 m corridor fog for 1d10 rounds, blocks Skaven sight and smell). Engel can't act publicly; if told of the review, he understands the target.
+- **Pious Cup**: tea room two streets behind the Temple (sign: cup + hammer). Pieter glimpses Ingrid at an upstairs window; if they force entry, Hannah and Ingrid slip out the back.
+- **Ursula's deal**: storm **Kessel's Chandlery on the night of the 16th** after the Tin Spur bout (Vielfrass's men celebrating). She provides plan, numbers (8–12), and her witch-hunter mandate as cover; she stays out of the fight. Pays afterwards: Jannik's killer (Hannah Baumann), Ingrid's room, the hour the Cup is empty. Down payment ("Baumann") possible on an opposed test vs her Cool 55. Hides that she witnessed Jannik's death. Will shift at most one day, never the 17th evening.
 
-- Ingrid investigation: Ricker (leaves the Temple late afternoon) or Ursula.
-- **Silvi's intelligence**: design in session prep — concrete city events plus misleading details that keep the Lowhavens alive; stage her reneging on the Kaspar deal. `brainstorming/silvi_intel_15_noncanon.md` is non-canonical input.
-- Evening (after this session's scope): Poetry Circle (Ludwig, Silas) and Friedrich's soirée (Pieter).
+## Threads to follow up after S20
 
-## Continuing clocks
+- Did the PCs make the Barracks / Sigmartag review link? Did they tell anyone (Wendt, Pfeffer, Silvi, Engel)?
+- Who carries the talismans, the mist vial, the coffer.
+- Expedition rendezvous time/place.
+- Ursula: accepted / refused / shifted — determines whether the 16th has a night assault.
+- Kaspar's move against Otto (if any) before the 16th; whether disinformation went through Ludwig → Elsa or Kaspar → Otto.
+- Jost Brückner's fate; whether Silas is now "the unknown barber" in the Herald.
+- Witness description of Thucydion + *Saif al-Janub*: Watch attention.
 
-- **Backertag 16th**: Pieter vs Eisfange (badly hurt unless healed); Felix's public return unless the deal holds.
-- **Sewer expedition**: no rendezvous fixed; Wahlund, Anders, Mårten, Rickard, Melina, Gunnar committed. Engel's help, Giordano's fee unresolved.
-- **Sigmartag 18th**: K&H and Skaven destroy the Watch Barracks unless stopped.
-- **Other**: Kaspar/Otto and Oswin; Elsa debrief; Grodni's favor; Günther; Kessel's Chandlery; Ingrid; Ludwig's Unblinking Eye thread; Ursula feedback (player expected a more calculating inquisitor).
+## Next session (S21) — to prep
+
+- Marktag 15th evening: **Poetry Circle** (Ludwig, Silas — Isolde's blackpowder task, Falck engages Ryan, guests' snobbish comments on burgher victims, Frau Kellner) **in parallel with Friedrich's soirée** (Pieter — ghosts, Unblinking Eye sizing him up, likely loses interest).
+- Elsa debrief (after the Circle?).
+- Backertag 16th: **Pieter vs Eisfange (= Gestaltenstark; Kretschmer's quest)**, Felix's public return, Otto learns, possible Chandlery assault.
+- Bezahltag 17th: expedition at dawn; *Margarethe* at noon; Rudi breaking.
+- Sigmartag 18th: climax.
+
+## Dormant threads (still open)
+
+Günther in Wahlund's custody; Grodni's favor; docker "ghost" bounty (10 GC, Thucydion); Doktor Grat; Mercy's 20 GC bounty on Kaspar; Oswin's memory of Kaspar's name; Rolf mole rumours (optional micro-scene planted in S20 if Silas sleeps in the Dunkelfeucht); Giordano's 20 GC offer (re-pitched if they lodge at Bridge House); Kretschmer awaiting a report; the fled Carmello goon; Johanna thread (Kaspar).
