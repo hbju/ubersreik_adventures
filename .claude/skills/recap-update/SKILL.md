@@ -57,6 +57,8 @@ After receiving answers:
 
 #### 3. Write Player-Facing Recap
 Create `campaign_docs/campaign/recaps/session_[N]_recap.md` in French:
+- **Addressed directly to the players, in the second person — never third person.** Use "vous" for the group ("Vous ne vous retournez pas.") and "tu" + the character's name when singling out one PC ("Kaspar, tu empoignes l'épée et tu frappes."). Present tense reads best at the table.
+- If the GM's raw notes were written into the recap file, move them to `recaps/gm_notes/session_[N]_raw.md` first (append the GM's Q&A answers there too)
 - Narrative summary of events (player perspective)
 - Key moments and decisions
 - Cliffhanger or current situation
@@ -116,7 +118,7 @@ Committed with message: "Post-session [N] state update"
 
 - State files are the source of truth - handle with care
 - Flag contradictions, don't silently resolve them
-- Player-facing recap is narrative, not mechanics
+- Player-facing recap is narrative, not mechanics, and speaks to the players ("vous" / "tu"), never about them
 - NPCs are people with motivations, not stat blocks
 - Time matters - update the calendar
 - Absence has consequences - track who wasn't there

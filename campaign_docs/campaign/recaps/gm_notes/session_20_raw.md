@@ -59,7 +59,7 @@ Il va donc falloir que nous réfléchissions à comment sortir nos joueurs de ce
 - Eisfange bout is TOMORROW (Backertag 16th), not "in two days".
 - Kaspar's Fate: 2 or 1 — possibly burned two (one in round 1, a second after getting back up). Confirm with the player.
 - Kaspar, Thucydion, Silas each took a Critical Wound and burned Fate to avoid it: no lasting crits.
-- Engel scene: at the Red Moon ruins (changed during prep). He named warpstone. His leads: the powder looked dwarven; a Ratman was in the ruins; magical residues (will ask Cordelia). Will investigate Heske's and the Hog Pit. Carriers of coffer / 3 amulets / vial: to confirm.
+- Engel scene: at the Red Moon ruins (changed during prep). He named warpstone. His leads: the powder looked dwarven; a Ratman was in the ruins (Shrinq's burned corpse — he didn't escape; Engel identified it and will make it disappear rather than leave it to the guards); magical residues (will ask Cordelia). Will investigate Heske's and the Hog Pit. Carriers of coffer / 3 amulets / vial: to confirm.
 - Franz: 10 GC paid; hinted at someone important who may task them later (Nacht, unnamed). Silas did not try to save Jost Brückner. Red Moon toll canon (7 dead, a dozen burned).
 - Herald special (ubersreik_herald_se01.html): "tall elf with a curved sword" + very tall man carrying a body. Thucydion handed the sword to Kaspar on reading it. Pfeffer's Sigmartag review heard from a guard crier on the Marktplatz (not in the Herald); unknown if PCs linked it.
 - Purchases: everyone Mail Coat + full leather; Kaspar also Mail Coif + Bracers (+ studded gloves from his fence); Pieter Mail Coif + Bracers + Large Shield; Thucydion Large Shield + leather Breastplate. 26 GC left.

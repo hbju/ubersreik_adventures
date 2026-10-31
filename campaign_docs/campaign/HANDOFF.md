@@ -13,7 +13,7 @@ Session 20 ended on **Marktag 15th Sigmarzeit, c. 18:00**, at the **Wolf & Hobgo
 - Franz escaped by boat; 10 GC paid; important-patron hint (Nacht, unnamed). Silas did not try to save Jost Brückner. Red Moon toll canon (7 dead, a dozen burned).
 - Herald special edition `player_handouts/ubersreik_herald_se01.html` (tall elf with curved sword + very tall man carrying a body). Thucydion gave the sword to Kaspar after reading it.
 - Pfeffer's Sigmartag review in front of the Barracks: announced by a Watch crier on the Marktplatz (not in the Herald). Unknown whether the PCs linked it to the bomb.
-- **Engel at the Red Moon ruins** (moved from Cordelia's during prep): named warpstone; gave the kit; PCs lied to him. His leads: dwarven powder, a Ratman in the ruins, magical residues (→ Cordelia). Will investigate Heske's and the Hog Pit.
+- **Engel at the Red Moon ruins** (moved from Cordelia's during prep): named warpstone; gave the kit; PCs lied to him. His leads: dwarven powder, Shrinq's burned corpse identified as a Ratman (Engel will make it disappear), magical residues (→ Cordelia). Will investigate Heske's and the Hog Pit.
 - Ottokar overheard the PCs' confession about the fire, confronted them, was intimidated by Kaspar; then received Ludwig's anonymous "Un garde concerné" letter (naming Rudi).
 - Shopping: Mail Coats + leather all round, extras (see CAMPAIGN_STATE §3). 26 GC left.
 - Ludwig's mutation: Bestial Face (eagle) — schedule 16th / 17th / 18th in CAMPAIGN_STATE §3.
