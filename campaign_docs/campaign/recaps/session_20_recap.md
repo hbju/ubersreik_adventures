@@ -2,76 +2,76 @@
 
 ## La nuit du feu
 
-Derrière vous, la Lune Rouge brûle. Le feu saute déjà de toit en toit, et la rue s'emplit de cris : une femme appelle ses enfants, un homme supplie qu'on l'aide à soulever une poutre. Vous ne vous retournez pas. Franz pèse lourd entre vos bras, et chaque seconde passée dans la lumière des flammes est une seconde de trop.
+Derrière vous, la Lune Rouge brûlait. Le feu sautait déjà de toit en toit, et la rue s'emplissait de cris : une femme appelait ses enfants, un homme suppliait qu'on l'aide à soulever une poutre. Vous ne vous êtes pas retournés. Franz pesait lourd entre vos bras, et chaque seconde passée dans la lumière des flammes était une seconde de trop.
 
-Au hangar de la Guilde des Bateliers, Franz rouvre les yeux. Il vous paie ce qu'il vous doit — dix couronnes, et l'épée — puis, avant de monter dans la barque, il laisse tomber quelques mots : il y a, loin d'ici, des gens importants qui aiment savoir qui fait du bon travail. Peut-être entendront-ils parler de vous. Puis la barque glisse sur le Teufel, et Franz Lohner cesse d'exister.
+Au hangar de la Guilde des Bateliers, Franz a rouvert les yeux. Il vous a payé ce qu'il vous devait — dix couronnes, et l'épée — puis, avant de monter dans la barque, il a laissé tomber quelques mots : il y avait, loin d'ici, des gens importants qui aimaient savoir qui faisait du bon travail. Peut-être entendraient-ils parler de vous. Puis la barque a glissé sur le Teufel, et Franz Lohner a cessé d'exister.
 
-En repassant près de l'incendie, certains d'entre vous aperçoivent un visage connu dans la foule : Ottokar Stiegler, le gazetier. Il vous a vus, lui aussi.
+En repassant près de l'incendie, certains d'entre vous ont aperçu un visage connu dans la foule : Ottokar Stiegler, le gazetier. Il vous avait vus, lui aussi.
 
-Vous dormez au Dunkelfeucht. Mal. Les cris de la rue vous suivent jusque dans vos rêves.
+Vous avez dormi au Dunkelfeucht. Mal. Les cris de la rue vous ont suivis jusque dans vos rêves.
 
 ## Le lendemain
 
-Au matin, vous cassez le jeûne à l'Auberge du Pont. Thucydion, tu as une idée : *Saif al-Janub* contre le départ de Reikhardt Gestaltenstark. Une lame de légende, pour qu'un champion maudit quitte la ville sans bruit. Vous lui faites porter un billet : *Nous connaissons votre secret. Marktplatz, en fin d'après-midi.*
+Au matin, vous avez cassé le jeûne à l'Auberge du Pont. Thucydion, tu avais une idée : *Saif al-Janub* contre le départ de Reikhardt Gestaltenstark. Une lame de légende, pour qu'un champion maudit quitte la ville sans bruit. Vous lui avez fait porter un billet : *Nous connaissons votre secret. Marktplatz, en fin d'après-midi.*
 
-Au même moment vous arrive un autre mot, signé de deux initiales : C.E.
+Au même moment vous est arrivé un autre mot, signé de deux initiales : C.E.
 
-Au temple de Sigmar, vous cherchez Ursula. Elle n'y est pas. Aujourd'hui, on enterre les morts au Jardin de Morr.
+Au temple de Sigmar, vous avez cherché Ursula. Elle n'y était pas. Ce jour-là, on enterrait les morts au Jardin de Morr.
 
-Puis vous filez à la Guilde des Métallurgistes, et vous dépensez presque tout ce que vous avez gagné. Vous en ressortez vêtus de mailles et de cuir ; Kaspar et Pieter, vous voilà coiffés d'acier, et Pieter et Thucydion, chargés de grands boucliers. Kaspar, tu complètes l'ensemble chez ton receleur avec une paire de gantelets cloutés. Il vous reste vingt-six couronnes.
+Puis vous avez filé à la Guilde des Métallurgistes, et vous avez dépensé presque tout ce que vous aviez gagné. Vous en êtes ressortis vêtus de mailles et de cuir ; Kaspar et Pieter, coiffés d'acier, Pieter et Thucydion, chargés de grands boucliers. Kaspar, tu as complété l'ensemble chez ton receleur avec une paire de gantelets cloutés. Il vous restait vingt-six couronnes.
 
-Sur la place, un crieur de la Garde annonce que le jour de Sigmar, la capitaine Pfeffer passera ses hommes en revue devant la caserne.
+Sur la place, un crieur de la Garde annonçait que le jour de Sigmar, la capitaine Pfeffer passerait ses hommes en revue devant la caserne.
 
 ## Le Héraut
 
-Le numéro spécial du *Héraut d'Ubersreik* se vend à chaque coin de rue. Sept morts. Dora Brückner, la femme du tonnelier, et deux apprentis. La veuve Rosshaupt et sa servante. Un veilleur de nuit écrasé en portant secours. Une douzaine de brûlés couchés sur la paille dans la cour des sœurs de Shallya. Les guildes réclament la tête de Pfeffer.
+Le numéro spécial du *Héraut d'Ubersreik* se vendait à chaque coin de rue. Sept morts. Dora Brückner, la femme du tonnelier, et deux apprentis. La veuve Rosshaupt et sa servante. Un veilleur de nuit écrasé en portant secours. Une douzaine de brûlés couchés sur la paille dans la cour des sœurs de Shallya. Les guildes réclamaient la tête de Pfeffer.
 
-Et, en bas de page : des témoins ont vu, juste après l'explosion, *« un grand elfe portant une épée courbe »* et un homme d'une taille peu commune emporter un corps dans les ruelles.
+Et, en bas de page : des témoins avaient vu, juste après l'explosion, *« un grand elfe portant une épée courbe »* et un homme d'une taille peu commune emporter un corps dans les ruelles.
 
-Thucydion, tu tends l'épée à Kaspar sans un mot.
+Thucydion, tu as tendu l'épée à Kaspar sans un mot.
 
 ## Le sorcier dans les ruines
 
-C.E., c'est Christoph Engel. Le Sorcier Gris a quitté sa tour pour fouiller lui-même les décombres de la Lune Rouge. Il vous parle de la **malepierre**, la pierre du Chaos que les hommes-rats savent changer en poudre, et de ce qu'elle ferait à une charge d'explosif. Il vous confie ce qu'il avait promis : un coffret de plomb et ses pinces, trois amulettes de plomb, une fiole de brume grise.
+C.E., c'était Christoph Engel. Le Sorcier Gris avait quitté sa tour pour fouiller lui-même les décombres de la Lune Rouge. Il vous a parlé de la **malepierre**, la pierre du Chaos que les hommes-rats savent changer en poudre, et de ce qu'elle ferait à une charge d'explosif. Il vous a confié ce qu'il avait promis : un coffret de plomb et ses pinces, trois amulettes de plomb, une fiole de brume grise.
 
-Puis il vous dit ce que lui voit dans les cendres : une poudre de facture naine, des traces de magie, et, parmi les corps calcinés, l'un d'eux qui n'a jamais été un homme. Un homme-rat. Celui-là, dit-il, la Garde ne le trouvera pas.
+Puis il vous a dit ce que lui voyait dans les cendres : une poudre de facture naine, des traces de magie, et, parmi les corps calcinés, l'un d'eux qui n'avait jamais été un homme. Un homme-rat. Celui-là, a-t-il dit, la Garde ne le trouverait pas.
 
-Vous ne le détrompez sur rien. Vous ne lui dites rien de ce que vous savez, et vous le laissez repartir sur sa piste.
+Vous ne l'avez détrompé sur rien. Vous ne lui avez rien dit de ce que vous saviez, et vous l'avez laissé repartir sur sa piste.
 
 ## L'oreille du gazetier
 
-Devant les ruines, vous vous attardez pour discuter de la suite. Vous parlez trop, et trop fort, de la nuit précédente. Aucun de vous ne remarque Ottokar, à quelques pas, occupé à questionner les gardes.
+Devant les ruines, vous vous êtes attardés pour discuter de la suite. Vous avez parlé trop, et trop fort, de la nuit précédente. Aucun de vous n'a remarqué Ottokar, à quelques pas, occupé à questionner les gardes.
 
-Lui vous a entendus. Il vient droit sur vous : il vous a vus la veille, des témoins parlent d'un elfe, et voilà que vous revenez sur les lieux du crime. Vous protestez. Kaspar, tu t'avances tout près de lui, et Ottokar se tait. Ludwig, toi, tu te mets à parler d'hommes-rats sous la ville. Le gazetier vous regarde comme on regarde des fous.
+Lui vous avait entendus. Il est venu droit sur vous : il vous avait vus la veille, des témoins parlaient d'un elfe, et voilà que vous reveniez sur les lieux du crime. Vous avez protesté. Kaspar, tu t'es avancé tout près de lui, et Ottokar s'est tu. Ludwig, toi, tu t'es mis à parler d'hommes-rats sous la ville. Le gazetier vous a regardés comme on regarde des fous.
 
-De retour à l'Auberge du Pont, Ludwig, tu prends la plume. Une lettre anonyme, soigneusement écrite, qu'un gamin des rues va porter à Ottokar : la Garde corrompue, les Skavens sous la ville, les incendies, Franz assassiné pour avoir voulu descendre dans les égouts, la capitaine qui étouffe l'affaire, le nom du sergent Rudi Klumpenklug. Signé : *Un garde concerné.*
+De retour à l'Auberge du Pont, Ludwig, tu as pris la plume. Une lettre anonyme, soigneusement écrite, qu'un gamin des rues est allé porter à Ottokar : la Garde corrompue, les Skavens sous la ville, les incendies, Franz assassiné pour avoir voulu descendre dans les égouts, la capitaine qui étouffe l'affaire, le nom du sergent Rudi Klumpenklug. Signé : *Un garde concerné.*
 
 ## Le Loup et le Hobgobelin
 
-Reikhardt vient. Pas seul : quatre de ses hommes l'accompagnent. Vous vous installez dans une alcôve de l'auberge du Loup et du Hobgobelin, sur la Marktplatz.
+Reikhardt est venu. Pas seul : quatre de ses hommes l'accompagnaient. Vous vous êtes installés dans une alcôve de l'auberge du Loup et du Hobgobelin, sur la Marktplatz.
 
-Thucydion, c'est toi qui parles. Vous savez. Le Denvater vous envoie. Voici l'épée, et voici le prix : qu'il quitte Ubersreik.
+Thucydion, c'est toi qui as parlé. Vous saviez. Le Denvater vous envoyait. Voici l'épée, et voici le prix : qu'il quitte Ubersreik.
 
-Reikhardt examine la lame, la pose sur la table, et rit. Oui, il porte le don d'Ulric. Et alors ? Il te reconnaît, Pieter — son adversaire de demain dans l'arène — et rit plus fort encore. Il ne partira pas. Allez au diable.
+Reikhardt a examiné la lame, l'a posée sur la table, et il a ri. Oui, il portait le don d'Ulric. Et alors ? Il t'a reconnu, Pieter — son adversaire du lendemain dans l'arène — et il a ri plus fort encore. Il ne partirait pas. Vous pouviez aller au diable.
 
-Il se lève quand toi, Kaspar, tu empoignes *Saif al-Janub* et tu frappes.
+Il se levait quand toi, Kaspar, tu as empoigné *Saif al-Janub* et tu as frappé.
 
 ## La colère du champion
 
-La lame mord profond. Pas assez.
+La lame a mordu profond. Pas assez.
 
-Ce qui suit est bref et terrible. Kaspar, Reikhardt te met en pièces. Thucydion, tu tiens tête au champion et à deux de ses hommes, quelques instants, avant de t'effondrer à ton tour. Pieter, tu as couru dans la salle en criant à l'assassin. Silas, tu tiens bon face à un homme de main jusqu'à ce que Reikhardt, débarrassé de Thucydion, te broie. Tous les trois, vous auriez dû mourir. Le destin, aujourd'hui, se contente d'un acompte.
+Ce qui a suivi a été bref et terrible. Kaspar, Reikhardt t'a mis en pièces. Thucydion, tu as tenu tête au champion et à deux de ses hommes, quelques instants, avant de t'effondrer à ton tour. Pieter, tu avais couru dans la salle en criant à l'assassin. Silas, tu as tenu bon face à un homme de main jusqu'à ce que Reikhardt, débarrassé de Thucydion, te broie. Tous les trois, vous auriez dû mourir. Le destin, ce jour-là, s'est contenté d'un acompte.
 
-Reste toi, Ludwig. Tu te bats comme un damné : un homme de main tombe mort, un autre s'effondre, la clavicule brisée. Puis tu fais face, seul, au champion de l'Éperon d'Étain, parant coup après coup, puisant dans des forces que tu n'as plus. Tu tiens jusqu'au retour de Pieter. Pieter, tu abats les derniers hommes de main, et ensemble vous jetez Reikhardt à terre.
+Restait toi, Ludwig. Tu t'es battu comme un damné : un homme de main est tombé mort, un autre s'est effondré, la clavicule brisée. Puis tu as fait face, seul, au champion de l'Éperon d'Étain, parant coup après coup, puisant dans des forces que tu n'avais plus. Tu as tenu jusqu'au retour de Pieter. Pieter, tu as abattu les derniers hommes de main, et ensemble vous avez jeté Reikhardt à terre.
 
-Le champion ne se relève pas. Il ne s'est pas transformé.
+Le champion ne s'est pas relevé. Il ne s'était pas transformé.
 
-## Ce qui reste
+## Ce qui restait
 
-Dans l'alcôve, trois d'entre vous gisent inconscients. Un homme est mort, un autre se vide de son sang par un œil crevé. L'épée courbe repose sur le plancher, au milieu du sang. Le meilleur combattant d'Ubersreik est étendu à vos pieds, et vous n'avez aucune preuve de ce qu'il est.
+Dans l'alcôve, trois d'entre vous gisaient inconscients. Un homme était mort, un autre se vidait de son sang par un œil crevé. L'épée courbe reposait sur le plancher, au milieu du sang. Le meilleur combattant d'Ubersreik était étendu à vos pieds, et vous n'aviez aucune preuve de ce qu'il était.
 
-Le tavernier et les clients s'approchent. Quelqu'un reconnaît le visage de Reikhardt.
+Le tavernier et les clients s'approchaient. Quelqu'un avait reconnu le visage de Reikhardt.
 
-Et toi, Ludwig, sans le savoir encore, tu as payé plus cher que les autres. Quelque chose, en toi, a commencé à changer.
+Et toi, Ludwig, sans le savoir encore, tu avais payé plus cher que les autres. Quelque chose, en toi, avait commencé à changer.
 
-Il est six heures du soir. Il vous reste trois jours avant la fête de Sigmar.
+Il était six heures du soir. Il vous restait trois jours avant la fête de Sigmar.

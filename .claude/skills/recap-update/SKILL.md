@@ -57,7 +57,8 @@ After receiving answers:
 
 #### 3. Write Player-Facing Recap
 Create `campaign_docs/campaign/recaps/session_[N]_recap.md` in French:
-- **Addressed directly to the players, in the second person — never third person.** Use "vous" for the group ("Vous ne vous retournez pas.") and "tu" + the character's name when singling out one PC ("Kaspar, tu empoignes l'épée et tu frappes."). Present tense reads best at the table.
+- **Addressed directly to the players, in the second person — never third person.** Use "vous" for the group ("Vous ne vous êtes pas retournés.") and "tu" + the character's name when singling out one PC ("Kaspar, tu as empoigné l'épée et tu as frappé.").
+- **Past tense throughout** (passé composé for actions, imparfait for descriptions and the closing situation: "Il était six heures du soir."). It is a recap of what happened, never narrated as if happening now.
 - If the GM's raw notes were written into the recap file, move them to `recaps/gm_notes/session_[N]_raw.md` first (append the GM's Q&A answers there too)
 - Narrative summary of events (player perspective)
 - Key moments and decisions
