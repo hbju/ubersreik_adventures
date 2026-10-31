@@ -1,13 +1,75 @@
-La dernière session était un banger, mais va devoir recquérir pas mal de boulot pour raccorder les trains. 
+# Session 20 — Cendres et comptes
 
-On a commencé avec la fin de la session avec Franz. Un bon travail a été fait de les confronter aux horreurs du feu je pense, et ça s'est plutôt bien passé globalement. Ils n'ont absolument pas essayé de sauver qui que ce soit, et sont juste allés aussi vite que possible accompagner Franz à son départ. Ils sont ensuite tous allés dormir au Dunkelfeucht, et en repassant à proximité de l'incendie après avoir déposé Franz, certains d'entre eux ont pu remarquer Ottokar, présent sur la scène, qui les a également aperçus. 
+## La nuit du feu
 
-Le lendemain, ils se sont rapidement dirigés vers l'auberge de la Maison du Pont, où ils ont pu casser le jeun et discuter de la suite. En particulier, Thucydion a eu pour idée d'offrir Saif al-Janub à Reikhardt en échange de son départ de la cité. Ils ont donc écrit un mot à celui-ci, lui disant qu'ils connaissaient son secret, et de les retrouver vers Marktplatz en fin d'après-midi. 
+Derrière eux, la Lune Rouge brûlait. Le feu sautait déjà de toit en toit, et la rue s'emplissait de cris : une femme appelait ses enfants, un homme suppliait qu'on l'aide à soulever une poutre. Les compagnons ne se retournèrent pas. Franz pesait lourd entre leurs bras, et chaque seconde passée dans la lumière des flammes était une seconde de trop.
 
-Au même moment, ils ont reçu le mot de Christopher, ne sachant pas vraiment à qui ce C.E. pourrait référer. Ils ont ensuite décidé de se diriger vers le temple de Sigmar, afin de s'enquérir de Ursula. Celle-ci n'était pas là : elle est en train de traîner autour du jardin de Morr, comme prévu, alors que les gens pleurent les victimes des feux. 
+Au hangar de la Guilde des Bateliers, Franz rouvrit les yeux. Il paya ce qu'il devait — dix couronnes, et l'épée — puis, avant de monter dans la barque, il laissa tomber quelques mots : il y avait, loin d'ici, des gens importants qui aimaient savoir qui faisait du bon travail. Peut-être entendraient-ils parler d'eux. Puis la barque glissa sur le Teufel, et Franz Lohner cessa d'exister.
 
-Ensuite, ils sont partis vers la guilde des métallurgistes afin de trouver de l'équipment et dépenser tout l'argent gagné jusque là. Ils ont ainsi pu acheter pour la plupart de la maille, Kaspar a également acheté des brassards en plate, Thucydion un grand bouclier. Kaspar s'est également rendu chez son receleur et a pu acheter des gants cloutés à accrocher à ses nouveaux brassards. En tout, il leur reste maintenant 26 GCs. 
+En repassant près de l'incendie, certains aperçurent un visage connu dans la foule : Ottokar Stiegler, le gazetier. Il les avait vus, lui aussi.
 
-Ensuite ils sont directement allés aux ruines de la Lune Rouge. Ils ont acheté le numéro spécial du Héraut d'Ubersreik, où ils ont pu constater qu'ils risquaient d'être quelque peu suspects. Ils ont pu pénétrer les lieux et retrouver Christoph Engel. Je pense que je n'ai pas fait un assez bon travail de préparation sur la description exacte de l'auberge : en particulier, j'ai dit aux joueurs qu'il y avait encore un étage, ce qui leur a paru quelque peu étrange. J'aurais dû être plus au clair sur ce qu'il restait exactement de l'auberge et comment le souffle de l'explosion l'avait emportée. Ils ont pu discuter avec le sorcier. Ils n'ont absolument pas dit la vérité à Christoph et l'ont laissé sur ses pistes actuelles. Il leur a donné le coffret de plomb, les amulettes et la fiole. 
+Ils dormirent au Dunkelfeucht. Mal. Les cris de la rue les suivirent jusque dans leurs rêves.
 
-En sortant, ils sont restés quelques temps discuter de la suite devant l'auberge. Là, sans faire attention à leur entourage, ils ont mentionné en particulier leur implication dans le feu de la veille. Ils ont tous raté un test de Perception et n'ont donc pas remarqué Ottokar, qui était en train d'essayer d'interroger les gardes devant les ruines, et qui a pu tendre l'oreille et écouter leur conversation. Il les a ensuite tous confrontés (il n'a pas tout entendu mais n'est pas bête : il les a vus la veille, a entendu des témoignages sur un groupe avec un elfe sortant de l'auberge, et maintenant ils reviennent sur la scène du crime). Ceux-ci se sont insurgés contre ses accusations et Kaspar l'a intimidé pour qu'il se taise. Ce que Ottokar fera n'est pas encore sûr, et de toute manière changera probablement bien étant donné la suite des événements. Pour en tout cas le 
+## Le lendemain
+
+Au matin, ils cassèrent le jeûne à l'Auberge du Pont. Thucydion avait une idée : *Saif al-Janub* contre le départ de Reikhardt Gestaltenstark. Une lame de légende, pour qu'un champion maudit quitte la ville sans bruit. On lui fit porter un billet : *Nous connaissons votre secret. Marktplatz, en fin d'après-midi.*
+
+Au même moment arriva un autre mot, signé de deux initiales : C.E.
+
+Au temple de Sigmar, ils cherchèrent Ursula. Elle n'y était pas. Ce jour-là, on enterrait les morts au Jardin de Morr.
+
+Puis ils allèrent à la Guilde des Métallurgistes, et dépensèrent presque tout ce qu'ils avaient gagné. Ils en ressortirent vêtus de mailles et de cuir, Kaspar et Pieter coiffés d'acier, Thucydion et Pieter chargés de grands boucliers. Kaspar compléta l'ensemble chez son receleur avec une paire de gantelets cloutés. Il leur restait vingt-six couronnes.
+
+Sur la place, un crieur de la Garde annonçait que le jour de Sigmar, la capitaine Pfeffer passerait ses hommes en revue devant la caserne.
+
+## Le Héraut
+
+Le numéro spécial du *Héraut d'Ubersreik* se vendait à chaque coin de rue. Sept morts. Dora Brückner, la femme du tonnelier, et deux apprentis. La veuve Rosshaupt et sa servante. Un veilleur de nuit écrasé en portant secours. Une douzaine de brûlés couchés sur la paille dans la cour des sœurs de Shallya. Les guildes réclamaient la tête de Pfeffer.
+
+Et, en bas de page : des témoins avaient vu, juste après l'explosion, *« un grand elfe portant une épée courbe »* et un homme d'une taille peu commune emporter un corps dans les ruelles.
+
+Thucydion tendit l'épée à Kaspar sans un mot.
+
+## Le sorcier dans les ruines
+
+C.E., c'était Christoph Engel. Le Sorcier Gris avait quitté sa tour pour venir fouiller lui-même les décombres de la Lune Rouge, au milieu de ce qui restait du bâtiment. Il leur parla de la **malepierre**, la pierre du Chaos que les hommes-rats savent changer en poudre, et de ce qu'elle ferait à une charge d'explosif. Il leur confia ce qu'il avait promis : un coffret de plomb et ses pinces, trois amulettes de plomb, une fiole de brume grise.
+
+Puis il leur dit ce que lui voyait dans les cendres : une poudre de facture naine, des traces de magie, et l'odeur d'un homme-rat. Les compagnons ne le détrompèrent pas. Ils ne lui dirent rien de ce qu'ils savaient, et le laissèrent repartir sur sa piste.
+
+## L'oreille du gazetier
+
+Devant les ruines, ils s'attardèrent pour discuter de la suite. Ils parlèrent trop, et trop fort, de la nuit précédente. Aucun d'eux ne remarqua Ottokar, à quelques pas, occupé à questionner les gardes.
+
+Lui les avait entendus. Il vint droit sur eux : il les avait vus la veille, des témoins parlaient d'un elfe, et voilà qu'ils revenaient sur les lieux du crime. Ils protestèrent. Kaspar s'avança tout près de lui, et Ottokar se tut. Ludwig, lui, se mit à parler d'hommes-rats sous la ville. Le gazetier les regarda comme on regarde des fous.
+
+De retour à l'Auberge du Pont, Ludwig prit la plume. Une lettre anonyme, soigneusement écrite, qu'un gamin des rues alla porter à Ottokar : la Garde corrompue, les Skavens sous la ville, les incendies, Franz assassiné pour avoir voulu descendre dans les égouts, la capitaine qui étouffe l'affaire, le nom du sergent Rudi Klumpenklug. Signé : *Un garde concerné.*
+
+## Le Loup et le Hobgobelin
+
+Reikhardt vint. Pas seul : quatre de ses hommes l'accompagnaient. On s'installa dans une alcôve de l'auberge du Loup et du Hobgobelin, sur la Marktplatz.
+
+Thucydion parla. Ils savaient. Le Denvater les envoyait. Voici l'épée, et voici le prix : qu'il quitte Ubersreik.
+
+Reikhardt examina la lame, la posa sur la table, et rit. Oui, il portait le don d'Ulric. Et alors ? Il reconnut Pieter, son adversaire du lendemain dans l'arène, et rit plus fort encore. Il ne partirait pas. Qu'ils aillent au diable.
+
+Il se levait quand Kaspar empoigna *Saif al-Janub* et frappa.
+
+## La colère du champion
+
+La lame mordit profond. Pas assez.
+
+Ce qui suivit fut bref et terrible. Reikhardt mit Kaspar en pièces. Thucydion tint tête au champion et à deux de ses hommes, quelques instants, avant de s'effondrer à son tour. Pieter avait couru dans la salle en criant à l'assassin. Silas tint bon face à un homme de main jusqu'à ce que Reikhardt, débarrassé de Thucydion, le broie. Tous trois auraient dû mourir. Le destin, ce jour-là, se contenta d'un acompte.
+
+Restait Ludwig. Il se battit comme un damné : un homme de main tomba mort, un autre s'effondra, la clavicule brisée. Puis il fit face, seul, au champion de l'Éperon d'Étain, parant coup après coup, puisant dans des forces qu'il n'avait plus. Il tint jusqu'au retour de Pieter. Pieter abattit les derniers hommes de main, et ensemble ils jetèrent Reikhardt à terre.
+
+Le champion ne se releva pas. Il ne s'était pas transformé.
+
+## Ce qui reste
+
+Dans l'alcôve, trois compagnons gisent inconscients. Un homme est mort, un autre se vide de son sang par un œil crevé. L'épée courbe repose sur le plancher, au milieu du sang. Le meilleur combattant d'Ubersreik est étendu à leurs pieds, et ils n'ont aucune preuve de ce qu'il est.
+
+Le tavernier et les clients s'approchent. Quelqu'un reconnaît le visage de Reikhardt.
+
+Et Ludwig, sans le savoir encore, a payé plus cher que les autres. Quelque chose, en lui, a commencé à changer.
+
+Il est six heures du soir. Il reste trois jours avant la fête de Sigmar.
