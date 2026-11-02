@@ -14,11 +14,11 @@ Vous avez dormi au Dunkelfeucht. Mal. Les cris de la rue vous ont suivis jusque 
 
 Au matin, vous avez cassé le jeûne à l'Auberge du Pont. Thucydion, tu avais une idée : *Saif al-Janub* contre le départ de Reikhardt Gestaltenstark. Une lame de légende, pour qu'un champion maudit quitte la ville sans bruit. Vous lui avez fait porter un billet : *Nous connaissons votre secret. Marktplatz, en fin d'après-midi.*
 
-Au même moment vous est arrivé un autre mot, signé de deux initiales : C.E.
+Au même moment vous est arrivé un autre mot, signé de deux initiales : C.E., vous invitant aux ruines de votre larcin de la veille. 
 
-Au temple de Sigmar, vous avez cherché Ursula. Elle n'y était pas. Ce jour-là, on enterrait les morts au Jardin de Morr.
+Au temple de Sigmar, vous avez cherché Ursula. Elle n'y était pas, mais vous avez chargé un Sigmarite présent de lui dire qu'elle pourrait vous trouver en votre nouvelle auberge. 
 
-Puis vous avez filé à la Guilde des Métallurgistes, et vous avez dépensé presque tout ce que vous aviez gagné. Vous en êtes ressortis vêtus de mailles et de cuir ; Kaspar et Pieter, coiffés d'acier, Pieter et Thucydion, chargés de grands boucliers. Kaspar, tu as complété l'ensemble chez ton receleur avec une paire de gantelets cloutés. Il vous restait vingt-six couronnes.
+Puis vous avez filé à la Guilde des Métallurgistes, et vous avez dépensé presque tout ce que vous aviez gagné. Vous en êtes ressortis vêtus de mailles et de cuir. Kaspar, tu as complété l'ensemble chez ton receleur avec une paire de gantelets cloutés.
 
 Sur la place, un crieur de la Garde annonçait que le jour de Sigmar, la capitaine Pfeffer passerait ses hommes en revue devant la caserne.
 
@@ -62,16 +62,14 @@ La lame a mordu profond. Pas assez.
 
 Ce qui a suivi a été bref et terrible. Kaspar, Reikhardt t'a mis en pièces. Thucydion, tu as tenu tête au champion et à deux de ses hommes, quelques instants, avant de t'effondrer à ton tour. Pieter, tu avais couru dans la salle en criant à l'assassin. Silas, tu as tenu bon face à un homme de main jusqu'à ce que Reikhardt, débarrassé de Thucydion, te broie. Tous les trois, vous auriez dû mourir. Le destin, ce jour-là, s'est contenté d'un acompte.
 
-Restait toi, Ludwig. Tu t'es battu comme un damné : un homme de main est tombé mort, un autre s'est effondré, la clavicule brisée. Puis tu as fait face, seul, au champion de l'Éperon d'Étain, parant coup après coup, puisant dans des forces que tu n'avais plus. Tu as tenu jusqu'au retour de Pieter. Pieter, tu as abattu les derniers hommes de main, et ensemble vous avez jeté Reikhardt à terre.
+Restait toi, Ludwig. Tu t'es battu comme un damné : un homme de main est tombé mort, un autre s'est effondré, la clavicule brisée. Puis tu as fait face, seul, au champion de l'Éperon d'Étain, parant coup après coup, puisant dans des forces que tu n'avais plus. Tu as tenu jusqu'au retour de Pieter. Pieter, tu as abattu les derniers hommes de main, et ensemble vous avez terrassé Reikhardt.
 
-Le champion ne s'est pas relevé. Il ne s'était pas transformé.
+Le champion ne s'est pas relevé.
 
 ## Ce qui restait
 
-Dans l'alcôve, trois d'entre vous gisaient inconscients. Un homme était mort, un autre se vidait de son sang par un œil crevé. L'épée courbe reposait sur le plancher, au milieu du sang. Le meilleur combattant d'Ubersreik était étendu à vos pieds, et vous n'aviez aucune preuve de ce qu'il était.
+Dans l'alcôve, trois d'entre vous gisent inconscients. Un homme est mort, un autre se vide de son sang par un œil crevé. L'épée courbe repose sur le plancher, au milieu du sang. Le meilleur combattant d'Ubersreik est étendu au milieu de la table, et vous n'avez aucune preuve de ce qu'il est.
 
-Le tavernier et les clients s'approchaient. Quelqu'un avait reconnu le visage de Reikhardt.
+Le tavernier et les clients s'approchent. 
 
-Et toi, Ludwig, sans le savoir encore, tu avais payé plus cher que les autres. Quelque chose, en toi, avait commencé à changer.
-
-Il était six heures du soir. Il vous restait trois jours avant la fête de Sigmar.
+Il est six heures du soir. Il vous reste trois jours avant le Sigmartag.
