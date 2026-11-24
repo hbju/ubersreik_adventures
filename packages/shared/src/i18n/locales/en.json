@@ -1,4 +1,19 @@
 {
+    "partyCheck": {
+        "title": "Secret party check",
+        "skill": "Skill",
+        "modifier": "Modifier",
+        "roll": "Roll for party",
+        "empty": "Assign characters to players to roll for the party.",
+        "results": "Party check results",
+        "character": "Character",
+        "rollVsTarget": "Roll / Target",
+        "outcome": "Outcome",
+        "success": "Success",
+        "failure": "Failure",
+        "sl": "SL",
+        "unavailable": "Skill unavailable"
+    },
     "common": {
         "cancel": "Cancel",
         "confirm": "Confirm",

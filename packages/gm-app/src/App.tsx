@@ -1744,7 +1744,7 @@ function App() {
             )}
 
 
-            {showDiceTray && <DiceTray onClose={() => setShowDiceTray(false)} onLogEntry={addLogEntry} />}
+            {showDiceTray && <DiceTray characters={characters} onClose={() => setShowDiceTray(false)} onLogEntry={addLogEntry} />}
 
             {showChat && (
                 <div style={{

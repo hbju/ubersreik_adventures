@@ -1,4 +1,19 @@
 {
+    "partyCheck": {
+        "title": "Test secret du groupe",
+        "skill": "Compétence",
+        "modifier": "Modificateur",
+        "roll": "Lancer pour le groupe",
+        "empty": "Attribuez des personnages aux joueurs pour lancer un test de groupe.",
+        "results": "Résultats du test de groupe",
+        "character": "Personnage",
+        "rollVsTarget": "Jet / Seuil",
+        "outcome": "Résultat",
+        "success": "Réussite",
+        "failure": "Échec",
+        "sl": "DR",
+        "unavailable": "Compétence indisponible"
+    },
     "common": {
         "cancel": "Annuler",
         "confirm": "Confirmer",

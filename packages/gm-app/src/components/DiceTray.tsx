@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { Character } from '@wfrp/shared';
+import SecretPartyCheck from './SecretPartyCheck';
 import styles from './DiceTray.module.css';
 
 interface DiceTrayProps {
+    characters: Character[];
     onClose: () => void;
     onLogEntry: (type: 'roll' | 'system' | 'info', content: string) => void;
 }
 
-const DiceTray: React.FC<DiceTrayProps> = ({ onClose, onLogEntry }) => {
+const DiceTray: React.FC<DiceTrayProps> = ({ characters, onClose, onLogEntry }) => {
     const [customFormula, setCustomFormula] = useState('');
     const [lastResult, setLastResult] = useState<string | null>(null);
 
@@ -74,6 +77,8 @@ const DiceTray: React.FC<DiceTrayProps> = ({ onClose, onLogEntry }) => {
                 <button onClick={onClose} className={styles.closeButton}>✖</button>
             </div>
             
+            <SecretPartyCheck party={characters.filter(character => character.userId)} />
+
             <div className={styles.quickRolls}>
                 <button onClick={() => rollDice('1d100')}>d100</button>
                 <button onClick={() => rollDice('1d10')}>d10</button>
