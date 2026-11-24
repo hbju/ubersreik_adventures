@@ -1,42 +1,54 @@
-# HANDOFF — going into Session 21 (prep DONE)
+# HANDOFF — Session 22 prepared, not yet played
 
-Guide: `campaign_docs/output/Session 21 - A Night in the Barracks.docx` (generator: `campaign_docs/tools/generate_session_21_guide.mjs`).
-Scope: Marktag 15th 18:00 → Backertag 16th c. 23:00. Custody night in the Barracks, morning visitors, release c. 14:00, then the Tin Spur (Felix + Eisfange) and/or Ursula's raid on Kessel's Chandlery.
+State files are current as of the end of Session 21 (Backertag 16th, c. 19:00, outside the Barracks). **Nothing below is canon until played.**
 
-**None of the below is canon until played.** Do not record outcomes in CAMPAIGN_STATE before the recap.
+Guide: `campaign_docs/output/Session 22 - Debts Come Due.docx` (generator: `campaign_docs/tools/generate_session_22_guide.mjs`). Scope: Backertag 16th 19:00 → Bezahltag 17th late night. May split in two sessions; natural cut at the end of the night of the 16th.
 
-## GM decisions taken in S21 prep (plan, not yet canon)
-- **Endgame recalibrated**: Reikhardt is alive, so the PCs get bail, a trial postponed until after the feast days (Burgermeister's court), and a ruined reputation — unless they do something stupid (finish him, attack a Watchman, break out).
-- **Arrest**: routine patrol led by Vielfrass + Geldrecht. Vielfrass recognises Pieter/Thucydion, thinks they removed a rival (knows nothing of the Hog Pit fire). Geldrecht half-recognises Ludwig/Silas from the warehouse on the 13th; loose talk about docks/idol → Chandlery reinforced.
-- **Custody in the Barracks**: faint sounds at night, described but never called digging. Rudi on night duty, steering patrols away from the cellar stair.
-- **Charges**: heavier for Ludwig (killed henchman Jörg Maurer) and Kaspar (struck first; the one-eyed henchman barely survived). Suggested bail 20 GC each, 5 GC for the others (55 GC total).
-- **Reikhardt heals overnight**; Shallyan Sister Hildegund calls it Ulric's blessing. Eisfange bout **goes ahead** on the 16th (cancelling would feed the PCs' accusations); Pieter may forfeit (→ Klaus Wenner mauled, contract voided, 2 GC advance owed).
-- **Pfeffer** visits on the sly c. 21:30 on the 15th, out of curiosity: confirms a Rudi file ("sketchy contacts"), can't free them, can't cancel the review. **What the PCs tell her decides her reaction for the 18th — decide after S21.**
-- **Kretschmer**: contract void, no reward, avoids them for the rest of the campaign. Pays bail anonymously **only if no PC named him to the Watch** during interrogations (Pfeffer talk off the record doesn't count by default).
-- **Silvi** comes last: everything done, the Crosses are finished helping, the debt = clear the threat under the city. **Cancels Kaspar's Lowhaven deal and proposes Otto's death** (Otto's second ledger, bookkeeper Kurt Pfennig). Refusing her → corrupt guards, release c. 19:00.
-- **Kit and *Saif al-Janub* returned at release.**
-- **Ursula** contacts them at release: raid the Chandlery tonight while Vielfrass and the Circle are at the Tin Spur. Pays with Hannah (Jannik's killer), Ingrid's room, the Pious Cup's empty hour. If refused, **she waits** — no assault.
-- **Ludwig's mutation corrected**: Bestial Face is a flat **−20 Fel** (not 2d10): 16th none (nightmare, itching, Hard Perception to notice nose/chin), 17th −10, 18th −10 more.
-- **Silas threshold**: on his next Corruption point, Cool test; on failure roll the mutation at once. Likely trigger: the idol at the Chandlery (Pieter 7/8 too).
-- **No extra visitors** (no Ottokar, Rolf or Melina in the cells). **No Herald issue on the 16th**; a possible issue on the morning of Sigmartag.
-- New NPCs (guide §15): Bertolt "Bandages" Rau (Watch would-be medic, on duty on Sigmartag), Sister Hildegund, Sgt. Konrad Bleich (interrogator), Jörg Maurer ✝.
+## GM decisions taken in S22 prep
+- **Purpose**: close the remaining threads before the dungeon crawl. No new side quests, no extra outs. If the PCs leave the city, they leave.
+- **Eisfange**: diminished but lethal (two-thirds Wounds, fresh scar on the left flank from *Saif al-Janub*). Friends may cheat; the bout is in front of the whole city. Purse: **10 GC for a win, 2 GC otherwise**. If Pieter does not fight, **Reikhardt files charges on the 17th**: summons for a hearing in a week.
+- **Silvi**: if Pieter fights, she gives one cold fact and nothing else — **Otto's second ledger and his bookkeeper Kurt Pfennig** (garret above the Gilded Cage). No money, no reconciliation.
+- **Chandlery**: built on *A Heart of Glass* pp. 57–59 (bar, chalk circle, Vielfrass's cabinet, flesh icon, black marble statuette under purple velvet, gold-leaf sheet, Vielfrass's half-finished page about Heske Glazer). Garrison Geldrecht + 4; the Circle returns at 22:30. Slaanesh is never named. Ursula pays at once: the **Pious Cup**, Hannah and Ingrid; she says Hannah killed Jannik and that she was there.
+- **Elsa's price**: Ludwig and Silas must stand among Otto's men at the Stiegler house on the 17th and hold Kaspar. If they hide, nothing happens before Sigmartag; the consequence is for the epilogue. Rolf carries her summons.
+- **Ludwig's face on the 17th**: visible but can be hidden without much trouble (hood, scarf). On the 18th it cannot.
+- **Pious Cup**: Hannah and Ingrid alone during the evening office (17:00–18:00). Ingrid has joined the Zealots and tries to talk Pieter into leaving them alone or helping. **Hannah's head: 20 GC** — exactly Giordano's price for the Bastards of the Reik.
+- **Otto's trap (17th, 20:00, Stiegler house)**: dozens of men in the house, a dozen in the street. Kaspar is stripped of his armour. Otto does not kill him: he **crushes his right hand** in front of the men unless someone stops it. Then he makes his advance on Johanna, who refuses. If Kaspar does not come: the father is drowned in his drug (permanent), Johanna is assaulted. Otto has heard the Baron's name was used and does not care.
+- **The bomb's location** is the goal of the dungeon crawl; no extra hint was added in S22.
+- **Herald**: no issue before Sigmartag. One last issue after the feast, as the campaign's conclusion.
+- ***Margarethe***: docks at noon on the 17th with numerous fighters — the Lowhaven reinforcements. Background only.
+- **Wahlund's scout**: Mårten is the man put out of action. Rendezvous proposed at the Guild sewergate before first light on Sigmartag.
 
-## To confirm at the table
-- Kaspar's Fate (1 or 2 left); who carries Engel's coffer, talismans, vial.
-- **State discrepancy**: CAMPAIGN_STATE §2 says *Pieter* put out the henchman's eye; the GM's prep answer ties the eye to Kaspar's charge. Clarify who did it before the recap.
+## Invented in prep — confirm or rename
+- Otto's men at the Stiegler house: Dieter "Deux-Doigts" Hass, Uwe and Karl Brandt, old Henning, Matthes le Rouge, Jochen "Sourire"; Rolf Vane is among them.
+- Frau Betke (the Stieglers' old servant) and her grandson; Frau Ottilie Krämer (keeper of the Pious Cup).
+- Kurt Pfennig's lodging (garret above the Gilded Cage) and the ledger's hiding place (loose stair-tread).
+- Elsa's meeting place: "the same back room as the branding" — no location named.
+- Hearing date on the summons: Marktag 22nd Sigmarzeit.
+- **Who pays Hannah's bounty** is not stated in the guide ("where the bounty was posted") — fill in at the table.
 
-## After S21 — decide / follow up
-1. Pfeffer's concrete reaction for the 18th, based on what they told her.
-2. Kretschmer tally → who paid the bail; does Silvi's debt grow?
-3. Kaspar's answer about Otto; Otto learns of Felix on the 16th night and **moves on the 17th**.
-4. Expedition: rendezvous fixed for dawn on the 17th? If no PC went to the Guild, Wahlund leaves without them.
-5. Chandlery: raid or not; Geldrecht's fate; idol; ledger + eye-sealed letter (Unblinking Eye link); Ursula's payment → Pious Cup thread opens.
-6. Eisfange: fought or forfeited; Reikhardt's hatred of Pieter.
-7. Elsa: debrief done or skipped (muscle in S22). Ludwig booked as "Ryan von Mounir" or Ludwig → Jungfreud consequences.
-8. Rudi: confronted? K&H warned via dead drop (Honighäschen knows their faces)?
-9. Optional daily noon reporting at the Barracks for Ludwig/Kaspar (bail condition) — would place them at the Barracks on Sigmartag.
-10. Engel now knows (via Cordelia) that the PCs lied at the ruins.
-11. Plan S22: Bezahltag 17th (expedition, Otto, Ludwig's beak visible, *Margarethe* at noon) → Sigmartag 18th finale (possibly two sessions).
+## To confirm at the table (carried from S21)
+- Did the PCs really denounce Vielfrass to Pfeffer? (Assumed yes.)
+- Did Thucydion tell the others about the noise under the gaol?
+- Who carries Engel's lead coffer and tongs?
+
+## To record after S22 (drives the expedition and the finale)
+- Eisfange: fought / forfeited / cheated; Pieter's wounds and purse; summons served or not.
+- Chandlery: Geldrecht's fate; Watchmen killed; Corruption gained (Silas's threshold, Pieter); who holds the Circle's ledger and the eye-sealed letter; were the PCs recognised.
+- Elsa: did Ludwig and Silas go; did they warn Kaspar; did she see Ludwig's face.
+- Pfennig and the second ledger: found, copied, used?
+- Pious Cup: Hannah's fate, Ingrid's choice, Thucydion alive, bounty and Giordano paid.
+- Stiegler house: which lever, at which beat; **Kaspar's hand**; Johanna and her father; what Elsa will hear about Ludwig and Silas.
+- Expedition roster and each PC's state at first light on Sigmartag.
+
+## Next prep — the expedition (dedicated dungeon-crawl session)
+- VTT app to be adapted for the crawl; needs dev time.
+- Goal of the crawl: find where the bomb is and stop the detonation.
+- Roster: Wahlund, Anders, Rickard, Melina (Mårten out); Gunnar if told the hour (guest-NPC candidate); the Bastards of the Reik only if Giordano got his 20 GC. Giordano's Skaven lore opens that session if paid.
+- Engel's kit in play: lead talismans (Thucydion, Kaspar, Ludwig — Kaspar's is taken off him at the Stiegler house with his armour; decide whether he gets it back), grey-mist vial (Thucydion), lead coffer and tongs.
+- Still open for the finale: Pfeffer's reaction on the 18th; Rudi at breaking point; Otto's promise to take Johanna to the review; Ingrid in the crowd if she stayed with Ricker.
+
+## Epilogue material (after Sigmartag)
+Elsa's account with Ludwig and Silas (and Ludwig's mutation under the Baron's brand); Otto and the ledger; Reikhardt's hearing if summoned; the Herald's last issue; Vielfrass alive for *A Heart of Glass* and Geldrecht's grudge; Ursula; the Lowhaven reinforcements and Mercy's bounty; Rolf the mole.
 
 ## Dormant threads (still open)
-Günther in Wahlund's custody; Grodni's favor; docker "ghost" bounty (10 GC, Thucydion); Doktor Grat; Mercy's 20 GC bounty on Kaspar; Oswin's memory of Kaspar's name; Rolf mole rumours; Giordano's 20 GC offer; the fled Carmello goon; Johanna thread (Kaspar); Jacob's Temple inquiry (Ricker, Aldric, Tobias); Nacht's eventual summons via Franz; Silvi's undelivered disinformation (*Margarethe*, doctored dossier).
+Günther in Wahlund's custody; Grodni's favour; docker "ghost" bounty (10 GC, Thucydion); Doktor Grat; Oswin's memory of Kaspar's name; the fled Carmello goon; Jacob's Temple inquiry (answered only if the Pious Cup is played); Nacht's eventual summons via Franz; Engel knowing the PCs lied (he says so if they seek him); Friedrich / the Unblinking Eye; the Resistance and "Ryan"; "Dordean"; Ottokar's file on the PCs.
