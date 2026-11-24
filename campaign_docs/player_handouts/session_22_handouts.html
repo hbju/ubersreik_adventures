@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 22 — Documents pour les joueurs</title>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Cinzel:wght@400;700;900&family=Dancing+Script:wght@400;700&family=UnifrakturMaguntia&family=Parisienne&family=La+Belle+Aurore&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1e1a14;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+    padding: 40px 20px 80px;
+    min-height: 100vh;
+  }
+
+  /* ── GM chrome (never printed, hidden while presenting) ───────── */
+  .gm-header {
+    font-family: 'Cinzel', serif;
+    color: #c4a46a;
+    text-align: center;
+    max-width: 640px;
+    line-height: 1.5;
+  }
+  .gm-header h1 { font-size: 15pt; letter-spacing: 4px; text-transform: uppercase; font-weight: 700; }
+  .gm-header p {
+    font-family: 'IM Fell English', serif; font-style: italic;
+    font-size: 10pt; color: #8a7a5a; margin-top: 8px;
+  }
+  .gm-header kbd {
+    font-family: 'Cinzel', serif; font-style: normal; font-size: 8pt;
+    border: 1px solid #6a5a3a; border-radius: 3px; padding: 0 5px; color: #c4a46a;
+  }
+
+  .handout { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+
+  .gm-label {
+    font-family: 'Cinzel', serif;
+    color: #c4a46a;
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: center;
+    max-width: 620px;
+    line-height: 1.5;
+  }
+  .gm-label .gm-note {
+    display: block;
+    font-family: 'IM Fell English', serif;
+    font-size: 9pt;
+    color: #8a7a5a;
+    letter-spacing: 0.5px;
+    text-transform: none;
+    margin-top: 5px;
+    font-style: italic;
+  }
+  .show-btn {
+    margin-top: 10px;
+    font-family: 'Cinzel', serif; font-size: 8pt; letter-spacing: 2px; text-transform: uppercase;
+    color: #1e1a14; background: #c4a46a; border: none; border-radius: 2px;
+    padding: 6px 14px; cursor: pointer;
+  }
+  .show-btn:hover { background: #dcc08a; }
+
+  .exit-btn {
+    display: none;
+    position: fixed; top: 10px; left: 10px; z-index: 50;
+    font-family: 'Cinzel', serif; font-size: 8pt; letter-spacing: 2px;
+    color: #6a5a3a; background: transparent; border: 1px solid #3a3020; border-radius: 2px;
+    padding: 4px 10px; cursor: pointer; opacity: 0.5;
+  }
+  .exit-btn:hover { opacity: 1; color: #c4a46a; }
+
+  /* Presenting: one document alone on a dark table */
+  body.presenting { justify-content: center; padding: 30px 20px; background: #14110d; }
+  body.presenting .gm-header,
+  body.presenting .gm-label,
+  body.presenting .handout:not(.active) { display: none; }
+  body.presenting .exit-btn { display: block; }
+
+  /* ── Paper ─────────────────────────────────────────────────────── */
+  .parchment {
+    width: 180mm;
+    background-color: #f3e8ce;
+    background-image:
+      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    position: relative;
+    padding: 25mm;
+    font-family: 'IM Fell English', serif;
+    color: #2a2015;
+    line-height: 1.65;
+    font-size: 11pt;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.45), 0 0 60px rgba(0,0,0,0.2);
+  }
+  .parchment::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 8%, rgba(160,120,60,0.14) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 92%, rgba(160,120,60,0.16) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 50%, transparent 25%, rgba(120,90,40,0.06) 100%);
+    pointer-events: none;
+  }
+  .parchment > * { position: relative; z-index: 1; }
+
+  .sc { font-family: 'IM Fell English SC', serif; letter-spacing: 0.3px; }
+
+  /* ── 1. The gold leaf ──────────────────────────────────────────── */
+  .gold-leaf {
+    width: 120mm;
+    padding: 20mm 14mm 22mm;
+    position: relative;
+    text-align: center;
+    background-color: #d4aa45;
+    background-image:
+      url("data:image/svg+xml,%3Csvg width='240' height='240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E"),
+      linear-gradient(128deg, #a87a22 0%, #e9cd72 18%, #c59a36 36%, #f5e39a 52%, #c9a03c 68%, #ecd27c 84%, #9c6f1c 100%);
+    box-shadow: 0 6px 30px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,240,180,0.5), inset 0 0 40px rgba(90,55,5,0.35);
+    transform: rotate(-0.6deg);
+  }
+  .gold-leaf::after {
+    /* fine creases in the foil */
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(97deg, transparent 31.8%, rgba(255,250,210,0.35) 32%, rgba(90,55,5,0.18) 32.3%, transparent 32.6%),
+      linear-gradient(12deg, transparent 63.8%, rgba(90,55,5,0.16) 64%, rgba(255,250,210,0.3) 64.3%, transparent 64.6%),
+      linear-gradient(160deg, transparent 80.8%, rgba(255,250,210,0.25) 81%, rgba(90,55,5,0.14) 81.3%, transparent 81.6%);
+  }
+  .gold-leaf .title-line {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 17pt;
+    letter-spacing: 1.5px;
+    line-height: 2.25;
+    color: #55390a;
+    text-shadow: 0 1px 0 rgba(255,244,190,0.75), 0 -1px 0 rgba(60,35,0,0.35);
+  }
+  .gold-leaf .scraped {
+    width: 78%;
+    height: 13mm;
+    margin: 4mm auto 0;
+    background:
+      repeating-linear-gradient(4deg, rgba(70,42,4,0.55) 0 0.5px, transparent 0.5px 2.6px),
+      repeating-linear-gradient(-7deg, rgba(255,246,200,0.7) 0 0.6px, transparent 0.6px 3.4px),
+      repeating-linear-gradient(11deg, rgba(70,42,4,0.35) 0 0.4px, transparent 0.4px 4.3px),
+      repeating-linear-gradient(-2deg, rgba(120,80,15,0.4) 0 0.8px, transparent 0.8px 5.1px),
+      linear-gradient(90deg, #b08a3a, #a57c2a 40%, #b99244 70%, #a27824);
+    clip-path: polygon(0 38%, 3% 14%, 9% 22%, 15% 4%, 24% 16%, 33% 0, 41% 12%, 52% 3%, 61% 15%, 70% 2%, 79% 14%, 88% 6%, 95% 20%, 100% 34%, 97% 62%, 100% 82%, 92% 94%, 83% 86%, 74% 100%, 63% 88%, 54% 97%, 43% 86%, 34% 100%, 24% 88%, 14% 96%, 6% 84%, 1% 70%);
+    box-shadow: inset 0 0 6px rgba(50,30,0,0.6);
+  }
+
+  /* ── 2. Vielfrass's unfinished page ────────────────────────────── */
+  .vielfrass {
+    width: 165mm;
+    padding: 26mm 24mm 30mm;
+    transform: rotate(0.5deg);
+  }
+  .vielfrass .pin {
+    position: absolute; top: 7mm; left: 50%; z-index: 3;
+    width: 13px; height: 13px; margin-left: -6px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #d9d9d9, #7c7c7c 55%, #3c3c3c);
+    box-shadow: 2px 5px 5px rgba(0,0,0,0.45);
+  }
+  .vielfrass .hand {
+    font-family: 'Parisienne', 'Dancing Script', cursive;
+    font-size: 19pt;
+    line-height: 1.5;
+    color: #2b1630;
+  }
+  .vielfrass .hand p { margin-bottom: 11px; text-indent: 1.4em; }
+  .vielfrass .hand p.first { text-indent: 0; }
+  .vielfrass .hand p.last { margin-bottom: 0; }
+  .vielfrass .name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  .vielfrass .trail {
+    display: inline-block; width: 26mm; height: 9px; margin-left: 3px; vertical-align: baseline;
+    border-bottom: 1.4px solid #2b1630; border-radius: 0 0 70% 8% / 0 0 100% 60%;
+    transform: rotate(5deg); transform-origin: left bottom; opacity: 0.75;
+  }
+
+  /* ── 3. The summons ────────────────────────────────────────────── */
+  .summons { width: 175mm; padding: 22mm 24mm 24mm; background-color: #f0e6cf; }
+  .summons .frame { border: 3px double #4a3c28; padding: 13mm 13mm 11mm; }
+  .summons .court {
+    font-family: 'UnifrakturMaguntia', cursive; font-size: 24pt; line-height: 1.2;
+    text-align: center; color: #1a1008;
+  }
+  .summons .doc-title {
+    font-family: 'Cinzel', serif; font-weight: 700; font-size: 11pt; letter-spacing: 5px;
+    text-align: center; text-transform: uppercase; margin-top: 8px; color: #3a2a18;
+  }
+  .summons hr { border: none; border-top: 1px solid #6a5a40; width: 60%; margin: 12px auto 16px; }
+  .summons .text { font-size: 12pt; line-height: 1.8; text-align: justify; }
+  .summons .text p { margin-bottom: 9px; }
+  .summons .blank {
+    display: inline-block; min-width: 62mm; border-bottom: 1px solid #2a2015;
+    font-family: 'Dancing Script', cursive; font-size: 16pt; line-height: 1.1;
+    text-align: center; color: #1a1530; padding: 0 6px; outline: none;
+  }
+  .summons .charges { text-align: center; font-size: 12.5pt; margin: 4px 0 10px; }
+  .summons .order { font-weight: normal; text-align: center; font-style: italic; }
+  .summons .foot { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 22px; gap: 4mm; }
+  .summons .done { font-family: 'IM Fell English SC', serif; font-size: 9.5pt; color: #4a3e2e; line-height: 1.5; }
+  .summons .sig { font-family: 'Pinyon Script', cursive; font-size: 24pt; color: #1a1530; line-height: 1; text-align: right; }
+  .summons .sig small { display: block; font-family: 'IM Fell English SC', serif; font-size: 8.5pt; color: #4a3e2e; margin-top: 4px; }
+  .summons .stamp {
+    flex: none; margin-bottom: -3mm;
+    width: 25mm; height: 25mm; border-radius: 50%;
+    border: 2.5px solid rgba(120,20,20,0.5); outline: 1px solid rgba(120,20,20,0.4); outline-offset: -5px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'Cinzel', serif; font-weight: 700; color: rgba(120,20,20,0.55);
+    font-size: 6.5pt; letter-spacing: 1.5px; text-align: center; line-height: 1.5;
+    transform: rotate(-13deg);
+  }
+  .summons .stamp b { font-size: 13pt; letter-spacing: 0; font-family: 'UnifrakturMaguntia', cursive; font-weight: 400; }
+
+  /* ── 4. Johanna's letter ───────────────────────────────────────── */
+  .johanna {
+    width: 125mm;
+    padding: 22mm 18mm 22mm 20mm;
+    background-color: #efe4ca;
+    transform: rotate(-1.1deg);
+  }
+  .johanna::after {
+    /* folded in four */
+    content: '';
+    position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    background:
+      linear-gradient(90deg, transparent calc(50% - 1.5px), rgba(90,65,30,0.22) calc(50% - 0.5px), rgba(255,250,235,0.6) calc(50% + 0.5px), transparent calc(50% + 2px)),
+      linear-gradient(180deg, transparent calc(50% - 1.5px), rgba(90,65,30,0.22) calc(50% - 0.5px), rgba(255,250,235,0.6) calc(50% + 0.5px), transparent calc(50% + 2px)),
+      radial-gradient(ellipse at 50% 50%, rgba(90,65,30,0.12) 0%, transparent 16%);
+  }
+  .johanna .hand {
+    font-family: 'La Belle Aurore', 'Dancing Script', cursive;
+    font-size: 19pt;
+    line-height: 1.55;
+    color: #1d1a2e;
+  }
+  .johanna .hand p { margin-bottom: 4px; }
+  .johanna .hand p:nth-child(1) { transform: rotate(-0.8deg); margin-bottom: 14px; }
+  .johanna .hand p:nth-child(2) { transform: rotate(0.9deg) translateX(2px); }
+  .johanna .hand p:nth-child(3) { transform: rotate(-0.5deg) translateX(-1px); letter-spacing: 0.3px; }
+  .johanna .hand p:nth-child(4) { transform: rotate(1.3deg) translateX(3px); margin-top: 12px; }
+  .johanna .hand p:nth-child(5) { transform: rotate(-1.4deg); }
+  .johanna .hand p:nth-child(6) { transform: rotate(0.6deg) translateX(-2px); margin-top: 16px; letter-spacing: -0.2px; }
+  .johanna .hand p.sign { text-align: right; margin-top: 14px; font-size: 22pt; transform: rotate(-3deg); padding-right: 8mm; }
+
+  @media print {
+    body { background: none; padding: 0; gap: 0; display: block; }
+    .gm-header, .gm-label, .exit-btn { display: none !important; }
+    .handout { display: flex !important; min-height: 100vh; justify-content: center; break-after: page; }
+    .parchment, .gold-leaf { box-shadow: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<button class="exit-btn" onclick="exitPresent()">← Esc</button>
+
+<div class="gm-header">
+  <h1>Session 22 — Player Handouts</h1>
+  <p>Click <em>Show to players</em> under a title to put that document alone on screen; <kbd>Esc</kbd> comes back here. Each one also has its own address (<span class="sc">#gold-leaf</span>, <span class="sc">#page</span>, <span class="sc">#summons</span>, <span class="sc">#letter</span>) if you want to open it directly on a second screen. Printing gives one document per page, without the GM notes.</p>
+</div>
+
+
+<!-- ============================================================ -->
+<!--  1. THE GOLD LEAF                                             -->
+<!-- ============================================================ -->
+<section class="handout" id="gold-leaf">
+  <div class="gm-label">
+    1 · The Gold Leaf
+    <span class="gm-note">Kessel’s Chandlery, Vielfrass’s cabinet — kept between two boards among the parchments. Five titles; the sixth line has been scraped away. Nobody in the room can name what it describes; Ursula can, and will not say it aloud.</span>
+    <button class="show-btn" onclick="present('gold-leaf')">Show to players</button>
+  </div>
+
+  <div class="gold-leaf">
+    <div class="title-line">Prince du Plaisir,</div>
+    <div class="title-line">Celle qui a Soif,</div>
+    <div class="title-line">notre Tentateur,</div>
+    <div class="title-line">Loesh le Serpent,</div>
+    <div class="title-line">Shornaal l’Orgueilleux,</div>
+    <div class="scraped"></div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!--  2. THE HALF-FINISHED PAGE                                    -->
+<!-- ============================================================ -->
+<section class="handout" id="page">
+  <div class="gm-label">
+    2 · The Half-Finished Page
+    <span class="gm-note">Pinned to Vielfrass’s writing desk in the cabinet. His own hand; it stops in the middle of a sentence. Shown to Geldrecht (“Orban”), it breaks him.</span>
+    <button class="show-btn" onclick="present('page')">Show to players</button>
+  </div>
+
+  <div class="parchment vielfrass">
+    <div class="pin"></div>
+    <div class="hand">
+      <p class="first"><span class="name">Heske Glazer</span>. Elle sait quelque chose. Toujours à me suivre, à m’épier. Sa boutique a brûlé et on la cache, mais je la trouverai.</p>
+      <p>Peut-être connaît-elle la vérité. Notre vérité. Je crains qu’elle ne nous démasque.</p>
+      <p>Je sais que vous m’avez commandé de ne nous mêler que de recrutement et de subversion. Mais Glazer sera notre perte si elle reste en vie.</p>
+      <p>Je peux convaincre Orban de le faire. J’inventerai un mensonge ; je n’aurai même pas à y réfléchir. Le pauvre brûle tant d’amour pour moi qu’il ferait n’importe quoi.</p>
+      <p>Lui et les autres imbéciles n’ont toujours pas la moindre idée de notre véritable but.</p>
+      <p class="last">Je la tuerai avant qu’elle ne me<span class="trail"></span></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!--  3. THE SUMMONS                                               -->
+<!-- ============================================================ -->
+<section class="handout" id="summons">
+  <div class="gm-label">
+    3 · The Summons
+    <span class="gm-note">Morning of the 17th — ONLY if Pieter did not fight Eisfange. Served on all five by a Watch runner. Click the blank line to type a character’s name (or leave it empty and fill it in by hand on a print).</span>
+    <button class="show-btn" onclick="present('summons')">Show to players</button>
+  </div>
+
+  <div class="parchment summons">
+    <div class="frame">
+      <div class="court">Cour du Burgermeister<br>d’Ubersreik</div>
+      <div class="doc-title">Citation à comparaître</div>
+      <hr>
+      <div class="text">
+        <p>Sur plainte du sieur <span class="sc">Reikhardt Gestaltenstark</span>, champion de la Compagnie Estimée,</p>
+        <p>le nommé <span class="blank" contenteditable="true" spellcheck="false">&nbsp;</span> est cité à comparaître devant la cour, le <span class="sc">Marktag 22 Sigmarzeit</span>, à la troisième cloche, pour y répondre des chefs de</p>
+        <p class="charges sc">coups et blessures &nbsp;·&nbsp; tentative de meurtre &nbsp;·&nbsp; diffamation publique.</p>
+        <p class="order">Il lui est interdit de quitter la ville et ses faubourgs.<br>Tout défaut vaudra aveu.</p>
+      </div>
+      <div class="foot">
+        <div class="done">Fait à la caserne,<br>le 17 Sigmarzeit 2512.</div>
+        <div class="stamp">Garde<b>U</b>Ubersreik</div>
+        <div class="sig">K. Bleich<small>Sergent de la Garde</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!--  4. JOHANNA'S LETTER                                          -->
+<!-- ============================================================ -->
+<section class="handout" id="letter">
+  <div class="gm-label">
+    4 · Johanna’s Letter
+    <span class="gm-note">Bezahltag 17th, c. 16:00 — for Kaspar, from Betke’s grandson, folded in four. Written at noon with Otto reading over her shoulder. It names no one and explains nothing. Intuition Average (+20): she never calls him “mon Kaspar”. Challenging (+0): the ink changes before the last line, as though she stopped and was made to go on — tell the player; it is deliberately not visible on the handout.</span>
+    <button class="show-btn" onclick="present('letter')">Show to players</button>
+  </div>
+
+  <div class="parchment johanna">
+    <div class="hand">
+      <p>Mon Kaspar,</p>
+      <p>Viens ce soir. À la maison,</p>
+      <p>à la huitième cloche.</p>
+      <p>Mon père court un grave danger.</p>
+      <p>Viens seul. Je t’en prie.</p>
+      <p class="sign">Johanna</p>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  function present(id) {
+    var found = false;
+    document.querySelectorAll('.handout').forEach(function (h) {
+      var on = h.id === id;
+      h.classList.toggle('active', on);
+      if (on) found = true;
+    });
+    if (!found) return;
+    document.body.classList.add('presenting');
+    if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+    window.scrollTo(0, 0);
+  }
+  function exitPresent() {
+    document.body.classList.remove('presenting');
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.body.classList.contains('presenting')) exitPresent();
+  });
+  window.addEventListener('hashchange', function () {
+    if (location.hash.length > 1) present(location.hash.slice(1));
+  });
+  if (location.hash.length > 1) present(location.hash.slice(1));
+</script>
+
+</body>
+</html>

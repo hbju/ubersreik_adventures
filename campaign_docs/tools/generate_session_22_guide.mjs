@@ -530,8 +530,8 @@ section("11. JOHANNA’S LETTER");
 c.push(timeBox("BEZAHLTAG 17TH, C. 16:00 • 5 MINUTES AT THE TABLE"));
 c.push(readAloud("Kaspar. Un gamin te tire par la manche. Tu le connais de vue : le petit-fils de la vieille servante des Stiegler. Il te tend un papier plié en quatre, et il part en courant avant que tu aies pu lui poser une question. L’écriture est celle de Johanna. Elle tremble."));
 c.push(body("Hand over the prop (section 16). Deliver it before the Pious Cup if you can: Kaspar should carry it through the afternoon."));
-c.push(gm("Johanna wrote it at noon with Otto reading over her shoulder. Her lip is split; two of his men have been in the house since dawn. Her father was given his drug at breakfast and has not made sense since. Everything in the letter is true except the word “alone”."));
-c.push(gm("Average (+20) Intuition on the letter: she never calls him “mon Kaspar”. Challenging (+0): the ink changes halfway through the last line, as though she stopped and was made to go on."));
+c.push(gm("Johanna wrote it at noon with Otto reading over her shoulder. Her lip is split; two of his men have been in the house since dawn. Her father was given his drug at breakfast and has not made sense since. The letter names no one and explains nothing: Otto wanted it short, and she was glad to give Kaspar no lie to believe. Kaspar should not be able to tell who is behind it."));
+c.push(gm("Average (+20) Intuition on the letter: she never calls him “mon Kaspar”. Challenging (+0): the ink changes before the last line, as though she stopped and was made to go on. Neither points at Otto; do not volunteer a name. The handout is in campaign_docs/player_handouts/session_22_handouts.html."));
 c.push(music("None."));
 
 // ─────────────────────────────────────────────────────────────
@@ -673,10 +673,10 @@ c.push(prop([
 c.push(h3("Johanna’s letter — carried by Betke’s grandson, c. 16:00"));
 c.push(prop([
   "Kaspar,",
-  "Il faut que tu viennes ce soir. À la maison, à la huitième cloche.",
-  "Des hommes sont venus pour mon père. Il leur doit plus que je ne croyais, et à des gens que tu connais. Ils reviendront cette nuit. Je n’ai personne d’autre.",
-  "Viens seul. Je t’en prie. S’ils voient du monde avec toi, ils s’en prendront à lui.",
-  "Mon Kaspar, pardonne-moi de te demander cela.",
+  "Viens ce soir. À la maison, à la huitième cloche.",
+  "Je ne peux rien écrire de plus.",
+  "Viens seul. Je t’en prie.",
+  "Mon Kaspar, pardonne-moi.",
   "J.",
 ]));
 
